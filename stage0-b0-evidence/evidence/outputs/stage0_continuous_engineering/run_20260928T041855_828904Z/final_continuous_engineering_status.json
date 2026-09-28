@@ -1,0 +1,50 @@
+{
+  "run": "run_20260928T041855_828904Z",
+  "completed_utc": "2026-09-28T04:29:15.202416+00:00",
+  "status": "NEEDS_REVIEW",
+  "engineering_execution": "PASS",
+  "tests": {
+    "tests": 33,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "csv_parquet_roundtrip": {
+    "attempted": 36,
+    "passed": 36,
+    "failed": [],
+    "validation_table_pair": "PASS",
+    "scope": "All audit CSVs existing at conversion; final output_manifest is administrative CSV only",
+    "engine": "pyarrow",
+    "compression": "snappy",
+    "roundtrip": "Exact pandas frame equality after CSV parse"
+  },
+  "raw_integrity": "FULL_GFS_STAT_AND_STATED_SAMPLE_SHA256_PASS",
+  "researcher_review_required": [
+    "GFS T/RH gaps and secondary root",
+    "auxiliary time metadata provenance",
+    "operational availability and vintage",
+    "IMERG native window mapping",
+    "bbox/admin mask",
+    "IMERG 2025-10",
+    "independent validation"
+  ],
+  "not_executed_by_design": [
+    "training",
+    "normalization",
+    "split",
+    "interpolation",
+    "resampling",
+    "formal sample generation",
+    "DOTE",
+    "DTFM",
+    "MEE"
+  ],
+  "historical_runs_overwritten": false,
+  "scientific_conventions_changed_automatically": false,
+  "authoritative_status_file": "audit_final_status.json",
+  "tasks_A_to_P": "EXECUTED_WITH_DOCUMENTED_EVIDENCE_LIMITATIONS",
+  "engineering_status": "PASS",
+  "researcher_review_status": "NEEDS_REVIEW",
+  "stage0_closeout_ready": false
+}

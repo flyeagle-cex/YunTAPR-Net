@@ -1,0 +1,22 @@
+IMERG 2025-06-24 boundary extreme sanity check
+No interpolation, clipping, exclusion or scientific threshold.
+Same nearest grid pixel to latitude=24.95, longitude=95.45; actual coordinates retained.
+Converted CF timestamps are used literally; native half-hour-window association remains PROVISIONAL.
+
+2025-06-23T23:30:00Z: 3.19999981 mm hr-1; lat=24.9499988556, lon=95.4499969482; missing=False
+2025-06-24T00:00:00Z: 91.02999878 mm hr-1; lat=24.9499988556, lon=95.4499969482; missing=False
+2025-06-24T00:30:00Z: 8.59999943 mm hr-1; lat=24.9499988556, lon=95.4499969482; missing=False
+
+00:00 patch: rows follow original ascending latitude; columns original ascending longitude.
+latitudes: [24.75, 24.850000381469727, 24.94999885559082, 25.049999237060547, 25.149999618530273]
+longitudes: [95.25, 95.3499984741211, 95.44999694824219, 95.54999542236328, 95.6500015258789]
+   8.4500    6.9800    8.2300    8.1400    4.8000
+   9.3400    8.7900    9.9700    6.3400    4.3400
+  27.9000   32.2400   91.0300    7.4100   14.1100
+   7.3600   15.7000   20.8400    7.8500   12.8200
+   9.1500   20.5400   11.5000    6.8300    8.5600
+
+This check supplies adjacent-time and local-spatial evidence only; it does not establish meteorological truth or create a training/QC rule.
+Both raw files and staging copies passed SHA256 verification; raw hashes unchanged.
+
+This run reread all requested values and the 5x5 patch; both tables exactly match the previous run. See boundary_prior_result_comparison.csv.
