@@ -1,0 +1,12 @@
+﻿item,dimension,status,evidence
+A,file structure compatibility,PASS,"All thermo NETCDF4, one structural version; companion variable schema is readable without format rewriting"
+B,grid compatibility,PASS,12960 exact array matches; both coordinate hashes agree; max absolute differences 0
+C,forecast init compatibility,PASS,"All thermo init keys exist in reused main inventory; [00,06,12,18] UTC"
+D,lead compatibility,PASS,"All thermo leads [0,3,6]h match main; thermo global coverage is a subset"
+E,valid-time compatibility,PASS,All thermo identities and paired valid times agree
+F,variable semantic compatibility,PASS,Explicit Temperature_isobaric and Relative_humidity_isobaric at three required levels; no q/dewpoint/potential-T substitution
+G,unit compatibility,PASS,"T K, RH %, pressure Pa agree with available main metadata; no data conversion"
+H,pressure-level compatibility,PASS,"50000/70000/85000 Pa present; main PS Pa allows future comparison, no mask computed"
+I,research-period coverage,PASS,24 months and 8820/8820 pairs have all six target metadata fields
+J,source lineage compatibility,PARTIAL,SUPPORTED_WITH_CAVEATS: declared GFS archive/forecast identifiers agree; converted payload lineage not independently proven
+K,one-to-one pairing quality,PASS,12960/12960 thermo keys unique and matched; no ambiguous selections
