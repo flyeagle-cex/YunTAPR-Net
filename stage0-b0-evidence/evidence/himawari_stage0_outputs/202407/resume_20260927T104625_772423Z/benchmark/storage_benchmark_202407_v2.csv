@@ -1,0 +1,27 @@
+﻿format,operation,repeat,operations,seconds,write_seconds,source_decode_seconds,total_bytes,chunk_shape,compressor,mask_dtype,storage_dtype,metadata_preserved,memory_peak_mb,memory_baseline_mb,memory_delta_mb,process_lifetime_peak_mb,seconds_per_operation,cache_state
+zarr,create,0,352,38.07579049999913,22.41547019997961,13.634813199925702,1421023838.0,"[1, 7, 128, 128]",Blosc zstd level=3 bitshuffle,bool,float32,True,350.375,314.23046875,36.14453125,419.62890625,,
+netcdf4,create,0,352,53.17951120000362,38.28449299987551,12.831172400037758,1078980336.0,"[1, 7, 128, 128]",zlib level=3 shuffle=True,uint8 with explicit boolean semantics,float32,True,488.7578125,334.58203125,154.17578125,488.7734375,,
+zarr,single_frame_random,0,50,1.138941999997769,,,,,,,,,518.84765625,501.12890625,17.71875,521.734375,0.0227788399999553,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,sequential_6frame,0,50,6.776321299999836,,,,,,,,,610.07421875,501.32421875,108.75,611.92578125,0.1355264259999967,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,pytorch_6frame,0,50,6.1734064999982365,,,,,,,,,581.328125,501.28515625,80.04296875,611.92578125,0.1234681299999647,
+netcdf4,single_frame_random,0,50,1.2954767999981414,,,,,,,,,516.12109375,501.46484375,14.65625,611.92578125,0.0259095359999628,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,sequential_6frame,0,50,5.757303000005777,,,,,,,,,612.109375,501.5078125,110.6015625,612.109375,0.1151460600001155,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,pytorch_6frame,0,50,7.731137099995976,,,,,,,,,578.703125,498.5234375,80.1796875,612.109375,0.1546227419999195,
+netcdf4,single_frame_random,1,50,1.3073204000029364,,,,,,,,,517.01171875,498.5546875,18.45703125,612.109375,0.0261464080000587,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,sequential_6frame,1,50,5.892610199996852,,,,,,,,,609.17578125,498.57421875,110.6015625,612.109375,0.117852203999937,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,pytorch_6frame,1,50,7.567093500001647,,,,,,,,,579.4375,499.77734375,79.66015625,612.109375,0.1513418700000329,
+zarr,single_frame_random,1,50,1.1004272999998648,,,,,,,,,518.55859375,499.90234375,18.65625,612.109375,0.0220085459999972,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,sequential_6frame,1,50,7.017296300000453,,,,,,,,,611.65234375,503.29296875,108.359375,614.50390625,0.140345926000009,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,pytorch_6frame,1,50,6.363355599998613,,,,,,,,,583.65625,503.72265625,79.93359375,614.94140625,0.1272671119999722,
+zarr,single_frame_random,2,50,1.165619700004754,,,,,,,,,521.55859375,503.3515625,18.20703125,614.94140625,0.023312394000095,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,sequential_6frame,2,50,6.867644500001916,,,,,,,,,614.125,503.15625,110.96875,614.94140625,0.1373528900000383,warm_OS_and_backend_cache; not cold-disk measurement
+zarr,pytorch_6frame,2,50,6.4930311999996775,,,,,,,,,583.28125,502.87109375,80.41015625,614.94140625,0.1298606239999935,
+netcdf4,single_frame_random,2,50,1.3418018000011216,,,,,,,,,520.70703125,502.265625,18.44140625,614.94140625,0.0268360360000224,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,sequential_6frame,2,50,5.733913500000199,,,,,,,,,611.75390625,501.1328125,110.62109375,614.94140625,0.1146782700000039,warm_OS_and_backend_cache; not cold-disk measurement
+netcdf4,pytorch_6frame,2,50,7.45056370000384,,,,,,,,,581.33984375,501.51171875,79.828125,614.94140625,0.1490112740000768,
+zarr,random_6frame,0,50,7.00160589999723,,,,,,,,,376.6640625,257.07421875,119.58984375,378.17578125,0.1400321179999446,warm OS cache; backend warms in first repeat; seeded shuffled targets
+netcdf4,random_6frame,0,50,7.954129699995974,,,,,,,,,540.734375,266.3515625,274.3828125,541.61328125,0.15908259399991947,warm OS cache; backend warms in first repeat; seeded shuffled targets
+netcdf4,random_6frame,1,50,7.761040199999115,,,,,,,,,544.9140625,431.0625,113.8515625,544.92578125,0.1552208039999823,warm OS cache; backend warms in first repeat; seeded shuffled targets
+zarr,random_6frame,1,50,6.6353325999953086,,,,,,,,,550.453125,434.3046875,116.1484375,550.4609375,0.13270665199990617,warm OS cache; backend warms in first repeat; seeded shuffled targets
+zarr,random_6frame,2,50,6.44861949999904,,,,,,,,,549.609375,439.859375,109.75,550.5,0.1289723899999808,warm OS cache; backend warms in first repeat; seeded shuffled targets
+netcdf4,random_6frame,2,50,7.736731600001804,,,,,,,,,550.546875,439.87890625,110.66796875,550.55078125,0.15473463200003607,warm OS cache; backend warms in first repeat; seeded shuffled targets
