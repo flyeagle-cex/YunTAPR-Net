@@ -1,0 +1,114 @@
+{
+  "axes": {
+    "native_lat": {
+      "direction": "descending",
+      "dtype": "float32",
+      "first": 30.0,
+      "last": 20.0,
+      "maximum": 30.0,
+      "minimum": 20.0,
+      "raw_bytes_sha256": "dc82ee6d54c12e796ec2b9751ef388441d22a877d4e73aa1ba4702cdada72c52",
+      "shape": [
+        501
+      ],
+      "spacing_signed_max": -0.01999664306640625,
+      "spacing_signed_median": -0.020000457763671875,
+      "spacing_signed_min": -0.020000457763671875,
+      "unique_spacing_rounded_8": [
+        -0.02000046,
+        -0.01999855,
+        -0.01999664
+      ]
+    },
+    "native_lon": {
+      "direction": "ascending",
+      "dtype": "float32",
+      "first": 97.0,
+      "last": 107.0,
+      "maximum": 107.0,
+      "minimum": 97.0,
+      "raw_bytes_sha256": "9303bfb46b0873cf35008ab1860445af9811f05a5b60f8eb9e30aaff95d2968b",
+      "shape": [
+        501
+      ],
+      "spacing_signed_max": 0.0200042724609375,
+      "spacing_signed_median": 0.01999664306640625,
+      "spacing_signed_min": 0.01999664306640625,
+      "unique_spacing_rounded_8": [
+        0.01999664,
+        0.02000427
+      ]
+    },
+    "target_lat": {
+      "direction": "ascending",
+      "dtype": "float32",
+      "first": 20.049999237060547,
+      "last": 29.94999885559082,
+      "maximum": 29.94999885559082,
+      "minimum": 20.049999237060547,
+      "raw_bytes_sha256": "2c12a5b12969ddc2625686eae7ca561286b467b72e56a06493fe34800fb5aa5e",
+      "shape": [
+        100
+      ],
+      "spacing_signed_max": 0.10000038146972656,
+      "spacing_signed_median": 0.10000038146972656,
+      "spacing_signed_min": 0.09999847412109375,
+      "unique_spacing_rounded_8": [
+        0.09999847,
+        0.10000038
+      ]
+    },
+    "target_lon": {
+      "direction": "ascending",
+      "dtype": "float32",
+      "first": 97.04999542236328,
+      "last": 106.94999694824219,
+      "maximum": 106.94999694824219,
+      "minimum": 97.04999542236328,
+      "raw_bytes_sha256": "07cc72b46ff87949b32c5c265af48211a28331055ed25166d499647a2b02ad07",
+      "shape": [
+        100
+      ],
+      "spacing_signed_max": 0.100006103515625,
+      "spacing_signed_median": 0.09999847412109375,
+      "spacing_signed_min": 0.09999847412109375,
+      "unique_spacing_rounded_8": [
+        0.09999847,
+        0.1000061
+      ]
+    }
+  },
+  "domain": "SP04 97-107E 20-30N",
+  "evaluation_mask_cells_within_target": 3430,
+  "evaluation_mask_total_cells": 3430,
+  "no_lat_flip": true,
+  "no_science_resampling": true,
+  "no_transpose": true,
+  "source_evidence": {
+    "frozen_mask_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+    "frozen_mask_source": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+    "frozen_registry": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\freeze_registry.json",
+    "himawari_coordinate_evidence": "F:\\pytorch\\Research\\outputs\\stage1_b0_formal_readiness_resolution\\run_20260928T124313_169375Z\\SPATIAL\\himawari_actual_coordinates.npz",
+    "himawari_evidence_sha256": "9fc06c2f0f9bbfe46acb5a5a0878d839bf29b14a73e4830b82971f19a16a9df9",
+    "himawari_raw_file_provenance": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc",
+    "imerg_evidence_sha256": "4bf6ce3f9722c318c5db93bb4967660e82a53c498c90f3c6bacbf95c72ed912a",
+    "imerg_frozen_coordinate_evidence": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\FROZEN\\MASK\\imerg_actual_coordinates.npz"
+  },
+  "source_lat_original_indices": [
+    0,
+    500
+  ],
+  "source_lon_original_indices": [
+    0,
+    500
+  ],
+  "status": "CANDIDATE_GEOMETRY_VERIFIED_NOT_FORMAL_MAPPING",
+  "target_lat_original_indices": [
+    10,
+    109
+  ],
+  "target_lon_original_indices": [
+    20,
+    119
+  ]
+}

@@ -1,0 +1,3 @@
+# Public export scope
+
+This is the reviewed text/code/index-mapping evidence from the completed decision run. The local `SPATIAL/sp04_coordinate_arrays.npz` was deliberately excluded from public GitHub; its SHA256 is `929db08178a0679ada7b81a02a393159d0955987c71ba5ad984ecc087ebc22f3` and it remains in the local F: run. No source satellite/precipitation data, GADM geometry, or GADM-derived mask arrays were copied. The published `evidence_registry.csv` is the complete **local** registry and therefore lists that one excluded NPZ. Coordinate and source paths in text files are provenance metadata only.

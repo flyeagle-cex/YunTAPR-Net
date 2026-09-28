@@ -1,0 +1,5 @@
+# Conditional pinball candidate
+
+For `u=y−qτ`, `ρτ(u)=max(τu,(τ−1)u)`. If output is log space, `y=log1p(R)` for each valid **conditional** pixel; `conditional log1p(R)` means the same transform with a conditioning mask, not a separately renormalized variable. If conditioning is approved as `R>0.1`, `M_q=M_valid ∧ (R>0.1)`; only those pixels contribute to `L_qr`. `L_qr = Σ_{bxy,i} M_q ρτᵢ(log1p R−qᵢ) / [32 Σ_{bxy} M_q]` is an illustrative per-pixel normalization; behavior for empty conditional batches must be explicit (e.g. skip this component with logged count), not divide by zero. If τ quadrature weights differ, replace uniform 1/32 explicitly.
+
+`M_valid` excludes IMERG missing values from **all** terms. A valid observed zero is an occurrence negative (`z=0`) and never treated as missing. Valid `0<R≤0.1` is also occurrence negative but excluded from the conditional quantile term under the `R>0.1` candidate. Threshold choice, reduction and loss weights require approval. No loss was applied to training data.

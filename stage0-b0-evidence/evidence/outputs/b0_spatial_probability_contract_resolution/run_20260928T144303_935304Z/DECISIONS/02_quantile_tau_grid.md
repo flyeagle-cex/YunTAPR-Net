@@ -1,0 +1,5 @@
+# Decision 02 — 32 τ levels
+
+No exact local original τ vector was found. `Q01=(i−0.5)/32` has min 0.015625, max 0.984375 and 16 points at/above median. `Q02=i/33` has min ≈0.030303, max ≈0.969697 and 16 points at/above median. `Q03=1−[1−(i−0.5)/32]²` is an **illustrative, unsourced** high-tail-dense candidate; it changes coverage of the lower half and cannot be presented as GPROF-IR's rule. Exact values and counts are in `../PROBABILITY/quantile_tau_candidates.csv`.
+
+Q01 reaches farther into both tails; Q02 leaves a wider uncovered extreme tail; Q03 allocates more quantiles to high precipitation but gives poorer lower-tail resolution. A simple unweighted mean of pinball losses over nonuniform Q03 τ is **not** the same quadrature for CRPS as a uniform τ grid; τ-integration weights and endpoint/tail treatment must be specified. Any grid is sensitive to finite-sample upper-tail noise, especially for rare extremes. Q01/Q02 are simple; Q03 requires a versioned formula and calibration study. No τ grid is frozen. **RESEARCHER_DECISION_REQUIRED.**
