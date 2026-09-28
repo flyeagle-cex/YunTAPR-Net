@@ -1,0 +1,5 @@
+﻿source,evidence,lat_min,lat_max,lon_min,lon_max,shape,lat_direction,lon_direction,resolution_lat,resolution_lon,coverage_scope
+Himawari,F:\pytorch\Research\stage0_himawari\outputs\202407\resume_20260927T104625_772423Z\qc\grid_consistency_report_202407.csv,20.0,30.0,97.0,107.0,"(501,501)",descending,ascending,0.0200004577636718,0.0199966430664062,2024-07 only; original descending latitude retained
+IMERG,F:\pytorch\Research\outputs\stage0_p0_audit\run_20260927T161311_417313Z\IMERG\imerg_grid_audit.csv,19.049999237060547,31.94999885559082,95.04999542236328,108.9499969482422,"(130, 140)",ascending,ascending,0.0999999970428703,0.100000010977546,Prior full-library audit reused; this run reads two boundary files only
+GFS,GFS/gfs_grid_audit.csv,19.0,32.0,95.0,109.0,"(53, 57)",descending,ascending,0.25,0.25,Full main-root coordinate metadata audit
+SRTM,CROSS_SOURCE/srtm_tile_inventory.csv,18.0,33.0,94.0,110.0,3601x3601 per tile (ZIP size evidence),NOT_READ,NOT_READ,0.0002777777777777778,0.0002777777777777778,Tile extent envelope; three holes recorded; raster void/value validity NOT_AUDITED

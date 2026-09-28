@@ -1,0 +1,1283 @@
+[
+  {
+    "source": "F:\\云南极端降水数据\\raw\\GFS\\2019\\20190101\\gfs_0p25_2019010100_f000.nc",
+    "global_attrs": {
+      "title": "Yunnan regional GFS 0.25-degree f000 predictors",
+      "source": "https://thredds.rda.ucar.edu/thredds/ncss/grid/files/g/d084001/2019/20190101/gfs.0p25.2019010100.f000.grib2",
+      "archive": "NCAR RDA d084001 official GFS archive via THREDDS NCSS",
+      "initialization_time_utc": "2019-01-01T00:00:00+00:00",
+      "valid_time_utc": "2019-01-01T00:00:00+00:00",
+      "conservative_available_time_utc": "2019-01-01T05:00:00+00:00",
+      "availability_note": "Conservative +5 h assumption for leakage-safe modeling; not an observed per-file publication timestamp.",
+      "precipitation_excluded": "true",
+      "history": "created 2026-09-01T03:13:41.454119+00:00"
+    },
+    "dims": {
+      "valid_time": 1,
+      "pressure_level": 3,
+      "latitude": 53,
+      "longitude": 57
+    },
+    "variables": {
+      "valid_time": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "dims": [
+          "valid_time"
+        ],
+        "attrs": {
+          "units": "seconds since 1970-01-01 00:00:00 UTC",
+          "calendar": "standard"
+        },
+        "values": "[1546300800]"
+      },
+      "forecast_reference_time": {
+        "dtype": "int64",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "units": "seconds since 1970-01-01 00:00:00 UTC"
+        },
+        "values": "1546300800"
+      },
+      "pressure_level": {
+        "dtype": "float32",
+        "shape": [
+          3
+        ],
+        "dims": [
+          "pressure_level"
+        ],
+        "attrs": {
+          "units": "Pa"
+        },
+        "values": "[50000. 70000. 85000.]"
+      },
+      "latitude": {
+        "dtype": "float32",
+        "shape": [
+          53
+        ],
+        "dims": [
+          "latitude"
+        ],
+        "attrs": {
+          "units": "degrees_north"
+        },
+        "values": "[32.   31.75 31.5  31.25 31.   30.75 30.5  30.25 30.   29.75 29.5  29.25\n 29.   28.75 28.5  28.25 28.   27.75 27.5  27.25 27.   26.75 26.5  26.25\n 26.   25.75 25.5  25.25 25.   24.75 24.5  24.25 24.   23.75 23.5  23.25\n 23.   22.75 22.5  22.25 22.   21.75 21.5  21.25 21.   20.75 20.5  20.25\n 20.   19.75 19.5  19.25 19.  ]"
+      },
+      "longitude": {
+        "dtype": "float32",
+        "shape": [
+          57
+        ],
+        "dims": [
+          "longitude"
+        ],
+        "attrs": {
+          "units": "degrees_east"
+        },
+        "values": "[ 95.    95.25  95.5   95.75  96.    96.25  96.5   96.75  97.    97.25\n  97.5   97.75  98.    98.25  98.5   98.75  99.    99.25  99.5   99.75\n 100.   100.25 100.5  100.75 101.   101.25 101.5  101.75 102.   102.25\n 102.5  102.75 103.   103.25 103.5  103.75 104.   104.25 104.5  104.75\n 105.   105.25 105.5  105.75 106.   106.25 106.5  106.75 107.   107.25\n 107.5  107.75 108.   108.25 108.5  108.75 109.  ]"
+      },
+      "Temperature_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "K"
+        }
+      },
+      "Relative_humidity_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "%"
+        }
+      },
+      "Specific_humidity_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "kg kg-1",
+          "derivation": "derived from GFS temperature, relative humidity, and pressure using Bolton-type saturation vapor pressure"
+        }
+      },
+      "Geopotential_height_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "gpm"
+        }
+      },
+      "u-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "m s-1"
+        }
+      },
+      "v-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "m s-1"
+        }
+      },
+      "Vertical_velocity_pressure_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "Pa s-1"
+        }
+      },
+      "Precipitable_water_entire_atmosphere_single_layer": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "kg m-2",
+          "height_m": "not_applicable"
+        }
+      },
+      "Pressure_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "Pa",
+          "height_m": "not_applicable"
+        }
+      },
+      "Convective_available_potential_energy_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "J kg-1",
+          "height_m": "not_applicable"
+        }
+      },
+      "u-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "m s-1",
+          "height_m": "10.0"
+        }
+      },
+      "v-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "units": "m s-1",
+          "height_m": "10.0"
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\raw\\GFS\\2023\\20230101\\gfs_0p25_2023010100_f003.nc",
+    "global_attrs": {
+      "Originating_or_generating_Center": "US National Weather Service, National Centres for Environmental Prediction (NCEP)",
+      "Originating_or_generating_Subcenter": "0",
+      "GRIB_table_version": "2,1",
+      "Type_of_generating_process": "Forecast",
+      "Analysis_or_forecast_generating_process_identifier_defined_by_originating_centre": "Global Forecast System Model T1534 - Forecast hours 00-384 T574 - Forecast hours 00-192 T190 - Forecast hours 204-384",
+      "Conventions": "CF-1.6",
+      "history": "Read using CDM IOSP GribCollection v3",
+      "featureType": "GRID",
+      "History": "Translated to CF-1.0 Conventions by Netcdf-Java CDM (CFGridCoverageWriter)\nOriginal Dataset = gfs.0p25.2023010100.f003.grib2#SRC; Translation Date = 2026-07-25T14:13:04.112Z",
+      "geospatial_lat_min": "18.875",
+      "geospatial_lat_max": "32.125",
+      "geospatial_lon_min": "94.875",
+      "geospatial_lon_max": "109.125",
+      "source": "NCAR GDEX d084001 / NCEP GFS 0.25 degree",
+      "requested_domain": "95E-109E, 19N-32N",
+      "forecast_cycle": "2023010100",
+      "forecast_hour": "3"
+    },
+    "dims": {
+      "accumulation_time": 1,
+      "bounds_dim": 2,
+      "valid_time": 1,
+      "latitude": 53,
+      "longitude": 57,
+      "pressure_level": 3
+    },
+    "variables": {
+      "reftime": {
+        "dtype": "int64",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "standard_name": "forecast_reference_time",
+          "long_name": "GRIB reference time",
+          "units": "days since 2023-01-01 00:00:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "0"
+      },
+      "height_above_ground2": {
+        "dtype": "float64",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "m",
+          "positive": "up"
+        },
+        "values": "10.0"
+      },
+      "accumulation_time": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "dims": [
+          "accumulation_time"
+        ],
+        "attrs": {
+          "standard_name": "time",
+          "long_name": "time",
+          "udunits": "Hour since 2023-01-01T00:00:00Z",
+          "bounds": "time_bounds",
+          "units": "days since 2023-01-01 01:30:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "[0]"
+      },
+      "accumulation_time_bounds": {
+        "dtype": "int64",
+        "shape": [
+          1,
+          2
+        ],
+        "dims": [
+          "accumulation_time",
+          "bounds_dim"
+        ],
+        "attrs": {
+          "coordinates": "height_above_ground2 reftime",
+          "units": "hours since 2023-01-01 00:00:00",
+          "calendar": "proleptic_gregorian"
+        }
+      },
+      "valid_time": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "dims": [
+          "valid_time"
+        ],
+        "attrs": {
+          "standard_name": "time",
+          "long_name": "time",
+          "udunits": "Hour since 2023-01-01T00:00:00Z",
+          "units": "days since 2023-01-01 03:00:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "[0]"
+      },
+      "latitude": {
+        "dtype": "float32",
+        "shape": [
+          53
+        ],
+        "dims": [
+          "latitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "degrees_north",
+          "standard_name": "latitude"
+        },
+        "values": "[32.   31.75 31.5  31.25 31.   30.75 30.5  30.25 30.   29.75 29.5  29.25\n 29.   28.75 28.5  28.25 28.   27.75 27.5  27.25 27.   26.75 26.5  26.25\n 26.   25.75 25.5  25.25 25.   24.75 24.5  24.25 24.   23.75 23.5  23.25\n 23.   22.75 22.5  22.25 22.   21.75 21.5  21.25 21.   20.75 20.5  20.25\n 20.   19.75 19.5  19.25 19.  ]"
+      },
+      "longitude": {
+        "dtype": "float32",
+        "shape": [
+          57
+        ],
+        "dims": [
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "degrees_east",
+          "standard_name": "longitude"
+        },
+        "values": "[ 95.    95.25  95.5   95.75  96.    96.25  96.5   96.75  97.    97.25\n  97.5   97.75  98.    98.25  98.5   98.75  99.    99.25  99.5   99.75\n 100.   100.25 100.5  100.75 101.   101.25 101.5  101.75 102.   102.25\n 102.5  102.75 103.   103.25 103.5  103.75 104.   104.25 104.5  104.75\n 105.   105.25 105.5  105.75 106.   106.25 106.5  106.75 107.   107.25\n 107.5  107.75 108.   108.25 108.5  108.75 109.  ]"
+      },
+      "Precipitable_water_entire_atmosphere_single_layer": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Precipitable water @ Entire atmosphere layer",
+          "units": "kg.m-2",
+          "Grib_Variable_Id": "VAR_0-1-3_L200",
+          "Grib2_Parameter": "[0 1 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Precipitable water",
+          "Grib2_Level_Type": "200",
+          "Grib2_Level_Desc": "Entire atmosphere layer",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "pressure_level": {
+        "dtype": "float64",
+        "shape": [
+          3
+        ],
+        "dims": [
+          "pressure_level"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "Pa",
+          "positive": "down"
+        },
+        "values": "[50000. 70000. 85000.]"
+      },
+      "Vertical_velocity_pressure_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Vertical velocity (pressure) @ Isobaric surface",
+          "units": "Pa/s",
+          "Grib_Variable_Id": "VAR_0-2-8_L100",
+          "Grib2_Parameter": "[0 2 8]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "Vertical velocity (pressure)",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Total_precipitation_surface_3_Hour_Accumulation": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "accumulation_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Total precipitation (3_Hour Accumulation) @ Ground or water surface",
+          "units": "kg.m-2",
+          "Grib_Variable_Id": "VAR_0-1-8_L1_I3_Hour_S1",
+          "Grib2_Parameter": "[0 1 8]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Total precipitation",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "Accumulation",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Pressure_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Pressure @ Ground or water surface",
+          "units": "Pa",
+          "Grib_Variable_Id": "VAR_0-3-0_L1",
+          "Grib2_Parameter": "[0 3 0]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Mass",
+          "Grib2_Parameter_Name": "Pressure",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Specific_humidity_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Specific humidity @ Isobaric surface",
+          "units": "kg/kg",
+          "Grib_Variable_Id": "VAR_0-1-0_L100",
+          "Grib2_Parameter": "[0 1 0]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Specific humidity",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "u-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "u-component of wind @ Isobaric surface",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-2_L100",
+          "Grib2_Parameter": "[0 2 2]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "u-component of wind",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "v-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "v-component of wind @ Isobaric surface",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-3_L100",
+          "Grib2_Parameter": "[0 2 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "v-component of wind",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "u-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "u-component of wind @ Specified height level above ground",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-2_L103",
+          "Grib2_Parameter": "[0 2 2]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "u-component of wind",
+          "Grib2_Level_Type": "103",
+          "Grib2_Level_Desc": "Specified height level above ground",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "v-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "v-component of wind @ Specified height level above ground",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-3_L103",
+          "Grib2_Parameter": "[0 2 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "v-component of wind",
+          "Grib2_Level_Type": "103",
+          "Grib2_Level_Desc": "Specified height level above ground",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Convective_available_potential_energy_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Convective available potential energy @ Ground or water surface",
+          "units": "J/kg",
+          "Grib_Variable_Id": "VAR_0-7-6_L1",
+          "Grib2_Parameter": "[0 7 6]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Thermodynamic stability indices",
+          "Grib2_Parameter_Name": "Convective available potential energy",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Geopotential_height_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Geopotential height @ Isobaric surface",
+          "units": "gpm",
+          "Grib_Variable_Id": "VAR_0-3-5_L100",
+          "Grib2_Parameter": "[0 3 5]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Mass",
+          "Grib2_Parameter_Name": "Geopotential height",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "LatLon_721X1440-0p13S-180p00E": {
+        "dtype": "int32",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "grid_mapping_name": "latitude_longitude",
+          "earth_radius": "6371229.0",
+          "coordinates": "height_above_ground2 reftime"
+        },
+        "values": "-2147483647"
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\raw\\GFS\\2025\\20251231\\gfs_0p25_2025123118_f006.nc",
+    "global_attrs": {
+      "Originating_or_generating_Center": "US National Weather Service, National Centres for Environmental Prediction (NCEP)",
+      "Originating_or_generating_Subcenter": "0",
+      "GRIB_table_version": "2,1",
+      "Type_of_generating_process": "Forecast",
+      "Analysis_or_forecast_generating_process_identifier_defined_by_originating_centre": "Analysis from GFS (Global Forecast System)",
+      "Conventions": "CF-1.6",
+      "history": "Read using CDM IOSP GribCollection v3",
+      "featureType": "GRID",
+      "History": "Translated to CF-1.0 Conventions by Netcdf-Java CDM (CFGridCoverageWriter)\nOriginal Dataset = gfs.0p25.2023062212.f000.grib2#SRC; Translation Date = 2026-07-26T01:53:49.621Z",
+      "geospatial_lat_min": "18.875",
+      "geospatial_lat_max": "32.125",
+      "geospatial_lon_min": "94.875",
+      "geospatial_lon_max": "109.125",
+      "source": "NOAA GFS AWS Open Data (noaa-gfs-bdp-pds); primary source with NCAR-compatible normalization; NCAR GDEX fallback enabled",
+      "requested_domain": "95E-109E, 19N-32N",
+      "forecast_cycle": "2025123118",
+      "forecast_hour": "6",
+      "original_grib_url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20251231/18/atmos/gfs.t18z.pgrb2.0p25.f006",
+      "fallback_validation": "NOAA/AWS primary path validated against NCAR GDEX examples: matching variables, coordinates, pressure levels, valid times, accumulation bounds, and precipitation",
+      "conversion_time": "2026-08-25T04:18:13+00:00"
+    },
+    "dims": {
+      "valid_time": 1,
+      "latitude": 53,
+      "longitude": 57,
+      "pressure_level": 3,
+      "accumulation_time": 1,
+      "bounds_dim": 2
+    },
+    "variables": {
+      "Pressure_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Pressure @ Ground or water surface",
+          "units": "Pa",
+          "Grib_Variable_Id": "VAR_0-3-0_L1",
+          "Grib2_Parameter": "[0 3 0]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Mass",
+          "Grib2_Parameter_Name": "Pressure",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Convective_available_potential_energy_surface": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Convective available potential energy @ Ground or water surface",
+          "units": "J/kg",
+          "Grib_Variable_Id": "VAR_0-7-6_L1",
+          "Grib2_Parameter": "[0 7 6]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Thermodynamic stability indices",
+          "Grib2_Parameter_Name": "Convective available potential energy",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Precipitable_water_entire_atmosphere_single_layer": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Precipitable water @ Entire atmosphere layer",
+          "units": "kg.m-2",
+          "Grib_Variable_Id": "VAR_0-1-3_L200",
+          "Grib2_Parameter": "[0 1 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Precipitable water",
+          "Grib2_Level_Type": "200",
+          "Grib2_Level_Desc": "Entire atmosphere layer",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "u-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "u-component of wind @ Specified height level above ground",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-2_L103",
+          "Grib2_Parameter": "[0 2 2]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "u-component of wind",
+          "Grib2_Level_Type": "103",
+          "Grib2_Level_Desc": "Specified height level above ground",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "v-component_of_wind_height_above_ground": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "v-component of wind @ Specified height level above ground",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-3_L103",
+          "Grib2_Parameter": "[0 2 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "v-component of wind",
+          "Grib2_Level_Type": "103",
+          "Grib2_Level_Desc": "Specified height level above ground",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "LatLon_721X1440-0p13S-180p00E": {
+        "dtype": "int32",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "grid_mapping_name": "latitude_longitude",
+          "earth_radius": "6371229.0",
+          "coordinates": "height_above_ground2 reftime"
+        },
+        "values": "0"
+      },
+      "Geopotential_height_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Geopotential height @ Isobaric surface",
+          "units": "gpm",
+          "Grib_Variable_Id": "VAR_0-3-5_L100",
+          "Grib2_Parameter": "[0 3 5]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Mass",
+          "Grib2_Parameter_Name": "Geopotential height",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Specific_humidity_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Specific humidity @ Isobaric surface",
+          "units": "kg/kg",
+          "Grib_Variable_Id": "VAR_0-1-0_L100",
+          "Grib2_Parameter": "[0 1 0]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Specific humidity",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "Vertical_velocity_pressure_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Vertical velocity (pressure) @ Isobaric surface",
+          "units": "Pa/s",
+          "Grib_Variable_Id": "VAR_0-2-8_L100",
+          "Grib2_Parameter": "[0 2 8]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "Vertical velocity (pressure)",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "u-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "u-component of wind @ Isobaric surface",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-2_L100",
+          "Grib2_Parameter": "[0 2 2]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "u-component of wind",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "v-component_of_wind_isobaric": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          3,
+          53,
+          57
+        ],
+        "dims": [
+          "valid_time",
+          "pressure_level",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "v-component of wind @ Isobaric surface",
+          "units": "m/s",
+          "Grib_Variable_Id": "VAR_0-2-3_L100",
+          "Grib2_Parameter": "[0 2 3]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Momentum",
+          "Grib2_Parameter_Name": "v-component of wind",
+          "Grib2_Level_Type": "100",
+          "Grib2_Level_Desc": "Isobaric surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "UnknownStatType--1",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "accumulation_time_bounds": {
+        "dtype": "int64",
+        "shape": [
+          1,
+          2
+        ],
+        "dims": [
+          "accumulation_time",
+          "bounds_dim"
+        ],
+        "attrs": {
+          "coordinates": "height_above_ground2 reftime",
+          "units": "hours since 2025-12-31 18:00:00",
+          "calendar": "proleptic_gregorian"
+        }
+      },
+      "Total_precipitation_surface_6_Hour_Accumulation": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          53,
+          57
+        ],
+        "dims": [
+          "accumulation_time",
+          "latitude",
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "long_name": "Total precipitation (6_Hour Accumulation) @ Ground or water surface",
+          "units": "kg.m-2",
+          "Grib_Variable_Id": "VAR_0-1-8_L1_I6_Hour_S1",
+          "Grib2_Parameter": "[0 1 8]",
+          "Grib2_Parameter_Discipline": "Meteorological products",
+          "Grib2_Parameter_Category": "Moisture",
+          "Grib2_Parameter_Name": "Total precipitation",
+          "Grib2_Level_Type": "1",
+          "Grib2_Level_Desc": "Ground or water surface",
+          "Grib2_Generating_Process_Type": "Forecast",
+          "Grib2_Statistical_Process_Type": "Accumulation",
+          "grid_mapping": "LatLon_721X1440-0p13S-180p00E",
+          "coordinates": "height_above_ground2 reftime"
+        }
+      },
+      "reftime": {
+        "dtype": "int64",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "standard_name": "forecast_reference_time",
+          "long_name": "GRIB reference time",
+          "units": "days since 2025-12-31 18:00:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "0"
+      },
+      "height_above_ground2": {
+        "dtype": "float64",
+        "shape": [],
+        "dims": [],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "m",
+          "positive": "up"
+        },
+        "values": "10.0"
+      },
+      "valid_time": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "dims": [
+          "valid_time"
+        ],
+        "attrs": {
+          "standard_name": "time",
+          "long_name": "time",
+          "udunits": "Hour since 2023-06-22T12:00:00Z",
+          "units": "days since 2026-01-01 00:00:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "[0]"
+      },
+      "latitude": {
+        "dtype": "float32",
+        "shape": [
+          53
+        ],
+        "dims": [
+          "latitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "degrees_north",
+          "standard_name": "latitude"
+        },
+        "values": "[32.   31.75 31.5  31.25 31.   30.75 30.5  30.25 30.   29.75 29.5  29.25\n 29.   28.75 28.5  28.25 28.   27.75 27.5  27.25 27.   26.75 26.5  26.25\n 26.   25.75 25.5  25.25 25.   24.75 24.5  24.25 24.   23.75 23.5  23.25\n 23.   22.75 22.5  22.25 22.   21.75 21.5  21.25 21.   20.75 20.5  20.25\n 20.   19.75 19.5  19.25 19.  ]"
+      },
+      "longitude": {
+        "dtype": "float32",
+        "shape": [
+          57
+        ],
+        "dims": [
+          "longitude"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "degrees_east",
+          "standard_name": "longitude"
+        },
+        "values": "[ 95.    95.25  95.5   95.75  96.    96.25  96.5   96.75  97.    97.25\n  97.5   97.75  98.    98.25  98.5   98.75  99.    99.25  99.5   99.75\n 100.   100.25 100.5  100.75 101.   101.25 101.5  101.75 102.   102.25\n 102.5  102.75 103.   103.25 103.5  103.75 104.   104.25 104.5  104.75\n 105.   105.25 105.5  105.75 106.   106.25 106.5  106.75 107.   107.25\n 107.5  107.75 108.   108.25 108.5  108.75 109.  ]"
+      },
+      "pressure_level": {
+        "dtype": "float64",
+        "shape": [
+          3
+        ],
+        "dims": [
+          "pressure_level"
+        ],
+        "attrs": {
+          "_FillValue": "nan",
+          "units": "Pa",
+          "positive": "down"
+        },
+        "values": "[50000. 70000. 85000.]"
+      },
+      "accumulation_time": {
+        "dtype": "int64",
+        "shape": [
+          1
+        ],
+        "dims": [
+          "accumulation_time"
+        ],
+        "attrs": {
+          "standard_name": "time",
+          "long_name": "time",
+          "udunits": "Hour since 2023-06-22T06:00:00Z",
+          "bounds": "time_bounds",
+          "units": "days since 2025-12-31 21:00:00",
+          "calendar": "proleptic_gregorian"
+        },
+        "values": "[0]"
+      }
+    }
+  }
+]
