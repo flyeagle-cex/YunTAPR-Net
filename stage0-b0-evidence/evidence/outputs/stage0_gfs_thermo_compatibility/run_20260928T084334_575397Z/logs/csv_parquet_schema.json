@@ -1,0 +1,10 @@
+{
+  "table": "COMPATIBILITY/main_thermo_pairing.csv",
+  "nullable_boolean_columns": [
+    "main_auxiliary_metadata_conflict",
+    "thermo_auxiliary_metadata_conflict"
+  ],
+  "null_policy": "unknown absent-side metadata remains null, never False",
+  "initial_failure_evidence": "logs/parquet_summary.json",
+  "recovery": "PASS with explicit pandas nullable boolean and pyarrow"
+}

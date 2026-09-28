@@ -1,0 +1,34 @@
+﻿csv,parquet,engine,status,rows,error
+COMPATIBILITY\grid_compatibility.csv,COMPATIBILITY\grid_compatibility.parquet,pyarrow,PASS,12960.0,
+COMPATIBILITY\main_thermo_pairing.csv,COMPATIBILITY\main_thermo_pairing.parquet,pyarrow,FAILED,,"AssertionError: DataFrame.iloc[:, 21] (column name=""thermo_auxiliary_metadata_conflict"") are different
+
+DataFrame.iloc[:, 21] (column name=""thermo_auxiliary_metadata_conflict"") values are different (46.85911 %)
+[index]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, ...]
+[left]:  [nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, ...]
+[right]: [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, ...]
+At positional index 0, first diff: nan != None"
+COMPATIBILITY\pairing_conflicts.csv,COMPATIBILITY\pairing_conflicts.parquet,pyarrow,PASS,10019.0,
+COMPATIBILITY\research_period_missing_thermo_keys.csv,COMPATIBILITY\research_period_missing_thermo_keys.parquet,pyarrow,PASS,0.0,
+COMPATIBILITY\research_period_thermo_coverage.csv,COMPATIBILITY\research_period_thermo_coverage.parquet,pyarrow,PASS,24.0,
+COMPATIBILITY\source_lineage_fields.csv,COMPATIBILITY\source_lineage_fields.parquet,pyarrow,PASS,12960.0,
+COMPATIBILITY\unit_pressure_compatibility.csv,COMPATIBILITY\unit_pressure_compatibility.parquet,pyarrow,PASS,3.0,
+logs\main_samples_after.csv,logs\main_samples_after.parquet,pyarrow,PASS,9.0,
+logs\main_samples_before.csv,logs\main_samples_before.parquet,pyarrow,PASS,9.0,
+logs\staging_io.csv,logs\staging_io.parquet,pyarrow,PASS,12975.0,
+logs\thermo_integrity_after.csv,logs\thermo_integrity_after.parquet,pyarrow,PASS,12960.0,
+logs\thermo_manifest_before.csv,logs\thermo_manifest_before.parquet,pyarrow,PASS,12960.0,
+logs\thermo_sample_hashes_after.csv,logs\thermo_sample_hashes_after.parquet,pyarrow,PASS,5.0,
+logs\thermo_source_sample_hashes_before.csv,logs\thermo_source_sample_hashes_before.parquet,pyarrow,PASS,5.0,
+THERMO\gfs_thermo_file_structure_audit.csv,THERMO\gfs_thermo_file_structure_audit.parquet,pyarrow,PASS,12960.0,
+THERMO\gfs_thermo_forbidden_precip_variables_detected.csv,THERMO\gfs_thermo_forbidden_precip_variables_detected.parquet,pyarrow,PASS,0.0,
+THERMO\gfs_thermo_grid_audit.csv,THERMO\gfs_thermo_grid_audit.parquet,pyarrow,PASS,12960.0,
+THERMO\gfs_thermo_inventory.csv,THERMO\gfs_thermo_inventory.parquet,pyarrow,PASS,12960.0,
+THERMO\gfs_thermo_month_inventory.csv,THERMO\gfs_thermo_month_inventory.parquet,pyarrow,PASS,59.0,
+THERMO\gfs_thermo_read_errors.csv,THERMO\gfs_thermo_read_errors.parquet,pyarrow,PASS,0.0,
+THERMO\gfs_thermo_structure_versions.csv,THERMO\gfs_thermo_structure_versions.parquet,pyarrow,PASS,1.0,
+THERMO\gfs_thermo_time_semantics_audit.csv,THERMO\gfs_thermo_time_semantics_audit.parquet,pyarrow,PASS,12960.0,
+THERMO\gfs_thermo_variable_coverage.csv,THERMO\gfs_thermo_variable_coverage.parquet,pyarrow,PASS,6.0,
+THERMO\gfs_thermo_variable_mapping.csv,THERMO\gfs_thermo_variable_mapping.parquet,pyarrow,PASS,3.0,
+THERMO\gfs_thermo_variable_presence.csv,THERMO\gfs_thermo_variable_presence.parquet,pyarrow,PASS,12960.0,
+TIME_LINEAGE\auxiliary_time_conflict_classification.csv,TIME_LINEAGE\auxiliary_time_conflict_classification.parquet,pyarrow,PASS,24388.0,
+TIME_LINEAGE\main_targeted_verification.csv,TIME_LINEAGE\main_targeted_verification.parquet,pyarrow,PASS,9.0,
