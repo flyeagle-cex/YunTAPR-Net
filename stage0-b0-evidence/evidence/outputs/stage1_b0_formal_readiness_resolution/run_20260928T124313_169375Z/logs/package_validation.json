@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "required_outputs": [
+    "FINAL_B0_FORMAL_READINESS_REPORT.md",
+    "b0_formal_readiness_status.json",
+    "RESEARCHER_DECISIONS_REQUIRED.md",
+    "B0_FORMAL_ENTRY_MATRIX.csv",
+    "B0_FORMAL_ENTRY_MATRIX.parquet",
+    "evidence_registry.csv",
+    "evidence_registry.parquet",
+    "TIME/B0_FORMAL_TIME_SEMANTICS_EVIDENCE.md",
+    "TIME/b0_time_rule_candidates.csv",
+    "GAPS/IMERG_2025_10_DECISION_CARD.md",
+    "SPATIAL/b0_input_domain_candidates.csv",
+    "SPATIAL/B0_INPUT_DOMAIN_DECISION.md",
+    "SPLIT/b0_train_val_candidates.csv",
+    "SPLIT/B0_TRAIN_VAL_DECISION.md",
+    "DATA_CONTRACT/b0_missing_qc_contract_candidate.md",
+    "DATA_CONTRACT/b0_normalization_contract.md",
+    "MODEL/B0_FORMAL_ARCHITECTURE_DECISION.md",
+    "README.md"
+  ],
+  "decisions": 10,
+  "required_final_lines_exact": true,
+  "entry_evidence_paths_exist": true,
+  "pytest": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "formal_gate": "B0_FORMAL_NOT_READY"
+}

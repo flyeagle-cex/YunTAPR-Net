@@ -1,0 +1,3290 @@
+[
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S173000-E175959.1050.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S173000-E175959.1050.V07B.HDF5",
+      "sha256": "cb1c0a32f580f5cc5596f41c72c6c7084f8d4967ec3d060adcdf978e8ac56b40",
+      "size_bytes": 8248250,
+      "mtime_ns": 1784679390045146100
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20210825-S173000-E175959.1050.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-01-05T15:12:14.000Z;\nStartGranuleDateTime=2021-08-25T17:30:00.000Z;\nStopGranuleDateTime=2021-08-25T17:59:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.5;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.100;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1313947800
+            ],
+            "decoded_values": [
+              "2021-08-25 17:30:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1313947800,
+                1313949600
+              ]
+            ],
+            "decoded_values": [
+              "2021-08-25 17:30:00",
+              "2021-08-25 18:00:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S210000-E212959.1260.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S210000-E212959.1260.V07B.HDF5",
+      "sha256": "b9a2d11249c323e6f1a6d84c5f29b007851af319e340faf7cdea8b3c8436cfee",
+      "size_bytes": 8197097,
+      "mtime_ns": 1784679441709658500
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20210825-S210000-E212959.1260.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-01-05T15:13:24.000Z;\nStartGranuleDateTime=2021-08-25T21:00:00.000Z;\nStopGranuleDateTime=2021-08-25T21:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.5;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.100;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1313960400
+            ],
+            "decoded_values": [
+              "2021-08-25 21:00:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1313960400,
+                1313962200
+              ]
+            ],
+            "decoded_values": [
+              "2021-08-25 21:00:00",
+              "2021-08-25 21:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S233000-E235959.1410.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20210825\\3B-HHR.MS.MRG.3IMERG.20210825-S233000-E235959.1410.V07B.HDF5",
+      "sha256": "073de7fe8dca089e5250f987c4701ec58cb9b2a3998bbe3ea63ff9e6a262c8ea",
+      "size_bytes": 7970838,
+      "mtime_ns": 1784679445111755000
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20210825-S233000-E235959.1410.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-01-05T15:14:07.000Z;\nStartGranuleDateTime=2021-08-25T23:30:00.000Z;\nStopGranuleDateTime=2021-08-25T23:59:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.5;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.100;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1313969400
+            ],
+            "decoded_values": [
+              "2021-08-25 23:30:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1313969400,
+                1313971200
+              ]
+            ],
+            "decoded_values": [
+              "2021-08-25 23:30:00",
+              "2021-08-26 00:00:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S000000-E002959.0000.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S000000-E002959.0000.V07B.HDF5",
+      "sha256": "8f1659d2b030c020f78879313590f002111e95e0bea1468c12cd5d09eb0b06f1",
+      "size_bytes": 7842805,
+      "mtime_ns": 1787496685072232900
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240501-S000000-E002959.0000.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T11:55:04.000Z;\nStartGranuleDateTime=2024-05-01T00:00:00.000Z;\nStopGranuleDateTime=2024-05-01T00:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1398556800
+            ],
+            "decoded_values": [
+              "2024-05-01 00:00:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1398556800,
+                1398558600
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-01 00:00:00",
+              "2024-05-01 00:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S120000-E122959.0720.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S120000-E122959.0720.V07B.HDF5",
+      "sha256": "1012e0abe964cfee1cdbab396edb43e55f2acb9ca3bc9f7a6da5c22de3cd3269",
+      "size_bytes": 7943466,
+      "mtime_ns": 1787496732457270400
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240501-S120000-E122959.0720.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T11:56:56.000Z;\nStartGranuleDateTime=2024-05-01T12:00:00.000Z;\nStopGranuleDateTime=2024-05-01T12:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1398600000
+            ],
+            "decoded_values": [
+              "2024-05-01 12:00:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1398600000,
+                1398601800
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-01 12:00:00",
+              "2024-05-01 12:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S233000-E235959.1410.V07B.HDF5",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_granules\\20240501\\3B-HHR.MS.MRG.3IMERG.20240501-S233000-E235959.1410.V07B.HDF5",
+      "sha256": "25e8e12b8c20b1bb1e15fe970de181259a1b84a5f682e8b8f97176e9f79ab470",
+      "size_bytes": 8108251,
+      "mtime_ns": 1787496802892549300
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240501-S233000-E235959.1410.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T11:58:40.000Z;\nStartGranuleDateTime=2024-05-01T23:30:00.000Z;\nStopGranuleDateTime=2024-05-01T23:59:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "nv": 2,
+          "lonv": 2,
+          "latv": 2,
+          "time": 1,
+          "lon": 3600,
+          "lat": 1800
+        },
+        "variables": {
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1398641400
+            ],
+            "decoded_values": [
+              "2024-05-01 23:30:00"
+            ]
+          },
+          "lon": {
+            "shape": [
+              3600
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "lat": {
+            "shape": [
+              1800
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1398641400,
+                1398643200
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-01 23:30:00",
+              "2024-05-02 00:00:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              3600,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          },
+          "lat_bnds": {
+            "shape": [
+              1800,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "randomError": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nRoot-mean-square error estimate for \n                        complete merged microwave-infrared (gauge-adjusted)\n                        precipitation\n"
+            }
+          },
+          "probabilityLiquidPrecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "percent",
+              "units": "percent",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nProbability of liquid precipitation;  estimated with\n                        a diagnostic parameterization using ancillary data\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          }
+        }
+      },
+      "/Grid/Intermediate": {
+        "attributes": {},
+        "dimensions": {},
+        "variables": {
+          "MWprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Observed merged microwave precipitation estimate;\n                        formerly HQprecipitation"
+            }
+          },
+          "MWprecipSource": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "Observed merged microwave satellite source;\n                        formerly HQprecipSource"
+            }
+          },
+          "MWobservationTime": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "minutes",
+              "units": "minutes",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nObserved merged microwave observation time after\n                        dataset start time;  formerly HQobservationTime\n"
+            }
+          },
+          "IRprecipitation": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Infrared precipitation estimate"
+            }
+          },
+          "IRinfluence": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "int16",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999,
+              "CodeMissingValue": "-9999",
+              "LongName": "\nRelative influence of infrared precipitation in the merged\n                        microwave-infrared precipitation estimate\n"
+            }
+          },
+          "precipitationUncal": {
+            "shape": [
+              1,
+              3600,
+              1800
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "Merged microwave-infrared \n                        precipitation estimate"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239768_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B_subsetted.nc4",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239768_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B_subsetted.nc4",
+      "sha256": "4ed186fc8e348d2cdbaa15c70a81dc17803eb6f69ae7e93e20c5944d4a07ac54",
+      "size_bytes": 66635,
+      "mtime_ns": 1787499500915852800
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T13:41:24.000Z;\nStartGranuleDateTime=2024-05-27T00:00:00.000Z;\nStopGranuleDateTime=2024-05-27T00:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n",
+          "build_dmrpp_metadata.created": "2025-02-10T06:38:34Z",
+          "build_dmrpp_metadata.build_dmrpp": "3.21.0-526",
+          "build_dmrpp_metadata.bes": "3.21.0-526",
+          "build_dmrpp_metadata.libdap": "libdap-3.21.0-120",
+          "build_dmrpp_metadata.configuration": "\n# TheBESKeys::get_as_config()\nAllowedHosts=^https?:\\/\\/\nBES.Catalog.catalog.FollowSymLinks=Yes\nBES.Catalog.catalog.RootDirectory=/tmp/tmp8_0lewib/\nBES.Catalog.catalog.TypeMatch=dmrpp:.*\\.(dmrpp)$;\nBES.Catalog.catalog.TypeMatch+=h5:.*(\\.bz2|\\.gz|\\.Z)?$;\nBES.Data.RootDirectory=/dev/null\nBES.LogName=./bes.log\nBES.UncompressCache.dir=/tmp/hyrax_ux\nBES.UncompressCache.prefix=ux_\nBES.UncompressCache.size=500\nBES.module.cmd=/usr/lib64/bes/libdap_xml_module.so\nBES.module.dap=/usr/lib64/bes/libdap_module.so\nBES.module.dmrpp=/usr/lib64/bes/libdmrpp_module.so\nBES.module.fonc=/usr/lib64/bes/libfonc_module.so\nBES.module.h5=/usr/lib64/bes/libhdf5_module.so\nBES.module.nc=/usr/lib64/bes/libnc_module.so\nBES.modules=dap,cmd,h5,dmrpp,nc,fonc\nFONc.ClassicModel=false\nFONc.NoGlobalAttrs=true\nH5.EnableCF=false\nH5.EnableCheckNameClashing=true\n",
+          "build_dmrpp_metadata.invocation": "build_dmrpp -c /tmp/bes_conf_0lmK -f /tmp/tmp8_0lewib//3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B.HDF5 -r /tmp/dmr__oQk7p0 -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+          "history": "2026-08-23 15:37:25 GMT hyrax-1.17.1-1404 https://opendap.earthdata.nasa.gov/collections/C2723754847-GES_DISC/granules/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\n",
+          "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-08-23T15:37:25.590+0000\",\"program\":\"hyrax\",\"version\":\"1.17.1-1404\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C2723754847-GES_DISC\\/granules\\/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S000000-E002959.0000.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\"},{\"decoded_constraint\":\"A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=\\/Grid\\/lat[1090:1219];\\/Grid\\/time_bnds[0:0][];\\/Grid\\/lon_bnds[2750:2890][];\\/Grid\\/time[0:0];\\/Grid\\/lat_bnds[1090:1219][];\\/Grid\\/precipitation[0:0][2750:2890][1090:1219];\\/Grid\\/lon[2750:2890];\\/Grid\\/precipitationQualityIndex[0:0][2750:2890][1090:1219]\"}]}]"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "time": 1,
+          "lon": 141,
+          "lat": 130,
+          "latv": 2,
+          "lonv": 2,
+          "nv": 2
+        },
+        "variables": {
+          "lat": {
+            "shape": [
+              130
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "lon": {
+            "shape": [
+              141
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1400803200
+            ],
+            "decoded_values": [
+              "2024-05-27 00:00:00"
+            ]
+          },
+          "lat_bnds": {
+            "shape": [
+              130,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1400803200,
+                1400805000
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-27 00:00:00",
+              "2024-05-27 00:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              141,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239797_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B_subsetted.nc4",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239797_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B_subsetted.nc4",
+      "sha256": "84a6f2f93029888aeb8b7cc616966d24d2eb638957ac999b9c46aa8d71b66351",
+      "size_bytes": 65927,
+      "mtime_ns": 1787499495791859400
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T13:43:51.000Z;\nStartGranuleDateTime=2024-05-27T14:30:00.000Z;\nStopGranuleDateTime=2024-05-27T14:59:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n",
+          "build_dmrpp_metadata.created": "2025-02-10T06:29:35Z",
+          "build_dmrpp_metadata.build_dmrpp": "3.21.0-526",
+          "build_dmrpp_metadata.bes": "3.21.0-526",
+          "build_dmrpp_metadata.libdap": "libdap-3.21.0-120",
+          "build_dmrpp_metadata.configuration": "\n# TheBESKeys::get_as_config()\nAllowedHosts=^https?:\\/\\/\nBES.Catalog.catalog.FollowSymLinks=Yes\nBES.Catalog.catalog.RootDirectory=/tmp/tmpq66c9yyo/\nBES.Catalog.catalog.TypeMatch=dmrpp:.*\\.(dmrpp)$;\nBES.Catalog.catalog.TypeMatch+=h5:.*(\\.bz2|\\.gz|\\.Z)?$;\nBES.Data.RootDirectory=/dev/null\nBES.LogName=./bes.log\nBES.UncompressCache.dir=/tmp/hyrax_ux\nBES.UncompressCache.prefix=ux_\nBES.UncompressCache.size=500\nBES.module.cmd=/usr/lib64/bes/libdap_xml_module.so\nBES.module.dap=/usr/lib64/bes/libdap_module.so\nBES.module.dmrpp=/usr/lib64/bes/libdmrpp_module.so\nBES.module.fonc=/usr/lib64/bes/libfonc_module.so\nBES.module.h5=/usr/lib64/bes/libhdf5_module.so\nBES.module.nc=/usr/lib64/bes/libnc_module.so\nBES.modules=dap,cmd,h5,dmrpp,nc,fonc\nFONc.ClassicModel=false\nFONc.NoGlobalAttrs=true\nH5.EnableCF=false\nH5.EnableCheckNameClashing=true\n",
+          "build_dmrpp_metadata.invocation": "build_dmrpp -c /tmp/bes_conf_hhk9 -f /tmp/tmpq66c9yyo//3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B.HDF5 -r /tmp/dmr__5nkUdX -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+          "history": "2026-08-23 15:37:26 GMT hyrax-1.17.1-1404 https://opendap.earthdata.nasa.gov/collections/C2723754847-GES_DISC/granules/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\n",
+          "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-08-23T15:37:26.248+0000\",\"program\":\"hyrax\",\"version\":\"1.17.1-1404\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C2723754847-GES_DISC\\/granules\\/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S143000-E145959.0870.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\"},{\"decoded_constraint\":\"A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=\\/Grid\\/time[0:0];\\/Grid\\/lat_bnds[1090:1219][];\\/Grid\\/time_bnds[0:0][];\\/Grid\\/lon[2750:2890];\\/Grid\\/lon_bnds[2750:2890][];\\/Grid\\/lat[1090:1219];\\/Grid\\/precipitation[0:0][2750:2890][1090:1219];\\/Grid\\/precipitationQualityIndex[0:0][2750:2890][1090:1219]\"}]}]"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "time": 1,
+          "lon": 141,
+          "lat": 130,
+          "latv": 2,
+          "lonv": 2,
+          "nv": 2
+        },
+        "variables": {
+          "lat": {
+            "shape": [
+              130
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "lon": {
+            "shape": [
+              141
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1400855400
+            ],
+            "decoded_values": [
+              "2024-05-27 14:30:00"
+            ]
+          },
+          "lat_bnds": {
+            "shape": [
+              130,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1400855400,
+                1400857200
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-27 14:30:00",
+              "2024-05-27 15:00:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              141,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239814_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B_subsetted.nc4",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20240527\\291239814_GPM_3IMERGHH.07_3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B_subsetted.nc4",
+      "sha256": "e38e3f33ddad53cb5fce099cc462087a778963c303f9aa9f3750af589f58d9ed",
+      "size_bytes": 74109,
+      "mtime_ns": 1787499499304400800
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHH;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B.HDF5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2024-10-16T13:45:18.000Z;\nStartGranuleDateTime=2024-05-27T23:00:00.000Z;\nStopGranuleDateTime=2024-05-27T23:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS;\nProductVersion=V07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n",
+          "build_dmrpp_metadata.created": "2025-02-10T06:11:34Z",
+          "build_dmrpp_metadata.build_dmrpp": "3.21.0-526",
+          "build_dmrpp_metadata.bes": "3.21.0-526",
+          "build_dmrpp_metadata.libdap": "libdap-3.21.0-120",
+          "build_dmrpp_metadata.configuration": "\n# TheBESKeys::get_as_config()\nAllowedHosts=^https?:\\/\\/\nBES.Catalog.catalog.FollowSymLinks=Yes\nBES.Catalog.catalog.RootDirectory=/tmp/tmp9pwjzf2_/\nBES.Catalog.catalog.TypeMatch=dmrpp:.*\\.(dmrpp)$;\nBES.Catalog.catalog.TypeMatch+=h5:.*(\\.bz2|\\.gz|\\.Z)?$;\nBES.Data.RootDirectory=/dev/null\nBES.LogName=./bes.log\nBES.UncompressCache.dir=/tmp/hyrax_ux\nBES.UncompressCache.prefix=ux_\nBES.UncompressCache.size=500\nBES.module.cmd=/usr/lib64/bes/libdap_xml_module.so\nBES.module.dap=/usr/lib64/bes/libdap_module.so\nBES.module.dmrpp=/usr/lib64/bes/libdmrpp_module.so\nBES.module.fonc=/usr/lib64/bes/libfonc_module.so\nBES.module.h5=/usr/lib64/bes/libhdf5_module.so\nBES.module.nc=/usr/lib64/bes/libnc_module.so\nBES.modules=dap,cmd,h5,dmrpp,nc,fonc\nFONc.ClassicModel=false\nFONc.NoGlobalAttrs=true\nH5.EnableCF=false\nH5.EnableCheckNameClashing=true\n",
+          "build_dmrpp_metadata.invocation": "build_dmrpp -c /tmp/bes_conf_qBkl -f /tmp/tmp9pwjzf2_//3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B.HDF5 -r /tmp/dmr__BjCAkW -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+          "history": "2026-08-23 15:37:25 GMT hyrax-1.17.1-1404 https://opendap.earthdata.nasa.gov/collections/C2723754847-GES_DISC/granules/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D\n",
+          "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-08-23T15:37:25.419+0000\",\"program\":\"hyrax\",\"version\":\"1.17.1-1404\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C2723754847-GES_DISC\\/granules\\/GPM_3IMERGHH.07%3A3B-HHR.MS.MRG.3IMERG.20240527-S230000-E232959.1380.V07B.HDF5.dap.nc4?A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D\"},{\"decoded_constraint\":\"A-api-request-uuid=9bd3c44b-141f-42c6-b564-ac196b4f545a,dap4.ce=\\/Grid\\/lon[2750:2890];\\/Grid\\/precipitation[0:0][2750:2890][1090:1219];\\/Grid\\/lat[1090:1219];\\/Grid\\/lon_bnds[2750:2890][];\\/Grid\\/time_bnds[0:0][];\\/Grid\\/lat_bnds[1090:1219][];\\/Grid\\/precipitationQualityIndex[0:0][2750:2890][1090:1219];\\/Grid\\/time[0:0]\"}]}]"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "time": 1,
+          "lon": 141,
+          "lat": 130,
+          "latv": 2,
+          "lonv": 2,
+          "nv": 2
+        },
+        "variables": {
+          "lat": {
+            "shape": [
+              130
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "lon": {
+            "shape": [
+              141
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1400886000
+            ],
+            "decoded_values": [
+              "2024-05-27 23:00:00"
+            ]
+          },
+          "lat_bnds": {
+            "shape": [
+              130,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1400886000,
+                1400887800
+              ]
+            ],
+            "decoded_values": [
+              "2024-05-27 23:00:00",
+              "2024-05-27 23:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              141,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20251107\\303596866_GPM_3IMERGHHL.07_3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B_subsetted.nc4",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20251107\\303596866_GPM_3IMERGHHL.07_3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B_subsetted.nc4",
+      "sha256": "62f6f41bbcea80984b0775abbdd9fcf7c209e802a6b84340669a37af119a5360",
+      "size_bytes": 56087,
+      "mtime_ns": 1788356376542103900
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH-L/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHHL_07;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B.RT-H5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2025-11-07T15:13:51.000Z;\nStartGranuleDateTime=2025-11-07T00:00:00.000Z;\nStopGranuleDateTime=2025-11-07T00:29:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS-NRT;\nProductVersion=07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n",
+          "build_dmrpp_metadata.created": "2025-11-07T15:37:15Z",
+          "build_dmrpp_metadata.build_dmrpp": "3.21.1-367",
+          "build_dmrpp_metadata.bes": "3.21.1-367",
+          "build_dmrpp_metadata.libdap": "libdap-3.21.1-99",
+          "build_dmrpp_metadata.invocation": "build_dmrpp -f /tmp/tmp6kybuxrp/3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B.HDF5 -r 3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B.HDF5.dmr -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+          "history": "2026-09-02 13:36:38 GMT hyrax-1.18.0-48 https://opendap.earthdata.nasa.gov/collections/C2723754845-GES_DISC/granules/GPM_3IMERGHHL.07%3A3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B.HDF5.dap.nc4?A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D\n",
+          "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-09-02T13:36:38.366+0000\",\"program\":\"hyrax\",\"version\":\"1.18.0-48\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C2723754845-GES_DISC\\/granules\\/GPM_3IMERGHHL.07%3A3B-HHR-L.MS.MRG.3IMERG.20251107-S000000-E002959.0000.V07B.HDF5.dap.nc4?A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D\"},{\"decoded_constraint\":\"A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=\\/Grid\\/lat[1090:1219];\\/Grid\\/lon_bnds[2750:2890][];\\/Grid\\/precipitationQualityIndex[0:0][2750:2890][1090:1219];\\/Grid\\/time[0:0];\\/Grid\\/lat_bnds[1090:1219][];\\/Grid\\/precipitation[0:0][2750:2890][1090:1219];\\/Grid\\/time_bnds[0:0][];\\/Grid\\/lon[2750:2890]\"}]}]"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "time": 1,
+          "lon": 141,
+          "lat": 130,
+          "latv": 2,
+          "lonv": 2,
+          "nv": 2
+        },
+        "variables": {
+          "lat": {
+            "shape": [
+              130
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "lon": {
+            "shape": [
+              141
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1446508800
+            ],
+            "decoded_values": [
+              "2025-11-07 00:00:00"
+            ]
+          },
+          "lat_bnds": {
+            "shape": [
+              130,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1446508800,
+                1446510600
+              ]
+            ],
+            "decoded_values": [
+              "2025-11-07 00:00:00",
+              "2025-11-07 00:30:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              141,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20251107\\303596889_GPM_3IMERGHHL.07_3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B_subsetted.nc4",
+    "source_fingerprint": {
+      "path": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20251107\\303596889_GPM_3IMERGHHL.07_3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B_subsetted.nc4",
+      "sha256": "f967cfad3caa872b23ee0e85724f7553067e16b95aae561a7d13c36772ad94e7",
+      "size_bytes": 57721,
+      "mtime_ns": 1788356387152574500
+    },
+    "groups": {
+      "/": {
+        "attributes": {
+          "FileHeader": "DOI=10.5067/GPM/IMERG/3B-HH-L/07;\nDOIauthority=http://dx.doi.org/;\nDOIshortName=3IMERGHHL_07;\nAlgorithmID=3IMERGHH;\nAlgorithmVersion=3IMERGH_7.0;\nFileName=3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B.RT-H5;\nSatelliteName=MULTI;\nInstrumentName=MERGED;\nGenerationDateTime=2025-11-08T02:14:23.000Z;\nStartGranuleDateTime=2025-11-07T11:30:00.000Z;\nStopGranuleDateTime=2025-11-07T11:59:59.999Z;\nGranuleNumber=;\nNumberOfSwaths=0;\nNumberOfGrids=1;\nGranuleStart=;\nTimeInterval=HALF_HOUR;\nProcessingSystem=PPS-NRT;\nProductVersion=07B;\nEmptyGranule=NOT_EMPTY;\nMissingData=;\n",
+          "FileInfo": "DataFormatVersion=7e;\nTKCodeBuildVersion=0;\nMetadataVersion=7e;\nFormatPackage=HDF5-1.10.9;\nBlueprintFilename=GPM.V7.3IMERGHH.blueprint.xml;\nBlueprintVersion=BV_69;\nTKIOVersion=3.101;\nMetadataStyle=PVL;\nEndianType=LITTLE_ENDIAN;\n",
+          "build_dmrpp_metadata.created": "2025-11-08T02:37:16Z",
+          "build_dmrpp_metadata.build_dmrpp": "3.21.1-367",
+          "build_dmrpp_metadata.bes": "3.21.1-367",
+          "build_dmrpp_metadata.libdap": "libdap-3.21.1-99",
+          "build_dmrpp_metadata.invocation": "build_dmrpp -f /tmp/tmphn40r86h/3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B.HDF5 -r 3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B.HDF5.dmr -u OPeNDAP_DMRpp_DATA_ACCESS_URL -M",
+          "history": "2026-09-02 13:37:54 GMT hyrax-1.18.0-48 https://opendap.earthdata.nasa.gov/collections/C2723754845-GES_DISC/granules/GPM_3IMERGHHL.07%3A3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B.HDF5.dap.nc4?A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\n",
+          "history_json": "[{\"$schema\":\"https:\\/\\/harmony.earthdata.nasa.gov\\/schemas\\/history\\/0.1.0\\/history-0.1.0.json\",\"date_time\":\"2026-09-02T13:37:54.609+0000\",\"program\":\"hyrax\",\"version\":\"1.18.0-48\",\"parameters\":[{\"request_url\":\"https:\\/\\/opendap.earthdata.nasa.gov\\/collections\\/C2723754845-GES_DISC\\/granules\\/GPM_3IMERGHHL.07%3A3B-HHR-L.MS.MRG.3IMERG.20251107-S113000-E115959.0690.V07B.HDF5.dap.nc4?A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=%2FGrid%2Flat%5B1090%3A1219%5D%3B%2FGrid%2Flon_bnds%5B2750%3A2890%5D%5B%5D%3B%2FGrid%2Ftime_bnds%5B0%3A0%5D%5B%5D%3B%2FGrid%2FprecipitationQualityIndex%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D%3B%2FGrid%2Ftime%5B0%3A0%5D%3B%2FGrid%2Flon%5B2750%3A2890%5D%3B%2FGrid%2Flat_bnds%5B1090%3A1219%5D%5B%5D%3B%2FGrid%2Fprecipitation%5B0%3A0%5D%5B2750%3A2890%5D%5B1090%3A1219%5D\"},{\"decoded_constraint\":\"A-api-request-uuid=9ea23e91-a878-4df8-ba2d-cd624e171dc8,dap4.ce=\\/Grid\\/lat[1090:1219];\\/Grid\\/lon_bnds[2750:2890][];\\/Grid\\/time_bnds[0:0][];\\/Grid\\/precipitationQualityIndex[0:0][2750:2890][1090:1219];\\/Grid\\/time[0:0];\\/Grid\\/lon[2750:2890];\\/Grid\\/lat_bnds[1090:1219][];\\/Grid\\/precipitation[0:0][2750:2890][1090:1219]\"}]}]"
+        },
+        "dimensions": {},
+        "variables": {}
+      },
+      "/Grid": {
+        "attributes": {
+          "GridHeader": "BinMethod=ARITHMETIC_MEAN;\nRegistration=CENTER;\nLatitudeResolution=0.1;\nLongitudeResolution=0.1;\nNorthBoundingCoordinate=90;\nSouthBoundingCoordinate=-90;\nEastBoundingCoordinate=180;\nWestBoundingCoordinate=-180;\nOrigin=SOUTHWEST;\n"
+        },
+        "dimensions": {
+          "time": 1,
+          "lon": 141,
+          "lat": 130,
+          "latv": 2,
+          "lonv": 2,
+          "nv": 2
+        },
+        "variables": {
+          "lat": {
+            "shape": [
+              130
+            ],
+            "dimensions": [
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "standard_name": "latitude",
+              "LongName": "Latitude at the center of\n\t\t\t0.10 degree grid intervals of latitude\n\t\t\tfrom -90 to 90.",
+              "bounds": "lat_bnds",
+              "axis": "Y"
+            }
+          },
+          "lon": {
+            "shape": [
+              141
+            ],
+            "dimensions": [
+              "lon"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "standard_name": "longitude",
+              "LongName": "Longitude at the center of\n\t\t\t0.10 degree grid intervals of longitude \n\t\t\tfrom -180 to 180.",
+              "bounds": "lon_bnds",
+              "axis": "X"
+            }
+          },
+          "time": {
+            "shape": [
+              1
+            ],
+            "dimensions": [
+              "time"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "standard_name": "time",
+              "LongName": "\nRepresentative time of data in \n\t\t\tseconds since 1980-01-06 00:00:00 UTC.\n\t\t\tThe calculation of time does not add leap seconds.\n\t\t\tThe difference due to leap seconds grows with time \n\t\t\tand in 2019 is less than 30 seconds.\n",
+              "bounds": "time_bnds",
+              "axis": "T",
+              "calendar": "julian"
+            },
+            "raw_values": [
+              1446550200
+            ],
+            "decoded_values": [
+              "2025-11-07 11:30:00"
+            ]
+          },
+          "lat_bnds": {
+            "shape": [
+              130,
+              2
+            ],
+            "dimensions": [
+              "lat",
+              "latv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lat,latv",
+              "Units": "degrees_north",
+              "units": "degrees_north",
+              "coordinates": "lat latv"
+            }
+          },
+          "precipitation": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "Units": "mm/hr",
+              "units": "mm/hr",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nComplete merged microwave-infrared (gauge-adjusted)\n                        precipitation estimate;  formerly precipitationCal\n"
+            }
+          },
+          "precipitationQualityIndex": {
+            "shape": [
+              1,
+              141,
+              130
+            ],
+            "dimensions": [
+              "time",
+              "lon",
+              "lat"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "time,lon,lat",
+              "coordinates": "time lon lat",
+              "_FillValue": -9999.900390625,
+              "CodeMissingValue": "-9999.9",
+              "LongName": "\nPrecipitation quality index; qualitative indicator\n                        of skill based on the microwave-infrared merging process\n"
+            }
+          },
+          "time_bnds": {
+            "shape": [
+              1,
+              2
+            ],
+            "dimensions": [
+              "time",
+              "nv"
+            ],
+            "dtype": "int32",
+            "attributes": {
+              "DimensionNames": "time,nv",
+              "Units": "seconds since 1980-01-06 00:00:00 UTC",
+              "units": "seconds since 1980-01-06 00:00:00 UTC",
+              "coordinates": "time nv"
+            },
+            "raw_values": [
+              [
+                1446550200,
+                1446552000
+              ]
+            ],
+            "decoded_values": [
+              "2025-11-07 11:30:00",
+              "2025-11-07 12:00:00"
+            ]
+          },
+          "lon_bnds": {
+            "shape": [
+              141,
+              2
+            ],
+            "dimensions": [
+              "lon",
+              "lonv"
+            ],
+            "dtype": "float32",
+            "attributes": {
+              "DimensionNames": "lon,lonv",
+              "Units": "degrees_east",
+              "units": "degrees_east",
+              "coordinates": "lon lonv"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "source": "F:\\云南极端降水数据\\tmp\\imerg_harmony\\20251107\\303596911_GPM_3IMERGHHL.07_3B-HHR-L.MS.MRG.3IMERG.20251107-S223000-E225959.1350.V07B_subsetted.nc4",
+    "error": "OSError(-51, 'NetCDF: Unknown file format')"
+  }
+]

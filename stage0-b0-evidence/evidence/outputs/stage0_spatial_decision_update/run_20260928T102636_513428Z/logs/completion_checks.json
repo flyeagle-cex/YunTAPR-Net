@@ -1,0 +1,30 @@
+{
+  "required_outputs": [
+    "STAGE0_SPATIAL_DECISION_FREEZE_REPORT.md",
+    "freeze_registry.json",
+    "docs/DECISION_LOG_STAGE0_SPATIAL_FREEZE_UPDATE.md",
+    "docs/RESEARCHER_APPROVAL_RECORD.md",
+    "PROVENANCE/generator_script_hashes.json",
+    "FROZEN/BOUNDARY/yunnan_gadm41_level1_boundary.geojson",
+    "FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+    "COMPARISON/yunnan_imerg_mask_intersection_candidate.nc",
+    "tests/pytest_final_output.txt",
+    "tests/pytest_final.xml",
+    "audit_final_status.json"
+  ],
+  "all_exist": true,
+  "frozen_contract": {
+    "status": "PASS",
+    "shape": [
+      130,
+      140
+    ],
+    "true_cells": 3430,
+    "boundary_all_identity_fields_match": true,
+    "lat_exact_match": true,
+    "lon_exact_match": true
+  },
+  "staging_empty": true,
+  "test_temporary_files_remaining": [],
+  "next_stage_started": false
+}

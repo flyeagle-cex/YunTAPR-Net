@@ -1,0 +1,37 @@
+{
+  "engine": "pyarrow",
+  "version": "25.0.1",
+  "schema": "all CSV columns as strings; CSV/Parquet exact evidence presentation; typed canonical values in gate_assessment.json",
+  "pairs": [
+    {
+      "csv": "EVIDENCE\\evidence_fingerprint_check.csv",
+      "parquet": "EVIDENCE\\evidence_fingerprint_check.parquet",
+      "rows": 95,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "EVIDENCE\\evidence_run_registry.csv",
+      "parquet": "EVIDENCE\\evidence_run_registry.parquet",
+      "rows": 9,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "evidence_registry.csv",
+      "parquet": "evidence_registry.parquet",
+      "rows": 139,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "logs\\input_integrity_check.csv",
+      "parquet": "logs\\input_integrity_check.parquet",
+      "rows": 48,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "STAGE0_CLOSEOUT_MATRIX.csv",
+      "parquet": "STAGE0_CLOSEOUT_MATRIX.parquet",
+      "rows": 20,
+      "exact_roundtrip": true
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+[
+  {
+    "item": "formal_time_binding",
+    "engineering_ready": false,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "TIME/B0_FORMAL_TIME_SEMANTICS_EVIDENCE.md",
+    "blocking_reason": "原转换链未闭合，analysis/单帧绑定待批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "imerg_2025_10",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "GAPS/IMERG_2025_10_DECISION_CARD.md",
+    "blocking_reason": "Final 缺 31 天；Late 不替代；缺口处置未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "model_input_bbox",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "SPATIAL/B0_INPUT_DOMAIN_DECISION.md",
+    "blocking_reason": "4 个工程候选无正式选择",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "weather_context_margin",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "SPATIAL/b0_input_domain_candidates.csv",
+    "blocking_reason": "科学上下文充分性尚未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "train_blocks",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "SPLIT/B0_TRAIN_VAL_DECISION.md",
+    "blocking_reason": "Train blocks、buffer、事件隔离未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "validation_blocks",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "SPLIT/B0_TRAIN_VAL_DECISION.md",
+    "blocking_reason": "Val blocks 与模型选择设计未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "final_test_rule",
+    "engineering_ready": true,
+    "scientific_rule_frozen": true,
+    "data_ready": true,
+    "researcher_decision_required": false,
+    "status": "PASS",
+    "evidence": "SPLIT/period_count_bounds.json",
+    "blocking_reason": "",
+    "scope_note": "规则层面 PASS；2025 March–October；数据缺口另列"
+  },
+  {
+    "item": "missing_qc",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "DATA_CONTRACT/b0_missing_qc_contract_candidate.md",
+    "blocking_reason": "partial、有效分母及输入缺测处置尚未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "train_only_normalization",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "DATA_CONTRACT/b0_normalization_contract.md",
+    "blocking_reason": "Train-only 范围已定义；方法/统计域未批，未拟合",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "b13_reader",
+    "engineering_ready": true,
+    "scientific_rule_frozen": true,
+    "data_ready": true,
+    "researcher_decision_required": false,
+    "status": "PASS",
+    "evidence": "F:\\pytorch\\Research\\outputs\\stage1_b0_engineering_smoke\\run_20260928T121619_125413Z\\B0_SMOKE\\himawari_b13_reader_report.md",
+    "blocking_reason": "",
+    "scope_note": "reader 工程接口复用旧 PASS；不代表所有月份数据通过"
+  },
+  {
+    "item": "target_grid",
+    "engineering_ready": true,
+    "scientific_rule_frozen": true,
+    "data_ready": true,
+    "researcher_decision_required": false,
+    "status": "PASS",
+    "evidence": "SPATIAL/frozen_spatial_anchor_verification.json",
+    "blocking_reason": "",
+    "scope_note": "真实 IMERG lat/lon 与冻结坐标逐值相等"
+  },
+  {
+    "item": "yunnan_evaluation_mask",
+    "engineering_ready": true,
+    "scientific_rule_frozen": true,
+    "data_ready": true,
+    "researcher_decision_required": false,
+    "status": "PASS",
+    "evidence": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\freeze_registry.json",
+    "blocking_reason": "",
+    "scope_note": "GADM4.1 center-in-polygon; 130x140; 3430; 哈希一致"
+  },
+  {
+    "item": "formal_b0_architecture",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "MODEL/B0_FORMAL_ARCHITECTURE_DECISION.md",
+    "blocking_reason": "只建立要求，正式配置及概率头第一版待批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "formal_loss_output_protocol",
+    "engineering_ready": false,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "MODEL/B0_FORMAL_ARCHITECTURE_DECISION.md",
+    "blocking_reason": "损失、输出、校准、指标/重复设计尚未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "formal_spatial_alignment",
+    "engineering_ready": true,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "SPATIAL/B0_INPUT_DOMAIN_DECISION.md",
+    "blocking_reason": "smoke nearest gather 不等于正式对齐；重采样/缺测传播未批准",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  },
+  {
+    "item": "multi_month_himawari_qc",
+    "engineering_ready": false,
+    "scientific_rule_frozen": false,
+    "data_ready": false,
+    "researcher_decision_required": true,
+    "status": "BLOCKED",
+    "evidence": "F:\\pytorch\\Research\\outputs\\stage0_continuous_engineering\\run_20260928T041855_828904Z\\CROSS_SOURCE\\research_period_data_matrix.csv",
+    "blocking_reason": "除2024-07外研究月 NOT_AUDITED；待正式规则批准后安排数据资格验证",
+    "scope_note": "Engineering-ready means evidence/contract preparation only; NOT formal execution-ready"
+  }
+]

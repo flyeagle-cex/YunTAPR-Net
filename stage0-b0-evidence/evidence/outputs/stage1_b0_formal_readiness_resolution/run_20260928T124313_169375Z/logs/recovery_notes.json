@@ -1,0 +1,31 @@
+{
+  "environment_display_attempt": {
+    "error": "importlib.metadata.PackageNotFoundError: h5py",
+    "resolution": "Optional h5py absent; netCDF4 1.7.4 read native HDF5 metadata successfully; no installation or environment change"
+  },
+  "first_build_attempt": {
+    "error": "source snapshot byte SHA assertion on discover.py",
+    "finding": "UTF-8-sig normalized source text identical; byte/line-ending difference only",
+    "resolution": "Preserve original discovery snapshot and save distinct source snapshots by SHA prefix; no old artifact replacement"
+  },
+  "pytest_attempt_1": {
+    "tests": 30,
+    "passed": 29,
+    "failed": 1,
+    "reason": "Default pandas CSV parser changed final floating-point ULP during readback",
+    "resolution": "CSV already stores exact round-trip numeric text; use float_precision=round_trip, strict equality retained; no coordinates changed",
+    "preserved_evidence": "tests/pytest_attempt_1.xml; tests/pytest_attempt_1.txt; tests/source_history/"
+  },
+  "native_probe_failure": {
+    "count": 1,
+    "product": "Late cache, 2025-11-07; outside required Final evidence",
+    "error": "OSError(-51, NetCDF: Unknown file format)",
+    "disposition": "Recorded, not removed, repaired, or treated as PASS; 9 Final probes independently pass"
+  },
+  "final_pytest": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

@@ -1,0 +1,1287 @@
+{
+  "frozen_conventions": [
+    {
+      "id": "F01",
+      "status": "FROZEN",
+      "rule": "研究对象为云南省全境",
+      "scope": "科学研究空间原则",
+      "evidence_ids": [
+        "SPATIAL_APPROVAL",
+        "FREEZE"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F02",
+      "status": "FROZEN",
+      "rule": "主评价使用云南省行政区 mask",
+      "scope": "评价范围，不是矩形输入域",
+      "evidence_ids": [
+        "FREEZE"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F03",
+      "status": "FROZEN",
+      "rule": "GADM 4.1 China Level-1 / CHN.30_1；五身份字段同时确认",
+      "scope": "固定本地归档及其 hash；不得静默更换版本；未声称有新的官方获取凭据",
+      "evidence_ids": [
+        "FREEZE",
+        "SPATIAL_APPROVAL"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F04",
+      "status": "FROZEN",
+      "rule": "center-in-polygon；3430 true / 14770 false",
+      "scope": "PRIMARY_EVALUATION；intersection 3752 格仅作 sensitivity comparison",
+      "evidence_ids": [
+        "FREEZE",
+        "RUN_freeze"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F05",
+      "status": "FROZEN",
+      "rule": "真实 IMERG 130×140 lat/lon；latitude ascending",
+      "scope": "保留 float32 原坐标、逐值一致与坐标 hash；不重建坐标，不 flip/transpose",
+      "evidence_ids": [
+        "FREEZE",
+        "IMERG_GRID"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F06",
+      "status": "FROZEN",
+      "rule": "当前审计 IMERG V07B Final metadata；48 帧/日、30 min、约 0.1°",
+      "scope": "已批准采用的源身份/工程事实；不扩展为 native half-hour exact window 已证实",
+      "evidence_ids": [
+        "RUN_p0",
+        "CONVENTIONS"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F07",
+      "status": "FROZEN",
+      "rule": "0 mm/hr 为有效无雨；missing 不得当 0",
+      "scope": "缺测显式 mask；不得自动插值、填零或制造观测",
+      "evidence_ids": [
+        "CONVENTIONS"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F08",
+      "status": "FROZEN",
+      "rule": "Himawari 七通道 08/09/10/11/13/15/16；六个 causal nominal slots；obs_end <= analysis_time",
+      "scope": "七通道/六槽用于相应阶段；B0 仅 B13 单时次。槽位 −10/−20/−30/−40/−50/−60 min；与 IMERG 的正式绑定另待决",
+      "evidence_ids": [
+        "CONVENTIONS",
+        "RUN_p0"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F09",
+      "status": "FROZEN",
+      "rule": "NO_GFS_PRECIPITATION_USED_AS_MODEL_INPUT",
+      "scope": "禁止降水累积/降水率 predictor；PWAT 为整层水汽，不是降水 predictor",
+      "evidence_ids": [
+        "RUN_continuous",
+        "CONVENTIONS"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F10",
+      "status": "FROZEN",
+      "rule": "DEM 主来源 F:\\云南极端降水数据\\raw\\SRTM",
+      "scope": "237 文件，对已冻结云南 polygon FULL；AWS_Skadi 独立，不拼接",
+      "evidence_ids": [
+        "FREEZE",
+        "DEM_COVERAGE"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F11",
+      "status": "FROZEN",
+      "rule": "DOTE dh/dx、dh/dy 必须基于真实物理距离",
+      "scope": "仅物理原则；DEM 聚合、地形参数与生产流程未冻结",
+      "evidence_ids": [
+        "FREEZE",
+        "SPATIAL_APPROVAL"
+      ],
+      "approval_evidence": [
+        "SPATIAL_APPROVAL",
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F12",
+      "status": "FROZEN",
+      "rule": "F/H 原始科研数据及既有审计 run 只读",
+      "scope": "历史 DRY_RUN_FAILED、报告与诊断 cache 均保留",
+      "evidence_ids": [
+        "CONVENTIONS",
+        "CURRENT_REQUEST"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F13",
+      "status": "FROZEN",
+      "rule": "surface pressure 支持未来 pressure-level physical validity feasibility",
+      "scope": "仅已有 PS/层压单位可比的可行性事实；未冻结或生产像元有效性 mask",
+      "evidence_ids": [
+        "REPORT_continuous",
+        "REPORT_thermo",
+        "CURRENT_REQUEST"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F14",
+      "status": "FROZEN",
+      "rule": "p99 is a distribution-tail review marker only; it is not an exclusion criterion, QC threshold, or scientific threshold.",
+      "scope": "44 LATENCY_TAIL_REVIEW 不作排除；TEMPORAL_ORDER_ERROR 独立判断；creation delay 原值保留",
+      "evidence_ids": [
+        "RUN_p0",
+        "CONVENTIONS"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F15",
+      "status": "FROZEN",
+      "rule": "2025 final test；2023–2024 development pool",
+      "scope": "V1.3 框架，候选每年 March–October 保留；具体 Train/Val 连续块未定，未执行 split",
+      "evidence_ids": [
+        "CURRENT_REQUEST",
+        "CONVENTIONS"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    },
+    {
+      "id": "F16",
+      "status": "FROZEN",
+      "rule": "IMERG QI 仅 QC_STAT_ONLY，不作为 predictor",
+      "scope": "本轮不引入 QI 科学阈值或筛样规则",
+      "evidence_ids": [
+        "CONVENTIONS",
+        "SCHEMA"
+      ],
+      "approval_evidence": [
+        "CURRENT_REQUEST"
+      ]
+    }
+  ],
+  "data_gaps": [
+    {
+      "id": "G01",
+      "classification": "HARD_DATA_GAP",
+      "item": "IMERG 2025-10",
+      "status": "MISSING",
+      "confirmed_gap": true,
+      "detail": "候选 2025-03~10 final test 缺 31 日；不可自动缩短到 September。",
+      "evidence_ids": [
+        "OCTOBER",
+        "RUN_p0"
+      ]
+    },
+    {
+      "id": "G02",
+      "classification": "DATA_COVERAGE_GAP",
+      "item": "GFS main 研究期六层 T/RH",
+      "status": "MAIN_ROOT_MISSING_COMPANION_CANDIDATE_COMPLETE",
+      "confirmed_gap": true,
+      "detail": "主库缺所需 T/RH；thermo 有 8820/8820 structural complete 对。缺口限主来源，未批准 integration。",
+      "evidence_ids": [
+        "REPORT_continuous",
+        "THERMO_RESEARCH"
+      ]
+    },
+    {
+      "id": "G03",
+      "classification": "DATA_COVERAGE_GAP",
+      "item": "Himawari 2024-07 nominal slots",
+      "status": "PARTIAL",
+      "confirmed_gap": true,
+      "detail": "4390/4464，74 个名义时次未覆盖；六帧候选 4020 complete /444 incomplete。B0 单帧不可直接用六帧完整性剔除。",
+      "evidence_ids": [
+        "RUN_himawari",
+        "RESEARCH_MATRIX"
+      ]
+    },
+    {
+      "id": "G04",
+      "classification": "METADATA_EVIDENCE_GAP",
+      "item": "IMERG native exact half-hour window",
+      "status": "PROVISIONAL",
+      "confirmed_gap": true,
+      "detail": "converted CF time 已验证；native 窗口起止及 analysis_time 绑定仍未完全建立。",
+      "evidence_ids": [
+        "SCHEMA",
+        "CONVENTIONS"
+      ]
+    },
+    {
+      "id": "G05",
+      "classification": "METADATA_EVIDENCE_GAP",
+      "item": "GFS operational release / historical vintage",
+      "status": "NOT_ESTABLISHED",
+      "confirmed_gap": true,
+      "detail": "2026 retrospective acquisition 仅 PARTIALLY_ESTABLISHED，不能证明 2023–2025 contemporaneous availability。",
+      "evidence_ids": [
+        "RUN_provenance"
+      ]
+    },
+    {
+      "id": "G06",
+      "classification": "SOURCE_PROVENANCE_GAP",
+      "item": "GFS main/thermo acquisition-conversion-content chain",
+      "status": "SUPPORTED_WITH_CAVEATS",
+      "confirmed_gap": true,
+      "detail": "原始内容/转换过程证据链未闭合；不能把 token/grid/time 一致升级成全部来源认证。",
+      "evidence_ids": [
+        "RUN_provenance",
+        "REPORT_provenance"
+      ]
+    },
+    {
+      "id": "G07",
+      "classification": "METADATA_EVIDENCE_GAP",
+      "item": "Himawari operational availability",
+      "status": "NOT_ESTABLISHED",
+      "confirmed_gap": true,
+      "detail": "date_created 是 product/file creation timestamp；不是已验证 operational availability。",
+      "evidence_ids": [
+        "RUN_p0",
+        "REPORT_himawari"
+      ]
+    },
+    {
+      "id": "U01",
+      "classification": "DATA_COVERAGE_GAP",
+      "item": "独立外部验证",
+      "status": "NOT_AUDITED",
+      "confirmed_gap": false,
+      "detail": "这是准备状态未知，不是已证明数据缺失。既有材料未建立可用独立验证集，不扫描/下载来补齐。",
+      "evidence_ids": [
+        "RESEARCH_MATRIX",
+        "CONVENTIONS"
+      ]
+    },
+    {
+      "id": "U02",
+      "classification": "DATA_COVERAGE_GAP",
+      "item": "Himawari 其余 23 个研究月份",
+      "status": "NOT_AUDITED",
+      "confirmed_gap": false,
+      "detail": "只有目录证据；未证明缺文件，也未证明 READY。未来正式样本生产前需完成其选定范围工程验证。",
+      "evidence_ids": [
+        "RESEARCH_MATRIX"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D01",
+      "decision": "2025-10 IMERG 缺月处理",
+      "category": "B",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": true,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "完整 2025-03~10 final test 目前不可构建。",
+      "current_evidence": "2465 日截止 2025-09-30，定向 October 计数 0。",
+      "options": "补齐同标准数据后验证；或由研究者显式批准研究期/测试协议修订并说明可比性；本轮不选择。",
+      "engineering_consequence": "现有月份可支持工程链路；完整正式测试 Dataset 保持 HOLD。",
+      "scientific_consequence": "擅自删 October 会改变季节覆盖及测试问题。",
+      "if_deferred": "smoke 可单独进入；完整正式实验与 full scientific closeout 仍阻塞。",
+      "recommendation": "先保留 March–October 框架与显式缺月状态，待研究者选定处理方案。",
+      "evidence_ids": [
+        "OCTOBER",
+        "CURRENT_REQUEST"
+      ],
+      "category_name": "BLOCKER_TO_FULL_STAGE0_SCIENTIFIC_CLOSEOUT"
+    },
+    {
+      "id": "D02",
+      "decision": "native IMERG half-hour 与 analysis_time 正式绑定",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": true,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "监督标签的时段和可使用卫星观测必须一致。",
+      "current_evidence": "converted CF coordinate verified；native exact window PROVISIONAL。",
+      "options": "取得可追溯产品/转换证据后确定映射；证据不足时继续工程 fixture，推迟真实标签的正式配对。",
+      "engineering_consequence": "正式 sample pairing 前必须冻结 start/end/analysis_time 语义。",
+      "scientific_consequence": "不自行采用 [T,T+30)；未证实绑定不能形成正式指标。",
+      "if_deferred": "只允许非科研 smoke；正式配对阻塞。",
+      "recommendation": "先保存原时间及证据字段，正式映射由研究者依据证据确认。",
+      "evidence_ids": [
+        "SCHEMA",
+        "CONVENTIONS"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D03",
+      "decision": "model_input_bbox 与输入输出空间映射",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": true,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "真实输入裁剪、padding 与目标 grid 映射影响全省输出。",
+      "current_evidence": "bbox NOT_YET_FROZEN；97–107E/20–30N 是 common numerical overlap candidate。",
+      "options": "根据 B0 的 Himawari/IMERG 覆盖选择并批准输入域和显式映射；或继续保持未定，仅做工程 fixture。",
+      "engineering_consequence": "smoke 可声明临时已有数组域；正式 Dataset 必须固定空间接口。",
+      "scientific_consequence": "不能把矩形公共交集当云南评价 mask 或正式天气背景范围。",
+      "if_deferred": "不阻止 smoke；正式数据裁剪和可复现实验阻塞。",
+      "recommendation": "分别记录输入域、目标全 grid 和已冻结评价 mask，勿以公共交集替代决定。",
+      "evidence_ids": [
+        "FREEZE",
+        "REPORT_spatial"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D04",
+      "decision": "省界外 weather-system context margin",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": true,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "影响输入域携带的省外天气信息及边界效应。",
+      "current_evidence": "当前未选科学 margin；包络余量仅几何工程事实。",
+      "options": "结合可用覆盖与研究目标批准宽度/几何定义，并与 bbox 一起定版；或暂缓正式输入域。",
+      "engineering_consequence": "无需为 smoke 冻结；正式输入裁剪前需明确其规则或适用范围。",
+      "scientific_consequence": "已有包络余量不自动成为科学 context 定义。",
+      "if_deferred": "仅阻止正式输入域定版，不阻止工程链路验证。",
+      "recommendation": "与 D03 联合 review，避免两项相互矛盾，不预选数值。",
+      "evidence_ids": [
+        "FREEZE",
+        "REPORT_spatial"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D05",
+      "decision": "正式 Train/Validation 时间块",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "影响无泄漏验证、归一化来源和实验可比性。",
+      "current_evidence": "2025 final test、2023–2024 development pool 已保留；具体块未冻结。",
+      "options": "研究者选择明确连续时间块或有版本的事件划分及间隔规则；保持 2025 测试隔离。",
+      "engineering_consequence": "必须在正式 index、Train-only 统计和实验前定版。",
+      "scientific_consequence": "不自动挑选任何 validation 月份。",
+      "if_deferred": "smoke 可继续；正式 split 和训练不可开始。",
+      "recommendation": "将每个时间块与排除/缓冲规则写成可核验配置后再执行。",
+      "evidence_ids": [
+        "CURRENT_REQUEST",
+        "CONVENTIONS"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D06",
+      "decision": "正式缺测、QC 和单帧/六帧样本纳入规则",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "工程读成功不代表每个训练样本/像元有效。",
+      "current_evidence": "missing 不填零；无科学 QC 阈值；44 p99 尾部不是坏数据。",
+      "options": "在已冻结因果与显式 mask 原则下批准分阶段缺帧/缺像元处理、loss/metric 有效像元规则；未确定则暂缓正式样本。",
+      "engineering_consequence": "B0 必须按 B13 单时次条件，B1/B3 才采用对应六槽条件。",
+      "scientific_consequence": "不可因六帧不完整剔除可用 B0 单帧；不可因延迟尾部剔除。",
+      "if_deferred": "正式样本纳入策略未定；smoke 可用显式标注 fixture。",
+      "recommendation": "复用原 QC flags 和 null，不凭工程阈值创造科学剔除标准。",
+      "evidence_ids": [
+        "SCHEMA",
+        "REPORT_himawari",
+        "CONVENTIONS"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D07",
+      "decision": "正式归一化来源及计算协议",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "正式统计不能泄漏 validation/final test 信息。",
+      "current_evidence": "尚未执行正式 mean/std；具体 Train blocks 未冻结。",
+      "options": "先确认 Train-only 来源、统计对象、有效像元、版本和反变换协议；或保持正式归一化待定。",
+      "engineering_consequence": "未来依赖 D05/D06；本轮不计算统计量。",
+      "scientific_consequence": "工程 fixture 参数不是训练统计，不可用于报告正式结果。",
+      "if_deferred": "正式训练前 HOLD；不阻塞 raw/dummy 工程输入。",
+      "recommendation": "将统计来源与 split hash 绑定，等研究者确认协议后计算。",
+      "evidence_ids": [
+        "CURRENT_REQUEST",
+        "SCHEMA"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D08",
+      "decision": "Himawari 观测因果与 operational availability 的正式声明",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": true,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "近实时结论不能用 product creation timestamp 冒充可用时间。",
+      "current_evidence": "obs_end physical causality 已建立；date_created/availability 分离；4390 nominal/internal 数值不等。",
+      "options": "建立 operational evidence；或研究者明确批准有局限的 proxy/retrospective evaluation 声明，不能声称观测到的真实可用性。",
+      "engineering_consequence": "真实正式配对采用获批 analysis_time；NRT replay 另需 availability 规则。",
+      "scientific_consequence": "物理因果的 retrospective baseline 与 operational NRT 可用性结论必须分开。",
+      "if_deferred": "不妨碍 fixture smoke；当前未界定正式 B0 的时间解释，需先明确；不机械要求获取不可得实时日志才能做明确标注的 retrospective baseline。",
+      "recommendation": "先确认拟报告的是哪种时间语义与证据强度，再定规则，不自动代理。",
+      "evidence_ids": [
+        "RUN_p0",
+        "REPORT_himawari",
+        "SCHEMA"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "D09",
+      "decision": "GFS main + thermo Dataset-layer adoption",
+      "category": "B",
+      "due_stage": "BEFORE_B4",
+      "blocks_smoke": false,
+      "blocks_formal": false,
+      "blocks_full_stage0": true,
+      "required_before_B4": true,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "B4 所需 T/RH 补充及来源可追溯性。",
+      "current_evidence": "12960 完整配对、研究期 8820/8820；SUPPORTED_WITH_CAVEATS / PARTIALLY_COMPATIBLE。",
+      "options": "研究者审阅来源不足后显式采用并登记局限；或先补 provenance，保持分库。",
+      "engineering_consequence": "B0 不读取 GFS；B4 合并前需明确 source role、冲突和 provenance 规则。",
+      "scientific_consequence": "结构齐全不等于内容来源全部认证或研究者批准。",
+      "if_deferred": "B0 不受影响；完整科学收口及 B4 adoption 保持未决。",
+      "recommendation": "保留双来源和 key/hash，不生成已批准 integration 的假状态。",
+      "evidence_ids": [
+        "RUN_thermo",
+        "RUN_provenance",
+        "THERMO_RESEARCH"
+      ],
+      "category_name": "BLOCKER_TO_FULL_STAGE0_SCIENTIFIC_CLOSEOUT"
+    },
+    {
+      "id": "D10",
+      "decision": "GFS operational vintage rule",
+      "category": "B",
+      "due_stage": "BEFORE_B4",
+      "blocks_smoke": false,
+      "blocks_formal": false,
+      "blocks_full_stage0": true,
+      "required_before_B4": true,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "决定 B4/NRT replay 当时允许选择的 forecast。",
+      "current_evidence": "release 与 historical operational vintage NOT_ESTABLISHED；2026 acquisition 不能证明 2023–2025 contemporaneous availability。",
+      "options": "基于官方发布证据；基于同历史时期实测 acquisition；或显式批准有局限的延迟 fallback；也可暂缓 NRT 使用。",
+      "engineering_consequence": "未选择 init+X，更未采用 init+5h；B4 取样前需版本化规则。",
+      "scientific_consequence": "conversion/mtime/download time 都不能自动当 official release。",
+      "if_deferred": "不阻塞 B0；阻塞 full scientific closeout 与 B4 operational replay。",
+      "recommendation": "并列保存可证实事实和 fallback 假设，由研究者选择，不补造 release。",
+      "evidence_ids": [
+        "RUN_provenance",
+        "REPORT_provenance"
+      ],
+      "category_name": "BLOCKER_TO_FULL_STAGE0_SCIENTIFIC_CLOSEOUT"
+    },
+    {
+      "id": "D11",
+      "decision": "DEM aggregation / terrain 参数 / gradient production",
+      "category": "C",
+      "due_stage": "BEFORE_B5_B8",
+      "blocks_smoke": false,
+      "blocks_formal": false,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": true,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "影响后续地形特征尺度与物理解释。",
+      "current_evidence": "SRTM 主来源和物理距离原则已冻结，正式生产细节未冻结。",
+      "options": "在 B5 elevation 使用前确定聚合；在 B6 terrain 与 B7/B8 DOTE 前分别确定参数和流程。",
+      "engineering_consequence": "B0/B4 无需等 DEM 特征生产；本轮不 resample。",
+      "scientific_consequence": "经纬度 index gradient 永远不能冒充物理梯度。",
+      "if_deferred": "不阻塞当前 B0 或 Stage-0 工程收口；到对应地形阶段再决策。",
+      "recommendation": "分阶段定版，避免要求现在冻结 B8 的所有参数。",
+      "evidence_ids": [
+        "FREEZE",
+        "DEM_COVERAGE"
+      ],
+      "category_name": "DEFERABLE_TO_LATER_STAGE"
+    },
+    {
+      "id": "D12",
+      "decision": "独立外部验证数据与启用时间",
+      "category": "C",
+      "due_stage": "BEFORE_FINAL_PAPER",
+      "blocks_smoke": false,
+      "blocks_formal": false,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": true,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "IMERG 密集参考不能独立证明真实降水改进。",
+      "current_evidence": "当前 NOT_AUDITED；未证明不存在，也未建立正式独立验证集。",
+      "options": "研究者选定可用站点/雷达/DPR 等独立资料与审计计划；在论文真实性结论前落实；B0 可先报告相对 IMERG 的内部验证。",
+      "engineering_consequence": "不要求 B0 开始前全部下载；后续验证需时间空间配对、独立性与许可审计。",
+      "scientific_consequence": "没有独立观测时不得宣称对真实降水的全面优越性。",
+      "if_deferred": "B0 smoke/formal 对 IMERG baseline 不因此阻塞；最终独立真实性结论 HOLD。",
+      "recommendation": "现在登记 NOT_AUDITED 和最终论文前里程碑，不伪造 READY。",
+      "evidence_ids": [
+        "RESEARCH_MATRIX",
+        "CURRENT_REQUEST"
+      ],
+      "category_name": "DEFERABLE_TO_LATER_STAGE"
+    },
+    {
+      "id": "D13",
+      "decision": "正式概率实验协议（包括 32 quantile levels）",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "why": "固定输出、loss、metric 和多随机种子协议才能形成可复现实验。",
+      "current_evidence": "既有 schema 明示 32 quantile levels 尚未冻结；本轮没有实验配置批准证据。",
+      "options": "在 B0 正式实验设计时版本化 quantile levels、损失/指标、checkpoint 选择与种子协议；smoke 仅用明确非科研 fixture 配置。",
+      "engineering_consequence": "属于未来 B0 实验设计门槛，不要求现在生产模型或冻结全部超参数。",
+      "scientific_consequence": "避免把调试 loss/metric 输出称为论文结果。",
+      "if_deferred": "smoke 和 Stage-0 工程交付可完成；正式实验协议仍待决。",
+      "recommendation": "只记录已知协议空缺，进入正式实验准备时由研究者确认，不替研究者选值。",
+      "evidence_ids": [
+        "SCHEMA",
+        "CONVENTIONS"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    },
+    {
+      "id": "R14",
+      "decision": "44 LATENCY_TAIL_REVIEW",
+      "category": "D",
+      "due_stage": "NOW",
+      "blocks_smoke": false,
+      "blocks_formal": false,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": false,
+      "status": "INFORMATIONAL_REVIEW_ONLY",
+      "why": "标记延迟分布尾部供查看。",
+      "current_evidence": "本月 p99=844.6853707599998 秒，44 个 >=p99；不存在据此认定错误的证据。",
+      "options": "研究者可复核成因；若发现独立异常，另建证据/决策记录。",
+      "engineering_consequence": "无需据此删除或阻止所有 B0；保留原 delay 和 marker。",
+      "scientific_consequence": "p99 不是排除、QC 或科学阈值。",
+      "if_deferred": "不阻止任何 B0 entry；没有额外证据时仅 informational。",
+      "recommendation": "保留记录并允许人工查看，不提高为硬 blocker。",
+      "evidence_ids": [
+        "RUN_p0"
+      ],
+      "category_name": "INFORMATIONAL_REVIEW_ONLY"
+    },
+    {
+      "id": "E15",
+      "decision": "Himawari 正式研究期工程证据覆盖",
+      "category": "A",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "blocks_smoke": false,
+      "blocks_formal": true,
+      "blocks_full_stage0": false,
+      "required_before_B4": false,
+      "required_before_B5_B8": false,
+      "required_before_final_paper": false,
+      "requires_researcher_decision": false,
+      "status": "ENGINEERING_EVIDENCE_REQUIRED",
+      "why": "正式实验不得将未审计月份标成 READY。",
+      "current_evidence": "只有 2024-07 内容审计通过；其余 23 研究月 NOT_AUDITED。",
+      "options": "在未来正式数据准备任务中按批准范围完成 reader/QC/grid/causal validation。",
+      "engineering_consequence": "这是后续实现前/随数据准备完成的工程检查，不是本轮全库扫描许可。",
+      "scientific_consequence": "不得外推一个月结果，也不得把 NOT_AUDITED 当 MISSING。",
+      "if_deferred": "smoke 可以复用已审计月；完整正式研究期 Dataset 就绪仍缺证据。",
+      "recommendation": "在下一步获授权的数据工程范围内解决，不重开本轮审计。",
+      "evidence_ids": [
+        "RESEARCH_MATRIX",
+        "RUN_himawari"
+      ],
+      "category_name": "BLOCKER_TO_B0"
+    }
+  ],
+  "master": [
+    {
+      "item": "IMERG",
+      "engineering_status": "PASS / audited 2465 files",
+      "scientific_status": "2025-10 MISSING; native window PROVISIONAL",
+      "frozen_status": "产品/频率/真实 grid/0!=missing 已定；native window 未定",
+      "evidence_ids": [
+        "RUN_p0",
+        "IMERG_GRID",
+        "OCTOBER",
+        "SCHEMA"
+      ],
+      "next_action": "D01/D02/D06；不得自动缩短研究期"
+    },
+    {
+      "item": "Himawari",
+      "engineering_status": "PASS / 2024-07 scope only",
+      "scientific_status": "其他月 NOT_AUDITED；operational availability NOT_ESTABLISHED",
+      "frozen_status": "七通道/六 causal slots/obs_end 约束已定；正式 label binding 未定",
+      "evidence_ids": [
+        "RUN_himawari",
+        "RUN_p0",
+        "RESEARCH_MATRIX"
+      ],
+      "next_action": "D02/D06/D08/E15；44 尾部仅 R14 review"
+    },
+    {
+      "item": "GFS main",
+      "engineering_status": "PASS / metadata-grid-time audit",
+      "scientific_status": "研究期主库 T/RH 缺失；非全像元 QC",
+      "frozen_status": "禁用降水 predictor；PS 物理可行性事实确认",
+      "evidence_ids": [
+        "REPORT_continuous",
+        "GFS_GRID",
+        "GFS_INVENTORY"
+      ],
+      "next_action": "B4 前 D09；B0 不依赖"
+    },
+    {
+      "item": "GFS thermo",
+      "engineering_status": "PASS / structural metadata",
+      "scientific_status": "PARTIALLY_COMPATIBLE; 8820/8820 research candidate",
+      "frozen_status": "Dataset integration NOT_YET_FROZEN",
+      "evidence_ids": [
+        "RUN_thermo",
+        "THERMO_RESEARCH"
+      ],
+      "next_action": "D09；不自动合并"
+    },
+    {
+      "item": "GFS provenance",
+      "engineering_status": "PASS / evidence investigation",
+      "scientific_status": "SUPPORTED_WITH_CAVEATS; conversion chain gap",
+      "frozen_status": "来源认可不足不转为 FROZEN",
+      "evidence_ids": [
+        "RUN_provenance",
+        "REPORT_provenance"
+      ],
+      "next_action": "D09：显式接受局限或补证据"
+    },
+    {
+      "item": "GFS vintage",
+      "engineering_status": "PASS / investigation complete",
+      "scientific_status": "release/historical vintage NOT_ESTABLISHED",
+      "frozen_status": "NOT_YET_FROZEN",
+      "evidence_ids": [
+        "RUN_provenance"
+      ],
+      "next_action": "D10；B4/NRT replay 前解决，不阻塞 B0"
+    },
+    {
+      "item": "DEM",
+      "engineering_status": "PASS / 237 SRTM tiles coverage",
+      "scientific_status": "FULL frozen Yunnan polygon coverage；不是高程精度验证",
+      "frozen_status": "SRTM 主来源与 physical-distance 原则 FROZEN；生产参数未定",
+      "evidence_ids": [
+        "FREEZE",
+        "DEM_COVERAGE"
+      ],
+      "next_action": "D11 在 B5–B8 对应阶段处理"
+    },
+    {
+      "item": "Yunnan boundary",
+      "engineering_status": "PASS / identity + hashes",
+      "scientific_status": "GADM4.1 CHN.30_1 已获批准",
+      "frozen_status": "FROZEN",
+      "evidence_ids": [
+        "FREEZE",
+        "SPATIAL_APPROVAL"
+      ],
+      "next_action": "保持版本/归档/geometry hash，不静默替换"
+    },
+    {
+      "item": "Yunnan evaluation mask",
+      "engineering_status": "PASS / readback fingerprint",
+      "scientific_status": "center-in-polygon; 3430/14770; actual 130x140",
+      "frozen_status": "FROZEN PRIMARY；intersection NON_PRIMARY",
+      "evidence_ids": [
+        "FREEZE",
+        "RUN_freeze",
+        "IMERG_GRID"
+      ],
+      "next_action": "直接使用冻结登记；本轮未重生成"
+    },
+    {
+      "item": "spatial overlap",
+      "engineering_status": "PASS / static geometric audit",
+      "scientific_status": "97–107E,20–30N CANDIDATE ONLY；非 all-time all-variable validity",
+      "frozen_status": "NOT_FROZEN_AS_MODEL_BBOX",
+      "evidence_ids": [
+        "RUN_spatial",
+        "FREEZE"
+      ],
+      "next_action": "D03/D04；几何相交不证明科学 context 足够"
+    },
+    {
+      "item": "model bbox",
+      "engineering_status": "候选工程证据已提供",
+      "scientific_status": "RESEARCHER_DECISION_REQUIRED",
+      "frozen_status": "NOT_YET_FROZEN",
+      "evidence_ids": [
+        "FREEZE",
+        "CURRENT_REQUEST"
+      ],
+      "next_action": "smoke 可用声明的临时域；formal 前固定输入与映射"
+    },
+    {
+      "item": "external validation",
+      "engineering_status": "NOT_AUDITED",
+      "scientific_status": "独立有效性/可用性尚未建立",
+      "frozen_status": "NOT_YET_FROZEN",
+      "evidence_ids": [
+        "RESEARCH_MATRIX",
+        "CURRENT_REQUEST"
+      ],
+      "next_action": "D12：最终论文真实性结论前落实；不是 B0 mandatory input"
+    }
+  ],
+  "requirements": {
+    "B0_ENGINEERING_SMOKE_ENTRY": {
+      "status": "READY",
+      "meaning": "READY_FOR_ENGINEERING_IMPLEMENTATION_ONLY; not an executed/passed B0 and not formal experiment approval",
+      "required": [
+        "明确工程 smoke 标签与独立 run；仅 B13 单时次",
+        "使用已审计 2024-07 reader / dummy-loading 证据作为实现基础",
+        "显式有效性 mask、float32 tensor、源方向记录、obs_end 因果原则",
+        "将未来 Dataset -> Tensor -> forward -> loss -> metric -> checkpoint -> inference 逐环验证；本轮不执行",
+        "空间/标签接口若尚未冻结，使用显式非科学 fixture/synthetic targets 验证接口；不做未经批准的真实监督时间配对",
+        "保持 raw/old-run 只读与审计可追溯"
+      ],
+      "optional": [
+        "使用已冻结云南评价 mask 做 shape/hash 接口检查",
+        "使用已保存小样本中间格式；storage recommendation 尚非永久冻结",
+        "现有七通道/六槽 reader 能力可复用，但不是 B0 模型输入要求"
+      ],
+      "not_required": [
+        "GFS main",
+        "GFS thermo",
+        "GFS vintage",
+        "DEM",
+        "DOTE",
+        "DTFM",
+        "MEE",
+        "完整 2025-03~10 测试数据",
+        "独立外部验证下载完成",
+        "正式 model_input_bbox/context margin 冻结",
+        "正式 Train/Val 划分及 Train mean/std"
+      ],
+      "actual_execution": "NOT_RUN_THIS_TASK",
+      "model_input": [
+        "Himawari B13 single time"
+      ],
+      "formal_science_metrics_allowed": false
+    },
+    "B0_FORMAL_EXPERIMENT_ENTRY": {
+      "status": "NOT_READY",
+      "required": [
+        "研究期与 2025 final-test 框架保持，2025-10 缺月处理明确",
+        "真实 IMERG target grid 与 3430 主评价 mask（已满足）",
+        "native IMERG 窗口、analysis_time、单帧 selection 与 obs_end 因果绑定获批",
+        "正式 model_input_bbox/context 定义及裁剪/padding/输出映射获批",
+        "2023–2024 development 内 Train/Val 精确块和隔离规则获批",
+        "Train-only 归一化来源/有效像元/统计协议获批后再计算",
+        "missing/QC/sample inclusion 规则与分阶段单帧/六槽要求明确",
+        "实际拟用 Himawari 各研究月完成工程验证，不把 NOT_AUDITED 写 READY",
+        "正式概率实验 protocol（quantiles/loss/metrics/seeds/checkpoint）定版",
+        "明确 retrospective physical causality 与 operational NRT availability 的报告范围"
+      ],
+      "optional": [
+        "外部验证可先规划；若要作真实降水独立优越性结论则必须先就绪"
+      ],
+      "not_required": [
+        "GFS main",
+        "GFS thermo",
+        "GFS vintage",
+        "DEM",
+        "DOTE",
+        "DTFM",
+        "MEE",
+        "B8 全部 terrain hyperparameters"
+      ],
+      "actual_execution": "NOT_RUN_THIS_TASK",
+      "model_input": [
+        "Himawari B13 single time"
+      ],
+      "target": "IMERG (formal pairing pending)"
+    }
+  },
+  "matrix": [
+    {
+      "item": "IMERG audited source grid",
+      "engineering_complete": true,
+      "scientific_definition_frozen": true,
+      "data_ready": "READY_WITHIN_AUDITED_SPAN",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": true,
+      "required_for_B5_B8": true,
+      "required_for_full_stage0_closeout": true,
+      "status": "PASS",
+      "evidence": "RUN_p0;IMERG_GRID",
+      "researcher_action": "保持真实源坐标",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "Yunnan boundary and primary mask",
+      "engineering_complete": true,
+      "scientific_definition_frozen": true,
+      "data_ready": "READY",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": true,
+      "required_for_B5_B8": true,
+      "required_for_full_stage0_closeout": true,
+      "status": "FROZEN",
+      "evidence": "FREEZE",
+      "researcher_action": "保持冻结版本",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "Himawari July reader / dummy loading",
+      "engineering_complete": true,
+      "scientific_definition_frozen": true,
+      "data_ready": "READY_FOR_ENGINEERING",
+      "required_for_B0_smoke": true,
+      "required_for_B0_formal": true,
+      "required_for_B4": true,
+      "required_for_B5_B8": true,
+      "required_for_full_stage0_closeout": true,
+      "status": "PASS_SCOPED",
+      "evidence": "RUN_himawari",
+      "researcher_action": "B0 仅选择 B13 单时次；未开始新实现",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "GFS main / thermo metadata availability",
+      "engineering_complete": true,
+      "scientific_definition_frozen": false,
+      "data_ready": "STRUCTURAL_CANDIDATE_ONLY",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": true,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "PARTIALLY_COMPATIBLE",
+      "evidence": "RUN_thermo",
+      "researcher_action": "D09/D10；B4 前还须与实际 predictor 像元有效性验证分开",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "SRTM primary source coverage",
+      "engineering_complete": true,
+      "scientific_definition_frozen": true,
+      "data_ready": "FULL_FROZEN_POLYGON",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": false,
+      "required_for_B5_B8": true,
+      "required_for_full_stage0_closeout": true,
+      "status": "FROZEN_SOURCE",
+      "evidence": "FREEZE;DEM_COVERAGE",
+      "researcher_action": "参数 D11 可后置",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D01 2025-10 IMERG 缺月处理",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "MISSING",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "OCTOBER;CURRENT_REQUEST",
+      "researcher_action": "先保留 March–October 框架与显式缺月状态，待研究者选定处理方案。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D02 native IMERG half-hour 与 analysis_time 正式绑定",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "SCHEMA;CONVENTIONS",
+      "researcher_action": "先保存原时间及证据字段，正式映射由研究者依据证据确认。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D03 model_input_bbox 与输入输出空间映射",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "FREEZE;REPORT_spatial",
+      "researcher_action": "分别记录输入域、目标全 grid 和已冻结评价 mask，勿以公共交集替代决定。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D04 省界外 weather-system context margin",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "FREEZE;REPORT_spatial",
+      "researcher_action": "与 D03 联合 review，避免两项相互矛盾，不预选数值。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D05 正式 Train/Validation 时间块",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "CURRENT_REQUEST;CONVENTIONS",
+      "researcher_action": "将每个时间块与排除/缓冲规则写成可核验配置后再执行。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D06 正式缺测、QC 和单帧/六帧样本纳入规则",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "SCHEMA;REPORT_himawari;CONVENTIONS",
+      "researcher_action": "复用原 QC flags 和 null，不凭工程阈值创造科学剔除标准。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D07 正式归一化来源及计算协议",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "CURRENT_REQUEST;SCHEMA",
+      "researcher_action": "将统计来源与 split hash 绑定，等研究者确认协议后计算。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D08 Himawari 观测因果与 operational availability 的正式声明",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "RUN_p0;REPORT_himawari;SCHEMA",
+      "researcher_action": "先确认拟报告的是哪种时间语义与证据强度，再定规则，不自动代理。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D09 GFS main + thermo Dataset-layer adoption",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "CANDIDATE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": true,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "RUN_thermo;RUN_provenance;THERMO_RESEARCH",
+      "researcher_action": "保留双来源和 key/hash，不生成已批准 integration 的假状态。",
+      "due_stage": "BEFORE_B4",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D10 GFS operational vintage rule",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_ESTABLISHED",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": true,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": true,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "RUN_provenance;REPORT_provenance",
+      "researcher_action": "并列保存可证实事实和 fallback 假设，由研究者选择，不补造 release。",
+      "due_stage": "BEFORE_B4",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D11 DEM aggregation / terrain 参数 / gradient production",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": false,
+      "required_for_B5_B8": true,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "FREEZE;DEM_COVERAGE",
+      "researcher_action": "分阶段定版，避免要求现在冻结 B8 的所有参数。",
+      "due_stage": "BEFORE_B5_B8",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "D12 独立外部验证数据与启用时间",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_AUDITED",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "RESEARCH_MATRIX;CURRENT_REQUEST",
+      "researcher_action": "现在登记 NOT_AUDITED 和最终论文前里程碑，不伪造 READY。",
+      "due_stage": "BEFORE_FINAL_PAPER",
+      "required_before_final_paper": true
+    },
+    {
+      "item": "D13 正式概率实验协议（包括 32 quantile levels）",
+      "engineering_complete": "NOT_APPLICABLE_SCIENTIFIC_DECISION",
+      "scientific_definition_frozen": false,
+      "data_ready": "NOT_APPLICABLE_RULE",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "evidence": "SCHEMA;CONVENTIONS",
+      "researcher_action": "只记录已知协议空缺，进入正式实验准备时由研究者确认，不替研究者选值。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "R14 44 LATENCY_TAIL_REVIEW",
+      "engineering_complete": true,
+      "scientific_definition_frozen": "NOT_APPLICABLE",
+      "data_ready": "READY_FOR_REVIEW",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": false,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "INFORMATIONAL_REVIEW_ONLY",
+      "evidence": "RUN_p0",
+      "researcher_action": "保留记录并允许人工查看，不提高为硬 blocker。",
+      "due_stage": "NOW",
+      "required_before_final_paper": false
+    },
+    {
+      "item": "E15 Himawari 正式研究期工程证据覆盖",
+      "engineering_complete": false,
+      "scientific_definition_frozen": "NOT_APPLICABLE",
+      "data_ready": "NOT_AUDITED",
+      "required_for_B0_smoke": false,
+      "required_for_B0_formal": true,
+      "required_for_B4": false,
+      "required_for_B5_B8": false,
+      "required_for_full_stage0_closeout": false,
+      "status": "ENGINEERING_EVIDENCE_REQUIRED",
+      "evidence": "RESEARCH_MATRIX;RUN_himawari",
+      "researcher_action": "在下一步获授权的数据工程范围内解决，不重开本轮审计。",
+      "due_stage": "BEFORE_B0_FORMAL",
+      "required_before_final_paper": false
+    }
+  ],
+  "scientific_facts": {
+    "imerg_202510_status": "MISSING",
+    "native_imerg_window_status": "PROVISIONAL",
+    "gfs_release_status": "NOT_ESTABLISHED",
+    "gfs_main_thermo_status": "PARTIALLY_COMPATIBLE",
+    "main_thermo_researcher_approved": false,
+    "model_input_bbox": null,
+    "model_input_bbox_frozen": false,
+    "context_margin_frozen": false,
+    "formal_train_val_blocks_frozen": false,
+    "final_test_year": 2025,
+    "development_years": [
+      2023,
+      2024
+    ],
+    "exact_train_blocks": null,
+    "exact_validation_blocks": null,
+    "intersection_primary": false,
+    "primary_mask_true_cells": 3430,
+    "latency_tail_count": 44,
+    "latency_tail_exclusion": false,
+    "external_validation_status": "NOT_AUDITED",
+    "external_required_B0_smoke": false,
+    "external_required_B0_formal_imerg_baseline": false,
+    "external_required_final_paper_independent_claim": true
+  },
+  "scope": {
+    "raw_files_opened": 0,
+    "raw_scan": false,
+    "old_scripts_executed": false,
+    "mask_generated": false,
+    "B0_started": false,
+    "formal_dataset_created": false,
+    "dependencies_changed": false
+  },
+  "schema_status": "NEEDS_UPDATE",
+  "stage0_engineering_scope": "Completion of authorized existing audits and final-gate synthesis; not all raw months/all pixels or future stages validated"
+}

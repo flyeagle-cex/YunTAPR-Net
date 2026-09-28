@@ -1,0 +1,105 @@
+{
+  "contract_version": "B0_FORMAL_CONTRACT_CANDIDATE_v1",
+  "status": "CANDIDATE_ONLY",
+  "formal_training_enabled": false,
+  "formal_ready": false,
+  "inputs": [
+    "Himawari_B13"
+  ],
+  "single_time": true,
+  "additional_model_input_channels_approved": false,
+  "prohibited_required_inputs": [
+    "GFS",
+    "GFS_thermo",
+    "GFS vintage",
+    "DEM",
+    "DOTE",
+    "DTFM",
+    "MEE",
+    "ERA5 Teacher"
+  ],
+  "final_test_year": 2025,
+  "research_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "development_years": [
+    2023,
+    2024
+  ],
+  "timing": {
+    "scientific_rule_frozen": false,
+    "smoke_mapping_status": "ENGINEERING_SMOKE_TIME_MAPPING_ONLY",
+    "causal_constraint": "obs_end <= analysis_time",
+    "date_created_role": "RECORD_ONLY",
+    "operational_replay_established": false
+  },
+  "spatial": {
+    "evaluation_mask_frozen": true,
+    "mask_shape": [
+      130,
+      140
+    ],
+    "mask_true_cells": 3430,
+    "model_input_bbox_frozen": false,
+    "formal_model_input_bbox": null,
+    "context_margin_frozen": false,
+    "covers_yunnan_context": "PENDING_RESEARCHER_CONFIRMATION",
+    "alignment_method_frozen": false
+  },
+  "qc": {
+    "rain_zero_is_valid": true,
+    "missing_equals_zero": false,
+    "interpolation_allowed": false,
+    "formal_thresholds": null,
+    "valid_target_rule": "finite AND not declared fill/missing; metadata decoding before checks",
+    "all_fill_rule": "No valid B13 observation; cannot become valid through fill or interpolation",
+    "partial_acceptance": "RESEARCHER_DECISION_REQUIRED",
+    "missing_frame_fallback": "NOT_APPROVED",
+    "sequence_metadata_preserved": true,
+    "six_frame_completeness_required_for_B0": false
+  },
+  "normalization": {
+    "rule_defined": true,
+    "scientific_method_frozen": false,
+    "fit_roles": [
+      "Train"
+    ],
+    "forbidden_fit_roles": [
+      "Validation",
+      "Test"
+    ],
+    "missing_mask_required": true,
+    "exclude_invalid_from_fit": true,
+    "real_zero_is_observation": true,
+    "fitted": false,
+    "parameters": null,
+    "method": "NOT_YET_FROZEN",
+    "test_feedback_allowed": false,
+    "versioning_required": true
+  },
+  "architecture": {
+    "scientific_rule_frozen": false,
+    "family_requirement": "U-Net / GPROF-IR-style baseline",
+    "probability_head": "RESEARCHER_DECISION_REQUIRED",
+    "deterministic_default": false,
+    "loss_protocol_frozen": false,
+    "smoke_architecture_is_formal": false
+  },
+  "split": {
+    "scientific_rule_frozen": false,
+    "random_adjacent_split_allowed": false,
+    "formal_split_executed": false
+  },
+  "gap": {
+    "imerg_2025_10_status": "MISSING",
+    "product_substituted": false,
+    "research_period_changed": false
+  }
+}

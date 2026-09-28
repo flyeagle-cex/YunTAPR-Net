@@ -1,0 +1,45 @@
+{
+  "scope": "SMOKE PERFORMANCE DIAGNOSTIC; NOT FORMAL BENCHMARK",
+  "batch_loading": {
+    "1": {
+      "status": "PASS",
+      "load_seconds": 0.04030169999896316,
+      "shape": [
+        1,
+        1,
+        32,
+        32
+      ],
+      "num_workers": 0,
+      "shuffle": false,
+      "sample_ids": [
+        "b0_smoke_20240701T000000Z"
+      ]
+    },
+    "4": {
+      "status": "PASS",
+      "load_seconds": 0.09375249999720836,
+      "shape": [
+        4,
+        1,
+        32,
+        32
+      ],
+      "num_workers": 0,
+      "shuffle": false,
+      "sample_ids": [
+        "b0_smoke_20240701T000000Z",
+        "b0_smoke_20240701T003000Z",
+        "b0_smoke_20240701T010000Z",
+        "b0_smoke_20240701T013000Z"
+      ]
+    }
+  },
+  "mean_forward_seconds": 0.0029498250023607397,
+  "mean_backward_seconds": 0.004168100000242703,
+  "mean_optimizer_seconds": 0.0008052999983192421,
+  "peak_gpu_allocated_bytes": null,
+  "peak_gpu_memory_status": "NOT_APPLICABLE_CPU",
+  "data_cache": "Tiny aligned tensor cache inside this smoke Dataset; first accesses read original files through one-file staging; inference forces reread.",
+  "timing_limits": "copy/read intervals exclude SHA verification, process import/startup and integrity hashing. Not end-to-end wall time; warmed local filesystem possible."
+}

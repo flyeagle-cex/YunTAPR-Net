@@ -1,0 +1,167 @@
+{
+  "freeze_id": "YunTAPR_STAGE0_SPATIAL_v1_run_20260928T102636_513428Z",
+  "decision_authority": "RESEARCHER_EXPLICIT_APPROVAL_THIS_USER_MESSAGE",
+  "approved_scope": "Current formal spatial execution convention only; no next Stage",
+  "created_utc": "2026-09-28T10:32:41.024337+00:00",
+  "immutable_policy": "Never replace files or registry silently. Verify SHA256 before use via src/frozen_contract.py. Any scientific version change requires an explicit researcher decision and a new run; preserve this run. No OS-level immutability claim.",
+  "artifacts": {
+    "archive": {
+      "relative_path": "FROZEN\\BOUNDARY\\gadm41_CHN_1.source.json.zip",
+      "sha256": "656ea3e576a95f1172503c1f416c8a3b8267bc87e6c090c730a676e96d551478",
+      "size_bytes": 714043,
+      "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+    },
+    "original_geojson_member": {
+      "relative_path": "PROVENANCE\\gadm41_CHN_1.original_member.json",
+      "sha256": "0cc2dacb44375c1e36cf32145303b1f403e838658fb44de944af94df910deacc",
+      "size_bytes": 2408414,
+      "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+    },
+    "boundary": {
+      "relative_path": "FROZEN\\BOUNDARY\\yunnan_gadm41_level1_boundary.geojson",
+      "sha256": "263216aac09e7c4548396b5ff91c43a37962b4847db8ad3f9784aac74f60675f",
+      "size_bytes": 382905,
+      "role": "FROZEN_BOUNDARY"
+    },
+    "coordinates": {
+      "relative_path": "FROZEN\\MASK\\imerg_actual_coordinates.npz",
+      "sha256": "4bf6ce3f9722c318c5db93bb4967660e82a53c498c90f3c6bacbf95c72ed912a",
+      "size_bytes": 1578,
+      "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+    },
+    "primary_mask": {
+      "relative_path": "FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+      "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+      "size_bytes": 20916,
+      "role": "FROZEN_PRIMARY_EVALUATION_MASK"
+    },
+    "adopted_candidate": {
+      "relative_path": "PROVENANCE\\adopted_center_candidate.nc",
+      "sha256": "48697c58367adf497e502c139549e6e6622026dceea8de3eaaef876723a34d78",
+      "size_bytes": 19781,
+      "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+    },
+    "intersection_comparison": {
+      "relative_path": "COMPARISON\\yunnan_imerg_mask_intersection_candidate.nc",
+      "sha256": "1c9dd497a2855bd4d55f4988d3e8861ce25a9c5731b43223a61021ecfc69d6a5",
+      "size_bytes": 19806,
+      "role": "NON_PRIMARY_BOUNDARY_SENSITIVITY_COMPARISON"
+    }
+  },
+  "boundary": {
+    "status": "FROZEN",
+    "version": "GADM 4.1",
+    "administrative_level": 1,
+    "original_archive_path": "F:\\云南极端降水数据\\raw\\BOUNDARY\\GADM41\\gadm41_CHN_1.json.zip",
+    "original_archive_sha256": "656ea3e576a95f1172503c1f416c8a3b8267bc87e6c090c730a676e96d551478",
+    "archive_member": "gadm41_CHN_1.json",
+    "member_sha256": "0cc2dacb44375c1e36cf32145303b1f403e838658fb44de944af94df910deacc",
+    "feature_index_zero_based": 35,
+    "feature_identifier": "CHN.30_1",
+    "required_identity_fields": {
+      "NAME_1": "Yunnan",
+      "GID_1": "CHN.30_1",
+      "HASC_1": "CN.YN",
+      "ISO_1": "CN-YN",
+      "ENGTYPE_1": "Province"
+    },
+    "crs": {
+      "type": "name",
+      "properties": {
+        "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+      }
+    },
+    "axis_order": "longitude,latitude",
+    "geometry_type": "MultiPolygon",
+    "geometry_sha256": "c721d7125d484d45d1c1fbc1b902167533c635077e739777163b7178c2e92d5c",
+    "geometry_hash_definition": "SHA256 UTF-8 JSON original geometry; sorted keys; compact separators; ensure_ascii=False; no rounding/reordering of coordinate arrays",
+    "normalized_wkb_sha256": "9a0ba6f0388d1cc459b691db5ebc4d973b6a70d5a894590025fa69c714b74f93",
+    "normalized_wkb_definition": "shapely.normalize; 2D little-endian WKB, no SRID; supplementary geometric fingerprint",
+    "shapely_version": "2.1.2",
+    "bounds": [
+      97.5341,
+      21.1394,
+      106.1942,
+      29.2511
+    ],
+    "provenance": "Selected the sole raw GADM41 CHN level-1 feature matching ALL five approved identity attributes; raw geometry unchanged; topologically equals audited candidate, normalized single-union representation exactly matches; raw MultiPolygon and old Polygon differ in representation only; archive/hash linked to prior audit. Local artifact adoption is researcher-approved. No new official download receipt/authentication claimed."
+  },
+  "mask": {
+    "status": "FROZEN",
+    "role": "PRIMARY_EVALUATION",
+    "rule": "CENTER_IN_POLYGON",
+    "predicate": "strict interior contains, inherited from approved candidate",
+    "exact_boundary_center_count": 0,
+    "shape": [
+      130,
+      140
+    ],
+    "true_cells": 3430,
+    "false_cells": 14770,
+    "dimensions": [
+      "lat",
+      "lon"
+    ],
+    "lat_direction": "ascending",
+    "lon_direction": "ascending",
+    "lat_dtype": "float32",
+    "lon_dtype": "float32",
+    "lat_hash": "5973fd3c0e1ab758157d30c240a4e33153a86a6228741958e203116139f4df3a",
+    "lon_hash": "ffc033c7d89b2750c907a61844ea599d2e0bd3af26c1c77aeda99f0b4a0fd7a2",
+    "coordinate_hash_definition": "SHA256 ASCII shape + canonical little-endian float64 numeric values C-order; signed zero normalized",
+    "raw_imerg_coordinate_source": "F:\\云南极端降水数据\\raw\\IMERG\\2019\\imerg_20190101.nc",
+    "raw_imerg_source_sha256": "9c5076f4d9bb1825b7c58edafe91eaeb817dda8c9b3e9e03b441ca436bc222d5",
+    "prior_formal_grid_audit": "F:\\pytorch\\Research\\outputs\\stage0_p0_audit\\run_20260927T161311_417313Z\\IMERG\\imerg_grid_audit.csv",
+    "actual_raw_coordinates_reread_equal": true,
+    "generated_coordinates": false,
+    "candidate_source": "F:\\pytorch\\Research\\outputs\\stage0_spatial_static_closeout\\run_20260928T095818_821492Z\\MASK\\yunnan_imerg_mask_center_candidate.nc",
+    "candidate_source_sha256": "48697c58367adf497e502c139549e6e6622026dceea8de3eaaef876723a34d78",
+    "all_variable_arrays_unchanged_from_candidate": true,
+    "only_global_metadata_updated_on_new_copy": true
+  },
+  "dem": {
+    "primary_source_status": "FROZEN",
+    "primary_root": "F:\\云南极端降水数据\\raw\\SRTM",
+    "registered_files": 237,
+    "coverage": "FULL_FOR_FROZEN_YUNNAN_POLYGON",
+    "coverage_evidence": "F:\\pytorch\\Research\\outputs\\stage0_spatial_static_closeout\\run_20260928T095818_821492Z\\DEM\\dem_audit_summary.json",
+    "inventory": "DEM/frozen_primary_root_inventory.csv",
+    "inventory_sha256": "64d6c12aed6a093ae9449eea372bce8e614a498bb9e6bae318e4d1aaf153f90d",
+    "auxiliary_root": "F:\\云南极端降水数据\\raw\\AWS_Skadi",
+    "auxiliary_status": "SEPARATE_NOT_MERGED_NOT_DELETED",
+    "production_processing_frozen": false
+  },
+  "frozen_principles": [
+    "Final main evaluation uses whole Yunnan provincial administrative mask",
+    "DOTE terrain gradients must use real physical distances, never longitude/latitude index gradients"
+  ],
+  "not_yet_frozen": [
+    "model_input_bbox",
+    "weather_system_context_margin",
+    "DEM_aggregation_method",
+    "slope_aspect_relief_curvature_parameters",
+    "dh_dx_dh_dy_formal_production_pipeline"
+  ],
+  "common_numerical_overlap": {
+    "designation": "CANDIDATE COMMON NUMERICAL OVERLAP",
+    "lon_min": 97.0,
+    "lon_max": 107.0,
+    "lat_min": 20.0,
+    "lat_max": 30.0,
+    "is_model_input_bbox": false
+  },
+  "intersection": {
+    "role": "BOUNDARY_SENSITIVITY_ENGINEERING_COMPARISON",
+    "is_primary_evaluation_mask": false,
+    "preserved_byte_identical": true,
+    "true_cells": 3752,
+    "difference_cells": 322
+  },
+  "execution_limits": {
+    "start_B0": false,
+    "DEM_resampling": false,
+    "formal_DOTE_features": false,
+    "next_stage_automatically": false
+  },
+  "generator_script_hashes": "PROVENANCE/generator_script_hashes.json"
+}

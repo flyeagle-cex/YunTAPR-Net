@@ -1,0 +1,2594 @@
+{
+  "0": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T00:20:40.074697Z",
+      "obs_end": "2024-07-01T00:29:38.162509Z",
+      "date_created": "2024-07-01T00:38:48Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T00:00:00Z",
+      "converted_time_raw": 0,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 184,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "1": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T00:50:40.044366Z",
+      "obs_end": "2024-07-01T00:59:38.135990Z",
+      "date_created": "2024-07-01T01:09:50Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T00:30:00Z",
+      "converted_time_raw": 30,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 266,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "2": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T01:20:40.399361Z",
+      "obs_end": "2024-07-01T01:29:38.105990Z",
+      "date_created": "2024-07-01T01:37:48Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T01:00:00Z",
+      "converted_time_raw": 60,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 205,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "3": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T01:50:40.303070Z",
+      "obs_end": "2024-07-01T01:59:38.036915Z",
+      "date_created": "2024-07-01T02:09:48Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T01:30:00Z",
+      "converted_time_raw": 90,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 267,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "4": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T02:20:39.933313Z",
+      "obs_end": "2024-07-01T02:29:38.008373Z",
+      "date_created": "2024-07-01T02:38:45Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T02:00:00Z",
+      "converted_time_raw": 120,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 589,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "5": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T02:50:40.698567Z",
+      "obs_end": "2024-07-01T02:59:38.432385Z",
+      "date_created": "2024-07-01T03:11:05Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T02:30:00Z",
+      "converted_time_raw": 150,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 573,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "6": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T03:20:40.668073Z",
+      "obs_end": "2024-07-01T03:29:38.401910Z",
+      "date_created": "2024-07-01T03:37:50Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T03:00:00Z",
+      "converted_time_raw": 180,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 580,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "7": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T03:50:40.639472Z",
+      "obs_end": "2024-07-01T03:59:38.369539Z",
+      "date_created": "2024-07-01T04:09:43Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T03:30:00Z",
+      "converted_time_raw": 210,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 513,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "8": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T04:20:40.609405Z",
+      "obs_end": "2024-07-01T04:29:38.342843Z",
+      "date_created": "2024-07-01T04:39:43Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T04:00:00Z",
+      "converted_time_raw": 240,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 348,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "9": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T04:50:40.578892Z",
+      "obs_end": "2024-07-01T04:59:38.312708Z",
+      "date_created": "2024-07-01T05:08:46Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T04:30:00Z",
+      "converted_time_raw": 270,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 336,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "10": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T05:20:40.524278Z",
+      "obs_end": "2024-07-01T05:29:38.282177Z",
+      "date_created": "2024-07-01T05:38:47Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T05:00:00Z",
+      "converted_time_raw": 300,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 349,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "11": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T05:50:40.178482Z",
+      "obs_end": "2024-07-01T05:59:38.214835Z",
+      "date_created": "2024-07-01T06:08:45Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T05:30:00Z",
+      "converted_time_raw": 330,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 486,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "12": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T06:20:40.158944Z",
+      "obs_end": "2024-07-01T06:29:38.223322Z",
+      "date_created": "2024-07-01T06:36:47Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T06:00:00Z",
+      "converted_time_raw": 360,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 473,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "13": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T06:50:40.128368Z",
+      "obs_end": "2024-07-01T06:59:38.192759Z",
+      "date_created": "2024-07-01T07:10:40Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T06:30:00Z",
+      "converted_time_raw": 390,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 471,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "14": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T07:20:40.376291Z",
+      "obs_end": "2024-07-01T07:29:38.162211Z",
+      "date_created": "2024-07-01T07:40:42Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T07:00:00Z",
+      "converted_time_raw": 420,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 457,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  },
+  "15": {
+    "b13": {
+      "variable": "tbb_13",
+      "packed_dtype": "int16",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        501,
+        501
+      ],
+      "attrs": {
+        "DIMENSION_LABELS": [
+          "latitude",
+          "longitude"
+        ],
+        "long_name": "Brightness temperature of band 13",
+        "units": "K",
+        "valid_min": -27315,
+        "valid_max": 32767,
+        "scale_factor": 0.009999999776482582,
+        "add_offset": 273.1499938964844,
+        "missing_value": -32768
+      },
+      "obs_start": "2024-07-01T07:50:40.400144Z",
+      "obs_end": "2024-07-01T07:59:38.133560Z",
+      "date_created": "2024-07-01T08:08:46Z",
+      "dimensions": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "imerg": {
+      "variable": "precipitation",
+      "dtype": "float32",
+      "decoded_dtype": "float32",
+      "original_shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      },
+      "converted_time": "2024-07-01T07:30:00Z",
+      "converted_time_raw": 450,
+      "time_units": "minutes since 2024-07-01 00:00:00",
+      "calendar": "proleptic_gregorian",
+      "native_window": "NOT_INFERRED"
+    },
+    "alignment": {
+      "method": "PROVISIONAL_SMOKE_ALIGNMENT: coordinate nearest-neighbor gather",
+      "source_row_indices": [
+        328,
+        323,
+        317,
+        313,
+        307,
+        303,
+        298,
+        292,
+        288,
+        282,
+        278,
+        273,
+        267,
+        263,
+        257,
+        253,
+        248,
+        242,
+        238,
+        232,
+        228,
+        223,
+        217,
+        213,
+        208,
+        203,
+        198,
+        192,
+        188,
+        183,
+        178,
+        173
+      ],
+      "source_col_indices": [
+        172,
+        177,
+        182,
+        187,
+        192,
+        197,
+        202,
+        207,
+        212,
+        217,
+        222,
+        227,
+        232,
+        237,
+        242,
+        247,
+        252,
+        257,
+        262,
+        267,
+        272,
+        277,
+        282,
+        287,
+        292,
+        297,
+        302,
+        307,
+        312,
+        317,
+        322,
+        327
+      ],
+      "max_abs_lat_offset_degrees": 0.010000228881835938,
+      "max_abs_lon_offset_degrees": 0.01000213623046875,
+      "source_lat_direction": "descending",
+      "output_lat_direction": "ascending",
+      "source_lon_direction": "ascending",
+      "original_shape": [
+        501,
+        501
+      ],
+      "smoke_shape": [
+        32,
+        32
+      ],
+      "original_lat_range": [
+        20.0,
+        30.0
+      ],
+      "original_lon_range": [
+        97.0,
+        107.0
+      ],
+      "output_lat_range": [
+        23.44999885559082,
+        26.549999237060547
+      ],
+      "output_lon_range": [
+        100.44999694824219,
+        103.54999542236328
+      ],
+      "missing_handling": "Preserve NaN and bool mask; never interpolate/fill; no source array flip; explicit index gather only"
+    },
+    "valid_input_cells": 1024,
+    "valid_target_cells": 1024,
+    "zero_rain_valid_cells": 475,
+    "source_input_invalid_cells": 0,
+    "target_invalid_cells": 0
+  }
+}

@@ -1,0 +1,1187 @@
+【Codex 连续执行任务】
+
+项目：
+YunTAPR-Net
+云南全境复杂地形近实时概率降水反演
+
+当前阶段：
+Stage-1 / B0 Engineering Smoke
+
+模型：
+GPT-5.6 Sol
+
+推理强度：
+max
+
+工作模式：
+最小可复现 PyTorch 工程链验证
+
+============================================================
+0. 本轮 Gate 状态
+============================================================
+
+Stage-0 Engineering：
+PASS / FROZEN
+
+Stage-0 Full Scientific Closeout：
+PENDING RESEARCHER DECISIONS
+
+B0 Engineering Smoke：
+READY
+
+B0 Formal Experiment：
+NOT_READY / HOLD
+
+因此本轮只允许：
+
+工程 smoke test
+
+禁止：
+
+正式科研训练
+正式 Train/Val/Test
+正式 normalization
+正式模型比较
+论文指标
+科研结论
+
+============================================================
+1. B0 定义
+============================================================
+
+B0：
+
+Himawari B13
+单通道
+单时次
+
+GPROF-IR-style 最小工程基线。
+
+本轮绝对不要加入：
+
+GFS
+GFS_thermo
+DEM
+DOTE
+DTFM
+MEE
+ERA5
+多时相
+7通道
+
+输入只允许：
+
+Himawari B13 单时次
+
+监督只允许：
+
+IMERG
+
+============================================================
+2. 本轮唯一目标
+============================================================
+
+验证下面这条完整工程链真实可运行：
+
+真实 Himawari 文件
+↓
+读取 B13
+↓
+读取对应 IMERG
+↓
+时间配对
+↓
+空间处理接口
+↓
+Tensor
+↓
+Dataset
+↓
+DataLoader
+↓
+B0 model
+↓
+forward
+↓
+loss
+↓
+backward
+↓
+optimizer step
+↓
+checkpoint save
+↓
+checkpoint reload
+↓
+inference
+↓
+basic metric
+↓
+可复现日志
+
+本轮目标不是：
+
+训练出好模型。
+
+只验证：
+
+工程链没有断点。
+
+============================================================
+3. 数据范围
+============================================================
+
+优先使用已经审计过的：
+
+2024-07
+
+原因：
+
+该月已有 Himawari Stage-0 dry-run 和 latency/QC 审计证据。
+
+禁止：
+
+为了 smoke 扫描全部 2023-2025。
+
+只选择很小的样本子集。
+
+建议：
+
+16–64 个有效样本
+
+允许根据显存/内存自动缩小。
+
+但：
+
+不得因为方便而使用虚构数据替代真实数据作为主 smoke。
+
+允许额外使用 synthetic tensor 做单元测试，
+但最终 end-to-end smoke 必须至少使用真实 Himawari + IMERG 文件。
+
+============================================================
+4. 时间规则
+============================================================
+
+B0 单时次 Himawari。
+
+使用已经建立的时间逻辑。
+
+必须保存：
+
+IMERG target time
+analysis_time
+Himawari nominal_time
+obs_start
+obs_end
+date_created
+
+必须 assert：
+
+obs_end <= analysis_time
+
+禁止未来帧。
+
+不要因为 B0 单时次就跳过因果性检查。
+
+当前 operational availability：
+
+未正式冻结。
+
+因此本轮：
+
+不做历史 operational replay 结论。
+
+只做：
+
+offline engineering smoke。
+
+报告必须明确这一点。
+
+============================================================
+5. IMERG 时间语义
+============================================================
+
+复用已有 verified converted coordinate。
+
+如果 native exact half-hour window 尚未冻结：
+
+不要自行补造新的科学语义。
+
+本轮只使用：
+
+当前已经通过 Stage-0 工程验证的 converted coordinate / analysis-time mapping。
+
+在报告中标：
+
+ENGINEERING_SMOKE_TIME_MAPPING_ONLY
+
+不得写成：
+
+final scientific sample timing convention
+
+============================================================
+6. 空间规则
+============================================================
+
+正式 evaluation mask 已冻结：
+
+GADM 4.1
+CHN.30_1
+
+center-in-polygon
+
+3430 cells
+
+但本轮 smoke：
+
+主要目标是跑通模型链。
+
+允许：
+
+使用一个小空间 crop
+
+或
+
+使用完整 target field
+
+取决于显存和当前 Himawari读取方式。
+
+但是：
+
+如果使用 crop：
+
+必须明确：
+
+ENGINEERING_SMOKE_CROP_ONLY
+
+不得自动冻结为 model_input_bbox。
+
+model_input_bbox：
+
+仍然 NOT_YET_FROZEN。
+
+============================================================
+7. Himawari B13
+============================================================
+
+必须真实确认：
+
+B13 对应变量名
+dtype
+shape
+units
+FillValue
+valid mask
+
+复用 Stage-0 已有读取逻辑。
+
+禁止：
+
+为了 smoke 重新设计 Himawari reader。
+
+如果已有 reader：
+
+优先复用。
+
+如果 reader 不完整：
+
+只做最小安全封装。
+
+生成：
+
+B0_SMOKE/himawari_b13_reader_report.md
+
+============================================================
+8. IMERG label
+============================================================
+
+读取对应：
+
+IMERG precipitation
+
+保持：
+
+units = mm hr-1
+
+0 mm/hr：
+有效无雨
+
+missing：
+不能转 0
+
+本轮不得：
+
+做正式 log1p normalization 参数冻结
+做正式 rain threshold 科研结论
+计算训练集统计量
+
+允许：
+
+为了数值稳定，模型内部使用临时 smoke loss transformation
+
+但必须：
+
+SMOKE_ONLY
+
+并在报告中单独说明。
+
+============================================================
+9. spatial alignment
+============================================================
+
+B0 smoke 必须验证：
+
+Himawari 输入
+与
+IMERG target
+
+在工程上能形成固定 shape 的样本。
+
+但：
+
+本轮不要正式冻结 Himawari -> IMERG resampling science rule。
+
+如果已有 Stage-0 dry-run 中验证过的 resampling / crop 接口：
+
+可以复用。
+
+如果没有正式规则：
+
+优先选择：
+
+最小工程方法
++
+清晰标记：
+
+PROVISIONAL_SMOKE_ALIGNMENT
+
+禁止把 provisional interpolation 变成论文正式方法。
+
+输出：
+
+B0_SMOKE/spatial_alignment_smoke_report.md
+
+记录：
+
+input original shape
+output smoke shape
+method
+coordinate ranges
+orientation
+missing handling
+
+============================================================
+10. Dataset
+============================================================
+
+创建：
+
+最小 B0SmokeDataset
+
+只服务本轮 smoke。
+
+不要命名为：
+
+FormalTrainingDataset
+
+每个 item 至少返回：
+
+{
+  "x": B13 tensor,
+  "y": IMERG tensor,
+  "input_valid_mask": ...,
+  "target_valid_mask": ...,
+  "metadata": {
+      sample_id,
+      himawari_path,
+      imerg_path,
+      nominal_time,
+      obs_end,
+      analysis_time
+  }
+}
+
+必须测试：
+
+shape
+dtype
+finite handling
+missing mask
+causality
+
+============================================================
+11. Tensor shape
+============================================================
+
+B0 输入：
+
+单通道
+
+建议：
+
+x shape:
+[B,1,H,W]
+
+target：
+
+[B,1,H_out,W_out]
+或
+[B,H_out,W_out]
+
+选一种统一。
+
+禁止：
+
+无记录地 squeeze/unsqueeze。
+
+输出：
+
+B0_SMOKE/tensor_contract.md
+
+明确：
+
+batch
+channel
+height
+width
+dtype
+
+============================================================
+12. B0 model
+============================================================
+
+建立最小：
+
+GPROF-IR-style
+single-channel
+single-time
+U-Net-like baseline
+
+要求：
+
+工程简洁
+可读
+可测试
+
+不要在 smoke 阶段引入：
+
+EfficientNet-V2 全复杂实现
+quantile 32-head
+probability double-head
+复杂 decoder
+复杂 loss
+
+除非已有稳定实现可直接复用。
+
+本轮首要目标：
+
+验证 pipeline。
+
+建议最小：
+
+small U-Net
+
+输入：
+1 channel
+
+输出：
+1 precipitation field
+
+这只是：
+
+ENGINEERING_SMOKE_MODEL
+
+不是论文 B0 最终 architecture freeze。
+
+============================================================
+13. loss
+============================================================
+
+本轮允许使用：
+
+masked MSE
+或
+masked MAE
+
+只用于：
+
+backward smoke。
+
+必须支持：
+
+target_valid_mask
+
+禁止：
+
+missing pixels 参与 loss。
+
+禁止：
+
+把 0 rain 排除。
+
+0 rain 是有效 target。
+
+输出：
+
+B0_SMOKE/loss_contract.md
+
+============================================================
+14. optimizer
+============================================================
+
+允许：
+
+Adam
+或 AdamW
+
+学习率：
+
+仅 smoke 值。
+
+例如：
+1e-3
+
+必须标：
+
+ENGINEERING_SMOKE_ONLY
+
+不进入正式科研配置。
+
+============================================================
+15. smoke training
+============================================================
+
+只运行极少步数。
+
+建议：
+
+1–3 epochs
+
+或：
+
+10–50 optimizer steps
+
+选择更快的方案。
+
+目标：
+
+确认：
+
+loss finite
+loss backward 成功
+optimizer.step 成功
+参数发生变化
+
+不是：
+
+追求收敛。
+
+禁止：
+
+early stopping
+hyperparameter tuning
+multiple seeds
+正式 benchmark
+
+============================================================
+16. 必须检查 gradient
+============================================================
+
+至少验证：
+
+存在可训练参数
+grad 非 None
+grad finite
+optimizer step 后参数变化
+
+输出：
+
+B0_SMOKE/gradient_update_check.json
+
+============================================================
+17. checkpoint
+============================================================
+
+必须真实：
+
+save checkpoint
+
+然后：
+
+新建 model instance
+
+reload checkpoint
+
+验证：
+
+相同输入
+reload 前后输出一致或在容差内一致。
+
+checkpoint 中至少保存：
+
+model_state_dict
+optimizer_state_dict
+step
+config
+sample contract version
+
+输出：
+
+B0_SMOKE/checkpoints/
+
+但是：
+
+明确：
+
+SMOKE CHECKPOINT
+NOT SCIENTIFIC CHECKPOINT
+
+============================================================
+18. inference
+============================================================
+
+checkpoint reload 后：
+
+对少量真实样本运行 inference。
+
+必须验证：
+
+output shape
+finite
+no crash
+
+可以计算基础：
+
+MAE
+RMSE
+
+但必须写：
+
+ENGINEERING_DIAGNOSTIC_ONLY
+
+不得：
+
+论文引用
+模型优劣评价
+科研结论
+
+============================================================
+19. optional rain detection diagnostic
+============================================================
+
+如果方便：
+
+可以额外计算：
+
+R > 0.1 mm/hr
+
+的简单 occurrence diagnostic。
+
+但是：
+
+仅用于工程检查。
+
+不要在本轮实现完整：
+
+Focal BCE
+probability head
+32 quantile head
+CRPS
+
+这些留给正式 B0 architecture 阶段。
+
+============================================================
+20. DataLoader
+============================================================
+
+必须真实测试：
+
+batch_size = 1
+和
+batch_size > 1
+
+若内存允许。
+
+至少检查：
+
+shuffle=False
+
+用于 deterministic smoke。
+
+num_workers：
+
+先使用 0。
+
+如果之后测试 >0：
+
+只作为工程检查。
+
+Windows 下必须避免 multiprocessing 死锁。
+
+============================================================
+21. reproducibility
+============================================================
+
+固定：
+
+Python random seed
+NumPy seed
+PyTorch seed
+
+记录：
+
+torch version
+CUDA availability
+GPU name
+CPU
+device
+dtype
+
+本轮不要求：
+
+bitwise deterministic CUDA
+
+但要记录：
+
+deterministic setting。
+
+输出：
+
+logs/environment.json
+
+============================================================
+22. GPU / CPU
+============================================================
+
+优先：
+
+CUDA if available
+
+如果 CUDA 不可用：
+
+CPU 继续完成 smoke。
+
+不要因为 GPU 问题阻塞整个流程。
+
+记录：
+
+device_used
+
+============================================================
+23. memory / performance
+============================================================
+
+只记录：
+
+single batch load time
+forward time
+backward time
+peak GPU memory if CUDA
+
+这些都是：
+
+SMOKE PERFORMANCE DIAGNOSTIC
+
+不是正式性能 benchmark。
+
+============================================================
+24. 本轮输出目录
+============================================================
+
+创建：
+
+F:\pytorch\Research\outputs\stage1_b0_engineering_smoke\run_<UTC_TIMESTAMP>
+
+禁止覆盖任何旧 run。
+
+============================================================
+25. 推荐代码位置
+============================================================
+
+如已有 YunTAPR-Net repo：
+
+在现有工程中增加最小模块。
+
+建议：
+
+data/b0_smoke_dataset.py
+
+models/b0_smoke.py
+
+losses/b0_smoke_loss.py
+
+scripts/run_b0_smoke.py
+
+tests/test_b0_smoke_dataset.py
+
+tests/test_b0_smoke_model.py
+
+tests/test_b0_smoke_end_to_end.py
+
+如果已有等价模块：
+
+优先复用。
+
+不要重复造轮子。
+
+============================================================
+26. raw data rule
+============================================================
+
+原始：
+
+F:
+H:
+
+永久只读。
+
+禁止：
+
+修改
+重命名
+删除
+覆盖
+写属性
+
+如果中文路径读取问题：
+
+允许单文件 staging 到英文 cache。
+
+但只处理本轮实际 sample。
+
+记录：
+
+copy_count
+bytes
+cleanup
+
+============================================================
+27. tests
+============================================================
+
+pytest 至少覆盖：
+
+1.
+B13 reader
+
+2.
+IMERG reader
+
+3.
+0 rain remains valid
+
+4.
+missing != 0
+
+5.
+obs_end <= analysis_time
+
+6.
+future Himawari rejected
+
+7.
+Dataset item contract
+
+8.
+Tensor shape
+
+9.
+input dtype
+
+10.
+target dtype
+
+11.
+valid mask shape
+
+12.
+DataLoader batch
+
+13.
+model forward
+
+14.
+output shape
+
+15.
+loss finite
+
+16.
+masked pixel excluded
+
+17.
+0-rain included
+
+18.
+backward
+
+19.
+grad finite
+
+20.
+optimizer step changes parameters
+
+21.
+checkpoint save
+
+22.
+checkpoint reload
+
+23.
+reload output consistency
+
+24.
+inference finite
+
+25.
+old Stage-0 frozen mask unchanged
+
+26.
+raw read-only
+
+27.
+formal Stage-0 decisions not modified
+
+28.
+GFS not imported into B0 smoke pipeline
+
+29.
+DEM not imported into B0 smoke pipeline
+
+30.
+no formal normalization statistics generated
+
+============================================================
+28. hard prohibitions
+============================================================
+
+本轮绝对禁止：
+
+正式论文训练
+
+正式 Train/Val/Test
+
+正式 normalization statistics
+
+multi-seed training
+
+hyperparameter search
+
+formal B0 architecture freeze
+
+formal quantile output
+
+formal probability head
+
+GFS
+
+GFS_thermo
+
+DEM
+
+DOTE
+
+DTFM
+
+MEE
+
+ERA5
+
+formal Dataset
+
+full sample index
+
+正式bbox冻结
+
+2025结果评价
+
+论文图表
+
+论文结论
+
+============================================================
+29. final report
+============================================================
+
+生成：
+
+FINAL_B0_ENGINEERING_SMOKE_REPORT.md
+
+必须包含：
+
+1.
+engineering_status
+
+2.
+sample count
+
+3.
+sample date range
+
+4.
+真实 Himawari files used
+
+5.
+真实 IMERG files used
+
+6.
+B13 variable mapping
+
+7.
+time pairing rule used
+
+8.
+spatial smoke alignment method
+
+9.
+input/output tensor contract
+
+10.
+Dataset status
+
+11.
+DataLoader status
+
+12.
+model summary
+
+13.
+parameter count
+
+14.
+loss
+
+15.
+training steps
+
+16.
+loss finite status
+
+17.
+gradient status
+
+18.
+optimizer update status
+
+19.
+checkpoint save/reload
+
+20.
+inference
+
+21.
+diagnostic MAE/RMSE
+
+22.
+device
+
+23.
+memory/timing
+
+24.
+pytest
+
+25.
+dependencies
+
+26.
+raw integrity
+
+27.
+cache
+
+28.
+scientific limitations
+
+29.
+B0 formal experiment blockers
+
+30.
+whether B0 smoke gate passed
+
+============================================================
+30. smoke gate status
+============================================================
+
+生成：
+
+b0_smoke_status.json
+
+至少：
+
+{
+  "engineering_status": "...",
+  "real_data_end_to_end": true,
+  "dataset_pass": null,
+  "dataloader_pass": null,
+  "forward_pass": null,
+  "backward_pass": null,
+  "optimizer_pass": null,
+  "checkpoint_reload_pass": null,
+  "inference_pass": null,
+  "pytest_pass": null,
+  "formal_experiment_started": false,
+  "scientific_result_claimed": false,
+  "raw_data_modified": false
+}
+
+============================================================
+31. gate 判断
+============================================================
+
+允许最终：
+
+B0 ENGINEERING SMOKE:
+PASS
+
+同时：
+
+B0 FORMAL EXPERIMENT:
+NOT_READY
+
+这是正常状态。
+
+不要为了：
+
+formal blockers
+
+否定工程 smoke。
+
+也不要因为：
+
+smoke PASS
+
+就宣称正式 B0 已经完成。
+
+============================================================
+32. 最终必须逐字写
+============================================================
+
+B0 engineering smoke run complete.
+Real-data Dataset-to-inference pipeline was tested.
+No formal B0 scientific experiment was started.
+No formal Train/Validation/Test split was executed.
+No scientific result is claimed from this smoke run.
+All Stage-0 frozen conventions remain unchanged.
+
+============================================================
+33. 核心原则
+============================================================
+
+本轮目标只有一个：
+
+把真实数据一路送进模型，
+完成一次真实的训练与推理工程闭环。
+
+不是：
+
+训练出论文结果。
+
+遇到普通工程错误：
+自动修复、测试、继续。
+
+遇到会改变科学定义的问题：
+停止该子任务、记录，
+不要替研究者决定。
+
+完成安全工程任务后停止。

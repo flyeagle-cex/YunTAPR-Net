@@ -1,0 +1,17 @@
+﻿item,engineering_ready,scientific_rule_frozen,data_ready,researcher_decision_required,status,evidence,blocking_reason,scope_note
+formal_time_binding,False,False,False,True,BLOCKED,TIME/B0_FORMAL_TIME_SEMANTICS_EVIDENCE.md,原转换链未闭合，analysis/单帧绑定待批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+imerg_2025_10,True,False,False,True,BLOCKED,GAPS/IMERG_2025_10_DECISION_CARD.md,Final 缺 31 天；Late 不替代；缺口处置未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+model_input_bbox,True,False,False,True,BLOCKED,SPATIAL/B0_INPUT_DOMAIN_DECISION.md,4 个工程候选无正式选择,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+weather_context_margin,True,False,False,True,BLOCKED,SPATIAL/b0_input_domain_candidates.csv,科学上下文充分性尚未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+train_blocks,True,False,False,True,BLOCKED,SPLIT/B0_TRAIN_VAL_DECISION.md,Train blocks、buffer、事件隔离未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+validation_blocks,True,False,False,True,BLOCKED,SPLIT/B0_TRAIN_VAL_DECISION.md,Val blocks 与模型选择设计未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+final_test_rule,True,True,True,False,PASS,SPLIT/period_count_bounds.json,,规则层面 PASS；2025 March–October；数据缺口另列
+missing_qc,True,False,False,True,BLOCKED,DATA_CONTRACT/b0_missing_qc_contract_candidate.md,partial、有效分母及输入缺测处置尚未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+train_only_normalization,True,False,False,True,BLOCKED,DATA_CONTRACT/b0_normalization_contract.md,Train-only 范围已定义；方法/统计域未批，未拟合,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+b13_reader,True,True,True,False,PASS,F:\pytorch\Research\outputs\stage1_b0_engineering_smoke\run_20260928T121619_125413Z\B0_SMOKE\himawari_b13_reader_report.md,,reader 工程接口复用旧 PASS；不代表所有月份数据通过
+target_grid,True,True,True,False,PASS,SPATIAL/frozen_spatial_anchor_verification.json,,真实 IMERG lat/lon 与冻结坐标逐值相等
+yunnan_evaluation_mask,True,True,True,False,PASS,F:\pytorch\Research\outputs\stage0_spatial_decision_update\run_20260928T102636_513428Z\freeze_registry.json,,GADM4.1 center-in-polygon; 130x140; 3430; 哈希一致
+formal_b0_architecture,True,False,False,True,BLOCKED,MODEL/B0_FORMAL_ARCHITECTURE_DECISION.md,只建立要求，正式配置及概率头第一版待批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+formal_loss_output_protocol,False,False,False,True,BLOCKED,MODEL/B0_FORMAL_ARCHITECTURE_DECISION.md,损失、输出、校准、指标/重复设计尚未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+formal_spatial_alignment,True,False,False,True,BLOCKED,SPATIAL/B0_INPUT_DOMAIN_DECISION.md,smoke nearest gather 不等于正式对齐；重采样/缺测传播未批准,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready
+multi_month_himawari_qc,False,False,False,True,BLOCKED,F:\pytorch\Research\outputs\stage0_continuous_engineering\run_20260928T041855_828904Z\CROSS_SOURCE\research_period_data_matrix.csv,除2024-07外研究月 NOT_AUDITED；待正式规则批准后安排数据资格验证,Engineering-ready means evidence/contract preparation only; NOT formal execution-ready

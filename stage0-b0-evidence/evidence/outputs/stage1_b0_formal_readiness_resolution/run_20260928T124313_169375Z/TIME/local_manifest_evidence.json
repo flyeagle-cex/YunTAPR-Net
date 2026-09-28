@@ -1,0 +1,779 @@
+[
+  {
+    "source": "F:\\云南极端降水数据\\manifests\\imerg_manifest.jsonl",
+    "fingerprint": {
+      "path": "F:\\云南极端降水数据\\manifests\\imerg_manifest.jsonl",
+      "sha256": "7efef36f05545ac6b9482e5d8fd68367aea875bc59145606a1bf45b5848968c1",
+      "size_bytes": 384292,
+      "mtime_ns": 1787630380734446400
+    },
+    "row_count": 1738,
+    "first": [
+      {
+        "recorded_at": "2026-07-21T17:01:51+08:00",
+        "status": "complete",
+        "date": "2021-07-01",
+        "granules": 2,
+        "path": "F:\\云南极端降水数据\\tmp\\smoke\\imerg_20210701.nc",
+        "bytes": 72871
+      }
+    ],
+    "last": [
+      {
+        "recorded_at": "2026-08-25T11:59:40+08:00",
+        "status": "complete",
+        "date": "2025-09-30",
+        "granules": 48,
+        "method": "harmony",
+        "path": "F:\\云南极端降水数据\\raw\\IMERG\\2025\\imerg_20250930.nc",
+        "bytes": 1388720
+      }
+    ],
+    "selected_rows": [
+      {
+        "recorded_at": "2026-07-22T08:19:48+08:00",
+        "status": "complete",
+        "date": "2021-08-25",
+        "granules": 48,
+        "method": "harmony",
+        "path": "F:\\云南极端降水数据\\raw\\IMERG\\2021\\imerg_20210825.nc",
+        "bytes": 1337844
+      },
+      {
+        "recorded_at": "2026-08-23T22:54:35+08:00",
+        "status": "complete",
+        "date": "2024-05-01",
+        "granules": 48,
+        "method": "harmony",
+        "path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240501.nc",
+        "bytes": 868414
+      },
+      {
+        "recorded_at": "2026-08-23T23:42:34+08:00",
+        "status": "complete",
+        "date": "2024-05-27",
+        "granules": 48,
+        "method": "granule",
+        "path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240527.nc",
+        "bytes": 1378585
+      },
+      {
+        "recorded_at": "2026-08-24T07:46:19+08:00",
+        "status": "complete",
+        "date": "2024-07-01",
+        "granules": 48,
+        "method": "harmony",
+        "path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc",
+        "bytes": 1129135
+      }
+    ]
+  },
+  {
+    "source": "F:\\云南极端降水数据\\manifests\\imerg_completion_manifest.jsonl",
+    "fingerprint": {
+      "path": "F:\\云南极端降水数据\\manifests\\imerg_completion_manifest.jsonl",
+      "sha256": "eb42bf32dc6d2670d453bf874a8627b3989647dd15475edf3d33d2ba6311b941",
+      "size_bytes": 209679,
+      "mtime_ns": 1790295846499767500
+    },
+    "row_count": 823,
+    "first": [
+      {
+        "date": "2019-01-01",
+        "status": "downloaded",
+        "granules": 2,
+        "method": "harmony",
+        "bytes": 34714,
+        "path": "F:\\yunnan_extreme_precip_data\\tmp\\smoke\\imerg_20190101.nc",
+        "recorded_utc": "2026-09-01T03:41:32.748429+00:00"
+      }
+    ],
+    "last": [
+      {
+        "date": "2025-10-01",
+        "status": "failed",
+        "error": "Exception: ('Bad Request', 'Error: No matching granules found.')",
+        "path": "F:\\yunnan_extreme_precip_data\\tmp\\smoke\\imerg_20251001.nc",
+        "product": "GPM_3IMERGHH_07",
+        "recorded_utc": "2026-09-25T00:24:06.497422+00:00"
+      }
+    ],
+    "selected_rows": [
+      {
+        "date": "2025-10-01",
+        "status": "failed",
+        "error": "Exception: ('Bad Request', 'Error: No matching granules found.')",
+        "path": "F:\\yunnan_extreme_precip_data\\tmp\\smoke\\imerg_20251001.nc",
+        "product": "GPM_3IMERGHH_07",
+        "recorded_utc": "2026-09-25T00:24:06.497422+00:00"
+      }
+    ]
+  },
+  {
+    "source": "F:\\云南极端降水数据\\manifests\\imerg_late_completion_manifest.jsonl",
+    "fingerprint": {
+      "path": "F:\\云南极端降水数据\\manifests\\imerg_late_completion_manifest.jsonl",
+      "sha256": "a43184893f23c26a2440a2f179a64174bdf03f5faf475cd02ff4d4f6d43c5b5a",
+      "size_bytes": 36070,
+      "mtime_ns": 1788355438407826000
+    },
+    "row_count": 130,
+    "first": [
+      {
+        "date": "2025-10-01",
+        "status": "downloaded",
+        "granules": 2,
+        "method": "harmony",
+        "bytes": 67266,
+        "path": "F:\\yunnan_extreme_precip_data\\tmp\\smoke\\imerg_late_20251001.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:53:35.692621+00:00"
+      }
+    ],
+    "last": [
+      {
+        "date": "2025-11-06",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251106.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T13:23:58.406436+00:00"
+      }
+    ],
+    "selected_rows": [
+      {
+        "date": "2025-10-01",
+        "status": "downloaded",
+        "granules": 2,
+        "method": "harmony",
+        "bytes": 67266,
+        "path": "F:\\yunnan_extreme_precip_data\\tmp\\smoke\\imerg_late_20251001.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:53:35.692621+00:00"
+      },
+      {
+        "date": "2025-10-01",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 966369,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251001.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:55:09.614121+00:00"
+      },
+      {
+        "date": "2025-10-02",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 543659,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251002.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:56:25.935627+00:00"
+      },
+      {
+        "date": "2025-10-03",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 521450,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251003.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:57:07.925697+00:00"
+      },
+      {
+        "date": "2025-10-04",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 537827,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251004.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:57:52.399848+00:00"
+      },
+      {
+        "date": "2025-10-05",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 510399,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251005.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:58:33.766549+00:00"
+      },
+      {
+        "date": "2025-10-06",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 848603,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251006.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T03:59:19.550940+00:00"
+      },
+      {
+        "date": "2025-10-07",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 1060977,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251007.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:00:02.248443+00:00"
+      },
+      {
+        "date": "2025-10-08",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 527160,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251008.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:00:46.379474+00:00"
+      },
+      {
+        "date": "2025-10-09",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 338646,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251009.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:01:32.796213+00:00"
+      },
+      {
+        "date": "2025-10-10",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 421085,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251010.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:02:14.727770+00:00"
+      },
+      {
+        "date": "2025-10-11",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 441307,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251011.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:02:53.073068+00:00"
+      },
+      {
+        "date": "2025-10-12",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 466166,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251012.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:03:28.105175+00:00"
+      },
+      {
+        "date": "2025-10-13",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 619565,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251013.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:04:07.036004+00:00"
+      },
+      {
+        "date": "2025-10-14",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 752058,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251014.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:04:45.827220+00:00"
+      },
+      {
+        "date": "2025-10-15",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 866585,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251015.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:05:28.157979+00:00"
+      },
+      {
+        "date": "2025-10-16",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 792309,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251016.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:06:03.774850+00:00"
+      },
+      {
+        "date": "2025-10-17",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 790416,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251017.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:06:42.173519+00:00"
+      },
+      {
+        "date": "2025-10-18",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 719219,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251018.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:07:27.451057+00:00"
+      },
+      {
+        "date": "2025-10-19",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 752971,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251019.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:07:59.462106+00:00"
+      },
+      {
+        "date": "2025-10-20",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 561728,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251020.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:08:35.833003+00:00"
+      },
+      {
+        "date": "2025-10-21",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 334380,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251021.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:09:07.492567+00:00"
+      },
+      {
+        "date": "2025-10-22",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 313599,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251022.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:09:39.816194+00:00"
+      },
+      {
+        "date": "2025-10-23",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 442892,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251023.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:10:14.232364+00:00"
+      },
+      {
+        "date": "2025-10-24",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 504799,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251024.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:10:48.468885+00:00"
+      },
+      {
+        "date": "2025-10-25",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 420850,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251025.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:11:23.275304+00:00"
+      },
+      {
+        "date": "2025-10-26",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 508019,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251026.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:11:56.648885+00:00"
+      },
+      {
+        "date": "2025-10-27",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 345477,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251027.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:12:31.669183+00:00"
+      },
+      {
+        "date": "2025-10-28",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 394895,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251028.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:13:04.349078+00:00"
+      },
+      {
+        "date": "2025-10-29",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 708784,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251029.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:13:46.395223+00:00"
+      },
+      {
+        "date": "2025-10-30",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 735269,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251030.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:14:19.020431+00:00"
+      },
+      {
+        "date": "2025-10-31",
+        "status": "downloaded",
+        "granules": 48,
+        "method": "harmony",
+        "bytes": 1131535,
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251031.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-01T04:14:56.996563+00:00"
+      },
+      {
+        "date": "2025-10-01",
+        "status": "failed",
+        "error": "ConnectionError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251001.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T09:27:53.404694+00:00"
+      },
+      {
+        "date": "2025-10-02",
+        "status": "failed",
+        "error": "ConnectionError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251002.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T09:30:23.522094+00:00"
+      },
+      {
+        "date": "2025-10-03",
+        "status": "failed",
+        "error": "ConnectionError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251003.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T09:32:53.640212+00:00"
+      },
+      {
+        "date": "2025-10-04",
+        "status": "failed",
+        "error": "ConnectionError: ('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None))",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251004.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T09:35:23.728013+00:00"
+      },
+      {
+        "date": "2025-10-05",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251005.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T09:48:53.327830+00:00"
+      },
+      {
+        "date": "2025-10-06",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251006.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:02:11.168304+00:00"
+      },
+      {
+        "date": "2025-10-07",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251007.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:08:58.460135+00:00"
+      },
+      {
+        "date": "2025-10-08",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251008.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:15:05.825948+00:00"
+      },
+      {
+        "date": "2025-10-09",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251009.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:21:04.918168+00:00"
+      },
+      {
+        "date": "2025-10-10",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251010.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:26:53.525090+00:00"
+      },
+      {
+        "date": "2025-10-11",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251011.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:32:52.119128+00:00"
+      },
+      {
+        "date": "2025-10-12",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251012.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:38:46.612029+00:00"
+      },
+      {
+        "date": "2025-10-13",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251013.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:44:43.904870+00:00"
+      },
+      {
+        "date": "2025-10-14",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251014.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:50:44.292595+00:00"
+      },
+      {
+        "date": "2025-10-15",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251015.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T10:56:57.205556+00:00"
+      },
+      {
+        "date": "2025-10-16",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251016.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:02:47.697704+00:00"
+      },
+      {
+        "date": "2025-10-17",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251017.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:08:38.681783+00:00"
+      },
+      {
+        "date": "2025-10-18",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251018.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:17:13.187126+00:00"
+      },
+      {
+        "date": "2025-10-19",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251019.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:24:27.035163+00:00"
+      },
+      {
+        "date": "2025-10-20",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251020.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:30:27.143307+00:00"
+      },
+      {
+        "date": "2025-10-21",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251021.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:36:24.293020+00:00"
+      },
+      {
+        "date": "2025-10-22",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251022.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:42:11.157770+00:00"
+      },
+      {
+        "date": "2025-10-23",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251023.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:48:07.401423+00:00"
+      },
+      {
+        "date": "2025-10-24",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251024.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T11:54:06.878947+00:00"
+      },
+      {
+        "date": "2025-10-25",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251025.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:00:36.248107+00:00"
+      },
+      {
+        "date": "2025-10-26",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251026.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:07:46.908053+00:00"
+      },
+      {
+        "date": "2025-10-27",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251027.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:15:56.519707+00:00"
+      },
+      {
+        "date": "2025-10-28",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251028.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:23:02.268573+00:00"
+      },
+      {
+        "date": "2025-10-29",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251029.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:29:16.578800+00:00"
+      },
+      {
+        "date": "2025-10-30",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251030.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:35:25.298774+00:00"
+      },
+      {
+        "date": "2025-10-31",
+        "status": "failed",
+        "error": "ModuleNotFoundError: No module named 'h5netcdf'",
+        "path": "F:\\yunnan_extreme_precip_data\\raw\\IMERG_LATE\\2025\\imerg_late_20251031.nc",
+        "product": "GPM_3IMERGHHL_07",
+        "recorded_utc": "2026-09-02T12:41:35.403577+00:00"
+      }
+    ]
+  },
+  {
+    "source": "F:\\云南极端降水数据\\manifests\\backup_manifest.jsonl",
+    "fingerprint": {
+      "path": "F:\\云南极端降水数据\\manifests\\backup_manifest.jsonl",
+      "sha256": "7bae70a3e5808874bf11f1884f567e0e31cc8ad4b518e8267b4bbf8b64e96bf2",
+      "size_bytes": 3634,
+      "mtime_ns": 1787585497372213400
+    },
+    "row_count": 13,
+    "first": [
+      {
+        "recorded_at": "2026-07-26T21:58:23+08:00",
+        "status": "complete",
+        "source": "IMERG",
+        "year": 2021,
+        "path": "D:\\云南极端降水数据_压缩备份\\archives\\IMERG_2021.tar.gz",
+        "bytes": 204674358,
+        "sha256": "5d89ba61f44cbec9273da8519934b1919f60c6f8255b8531cbba1f8f31a3bab1"
+      }
+    ],
+    "last": [
+      {
+        "recorded_at": "2026-08-24T23:31:37+08:00",
+        "status": "complete",
+        "source": "GFS",
+        "year": 2024,
+        "path": "D:\\云南极端降水数据_压缩备份\\archives\\GFS_2024.tar.gz",
+        "bytes": 873679720,
+        "sha256": "1f6a0cfaa8723d7638644ff681d61440f29be1adc36a61551418d425bb753e3d"
+      }
+    ],
+    "selected_rows": []
+  },
+  {
+    "source": "F:\\云南极端降水数据\\manifests\\pipeline_manifest.jsonl",
+    "fingerprint": {
+      "path": "F:\\云南极端降水数据\\manifests\\pipeline_manifest.jsonl",
+      "sha256": "8e5f44db4c3aab8b8824ec76ca18eca8072297c9986ccbb0bbdfacf17f59a0a4",
+      "size_bytes": 448,
+      "mtime_ns": 1784859872309357600
+    },
+    "row_count": 2,
+    "first": [
+      {
+        "recorded_at": "2026-07-24T10:13:08+08:00",
+        "status": "paused",
+        "reason": "user_requested",
+        "paused_at": "2026-07-24T10:13:08+08:00",
+        "imerg_files": 1028,
+        "era5_files": 72,
+        "gfs_files": 4996,
+        "partial_files_preserved": 0
+      }
+    ],
+    "last": [
+      {
+        "recorded_at": "2026-07-24T10:24:32+08:00",
+        "status": "running",
+        "reason": "user_resumed",
+        "resumed_at": "2026-07-24T10:24:32+08:00",
+        "launcher_log": "F:\\云南极端降水数据\\logs\\launcher_20260724_102334.err.log"
+      }
+    ],
+    "selected_rows": []
+  }
+]

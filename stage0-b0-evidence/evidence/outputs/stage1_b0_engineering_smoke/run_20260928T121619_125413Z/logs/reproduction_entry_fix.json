@@ -1,0 +1,19 @@
+{
+  "utc": "2026-09-28T12:25:16.549048+00:00",
+  "reason": "Archived source prepare copied vendor snapshots then attempted exclusive recreation; skip vendor during general source snapshot, then recreate audited snapshots explicitly.",
+  "scientific_or_data_computation_changed": false,
+  "training_rerun": false,
+  "prior_test_count": 46,
+  "final_tests": {
+    "tests": 47,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "regression_test": "test_prepare_from_archived_snapshot_does_not_double_copy_vendor",
+  "stdout_capture": "Exact stdout from successful exec command copied to tests/pytest_final_output.txt.",
+  "preserved_prior_artifacts": "logs/before_reproduction_fix_*; tests/pytest_before_reproduction_fix*; logs/*before_reproduction_fix.py",
+  "additional_scope": "Omit historical tests/tmp Python fixtures from future source snapshot. Scope final pytest to the two actual test modules. Report unit count comes from XML.",
+  "intermediate_collection_history": "Unscoped tests directory collected 2 synthetic helper fixture tests from prior basetemp, giving 49 passed. Expected-count assertion stopped artifact finalization. No scientific test failed. The 49-case stdout/XML are preserved; actual 47-case suite rerun with explicit files.",
+  "final_stdout_capture": "subprocess stdout captured directly"
+}

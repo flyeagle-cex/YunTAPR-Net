@@ -1,0 +1,42 @@
+ENGINEERING_SMOKE_MODEL; NOT FORMAL ARCHITECTURE
+B0SmokeUNet(
+  (enc1): Sequential(
+    (0): Conv2d(1, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU()
+  )
+  (pool): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (enc2): Sequential(
+    (0): Conv2d(8, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU()
+  )
+  (bridge): Sequential(
+    (0): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU()
+  )
+  (up2): ConvTranspose2d(32, 16, kernel_size=(2, 2), stride=(2, 2))
+  (dec2): Sequential(
+    (0): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU()
+  )
+  (up1): ConvTranspose2d(16, 8, kernel_size=(2, 2), stride=(2, 2))
+  (dec1): Sequential(
+    (0): Conv2d(16, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU()
+    (2): Conv2d(8, 8, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU()
+  )
+  (head): Sequential(
+    (0): Conv2d(8, 1, kernel_size=(1, 1), stride=(1, 1))
+    (1): Softplus(beta=1.0, threshold=20.0)
+  )
+)
+Trainable parameters: 29321
+Input: B13 single time, 1 channel. Output: 1 nonnegative precipitation field via Softplus.

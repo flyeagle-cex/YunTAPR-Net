@@ -1,0 +1,20 @@
+.............................F                                           [100%]
+================================== FAILURES ===================================
+______________________ test_csv_parquet_candidates_agree ______________________
+
+    def test_csv_parquet_candidates_agree():
+        for rel in ['B0_FORMAL_ENTRY_MATRIX.csv','TIME/b0_time_rule_candidates.csv','SPATIAL/b0_input_domain_candidates.csv','SPLIT/b0_train_val_candidates.csv']:
+            a=pd.read_csv(RUN/rel,keep_default_na=False); b=pd.read_parquet((RUN/rel).with_suffix('.parquet'),engine='pyarrow')
+            assert list(a.columns)==list(b.columns) and len(a)==len(b)
+            for c in a.columns:
+>               assert a[c].astype(str).tolist()==b[c].fillna('').astype(str).tolist(),(rel,c)
+E               AssertionError: ('SPATIAL/b0_input_domain_candidates.csv', 'actual_native_east')
+E               assert ['106.1999969...422', '107.0'] == ['106.1999969...219', '107.0']
+E                 
+E                 At index 0 diff: '106.1999969482422' != '106.19999694824219'
+E                 Use -v to get more diff
+
+tests\test_readiness.py:225: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_readiness.py::test_csv_parquet_candidates_agree - Assertion...
+1 failed, 29 passed in 1.32s

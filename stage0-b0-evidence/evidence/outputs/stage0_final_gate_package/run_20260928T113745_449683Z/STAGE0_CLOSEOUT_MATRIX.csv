@@ -1,0 +1,21 @@
+item,engineering_complete,scientific_definition_frozen,data_ready,required_for_B0_smoke,required_for_B0_formal,required_for_B4,required_for_B5_B8,required_for_full_stage0_closeout,status,evidence,researcher_action,due_stage,required_before_final_paper
+IMERG audited source grid,True,True,READY_WITHIN_AUDITED_SPAN,False,True,True,True,True,PASS,RUN_p0;IMERG_GRID,保持真实源坐标,NOW,False
+Yunnan boundary and primary mask,True,True,READY,False,True,True,True,True,FROZEN,FREEZE,保持冻结版本,NOW,False
+Himawari July reader / dummy loading,True,True,READY_FOR_ENGINEERING,True,True,True,True,True,PASS_SCOPED,RUN_himawari,B0 仅选择 B13 单时次；未开始新实现,NOW,False
+GFS main / thermo metadata availability,True,False,STRUCTURAL_CANDIDATE_ONLY,False,False,True,False,True,PARTIALLY_COMPATIBLE,RUN_thermo,D09/D10；B4 前还须与实际 predictor 像元有效性验证分开,NOW,False
+SRTM primary source coverage,True,True,FULL_FROZEN_POLYGON,False,False,False,True,True,FROZEN_SOURCE,FREEZE;DEM_COVERAGE,参数 D11 可后置,NOW,False
+D01 2025-10 IMERG 缺月处理,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,MISSING,False,True,False,False,True,RESEARCHER_DECISION_REQUIRED,OCTOBER;CURRENT_REQUEST,先保留 March–October 框架与显式缺月状态，待研究者选定处理方案。,BEFORE_B0_FORMAL,False
+D02 native IMERG half-hour 与 analysis_time 正式绑定,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,True,RESEARCHER_DECISION_REQUIRED,SCHEMA;CONVENTIONS,先保存原时间及证据字段，正式映射由研究者依据证据确认。,BEFORE_B0_FORMAL,False
+D03 model_input_bbox 与输入输出空间映射,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,True,RESEARCHER_DECISION_REQUIRED,FREEZE;REPORT_spatial,分别记录输入域、目标全 grid 和已冻结评价 mask，勿以公共交集替代决定。,BEFORE_B0_FORMAL,False
+D04 省界外 weather-system context margin,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,True,RESEARCHER_DECISION_REQUIRED,FREEZE;REPORT_spatial,与 D03 联合 review，避免两项相互矛盾，不预选数值。,BEFORE_B0_FORMAL,False
+D05 正式 Train/Validation 时间块,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,False,RESEARCHER_DECISION_REQUIRED,CURRENT_REQUEST;CONVENTIONS,将每个时间块与排除/缓冲规则写成可核验配置后再执行。,BEFORE_B0_FORMAL,False
+D06 正式缺测、QC 和单帧/六帧样本纳入规则,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,False,RESEARCHER_DECISION_REQUIRED,SCHEMA;REPORT_himawari;CONVENTIONS,复用原 QC flags 和 null，不凭工程阈值创造科学剔除标准。,BEFORE_B0_FORMAL,False
+D07 正式归一化来源及计算协议,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,False,RESEARCHER_DECISION_REQUIRED,CURRENT_REQUEST;SCHEMA,将统计来源与 split hash 绑定，等研究者确认协议后计算。,BEFORE_B0_FORMAL,False
+D08 Himawari 观测因果与 operational availability 的正式声明,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,True,RESEARCHER_DECISION_REQUIRED,RUN_p0;REPORT_himawari;SCHEMA,先确认拟报告的是哪种时间语义与证据强度，再定规则，不自动代理。,BEFORE_B0_FORMAL,False
+D09 GFS main + thermo Dataset-layer adoption,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,CANDIDATE,False,False,True,False,True,RESEARCHER_DECISION_REQUIRED,RUN_thermo;RUN_provenance;THERMO_RESEARCH,保留双来源和 key/hash，不生成已批准 integration 的假状态。,BEFORE_B4,False
+D10 GFS operational vintage rule,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_ESTABLISHED,False,False,True,False,True,RESEARCHER_DECISION_REQUIRED,RUN_provenance;REPORT_provenance,并列保存可证实事实和 fallback 假设，由研究者选择，不补造 release。,BEFORE_B4,False
+D11 DEM aggregation / terrain 参数 / gradient production,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,False,False,True,False,RESEARCHER_DECISION_REQUIRED,FREEZE;DEM_COVERAGE,分阶段定版，避免要求现在冻结 B8 的所有参数。,BEFORE_B5_B8,False
+D12 独立外部验证数据与启用时间,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_AUDITED,False,False,False,False,False,RESEARCHER_DECISION_REQUIRED,RESEARCH_MATRIX;CURRENT_REQUEST,现在登记 NOT_AUDITED 和最终论文前里程碑，不伪造 READY。,BEFORE_FINAL_PAPER,True
+D13 正式概率实验协议（包括 32 quantile levels）,NOT_APPLICABLE_SCIENTIFIC_DECISION,False,NOT_APPLICABLE_RULE,False,True,False,False,False,RESEARCHER_DECISION_REQUIRED,SCHEMA;CONVENTIONS,只记录已知协议空缺，进入正式实验准备时由研究者确认，不替研究者选值。,BEFORE_B0_FORMAL,False
+R14 44 LATENCY_TAIL_REVIEW,True,NOT_APPLICABLE,READY_FOR_REVIEW,False,False,False,False,False,INFORMATIONAL_REVIEW_ONLY,RUN_p0,保留记录并允许人工查看，不提高为硬 blocker。,NOW,False
+E15 Himawari 正式研究期工程证据覆盖,False,NOT_APPLICABLE,NOT_AUDITED,False,True,False,False,False,ENGINEERING_EVIDENCE_REQUIRED,RESEARCH_MATRIX;RUN_himawari,在下一步获授权的数据工程范围内解决，不重开本轮审计。,BEFORE_B0_FORMAL,False

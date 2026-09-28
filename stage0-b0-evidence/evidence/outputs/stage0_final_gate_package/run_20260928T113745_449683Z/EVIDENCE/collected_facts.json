@@ -1,0 +1,760 @@
+{
+  "statuses": {
+    "p0": {
+      "status": "NEEDS_REVIEW",
+      "engineering_execution": "PASS",
+      "imerg_files": 2465,
+      "imerg_open_success": 2465,
+      "imerg_open_failed": 0,
+      "years": {
+        "2019": 365,
+        "2020": 366,
+        "2021": 365,
+        "2022": 365,
+        "2023": 365,
+        "2024": 366,
+        "2025": 273
+      },
+      "imerg_first_date": "2019-01-01",
+      "imerg_last_date": "2025-09-30",
+      "imerg_missing_dates_within_observed_span": 0,
+      "imerg_duplicate_date_files": 0,
+      "imerg_expected_title_files": 2465,
+      "imerg_expected_source_files": 2465,
+      "imerg_48_frames_files": 2465,
+      "imerg_exact_daily_slots_files": 2465,
+      "imerg_strict_30min_files": 2465,
+      "imerg_unique_grid_count": 1,
+      "imerg_unique_lat_hash_count": 1,
+      "imerg_unique_lon_hash_count": 1,
+      "imerg_unique_precipitation_shapes": [
+        "(48, 130, 140)"
+      ],
+      "imerg_units": [
+        "mm hr-1"
+      ],
+      "imerg_invalid_precip_pixel_count": 0,
+      "imerg_invalid_QI_pixel_count": 0,
+      "imerg_precip_min": 0.0,
+      "imerg_precip_max": 116.29000091552734,
+      "imerg_negative_precip_count": 0,
+      "imerg_needs_review_file_count": 0,
+      "himawari_files": 4390,
+      "himawari_parsed": 4390,
+      "himawari_anomaly_counts": {
+        "LATENCY_TAIL_REVIEW": 44
+      },
+      "creation_delay_quantiles_seconds": {
+        "p50": 542.975124,
+        "p95": 668.44327495,
+        "p99": 844.6853707599998
+      },
+      "creation_delay_max_seconds": 3594.341787,
+      "latency_tail_review_files": 44,
+      "p99_rule": "p99 is a distribution-tail review marker only; it is not an exclusion criterion, QC threshold, or scientific threshold.",
+      "causal_as_latest_true": 4390,
+      "causal_as_latest_false": 0,
+      "causal_as_latest_unknown": 0,
+      "causal_as_latest_pass_fraction": 1.0,
+      "pytest_test_count": 29,
+      "pytest_failures": 0,
+      "source_integrity_pass": true,
+      "raw_F_H_modified": false,
+      "availability_time_conclusion": "Not established from current metadata alone.",
+      "formal_research_years_changed": false,
+      "normalization_or_training_executed": false,
+      "staging": {
+        "copy_count": 6855,
+        "cumulative_copied_bytes": 22106487072,
+        "max_single_copy_bytes": 5935249,
+        "copy_seconds": 71.53838880013063,
+        "read_and_analysis_seconds": 186.09811650042684,
+        "cleanup_failures": 0,
+        "remaining_staged_nc_bytes": 0
+      },
+      "timing": {
+        "data_execution_status": "COMPLETED_PENDING_FINAL_CHECKS",
+        "imerg_files": 2465,
+        "himawari_files": 4390,
+        "imerg_seconds": 176.27216800000315,
+        "himawari_seconds": 135.88202590000583,
+        "total_data_run_seconds": 314.8890546000039,
+        "ended_utc": "2026-09-27T16:30:57.457942+00:00"
+      },
+      "ended_utc": "2026-09-27T16:36:30.382770+00:00"
+    },
+    "continuous_history": {
+      "run": "run_20260928T031444_178129Z",
+      "completed_utc": "2026-09-28T03:44:48.691535+00:00",
+      "status": "NEEDS_REVIEW",
+      "engineering_execution": "PASS",
+      "tasks_A_to_I": "EXECUTED_WITH_DOCUMENTED_EVIDENCE_LIMITATIONS",
+      "tests": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "csv_parquet_roundtrip": {
+        "attempted": 26,
+        "passed": 26,
+        "failed": [],
+        "validation_table_pair": "PASS",
+        "scope": "All audit CSVs existing at conversion; final output_manifest is administrative CSV only",
+        "engine": "pyarrow",
+        "compression": "snappy",
+        "roundtrip": "Exact pandas frame equality after CSV parse"
+      },
+      "raw_integrity": "FULL_GFS_STAT_AND_STATED_SAMPLE_SHA256_PASS",
+      "researcher_review_required": [
+        "GFS T/RH gaps and secondary root",
+        "auxiliary time metadata provenance",
+        "operational availability and vintage",
+        "IMERG native window mapping",
+        "bbox/admin mask",
+        "IMERG 2025-10",
+        "independent validation"
+      ],
+      "not_executed_by_design": [
+        "training",
+        "normalization",
+        "split",
+        "interpolation",
+        "resampling",
+        "formal sample generation",
+        "DOTE",
+        "DTFM",
+        "MEE"
+      ],
+      "historical_runs_overwritten": false,
+      "scientific_conventions_changed_automatically": false
+    },
+    "continuous": {
+      "engineering_status": "PASS",
+      "researcher_review_status": "NEEDS_REVIEW",
+      "overall_status": "NEEDS_REVIEW",
+      "gfs_status": "PARTIAL",
+      "gfs_inventory_schedule_status_202503_202510": "READY",
+      "stage0_engineering_closeout_ready": true,
+      "stage0_closeout_ready": false,
+      "stage0_closeout_definition": "Engineering deliverables complete; scientific/data-readiness closeout awaits listed review items. No Stage 1/B0 started.",
+      "pass_items": [
+        "A decision log separates frozen/provisional/unfrozen/gap/researcher review",
+        "B two-file IMERG boundary reread and exact comparison with prior evidence",
+        "C bounded GFS root discovery; no supplemental merge",
+        "D inventory/year/month/size/parse/duplicate/zero-byte statistics",
+        "E actual signatures and reader/import verification; no dependency changes",
+        "F full-file coordinate/hash/dtype/shape/direction audit",
+        "G canonical variable/level metadata availability",
+        "H forbidden precipitation detection; never used as predictor",
+        "I surface pressure metadata feasibility only",
+        "J separate forecast/reference/valid/lead/creation/release/download/mtime evidence",
+        "K calendar cycle/lead coverage",
+        "L 24-row research matrix with 2025-10 IMERG MISSING",
+        "M common numerical overlap candidate; no bbox freeze",
+        "N schema only; no samples or Dataset",
+        "O scoped pytest executed, including failure isolation and overwrite protection",
+        "P before/after all-main-file size+mtime and selected hashes; bounded owned staging"
+      ],
+      "blocked_items": [],
+      "review_items": [
+        "GFS T/RH gaps and secondary root",
+        "auxiliary time metadata provenance",
+        "operational availability and vintage",
+        "IMERG native window mapping",
+        "bbox/admin mask",
+        "IMERG 2025-10",
+        "independent validation"
+      ],
+      "raw_data_modified": false,
+      "prior_runs_modified": false,
+      "tests": {
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "initial_test_setup_errors_resolved": 6,
+      "NO_GFS_PRECIPITATION_USED_AS_MODEL_INPUT": true,
+      "covers_yunnan_context": "PENDING_RESEARCHER_CONFIRMATION",
+      "model_input_bbox": null,
+      "formal_sample_pairing_executed": false,
+      "completed_utc": "2026-09-28T04:29:22.869416+00:00"
+    },
+    "thermo": {
+      "engineering_status": "PASS",
+      "researcher_review_status": "NEEDS_REVIEW",
+      "thermo_status": "PASS",
+      "grid_compatible": true,
+      "time_compatible": true,
+      "variable_compatible": true,
+      "source_lineage_status": "SUPPORTED_WITH_CAVEATS",
+      "research_period_t_rh_complete": true,
+      "compatibility_verdict": "PARTIALLY_COMPATIBLE",
+      "verdict_scope": "Engineering structure/time/variable coverage passes; conversion lineage remains caveated",
+      "predictor_readiness_candidate": "READY_CANDIDATE_STRUCTURAL_METADATA_ONLY",
+      "official_predictor_readiness_changed": false,
+      "researcher_approval_required_before_merge": true,
+      "raw_data_modified": false,
+      "old_output_runs_modified": false,
+      "main_thermo_merge_performed": false,
+      "merged_files_created": false,
+      "dataset_created": false,
+      "operational_release_established": false,
+      "main_baseline": "F:\\pytorch\\Research\\outputs\\stage0_continuous_engineering\\run_20260928T041855_828904Z",
+      "main_targeted_raw_files": 9,
+      "thermo_files": 12960,
+      "research_expected_pairs": 8820,
+      "research_complete_pairs": 8820,
+      "tests": {
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "stage0_closeout_ready": false,
+      "review_items": [
+        "Approve companion adoption only after reviewing declared conversion lineage",
+        "Primary stale history/alternative udunits provenance",
+        "Operational availability and forecast vintage"
+      ],
+      "blocked_engineering_items": []
+    },
+    "provenance": {
+      "engineering_status": "PASS",
+      "audit_completion_status": "COMPLETE_WITH_SCIENTIFIC_DECISIONS_PENDING",
+      "main_provenance_status": "SUPPORTED_WITH_CAVEATS",
+      "thermo_provenance_status": "SUPPORTED_WITH_CAVEATS",
+      "main_thermo_source_lineage_status": "SUPPORTED_WITH_CAVEATS",
+      "compatibility_verdict": "PARTIALLY_COMPATIBLE",
+      "compatibility_upgraded": false,
+      "dataset_layer_combination_status": "NEEDS_MORE_PROVENANCE",
+      "historical_operational_vintage_status": "NOT_ESTABLISHED",
+      "operational_release_status": "NOT_ESTABLISHED",
+      "local_historical_availability_status": "PARTIALLY_ESTABLISHED",
+      "local_historical_availability_scope": "2026 retrospective local acquisition logs exist; current-content identity incomplete",
+      "research_period_2023_2025_contemporaneous_local_availability_status": "NOT_ESTABLISHED",
+      "vintage_rule_frozen": false,
+      "vintage_candidate_selected": null,
+      "fixed_latency_hours": null,
+      "researcher_decision_required": true,
+      "raw_data_modified": false,
+      "raw_integrity_verification_scope": "40 selected raw files SHA256 + size + mtime; no whole-library rescan",
+      "old_output_runs_modified": false,
+      "historical_artifacts_verified": 219,
+      "explicit_baselines_verified": 14,
+      "full_raw_rescan": false,
+      "scientific_data_downloaded": false,
+      "official_documentation_lookup_performed": true,
+      "main_thermo_integration_performed": false,
+      "merged_files_created": false,
+      "dataset_created": false,
+      "sample_pairing_database_created": false,
+      "training_started": false,
+      "normalization_computed": false,
+      "split_created": false,
+      "bbox_frozen": false,
+      "covers_yunnan_context": "PENDING_RESEARCHER_CONFIRMATION",
+      "dependencies_changed": false,
+      "python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+      "targeted_cases": 20,
+      "targeted_raw_files": 40,
+      "source_token_pairs": 12960,
+      "source_token_matching_pairs": 12960,
+      "research_period_t_rh_complete_pairs": 8820,
+      "research_period_t_rh_expected_pairs": 8820,
+      "acquisition_conversion_code_status": "NOT_FOUND_IN_SEARCH_SCOPE_OR_EXPLICIT_LOG_REFERENCES",
+      "tests": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "staging": {
+        "copy_count": 40,
+        "copied_bytes": 7510442,
+        "copy_seconds": 0.057937900000979425,
+        "read_seconds": 0.16884699999718578,
+        "cleanup_failures": 0,
+        "remaining_staged_bytes": 0,
+        "remaining_file_count": 0,
+        "all_copy_sha256_verified": true,
+        "all_source_stat_unchanged": true,
+        "all_reads_success": true,
+        "max_single_temporary_bytes": 302316,
+        "bounded_limit_bytes": 33554432
+      },
+      "stage0_closeout_ready": false,
+      "main_baseline": "F:\\pytorch\\Research\\outputs\\stage0_continuous_engineering\\run_20260928T041855_828904Z",
+      "thermo_baseline": "F:\\pytorch\\Research\\outputs\\stage0_gfs_thermo_compatibility\\run_20260928T084334_575397Z",
+      "finished_utc": "2026-09-28T09:52:35.470462+00:00"
+    },
+    "spatial": {
+      "engineering_status": "PASS",
+      "audit_completion_status": "COMPLETE_SCIENTIFIC_SPATIAL_CHOICES_PENDING",
+      "dem_status": "PASS_WITH_OUTER_ENVELOPE_TILE_GAPS",
+      "dem_roots": [
+        "SRTM",
+        "AWS_Skadi"
+      ],
+      "multiple_dem_roots_review": true,
+      "dem_file_count": 240,
+      "dem_roots_merged": false,
+      "yunnan_polygon_status": "SOURCE_GEOMETRY_VALID",
+      "yunnan_identity_status": "ATTRIBUTE_SUPPORTED_YUNNAN",
+      "boundary_source_version_status": "GADM41_LOCAL_ARCHIVE_TRACEABLE_OFFICIAL_RECEIPT_NOT_ESTABLISHED",
+      "yunnan_full_dem_coverage": true,
+      "yunnan_full_dem_coverage_scope": "SRTM root, all raster samples finite/non-NoData and footprint union covers engineering GADM41 level1 Yunnan candidate; not official boundary approval or elevation-accuracy validation",
+      "skadi_yunnan_coverage": "MISSING",
+      "imerg_mask_candidate_generated": true,
+      "mask_grid_alignment": "EXACT_MATCH_130x140_ACTUAL_IMERG_COORDINATES",
+      "center_mask_true_cells": 3430,
+      "intersection_mask_true_cells": 3752,
+      "boundary_difference_cells": 322,
+      "common_spatial_overlap_status": "CANDIDATE_ONLY",
+      "numerical_common_overlap": {
+        "lon_min": 97.0,
+        "lon_max": 107.0,
+        "lat_min": 20.0,
+        "lat_max": 30.0
+      },
+      "all_time_all_variable_common_validity": "NOT_ESTABLISHED_THIS_STATIC_AUDIT",
+      "model_input_bbox_frozen": false,
+      "evaluation_yunnan_whole_province_mask_principle": "FROZEN_UNCHANGED",
+      "boundary_file_version_frozen": false,
+      "mask_boundary_convention_frozen": false,
+      "context_margin_chosen": false,
+      "formal_dem_model_grid_product_generated": false,
+      "formal_terrain_feature_dataset_generated": false,
+      "formal_DOTE_generated": false,
+      "dataset_created": false,
+      "training_started": false,
+      "normalization_computed": false,
+      "split_created": false,
+      "gfs_provenance_conclusion_changed": false,
+      "vintage_rule_changed": false,
+      "research_years_changed": false,
+      "october_2025_removed": false,
+      "researcher_decision_required": true,
+      "raw_data_modified": false,
+      "old_runs_modified": false,
+      "integrity": {
+        "input_files_checked": 253,
+        "size_mtime_all_unchanged": true,
+        "sha256_sampled": 17,
+        "sha256_sampled_all_pass": true,
+        "raw_write_operations": 0,
+        "old_run_write_operations": 0,
+        "existing_dependencies_unchanged": true,
+        "statement": "size/mtime verification is not full content hash proof.",
+        "cache": {
+          "copy_count": 2,
+          "cumulative_bytes": 392466,
+          "max_single_copy": 380398,
+          "cleanup_failures": 0,
+          "remaining_staged_bytes": 0,
+          "remaining_files": [],
+          "all_copy_hash_verified": true,
+          "temporary_vrt_cleaned": true
+        }
+      },
+      "tests": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test_attempt1": "1 failed,36 passed; exact CSV parse repaired; original outputs retained",
+      "dependency_added": {
+        "affine": "3.0.1",
+        "attrs": "26.1.0",
+        "pyproj": "3.8.0",
+        "rasterio": "1.5.1",
+        "shapely": "2.1.2"
+      },
+      "existing_dependencies_upgraded": false,
+      "python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+      "stage0_scientific_closeout_ready": false,
+      "finished_utc": "2026-09-28T10:19:04.129438+00:00"
+    },
+    "freeze": {
+      "status": "STAGE0_SPATIAL_DECISION_FREEZE_COMPLETE",
+      "engineering_status": "PASS",
+      "decision_authority": "EXPLICIT_RESEARCHER_APPROVAL",
+      "freeze_id": "YunTAPR_STAGE0_SPATIAL_v1_run_20260928T102636_513428Z",
+      "boundary_version_frozen": true,
+      "boundary_version": "GADM 4.1 Level1 CHN.30_1",
+      "all_five_identity_fields_verified": true,
+      "evaluation_mask_frozen": true,
+      "evaluation_mask_rule": "CENTER_IN_POLYGON",
+      "mask_shape": [
+        130,
+        140
+      ],
+      "mask_true_cells": 3430,
+      "mask_coordinates_exact_real_imerg": true,
+      "mask_lat_ascending": true,
+      "dem_primary_source_frozen": true,
+      "dem_primary_root": "F:\\云南极端降水数据\\raw\\SRTM",
+      "intersection_primary": false,
+      "intersection_retained": true,
+      "model_input_bbox_frozen": false,
+      "context_margin_frozen": false,
+      "dem_aggregation_method_frozen": false,
+      "terrain_parameters_frozen": false,
+      "gradient_production_pipeline_frozen": false,
+      "physical_distance_gradient_principle_frozen": true,
+      "common_overlap_role": "CANDIDATE COMMON NUMERICAL OVERLAP",
+      "raw_data_modified": false,
+      "old_runs_modified": false,
+      "dependencies_changed": false,
+      "B0_started": false,
+      "DEM_resampled": false,
+      "formal_DOTE_features_generated": false,
+      "automatic_next_stage": false,
+      "researcher_decision_required_for_remaining_unfrozen_items": true,
+      "tests": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "frozen_registry_sha256": "04077f6d33f7535bcff28d426de4c1970da6c86255c32f16ec043fe2c12779df",
+      "stopped_after_requested_scope": true,
+      "finished_utc": "2026-09-28T10:37:41.434709+00:00"
+    },
+    "himawari": {
+      "status": "READY_FOR_RESEARCHER_REVIEW",
+      "resume_from": "DRY_RUN_FAILED",
+      "ended_utc": "2026-09-27T11:11:56.158362+00:00",
+      "raw_files_scanned": 4390,
+      "read_success": 4390,
+      "read_failed": 0,
+      "reference_grid": "e930fc8377b0d158b4b22834869896bcc5047b44e38b4c34f63b0b1103e4c255",
+      "satellites": [
+        "H09"
+      ],
+      "total_targets": 4464,
+      "complete": 4020,
+      "incomplete": 444,
+      "boundary_files": 5,
+      "elapsed_seconds": 239.4312409999984,
+      "memory_peak_mb": 137.5546875,
+      "memory_baseline_mb": 101.09765625,
+      "memory_delta_mb": 36.45703125,
+      "process_lifetime_peak_mb": 137.88671875,
+      "sample_audit_pass_count": 56,
+      "expected_unloadable_sample_count": 3,
+      "random_audit_pass_count": 50,
+      "dummy_pass_count": 50,
+      "automated_tests_passed": 22,
+      "staging": {
+        "copy_count": 5736,
+        "total_copied_bytes": 26856686346,
+        "peak_per_copy_bytes": 5935249,
+        "copy_seconds": 71.2629659001177,
+        "read_seconds": 157.85821770012262,
+        "cleanup_failed": 0,
+        "sha256_verified_copies": 29,
+        "current_staging_bytes": 0
+      },
+      "recommended_candidate": "zarr for researcher review only",
+      "raw_h_drive_modified": false,
+      "formal_train_mean_std_computed": false,
+      "full_processing_started": false,
+      "covers_yunnan_context": "PENDING_RESEARCHER_CONFIRMATION",
+      "scientific_timing_decision": "UNRESOLVED_INTERNAL_TIMES_AFTER_NOMINAL",
+      "revision": 2,
+      "storage_benchmark": "benchmark/storage_benchmark_202407_v2.csv",
+      "shuffled_random_6frame_median_seconds": {
+        "netcdf4": 0.1552208039999823,
+        "zarr": 0.13270665199990617
+      },
+      "final_artifact_validation": "PASS",
+      "history_preserved": true
+    },
+    "himawari_failed_history": {
+      "status": "DRY_RUN_FAILED",
+      "engineering_status": "FAILED_DEPENDENCY_GATE",
+      "underlying_output_status": "BLOCKED_NOT_GENERATED"
+    }
+  },
+  "freeze": {
+    "freeze_id": "YunTAPR_STAGE0_SPATIAL_v1_run_20260928T102636_513428Z",
+    "decision_authority": "RESEARCHER_EXPLICIT_APPROVAL_THIS_USER_MESSAGE",
+    "approved_scope": "Current formal spatial execution convention only; no next Stage",
+    "created_utc": "2026-09-28T10:32:41.024337+00:00",
+    "immutable_policy": "Never replace files or registry silently. Verify SHA256 before use via src/frozen_contract.py. Any scientific version change requires an explicit researcher decision and a new run; preserve this run. No OS-level immutability claim.",
+    "artifacts": {
+      "archive": {
+        "relative_path": "FROZEN\\BOUNDARY\\gadm41_CHN_1.source.json.zip",
+        "sha256": "656ea3e576a95f1172503c1f416c8a3b8267bc87e6c090c730a676e96d551478",
+        "size_bytes": 714043,
+        "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+      },
+      "original_geojson_member": {
+        "relative_path": "PROVENANCE\\gadm41_CHN_1.original_member.json",
+        "sha256": "0cc2dacb44375c1e36cf32145303b1f403e838658fb44de944af94df910deacc",
+        "size_bytes": 2408414,
+        "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+      },
+      "boundary": {
+        "relative_path": "FROZEN\\BOUNDARY\\yunnan_gadm41_level1_boundary.geojson",
+        "sha256": "263216aac09e7c4548396b5ff91c43a37962b4847db8ad3f9784aac74f60675f",
+        "size_bytes": 382905,
+        "role": "FROZEN_BOUNDARY"
+      },
+      "coordinates": {
+        "relative_path": "FROZEN\\MASK\\imerg_actual_coordinates.npz",
+        "sha256": "4bf6ce3f9722c318c5db93bb4967660e82a53c498c90f3c6bacbf95c72ed912a",
+        "size_bytes": 1578,
+        "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+      },
+      "primary_mask": {
+        "relative_path": "FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+        "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+        "size_bytes": 20916,
+        "role": "FROZEN_PRIMARY_EVALUATION_MASK"
+      },
+      "adopted_candidate": {
+        "relative_path": "PROVENANCE\\adopted_center_candidate.nc",
+        "sha256": "48697c58367adf497e502c139549e6e6622026dceea8de3eaaef876723a34d78",
+        "size_bytes": 19781,
+        "role": "PROVENANCE_OR_COORDINATE_ANCHOR"
+      },
+      "intersection_comparison": {
+        "relative_path": "COMPARISON\\yunnan_imerg_mask_intersection_candidate.nc",
+        "sha256": "1c9dd497a2855bd4d55f4988d3e8861ce25a9c5731b43223a61021ecfc69d6a5",
+        "size_bytes": 19806,
+        "role": "NON_PRIMARY_BOUNDARY_SENSITIVITY_COMPARISON"
+      }
+    },
+    "boundary": {
+      "status": "FROZEN",
+      "version": "GADM 4.1",
+      "administrative_level": 1,
+      "original_archive_path": "F:\\云南极端降水数据\\raw\\BOUNDARY\\GADM41\\gadm41_CHN_1.json.zip",
+      "original_archive_sha256": "656ea3e576a95f1172503c1f416c8a3b8267bc87e6c090c730a676e96d551478",
+      "archive_member": "gadm41_CHN_1.json",
+      "member_sha256": "0cc2dacb44375c1e36cf32145303b1f403e838658fb44de944af94df910deacc",
+      "feature_index_zero_based": 35,
+      "feature_identifier": "CHN.30_1",
+      "required_identity_fields": {
+        "NAME_1": "Yunnan",
+        "GID_1": "CHN.30_1",
+        "HASC_1": "CN.YN",
+        "ISO_1": "CN-YN",
+        "ENGTYPE_1": "Province"
+      },
+      "crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+      },
+      "axis_order": "longitude,latitude",
+      "geometry_type": "MultiPolygon",
+      "geometry_sha256": "c721d7125d484d45d1c1fbc1b902167533c635077e739777163b7178c2e92d5c",
+      "geometry_hash_definition": "SHA256 UTF-8 JSON original geometry; sorted keys; compact separators; ensure_ascii=False; no rounding/reordering of coordinate arrays",
+      "normalized_wkb_sha256": "9a0ba6f0388d1cc459b691db5ebc4d973b6a70d5a894590025fa69c714b74f93",
+      "normalized_wkb_definition": "shapely.normalize; 2D little-endian WKB, no SRID; supplementary geometric fingerprint",
+      "shapely_version": "2.1.2",
+      "bounds": [
+        97.5341,
+        21.1394,
+        106.1942,
+        29.2511
+      ],
+      "provenance": "Selected the sole raw GADM41 CHN level-1 feature matching ALL five approved identity attributes; raw geometry unchanged; topologically equals audited candidate, normalized single-union representation exactly matches; raw MultiPolygon and old Polygon differ in representation only; archive/hash linked to prior audit. Local artifact adoption is researcher-approved. No new official download receipt/authentication claimed."
+    },
+    "mask": {
+      "status": "FROZEN",
+      "role": "PRIMARY_EVALUATION",
+      "rule": "CENTER_IN_POLYGON",
+      "predicate": "strict interior contains, inherited from approved candidate",
+      "exact_boundary_center_count": 0,
+      "shape": [
+        130,
+        140
+      ],
+      "true_cells": 3430,
+      "false_cells": 14770,
+      "dimensions": [
+        "lat",
+        "lon"
+      ],
+      "lat_direction": "ascending",
+      "lon_direction": "ascending",
+      "lat_dtype": "float32",
+      "lon_dtype": "float32",
+      "lat_hash": "5973fd3c0e1ab758157d30c240a4e33153a86a6228741958e203116139f4df3a",
+      "lon_hash": "ffc033c7d89b2750c907a61844ea599d2e0bd3af26c1c77aeda99f0b4a0fd7a2",
+      "coordinate_hash_definition": "SHA256 ASCII shape + canonical little-endian float64 numeric values C-order; signed zero normalized",
+      "raw_imerg_coordinate_source": "F:\\云南极端降水数据\\raw\\IMERG\\2019\\imerg_20190101.nc",
+      "raw_imerg_source_sha256": "9c5076f4d9bb1825b7c58edafe91eaeb817dda8c9b3e9e03b441ca436bc222d5",
+      "prior_formal_grid_audit": "F:\\pytorch\\Research\\outputs\\stage0_p0_audit\\run_20260927T161311_417313Z\\IMERG\\imerg_grid_audit.csv",
+      "actual_raw_coordinates_reread_equal": true,
+      "generated_coordinates": false,
+      "candidate_source": "F:\\pytorch\\Research\\outputs\\stage0_spatial_static_closeout\\run_20260928T095818_821492Z\\MASK\\yunnan_imerg_mask_center_candidate.nc",
+      "candidate_source_sha256": "48697c58367adf497e502c139549e6e6622026dceea8de3eaaef876723a34d78",
+      "all_variable_arrays_unchanged_from_candidate": true,
+      "only_global_metadata_updated_on_new_copy": true
+    },
+    "dem": {
+      "primary_source_status": "FROZEN",
+      "primary_root": "F:\\云南极端降水数据\\raw\\SRTM",
+      "registered_files": 237,
+      "coverage": "FULL_FOR_FROZEN_YUNNAN_POLYGON",
+      "coverage_evidence": "F:\\pytorch\\Research\\outputs\\stage0_spatial_static_closeout\\run_20260928T095818_821492Z\\DEM\\dem_audit_summary.json",
+      "inventory": "DEM/frozen_primary_root_inventory.csv",
+      "inventory_sha256": "64d6c12aed6a093ae9449eea372bce8e614a498bb9e6bae318e4d1aaf153f90d",
+      "auxiliary_root": "F:\\云南极端降水数据\\raw\\AWS_Skadi",
+      "auxiliary_status": "SEPARATE_NOT_MERGED_NOT_DELETED",
+      "production_processing_frozen": false
+    },
+    "frozen_principles": [
+      "Final main evaluation uses whole Yunnan provincial administrative mask",
+      "DOTE terrain gradients must use real physical distances, never longitude/latitude index gradients"
+    ],
+    "not_yet_frozen": [
+      "model_input_bbox",
+      "weather_system_context_margin",
+      "DEM_aggregation_method",
+      "slope_aspect_relief_curvature_parameters",
+      "dh_dx_dh_dy_formal_production_pipeline"
+    ],
+    "common_numerical_overlap": {
+      "designation": "CANDIDATE COMMON NUMERICAL OVERLAP",
+      "lon_min": 97.0,
+      "lon_max": 107.0,
+      "lat_min": 20.0,
+      "lat_max": 30.0,
+      "is_model_input_bbox": false
+    },
+    "intersection": {
+      "role": "BOUNDARY_SENSITIVITY_ENGINEERING_COMPARISON",
+      "is_primary_evaluation_mask": false,
+      "preserved_byte_identical": true,
+      "true_cells": 3752,
+      "difference_cells": 322
+    },
+    "execution_limits": {
+      "start_B0": false,
+      "DEM_resampling": false,
+      "formal_DOTE_features": false,
+      "next_stage_automatically": false
+    },
+    "generator_script_hashes": "PROVENANCE/generator_script_hashes.json"
+  },
+  "mask_observed": {
+    "variable": "yunnan_mask",
+    "shape": [
+      130,
+      140
+    ],
+    "true_cells": 3430,
+    "false_cells": 14770,
+    "dimensions": [
+      "lat",
+      "lon"
+    ],
+    "lat_ascending": true,
+    "lat_hash": "5973fd3c0e1ab758157d30c240a4e33153a86a6228741958e203116139f4df3a",
+    "lon_hash": "ffc033c7d89b2750c907a61844ea599d2e0bd3af26c1c77aeda99f0b4a0fd7a2"
+  },
+  "dem": {
+    "SRTM": {
+      "tile_count": 237,
+      "center_footprint_bounds": [
+        94.0,
+        18.0,
+        110.0,
+        33.0
+      ],
+      "raster_support_bounds": [
+        93.99986111111112,
+        17.99986111111111,
+        110.0001388888889,
+        33.00013888888889
+      ],
+      "nominal_gap_area_deg2": 3.000000000000057,
+      "nominal_duplicate_footprints": 0,
+      "nominal_overlap_area_deg2": 0.0,
+      "support_overlap_area_deg2": 0.12196273148242653,
+      "crs_mismatch": false,
+      "resolution_mismatch": false,
+      "total_pixels": 3073226637,
+      "valid_pixels": 3073226637,
+      "nodata_pixels": 0,
+      "nonfinite_pixels": 0,
+      "min_elevation": -468.0,
+      "max_elevation": 7439.0,
+      "yunnan_footprint_covers": true,
+      "yunnan_invalid_touched_cells": 0,
+      "yunnan_boundary_invalid_cells": 0,
+      "yunnan_coverage": "FULL",
+      "common_candidate_footprint_covers": true,
+      "common_candidate_invalid_cells": 0,
+      "common_candidate_coverage": "FULL"
+    },
+    "AWS_Skadi": {
+      "tile_count": 3,
+      "center_footprint_bounds": [
+        107.0,
+        18.0,
+        109.0,
+        21.0
+      ],
+      "raster_support_bounds": [
+        106.99986111111112,
+        17.99986111111111,
+        109.0001388888889,
+        21.000138888888888
+      ],
+      "nominal_gap_area_deg2": 3.0,
+      "nominal_duplicate_footprints": 0,
+      "nominal_overlap_area_deg2": 0.0,
+      "support_overlap_area_deg2": 0.0002779320987658096,
+      "crs_mismatch": false,
+      "resolution_mismatch": false,
+      "total_pixels": 38901603,
+      "valid_pixels": 38901603,
+      "nodata_pixels": 0,
+      "nonfinite_pixels": 0,
+      "min_elevation": -94.0,
+      "max_elevation": -18.0,
+      "yunnan_footprint_covers": false,
+      "yunnan_invalid_touched_cells": 0,
+      "yunnan_boundary_invalid_cells": 0,
+      "yunnan_coverage": "MISSING",
+      "common_candidate_footprint_covers": false,
+      "common_candidate_invalid_cells": 0,
+      "common_candidate_coverage": "PARTIAL"
+    }
+  },
+  "pair_counts": {
+    "MAIN_ONLY": 11428,
+    "MATCHED_COMPLETE": 12960
+  },
+  "research_coverage": [
+    24,
+    8820,
+    8820
+  ],
+  "imerg_202510": {
+    "target_pattern": "2025/imerg_202510*.nc",
+    "files": [],
+    "count": 0,
+    "status": "MISSING"
+  },
+  "source_month_status_counts": {
+    "Himawari_available": {
+      "NOT_AUDITED": 23,
+      "PARTIAL": 1
+    },
+    "external_validation_available_if_known": {
+      "NOT_AUDITED": 24
+    }
+  },
+  "fingerprint_conflicts": []
+}

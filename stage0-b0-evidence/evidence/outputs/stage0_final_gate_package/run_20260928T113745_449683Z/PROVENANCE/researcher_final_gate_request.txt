@@ -1,0 +1,1471 @@
+【Codex 连续执行任务】
+
+项目：
+YunTAPR-Net
+云南全境复杂地形近实时概率降水反演
+
+当前阶段：
+Stage-0 Final Gate / Researcher Decision Package
+
+模型：
+GPT-5.6 Sol
+
+推理强度：
+max
+
+工作模式：
+科研数据工程最终收口
+
+============================================================
+0. 本轮任务性质
+============================================================
+
+这一轮不是新的数据审计。
+
+这一轮禁止：
+
+- 重新全库扫描 IMERG
+- 重新全库扫描 Himawari
+- 重新全库扫描 GFS
+- 重新全库扫描 GFS_thermo
+- 重新全库扫描 DEM
+- 重新生成云南 mask
+- 下载新科研数据
+- 修改科研定义
+- 自动批准任何尚未批准的 scientific convention
+- 启动 B0
+- 构建正式 Dataset
+- normalization
+- Train/Val/Test split execution
+- spatial interpolation
+- Himawari resampling
+- DOTE / DTFM / MEE
+- model training
+
+本轮只做：
+
+1. 复用所有既有正式 Stage-0 run；
+2. 核验这些 run 的状态和关键 fingerprint；
+3. 汇总 frozen / provisional / gap / review；
+4. 区分真正阻止 B0 的事项与可后置事项；
+5. 输出 Stage-0 最终研究者决策包；
+6. 不自动跨入 Stage-1。
+
+============================================================
+1. 当前已经确认的正式状态
+============================================================
+
+------------------------------------------------------------
+1.1 IMERG
+------------------------------------------------------------
+
+P0 engineering audit：
+
+PASS
+
+文件数：
+2465
+
+覆盖：
+2019-01-01
+to
+2025-09-30
+
+全部：
+V07B Final metadata evidence
+48 frames/day
+30 min
+0.1 degree
+shape = (48,130,140)
+
+target grid：
+130 x 140
+
+lat：
+~19.05 to 31.95
+ascending
+
+lon：
+~95.05 to 108.95
+ascending
+
+0 mm/hr：
+有效无雨
+
+missing：
+不得转换为 0
+
+2025-10：
+对于正式候选科研时间
+2023-2025 每年 March-October
+
+状态：
+
+MISSING
+
+不得自动把科研期改成 March-September。
+
+native half-hour exact window semantics：
+
+尚未完全由当前 subset metadata 独立建立。
+
+------------------------------------------------------------
+1.2 Himawari
+------------------------------------------------------------
+
+Stage-0 engineering：
+PASS
+
+已确认：
+
+7 IR/WV channels
+6 causal nominal slots
+
+obs_end <= analysis_time
+
+属于物理因果约束。
+
+date_created：
+
+只是：
+
+product/file creation timestamp
+
+不是已证明：
+
+operational availability_time
+
+2024-07 latency audit：
+
+median ~9.05 min
+p95 ~11.14 min
+p99 ~14.08 min
+max ~59.91 min
+
+LATENCY_TAIL_REVIEW：
+44
+
+p99：
+
+只是人工 review marker。
+
+不是：
+
+QC threshold
+exclusion threshold
+scientific threshold
+
+------------------------------------------------------------
+1.3 GFS main
+------------------------------------------------------------
+
+root：
+
+F:\云南极端降水数据\raw\GFS
+
+engineering：
+PASS
+
+文件：
+24388
+
+grid：
+53 x 57
+0.25 degree
+
+lat：
+32 -> 19
+descending
+
+lon：
+95 -> 109
+ascending
+
+时间：
+
+init:
+00/06/12/18 UTC
+
+lead:
+0/3/6 h
+
+valid = init + lead：
+24388/24388 PASS
+
+main predictors：
+
+PWAT
+CAPE
+U850/U700
+V850/V700
+surface pressure
+
+研究期主库 T/RH：
+不足。
+
+surface pressure：
+真实存在。
+
+禁止 predictor：
+
+GFS precipitation / accumulation / rate
+
+已明确：
+
+NO_GFS_PRECIPITATION_USED_AS_MODEL_INPUT
+
+------------------------------------------------------------
+1.4 GFS_thermo
+------------------------------------------------------------
+
+root：
+
+F:\云南极端降水数据\raw\GFS_thermo
+
+engineering：
+PASS
+
+文件：
+12960
+
+与 main：
+
+grid：
+exact compatible
+
+time：
+compatible
+
+pairing：
+12960 MATCHED_COMPLETE
+
+THERMO_ONLY：
+0
+
+TIME_CONFLICT：
+0
+
+GRID_CONFLICT：
+0
+
+2023-2025 March-October：
+
+T850/T700/T500
+RH850/RH700/RH500
+
+8820 / 8820 complete candidate
+
+24/24 months：
+READY candidate
+
+source lineage：
+
+SUPPORTED_WITH_CAVEATS
+
+总体 compatibility：
+
+PARTIALLY_COMPATIBLE
+
+当前没有研究者正式批准：
+
+main + thermo Dataset-layer integration
+
+------------------------------------------------------------
+1.5 GFS provenance / vintage
+------------------------------------------------------------
+
+engineering audit：
+PASS
+
+main provenance：
+SUPPORTED_WITH_CAVEATS
+
+thermo provenance：
+SUPPORTED_WITH_CAVEATS
+
+operational release time：
+
+NOT_ESTABLISHED
+
+historical operational vintage：
+
+NOT_ESTABLISHED
+
+2026 retrospective local acquisition：
+
+PARTIALLY_ESTABLISHED
+
+但：
+
+不能证明 2023-2025 当时 contemporaneous availability。
+
+init + 5h：
+
+不得自动使用。
+
+conversion time：
+不得当 release。
+
+file mtime：
+不得当 release。
+
+download time：
+不得自动当 official release。
+
+vintage_rule_frozen：
+
+false
+
+------------------------------------------------------------
+1.6 DEM / SRTM
+------------------------------------------------------------
+
+正式空间决策已经冻结。
+
+主 DEM：
+
+F:\云南极端降水数据\raw\SRTM
+
+237 files
+
+对正式云南 polygon：
+
+FULL coverage
+
+云南及省界附近：
+
+无 NoData gap
+
+AWS_Skadi：
+
+辅助来源
+不进入当前正式云南 DEM 拼接。
+
+------------------------------------------------------------
+1.7 云南行政边界 / evaluation mask
+------------------------------------------------------------
+
+Freeze ID：
+
+YunTAPR_STAGE0_SPATIAL_v1_run_20260928T102636_513428Z
+
+正式边界：
+
+GADM 4.1
+China Level-1
+Yunnan
+
+feature：
+
+GID_1 = CHN.30_1
+
+身份同时确认：
+
+NAME_1 = Yunnan
+GID_1 = CHN.30_1
+HASC_1 = CN.YN
+ISO_1 = CN-YN
+ENGTYPE_1 = Province
+
+正式 evaluation mask：
+
+center-in-polygon
+
+grid：
+
+actual IMERG grid
+130 x 140
+
+true cells：
+3430
+
+false：
+14770
+
+lat：
+ascending
+
+正式 mask 已有：
+
+hash
+coordinate hash
+geometry hash
+script hash
+freeze registry
+silent replacement protection
+
+intersection mask：
+
+只作为 sensitivity comparison
+
+不是 primary evaluation mask。
+
+------------------------------------------------------------
+1.8 已冻结 DOTE 地形原则
+------------------------------------------------------------
+
+dh/dx
+dh/dy
+
+必须基于真实物理距离。
+
+禁止：
+
+把经纬度 index gradient
+当成物理地形梯度。
+
+但：
+
+正式 DEM aggregation
+slope/aspect/relief/curvature 参数
+gradient production pipeline
+
+尚未冻结。
+
+------------------------------------------------------------
+1.9 仍未冻结
+------------------------------------------------------------
+
+model_input_bbox
+
+weather-system context margin
+
+正式 DEM aggregation 方法
+
+正式 terrain feature 参数
+
+GFS main + thermo Dataset-layer integration
+
+GFS operational vintage rule
+
+2025-10 IMERG gap handling
+
+independent external validation dataset
+
+============================================================
+2. 本轮输出目录
+============================================================
+
+新建：
+
+F:\pytorch\Research\outputs\stage0_final_gate_package\run_<UTC_TIMESTAMP>
+
+禁止覆盖：
+
+所有旧 Stage-0 run。
+
+所有旧 run：
+只读。
+
+============================================================
+3. TASK A：发现并登记正式 Stage-0 evidence runs
+============================================================
+
+仅在：
+
+F:\pytorch\Research\outputs
+
+内受限定位正式 run。
+
+至少包括：
+
+stage0_p0_audit
+stage0_continuous_engineering
+stage0_gfs_thermo_compatibility
+stage0_gfs_provenance_vintage_resolution
+stage0_spatial_static_closeout
+stage0_spatial_decision_update
+
+以及：
+
+正式 Himawari dry-run / Stage-0 结果
+如果其状态文件明确可识别。
+
+生成：
+
+EVIDENCE/evidence_run_registry.csv
+
+字段至少：
+
+run_type
+run_path
+timestamp
+engineering_status
+researcher_review_status
+fingerprint
+key_report
+audit_final_status_path
+manifest_path
+status
+notes
+
+对每个正式 run：
+
+读取：
+
+audit_final_status.json
+final report
+manifest
+关键 hash
+
+不要重新运行旧任务。
+
+============================================================
+4. TASK B：旧 run fingerprint consistency
+============================================================
+
+定向检查关键 fingerprint。
+
+例如：
+
+IMERG：
+2465 files
+130x140
+2025-09-30 last date
+
+GFS：
+24388
+53x57
+
+GFS_thermo：
+12960
+8820/8820 research period
+
+正式 spatial freeze：
+Freeze ID
+3430 mask cells
+GADM 4.1 CHN.30_1
+
+如果 fingerprint 不一致：
+
+标记：
+
+EVIDENCE_CONFLICT_RESEARCHER_REVIEW
+
+不得自行选择哪一个真。
+
+如果一致：
+
+记录：
+
+CONSISTENT
+
+生成：
+
+EVIDENCE/evidence_fingerprint_check.csv
+
+============================================================
+5. TASK C：生成唯一 Master Status
+============================================================
+
+生成：
+
+STAGE0_MASTER_STATUS.md
+
+要求按数据源/规则分支列：
+
+IMERG
+Himawari
+GFS main
+GFS thermo
+GFS provenance
+GFS vintage
+DEM
+Yunnan boundary
+Yunnan evaluation mask
+spatial overlap
+model bbox
+external validation
+
+每项必须同时给：
+
+engineering_status
+
+scientific_status
+
+frozen_status
+
+evidence_source
+
+next_action
+
+不能只写 PASS/FAIL。
+
+============================================================
+6. TASK D：生成 FROZEN_CONVENTIONS.md
+============================================================
+
+只写已经由：
+
+真实工程证据
++
+研究者明确批准
+
+冻结的内容。
+
+至少包括：
+
+1.
+研究对象：
+云南省全境
+
+2.
+正式评价范围：
+云南省行政区 mask
+
+3.
+正式 boundary：
+GADM4.1 CHN.30_1
+
+4.
+正式 mask：
+center-in-polygon
+3430 cells
+
+5.
+正式 target grid：
+实际 IMERG 130x140 coordinate
+
+6.
+IMERG：
+V07B Final metadata evidence
+30 min
+0.1 degree
+0 != missing
+
+7.
+Himawari：
+7 channels
+six causal slots
+obs_end physical causality
+
+8.
+GFS：
+不得使用 precipitation predictor
+
+9.
+surface pressure：
+用于未来 pressure-level physical validity feasibility
+
+10.
+DEM主来源：
+SRTM
+
+11.
+DOTE gradient：
+必须真实物理距离
+
+12.
+raw F/H：
+read-only
+
+特别要求：
+
+不要把：
+
+PROVISIONAL
+candidate
+SUPPORTED_WITH_CAVEATS
+NOT_ESTABLISHED
+
+写进 FROZEN。
+
+============================================================
+7. TASK E：生成 DATA_GAPS.md
+============================================================
+
+只放真实数据缺口。
+
+至少区分：
+
+HARD_DATA_GAP
+
+DATA_COVERAGE_GAP
+
+METADATA_EVIDENCE_GAP
+
+SOURCE_PROVENANCE_GAP
+
+例如：
+
+2025-10 IMERG：
+HARD_DATA_GAP
+
+GFS release time：
+METADATA_EVIDENCE_GAP
+
+main/thermo conversion chain：
+SOURCE_PROVENANCE_GAP
+
+independent validation：
+如果尚无真实数据：
+DATA_GAP / NOT_AUDITED
+
+不要把：
+
+未冻结 bbox
+
+这种研究者选择写成 data gap。
+
+============================================================
+8. TASK F：研究者决策分类
+============================================================
+
+生成：
+
+RESEARCHER_DECISIONS_REQUIRED.md
+
+所有未决项必须分类成以下四类之一：
+
+A.
+BLOCKER_TO_B0
+
+B.
+BLOCKER_TO_FULL_STAGE0_SCIENTIFIC_CLOSEOUT
+
+C.
+DEFERABLE_TO_LATER_STAGE
+
+D.
+INFORMATIONAL_REVIEW_ONLY
+
+这个分类极其重要。
+
+============================================================
+9. BLOCKER 分类原则
+============================================================
+
+Codex 不得自行把所有 review 都变成 B0 blocker。
+
+必须根据工程依赖真实判断。
+
+例如：
+
+------------------------------------------------------------
+9.1 GFS main + thermo integration
+------------------------------------------------------------
+
+如果 B0 是：
+
+B13 单通道单时次 Himawari baseline
+
+则：
+
+GFS main + thermo
+不是 B0 数据依赖。
+
+因此：
+
+它很可能不是 BLOCKER_TO_B0。
+
+但是：
+
+对于未来 B4：
+
+它是重要 blocker / decision。
+
+必须明确：
+
+B0 entry blocker
+与
+B4 future blocker
+
+不是同一回事。
+
+------------------------------------------------------------
+9.2 GFS operational vintage
+------------------------------------------------------------
+
+B0 不使用 GFS。
+
+因此：
+
+不要机械写：
+
+BLOCKER_TO_B0
+
+但是对于：
+
+Stage-0 full scientific closeout
+以及未来 B4 / NRT replay
+
+属于重要未决事项。
+
+------------------------------------------------------------
+9.3 DEM terrain parameters
+------------------------------------------------------------
+
+B0 不使用 DEM。
+
+因此：
+
+slope/aspect/relief 等正式参数
+
+一般应该：
+
+DEFERABLE_TO_LATER_STAGE
+
+不是 B0 blocker。
+
+------------------------------------------------------------
+9.4 2025-10 IMERG
+------------------------------------------------------------
+
+必须判断：
+
+B0 正式训练/验证/测试设计
+是否需要完整 2025-03~10。
+
+当前 V1.3：
+
+2025 锁定 final test
+候选时间：
+March-October
+
+因此：
+
+2025-10 IMERG 缺失
+必须至少是：
+
+BLOCKER_TO_FULL_STAGE0_SCIENTIFIC_CLOSEOUT
+
+是否也是：
+
+BLOCKER_TO_B0
+
+不要自行猜。
+
+请根据：
+
+“B0是否允许只做前期工程 smoke/baseline pipeline”
+与
+“B0正式论文级实验是否要求完整冻结研究期”
+
+分开写：
+
+B0_ENGINEERING_SMOKE_ENTRY
+
+和：
+
+B0_FORMAL_EXPERIMENT_ENTRY
+
+如果正式 B0 使用冻结研究期：
+
+则 2025-10 gap 应阻塞正式 experiment dataset。
+
+============================================================
+10. TASK G：生成 B0_ENTRY_REQUIREMENTS.md
+============================================================
+
+必须把 B0 分成两个层级：
+
+------------------------------------------------------------
+Level A：
+B0 ENGINEERING SMOKE
+------------------------------------------------------------
+
+目标：
+
+验证：
+
+Dataset -> Tensor
+B13 single time
+model forward
+loss
+metric
+checkpoint
+inference
+
+最小链路。
+
+不得被误称为：
+
+正式论文结果。
+
+列出：
+
+required
+optional
+not required
+
+------------------------------------------------------------
+Level B：
+B0 FORMAL EXPERIMENT
+------------------------------------------------------------
+
+用于正式：
+
+Train
+Validation
+Final Test
+论文结果
+多随机种子
+正式归一化
+正式指标
+
+必须列出进入前硬条件。
+
+例如：
+
+- research period frozen
+- target grid frozen
+- evaluation mask frozen
+- formal Train/Val/Test time blocks frozen
+- normalization source rule frozen
+- 2025 test coverage decision resolved
+- missing-data handling frozen
+- Himawari sequence rules frozen
+
+注意：
+
+GFS 和 DEM：
+
+B0 本身不使用。
+
+不要错误要求它们全部准备完才能跑 B0。
+
+============================================================
+11. TASK H：正式区分 Stage-0 closeout
+============================================================
+
+生成：
+
+STAGE0_CLOSEOUT_MATRIX.csv
+
+至少列：
+
+item
+
+engineering_complete
+
+scientific_definition_frozen
+
+data_ready
+
+required_for_B0_smoke
+
+required_for_B0_formal
+
+required_for_B4
+
+required_for_B5_B8
+
+required_for_full_stage0_closeout
+
+status
+
+evidence
+
+researcher_action
+
+这张表必须让人一眼看出：
+
+什么现在就阻塞
+什么未来才阻塞。
+
+============================================================
+12. TASK I：外部验证地位
+============================================================
+
+根据 V1.3：
+
+独立外部验证是论文真实性结论的重要要求。
+
+但不要自动假设：
+
+它必须在 B0 开工前全部下载完成。
+
+区分：
+
+required before B0 smoke
+
+required before B0 formal
+
+required before final paper conclusion
+
+并记录：
+
+当前真实状态。
+
+如果还未审计：
+
+NOT_AUDITED
+
+不要伪造 READY。
+
+============================================================
+13. TASK J：Himawari 44 latency tails 的地位
+============================================================
+
+明确记录：
+
+44 LATENCY_TAIL_REVIEW
+
+不等于：
+
+bad data
+exclusion
+QC failure
+
+判断它属于：
+
+INFORMATIONAL_REVIEW_ONLY
+
+还是：
+
+需要在正式 sample generation 前人工 review。
+
+不要因为它们存在就自动阻止所有 B0。
+
+============================================================
+14. TASK K：IMERG native time window
+============================================================
+
+记录当前：
+
+converted CF time：
+verified
+
+native exact half-hour semantic：
+PROVISIONAL / NOT FULLY ESTABLISHED
+
+判断：
+
+对于正式 sample pairing：
+
+是否必须在 Dataset 构建前冻结。
+
+不要自行补造：
+
+[T,T+30)
+
+除非已有正式研究者批准或产品证据。
+
+============================================================
+15. TASK L：model_input_bbox
+============================================================
+
+当前：
+
+NOT_YET_FROZEN
+
+common numerical overlap：
+
+97–107E
+20–30N
+
+只是：
+
+CANDIDATE ONLY
+
+必须判断：
+
+B0 smoke 是否必须冻结 bbox
+
+B0 formal 是否必须冻结 bbox
+
+由于 B0 只使用 Himawari + IMERG：
+
+需要考虑真实输入裁剪域是否必须先固定。
+
+不要自动选择 bbox。
+
+============================================================
+16. TASK M：生成 Researcher Decision Cards
+============================================================
+
+为每一个真正需要研究者决策的项目生成简短卡片：
+
+DECISIONS/cards/<decision_id>.md
+
+每张卡只包含：
+
+Decision
+
+Why it matters
+
+Current evidence
+
+Options
+
+Engineering consequence
+
+Scientific consequence
+
+What happens if deferred
+
+Codex recommendation:
+只能是中性工程建议
+不能冒充科研决定
+
+至少针对：
+
+2025-10 IMERG
+
+GFS main + thermo adoption
+
+GFS vintage rule
+
+model_input_bbox
+
+context margin
+
+native IMERG time-window semantics
+
+formal Train/Val split blocks
+
+independent validation timing
+
+============================================================
+17. TASK N：不要提前冻结 Train/Val
+============================================================
+
+当前 V1.3：
+
+2025 final test
+
+2023-2024 development pool
+
+这是科学大框架。
+
+但具体：
+
+Train block
+Validation block
+
+尚未正式冻结。
+
+本轮：
+
+只记录。
+
+不要自动选择：
+
+哪几个月做 validation。
+
+写：
+
+RESEARCHER_DECISION_REQUIRED
+
+============================================================
+18. TASK O：Formal Sample Schema readiness
+============================================================
+
+复用已有 sample schema。
+
+只判断：
+
+schema 是否足以进入未来实现。
+
+不生成全量 sample index。
+
+输出：
+
+SCHEMA/sample_schema_readiness.md
+
+状态：
+
+READY_FOR_IMPLEMENTATION
+
+NEEDS_UPDATE
+
+BLOCKED
+
+如果需要 update：
+
+仅描述字段缺口。
+
+不要创建正式样本库。
+
+============================================================
+19. TASK P：证据引用
+============================================================
+
+生成：
+
+evidence_registry.csv
+
+每一个 master conclusion：
+
+必须关联：
+
+source run
+source file
+field/section
+hash if available
+
+避免未来出现：
+
+“这个结论是谁什么时候定的？”
+
+============================================================
+20. TASK Q：pytest
+============================================================
+
+测试至少覆盖：
+
+1.
+所有 declared frozen convention 有 evidence
+
+2.
+PROVISIONAL 不会进入 FROZEN
+
+3.
+NOT_ESTABLISHED 不会变 PASS
+
+4.
+candidate bbox 不会变 frozen bbox
+
+5.
+3430 primary mask cells
+
+6.
+intersection mask 不会变 primary
+
+7.
+2025-10 IMERG 保持 MISSING
+
+8.
+GFS release 保持 NOT_ESTABLISHED
+
+9.
+main+thermo researcher approval 不会被伪造
+
+10.
+B0 smoke 与 B0 formal requirements 分离
+
+11.
+GFS 不被错误列为 B0 mandatory input
+
+12.
+DEM 不被错误列为 B0 mandatory input
+
+13.
+2025 final test rule 保留
+
+14.
+Train/Val exact blocks 未被自动冻结
+
+15.
+old evidence runs remain read-only
+
+输出：
+
+tests/pytest_final_output.txt
+tests/pytest_final.xml
+
+============================================================
+21. 最终 Gate JSON
+============================================================
+
+生成：
+
+stage0_final_gate_status.json
+
+至少：
+
+{
+  "stage0_engineering_status": "PASS",
+  "stage0_scientific_closeout_ready": false,
+  "b0_engineering_smoke_ready": null,
+  "b0_formal_experiment_ready": null,
+  "frozen_convention_count": 0,
+  "data_gap_count": 0,
+  "b0_blocker_count": 0,
+  "full_stage0_blocker_count": 0,
+  "researcher_decision_count": 0,
+  "gfs_release_status": "NOT_ESTABLISHED",
+  "gfs_main_thermo_status": "PARTIALLY_COMPATIBLE",
+  "model_input_bbox_frozen": false,
+  "formal_train_val_blocks_frozen": false,
+  "raw_data_modified": false
+}
+
+实际值必须由当前证据填写。
+
+============================================================
+22. 必须生成的最终文件
+============================================================
+
+根目录至少：
+
+STAGE0_MASTER_STATUS.md
+
+FROZEN_CONVENTIONS.md
+
+DATA_GAPS.md
+
+RESEARCHER_DECISIONS_REQUIRED.md
+
+B0_ENTRY_REQUIREMENTS.md
+
+STAGE0_CLOSEOUT_MATRIX.csv
+
+evidence_registry.csv
+
+stage0_final_gate_status.json
+
+FINAL_STAGE0_GATE_REPORT.md
+
+DECISIONS/cards/
+
+tests/
+
+logs/
+
+============================================================
+23. FINAL_STAGE0_GATE_REPORT.md
+============================================================
+
+必须回答：
+
+1.
+Stage-0 engineering 是否完成？
+
+2.
+Stage-0 scientific closeout 是否完成？
+
+3.
+B0 engineering smoke 是否可以开始？
+
+4.
+B0 formal experiment 是否可以开始？
+
+5.
+如果不能，各自真正 blocker 是什么？
+
+6.
+哪些未决事项实际上与 B0 无关，可以后置？
+
+7.
+哪些事项必须在 B4 前解决？
+
+8.
+哪些事项必须在 B5-B8 前解决？
+
+9.
+哪些事项必须在最终论文结论前解决？
+
+10.
+当前 frozen scientific conventions 清单
+
+11.
+当前真实 data gaps
+
+12.
+当前 researcher decisions
+
+13.
+任何 evidence conflict
+
+14.
+pytest
+
+15.
+raw/old run integrity
+
+============================================================
+24. 非常重要：不要把 Stage-0 做成无限循环
+============================================================
+
+这一轮必须主动防止：
+
+“所有未来 Stage 的细节都必须在 Stage-0 冻结”
+
+这种 scope creep。
+
+Stage-0 的目标是：
+
+让下一阶段可以在清晰、无数据泄漏、可复现的规则下安全开始。
+
+不是：
+
+提前冻结 B8 所有 terrain hyperparameters。
+
+因此：
+
+必须区分：
+
+NOW
+
+BEFORE_B0_FORMAL
+
+BEFORE_B4
+
+BEFORE_B5_B8
+
+BEFORE_FINAL_PAPER
+
+============================================================
+25. 最终状态规则
+============================================================
+
+允许最终出现：
+
+Stage-0 engineering:
+PASS
+
+Stage-0 scientific full closeout:
+NEEDS_RESEARCHER_DECISIONS
+
+B0 engineering smoke:
+READY
+
+B0 formal experiment:
+NOT_READY
+
+如果真实证据支持。
+
+不要因为：
+
+GFS vintage 尚未解决
+
+就机械阻止：
+
+Himawari-only B0 smoke。
+
+同样：
+
+不要因为 B0 smoke 能跑
+
+就声称：
+
+Stage-0 全部科学问题已经解决。
+
+============================================================
+26. 最终必须逐字写
+============================================================
+
+Stage-0 final gate package complete.
+Engineering completion and scientific readiness were evaluated separately.
+No unresolved scientific decision was auto-frozen.
+No Stage-1/B0 execution was started automatically.
+All prior Stage-0 evidence runs remain unchanged.
+
+============================================================
+27. 核心原则
+============================================================
+
+这轮不是为了得到：
+
+PASS
+
+而是为了得到：
+
+真实的 Gate。
+
+该 READY 就 READY。
+
+该 HOLD 就 HOLD。
+
+未来 Stage 才需要解决的问题：
+不要提前变成当前 blocker。
+
+当前 B0 正式实验真正需要解决的问题：
+也不得为了赶进度被降级成 informational。
+
+研究者做科学决定。
+
+Codex 只整理证据、依赖关系、Gate 和可复现状态。
+
+完成全部安全工程任务后停止。

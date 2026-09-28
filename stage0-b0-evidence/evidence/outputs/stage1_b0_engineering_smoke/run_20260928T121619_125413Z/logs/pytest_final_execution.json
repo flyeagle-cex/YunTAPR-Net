@@ -1,0 +1,21 @@
+{
+  "command": [
+    "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/test_b0_unit.py",
+    "tests/test_b0_real_pipeline.py",
+    "--rootdir=.",
+    "--confcutdir=tests",
+    "--import-mode=importlib",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=tests/tmp_final_scoped",
+    "--junitxml=tests/pytest_final.xml",
+    "-q"
+  ],
+  "cwd": "F:\\pytorch\\Research\\outputs\\stage1_b0_engineering_smoke\\run_20260928T121619_125413Z",
+  "exit_code": 0,
+  "utc": "2026-09-28T12:28:17.814773+00:00"
+}

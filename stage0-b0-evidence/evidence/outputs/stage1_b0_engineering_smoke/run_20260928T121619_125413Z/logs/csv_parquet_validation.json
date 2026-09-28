@@ -1,0 +1,24 @@
+{
+  "engine": "pyarrow",
+  "column_schema": "string-valued CSV exact presentation; typed values in JSON/NPZ",
+  "checks": [
+    {
+      "csv": "B0_SMOKE\\candidate_selection_rejections.csv",
+      "parquet": "B0_SMOKE\\candidate_selection_rejections.parquet",
+      "rows": 0,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "B0_SMOKE\\smoke_sample_manifest.csv",
+      "parquet": "B0_SMOKE\\smoke_sample_manifest.parquet",
+      "rows": 16,
+      "exact_roundtrip": true
+    },
+    {
+      "csv": "B0_SMOKE\\step_log.csv",
+      "parquet": "B0_SMOKE\\step_log.parquet",
+      "rows": 4,
+      "exact_roundtrip": true
+    }
+  ]
+}
