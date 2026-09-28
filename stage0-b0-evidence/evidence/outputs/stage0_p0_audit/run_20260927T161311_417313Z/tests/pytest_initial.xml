@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.390" timestamp="2026-09-28T00:24:05.107409+08:00" hostname="LAPTOP-0KNAHACI"><testcase classname="" name="" time="0.000"><error message="collection failure">F:\pytorch\Research\.venv\Lib\site-packages\pluggy\_hooks.py:512: in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+F:\pytorch\Research\.venv\Lib\site-packages\pluggy\_manager.py:120: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+F:\pytorch\Research\.venv\Lib\site-packages\_pytest\python.py:186: in pytest_collect_directory
+    has_pkginit = pkginit.is_file()
+                  ^^^^^^^^^^^^^^^^^
+..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:892: in is_file
+    return S_ISREG(self.stat().st_mode)
+                   ^^^^^^^^^^^
+..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:840: in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   OSError: [WinError 1337] 安全 ID 结构无效。: 'F:\\WpSystem\\__init__.py'</error></testcase></testsuite></testsuites>

@@ -1,0 +1,14 @@
+.............................                                            [100%]
+============================== warnings summary ===============================
+tests/test_p0.py::test_real_netcdf_qc_denominators
+  F:\pytorch\Research\outputs\stage0_p0_audit\run_20260927T161311_417313Z\tests\test_p0.py:123: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    v[:]=np.array([[0.,np.nan,.2,2.,21.]],dtype="f4")
+
+tests/test_p0.py::test_qi_exact_median_no_threshold
+  F:\pytorch\Research\outputs\stage0_p0_audit\run_20260927T161311_417313Z\tests\test_p0.py:135: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    v[:]=np.array([[0.,np.nan,.2,.8]],dtype="f4")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+29 passed, 2 warnings in 1.69s

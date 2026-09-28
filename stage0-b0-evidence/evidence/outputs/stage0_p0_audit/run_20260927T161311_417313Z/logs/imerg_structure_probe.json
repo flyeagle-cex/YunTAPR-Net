@@ -1,0 +1,111 @@
+{
+  "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2019\\imerg_20190101.nc",
+  "direct_read_success": false,
+  "direct_error": "[Errno 2] No such file or directory: 'F:\\\\云南极端降水数据\\\\raw\\\\IMERG\\\\2019\\\\imerg_20190101.nc'",
+  "global_attrs": {
+    "title": "GPM IMERG Final Run V07B regional subset",
+    "source": "GPM_3IMERGHH_07",
+    "domain": "95E-109E, 19N-32N",
+    "history": "Converted 48 Harmony source granules at 2026-09-01T03:43:11.545999+00:00"
+  },
+  "dimensions": {
+    "time": 48,
+    "lat": 130,
+    "lon": 140
+  },
+  "variables": {
+    "precipitation": {
+      "dtype": "float32",
+      "shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan",
+        "units": "mm hr-1",
+        "long_name": "precipitation rate"
+      }
+    },
+    "precipitationQualityIndex": {
+      "dtype": "float32",
+      "shape": [
+        48,
+        130,
+        140
+      ],
+      "dimensions": [
+        "time",
+        "lat",
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan"
+      }
+    },
+    "time": {
+      "dtype": "int64",
+      "shape": [
+        48
+      ],
+      "dimensions": [
+        "time"
+      ],
+      "attrs": {
+        "units": "minutes since 2019-01-01 00:00:00",
+        "calendar": "proleptic_gregorian"
+      }
+    },
+    "lat": {
+      "dtype": "float32",
+      "shape": [
+        130
+      ],
+      "dimensions": [
+        "lat"
+      ],
+      "attrs": {
+        "_FillValue": "nan"
+      }
+    },
+    "lon": {
+      "dtype": "float32",
+      "shape": [
+        140
+      ],
+      "dimensions": [
+        "lon"
+      ],
+      "attrs": {
+        "_FillValue": "nan"
+      }
+    }
+  },
+  "time_edges": [
+    "[ 0 30 60]",
+    "[1350 1380 1410]"
+  ],
+  "lat_edges": [
+    "[19.05 19.15 19.25]",
+    "[31.75     31.849998 31.949999]"
+  ],
+  "lon_edges": [
+    "[95.049995 95.15     95.25    ]",
+    "[108.75 108.85 108.95]"
+  ],
+  "precipitation_raw_range": [
+    0.0,
+    4.589999675750732
+  ],
+  "precipitationQualityIndex_raw_range": [
+    0.19300000369548798,
+    0.89000004529953
+  ],
+  "source_sha256_unchanged": true,
+  "cache_cleanup_success": true
+}
