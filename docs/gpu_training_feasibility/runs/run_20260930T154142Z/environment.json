@@ -1,0 +1,23 @@
+{
+  "baseline": "9cb83aa493b57acbad648df5b2c257739b23045e",
+  "python": "F:\\pytorch\\Research\\.venv-cuda\\Scripts\\python.exe",
+  "torch": "2.11.0+cu128",
+  "cuda_runtime": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "capability": [
+    12,
+    0
+  ],
+  "science_schema": "1.1",
+  "engineering_schema": 4,
+  "threads": 2,
+  "fp32_matmul_precision": "highest",
+  "cudnn_benchmark": false,
+  "autocast_note": "No GradScaler and no optimizer; gradients checked unscaled. Finite benchmark is not convergence evidence.",
+  "headroom_method": "Both allocator reservation and estimated device-wide free VRAM; min(post-case free, pre-case free minus incremental peak reservation). Other applications remain active.",
+  "focal_parameters": {
+    "alpha": 0.25,
+    "gamma": 2.0,
+    "scope": "ENGINEERING_TEST_ONLY"
+  }
+}

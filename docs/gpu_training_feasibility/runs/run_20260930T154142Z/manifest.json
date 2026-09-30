@@ -1,0 +1,237 @@
+{
+  "task": "B0 GPU TRAINING FEASIBILITY BENCHMARK v1",
+  "baseline": "9cb83aa493b57acbad648df5b2c257739b23045e",
+  "created_utc": "2026-09-30T16:05:01.798867+00:00",
+  "execution_scope": "ENGINEERING_ONLY",
+  "public_files": {
+    "artifact_validation.json": {
+      "sha256": "70adb6a558b4ceda8e6523bda89cce36e0aba66c0930e931be86d6c754e4b782",
+      "bytes": 441
+    },
+    "compute_iterations.json": {
+      "sha256": "812bc8900963a8380badf3c5ab0016c646ea2a7bd480b5805878326349c9423d",
+      "bytes": 56644
+    },
+    "compute_provenance.json": {
+      "sha256": "6a73445bf9c86ee8435d86af32e97cee761d30c5549c2a6b230a717f8006c345",
+      "bytes": 221
+    },
+    "compute_recommendation.json": {
+      "sha256": "d89601beef811ec0efcc07680f5f68f4d2f3596c2d097339b3d6331bef4501ac",
+      "bytes": 1910
+    },
+    "cpu_reference_after.txt": {
+      "sha256": "9bd0b388c53a7ad9962222fd81a79ee153f0d1e4b2562dfd1337c095acf1e89c",
+      "bytes": 834
+    },
+    "cpu_reference_before.txt": {
+      "sha256": "9bd0b388c53a7ad9962222fd81a79ee153f0d1e4b2562dfd1337c095acf1e89c",
+      "bytes": 834
+    },
+    "cuda_environment_freeze.txt": {
+      "sha256": "b3eb7c4ac28c91151ea9987f8c714d29a224e393adc11dd80ca26c99ecd606ae",
+      "bytes": 410
+    },
+    "dataloader_gpu_batches.csv": {
+      "sha256": "2178832e9bb04096456fe3abc727357d4c5f6c3d097885c52b596eaebf18b0e3",
+      "bytes": 5070
+    },
+    "dataloader_gpu_benchmark.csv": {
+      "sha256": "6735dd8ae954742a912373684885a020478d26e08d786c5a4206eccabe523933",
+      "bytes": 1334
+    },
+    "dataloader_gpu_telemetry.csv": {
+      "sha256": "04001f8f761ba6a082288db13648b72f669484852982d747d6b656896460a0b0",
+      "bytes": 3654
+    },
+    "dataloader_real_sample_evidence.json": {
+      "sha256": "5b6284b92b30b5c4128f135d7696a42e033015a9db95fb58b4b1ec74094483ed",
+      "bytes": 169516
+    },
+    "engineering_recommendation.json": {
+      "sha256": "fbf35b6420a478f47d8055e8ee1f18ed1f670e8332ebfab2a3e2defe5bbf742a",
+      "bytes": 2554
+    },
+    "environment.json": {
+      "sha256": "0c93f4db21fb74efc31c3dd2d63f2af9bf67e0928aa6d002a9bb0fea5349ccf3",
+      "bytes": 828
+    },
+    "epoch_time_estimates.csv": {
+      "sha256": "d2a852ca09bc288bd39880c6b14f2f1242c5ae94850e21131f1eb014ff18184b",
+      "bytes": 1993
+    },
+    "finalize_invocation.json": {
+      "sha256": "eee3a3e945a0fc812cd09ba36e39817a105cf38d2efa3c9150a9f5c2c9e15302",
+      "bytes": 396
+    },
+    "formal_assembly_profile.json": {
+      "sha256": "a7f2f58f507536335c19e109a75a6c8bf838e7c9979dccb7822b674a216f60c5",
+      "bytes": 29435
+    },
+    "gpu_amp_benchmark.csv": {
+      "sha256": "cc4375cbf8d9a177dd085c3c649cf58ff4a9d258648a9305d646820a6b9650c7",
+      "bytes": 985
+    },
+    "gpu_batch_benchmark.csv": {
+      "sha256": "b9b7960091597219d48ec5e4acd5d653d0d458f166d39173942271baa14f7c60",
+      "bytes": 983
+    },
+    "gpu_stability_iterations.csv": {
+      "sha256": "06418d078f9a800c45ac6ffdc4b3c120efb369c544ec52c4bf092a47939c70e5",
+      "bytes": 239616
+    },
+    "gpu_stability_smoke.json": {
+      "sha256": "b0168b67676a66f732cd02b7baaadda01d47d79164d0a48fd3ad4a88dffab72c",
+      "bytes": 1190
+    },
+    "gpu_stability_telemetry.csv": {
+      "sha256": "92ca2a063ab98604f79f87ad0905ff27a1641e3189e90efcb7c8de28e8f974ce",
+      "bytes": 21436
+    },
+    "GPU_TRAINING_FEASIBILITY_REPORT.md": {
+      "sha256": "266c5fd8ccd72c0b71c4d3bed417b369283dfcd179d5b88b4029359dcbcdd4ab",
+      "bytes": 12740
+    },
+    "gpu_validation_benchmark.csv": {
+      "sha256": "908dc28b5c669fd80812fefcfc0c0cf46d7a0f2a479396e8a63fe229532920c6",
+      "bytes": 1428
+    },
+    "gradient_accumulation_candidates.csv": {
+      "sha256": "03950926054f45ef75252419dfb0084472eda70d1c1528b539b59e932bfe69d4",
+      "bytes": 659
+    },
+    "loader_initial/dataloader_gpu_batches.csv": {
+      "sha256": "fd8aa39cc7c94a1d9034733c3167d5dadfc002487635315eb8256587a242693c",
+      "bytes": 5068
+    },
+    "loader_initial/dataloader_gpu_benchmark.csv": {
+      "sha256": "bb86131a8a9f52692c4990101a4d24ff5686b062ff654ec679d6a2de041e7090",
+      "bytes": 1343
+    },
+    "loader_initial/dataloader_gpu_telemetry.csv": {
+      "sha256": "ced1c4c72cebac60796f0192ec6633c5f837070c85f4f212a615c0c1a7a909a6",
+      "bytes": 3758
+    },
+    "loader_initial/dataloader_real_sample_evidence.json": {
+      "sha256": "daf68a01ccab1ee0d1db544c4d94d4573a7738ec04831df6fe205cb51bf24841",
+      "bytes": 169361
+    },
+    "loader_initial/exclusion_note.json": {
+      "sha256": "d74fd5746648413007f0bfb1e90629f669083d9f125344b4686e4e2cefedc257",
+      "bytes": 244
+    },
+    "loader_initial/loader_invocation.json": {
+      "sha256": "2db3a9d9fbebbcf53b312ce8079dd0bdbbab8e6fee888ee777508f60809ce779",
+      "bytes": 394
+    },
+    "loader_initial/selected_32_real_samples.json": {
+      "sha256": "1fe2a18a07739568749e34f15f330f9e1dc55ab4a06d97b6b8f1431c6a162862",
+      "bytes": 14563
+    },
+    "loader_invocation.json": {
+      "sha256": "525504c5027dc0a7a059826157cea42d4a1904f68312c684f76655434f1785c2",
+      "bytes": 394
+    },
+    "profile_invocation.json": {
+      "sha256": "a2559970fb3af9f31207121d6f460b88433ce9bdcde5493c8f212aac5f100293",
+      "bytes": 395
+    },
+    "real_cuda_regression.json": {
+      "sha256": "ddee1788f6b559877117e82b343a3e15295ebd4e5c4ed363f4696d5d8f449eb4",
+      "bytes": 6325
+    },
+    "real_invocation.json": {
+      "sha256": "db641ebcf0b0e218254555e6191b7c43bef89a7ce273e22dede03145e93076a9",
+      "bytes": 392
+    },
+    "seal_invocation.json": {
+      "sha256": "b130db0eb1d82e26555916760cbf4403517484b896470d475f79b8f5df1f6658",
+      "bytes": 392
+    },
+    "selected_32_real_samples.json": {
+      "sha256": "1fe2a18a07739568749e34f15f330f9e1dc55ab4a06d97b6b8f1431c6a162862",
+      "bytes": 14563
+    },
+    "stability_invocation.json": {
+      "sha256": "bc1031b6b1befa8c5c307924b1506f716524ee30f26281a469921c2652f66096",
+      "bytes": 397
+    },
+    "test_results.txt": {
+      "sha256": "d1b7449eb3cf49f43800aa02dc880eb9bd41ff53432fa532db8bd0b68af9987a",
+      "bytes": 17049
+    },
+    "test_summary.json": {
+      "sha256": "f9d9432a78b0e61d32ed538c01d4bf1fac91c95fe0eb087abd5ce8e939e88eeb",
+      "bytes": 938
+    },
+    "tests_initial/test_results.txt": {
+      "sha256": "5f469f20dda1b3cdd5f81c582e205ac084fb7574d4f10bf128c66c17298e3bcd",
+      "bytes": 9688
+    },
+    "tests_initial/test_summary.json": {
+      "sha256": "0ae44f20ea06e4e34612441ff1f50f33652baa7055907b9284f185b3ac1ea5b0",
+      "bytes": 260
+    },
+    "tests_initial/tests_invocation.json": {
+      "sha256": "928108b746f89460d686af3789d93e100d2edc6923b6f9ebeba26f6a5242e1ab",
+      "bytes": 393
+    },
+    "tests_invocation.json": {
+      "sha256": "23d12f32a35097cd2c6cf6f0fba03ba6220e4ba7f7c4a470db9c637d5d0c4f48",
+      "bytes": 393
+    }
+  },
+  "scripts": {
+    "scripts/benchmark_b0_gpu_feasibility.py": "07609e0be468434e8e863f74de5e3a14748136ead9c0372e9a28825a7224ea23",
+    "tests/gpu_training_feasibility/test_benchmark_safety.py": "5e0c70161ba6a2b1327b1a7fbd6274b7c2264b77ebb48f9861ca815123dd5078"
+  },
+  "unchanged_production_inputs": {
+    "config/b0_engineering_v1.yaml": "0cc810a39483a938d6b65ede701efdfa49d5266c3588c56dd17725a078d2bbac",
+    "config/b0_engineering_v2.yaml": "aa8f2de06ef604a52deb245e570d8c9e766c8730f809728b0bb831ab87102c8f",
+    "config/b0_engineering_v3.yaml": "5870482bbfe2aee39a0493f80b35c88ecec96b6dfe72ad6d25fc4428c8aa8a3c",
+    "config/b0_engineering_v4.yaml": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7",
+    "config/science_contract_v1.1.yaml": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+    "config/science_contract_v1.yaml": "e6406afc94285e09747e976f24d99faeee0bed01edcbfc049e4920acdf3a4572",
+    "config/spatial/sp04_coordinate_axes_v1.csv": "994705240ef12b2fbd6438a678f18c6e8f7687fe238ee45e7af16299eeeef0c5",
+    "config/spatial/sp04_coordinate_manifest_v1.json": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473",
+    "config/spatial/sp04_target_cell_membership_v1.csv": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd",
+    "src/yuntapr/__init__.py": "2d4dae85df531298acab4ae4da33907d968e57235429fc219ac04623d4de5bdd",
+    "src/yuntapr/contracts/__init__.py": "1ecb7fb4f558e7e8139a774374db54f98096871d9979b8fccee253b7dd28f645",
+    "src/yuntapr/contracts/loader.py": "776d1aa774342e955eba9ff28809477e0f357a5d60eec7819ba55d3351b06964",
+    "src/yuntapr/data/__init__.py": "ec826cc0faeb4a373ff65877fdc980032baad23e0a2525d006ffda2b2e0912a7",
+    "src/yuntapr/data/dataset_b0.py": "19e5ef7c16c2ce1fdd0df2a16acc44bf740b9d4b5400001c406136879c8762e3",
+    "src/yuntapr/data/development_audit.py": "ed65703ded7e6db6e14ebc5fcd9b772ebc76486e5e8b6a476b66dfba1dd7fe8b",
+    "src/yuntapr/data/formal_policy.py": "3c0a0b97dc25b3ae0f942ec2cef367217fc981c01d1f09501d9f957adab2f490",
+    "src/yuntapr/data/himawari_b13.py": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857",
+    "src/yuntapr/data/imerg_v07.py": "eff89d4a2fb21473288b90f892799866ff839b7119901886e2ea358183b8d7b2",
+    "src/yuntapr/data/masks.py": "c397a5866af834098fd5f36e4acd23a26dfa607058ad298f8781a9766d5a8542",
+    "src/yuntapr/data/normalization.py": "cc10f0fc37e9fc2ac3e163025881c02ccbb805a35b884bc86702f6a72b7e6afb",
+    "src/yuntapr/data/sample_schema.py": "371a051b2aa7b5b2ac193df513a4ecc27850e923a371a4ec5cb3fe59a9d61b99",
+    "src/yuntapr/data/staging.py": "f84c55bfba9b998b2ee3486ee08b5857a2a1f48f76c68245dc7a06f31adebbe4",
+    "src/yuntapr/losses/__init__.py": "40206e500ba1cb5df1a4858f754fcdf83e49a108d0ec73cab31dafc9152aac1e",
+    "src/yuntapr/losses/focal.py": "7cd5042f88856c37889bee86f1f340e0e93373486620ee4a7a4d1f61df380e58",
+    "src/yuntapr/losses/pinball.py": "b3ebd505238fe881039f143fe9c73462735782ecfa0dee1e63b5463c3cb49b78",
+    "src/yuntapr/losses/total_loss.py": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0",
+    "src/yuntapr/metrics/__init__.py": "350f75bcc8be415c283773a339d442a62cc2192d0bb84b62576cc54f4f074cf2",
+    "src/yuntapr/metrics/deterministic.py": "43db58494627a6f83fee72241a394937fb144f481f580d40fe1018b5e1a91793",
+    "src/yuntapr/metrics/probabilistic.py": "310147262c0090e805d45bba36d7f992f157da8e52939a4361e18e4e4d8da110",
+    "src/yuntapr/models/__init__.py": "1e98d33cb0665c9eb26b67921b8ef55ab1b76958f25240bf1ebd376e5218a26e",
+    "src/yuntapr/models/b0.py": "6b9b8c28c8b12b7948d9658deedc68e0e54df42a956850d357d4f15d06c6227d",
+    "src/yuntapr/models/backbone_b0.py": "79f35a29349eae9dcba705b7e127899972d0bcea723773043547f0d7f341819f",
+    "src/yuntapr/models/blocks.py": "925ed0246258d4f709f4279f22e3829cf5aff89ce44dbe67f93ab1cb7c40bfd6",
+    "src/yuntapr/models/monotonic_quantiles.py": "d0b26433b986d5ce89a3eec92ee88cdf47d33d09809eba5a8bf11b5a2152c532",
+    "src/yuntapr/models/probability_heads.py": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50",
+    "src/yuntapr/spatial/__init__.py": "811e5f8e967d25595aa30c5976ded23d1d9ed35334c34fb19fc06fe86376ae5c",
+    "src/yuntapr/spatial/projection.py": "88661698d642e1f2e350d819452bdedd075f42da17bfe18e0ab5efde0e34662c",
+    "src/yuntapr/spatial/sp04_mapping.py": "a4a4d0c8744acd6754588f01c7d1976ccd109b7c9224ba362a4bc474cdc35202",
+    "src/yuntapr/training/__init__.py": "1d9d8338a97125e175d456f4260be66331a28f4949f62d1cacbade34089b8258",
+    "src/yuntapr/training/batch_contract.py": "e5089ce2a51a9ce0eb7e0b06b0ccf12f655a946b807443e7adcfb17fc336224e",
+    "src/yuntapr/training/forward_step.py": "a0d3f52ece5d383c2f8016c1d0245f963fa637dbe253414a7907131381d7170c"
+  },
+  "source_data_committed": false,
+  "cache_committed": false,
+  "wheel_committed": false,
+  "formal_training_started": false,
+  "formal_training_authorized": false,
+  "owned_staging_copies_remaining": 0
+}

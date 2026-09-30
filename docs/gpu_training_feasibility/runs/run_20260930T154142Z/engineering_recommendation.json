@@ -1,0 +1,61 @@
+{
+  "MAX_TESTED_SAFE_BATCH": 2,
+  "RECOMMENDED_SAFE_PHYSICAL_BATCH": 2,
+  "AMP_FP16_FEASIBLE": true,
+  "AMP_BF16_FEASIBLE": true,
+  "RECOMMENDED_AMP_MODE": "BF16",
+  "RECOMMENDED_VALIDATION_BATCH": 8,
+  "GPU_PRESENT": true,
+  "CUDA_TORCH_AVAILABLE": true,
+  "RTX5060_SM120_EXECUTION_VERIFIED": true,
+  "RECOMMENDED_NUM_WORKERS": 2,
+  "GPU_STABILITY_PASS": true,
+  "REAL_B0_CUDA_REGRESSION_PASS": true,
+  "TRAINING_ENVIRONMENT_READY": true,
+  "B0_FORMAL_TRAINING_STARTED": false,
+  "FORMAL_TRAINING_AUTHORIZED": false,
+  "scope": "ENGINEERING_RECOMMENDATION_ONLY",
+  "bottleneck": "GPU_COMPUTE_BOUND",
+  "cpu_reference_packages_unchanged": true,
+  "worker_comparison": [
+    {
+      "workers": 0,
+      "samples": 32,
+      "active_seconds_sum": 4.550204399987706,
+      "active_samples_per_second": 7.032651104659487,
+      "full_wall_samples_per_second": 7.020662203777495,
+      "startup_and_shutdown_seconds": 0.007770200012600981,
+      "data_wait_fraction": 0.23118508697631324,
+      "gpu_step_fraction": 0.7168990034841582
+    },
+    {
+      "workers": 2,
+      "samples": 32,
+      "active_seconds_sum": 3.1368239000148606,
+      "active_samples_per_second": 10.201401487615675,
+      "full_wall_samples_per_second": 3.920029391401556,
+      "startup_and_shutdown_seconds": 5.026380199982668,
+      "data_wait_fraction": 0.038816173260524355,
+      "gpu_step_fraction": 0.8837873557329681
+    },
+    {
+      "workers": 4,
+      "samples": 32,
+      "active_seconds_sum": 3.1904595000014524,
+      "active_samples_per_second": 10.029903216130915,
+      "full_wall_samples_per_second": 2.4563811193208065,
+      "startup_and_shutdown_seconds": 9.836834900001122,
+      "data_wait_fraction": 0.04554569647584738,
+      "gpu_step_fraction": 0.8766395248084715
+    }
+  ],
+  "worker_selection": "Active throughput for an epoch; prefer fewer workers within 5% of best. Startup included separately. 32-sample full wall also reported.",
+  "limitations": [
+    "No optimizer state or optimizer step measured; a future optimizer consumes extra VRAM and time.",
+    "No model fitting or accuracy/convergence claim; AMP unscaled gradients only.",
+    "32 pinned scenes, order 0/2/4, filesystem cache not flushed; not a cold-disk or full-epoch benchmark.",
+    "Device-wide memory estimate is conservative reservation arithmetic, not a physical residency measurement.",
+    "Validation full real DataLoader epoch not measured; serial I/O proxy clearly separated.",
+    "Worker staging isolation belongs to this audit; no production DataLoader refactor."
+  ]
+}
