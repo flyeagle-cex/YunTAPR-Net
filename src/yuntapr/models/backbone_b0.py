@@ -16,6 +16,10 @@ class B0Backbone(nn.Module):
         self.mode = cfg["decoder_interpolation_mode"]
         self.align_corners = cfg["align_corners"]
         self.enc0 = ResidualBlock(1, 48, groups)
+        if cfg["input_projection_skip_initialization"] != "zeros" or not isinstance(self.enc0.skip, nn.Conv2d):
+            raise ValueError("B0 input projection skip requires explicit zero initialization")
+        nn.init.zeros_(self.enc0.skip.weight)
+        nn.init.zeros_(self.enc0.skip.bias)
         self.down1 = nn.Conv2d(48, 96, kernel, stride=2, padding=padding)
         self.enc1 = ResidualBlock(96, 96, groups)
         self.down2 = nn.Conv2d(96, 192, kernel, stride=2, padding=padding)

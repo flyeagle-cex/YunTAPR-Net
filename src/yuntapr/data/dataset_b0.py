@@ -70,6 +70,8 @@ class B0Dataset(Dataset):
             raise ValueError("B13_ALL_FILL_REJECT_SAMPLE")
         if (utc(observed.obs_start), utc(observed.obs_end), utc(observed.nominal_time)) != (utc(selected.obs_start), utc(selected.obs_end), utc(selected.nominal_time)):
             raise ValueError("Himawari source metadata changed since frame selection")
+        if observed.date_created != selected.date_created:
+            raise ValueError("Himawari date_created changed since frame selection")
         if utc(observed.obs_end) > analysis:
             raise ValueError("Himawari future observation rejected")
         y = target_valid = None

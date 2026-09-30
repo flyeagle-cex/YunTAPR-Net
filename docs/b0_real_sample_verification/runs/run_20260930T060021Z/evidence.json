@@ -1,0 +1,247 @@
+{
+  "scope": "ENGINEERING_ONLY_REAL_SAMPLE_VERIFICATION",
+  "formal_training_started": false,
+  "science_contract_status": "FROZEN",
+  "fixed_python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+  "torch_version": "2.14.0+cpu",
+  "numpy_version": "2.5.3",
+  "netcdf4_version": "1.7.4",
+  "master_index_path": "F:\\pytorch\\Research\\stage0_himawari\\outputs\\202407\\resume_20260927T104625_772423Z\\index\\himawari_master_index_202407.csv",
+  "master_index_sha256": "82eb88eb29e6318195d0700d1c86344740394c7db54bbfc1010e934f015c3b01",
+  "master_index_rows": 4390,
+  "master_index_success_rows": 4390,
+  "candidate_audit": [
+    {
+      "path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0000_R21_FLDK.06001_06001.nc",
+      "nominal_time": "2024-07-01T00:00:00+00:00",
+      "obs_start": "2024-07-01T00:00:40.478784+00:00",
+      "obs_end": "2024-07-01T00:09:38.185414+00:00",
+      "date_created": "2024-07-01T00:19:44+00:00",
+      "causality_pass": true,
+      "quality_class_from_stage0_index": "TIME_MISMATCH",
+      "b13_valid_count": 251001,
+      "b13_invalid_count": 0
+    },
+    {
+      "path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0010_R21_FLDK.06001_06001.nc",
+      "nominal_time": "2024-07-01T00:10:00+00:00",
+      "obs_start": "2024-07-01T00:10:40.196437+00:00",
+      "obs_end": "2024-07-01T00:19:38.175684+00:00",
+      "date_created": "2024-07-01T00:27:49+00:00",
+      "causality_pass": true,
+      "quality_class_from_stage0_index": "TIME_MISMATCH",
+      "b13_valid_count": 251001,
+      "b13_invalid_count": 0
+    },
+    {
+      "path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc",
+      "nominal_time": "2024-07-01T00:20:00+00:00",
+      "obs_start": "2024-07-01T00:20:40.074697+00:00",
+      "obs_end": "2024-07-01T00:29:38.162509+00:00",
+      "date_created": "2024-07-01T00:38:48+00:00",
+      "causality_pass": true,
+      "quality_class_from_stage0_index": "TIME_MISMATCH",
+      "b13_valid_count": 251001,
+      "b13_invalid_count": 0
+    },
+    {
+      "path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0030_R21_FLDK.06001_06001.nc",
+      "nominal_time": "2024-07-01T00:30:00+00:00",
+      "obs_start": "2024-07-01T00:30:40.448432+00:00",
+      "obs_end": "2024-07-01T00:39:38.155073+00:00",
+      "date_created": "2024-07-01T00:49:48+00:00",
+      "causality_pass": false,
+      "quality_class_from_stage0_index": "TIME_MISMATCH",
+      "b13_valid_count": 251001,
+      "b13_invalid_count": 0
+    }
+  ],
+  "sample_id": "real_engineering_20240701T000000Z",
+  "analysis_time": "2024-07-01T00:30:00+00:00",
+  "imerg_window_start": "2024-07-01T00:00:00+00:00",
+  "imerg_window_end": "2024-07-01T00:30:00+00:00",
+  "selected_himawari_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc",
+  "selected_nominal_time": "2024-07-01T00:20:00+00:00",
+  "selected_obs_start": "2024-07-01T00:20:40.074697+00:00",
+  "selected_obs_end": "2024-07-01T00:29:38.162509+00:00",
+  "selected_date_created": "2024-07-01T00:38:48+00:00",
+  "causality_pass": true,
+  "historical_operational_availability_claimed": false,
+  "imerg_file": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc",
+  "imerg_manifest_path": "F:\\云南极端降水数据\\manifests\\imerg_manifest.jsonl",
+  "imerg_manifest_sha256": "7efef36f05545ac6b9482e5d8fd68367aea875bc59145606a1bf45b5848968c1",
+  "imerg_manifest_row": {
+    "recorded_at": "2026-08-24T07:46:19+08:00",
+    "status": "complete",
+    "date": "2024-07-01",
+    "granules": 48,
+    "method": "harmony",
+    "path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc",
+    "bytes": 1129135
+  },
+  "imerg_global_attrs": {
+    "title": "GPM IMERG Final Run V07B regional subset",
+    "source": "GPM_3IMERGHH_07",
+    "domain": "95E-109E, 19N-32N",
+    "history": "Converted 48 source granules at 2026-08-23T23:46:19.124356+00:00"
+  },
+  "imerg_time_slots": 48,
+  "imerg_v07_final_provenance_verified": true,
+  "frozen_mask_path": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+  "frozen_mask_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+  "frozen_mask_true_cells_target": 3430,
+  "sample_roles": {
+    "observation_eligible": true,
+    "supervised_eligible": true,
+    "inference_eligible": true,
+    "internal_test_eligible": false,
+    "external_validation_eligible": false,
+    "qc_status": "PASS"
+  },
+  "b13_valid_count": 251001,
+  "b13_invalid_count": 0,
+  "b13_valid_fraction": 1.0,
+  "target_support_fraction_min": 1.0,
+  "target_support_fraction_max": 1.0,
+  "imerg_valid_count_target": 10000,
+  "imerg_valid_zero_count_target": 5896,
+  "loss_valid_supervised_yunnan_count": 3430,
+  "loss_rainy_valid_yunnan_count": 1967,
+  "loss_finite": true,
+  "loss_value_omitted_as_non_scientific": true,
+  "engineering_test_only_focal_alpha": 0.5,
+  "engineering_test_only_focal_gamma": 1.0,
+  "development_focal_parameters_frozen": false,
+  "engineering_seed": 0,
+  "engineering_threads": 2,
+  "native_feature_shape": [
+    1,
+    48,
+    501,
+    501
+  ],
+  "target_feature_shape": [
+    1,
+    48,
+    100,
+    100
+  ],
+  "rain_logit_shape": [
+    1,
+    1,
+    100,
+    100
+  ],
+  "quantile_shape": [
+    1,
+    32,
+    100,
+    100
+  ],
+  "quantiles_strictly_monotonic": true,
+  "extreme_exceedance_status": "NOT_ESTABLISHED",
+  "source_integrity_before": {
+    "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0000_R21_FLDK.06001_06001.nc": {
+      "size_bytes": 5502273,
+      "sha256": "a6e8d0aaaefc30deec9730f2bf8e3298408913a46da70ac43306f14c2fd68c1f"
+    },
+    "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0010_R21_FLDK.06001_06001.nc": {
+      "size_bytes": 5534002,
+      "sha256": "bf6647c380f20a8dc7a4c333f8c9d8b2fdfa3d5215609891b6605cf18a033089"
+    },
+    "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc": {
+      "size_bytes": 5562349,
+      "sha256": "e5cbcd7e91747219b344c19f44abcbfdb2b5bd7d8e653931d34e7dea23ad563e"
+    },
+    "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0030_R21_FLDK.06001_06001.nc": {
+      "size_bytes": 5585672,
+      "sha256": "352d7f89953f7ac4a44ae25c10ae701976dfaa6804a86074322bb33f2f326962"
+    },
+    "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc": {
+      "size_bytes": 1129135,
+      "sha256": "e8c2710c247c7fa81e468cc7392a9fc2565d7c5fc95160f4e6aa93ec6798934c"
+    }
+  },
+  "source_integrity_after_equal": true,
+  "staging_records": [
+    {
+      "source_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0000_R21_FLDK.06001_06001.nc",
+      "temporary_bytes": 5502273,
+      "copy_seconds": 0.004884500001935521,
+      "read_seconds": 0.011744400002498878,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0010_R21_FLDK.06001_06001.nc",
+      "temporary_bytes": 5534002,
+      "copy_seconds": 0.003947700002754573,
+      "read_seconds": 0.008689599999343045,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc",
+      "temporary_bytes": 5562349,
+      "copy_seconds": 0.003957699998863973,
+      "read_seconds": 0.00820170000224607,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0030_R21_FLDK.06001_06001.nc",
+      "temporary_bytes": 5585672,
+      "copy_seconds": 0.004006499999377411,
+      "read_seconds": 0.009056700000655837,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc",
+      "temporary_bytes": 1129135,
+      "copy_seconds": 0.0016935000021476299,
+      "read_seconds": 0.002074500000162516,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "H:\\葵花202303_202510\\202407\\01\\NC_H09_20240701_0020_R21_FLDK.06001_06001.nc",
+      "temporary_bytes": 5562349,
+      "copy_seconds": 0.00419030000193743,
+      "read_seconds": 0.008732800000871066,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    },
+    {
+      "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240701.nc",
+      "temporary_bytes": 1129135,
+      "copy_seconds": 0.0017990999986068346,
+      "read_seconds": 0.004337300000770483,
+      "size_match": true,
+      "sha256_match": true,
+      "cleanup_success": true,
+      "error": null,
+      "cleanup_error": null
+    }
+  ],
+  "staging_peak_temporary_bytes": 5585672,
+  "staging_cleanup_all_success": true
+}

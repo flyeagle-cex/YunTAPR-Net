@@ -1,0 +1,32 @@
+schema_version: 2
+status: ENGINEERING_CONFIG
+scientific_contract_sha256: e6406afc94285e09747e976f24d99faeee0bed01edcbfc049e4920acdf3a4572
+scientific_freeze_document_sha256: 7b0f9e53616cf02b13ce0f40a9851894297e56a41e5c6117c5cb170523c4e996
+sp04_manifest_sha256: e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473
+formal_training_started: false
+backbone:
+  groupnorm_groups: 8
+  downsample_kernel: 3
+  downsample_padding: 1
+  decoder_interpolation_mode: nearest
+  align_corners: null
+  input_projection_skip_initialization: zeros
+projection:
+  feature_reduction_operator: arithmetic_mean
+  status: ENGINEERING_CONFIG
+loss:
+  quantile_axis_reduction: mean
+  status: ENGINEERING_CONFIG
+missing:
+  tensor_placeholder: 0.0
+  placeholder_is_physical_observation: false
+  requires_separate_validity_mask: true
+  status: ENGINEERING_CONFIG
+time:
+  equal_obs_end_tie_breaker: lexicographically_smallest_path
+  status: ENGINEERING_CONFIG
+staging:
+  staging_root_env_var: YUNTAPR_B0_STAGING_ROOT
+  max_temporary_bytes: 16777216
+  verify_sha256: true
+  status: ENGINEERING_CONFIG

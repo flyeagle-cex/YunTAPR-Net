@@ -10,7 +10,7 @@ import torch
 from yuntapr.contracts.loader import REPO_ROOT, load_contract
 from yuntapr.data.dataset_b0 import B0Dataset, B0Record
 from yuntapr.data.himawari_b13 import decode_b13
-from yuntapr.data.imerg_v07 import decode_imerg
+from yuntapr.data.imerg_v07 import decode_imerg, validate_final_provenance
 from yuntapr.data.sample_schema import HimawariFrame, select_latest_causal_frame
 from yuntapr.losses.pinball import frozen_taus
 from yuntapr.losses.total_loss import b0_core_loss
@@ -53,7 +53,8 @@ class ContractAndSpatialTests(unittest.TestCase):
         e = self.engineering
         self.assertEqual(e["status"], "ENGINEERING_CONFIG")
         self.assertEqual(e["backbone"], {"groupnorm_groups": 8, "downsample_kernel": 3, "downsample_padding": 1,
-                                          "decoder_interpolation_mode": "nearest", "align_corners": None})
+                                          "decoder_interpolation_mode": "nearest", "align_corners": None,
+                                          "input_projection_skip_initialization": "zeros"})
         self.assertEqual(e["projection"]["feature_reduction_operator"], "arithmetic_mean")
         self.assertEqual(e["loss"]["quantile_axis_reduction"], "mean")
         self.assertEqual(e["missing"]["tensor_placeholder"], 0.0)
@@ -100,6 +101,8 @@ class ModelTests(unittest.TestCase):
         cls.model = B0Model().eval()
 
     def test_full_forward_shapes_and_quantile_support(self):
+        self.assertEqual(int(torch.count_nonzero(self.model.backbone.enc0.skip.weight)), 0)
+        self.assertEqual(int(torch.count_nonzero(self.model.backbone.enc0.skip.bias)), 0)
         with torch.no_grad():
             x = torch.ones(1, 1, 501, 501)
             valid = torch.ones_like(x, dtype=torch.bool)
@@ -157,6 +160,15 @@ class ModelTests(unittest.TestCase):
 
 
 class DataAndLossTests(unittest.TestCase):
+    def test_v07_final_provenance_requires_metadata_and_manifest(self):
+        attrs = {"source": "GPM_3IMERGHH_07", "title": "GPM IMERG Final Run V07B regional subset"}
+        row = {"status": "complete", "granules": 48, "bytes": 1129135}
+        validate_final_provenance(attrs, row, 1129135)
+        with self.assertRaisesRegex(ValueError, "V07 Final"):
+            validate_final_provenance({**attrs, "source": "GPM_3IMERGHHL_07"}, row, 1129135)
+        with self.assertRaisesRegex(ValueError, "48-granule"):
+            validate_final_provenance(attrs, {**row, "granules": 47}, 1129135)
+
     def test_b13_packed_fill_and_partial(self):
         raw = np.array([[100, -9999]], dtype=np.int16)
         x, valid = decode_b13(raw, {"scale_factor": .01, "add_offset": 200.,

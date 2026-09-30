@@ -17,7 +17,7 @@ def sha256(path: Path) -> str:
 
 def load_contract(root: Path = REPO_ROOT) -> tuple[dict, dict]:
     science_path = root / "config/science_contract_v1.yaml"
-    engineering_path = root / "config/b0_engineering_v1.yaml"
+    engineering_path = root / "config/b0_engineering_v2.yaml"
     science = yaml.safe_load(science_path.read_text(encoding="utf-8"))
     engineering = yaml.safe_load(engineering_path.read_text(encoding="utf-8"))
     if sha256(science_path) != engineering["scientific_contract_sha256"]:
@@ -38,7 +38,8 @@ def load_contract(root: Path = REPO_ROOT) -> tuple[dict, dict]:
     groups = engineering["backbone"]["groupnorm_groups"]
     if not all(c % groups == 0 for c in channels):
         raise ValueError("GroupNorm groups must divide every frozen channel count")
-    expected = {"downsample_kernel": 3, "downsample_padding": 1, "decoder_interpolation_mode": "nearest", "align_corners": None}
+    expected = {"downsample_kernel": 3, "downsample_padding": 1, "decoder_interpolation_mode": "nearest", "align_corners": None,
+                "input_projection_skip_initialization": "zeros"}
     if any(engineering["backbone"][k] != v for k, v in expected.items()):
         raise ValueError("Unreviewed backbone engineering configuration")
     if engineering["projection"]["feature_reduction_operator"] != "arithmetic_mean":

@@ -29,6 +29,14 @@ def decode_imerg(raw: np.ndarray, attrs: dict) -> tuple[np.ndarray, np.ndarray]:
     return decoded, valid
 
 
+def validate_final_provenance(global_attrs: dict, manifest_row: dict, source_size: int) -> None:
+    """Require independent converted-file metadata and completion-manifest agreement."""
+    if global_attrs.get("source") != "GPM_3IMERGHH_07" or "IMERG Final Run V07" not in str(global_attrs.get("title", "")):
+        raise ValueError("IMERG source metadata does not establish V07 Final")
+    if manifest_row.get("status") != "complete" or manifest_row.get("granules") != 48 or manifest_row.get("bytes") != source_size:
+        raise ValueError("IMERG completion manifest does not match 48-granule source file")
+
+
 def read_imerg_local(local_path: Path, index: int, mapping: SP04Mapping) -> tuple[np.ndarray, np.ndarray, object]:
     with netCDF4.Dataset(str(local_path)) as ds:
         ds.set_auto_maskandscale(False)

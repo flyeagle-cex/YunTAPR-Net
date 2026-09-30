@@ -1,0 +1,6 @@
+ENGINEERING_ONLY. Fixed interpreter: F:\pytorch\Research\.venv\Scripts\python.exe.
+New B0 skeleton tests: 19/19 PASS (full synthetic forward/backward finite, strict quantiles, frozen SP04 mapping, causal sample selection, V07 Final provenance, mask/validity/denominator checks, no formal checkpoint).
+Existing Scientific Freeze v1 tests: 42/42 PASS; older freeze files and runs unchanged.
+Real-sample attempt 1: FAILED with explicit float32 strict-quantile exception under engineering config v1; preserved in attempt_1_failure.md.
+Real-sample attempt 2: PASS under separately versioned engineering config v2. The selected 2024-07-01 00:20 H: source passed obs_end<=00:30, 00:30 candidate failed causality, V07 Final provenance and frozen 3430-cell mask verified, forward and test-only masked loss finite.
+Source identity: four H: candidates and one F: IMERG file have matching before/after size and SHA256. Seven bounded English staging copies each passed size and SHA256 checks and cleanup. No source modification, training, or checkpoint.
