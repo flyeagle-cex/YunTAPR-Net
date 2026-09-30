@@ -1,0 +1,39 @@
+{
+  "status": "ENGINEERING_RECOMMENDATION_ONLY",
+  "scope": "Future B0 Phase-A Development training planning; not an authorized training configuration",
+  "GPU_PRESENT": true,
+  "CUDA_TORCH_AVAILABLE": false,
+  "TRAINING_ENVIRONMENT_READY": false,
+  "CUDA_ENVIRONMENT_ACTION_REQUIRED": true,
+  "MAX_TESTED_SAFE_BATCH": "NOT_AVAILABLE",
+  "AMP_FEASIBLE": "NOT_TESTED",
+  "DATALOADER_IO_READY": true,
+  "RECOMMENDED_ENGINEERING_STARTING_POINT": {
+    "device": "CUDA_AFTER_SEPARATE_ENVIRONMENT_ACTION_AND_REBENCHMARK",
+    "physical_batch_size": "NOT_DETERMINED_CUDA_BENCHMARK_NOT_RUN",
+    "gradient_accumulation": "NOT_DETERMINED_CUDA_BENCHMARK_NOT_RUN",
+    "amp_enabled": "NOT_DETERMINED_CUDA_BENCHMARK_NOT_RUN",
+    "amp_dtype": "NOT_DETERMINED_CUDA_BENCHMARK_NOT_RUN",
+    "num_workers": "0_CONSERVATIVE; 2_MEASURED_PROMISING_WITH_INDEPENDENT_PER_WORKER_STAGING",
+    "pin_memory": false,
+    "persistent_workers": false
+  },
+  "worker_evidence": {
+    "0": {
+      "eight_sample_wall_seconds": 11.501923900003021,
+      "samples_per_second": 0.6955358137952815
+    },
+    "2": {
+      "eight_sample_wall_seconds": 4.2105577000038465,
+      "samples_per_second": 1.8999858379788244
+    },
+    "4": {
+      "eight_sample_wall_seconds": 7.876989399999729,
+      "samples_per_second": 1.0156164485888828
+    }
+  },
+  "vram_headroom_target_fraction": "approximately 0.15-0.20; cannot validate without CUDA PyTorch",
+  "environment_action": "A separately authorized, compatible CUDA-enabled PyTorch environment is required before GPU feasibility can be measured; this audit did not install or change software.",
+  "B0_FORMAL_TRAINING_STARTED": false,
+  "FORMAL_TRAINING_AUTHORIZED": false
+}

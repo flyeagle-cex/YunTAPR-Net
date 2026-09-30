@@ -1,5 +1,6 @@
 """B13 packed-data reader; caller supplies a local English-path staging copy."""
 from pathlib import Path
+import time
 import netCDF4
 import numpy as np
 from yuntapr.data.sample_schema import HimawariFrame, utc
@@ -30,14 +31,37 @@ def _cf_time(ds, name: str):
     return utc(dt.isoformat() + "Z")
 
 
-def read_b13_local(local_english_path: Path, mapping: SP04Mapping, nominal_time) -> tuple[np.ndarray, np.ndarray, HimawariFrame]:
+def read_b13_local(local_english_path: Path, mapping: SP04Mapping, nominal_time, *,
+                   profile: dict | None = None) -> tuple[np.ndarray, np.ndarray, HimawariFrame]:
+    opened = time.perf_counter()
     with netCDF4.Dataset(str(local_english_path)) as ds:
         ds.set_auto_maskandscale(False)
         variable = ds["tbb_13"]
+        open_seconds = time.perf_counter() - opened
         if variable.dimensions != ("latitude", "longitude") or variable.shape != (501, 501) or variable.units != "K":
             raise ValueError("B13 dimension/shape/units mismatch")
-        mapping.assert_axes(np.asarray(ds["latitude"][:]), np.asarray(ds["longitude"][:]), mapping.axes["target_lat"], mapping.axes["target_lon"])
+        reading = time.perf_counter()
+        lat, lon = np.asarray(ds["latitude"][:]), np.asarray(ds["longitude"][:])
+        read_seconds = time.perf_counter() - reading
+        checking = time.perf_counter()
+        mapping.assert_axes(lat, lon, mapping.axes["target_lat"], mapping.axes["target_lon"])
+        qc_seconds = time.perf_counter() - checking
+        reading = time.perf_counter()
         attrs = {key: variable.getncattr(key) for key in variable.ncattrs()}
-        x, valid = decode_b13(np.asarray(variable[:]), attrs)
-        frame = HimawariFrame(Path(local_english_path), utc(nominal_time), _cf_time(ds, "start_time"), _cf_time(ds, "end_time"), utc(str(ds.date_created)) if hasattr(ds, "date_created") else None)
+        raw = np.asarray(variable[:])
+        read_seconds += time.perf_counter() - reading
+        checking = time.perf_counter()
+        x, valid = decode_b13(raw, attrs)
+        qc_seconds += time.perf_counter() - checking
+        reading = time.perf_counter()
+        start_time, end_time = _cf_time(ds, "start_time"), _cf_time(ds, "end_time")
+        created = str(ds.date_created) if hasattr(ds, "date_created") else None
+        read_seconds += time.perf_counter() - reading
+        checking = time.perf_counter()
+        frame = HimawariFrame(Path(local_english_path), utc(nominal_time), start_time, end_time,
+                              utc(created) if created else None)
+        qc_seconds += time.perf_counter() - checking
+        if profile is not None:
+            profile.update(netcdf_open_seconds=open_seconds, netcdf_read_seconds=read_seconds,
+                           reader_qc_seconds=qc_seconds)
         return x, valid, frame

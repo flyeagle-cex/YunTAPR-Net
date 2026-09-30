@@ -1,0 +1,45 @@
+{
+  "run_id": "run_20260930T114738Z",
+  "baseline_commit": "2e243ebfc368ac778538a15413598cbc60fd4f70",
+  "scientific_freeze_version": "v1.1",
+  "engineering_version": 4,
+  "formal_training_started": false,
+  "formal_training_authorized": false,
+  "source_2025_read": false,
+  "historical_reports_overwritten": false,
+  "artifact_sha256": {
+    "TRAINING_ENVIRONMENT_AUDIT_REPORT.md": "69858528b7b96c79cc94d91f63f1ce5e6807dd625c2b0fc3eef4dabbd93034d4",
+    "system_environment.json": "55d57cf79fdfae235b44fb268de4e67484cf0c346af7b0c97fad9c4548ee0c9f",
+    "pytorch_cuda_environment.json": "db631335654ea26d3a50cede3c45891f6effec104a72b3508412e67050c71521",
+    "gpu_inventory.json": "bfb4a1770f5f094e15a0bf90afc4dd78441927c97df9ac1b1d1670a93873dc6c",
+    "cpu_ram_storage.json": "f9fbcdec660b15c2b143d43b930233c8c749ae887c74335c0db8840f15d22d30",
+    "model_memory_static.json": "eb072f614c78108308497d730cf6eb1227bc8a8048d018aad04bd1aa7823ac6b",
+    "gpu_batch_benchmark.csv": "984169bfcf3cc6651e632ec0ff26e5bc253502215496a6c2bf75172b1c6b62d0",
+    "gpu_amp_benchmark.csv": "b2676475b983e149cdc79e6750a4e85d8712f9e79c9c7a0105b0f6a07b3782fa",
+    "gpu_validation_benchmark.csv": "2a6fd48a00870ef9744df0854a2ebbba27eac6bc949a73b273a82c86a6e8ecd7",
+    "cpu_benchmark.json": "4463d65f20f6f580c7ee2ca03f5578eb30b43b554d4b704af008757abfe7822b",
+    "dataloader_io_benchmark.csv": "722935eeaa808416b898d0fa913c88ea290f319b9d151cad9c361b9bdd2a20f7",
+    "io_breakdown.json": "6518590aa84c746d94eaeae60408289892e18161cc35c8bdbc25040475c9968d",
+    "epoch_time_estimates.csv": "d7ecdb147ca615c6a900964772d5a53298ead5bec27c80b58d106fca16d83e98",
+    "gradient_accumulation_candidates.csv": "609ef45ffad34ff8dc93f828dfaa65e3b69fdca3da6563b2cda647bcb6d143f0",
+    "checkpoint_storage_estimate.json": "6148a09f73f8fd16d0858b95db69085ba6a32d66e6819e3911faf9ce064dfef5",
+    "engineering_recommendation.json": "23c8ead3664f30b57287aa21c5309dd892caa0ee13fbdd1759d637671dd5a169",
+    "test_results.txt": "acf83532c4f5f923a20099529e716b26b9a6d653c312831be42babcb8a11f49c"
+  },
+  "additional_attempt_sha256": {
+    "cpu_benchmark_memory_unavailable_attempt.json": "316bc4a3939de5b0e0e865ce6f4af038c39c109db7d7e9dee591e2c51fc2c650",
+    "test_results_sandbox_attempt.txt": "8d4fda44f30224ad1a6c9d7bab442f19b9f43d99b2cebd26511f1c062a40ef5d"
+  },
+  "code_contract_test_sha256": {
+    "scripts/audit_b0_training_environment.py": "9907f12e44c1f2a6893148fb2e4866fdf9052fcc7dbb58a38bdcde190601a686",
+    "scripts/audit_b0_dataloader_io.py": "4f9dc206a923e9e052b1b119f12f4b31e861442f3a31601043a18fbccccea7ad",
+    "scripts/package_b0_training_environment_audit.py": "515caf341599baa303ee4d023d0544eec2d803ca6e46a9ce3cce690ae192d7c7",
+    "scripts/run_training_environment_audit_tests.py": "b4b19a6278ced32d60846225ca7b8132f3749097d8483dfd9bea7c2960c498ad",
+    "src/yuntapr/data/himawari_b13.py": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857",
+    "src/yuntapr/data/imerg_v07.py": "eff89d4a2fb21473288b90f892799866ff839b7119901886e2ea358183b8d7b2",
+    "config/science_contract_v1.1.yaml": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+    "config/b0_engineering_v4.yaml": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7",
+    "tests/training_environment_audit/test_audit.py": "c7c39dc68df08459a6b2d0ee0b07322710c720c66dc1a2c9c89a9d74e49b9c29",
+    "README.md": "db4c979291f82571f7077b71d378fbb7b3dd1bac9cda51b42a41e7b805d550cd"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "model": "B0Model",
+  "science_version": "1.1",
+  "engineering_version": 4,
+  "parameter_count": 4329361,
+  "trainable_parameter_count": 4329361,
+  "parameter_dtype_elements": {
+    "torch.float32": 4329361
+  },
+  "float32_parameter_count": 4329361,
+  "float64_parameter_count": 0,
+  "parameters_bytes": 17317444,
+  "gradients_theoretical_bytes": 17317444,
+  "sgd_no_momentum_theoretical_optimizer_state_bytes": 0,
+  "sgd_momentum_theoretical_optimizer_state_bytes": 17317444,
+  "adamw_theoretical_optimizer_state_bytes": 34634888,
+  "sgd_no_momentum_params_grads_state_bytes": 34634888,
+  "adamw_params_grads_state_bytes": 69269776,
+  "state_dict_tensor_bytes": 17317444,
+  "optimizer_created": false,
+  "input_shape_batch_1": [
+    1,
+    1,
+    501,
+    501
+  ],
+  "rain_logit_shape_batch_1": [
+    1,
+    1,
+    100,
+    100
+  ],
+  "quantile_shape_batch_1": [
+    1,
+    32,
+    100,
+    100
+  ],
+  "qlog_output_dtype": "float64",
+  "qphysical_output_dtype": "float64",
+  "qlog_bytes_per_batch_1": 2560000,
+  "qphysical_bytes_per_batch_1": 2560000,
+  "first_native_feature_bytes_per_batch_1": 48192192,
+  "scope": "Theoretical tensor bytes; full activation/autograd/workspace memory must be measured"
+}

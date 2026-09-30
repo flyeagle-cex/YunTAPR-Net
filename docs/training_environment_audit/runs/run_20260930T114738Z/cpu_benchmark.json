@@ -1,0 +1,109 @@
+{
+  "status": "PASS",
+  "device": "cpu",
+  "input": "synthetic_normalized_float32_full_valid_501x501",
+  "frozen_yunnan_mask_true_cells": 3430,
+  "torch_threads": 2,
+  "warmup_count": 1,
+  "measurement_count": 3,
+  "warmup_seconds": 3.471782299995539,
+  "measurements": [
+    {
+      "forward_seconds": 1.1647119999979623,
+      "loss_seconds": 0.00199609999981476,
+      "backward_seconds": 2.320642600003339,
+      "total_seconds": 3.487350700001116,
+      "rain_logit_shape": [
+        1,
+        1,
+        100,
+        100
+      ],
+      "quantile_shape": [
+        1,
+        32,
+        100,
+        100
+      ],
+      "qlog_dtype": "torch.float64",
+      "qphysical_dtype": "torch.float64",
+      "conditional_pinball_dtype": "torch.float64",
+      "outputs_finite": true,
+      "loss_finite": true,
+      "gradients_finite": true,
+      "valid_yunnan_loss_pixels": 3430
+    },
+    {
+      "forward_seconds": 1.1180654999989201,
+      "loss_seconds": 0.001439700004993938,
+      "backward_seconds": 2.308047999998962,
+      "total_seconds": 3.427553200002876,
+      "rain_logit_shape": [
+        1,
+        1,
+        100,
+        100
+      ],
+      "quantile_shape": [
+        1,
+        32,
+        100,
+        100
+      ],
+      "qlog_dtype": "torch.float64",
+      "qphysical_dtype": "torch.float64",
+      "conditional_pinball_dtype": "torch.float64",
+      "outputs_finite": true,
+      "loss_finite": true,
+      "gradients_finite": true,
+      "valid_yunnan_loss_pixels": 3430
+    },
+    {
+      "forward_seconds": 1.1194703000001027,
+      "loss_seconds": 0.0014675999991595745,
+      "backward_seconds": 2.3180509000012535,
+      "total_seconds": 3.4389888000005158,
+      "rain_logit_shape": [
+        1,
+        1,
+        100,
+        100
+      ],
+      "quantile_shape": [
+        1,
+        32,
+        100,
+        100
+      ],
+      "qlog_dtype": "torch.float64",
+      "qphysical_dtype": "torch.float64",
+      "conditional_pinball_dtype": "torch.float64",
+      "outputs_finite": true,
+      "loss_finite": true,
+      "gradients_finite": true,
+      "valid_yunnan_loss_pixels": 3430
+    }
+  ],
+  "mean_forward_seconds": 1.134082599998995,
+  "mean_loss_seconds": 0.0016344666679894242,
+  "mean_backward_seconds": 2.3155805000011846,
+  "mean_total_step_seconds": 3.451297566668169,
+  "min_total_step_seconds": 3.427553200002876,
+  "max_total_step_seconds": 3.487350700001116,
+  "memory_before": {
+    "working_set_bytes": 242798592,
+    "process_lifetime_peak_working_set_bytes": 258969600,
+    "private_usage_bytes": 1002094592
+  },
+  "memory_after": {
+    "working_set_bytes": 630243328,
+    "process_lifetime_peak_working_set_bytes": 1951436800,
+    "private_usage_bytes": 1545568256
+  },
+  "peak_memory_note": "Windows process lifetime peak working set includes model initialization and warmup; not an isolated per-step peak",
+  "execution_scope": "ENGINEERING_ONLY",
+  "focal_parameters": "ENGINEERING_TEST_ONLY",
+  "optimizer_created": false,
+  "optimizer_step_performed": false,
+  "checkpoint_generated": false
+}

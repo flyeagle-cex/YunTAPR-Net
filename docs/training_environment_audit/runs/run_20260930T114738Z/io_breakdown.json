@@ -1,0 +1,125 @@
+{
+  "sample_count": 8,
+  "population": "Eight hash-verified 2023 final-eligible Train samples",
+  "source_2025_read": false,
+  "worker_summaries": [
+    {
+      "num_workers": 0,
+      "status": "PASS",
+      "samples_completed": 8,
+      "samples_expected": 8,
+      "total_wall_seconds_including_spawn": 11.501923900003021,
+      "samples_per_second_including_spawn": 0.6955358137952815,
+      "per_worker_independent_staging": false,
+      "one_owned_copy_at_a_time_per_staging_root": true,
+      "owned_temporary_copies_remaining": {},
+      "error": null
+    },
+    {
+      "num_workers": 2,
+      "status": "PASS",
+      "samples_completed": 8,
+      "samples_expected": 8,
+      "total_wall_seconds_including_spawn": 4.2105577000038465,
+      "samples_per_second_including_spawn": 1.8999858379788244,
+      "per_worker_independent_staging": true,
+      "one_owned_copy_at_a_time_per_staging_root": true,
+      "owned_temporary_copies_remaining": {},
+      "error": null
+    },
+    {
+      "num_workers": 4,
+      "status": "PASS",
+      "samples_completed": 8,
+      "samples_expected": 8,
+      "total_wall_seconds_including_spawn": 7.876989399999729,
+      "samples_per_second_including_spawn": 1.0156164485888828,
+      "per_worker_independent_staging": true,
+      "one_owned_copy_at_a_time_per_staging_root": true,
+      "owned_temporary_copies_remaining": {},
+      "error": null
+    }
+  ],
+  "mean_b13_copy_seconds": 0.009437524999157176,
+  "mean_b13_netcdf_open_seconds": 0.0053812124988326104,
+  "mean_b13_netcdf_read_seconds": 0.002237762503682461,
+  "mean_b13_reader_qc_seconds": 0.00044716250067722285,
+  "mean_b13_sha_cleanup_seconds": 0.007127875002879591,
+  "mean_imerg_copy_seconds": 0.002360900000894617,
+  "mean_imerg_netcdf_open_seconds": 0.0016798875003587455,
+  "mean_imerg_netcdf_read_seconds": 0.001397999999426247,
+  "mean_imerg_reader_qc_seconds": 5.1662500482052565e-05,
+  "mean_imerg_sha_cleanup_seconds": 0.003512437498102372,
+  "mean_formal_assembly_qc_seconds": 1.400337137499264,
+  "mean_normalization_seconds": 0.0019573874997149687,
+  "mean_tensor_conversion_seconds": 7.385000026260968e-05,
+  "mean_end_to_end_sample_io_seconds": 1.4369526874997973,
+  "mean_cpu_forward_seconds": 1.134082599998995,
+  "mean_cpu_backward_seconds": 2.3155805000011846,
+  "mean_cpu_forward_loss_backward_seconds": 3.451297566668169,
+  "compute_to_io_ratio": 2.401817120835898,
+  "measured_bottleneck": "CPU_COMPUTE_BOUND",
+  "source_read_strategy": "Production netCDF readers with optional timing hooks; SHA-verified per-file English staging; real formal QC/normalization",
+  "timing_note": "Reader netCDF open/read excludes separately timed decode/axis QC; SHA/check/cleanup separately estimated from staging wall time. Formal assembly includes support mapping and metadata checks.",
+  "selected_samples": [
+    {
+      "sample_id": "2023-03-01T00:00:00+00:00",
+      "source_relative_path": "202303\\01\\NC_H09_20230301_0020_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "06adbbe5b18b04a15d060873f70c9082fc10c327dd7316f514d960dc94b21109",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230301.nc",
+      "imerg_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928"
+    },
+    {
+      "sample_id": "2023-04-04T22:30:00+00:00",
+      "source_relative_path": "202304\\04\\NC_H09_20230404_2250_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "d64e4d32eb43429b1db7772fa94c83cf57b9549d4360bd6c6667c1ea0c5e9e77",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230404.nc",
+      "imerg_sha256": "a5a7c3870de42e925b40ed82f3fdec171fbe280e1dced418028fdbb130dbda69"
+    },
+    {
+      "sample_id": "2023-05-09T23:00:00+00:00",
+      "source_relative_path": "202305\\09\\NC_H09_20230509_2320_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "91e332d5e31254941f5689e9640a68433247cfd0724d4825a6a79ca7a735c6d3",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230509.nc",
+      "imerg_sha256": "e5aeb3a6b417452e6b0ee63ea5472ba4ab90c3bbc121b19aa06bfcb8740f41ff"
+    },
+    {
+      "sample_id": "2023-06-13T22:30:00+00:00",
+      "source_relative_path": "202306\\13\\NC_H09_20230613_2250_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "6682fc463ae5ee9ba90d39ecb288b3f6cfd2e7436d40f780ebe034adc14a2b27",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230613.nc",
+      "imerg_sha256": "21682b12b07a9c046bf95b0f45c2f0791dfb6724d63c3e369e0de6adbb24a9cb"
+    },
+    {
+      "sample_id": "2023-07-18T20:30:00+00:00",
+      "source_relative_path": "202307\\18\\NC_H09_20230718_2050_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "0128c4317131d903df774d9db1581fbbcc4ddb3a31c6810e2950adaf1cc36ea8",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230718.nc",
+      "imerg_sha256": "03b506be53e83a8fc458e0a2511a05622bec6101d4f4de2f8aef0402930bf1e4"
+    },
+    {
+      "sample_id": "2023-08-22T20:30:00+00:00",
+      "source_relative_path": "202308\\22\\NC_H09_20230822_2050_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "26c9a41c201764eb3d41d2e72fef0c7b1b01ecbe9f4695c2725b18b682a23e4e",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230822.nc",
+      "imerg_sha256": "036eead95b70e6e5b045135e13371b405e5c868c45fa17e917152965eef3caf0"
+    },
+    {
+      "sample_id": "2023-09-27T01:00:00+00:00",
+      "source_relative_path": "202309\\27\\NC_H09_20230927_0120_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "6fb2877fe7510bb09de668ab3c4a317f114c00df4956549ee778ce1b9df6b2a2",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230927.nc",
+      "imerg_sha256": "72fa62b7632019549c5d2938946c810a91be6e62eec889ee2e185923e0be7251"
+    },
+    {
+      "sample_id": "2023-10-31T23:30:00+00:00",
+      "source_relative_path": "202310\\31\\NC_H09_20231031_2350_R21_FLDK.06001_06001.nc",
+      "b13_sha256": "16c124239ff0b05345e9ec3060fd331887fe33d501d707d51331bec4320d09e8",
+      "imerg_day_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20231031.nc",
+      "imerg_sha256": "8bffa23ea2f6f1844c0a592aa85b5cc2ed58388bb32fd381daf5debd7f3a65de"
+    }
+  ],
+  "DATALOADER_IO_READY": true,
+  "per_worker_staging_is_experimental_only": true,
+  "formal_dataloader_refactored": false
+}

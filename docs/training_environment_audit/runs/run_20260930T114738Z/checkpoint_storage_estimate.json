@@ -1,0 +1,32 @@
+{
+  "state_dict_tensor_bytes": 17317444,
+  "adamw_state_theoretical_bytes": 34634888,
+  "scheduler_and_metadata_allowance_bytes": 1048576,
+  "single_model_only_bytes": 17317444,
+  "single_model_plus_adamw_metadata_bytes": 53000908,
+  "best_plus_last_bytes_upper_bound": 106001816,
+  "illustrative_periodic_plans": [
+    {
+      "illustrative_total_epochs": 10,
+      "illustrative_every_n_epochs": 10,
+      "best_last_and_periodic_count_upper_bound": 3,
+      "storage_bytes_upper_bound": 159002724
+    },
+    {
+      "illustrative_total_epochs": 30,
+      "illustrative_every_n_epochs": 10,
+      "best_last_and_periodic_count_upper_bound": 5,
+      "storage_bytes_upper_bound": 265004540
+    },
+    {
+      "illustrative_total_epochs": 50,
+      "illustrative_every_n_epochs": 10,
+      "best_last_and_periodic_count_upper_bound": 7,
+      "storage_bytes_upper_bound": 371006356
+    }
+  ],
+  "status": "THEORETICAL_ENGINEERING_ESTIMATE_ONLY",
+  "optimizer_created": false,
+  "checkpoint_generated": false,
+  "epoch_or_save_interval_frozen": false
+}

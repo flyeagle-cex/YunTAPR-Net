@@ -1,6 +1,7 @@
 """IMERG converted V07 Final reader with valid-zero preservation."""
 from datetime import timedelta
 from pathlib import Path
+import time
 import netCDF4
 import numpy as np
 from yuntapr.data.sample_schema import utc
@@ -37,17 +38,37 @@ def validate_final_provenance(global_attrs: dict, manifest_row: dict, source_siz
         raise ValueError("IMERG completion manifest does not match 48-granule source file")
 
 
-def read_imerg_local(local_path: Path, index: int, mapping: SP04Mapping) -> tuple[np.ndarray, np.ndarray, object]:
+def read_imerg_local(local_path: Path, index: int, mapping: SP04Mapping, *,
+                     profile: dict | None = None) -> tuple[np.ndarray, np.ndarray, object]:
+    opened = time.perf_counter()
     with netCDF4.Dataset(str(local_path)) as ds:
         ds.set_auto_maskandscale(False)
         variable = ds["precipitation"]
+        open_seconds = time.perf_counter() - opened
         if variable.dimensions != ("time", "lat", "lon") or variable.units != "mm hr-1" or variable.shape[1:] != (130, 140):
             raise ValueError("IMERG converted dimension/shape/units mismatch")
+        reading = time.perf_counter()
         lat = np.asarray(ds["lat"][:])
         lon = np.asarray(ds["lon"][:])
+        read_seconds = time.perf_counter() - reading
+        checking = time.perf_counter()
         mapping.assert_axes(mapping.axes["native_lat"], mapping.axes["native_lon"], lat[10:110], lon[20:120])
+        qc_seconds = time.perf_counter() - checking
+        reading = time.perf_counter()
         attrs = {key: variable.getncattr(key) for key in variable.ncattrs()}
-        y, valid = decode_imerg(np.asarray(variable[index, 10:110, 20:120]), attrs)
+        raw = np.asarray(variable[index, 10:110, 20:120])
+        read_seconds += time.perf_counter() - reading
+        checking = time.perf_counter()
+        y, valid = decode_imerg(raw, attrs)
+        qc_seconds += time.perf_counter() - checking
+        reading = time.perf_counter()
         t = ds["time"]
         converted = netCDF4.num2date(t[index], t.units, calendar=getattr(t, "calendar", "standard"), only_use_cftime_datetimes=False)
-        return y, valid, utc(converted.isoformat() + "Z")
+        read_seconds += time.perf_counter() - reading
+        checking = time.perf_counter()
+        converted_utc = utc(converted.isoformat() + "Z")
+        qc_seconds += time.perf_counter() - checking
+        if profile is not None:
+            profile.update(netcdf_open_seconds=open_seconds, netcdf_read_seconds=read_seconds,
+                           reader_qc_seconds=qc_seconds)
+        return y, valid, converted_utc
