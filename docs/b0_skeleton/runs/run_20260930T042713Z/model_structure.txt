@@ -1,0 +1,17 @@
+ENGINEERING_ONLY; B0 single-frame residual U-Net, no formal training.
+Input: B13 [B,1,501,501] plus separate bool validity mask.
+enc0: ResidualBlock(1 -> 48), Conv3x3-GN8-GELU-Conv3x3-GN8-GELU+1x1 skip -> [B,48,501,501]
+down1: learned Conv3x3 stride2 padding1 (48 -> 96) -> [B,96,251,251]
+enc1: ResidualBlock(96 -> 96) -> [B,96,251,251]
+down2: learned Conv3x3 stride2 padding1 (96 -> 192) -> [B,192,126,126]
+enc2: ResidualBlock(192 -> 192) -> [B,192,126,126]
+down3: learned Conv3x3 stride2 padding1 (192 -> 256) -> [B,256,63,63]
+enc3: ResidualBlock(256 -> 256) -> [B,256,63,63]
+dec2: nearest resize to enc2.shape[-2:], concat 256+192, ResidualBlock(448 -> 192) -> [B,192,126,126]
+dec1: nearest resize to enc1.shape[-2:], concat 192+96, ResidualBlock(288 -> 96) -> [B,96,251,251]
+dec0: nearest resize to enc0.shape[-2:], concat 96+48, ResidualBlock(144 -> 48) -> [B,48,501,501]
+SP04Projection: indexed coordinate-defined 25-member arithmetic mean -> [B,48,100,100]
+Occurrence: Conv1x1(48 -> 1), sigmoid -> [B,1,100,100]
+Conditional quantiles: Conv1x1(48 -> 32), positive softplus increments in log1p domain -> [B,32,100,100]
+Threshold-censored diagnostic: p_rain * mean_32(expm1(q_log)) -> [B,1,100,100]
+All engineering choices are in config/b0_engineering_v1.yaml.

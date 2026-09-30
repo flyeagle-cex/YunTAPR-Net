@@ -1,0 +1,22 @@
+# B0 skeleton implementation — ENGINEERING_ONLY
+
+Run ID: `run_20260930T042713Z`. Scientific authority: repository commit `91f4443cc3ff7086890ea41dbcf00290450e0b86`, `config/science_contract_v1.yaml`, and `docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.md`. Their SHA256 values are pinned in the engineering config; the Scientific Freeze v1 files and older runs were not edited.
+
+| Status | Value |
+|---|---|
+| B0_FORMAL_SCIENTIFIC_CONTRACT | FROZEN |
+| B0_FORMAL_SKELETON_IMPLEMENTED | true |
+| B0_FORMAL_TRAINING_STARTED | false |
+| Execution / results | ENGINEERING_ONLY |
+
+`src/yuntapr` now contains an explicit single-B13 sample schema, causal latest-completed-frame selector, packed B13/converted IMERG readers, frozen-mask loader, bounded English staging, SHA-verified actual-coordinate SP04 mapping, 4-level residual U-Net, occurrence/monotonic-conditional-quantile heads, masked core loss, diagnostics, and a forward-only harness. No multi-year sample index, split execution, fitted statistics, optimizer step, formal checkpoint, 2025 Test parameter choice, or B1+ module was generated. The source H: drive was unavailable in this session; the previous English B13 diagnostic cache was read without altering it.
+
+The model accepts `[B,1,501,501]` and a separate bool validity mask. It retains all 501×501 centers during convolutions, then uses the pinned SP04 index map to reduce 25 learned feature vectors per target cell by an explicitly configured arithmetic mean. The raw coordinate axes and mapping hashes are checked at startup. Input invalid values become a configured tensor placeholder only inside forward computation, with the sidecar validity mask, invalid count, valid fraction, and target support fraction retained; placeholder `0.0` is **not** a physical B13 observation. A missing required frame or all-fill B13 fails explicitly. Invalid IMERG pixels are excluded from loss and metrics; valid zero rain is retained. Upstream-verified V07 Final provenance and the SHA-verified private 3430-cell mask are required for non-fixture supervised assembly.
+
+The output has `[B,1,100,100]` occurrence logit/probability and `[B,32,100,100]` conditional log1p/physical quantiles with exact midpoint taus. Softplus positive increments enforce strict ordering and support above 0.1 mm h⁻¹; numerical loss of strictness raises an error. The reported deterministic value is only the frozen 32-point threshold-censored diagnostic, not a full physical mean. Other exceedance thresholds return `NOT_ESTABLISHED` until a supported probability mapping is approved. Core loss is `L_occ + L_qr`; KD is zero and extension loss is disabled. Both components divide by the count of valid supervised Yunnan pixels. Empty rainy sets skip conditional loss; empty supervised sets skip the batch with a reason.
+
+The local checks passed: [18 skeleton tests](test_results.txt), 42 unchanged Scientific Freeze tests, full synthetic forward/backward with finite gradients, and a state-dict save/reload engineering round trip. The actual private frozen mask verified as 3430 cells in the target domain. A real 2024-07 IMERG file required English-path staging; its 1,129,135-byte temporary copy matched size and SHA256, read correctly, and was removed. [Parameter counts](parameter_count.json), [shape trace](shape_trace.json), [model structure](model_structure.txt), and [engineering snapshot](engineering_config_snapshot.yaml) are recorded. These checks are not B0 scientific results or operational replay evidence.
+
+Remaining `DEVELOPMENT_ESTIMATED_PARAMETER`: focal alpha, focal gamma, partial-B13 acceptance threshold, target-support threshold, and later development-derived epoch budget. None has a numerical formal value here. Remaining `ENGINEERING_CONFIG`: GroupNorm groups=8, learned stride-2 kernel/padding=3/1, nearest decoder resize with no `align_corners`, arithmetic-mean feature reduction, mean quantile-axis reduction, masked tensor placeholder=0.0, deterministic equal-obs-end path tie breaker, and one-file 16 MiB SHA-verified English staging. These explicit values are replaceable engineering choices and have no claimed scientific performance validation.
+
+The private mask file and raw Himawari/IMERG values remain outside GitHub. `2025-10` without V07 Final remains inference eligible and supervised/internal-test ineligible. Formal B0 training still requires a separate authorized execution after development parameters and data provenance are resolved.

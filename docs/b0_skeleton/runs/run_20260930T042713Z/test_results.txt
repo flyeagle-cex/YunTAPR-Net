@@ -1,0 +1,9 @@
+ENGINEERING_ONLY verification; fixed interpreter F:\pytorch\Research\.venv\Scripts\python.exe
+PYTHONPATH=src python -m unittest discover -s tests/b0_skeleton -p 'test_*.py' -v
+Result: 18 tests, OK. Covers contract/config, 10000x25 SP04 mapping, bit-exact axes/no flip, numeric projection, full forward and full backward finite gradients, state_dict round trip, tau/monotonic support, B13 and IMERG missing-vs-zero, causal selection/no fallback, October 2025 roles, masked loss denominator/empty rain, missing focal parameters, forbidden imports, no formal checkpoint.
+PYTHONPATH=src python -m unittest discover -s tests/scientific_freeze -p 'test_*.py' -v
+Result: 42 tests, OK. Existing Scientific Freeze v1 tests unchanged.
+Read-only local mask check: FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc SHA256 verified; target shape (100,100), true count 3430.
+Read-only B13 English diagnostic cache check: 2024-07-01 00:00 file, B13 shape (501,501), valid count 251001, observed interval 00:00:40.478784Z to 00:09:38.185414Z.
+Bounded IMERG staging check: F:/云南极端降水数据/raw/IMERG/2024/imerg_20240701.nc, time index 0. Temporary bytes 1129135; copy_seconds 0.0036653; read_seconds 0.0050816; size_match true; sha256_match true; cleanup_success true. Target shape (100,100), valid count 10000, valid zero count 5896, converted T=2024-07-01T00:00:00Z. Raw source remained read-only.
+Synthetic full-model backward check: all parameter gradients present and finite; no optimizer step, no formal checkpoint.
