@@ -16,7 +16,8 @@ class B0Model(nn.Module):
         self.backbone = B0Backbone(engineering["backbone"], tuple(science["backbone"]["channels"]))
         self.projection = SP04Projection(load_sp04(root), engineering["projection"]["feature_reduction_operator"])
         self.heads = ProbabilityHeads(48, float(science["probability"]["occurrence"]["threshold"]),
-                                      epsilon_mono=engineering["quantile_numerics"]["epsilon_mono"])
+                                      epsilon_mono=engineering["quantile_numerics"]["epsilon_mono"],
+                                      accumulation_dtype=getattr(torch, engineering["quantile_numerics"]["accumulation_dtype"]))
 
     def forward(self, x_b13: torch.Tensor, b13_valid_mask: torch.Tensor) -> B0Output:
         if x_b13.ndim != 4 or x_b13.shape[1:] != (1, 501, 501):

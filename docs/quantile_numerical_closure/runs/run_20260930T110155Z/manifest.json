@@ -1,0 +1,52 @@
+{
+  "run_id": "run_20260930T110155Z",
+  "baseline_commit": "957e8519e8063a6174b7bced5f10a819be0ef64e",
+  "created_utc": "2026-09-30T11:12:48.241584+00:00",
+  "scientific_freeze_version": "v1.1",
+  "status": {
+    "SCIENTIFIC_FREEZE_VERSION": "v1.1",
+    "QUANTILE_NUMERICAL_STABILITY_CLOSED": true,
+    "B0_FORMAL_TRAINING_STARTED": false,
+    "FORMAL_TRAINING_AUTHORIZED": false
+  },
+  "criteria": {
+    "all_required_qlog_stress_strict_zero_equal": true,
+    "real_2023_2024_regression": true,
+    "float32_parameter_gradients_and_float64_outputs": true,
+    "physical_overflow_separately_caught": true,
+    "no_sort_or_clamp": true,
+    "all_historical_and_new_tests": true,
+    "scientific_contract_unchanged": true
+  },
+  "python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+  "torch_version": "2.14.0+cpu",
+  "scientific_contract_sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+  "historical_files_unchanged": true,
+  "prior_quantile_stress_sha256": "a6ee9c99c2b3d313c097b2d4809b18a86f4323a98f1cc5428f97c94312a03553",
+  "code_and_config_sha256": {
+    "config/science_contract_v1.1.yaml": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+    "config/b0_engineering_v3.yaml": "5870482bbfe2aee39a0493f80b35c88ecec96b6dfe72ad6d25fc4428c8aa8a3c",
+    "config/b0_engineering_v4.yaml": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7",
+    "src/yuntapr/contracts/loader.py": "776d1aa774342e955eba9ff28809477e0f357a5d60eec7819ba55d3351b06964",
+    "src/yuntapr/models/monotonic_quantiles.py": "d0b26433b986d5ce89a3eec92ee88cdf47d33d09809eba5a8bf11b5a2152c532",
+    "src/yuntapr/models/probability_heads.py": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50",
+    "src/yuntapr/models/b0.py": "6b9b8c28c8b12b7948d9658deedc68e0e54df42a956850d357d4f15d06c6227d",
+    "src/yuntapr/losses/pinball.py": "b3ebd505238fe881039f143fe9c73462735782ecfa0dee1e63b5463c3cb49b78",
+    "src/yuntapr/losses/total_loss.py": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0",
+    "scripts/quantile_numerical_closure_v1.py": "6b3f779db21a855d9b44e086504b0773f53d12effecafbc451ab2f74dadbf344",
+    "scripts/package_quantile_closure_v1.py": "0fa8b3fd8fad57ba45e6b3c3f9ed22bbcb4725b7a13fc25426d38b063b1685dd",
+    "tests/quantile_numerical_closure/test_quantile_v4.py": "f6755ab0ab8542e16881cff27c8914424bc027df9f0788c3fc388788feaa349f"
+  },
+  "public_files_sha256": {
+    "closure_status.json": "ec8b0249545b63215ddd80f34f446685df51d8a3d48c7d80cb898661044b9893",
+    "engineering_config_snapshot_v4.yaml": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7",
+    "execution_status.json": "d520d74358f13d5e9955b3ee6b5f00f3875ac0439781ea27eda0b16d16c97ae5",
+    "gradient_dtype_trace.json": "bed9186646cdd7d82ced78a566c6ca347caa0651c6859def241ba68309f155f1",
+    "physical_overflow_stress.json": "0a011a394cdd2a495b18d2715cacb672c0818dd3d426d9551af74793e41db705",
+    "QUANTILE_NUMERICAL_CLOSURE_REPORT.md": "34a2ed603137c97a8e311e7d184b9faf708624472def0080e847a872221ff370",
+    "quantile_stress_float64.json": "523188652f58e1b6fd5233fe4df7f5414b52f26d2f03700c028fa7f9c0f890cc",
+    "real_regression_smoke.json": "10b144711011ee29969c2f506e2813725f2569d717acb3a0bd43ff2a093cb044",
+    "test_results.txt": "1610715055c6e6450353b67924df3db41327fda7a0fbecef595f3ae8c20cb702"
+  },
+  "packaging_note": "After tests, removed a trailing blank line from test_results.txt; no test result or scientific artifact changed."
+}

@@ -1,0 +1,276 @@
+{
+  "test_family": "MONOTONIC_TRANSFORM_STRESS",
+  "epsilon_mono": 0.0001,
+  "domain": "log1p(mm h^-1)",
+  "random_seed": 20260930,
+  "physical_expm1_invoked": false,
+  "all_required_cases_pass": true,
+  "cases": [
+    {
+      "case": "constant_-100",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00010000000000000286,
+      "maximum_qlog": 0.09851017980432496,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_-80",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00010000000000000286,
+      "maximum_qlog": 0.09851017980432496,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_-40",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00010000000000000286,
+      "maximum_qlog": 0.09851017980432496,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_-20",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00010000206115362564,
+      "maximum_qlog": 0.09851024576124089,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_-10",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00014539889921685867,
+      "maximum_qlog": 0.09996294457926434,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_0",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.6932471805599452,
+      "maximum_qlog": 22.27921995772259,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_10",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 10.000145398899207,
+      "maximum_qlog": 320.0999629445793,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_40",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 40.000099999999975,
+      "maximum_qlog": 1280.0985101798037,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_80",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 80.00009999999997,
+      "maximum_qlog": 2560.098510179805,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "constant_100",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 100.00009999999997,
+      "maximum_qlog": 3200.0985101798065,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "random_uniform_minus100_plus100",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 9.999999997489795e-05,
+      "maximum_qlog": 1523.0486698564812,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "random_normal_sigma100",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 9.999999997489795e-05,
+      "maximum_qlog": 2750.4279729434415,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "random_signed_100",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 9.999999997489795e-05,
+      "maximum_qlog": 2700.098510179805,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    },
+    {
+      "case": "mixed_22_positive100_then_10_negative100",
+      "shape": [
+        1,
+        32,
+        1,
+        1
+      ],
+      "raw_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qlog_finite": true,
+      "strictly_increasing": true,
+      "adjacent_equal_count": 0,
+      "above_threshold": true,
+      "minimum_log_increment": 0.00010000000020227162,
+      "maximum_qlog": 2200.0985101798065,
+      "raw_gradient_dtype": "torch.float32",
+      "gradient_finite": true
+    }
+  ]
+}

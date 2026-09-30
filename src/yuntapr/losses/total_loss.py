@@ -44,7 +44,9 @@ def b0_core_loss(output: B0Output, y_imerg: torch.Tensor, imerg_valid_mask: torc
     nrainy = int((rainy & valid).sum().item())
     occ = focal_bce_sum(output.rain_logit, rainy, valid, focal_alpha, focal_gamma) / nvalid
     if nrainy:
-        qr = pinball_sum(output.conditional_quantiles_log, torch.log1p(clean_y), rainy & valid, quantile_axis_reduction) / nvalid
+        qlog = output.conditional_quantiles_log
+        qr = pinball_sum(qlog, torch.log1p(clean_y.to(dtype=qlog.dtype)), rainy & valid,
+                         quantile_axis_reduction) / nvalid
     else:
         qr = output.conditional_quantiles_log.sum() * 0
     return LossResult(occ + qr, occ, qr, nvalid, nrainy, nrainy == 0, False,

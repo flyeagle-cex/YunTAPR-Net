@@ -1,0 +1,40 @@
+{
+  "samples": [
+    {
+      "year": 2023,
+      "backbone_parameter_dtype": "torch.float32",
+      "backbone_gradient_dtype": "torch.float32",
+      "quantile_head_parameter_dtype": "torch.float32",
+      "quantile_head_gradient_dtype": "torch.float32",
+      "quantile_raw_dtype": "torch.float32",
+      "quantile_raw_gradient_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qphysical_dtype": "torch.float64",
+      "conditional_pinball_dtype": "torch.float64",
+      "total_loss_dtype": "torch.float64",
+      "all_parameter_gradients_finite": true,
+      "nonzero_quantile_gradient": true,
+      "nonzero_backbone_gradient": true
+    },
+    {
+      "year": 2024,
+      "backbone_parameter_dtype": "torch.float32",
+      "backbone_gradient_dtype": "torch.float32",
+      "quantile_head_parameter_dtype": "torch.float32",
+      "quantile_head_gradient_dtype": "torch.float32",
+      "quantile_raw_dtype": "torch.float32",
+      "quantile_raw_gradient_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "qphysical_dtype": "torch.float64",
+      "conditional_pinball_dtype": "torch.float64",
+      "total_loss_dtype": "torch.float64",
+      "all_parameter_gradients_finite": true,
+      "nonzero_quantile_gradient": true,
+      "nonzero_backbone_gradient": true
+    }
+  ],
+  "all_dtype_and_gradient_contracts_pass": true,
+  "gradient_crosses_float64_quantile_to_float32_parameters": true,
+  "quantile_target_and_tau_dtype": "torch.float64",
+  "detach_in_loss_path": false
+}

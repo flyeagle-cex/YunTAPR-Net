@@ -1,0 +1,19 @@
+{
+  "criteria": {
+    "all_required_qlog_stress_strict_zero_equal": true,
+    "real_2023_2024_regression": true,
+    "float32_parameter_gradients_and_float64_outputs": true,
+    "physical_overflow_separately_caught": true,
+    "no_sort_or_clamp": true,
+    "all_historical_and_new_tests": true,
+    "scientific_contract_unchanged": true
+  },
+  "status": {
+    "SCIENTIFIC_FREEZE_VERSION": "v1.1",
+    "QUANTILE_NUMERICAL_STABILITY_CLOSED": true,
+    "B0_FORMAL_TRAINING_STARTED": false,
+    "FORMAL_TRAINING_AUTHORIZED": false
+  },
+  "test_count": 114,
+  "status_basis": "All measured criteria; a detected physical overflow is expected to raise explicitly"
+}

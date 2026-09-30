@@ -1,4 +1,4 @@
-"""Load the researcher-approved v1 contract without implicit defaults."""
+"""Load pinned science and explicit engineering revisions without changing D1-D8."""
 from pathlib import Path
 import hashlib
 import yaml
@@ -15,11 +15,14 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def load_contract(root: Path = REPO_ROOT, *, version: str = "v1.1") -> tuple[dict, dict]:
+def load_contract(root: Path = REPO_ROOT, *, version: str = "v1.1", engineering_version: int | None = None) -> tuple[dict, dict]:
     if version not in ("v1", "v1.1"):
         raise ValueError("Unsupported scientific contract version")
     science_path = root / f"config/science_contract_{version}.yaml"
-    engineering_path = root / ("config/b0_engineering_v2.yaml" if version == "v1" else "config/b0_engineering_v3.yaml")
+    revision = engineering_version if engineering_version is not None else (2 if version == "v1" else 4)
+    if (version == "v1" and revision != 2) or (version == "v1.1" and revision not in (3, 4)):
+        raise ValueError("Unsupported science and engineering revision combination")
+    engineering_path = root / f"config/b0_engineering_v{revision}.yaml"
     science = yaml.safe_load(science_path.read_text(encoding="utf-8"))
     engineering = yaml.safe_load(engineering_path.read_text(encoding="utf-8"))
     if sha256(science_path) != engineering["scientific_contract_sha256"]:
@@ -62,4 +65,13 @@ def load_contract(root: Path = REPO_ROOT, *, version: str = "v1.1") -> tuple[dic
         for key in ("one_file_at_a_time", "verify_sha256", "cleanup_required"):
             if engineering["staging"][key] is not True:
                 raise ValueError("Staging safeguards cannot be disabled")
+        if revision == 4:
+            numerics = engineering["quantile_numerics"]
+            required = {"status": "ENGINEERING_CONFIG", "epsilon_mono": 1e-4,
+                        "epsilon_domain": "log1p(mm h^-1)", "raw_dtype": "float32",
+                        "accumulation_dtype": "float64", "qlog_output_dtype": "float64",
+                        "physical_quantile_dtype": "float64", "recurrence": "sequential",
+                        "monotonic_failure_action": "RAISE", "physical_overflow_action": "RAISE"}
+            if any(numerics.get(k) != v for k, v in required.items()):
+                raise ValueError("Unapproved quantile v4 precision configuration")
     return science, engineering

@@ -12,6 +12,8 @@ def pinball_sum(qlog: torch.Tensor, log_rain: torch.Tensor, rainy_valid: torch.T
         raise ValueError("Unsupported explicit quantile axis reduction")
     if qlog.ndim != 4 or qlog.shape[1] != 32 or log_rain.shape != qlog[:, :1].shape:
         raise ValueError("Conditional pinball tensor shape mismatch")
+    if log_rain.dtype != qlog.dtype:
+        raise ValueError("Pinball target must have qlog precision")
     taus = frozen_taus(qlog.device, qlog.dtype).reshape(1, 32, 1, 1)
     error = log_rain - qlog
     per_pixel = torch.maximum(taus * error, (taus - 1) * error).mean(dim=1, keepdim=True)

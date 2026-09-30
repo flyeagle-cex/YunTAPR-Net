@@ -1,0 +1,56 @@
+schema_version: 4
+status: ENGINEERING_CONFIG
+scientific_contract_sha256: 14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3
+scientific_freeze_document_sha256: 48e164cc7b6569d33e1929418ce60b13173957efbab3d97ca70cca0e6f7f1b6c
+sp04_manifest_sha256: e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473
+formal_training_started: false
+backbone:
+  groupnorm_groups: 8
+  downsample_kernel: 3
+  downsample_padding: 1
+  decoder_interpolation_mode: nearest
+  align_corners: null
+  input_projection_skip_initialization: zeros
+projection:
+  feature_reduction_operator: arithmetic_mean
+  status: ENGINEERING_CONFIG
+loss:
+  quantile_axis_reduction: mean
+  status: ENGINEERING_CONFIG
+missing:
+  tensor_placeholder: 0.0
+  placeholder_is_physical_observation: false
+  requires_separate_validity_mask: true
+  status: ENGINEERING_CONFIG
+  formal_supervised_path_requires_full_valid_b13: true
+  placeholder_allowed_scopes:
+  - ENGINEERING_ONLY
+  - inference
+  - fixture
+  - future_robustness
+time:
+  equal_obs_end_tie_breaker: lexicographically_smallest_path
+  status: ENGINEERING_CONFIG
+staging:
+  staging_root_env_var: YUNTAPR_B0_STAGING_ROOT
+  max_temporary_bytes: 734003200
+  verify_sha256: true
+  status: ENGINEERING_CONFIG
+  one_file_at_a_time: true
+  cleanup_required: true
+  ASCII_staging_root_required: true
+quantile_numerics:
+  status: ENGINEERING_CONFIG
+  epsilon_mono: 0.0001
+  epsilon_domain: log1p(mm h^-1)
+  raw_dtype: float32
+  accumulation_dtype: float64
+  qlog_output_dtype: float64
+  physical_quantile_dtype: float64
+  recurrence: sequential
+  monotonic_failure_action: RAISE
+  physical_overflow_action: RAISE
+normalization_artifact:
+  path: docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_2023_final_eligible.json
+  sha256: 4bcfa0520550e343dd154fd4436715a306c015a02d16ec4a12bb2ed3cf606e0e
+  status: DEVELOPMENT_DERIVED_PARAMETER

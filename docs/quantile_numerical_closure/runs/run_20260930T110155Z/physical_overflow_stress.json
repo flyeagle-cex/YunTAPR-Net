@@ -1,0 +1,12 @@
+{
+  "test_family": "FULL_PHYSICAL_HEAD_STRESS",
+  "moderate_float64_physical_finite": true,
+  "synthetic_positive_raw": 100.0,
+  "large_qlog_finite_and_strict": true,
+  "large_qlog_max": 3200.0985101798065,
+  "expected_runtime_outcome": "FAIL_LOUDLY_QUANTILE_PHYSICAL_OVERFLOW",
+  "observed_error": "QUANTILE_PHYSICAL_OVERFLOW: expm1(qlog) nonfinite",
+  "physical_overflow_caught_separately": true,
+  "monotonicity_error_raised_for_physical_overflow": false,
+  "clamp_or_sort_applied": false
+}
