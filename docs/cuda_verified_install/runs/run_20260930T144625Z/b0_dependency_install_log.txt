@@ -1,0 +1,28 @@
+COMMAND=python -m pip install numpy==2.5.3 PyYAML==6.0.3 netCDF4==1.7.4 --index-url https://pypi.org/simple
+SCOPE=F:\pytorch\Research\.venv-cuda only
+PROCESS_LOCAL_PROXY_OVERRIDE_USED=true
+EXIT_CODE=0
+OUTPUT_START
+Collecting numpy==2.5.3
+  Downloading numpy-2.5.3-cp312-cp312-win_amd64.whl.metadata (6.6 kB)
+Collecting PyYAML==6.0.3
+  Downloading pyyaml-6.0.3-cp312-cp312-win_amd64.whl.metadata (2.4 kB)
+Collecting netCDF4==1.7.4
+  Downloading netcdf4-1.7.4-cp311-abi3-win_amd64.whl.metadata (2.1 kB)
+Collecting cftime (from netCDF4==1.7.4)
+  Downloading cftime-1.6.6-cp311-abi3-win_amd64.whl.metadata (8.9 kB)
+Collecting certifi (from netCDF4==1.7.4)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading numpy-2.5.3-cp312-cp312-win_amd64.whl (12.6 MB)
+   ---------------------------------------- 12.6/12.6 MB 425.2 kB/s eta 0:00:00
+Downloading pyyaml-6.0.3-cp312-cp312-win_amd64.whl (154 kB)
+Downloading netcdf4-1.7.4-cp311-abi3-win_amd64.whl (21.3 MB)
+   ---------------------------------------- 21.3/21.3 MB 761.5 kB/s eta 0:00:00
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Downloading cftime-1.6.6-cp311-abi3-win_amd64.whl (512 kB)
+Installing collected packages: PyYAML, numpy, certifi, cftime, netCDF4
+Successfully installed PyYAML-6.0.3 certifi-2026.7.22 cftime-1.6.6 netCDF4-1.7.4 numpy-2.5.3
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: F:\pytorch\Research\.venv-cuda\Scripts\python.exe -m pip install --upgrade pip
+OUTPUT_END

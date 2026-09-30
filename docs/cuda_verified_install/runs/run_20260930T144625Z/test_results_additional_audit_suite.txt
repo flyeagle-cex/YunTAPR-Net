@@ -1,0 +1,14 @@
+SUITE=training_environment_audit
+EXPECTED_COUNT=6
+EXIT_CODE=0
+test_cpu_only_gpu_presence_and_no_false_gpu_pass (test_audit.TrainingEnvironmentEvidenceTest.test_cpu_only_gpu_presence_and_no_false_gpu_pass) ... ok
+test_estimates_are_explicitly_component_arithmetic (test_audit.TrainingEnvironmentEvidenceTest.test_estimates_are_explicitly_component_arithmetic) ... ok
+test_full_shape_real_backward_precision_and_peak_memory (test_audit.TrainingEnvironmentEvidenceTest.test_full_shape_real_backward_precision_and_peak_memory) ... ok
+test_prior_evidence_and_contract_not_overwritten (test_audit.TrainingEnvironmentEvidenceTest.test_prior_evidence_and_contract_not_overwritten) ... ok
+test_real_io_eight_samples_every_worker_configuration (test_audit.TrainingEnvironmentEvidenceTest.test_real_io_eight_samples_every_worker_configuration) ... ok
+test_recommendation_is_not_formal_training_authority (test_audit.TrainingEnvironmentEvidenceTest.test_recommendation_is_not_formal_training_authority) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.013s
+
+OK
