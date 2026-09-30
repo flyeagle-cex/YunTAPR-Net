@@ -1,0 +1,64 @@
+{
+  "all_10000_cells_have_25_centers": true,
+  "axes_csv_sha256": "994705240ef12b2fbd6438a678f18c6e8f7687fe238ee45e7af16299eeeef0c5",
+  "axis_raw_float32_bytes_sha256": {
+    "native_lat": "dc82ee6d54c12e796ec2b9751ef388441d22a877d4e73aa1ba4702cdada72c52",
+    "native_lon": "9303bfb46b0873cf35008ab1860445af9811f05a5b60f8eb9e30aaff95d2968b",
+    "target_lat": "2c12a5b12969ddc2625686eae7ca561286b467b72e56a06493fe34800fb5aa5e",
+    "target_lon": "07cc72b46ff87949b32c5c265af48211a28331055ed25166d499647a2b02ad07"
+  },
+  "contract_version": "science_contract_v1",
+  "coordinate_rule": "actual float32 coordinate centers; infer midpoints/endpoint half-steps in float64; explicitly round inferred edges to float32 before comparison",
+  "edge_precision": "float32 after float64 midpoint calculation",
+  "excluded_centers_still_in_native_convolution_context": true,
+  "index_convention": "zero-based original native array indices; native latitude descending, target latitude ascending",
+  "mapping_csv_sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd",
+  "mask_ancillary_bounds_membership_counts": {
+    "latitude": {
+      "4": 11,
+      "5": 78,
+      "6": 11
+    },
+    "longitude": {
+      "4": 11,
+      "5": 78,
+      "6": 11
+    }
+  },
+  "mask_ancillary_bounds_note": "These ancillary mask-file bounds differ at float precision and are NOT the versioned SP04 feature-membership edges; evaluation mask remains unchanged.",
+  "mask_hash_not_payload": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+  "membership_rule": "[south,north) x [west,east), compare float32 native centers against explicitly float32-rounded inferred edges",
+  "native_shape": [
+    501,
+    501
+  ],
+  "not_a_physical_footprint_equivalence_claim": true,
+  "source_col_excluded_from_direct_projection": 500,
+  "source_cols_used": [
+    0,
+    499
+  ],
+  "source_frozen_mask_nc_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+  "source_himawari_npz_sha256": "9fc06c2f0f9bbfe46acb5a5a0878d839bf29b14a73e4830b82971f19a16a9df9",
+  "source_imerg_npz_sha256": "4bf6ce3f9722c318c5db93bb4967660e82a53c498c90f3c6bacbf95c72ed912a",
+  "source_previous_candidate_mapping_sha256": "9670e9e9cfe253e61dd3515c61faf6f66e05542edc7469aa310fe6715d2870c8",
+  "source_row_excluded_from_direct_projection": 0,
+  "source_rows_used": [
+    1,
+    500
+  ],
+  "status": "FROZEN_BY_RESEARCHER",
+  "target_full_col_indices": [
+    20,
+    119
+  ],
+  "target_full_row_indices": [
+    10,
+    109
+  ],
+  "target_shape": [
+    100,
+    100
+  ],
+  "yunnan_evaluation_mask_true_cells": 3430
+}
