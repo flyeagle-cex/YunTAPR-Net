@@ -1,0 +1,270 @@
+{
+  "epsilon_mono": 0.0001,
+  "domain": "log1p(mm h^-1)",
+  "status": "ENGINEERING_CONFIG",
+  "recurrence": "q1=log1p(0.1)+softplus(raw1)+eps; qi=qprev+softplus(rawi)+eps",
+  "random_seed": 20260930,
+  "cases": [
+    {
+      "case": "constant_-100",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.00010000169277191162,
+      "max_q_log": 0.09851023554801941,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_-80",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.00010000169277191162,
+      "max_q_log": 0.09851023554801941,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_-40",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.00010000169277191162,
+      "max_q_log": 0.09851023554801941,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_-20",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.00010000169277191162,
+      "max_q_log": 0.09851023554801941,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_-10",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.0001453980803489685,
+      "max_q_log": 0.09996291995048523,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_0",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.6932468414306641,
+      "max_q_log": 22.27921485900879,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_10",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 10.000144958496094,
+      "max_q_log": 320.10009765625,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_40",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 40.000091552734375,
+      "max_q_log": 1280.098876953125,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_80",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 80.0,
+      "max_q_log": 2560.09814453125,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "constant_100",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        4,
+        4
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 100.0,
+      "max_q_log": 3200.09765625,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "random_uniform_minus100_plus100",
+      "dtype": "torch.float32",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "finite": true,
+      "strictly_increasing": true,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "min_adjacent_delta": 9.1552734375e-05,
+      "max_q_log": 1523.0487060546875,
+      "runtime_status": "PASS"
+    },
+    {
+      "case": "random_normal_sigma100",
+      "dtype": "torch.float32",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "finite": true,
+      "strictly_increasing": false,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 112,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.0,
+      "max_q_log": 2750.427734375,
+      "runtime_status": "FAIL_LOUDLY",
+      "runtime_error": "Quantile support/strict monotonicity lost at tensor precision"
+    },
+    {
+      "case": "random_signed_100",
+      "dtype": "torch.float32",
+      "shape": [
+        8,
+        32,
+        32,
+        32
+      ],
+      "finite": true,
+      "strictly_increasing": false,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 305,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.0,
+      "max_q_log": 2700.09814453125,
+      "runtime_status": "FAIL_LOUDLY",
+      "runtime_error": "Quantile support/strict monotonicity lost at tensor precision"
+    },
+    {
+      "case": "mixed_22_positive100_then_10_negative100",
+      "dtype": "torch.float32",
+      "shape": [
+        1,
+        32,
+        1,
+        1
+      ],
+      "finite": true,
+      "strictly_increasing": false,
+      "support_above_threshold": true,
+      "adjacent_equal_count": 10,
+      "gradient_finite": true,
+      "min_adjacent_delta": 0.0,
+      "max_q_log": 2200.09765625,
+      "runtime_status": "FAIL_LOUDLY",
+      "runtime_error": "Quantile support/strict monotonicity lost at tensor precision"
+    }
+  ],
+  "QUANTILE_NUMERICAL_STABILITY_CLOSED": false,
+  "guards_fail_loudly_on_every_lost_ordering": true,
+  "explanation": "At q around 2200, float32 ULP is 0.000244140625; adding 0.0001 can round back to q. This specified epsilon cannot guarantee all mixed extreme tensors. Runtime raises; no sort/clamp/dtype/epsilon change was made.",
+  "physical_domain_note": "This stress validates the specified log domain. expm1 of very large positive quantiles can overflow float32 independently; the probability head retains its explicit physical-finiteness error.",
+  "RESEARCHER_DECISION_REQUIRED": "Review a precision strategy or approved bounded raw domain before claiming universal numerical closure; no automatic scientific or engineering parameter change.",
+  "formal_training_started": false
+}

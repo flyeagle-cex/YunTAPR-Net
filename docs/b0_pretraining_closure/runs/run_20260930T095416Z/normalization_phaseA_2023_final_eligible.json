@@ -1,0 +1,53 @@
+{
+  "normalization_version": "PHASE_A_2023_FINAL_ELIGIBLE_v1.1",
+  "status": "DEVELOPMENT_DERIVED_PARAMETER",
+  "ready": true,
+  "fit_years": [
+    2023
+  ],
+  "fit_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "ddof": 0,
+  "eligible_scene_count": 11720,
+  "excluded_missing_latest_count": 26,
+  "excluded_partial_count": 14,
+  "excluded_all_fill_count": 0,
+  "excluded_unreadable_count": 0,
+  "valid_pixel_count": 2941731720,
+  "mean_K": 271.7078191073734,
+  "std_K": 19.896814653342556,
+  "min_K": 177.1199951171875,
+  "p1_K": 210.17999267578125,
+  "q1_K": 262.3800048828125,
+  "median_K": 276.55999755859375,
+  "q3_K": 286.30999755859375,
+  "p99_K": 300.3699951171875,
+  "max_K": 324.510009765625,
+  "IQR_K": 23.92999267578125,
+  "sample_manifest_sha256": "dc0559f12f02817f8ec74916d03dd20e40ec0584ec58c59b34b5e02cc9a60e68",
+  "source_root": "H:\\葵花202303_202510",
+  "scientific_contract_sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+  "prior_evidence_manifest_sha256": "c53e5a04081b4492b6d4bff494017e0be686551bda58d973a4abab9c9eb441f4",
+  "statistics_method": "All eligible native pixels decoded identically to runtime float32, promoted to float64; exact packed-int16 code histogram (no rounding/rebinning), independently cross-checked against merged per-frame float64 central moments; quantiles exact linear rank interpolation",
+  "streaming_mean_K": 271.70781910737435,
+  "streaming_std_K": 19.896814653342524,
+  "code_baseline_commit": "890f5cecaa0a8f75f920e66e6d30381ae5c0ff04",
+  "code_sha256": {
+    "scripts/fit_phase_a_v1_1.py": "4c7965ecc9d59303946e8391a26429aedce9c98a7028172d543a0565ed076334",
+    "src/yuntapr/data/formal_policy.py": "3c0a0b97dc25b3ae0f942ec2cef367217fc981c01d1f09501d9f957adab2f490",
+    "src/yuntapr/data/himawari_b13.py": "70998f7ebf1197baa1aa3ebd008a718ab741bedf7ef039911db0433d89c22813",
+    "src/yuntapr/data/staging.py": "f84c55bfba9b998b2ee3486ee08b5857a2a1f48f76c68245dc7a06f31adebbe4"
+  },
+  "2024_role": "eligibility audit only; reuse 2023 statistics",
+  "2025_pixels_read": false,
+  "phase_b_statistics_ready": false,
+  "formal_training_started": false
+}

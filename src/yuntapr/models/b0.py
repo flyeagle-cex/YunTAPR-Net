@@ -15,7 +15,8 @@ class B0Model(nn.Module):
         self.placeholder = float(engineering["missing"]["tensor_placeholder"])
         self.backbone = B0Backbone(engineering["backbone"], tuple(science["backbone"]["channels"]))
         self.projection = SP04Projection(load_sp04(root), engineering["projection"]["feature_reduction_operator"])
-        self.heads = ProbabilityHeads(48, float(science["probability"]["occurrence"]["threshold"]))
+        self.heads = ProbabilityHeads(48, float(science["probability"]["occurrence"]["threshold"]),
+                                      epsilon_mono=engineering["quantile_numerics"]["epsilon_mono"])
 
     def forward(self, x_b13: torch.Tensor, b13_valid_mask: torch.Tensor) -> B0Output:
         if x_b13.ndim != 4 or x_b13.shape[1:] != (1, 501, 501):
@@ -28,6 +29,16 @@ class B0Model(nn.Module):
         if (valid_counts == 0).any():
             raise ValueError("B13 all-fill sample rejected")
         x = torch.where(b13_valid_mask, x_b13, torch.as_tensor(self.placeholder, dtype=x_b13.dtype, device=x_b13.device))
+        return self._evaluate(x, b13_valid_mask, valid_counts)
+
+    def forward_formal(self, batch) -> B0Output:
+        """Formal eligibility + normalized full frame, still ENGINEERING_ONLY execution."""
+        batch.validate_formal()
+        output = self._evaluate(batch.x_b13, batch.b13_valid_mask, batch.b13_valid_mask.flatten(1).sum(-1))
+        output.placeholder_policy = "FULL_VALID_NORMALIZED_NO_PLACEHOLDER"
+        return output
+
+    def _evaluate(self, x, b13_valid_mask, valid_counts):
         native = self.backbone(x)
         target = self.projection(native)
         logit, prob, qlog, qphysical = self.heads(target)

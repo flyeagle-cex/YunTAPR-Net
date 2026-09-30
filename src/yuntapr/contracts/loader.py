@@ -15,9 +15,11 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def load_contract(root: Path = REPO_ROOT) -> tuple[dict, dict]:
-    science_path = root / "config/science_contract_v1.yaml"
-    engineering_path = root / "config/b0_engineering_v2.yaml"
+def load_contract(root: Path = REPO_ROOT, *, version: str = "v1.1") -> tuple[dict, dict]:
+    if version not in ("v1", "v1.1"):
+        raise ValueError("Unsupported scientific contract version")
+    science_path = root / f"config/science_contract_{version}.yaml"
+    engineering_path = root / ("config/b0_engineering_v2.yaml" if version == "v1" else "config/b0_engineering_v3.yaml")
     science = yaml.safe_load(science_path.read_text(encoding="utf-8"))
     engineering = yaml.safe_load(engineering_path.read_text(encoding="utf-8"))
     if sha256(science_path) != engineering["scientific_contract_sha256"]:
@@ -48,4 +50,16 @@ def load_contract(root: Path = REPO_ROOT) -> tuple[dict, dict]:
         raise ValueError("Unsupported quantile axis reduction")
     if engineering["missing"]["requires_separate_validity_mask"] is not True or engineering["missing"]["placeholder_is_physical_observation"] is not False:
         raise ValueError("Missing-value policy must retain separate mask")
+    if version == "v1.1":
+        if science["normalization"]["status"] != "FROZEN" or science["normalization"]["policy"] != "TRAIN_ONLY_Z_SCORE":
+            raise ValueError("Decision 8 must be frozen Train-only Z-score")
+        if science["execution_status"]["FORMAL_TRAINING_AUTHORIZED"] is not False:
+            raise ValueError("Formal training is not authorized")
+        if engineering["quantile_numerics"]["epsilon_mono"] != 1e-4:
+            raise ValueError("Unapproved monotonic quantile epsilon")
+        if engineering["staging"]["max_temporary_bytes"] < 734003200:
+            raise ValueError("Staging cannot accommodate verified inventory")
+        for key in ("one_file_at_a_time", "verify_sha256", "cleanup_required"):
+            if engineering["staging"][key] is not True:
+                raise ValueError("Staging safeguards cannot be disabled")
     return science, engineering

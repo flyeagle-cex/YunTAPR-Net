@@ -1,0 +1,464 @@
+schema_version: '1.1'
+contract_id: YUNTAPR_SCIENTIFIC_FREEZE_v1.1
+authority: RESEARCHER_EXPLICIT_APPROVAL_2026-09-30
+status: FROZEN
+authoritative_document: docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md
+precedence:
+  inherits: config/science_contract_v1.yaml
+  inherits_sha256: e6406afc94285e09747e976f24d99faeee0bed01edcbfc049e4920acdf3a4572
+  scope: formal_B0_QC_normalization_quantile_numerics_engineering_staging_only
+  rule: Inherit D1-D7 unchanged except explicitly scoped formal_b0_supervision override
+    of general D5 partial/support rules. D1 general causality remains unchanged. D8
+    added; historical artifacts immutable.
+time:
+  decision_id: D1
+  status: FROZEN
+  imerg_converted_cf_time_role: native_30_min_precipitation_window_start
+  precipitation_window: '[T, T+30min)'
+  analysis_time: T_plus_30_minutes
+  satellite_frame_selection: latest_completed_frame_with_obs_end_le_analysis_time
+  causal_constraint: obs_end <= analysis_time
+  future_frames_allowed: false
+  nominal_time_alone_proves_causality: false
+  date_created_role: record_only_not_historical_operational_availability
+  historical_operational_replay_proven: false
+  equal_obs_end_tie_breaker:
+    status: ENGINEERING_CONFIG
+    requirement: deterministic_and_logged
+temporal_data_role:
+  decision_id: D2
+  status: FROZEN
+  supervised_product: IMERG_V07_Final
+  main_experiment_depends_on_v08: false
+  mixed_v07_v08_supervision_allowed: false
+  early_or_late_substitute_for_final_allowed: false
+  supervised_times_subset_of_observation_times: true
+  observation_goal:
+    years:
+    - 2023
+    - 2024
+    - 2025
+    months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+  october_2025:
+    imerg_v07_final_locally_available: false
+    retain_himawari_and_gfs: true
+    supervised_eligible: false
+    internal_test_eligible: false
+    inference_eligible: true
+    allowed_uses:
+    - unlabeled_inference
+    - workflow_replay
+    - case_demonstration
+    external_validation_requires_independent_reference: true
+spatial:
+  decision_id: D3
+  status: FROZEN
+  domain_degrees:
+    west: 97.0
+    east: 107.0
+    south: 20.0
+    north: 30.0
+  coordinate_authority: actual_himawari_and_imerg_float32_arrays_and_hashes
+  theoretical_coordinate_reconstruction_allowed: false
+  native_himawari:
+    shape:
+    - 501
+    - 501
+    latitude_direction: descending
+    longitude_direction: ascending
+    retain_all_centers_for_convolution_context: true
+  imerg_target:
+    shape:
+    - 100
+    - 100
+    latitude_direction: ascending
+    longitude_direction: ascending
+    full_imerg_grid_shape:
+    - 130
+    - 140
+    full_grid_row_indices_inclusive:
+    - 10
+    - 109
+    full_grid_col_indices_inclusive:
+    - 20
+    - 119
+  evaluation:
+    administrative_boundary: GADM_4.1_CHN.30_1_Yunnan
+    cell_rule: center_in_polygon
+    true_cell_count: 3430
+    frozen_mask_sha256: 9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef
+    mask_payload_in_public_repo: false
+  native_to_target:
+    kind: versioned_coordinate_defined_target_cell_membership
+    target_edge_construction: Infer float64 midpoints of actual ascending target float32
+      centers; extrapolate outer edges by half local spacing; explicitly round each
+      inferred edge to float32 before comparison with native float32 centers.
+    boundary_ownership: '[south,north) x [west,east)'
+    native_centers_per_target_cell: 25
+    source_row_zero_based_excluded_from_direct_aggregation: 0
+    source_col_zero_based_excluded_from_direct_aggregation: 500
+    excluded_edges_still_native_encoder_context: true
+    axes_csv: config/spatial/sp04_coordinate_axes_v1.csv
+    mapping_csv: config/spatial/sp04_target_cell_membership_v1.csv
+    manifest_json: config/spatial/sp04_coordinate_manifest_v1.json
+    mapping_csv_sha256: 3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd
+    projection_stage: after_native_encoder_decoder_feature_extraction
+    native_feature_shape: '[B,48,501,501]'
+    target_feature_shape: '[B,48,100,100]'
+    aggregation: fixed_coordinate_defined_5x5_learned_feature_aggregation
+    feature_reduction_operator:
+      status: ENGINEERING_CONFIG
+      requirement: explicit_and_logged_before_training_no_silent_default
+    physical_pixel_footprint_equivalence_claimed: false
+    implicit_reshape_allowed: false
+    bare_stride_assumption_allowed: false
+    silent_flip_or_transpose_allowed: false
+    bare_adaptive_pooling_allowed: false
+split:
+  decision_id: D4
+  status: FROZEN
+  adjacent_30_min_random_split_allowed: false
+  phase_a_development:
+    train_year: 2023
+    validation_year: 2024
+    months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    decisions_allowed_here_only:
+    - architecture
+    - loss
+    - hyperparameters
+    - epoch_budget
+    - calibration
+  phase_b_final_fit:
+    years:
+    - 2023
+    - 2024
+    months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    starts_after_protocol_freeze: true
+    epoch_budget_source: predeclared_phase_a_result
+  internal_final_test:
+    year: 2025
+    months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    may_tune_architecture_loss_normalization_epoch_checkpoint_threshold: false
+  same_rule_for_stages:
+  - B0
+  - B1
+  - B2
+  - B3
+  - B4
+  - B5
+  - B6
+  - B7
+  - B8
+missing_qc:
+  decision_id: D5
+  status: FROZEN_PRINCIPLES
+  imerg_zero_is_valid_no_rain: true
+  imerg_missing_is_zero: false
+  distinct_invalid_types:
+  - NaN
+  - masked
+  - declared_fill
+  - declared_missing
+  required_himawari_frame_missing: reject_sample
+  b13_all_fill: reject_sample
+  b13_partial:
+    reject_whole_frame_by_default: false
+    retain_fields:
+    - source_validity_mask
+    - invalid_count
+    - valid_fraction
+    feature_missing_propagation:
+      status: ENGINEERING_CONFIG
+      requirement: no_silent_missing_to_zero_or_unlogged_imputation
+  target_cell_support_fraction: N_valid_native_centers_divided_by_25
+  partial_and_support_thresholds:
+    status: DEVELOPMENT_ESTIMATED_PARAMETER
+    allowed_data_years:
+    - 2023
+    - 2024
+    forbidden_data_year: 2025
+    numeric_value: null
+  imerg_invalid_target_pixel: exclude_from_loss_and_metric_denominator
+  whole_scene_rejection_for_one_invalid_target: false
+  supervision_domain: frozen_3430_cell_yunnan_mask
+  loss_denominator: count_valid_supervised_pixels_in_yunnan_mask
+  zero_valid_supervised_pixels: reject_or_skip_with_logged_reason
+probability:
+  decision_id: D6
+  status: FROZEN
+  rate_unit: mm_per_hour
+  occurrence:
+    definition: P(R > 0.1)
+    threshold: 0.1
+    comparison: strictly_greater_than
+    raw_tensor: rain_logit[B,1,100,100]
+    probability_transform: sigmoid
+  conditional:
+    definition: R_given_R_greater_than_0.1
+    raw_tensor: conditional_quantiles[B,32,100,100]
+    quantile_domain: log1p_mm_per_hour
+    taus_formula: (i-0.5)/32 for i=1,...,32
+    taus_count: 32
+    taus_min: 0.015625
+    taus_max: 0.984375
+    noncrossing: monotonic_by_construction_softplus_positive_increments
+    support: strictly_greater_than_log1p_0.1
+    silent_clamp_allowed: false
+    posthoc_sort_allowed: false
+  loss:
+    core: L_occ_plus_L_qr
+    occurrence_family: focal_bce
+    quantile_family: masked_conditional_pinball
+    supervised_validity_denominator: count_valid_supervised_pixels_in_yunnan_mask
+    focal_alpha:
+      status: DEVELOPMENT_ESTIMATED_PARAMETER
+      numeric_value: null
+    focal_gamma:
+      status: DEVELOPMENT_ESTIMATED_PARAMETER
+      numeric_value: null
+    quantile_axis_reduction:
+      status: ENGINEERING_CONFIG
+      requirement: specify_and_log_before_training
+    l_kd_b0_to_b8_core: 0
+    l_ext:
+      interface_retained: true
+      enabled_in_v1_core: false
+      future_enablement_requires_new_protocol_and_uniform_b0_to_b8_rerun: true
+  deterministic_diagnostic:
+    name: probability_weighted_32_point_midpoint_threshold_censored_mean
+    formula: p_rain * (1/32) * sum_i expm1(q_i_log1p)
+    exact_physical_mean: false
+    includes_0_to_0_1_drizzle_component: false
+  exceedance:
+    p_r_greater_than_0_1: p_rain
+    beyond_quantile_support: NOT_ESTABLISHED
+    silent_zero_tail_allowed: false
+backbone:
+  decision_id: D7
+  status: FROZEN
+  b0_input: B13_single_latest_causal_frame[B,1,501,501]
+  family: four_level_residual_unet
+  channels:
+  - 48
+  - 96
+  - 192
+  - 256
+  block: Conv3x3_GroupNorm_GELU_Conv3x3_GroupNorm_GELU_residual
+  downsampling: learned_stride_2_convolution
+  decoder: explicit_resize_to_skip_spatial_shape_then_concat_then_residual_block
+  silent_crop_allowed: false
+  scientific_domain_change_for_network_allowed: false
+  final_native_feature: '[B,48,501,501]'
+  final_target_feature: '[B,48,100,100]'
+  heads:
+  - occurrence
+  - conditional_32_quantiles
+  b0_forbidden_inputs_modules:
+  - GFS
+  - DEM
+  - DOTE
+  - DTFM
+  - MEE
+  - ERA5_Teacher
+  - Attention
+  - Transformer
+  - recurrent_temporal_model
+  b0_to_b3_shared:
+  - backbone
+  - decoder
+  - projection
+  - heads
+  - loss_family
+  b0_to_b3_difference: himawari_input_information_only
+  groupnorm_groups:
+    status: ENGINEERING_CONFIG
+    numeric_value: null
+    requirement: divide_every_stage_channel_count_and_log_value
+  downsample_kernel_padding_and_resize_mode:
+    status: ENGINEERING_CONFIG
+    requirement: explicit_shape_checked_and_logged_before_training
+decision_status:
+- decision_id: D1
+  name: Time Contract
+  status: FROZEN
+  supersedes: old_candidate_time_binding
+  remaining_numeric_parameters: none
+  evidence: researcher_approval_and_prior_time_audit
+- decision_id: D2
+  name: Temporal Data Role and IMERG Product
+  status: FROZEN
+  supersedes: old_2025_october_blocking_interpretation
+  remaining_numeric_parameters: none
+  evidence: researcher_approval_and_october_presence_audit
+- decision_id: D3
+  name: Spatial Contract
+  status: FROZEN
+  supersedes: old_SP04_and_projection_candidate
+  remaining_numeric_parameters: feature_reduction_operator_ENGINEERING_CONFIG
+  evidence: versioned_actual_axes_and_mapping
+- decision_id: D4
+  name: Split Contract
+  status: FROZEN
+  supersedes: old_train_val_test_candidates
+  remaining_numeric_parameters: phase_a_estimated_epoch_budget
+  evidence: researcher_approval
+- decision_id: D5
+  name: Missing and QC Principles
+  status: FROZEN_PRINCIPLES
+  supersedes: old_QC_threshold_candidates
+  remaining_numeric_parameters: partial_support_thresholds_DEVELOPMENT_ESTIMATED_PARAMETER
+  evidence: researcher_approval_and_prior_QC
+- decision_id: D6
+  name: Probability Core
+  status: FROZEN
+  supersedes: old_tau_conditioning_and_loss_candidates
+  remaining_numeric_parameters: focal_alpha_focal_gamma_DEVELOPMENT_ESTIMATED_PARAMETER
+  evidence: researcher_approval_and_previous_probability_decision_package
+- decision_id: D7
+  name: Formal B0 Backbone
+  status: FROZEN
+  supersedes: old_small_unet_and_backbone_candidates
+  remaining_numeric_parameters: groupnorm_groups_ENGINEERING_CONFIG
+  evidence: researcher_approval_and_prior_shape_audit
+- decision_id: D8
+  name: Input Normalization
+  status: FROZEN
+  supersedes: broader_valid_pixel_evidence_not_formal_constants
+  remaining_numeric_parameters: DEVELOPMENT_DERIVED_PARAMETER
+  evidence: researcher_approval_and_final_eligible_2023_exact_pixel_fit
+execution_status:
+  B0_FORMAL_SCIENTIFIC_CONTRACT: FROZEN
+  B0_FORMAL_TRAINING_STARTED: false
+  next_phase: RESEARCHER_REVIEW_NO_AUTOMATIC_TRAINING
+  formal_training_authorized_by_this_file: false
+  historical_stage0_smoke_readiness_runs_retained: true
+  B0_FORMAL_SKELETON_IMPLEMENTED: true
+  FORMAL_TRAINING_AUTHORIZED: false
+formal_b0_supervision:
+  status: FROZEN
+  B0_FORMAL_SUPERVISED_B13_POLICY: FULL_SCENE_REQUIRED
+  B13_PARTIAL_FORMAL_SUPERVISION_ALLOWED: false
+  MASK_AWARE_INPUT_REQUIRED_FOR_B0_CORE: false
+  OLDER_CAUSAL_FALLBACK_ALLOWED_FOR_FORMAL_SUPERVISION: false
+  formal_supervised_path_requires_full_valid_b13: true
+  expected_latest_slot: analysis_time_minus_10_minutes
+  expected_latest_nominal_cadence_minutes: 10
+  missing_latest_reject_reason: EXPECTED_LATEST_B13_MISSING_NO_FORMAL_FALLBACK
+  required:
+  - IMERG_V07_Final_valid
+  - expected_latest_exists
+  - latest_completed_causal
+  - B13_readable
+  - B13_valid_fraction_equals_1
+  - B13_metadata_valid
+  - IMERG_time_grid_provenance_pass
+  - valid_Yunnan_supervised_pixels_gt_0
+  - no_older_fallback
+  partial_other_uses:
+  - observation
+  - inference
+  - future_robustness_research
+  partial_payload_deletion_allowed: false
+normalization:
+  decision_id: D8
+  status: FROZEN
+  policy: TRAIN_ONLY_Z_SCORE
+  formula: (raw_B13_Kelvin-mu_train)/sigma_train
+  ddof: 0
+  numeric_values_status: DEVELOPMENT_DERIVED_PARAMETER
+  phase_a:
+    fit_years:
+    - 2023
+    fit_months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    fit_population: final_eligible_formal_B0_Train_samples_valid_native_pixels
+    validation_year: 2024
+    validation_refit_allowed: false
+    artifact: docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_2023_final_eligible.json
+  phase_b:
+    fit_years:
+    - 2023
+    - 2024
+    fit_months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    starts_after: Phase_A_architecture_hyperparameters_loss_epoch_budget_frozen
+    recompute_on_final_eligible_population: true
+    statistics_ready: false
+  final_test:
+    year: 2025
+    months:
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    statistics_source: Phase_B_FinalFit
+    refit_allowed: false
+  forbidden_fit_years:
+  - 2024
+  - 2025
+  forbidden_fit_years_scope: Phase_A_only; Phase_B_can_use_2024_after_protocol_freeze;_2025_always_forbidden
+  partial_invalid_pixels_included: false
+  older_fallback_samples_included: false
+  runtime_order:
+  - raw_Kelvin
+  - QC
+  - eligibility
+  - normalization
+  - backbone
+quantile_numerical_implementation:
+  status: ENGINEERING_CONFIG
+  engineering_config: config/b0_engineering_v3.yaml
+  delta: softplus(raw_i)+epsilon_mono
+  recurrence: q_i=q_(i-1)+delta_i
+  epsilon_domain: log1p(mm h^-1)
+  scientific_parameterization_changed: false
+  finite_precision_failure_action: RAISE_FloatingPointError
+  sort_or_clamp_allowed: false

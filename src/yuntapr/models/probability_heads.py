@@ -26,11 +26,12 @@ class B0Output:
 
 
 class ProbabilityHeads(nn.Module):
-    def __init__(self, target_channels: int, threshold: float):
+    def __init__(self, target_channels: int, threshold: float, *, epsilon_mono: float = 0.0):
         super().__init__()
         if target_channels != 48 or threshold != 0.1:
             raise ValueError("B0 probability head differs from frozen contract")
         self.threshold = threshold
+        self.epsilon_mono = epsilon_mono
         self.occurrence = nn.Conv2d(48, 1, 1)
         self.quantile = nn.Conv2d(48, 32, 1)
 
@@ -38,7 +39,7 @@ class ProbabilityHeads(nn.Module):
         if features.ndim != 4 or features.shape[1:] != (48, 100, 100):
             raise ValueError("Head requires [B,48,100,100]")
         logit = self.occurrence(features)
-        qlog = monotonic_quantiles(self.quantile(features), self.threshold)
+        qlog = monotonic_quantiles(self.quantile(features), self.threshold, epsilon_mono=self.epsilon_mono)
         qphysical = torch.expm1(qlog)
         if not torch.isfinite(qphysical).all():
             raise FloatingPointError("Nonfinite physical quantile")

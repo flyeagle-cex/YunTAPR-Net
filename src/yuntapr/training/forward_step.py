@@ -13,3 +13,14 @@ def engineering_forward_step(model, batch: B0Batch, *, focal_alpha: float | None
                           focal_alpha=focal_alpha, focal_gamma=focal_gamma,
                           quantile_axis_reduction=quantile_axis_reduction)
     return output, losses
+
+
+def formal_rules_engineering_forward_step(model, batch: B0Batch, *, focal_alpha: float,
+                                          focal_gamma: float, quantile_axis_reduction: str):
+    """Validate formal sample rules with development-only forward/backward; no fit loop."""
+    batch.validate_formal()
+    output = model.forward_formal(batch)
+    losses = b0_core_loss(output, batch.y_imerg, batch.imerg_valid_mask, batch.yunnan_eval_mask,
+                         focal_alpha=focal_alpha, focal_gamma=focal_gamma,
+                         quantile_axis_reduction=quantile_axis_reduction)
+    return output, losses

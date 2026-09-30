@@ -38,7 +38,7 @@ def tiny_output(logit=None, qlog=None):
 class ContractAndSpatialTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.science, cls.engineering = load_contract()
+        cls.science, cls.engineering = load_contract(version="v1")  # immutable historical assertions
         cls.mapping = load_sp04()
 
     def test_status_and_unset_development_parameters(self):

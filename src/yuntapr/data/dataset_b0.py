@@ -7,6 +7,7 @@ import numpy as np
 from torch.utils.data import Dataset
 from yuntapr.data.sample_schema import B0Sample, HimawariFrame, select_latest_causal_frame, utc
 from yuntapr.data.masks import read_frozen_yunnan_mask
+from yuntapr.data.formal_policy import select_formal_frame, require_full_valid
 from yuntapr.spatial.sp04_mapping import SP04Mapping
 
 
@@ -33,12 +34,17 @@ class B0Dataset(Dataset):
 
     def __init__(self, records: list[B0Record], mapping: SP04Mapping, yunnan_mask: np.ndarray | None,
                  b13_reader: Callable, imerg_reader: Callable | None, *,
-                 frozen_mask_path: Path | None = None, engineering_fixture_mask: bool = False):
+                 frozen_mask_path: Path | None = None, engineering_fixture_mask: bool = False,
+                 formal_supervised: bool = False, normalizer=None):
         self.records = records
         self.mapping = mapping
         self.yunnan_mask = yunnan_mask
         self.b13_reader = b13_reader
         self.imerg_reader = imerg_reader
+        self.formal_supervised = formal_supervised
+        self.normalizer = normalizer
+        if formal_supervised and normalizer is None:
+            raise ValueError("FORMAL_SUPERVISED_REQUIRES_NORMALIZATION")
         if yunnan_mask is not None and (yunnan_mask.dtype != bool or yunnan_mask.shape != (100, 100)):
             raise ValueError("Evaluation mask must be bool [100,100]")
         if yunnan_mask is not None:
@@ -56,7 +62,11 @@ class B0Dataset(Dataset):
         record = self.records[index]
         start = utc(record.imerg_window_start)
         analysis = start + timedelta(minutes=30)
-        selected = select_latest_causal_frame(list(record.frames), analysis)
+        expected = analysis - timedelta(minutes=10)
+        expected_available = any(utc(f.nominal_time) == expected and f.path.is_file() for f in record.frames)
+        older_available = any(utc(f.nominal_time) < expected and utc(f.obs_end) <= analysis and f.path.is_file() for f in record.frames)
+        selected = (select_formal_frame(list(record.frames), analysis) if self.formal_supervised
+                    else select_latest_causal_frame(list(record.frames), analysis))
         if not selected.path.is_file():
             raise FileNotFoundError(f"REQUIRED_HIMAWARI_FRAME_MISSING: {selected.path}")
         x, valid, observed = self.b13_reader(selected.path, selected.nominal_time)
@@ -68,6 +78,8 @@ class B0Dataset(Dataset):
             raise ValueError("Valid B13 contains nonfinite values")
         if not valid.any():
             raise ValueError("B13_ALL_FILL_REJECT_SAMPLE")
+        if self.formal_supervised:
+            require_full_valid(x, valid)
         if (utc(observed.obs_start), utc(observed.obs_end), utc(observed.nominal_time)) != (utc(selected.obs_start), utc(selected.obs_end), utc(selected.nominal_time)):
             raise ValueError("Himawari source metadata changed since frame selection")
         if observed.date_created != selected.date_created:
@@ -100,6 +112,13 @@ class B0Dataset(Dataset):
             if has_final:
                 raise ValueError("2025-10 V07 Final availability conflicts with frozen contract")
             supervised = False
+        used_older = utc(selected.nominal_time) < expected
+        formal_qc = bool(supervised and valid.all() and expected_available and utc(selected.nominal_time) == expected)
+        normalized = None
+        if self.formal_supervised:
+            if not formal_qc:
+                raise ValueError("FORMAL_SUPERVISION_ELIGIBILITY_REJECTED")
+            normalized = self.normalizer.transform(x, valid, start)
         return B0Sample(
             sample_id=record.sample_id, analysis_time=analysis, imerg_window_start=start, imerg_window_end=analysis,
             himawari_path=selected.path, himawari_nominal_time=selected.nominal_time,
@@ -112,4 +131,13 @@ class B0Dataset(Dataset):
             imerg_run_type=record.imerg_run_type, imerg_provenance_verified=record.imerg_provenance_verified,
             qc_status="PASS" if supervised else "UNLABELED_OR_NO_VALID_SUPERVISION",
             reject_reason=None if supervised else "NO_V07_FINAL_OR_NO_VALID_YUNNAN_PIXELS",
-            b13_invalid_count=int((~valid).sum()), b13_valid_fraction=float(valid.mean()))
+            b13_invalid_count=int((~valid).sum()), b13_valid_fraction=float(valid.mean()),
+            expected_latest_slot=expected, expected_latest_available=expected_available,
+            older_causal_available=older_available, used_older_causal_frame=used_older,
+            b13_full_valid=bool(valid.all()), formal_supervised_qc_pass=formal_qc,
+            normalization_version=self.normalizer.version if normalized is not None else None,
+            normalization_mu=self.normalizer.mu if normalized is not None else None,
+            normalization_sigma=self.normalizer.sigma if normalized is not None else None,
+            normalization_artifact_sha256=self.normalizer.artifact_sha256 if normalized is not None else None,
+            x_b13_normalized=normalized,
+            eligibility_scope="FORMAL_SUPERVISED_RULES_ENGINEERING_EXECUTION" if self.formal_supervised else "ENGINEERING_ONLY")

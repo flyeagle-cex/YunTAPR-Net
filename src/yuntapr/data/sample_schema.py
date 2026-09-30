@@ -69,3 +69,15 @@ class B0Sample:
     b13_invalid_count: int
     b13_valid_fraction: float
     execution_scope: str = "ENGINEERING_ONLY"
+    expected_latest_slot: datetime | None = None
+    expected_latest_available: bool = False
+    older_causal_available: bool = False
+    used_older_causal_frame: bool = False
+    b13_full_valid: bool = False
+    formal_supervised_qc_pass: bool = False
+    normalization_version: str | None = None
+    normalization_mu: float | None = None
+    normalization_sigma: float | None = None
+    normalization_artifact_sha256: str | None = None
+    x_b13_normalized: np.ndarray | None = None
+    eligibility_scope: str = "ENGINEERING_ONLY"

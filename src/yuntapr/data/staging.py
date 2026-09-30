@@ -24,13 +24,14 @@ class StagingRecord:
     read_seconds: float | None = None
     size_match: bool = False
     sha256_match: bool | None = None
+    source_sha256: str | None = None
     cleanup_success: bool = False
     error: str | None = None
     cleanup_error: str | None = None
 
 
 class BoundedEnglishStaging:
-    def __init__(self, staging_root: Path, max_bytes: int, verify_sha256: bool):
+    def __init__(self, staging_root: Path, max_bytes: int, verify_sha256: bool, cleanup_required: bool = False):
         self.root = staging_root.resolve()
         if not self.root.is_absolute():
             raise ValueError("Staging root must be an absolute English path")
@@ -39,6 +40,7 @@ class BoundedEnglishStaging:
         self.root.mkdir(parents=True, exist_ok=True)
         self.max_bytes = max_bytes
         self.verify_sha256 = verify_sha256
+        self.cleanup_required = cleanup_required
         self.records: list[StagingRecord] = []
         self._active = False
         self._owned: set[Path] = set()
@@ -46,7 +48,7 @@ class BoundedEnglishStaging:
     @contextmanager
     def local(self, source: Path):
         source = source.resolve(strict=True)
-        if self._active or source.is_relative_to(self.root):
+        if self._active or self._owned or source.is_relative_to(self.root):
             raise ValueError("Staging permits only one external source at a time")
         size = source.stat().st_size
         if size > self.max_bytes:
@@ -66,7 +68,8 @@ class BoundedEnglishStaging:
             if not record.size_match:
                 raise IOError("Staging copy size mismatch")
             if self.verify_sha256:
-                record.sha256_match = sha256(source) == sha256(dest)
+                record.source_sha256 = sha256(source)
+                record.sha256_match = record.source_sha256 == sha256(dest)
                 if not record.sha256_match:
                     raise IOError("Staging SHA256 mismatch")
             start = time.perf_counter()
@@ -87,6 +90,8 @@ class BoundedEnglishStaging:
                     record.cleanup_error = repr(error)
             self.records.append(record)
             self._active = False
+            if self.cleanup_required and not record.cleanup_success:
+                raise IOError(f"STAGING_CLEANUP_REQUIRED: {record.cleanup_error}")
 
 
 def configured_staging(root=REPO_ROOT) -> BoundedEnglishStaging:
@@ -96,7 +101,7 @@ def configured_staging(root=REPO_ROOT) -> BoundedEnglishStaging:
     location = os.environ.get(cfg["staging_root_env_var"])
     if not location:
         raise ValueError(f"Set {cfg['staging_root_env_var']} to a bounded English staging directory")
-    return BoundedEnglishStaging(Path(location), int(cfg["max_temporary_bytes"]), bool(cfg["verify_sha256"]))
+    return BoundedEnglishStaging(Path(location), int(cfg["max_temporary_bytes"]), bool(cfg["verify_sha256"]), bool(cfg.get("cleanup_required", False)))
 
 
 class StagedB13Reader:
