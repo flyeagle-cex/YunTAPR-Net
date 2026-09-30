@@ -1,0 +1,66 @@
+{
+  "checked_at_utc": "2026-09-30T13:53:23.1594632Z",
+  "process_proxy_and_pip_environment": [
+    {
+      "name": "HTTP_PROXY",
+      "present": true,
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "port": 9,
+      "credentials_present": false,
+      "path_query_redacted": false
+    },
+    {
+      "name": "HTTPS_PROXY",
+      "present": true,
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "port": 9,
+      "credentials_present": false,
+      "path_query_redacted": false
+    },
+    {
+      "name": "ALL_PROXY",
+      "present": true,
+      "scheme": "http",
+      "host": "127.0.0.1",
+      "port": 9,
+      "credentials_present": false,
+      "path_query_redacted": false
+    },
+    {
+      "name": "NO_PROXY",
+      "present": true,
+      "entry_count": 3
+    },
+    {
+      "name": "PIP_INDEX_URL",
+      "present": false
+    },
+    {
+      "name": "PIP_EXTRA_INDEX_URL",
+      "present": false
+    },
+    {
+      "name": "PIP_CONFIG_FILE",
+      "present": false
+    },
+    {
+      "name": "PIP_NO_INDEX",
+      "present": true,
+      "value": "1"
+    }
+  ],
+  "pip_config_command": "python -m pip config list -v",
+  "pip_config_output_redacted": [
+    "For variant 'global', will try loading 'C:\\ProgramData\\pip\\pip.ini'",
+    "For variant 'user', will try loading 'C:\\Users\\chenerxiao\\pip\\pip.ini'",
+    "For variant 'user', will try loading 'C:\\Users\\chenerxiao\\AppData\\Roaming\\pip\\pip.ini'",
+    "For variant 'site', will try loading 'F:\\pytorch\\Research\\.venv-cuda\\pip.ini'",
+    ":env:.disable-pip-version-check='1'",
+    ":env:.no-index='1'"
+  ],
+  "winhttp_command": "netsh winhttp show proxy",
+  "winhttp_output": "Current WinHTTP proxy settings:\r\n\r\n    Direct access (no proxy server).",
+  "settings_modified": false
+}

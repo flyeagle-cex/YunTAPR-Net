@@ -1,0 +1,141 @@
+{
+  "checked_at_utc": "2026-09-30T13:58:57.9214737Z",
+  "endpoints": [
+    {
+      "host": "download.pytorch.org",
+      "dns_status": "PASS",
+      "dns_records": [
+        {
+          "Type": 5,
+          "Name": "download.pytorch.org",
+          "NameHost": "d21usjoq99fcb9.cloudfront.net",
+          "IPAddress": null
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:8600:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:5600:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:5800:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:a600:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:4e00:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:7800:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:3600:d:607e:4540:93a1"
+        },
+        {
+          "Type": 28,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "2600:9000:20af:6e00:d:607e:4540:93a1"
+        },
+        {
+          "Type": 1,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "108.139.10.61"
+        },
+        {
+          "Type": 1,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "108.139.10.124"
+        },
+        {
+          "Type": 1,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "108.139.10.87"
+        },
+        {
+          "Type": 1,
+          "Name": "d21usjoq99fcb9.cloudfront.net",
+          "NameHost": null,
+          "IPAddress": "108.139.10.122"
+        }
+      ],
+      "https_url": "https://download.pytorch.org/whl/cu128/torch/",
+      "https_status": "FAIL",
+      "https_error": "由于目标计算机积极拒绝，无法连接。 (127.0.0.1:9)"
+    },
+    {
+      "host": "download-r2.pytorch.org",
+      "dns_status": "PASS",
+      "dns_records": [
+        {
+          "Type": 5,
+          "Name": "download-r2.pytorch.org",
+          "NameHost": "download-r2.pytorch.org.cdn.cloudflare.net",
+          "IPAddress": null
+        },
+        {
+          "Type": 28,
+          "Name": "download-r2.pytorch.org.cdn.cloudflare.net",
+          "NameHost": null,
+          "IPAddress": "2606:4700::6812:834"
+        },
+        {
+          "Type": 28,
+          "Name": "download-r2.pytorch.org.cdn.cloudflare.net",
+          "NameHost": null,
+          "IPAddress": "2606:4700::6812:934"
+        },
+        {
+          "Type": 1,
+          "Name": "download-r2.pytorch.org.cdn.cloudflare.net",
+          "NameHost": null,
+          "IPAddress": "104.18.8.52"
+        },
+        {
+          "Type": 1,
+          "Name": "download-r2.pytorch.org.cdn.cloudflare.net",
+          "NameHost": null,
+          "IPAddress": "104.18.9.52"
+        }
+      ],
+      "https_url": "https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-win_amd64.whl",
+      "https_status": "FAIL",
+      "https_error": "由于目标计算机积极拒绝，无法连接。 (127.0.0.1:9)"
+    }
+  ],
+  "tls_verification_disabled": false,
+  "normal_network_head_check": {
+    "checked_at_utc": "2026-09-30T14:00:29Z",
+    "url": "https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-win_amd64.whl",
+    "method": "curl.exe --head --location --fail",
+    "http_status": 200,
+    "content_length": 2753189216,
+    "tls_verification_disabled": false,
+    "note": "No proxy/TLS override options used; response headers omitted to avoid recording cookies."
+  }
+}
