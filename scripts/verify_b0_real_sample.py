@@ -51,6 +51,17 @@ def _frame_from_row(root: Path, row: dict) -> HimawariFrame:
     )
 
 
+def b0_candidate_rows(rows: list[dict], root: Path, start, analysis) -> list[dict]:
+    """B0 eligibility starts with the B13 file, independent of other bands.
+
+    Packed B13 readability, metadata and causality are verified below by the
+    B13 reader and frame selector. Seven-band Stage-0 flags are not B0 gates.
+    """
+    return [row for row in rows
+            if start <= utc(row["timestamp_filename_utc"]) <= analysis
+            and (root / row["relative_path"]).is_file()]
+
+
 def _load_manifest_row(path: Path, imerg_path: Path, date: str) -> dict:
     matches = []
     with path.open(encoding="utf-8") as stream:
@@ -79,31 +90,39 @@ def verify(args) -> dict:
         rows = list(csv.DictReader(stream))
     if not rows:
         raise ValueError("Empty Himawari master index")
-    success = [row for row in rows if row["read_success"] == "True" and row["has_all_7_channels"] == "True"]
-    frames = [_frame_from_row(args.himawari_root, row) for row in success]
-    selected = select_latest_causal_frame(frames, analysis)
-    near_rows = [row for row in success if start <= utc(row["timestamp_filename_utc"]) <= analysis]
-    if not near_rows or selected.path not in {_frame_from_row(args.himawari_root, row).path for row in near_rows}:
-        raise ValueError("Selected causal frame is outside audited same-window candidates")
+    near_rows = b0_candidate_rows(rows, args.himawari_root, start, analysis)
+    if not near_rows:
+        raise ValueError("No available B13 candidate in the audited window")
     source_paths = [_frame_from_row(args.himawari_root, row).path for row in near_rows] + [args.imerg_file]
     if any(not path.is_file() for path in source_paths):
         raise FileNotFoundError("Required real source missing")
     before = {str(path): {"size_bytes": path.stat().st_size, "sha256": sha256(path)} for path in source_paths}
     candidate_audit = []
+    frames = []
     for row in near_rows:
-        indexed = _frame_from_row(args.himawari_root, row)
-        x, valid, observed = b13_reader(indexed.path, indexed.nominal_time)
-        if (observed.obs_start, observed.obs_end, observed.date_created) != (indexed.obs_start, indexed.obs_end, indexed.date_created):
+        path = args.himawari_root / row["relative_path"]
+        nominal = utc(row["timestamp_filename_utc"])
+        x, valid, observed = b13_reader(path, nominal)
+        if all(row.get(k) for k in ("start_time", "end_time")) and (
+            observed.obs_start != utc(row["start_time"]) or observed.obs_end != utc(row["end_time"])
+        ):
             raise ValueError("Himawari master index disagrees with real source metadata")
+        if row.get("date_created") and observed.date_created != utc(row["date_created"]):
+            raise ValueError("Himawari date_created disagrees with real source metadata")
         if x.shape != (501, 501) or valid.shape != x.shape:
             raise ValueError("Real B13 native shape mismatch")
+        if valid.any() and observed.obs_start <= observed.obs_end and observed.obs_end <= analysis:
+            frames.append(observed)
         candidate_audit.append({
-            "path": str(indexed.path), "nominal_time": indexed.nominal_time.isoformat(),
-            "obs_start": indexed.obs_start.isoformat(), "obs_end": indexed.obs_end.isoformat(),
-            "date_created": indexed.date_created.isoformat() if indexed.date_created else None,
-            "causality_pass": indexed.obs_end <= analysis, "quality_class_from_stage0_index": row["quality_class"],
+            "path": str(path), "nominal_time": nominal.isoformat(),
+            "obs_start": observed.obs_start.isoformat(), "obs_end": observed.obs_end.isoformat(),
+            "date_created": observed.date_created.isoformat() if observed.date_created else None,
+            "causality_pass": observed.obs_end <= analysis,
+            "b13_eligible": bool(valid.any() and observed.obs_start <= observed.obs_end and observed.obs_end <= analysis),
+            "quality_class_from_stage0_index": row.get("quality_class"),
             "b13_valid_count": int(valid.sum()), "b13_invalid_count": int((~valid).sum()),
         })
+    selected = select_latest_causal_frame(frames, analysis)
     manifest_row = _load_manifest_row(args.imerg_manifest, args.imerg_file, start.date().isoformat())
     with staging.local(args.imerg_file) as local:
         with netCDF4.Dataset(str(local)) as ds:
@@ -155,7 +174,7 @@ def verify(args) -> dict:
         "fixed_python": sys.executable,
         "torch_version": torch.__version__, "numpy_version": np.__version__, "netcdf4_version": netCDF4.__version__,
         "master_index_path": str(args.master_index), "master_index_sha256": sha256(args.master_index),
-        "master_index_rows": len(rows), "master_index_success_rows": len(success),
+        "master_index_rows": len(rows), "b13_candidate_rows": len(near_rows),
         "candidate_audit": candidate_audit,
         "sample_id": sample.sample_id,
         "analysis_time": analysis.isoformat(), "imerg_window_start": start.isoformat(), "imerg_window_end": analysis.isoformat(),

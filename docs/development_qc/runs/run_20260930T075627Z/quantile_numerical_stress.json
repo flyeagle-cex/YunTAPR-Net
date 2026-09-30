@@ -1,0 +1,83 @@
+{
+  "dtype": "float32",
+  "raw_range_tested": [
+    -80,
+    80
+  ],
+  "cases": [
+    {
+      "raw_constant": -80.0,
+      "finite": true,
+      "strictly_increasing": false,
+      "float32_adjacent_equal_count": 124,
+      "gradient_finite": true,
+      "official_function": "FloatingPointError"
+    },
+    {
+      "raw_constant": -40.0,
+      "finite": true,
+      "strictly_increasing": false,
+      "float32_adjacent_equal_count": 124,
+      "gradient_finite": true,
+      "official_function": "FloatingPointError"
+    },
+    {
+      "raw_constant": -20.0,
+      "finite": true,
+      "strictly_increasing": false,
+      "float32_adjacent_equal_count": 88,
+      "gradient_finite": true,
+      "official_function": "FloatingPointError"
+    },
+    {
+      "raw_constant": -10.0,
+      "finite": true,
+      "strictly_increasing": true,
+      "float32_adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "official_function": "PASS"
+    },
+    {
+      "raw_constant": 0.0,
+      "finite": true,
+      "strictly_increasing": true,
+      "float32_adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "official_function": "PASS"
+    },
+    {
+      "raw_constant": 10.0,
+      "finite": true,
+      "strictly_increasing": true,
+      "float32_adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "official_function": "PASS"
+    },
+    {
+      "raw_constant": 40.0,
+      "finite": true,
+      "strictly_increasing": true,
+      "float32_adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "official_function": "PASS"
+    },
+    {
+      "raw_constant": 80.0,
+      "finite": true,
+      "strictly_increasing": true,
+      "float32_adjacent_equal_count": 0,
+      "gradient_finite": true,
+      "official_function": "PASS"
+    }
+  ],
+  "QUANTILE_NUMERICAL_STABILITY_DECISION_REQUIRED": true,
+  "not_auto_applied_options": [
+    "accumulate positive increments in higher precision then cast with explicit contract impact review",
+    "choose a positive minimum increment in the frozen log domain after Development-only analysis",
+    "reparameterize a numerically stable monotonic head under a new researcher-approved version"
+  ],
+  "forbidden_silent_fixes": [
+    "posthoc_sort",
+    "silent_clamp"
+  ]
+}

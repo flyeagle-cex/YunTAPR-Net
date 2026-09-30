@@ -1,0 +1,174 @@
+{
+  "run_id": "run_20260930T075627Z",
+  "baseline_commit": "c5a7a6bb3746275c16cfd66c2a305cbae016aaff",
+  "science_contract_sha256": "e6406afc94285e09747e976f24d99faeee0bed01edcbfc049e4920acdf3a4572",
+  "ten_minute_cadence_evidence": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\stage0-b0-evidence\\evidence\\himawari_stage0_outputs\\202407\\resume_20260927T104625_772423Z\\index\\himawari_master_index_202407.csv",
+    "sha256": "82eb88eb29e6318195d0700d1c86344740394c7db54bbfc1010e934f015c3b01"
+  },
+  "status": {
+    "B0_FORMAL_SCIENTIFIC_CONTRACT": "FROZEN",
+    "B0_FORMAL_SKELETON_IMPLEMENTED": true,
+    "B0_FORMAL_TRAINING_STARTED": false,
+    "DEVELOPMENT_DATA_COVERAGE": "PARTIAL",
+    "B13_PARTIAL_QC_EVIDENCE_READY": true,
+    "MASK_AWARE_INPUT_DECISION_REQUIRED": true,
+    "NORMALIZATION_EVIDENCE_READY": true,
+    "QUANTILE_NUMERICAL_STABILITY_DECISION_REQUIRED": true,
+    "FORMAL_TRAINING_AUTHORIZED": false
+  },
+  "python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+  "public_files_sha256": {
+    "b13_oversize_reconciliation.json": "ca2ff4a41c08dfb59ac92f55f0a686a0ba48377a3dd912723b732b6d3741c1a5",
+    "b13_partial_spatial_summary.json": "4f408b6ded397200bf8da2c344e19eb5683305a69adee10470a9868b6a581817",
+    "b13_valid_fraction_summary.json": "c4d73e9ebf5c5c535bf68ed447e5ca86f30fdd82b3769b4d4d9a7c3fd6c1b925",
+    "causal_pairing_summary.csv": "7948fabec7701d05bfcdee8e1cd7666d0212f67896aa8208a69638ed8e66e841",
+    "DECISION_8_NORMALIZATION_EVIDENCE.md": "fb7a748047c3bec1eb4ddf60b8b1f076a661f9c49b6d032ed47ce74b698d3475",
+    "DEVELOPMENT_DATA_QC_REPORT.md": "fac572af9f45fa321418dd3ef67820ca15c92113df4ef920ae8134a8eb5117d3",
+    "himawari_b13_monthly_coverage.csv": "90ea70f4012fecb31df74c03343d26f7f6a33dd7b7cb541bb4f5513f2787e381",
+    "imerg_v07_coverage.csv": "b69d75e517e1028849f091be4770819cadcd29830631e262894440732e355a53",
+    "normalization_2023_train_only.json": "0964df1dc1f1e69b777e701d20a22b03ab65d48989c371b8b933c5de05fde9e7",
+    "qc_candidate_impact.csv": "9b84254cd3dd6cf2aa171402b684e2f6450e967b6928ec09e4297656b3e525fb",
+    "qc_impact_grain_reconciliation.json": "e363dc2dc2d8444e9a195872defe4d7c47c1e904924959c5f50b7805d987c90e",
+    "quantile_numerical_stress.json": "b38f502c9189186058580849cc9a83febe00d945ada9442987ae4496afb6b067",
+    "real_multisample_smoke.json": "e6b1a2f74a8d812557865874fb159a70fcb4fc25d9bc021c58c002882a79afee",
+    "sp04_support_distribution.csv": "5750b5563caeb443bfa7f07edad12a32ec3a6261fddb76b658a940bcb0c7807d",
+    "test_results.txt": "2b2fc8e6d023e2a844bb222a7350a92e118e32d3397a0c8134d0b4a1e638bca4"
+  },
+  "local_evidence": {
+    "b13_per_frame.csv": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\b13_per_frame.csv",
+      "bytes": 15732909,
+      "sha256": "4436ceee4d882693ca0ad6a1356e6fe23957f50fbfa4b5a1254c2116a9f4aaea",
+      "schema": [
+        "month",
+        "nominal",
+        "relative_path",
+        "status",
+        "valid_count",
+        "valid_fraction",
+        "obs_start",
+        "obs_end",
+        "date_created",
+        "yunnan_25",
+        "yunnan_24",
+        "yunnan_23",
+        "yunnan_positive",
+        "invalid_mapped",
+        "error"
+      ],
+      "row_count": 70560
+    },
+    "b13_partial_invalid_frequency.npy": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\b13_partial_invalid_frequency.npy",
+      "bytes": 1004132,
+      "sha256": "65740fea3bbe9d7bd8feaa31a61bf92dbc6a00c3839d4f63c01d72ec7f730c7d",
+      "schema": "uint32[501,501]"
+    },
+    "b13_2023_centikelvin_hist.npy": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\b13_2023_centikelvin_hist.npy",
+      "bytes": 524416,
+      "sha256": "2884305a53ba393d6d25b7cd8aae8d0fb714d86707da9d754418375ae0504b1b",
+      "schema": "int64[65536]"
+    },
+    "b13_2024_centikelvin_hist.npy": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\b13_2024_centikelvin_hist.npy",
+      "bytes": 524416,
+      "sha256": "140a2e0aa0cf134f5b3dbfc0b59da19e9c655290fca74cba05336704e4de1176",
+      "schema": "int64[65536]"
+    },
+    "imerg_per_slot.csv": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\imerg_per_slot.csv",
+      "bytes": 5850483,
+      "sha256": "73e8d3ae7e5090299ea2c5920b9b4be6fb22f9f4efc870424763fab581a07fc0",
+      "schema": [
+        "month",
+        "window_start",
+        "analysis_time",
+        "day_path",
+        "index",
+        "status",
+        "valid_target_count",
+        "valid_yunnan_count",
+        "zero_yunnan_count",
+        "rain_yunnan_count",
+        "max_yunnan_mmhr",
+        "error"
+      ],
+      "row_count": 33792
+    },
+    "causal_pairing_per_slot.csv": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\causal_pairing_per_slot.csv",
+      "bytes": 8074600,
+      "sha256": "9bb1d401a10658cb6c1a3862ef5e79e1ff12ba9718b8efc5e6d34d8d77e02fe2",
+      "schema": [
+        "month",
+        "window_start",
+        "analysis_time",
+        "expected_nominal",
+        "expected_status",
+        "pair_status",
+        "selected_nominal",
+        "selected_obs_end",
+        "selected_b13_relative_path",
+        "equal_obs_end_tie",
+        "imerg_day_path",
+        "imerg_index",
+        "imerg_valid_yunnan_count",
+        "imerg_zero_yunnan_count",
+        "imerg_rain_yunnan_count",
+        "imerg_max_yunnan_mmhr"
+      ],
+      "row_count": 23520
+    },
+    "h_scan_internal.json": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\h_scan_internal.json",
+      "bytes": 1289,
+      "sha256": "01adf2a6c894df6d28db59878128c9c00a15befe847c806edc5c99c6ed77d001",
+      "schema": "JSON summary"
+    },
+    "imerg_scan_internal.json": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\imerg_scan_internal.json",
+      "bytes": 297,
+      "sha256": "85da0eb8fd2a1fa6893aa84daedc5b37e331362577869c9baf887a2955bafa96",
+      "schema": "JSON summary"
+    },
+    "oversize_reconciliation.json": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\oversize_reconciliation.json",
+      "bytes": 1400,
+      "sha256": "af2c7bd4151c8328229821eebfd3877f303638cf67b74a668f62fffe510df623",
+      "schema": "JSON summary"
+    }
+  },
+  "local_revision_history": {
+    "qc_candidate_impact.csv": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\pre_supervised_grain_revision\\qc_candidate_impact.csv",
+      "sha256": "b403e6ea6b29c91d540e0114df35e4e0cc612f3b114e116b4219722707074a5c"
+    },
+    "DEVELOPMENT_DATA_QC_REPORT.md": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\pre_supervised_grain_revision\\DEVELOPMENT_DATA_QC_REPORT.md",
+      "sha256": "57083b8d6c7eee7882ad4e39b950d23dd3c1d67b4eda2b9ce23fa8c2ba0f55bc"
+    },
+    "manifest.json": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\pre_supervised_grain_revision\\manifest.json",
+      "sha256": "065f755b836f58a64631a80a54c9d922540d6ca68f49319800abaece45014851"
+    },
+    "test_results.txt": {
+      "local_path": "F:\\pytorch\\Research\\outputs\\development_qc\\run_20260930T075627Z\\pre_supervised_grain_revision\\test_results.txt",
+      "sha256": "1cb538029ece4d2717e9b244e2065b20e3cbfa1eb42161de3b28a5b3b7866857"
+    }
+  },
+  "source_payload_committed": false,
+  "private_mask_payload_committed": false,
+  "published_scripts_sha256": {
+    "audit_development_qc.py": "2d2710bd70b08b912bbca01021d43ddd55014764db42e64cef4df7fca5aaaaf1",
+    "audit_imerg_coverage.py": "c7935eb5bd1c3f5ab2e3a857009e6804cff28a067400af13dfbd4c4643920d95",
+    "finalize_development_qc.py": "01c8bb943ea4414ff5633229726b347202445a6809300f97e321635d7f0197b1",
+    "real_multisample_qc_smoke.py": "5608e0e62ee14fabbeff5ea44807cd53db32f26e0ccb7cccca91bbabd942225d",
+    "package_development_qc.py": "bd691a704e37c77bfe208ce88a6f9f3e952d2cd042e3db193c6cf9dd7953162a",
+    "reconcile_b13_oversize.py": "0f0886b5989155c56a6a3196570a9ad840e417cee2b9a78deffec4034c6144d9",
+    "revise_qc_candidate_impact.py": "aff672b08eccc978e9330a1a88856dae3b5d43ffac8ab8a17a2e4598042a98c4",
+    "verify_b0_real_sample.py": "19616761f3e3a2141501a8e098b75b834411e126a0d361dfb6403e90d01afb9a"
+  },
+  "scan_execution_note": "The source scans started before presentation-only explicit-zero CSV formatting edits to the two scan scripts. Computation and source-read rules did not change; current published script hashes identify the reviewed versions. The current-run monthly CSVs were normalized to show zero counts explicitly before packaging."
+}

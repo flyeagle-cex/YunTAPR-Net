@@ -1,0 +1,87 @@
+{
+  "scope": "ENGINEERING_TEST_ONLY",
+  "formal_training_started": false,
+  "optimizer_step_performed": false,
+  "checkpoint_generated": false,
+  "focal_alpha": 0.25,
+  "focal_gamma": 2.0,
+  "focal_parameters_frozen": false,
+  "python": "F:\\pytorch\\Research\\.venv\\Scripts\\python.exe",
+  "selected_sample_count": 2,
+  "available_categories": [
+    "DRY",
+    "HEAVY_RATE_PROXY_GE20",
+    "PARTIAL_B13",
+    "RAINY",
+    "VALID_ZERO_IMERG",
+    "YEAR_2023",
+    "YEAR_2024"
+  ],
+  "unavailable_categories": [],
+  "samples": [
+    {
+      "sample_id": "development_qc_20230407T1400Z",
+      "year": "2023",
+      "categories": [
+        "DRY",
+        "PARTIAL_B13",
+        "VALID_ZERO_IMERG",
+        "YEAR_2023"
+      ],
+      "pair_status": "EXPECTED_LATEST_SLOT_AVAILABLE",
+      "causality_pass": true,
+      "b13_valid_fraction": 0.15761690192469352,
+      "target_valid_yunnan_pixels": 3430,
+      "valid_zero_imerg_yunnan_pixels": 3430,
+      "finite_forward_loss_backward": true,
+      "parameter_tensors_with_finite_grad": 74,
+      "native_shape": [
+        1,
+        48,
+        501,
+        501
+      ],
+      "target_shape": [
+        1,
+        48,
+        100,
+        100
+      ],
+      "source_sha256": "a4472889044712a91d9915aedcdecb8183c182057d64fb7717791f5595187085",
+      "target_sha256": "9bec3b51223b5ae0c39c267ef4609a564cdfa164139e8269417d48e9fb25c383"
+    },
+    {
+      "sample_id": "development_qc_20240319T2300Z",
+      "year": "2024",
+      "categories": [
+        "HEAVY_RATE_PROXY_GE20",
+        "RAINY",
+        "VALID_ZERO_IMERG",
+        "YEAR_2024"
+      ],
+      "pair_status": "EXPECTED_LATEST_SLOT_AVAILABLE",
+      "causality_pass": true,
+      "b13_valid_fraction": 1.0,
+      "target_valid_yunnan_pixels": 3430,
+      "valid_zero_imerg_yunnan_pixels": 3277,
+      "finite_forward_loss_backward": true,
+      "parameter_tensors_with_finite_grad": 74,
+      "native_shape": [
+        1,
+        48,
+        501,
+        501
+      ],
+      "target_shape": [
+        1,
+        48,
+        100,
+        100
+      ],
+      "source_sha256": "999bb4d5af7f1b8ccba5aaf1dceb685c379344e2ae2025f93fe30f51a3d98b5d",
+      "target_sha256": "4f25e738545c03db6d36a5a8c94e2b89bea09e10c2ff6e8c6b20763f894b776a"
+    }
+  ],
+  "staging_copy_count": 4,
+  "staging_cleanup_all_success": true
+}

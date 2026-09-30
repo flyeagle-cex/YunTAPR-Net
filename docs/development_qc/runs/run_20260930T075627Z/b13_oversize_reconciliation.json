@@ -1,0 +1,25 @@
+{
+  "reason": "Standard 16 MiB B0 staging cap rejected a valid exceptional 607 MiB H09 file; a one-time 700 MiB single-file audit cap was used without changing B0 production config.",
+  "nominal": "2024-03-02T00:10:00+00:00",
+  "source_bytes": 636106619,
+  "source_sha256": "d470bd850b85c8cbcd6489db7e2cd6eba7214537027127c743657fb15565f065",
+  "valid_count": 251001,
+  "classification_before": "CORRUPT_OR_UNREADABLE_STAGING_CAP",
+  "classification_after": "FULL_VALID",
+  "before_hashes": {
+    "per_frame_sha256": "b0c926188abdc8ac341d821e450f4c6b56210b3c3b0b9581ff99e0d295ce8f52",
+    "monthly_sha256": "9cb5103f7f0a615342a34105e373c45148a2683cc056b3b20d1326565f3aae6e",
+    "hist_2024_sha256": "87d995bdda1c83ede2c708eaeabdb055705b5ec5ca64e0001732553e5a51676c"
+  },
+  "after_hashes": {
+    "per_frame_sha256": "4436ceee4d882693ca0ad6a1356e6fe23957f50fbfa4b5a1254c2116a9f4aaea",
+    "monthly_sha256": "90ea70f4012fecb31df74c03343d26f7f6a33dd7b7cb541bb4f5513f2787e381",
+    "hist_2024_sha256": "140a2e0aa0cf134f5b3dbfc0b59da19e9c655290fca74cba05336704e4de1176"
+  },
+  "staging_copy_seconds": 0.3509766999995918,
+  "staging_read_seconds": 0.011520299998664996,
+  "staging_temporary_bytes": 636106619,
+  "staging_sha256_match": true,
+  "staging_cleanup_success": true,
+  "source_modified": false
+}
