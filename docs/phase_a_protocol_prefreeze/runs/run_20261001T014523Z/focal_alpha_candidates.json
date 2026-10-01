@@ -1,0 +1,42 @@
+{
+  "semantics": "ALPHA_IS_POSITIVE_CLASS_WEIGHT",
+  "N_positive": 4188966,
+  "N_negative": 36010634,
+  "candidates": [
+    {
+      "name": "A",
+      "alpha": 0.25,
+      "negative_weight": 0.75,
+      "status": "CANONICAL_REFERENCE_ONLY"
+    },
+    {
+      "name": "B",
+      "alpha": 0.5,
+      "negative_weight": 0.5,
+      "status": "NO_CLASS_REWEIGHTING_REFERENCE"
+    },
+    {
+      "name": "C",
+      "alpha": 0.895795828814217,
+      "negative_weight": 0.10420417118578294,
+      "status": "TRAIN_BALANCED_CANDIDATE_ONLY"
+    }
+  ],
+  "balanced_formula": "alpha_balanced=N_negative/(N_positive+N_negative); 1-alpha_balanced=N_positive/N_valid",
+  "D_inverse_frequency": {
+    "positive_weight_unit_expected_mean": 4.798272413765115,
+    "negative_weight_unit_expected_mean": 0.5581629026581426,
+    "positive_to_negative_ratio": 8.59654482753023,
+    "weights_normalized_to_sum_one": [
+      0.895795828814217,
+      0.10420417118578294
+    ],
+    "equivalence": "Sum-one inverse-frequency weights exactly equal candidate C. Unit-expected-mean weights have the same class ratio but multiply L_occ by 1/[2*p*(1-p)], changing scale relative to L_qr."
+  },
+  "gamma_zero_equal_difficulty_balance_check": {
+    "positive_mass": 0.09334566189326698,
+    "negative_mass": 0.09334566189326698
+  },
+  "recommended_alpha": null,
+  "selection_status": "RESEARCHER_DECISION_REQUIRED"
+}

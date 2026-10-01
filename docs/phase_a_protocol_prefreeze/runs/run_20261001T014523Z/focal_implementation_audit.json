@@ -1,0 +1,19 @@
+{
+  "input": "logit",
+  "target": "rainy bool cast to logit dtype, y in {0,1}",
+  "FOCAL_ALPHA_SEMANTICS": "ALPHA_IS_POSITIVE_CLASS_WEIGHT",
+  "alpha_t": "alpha*y+(1-alpha)*(1-y)",
+  "bce": "softplus(z)-y*z",
+  "p_t": "exp(-bce)=y*sigmoid(z)+(1-y)*(1-sigmoid(z))",
+  "gamma_factor": "(1-p_t)**gamma",
+  "pixel_loss": "alpha_t*(1-p_t)**gamma*bce",
+  "mask": "imerg_valid_mask AND yunnan_eval_mask",
+  "focal_function_reduction": "sum masked pixel losses",
+  "occurrence_core_reduction": "sum masked pixel losses / N_valid_supervised_Yunnan",
+  "source": "def focal_bce_sum(logit: torch.Tensor, rainy: torch.Tensor, valid: torch.Tensor,\n                  alpha: float | None, gamma: float | None) -> torch.Tensor:\n    if alpha is None or gamma is None:\n        raise ValueError(\"focal_alpha and focal_gamma are REQUIRED_DEVELOPMENT_PARAMETER\")\n    if not 0 <= alpha <= 1 or gamma < 0:\n        raise ValueError(\"Focal parameters outside valid numeric domain\")\n    label = rainy.to(logit.dtype)\n    bce = F.binary_cross_entropy_with_logits(logit, label, reduction=\"none\")\n    pt = torch.exp(-bce)\n    weight = torch.where(rainy, alpha, 1 - alpha)\n    return (weight * (1 - pt).pow(gamma) * bce * valid).sum()\n",
+  "source_sha256": "7cd5042f88856c37889bee86f1f340e0e93373486620ee4a7a4d1f61df380e58",
+  "parameter_domain": "0<=alpha<=1, gamma>=0; None rejects, no scientific numeric default",
+  "threshold_runtime_precision": "Production comparison uses float32 decoded targets and representable float32 0.1. Exact float32 0.1 is negative; no tolerance/rebinning.",
+  "total_loss_source_sha256": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0",
+  "status": "EVIDENCE_READY"
+}

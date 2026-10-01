@@ -1,0 +1,37 @@
+{
+  "heads": {
+    "occurrence": {
+      "module": "Conv2d",
+      "input_channels": 48,
+      "output_channels": 1,
+      "kernel_size": [
+        1,
+        1
+      ],
+      "hidden_layers": 0,
+      "bias": true,
+      "parameter_count": 49,
+      "raw_activation": "none",
+      "semantic_transform": "sigmoid"
+    },
+    "quantile": {
+      "module": "Conv2d",
+      "input_channels": 48,
+      "output_channels": 32,
+      "kernel_size": [
+        1,
+        1
+      ],
+      "hidden_layers": 0,
+      "bias": true,
+      "parameter_count": 1568,
+      "raw_activation": "none",
+      "semantic_transform": "softplus positive increments + epsilon; sequential float64 qlog; expm1 physical"
+    }
+  },
+  "total_head_params": 1617,
+  "HEAD_IMPLEMENTATION_DETAIL_REQUIRES_PROTOCOL_PIN": true,
+  "reason": "v1.1 specifies occurrence/32-quantile semantics and shared heads, but not exact hidden depth or direct 1x1 layer shape in the scientific protocol.",
+  "source_sha256": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50",
+  "architecture_modified": false
+}
