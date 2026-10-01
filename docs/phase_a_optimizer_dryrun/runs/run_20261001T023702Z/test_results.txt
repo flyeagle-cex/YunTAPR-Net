@@ -1,0 +1,28 @@
+Recorded preliminary command: CUDA interpreter -B; unittest suite of ProtocolTests excluding test_real_replay_and_resume_evidence.
+This file transcribes the observed tool output. No tests were rerun after the STOP.
+
+test_checkpoint_best_separate_from_early_stop ... ok
+test_checkpoint_metadata_rejects_identity_and_boundary ... ok
+test_early_stop_strict_boundary_and_reset ... ok
+test_epoch_shuffle_independent_of_global_rng ... ok
+test_exact_approved_values ... ok
+test_exact_disjoint_optimizer_groups ... ok
+test_finalfit_replay_same_epoch_horizon ... FAIL
+test_global_validation_raw_numerators_unequal_partition ... ok
+test_grouped_ap_and_auc_ties ... ok
+test_head_implementation_pin ... ok
+test_no_formal_training_authorization ... ok
+test_schedule_boundaries_no_off_by_one ... FAIL
+test_schedule_full_mathematical_monotonicity ... FAIL
+test_shared_parameter_fails ... ok
+test_state_digest_includes_buffers_and_scalar_optimizer_steps ... ok
+test_unknown_parameter_fails ... ok
+
+test_finalfit_replay_same_epoch_horizon: AssertionError: 0.0001 != 0.00010000000000000002
+test_schedule_boundaries_no_off_by_one: AssertionError: 0.00010000000000000002 != 0.0001
+test_schedule_full_mathematical_monotonicity: warmup <= base_lr assertion is False
+Ran 16 tests in 1.652s
+FAILED (failures=3)
+Command process exit_code=1.
+137 historical tests: NOT_RUN this run (STOP); retained historical passing evidence belongs to the baseline only.
+Real replay/resume evidence test: NOT_RUN (STOP).

@@ -1,0 +1,23 @@
+{
+  "status": "FAIL",
+  "executed_in": "preliminary 16-test CPU protocol gate",
+  "lr_1": 1.7064846416382254e-08,
+  "lr_W_observed": 0.00010000000000000002,
+  "lr_W_required": 0.0001,
+  "lr_W_absolute_error": 1.3552527156068805e-20,
+  "lr_U": 1e-06,
+  "lr_W_plus_1_status": "assertion not reached after W failure in boundary test",
+  "actual_evaluation_order": "(base_lr * u) / W",
+  "three_failed_tests": [
+    "test_schedule_boundaries_no_off_by_one",
+    "test_schedule_full_mathematical_monotonicity",
+    "test_finalfit_replay_same_epoch_horizon"
+  ],
+  "failure_cause": "Float64 operation ordering rounds the warmup endpoint above base_lr, breaking exact boundary, range and same-epoch equality.",
+  "researcher_approved_bound_resolution": "min_lr lower bound applies only to cosine; warmup 0<LR<=base_lr",
+  "bound_resolution_did_not_cause_this_failure": true,
+  "proposed_follow_up_for_researcher_review": "Evaluate base_lr*(u/W) to preserve the exact W endpoint without changing the mathematical formula or parameters; verify all boundaries in a new run.",
+  "proposed_fix_applied": false,
+  "optimizer_steps": 0,
+  "stop_rule": "User attachment Section27: scheduler boundary failure => STOP; report problem, no parameter changes."
+}
