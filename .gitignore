@@ -3,3 +3,9 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# Formal model/optimizer payloads stay outside Git (researcher-approved F: root).
+outputs/formal_training/
+*.pt
+*.pth
+*.ckpt

@@ -1,0 +1,79 @@
+version: v1
+AUTHORIZED_BY: RESEARCHER
+AUTHORIZED_SCOPE: B0_PHASE_A_ONLY
+FORMAL_TRAINING_AUTHORIZED: true
+B0_FORMAL_TRAINING_STARTED: false
+PHASE_B_AUTHORIZED: false
+B1_TO_B8_AUTHORIZED: false
+baseline_commit: aa65a5b4b33f04d7adddd1ca832963dcb21e4487
+seed: 2026
+protocol_version: v1.0
+train_year: 2023
+validation_year: 2024
+months:
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+train_count: 11720
+validation_count: 11727
+FORMAL_CHECKPOINT_ROOT: F:\pytorch\Research\outputs\formal_training\b0_phase_a
+identity:
+  scientific_contract_v1.1:
+    path: config/science_contract_v1.1.yaml
+    sha256: 14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3
+  scientific_freeze_v1.1_document:
+    path: docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md
+    sha256: 48e164cc7b6569d33e1929418ce60b13173957efbab3d97ca70cca0e6f7f1b6c
+  engineering_v4:
+    path: config/b0_engineering_v4.yaml
+    sha256: bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7
+  phase_a_normalization_artifact:
+    path: docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_2023_final_eligible.json
+    sha256: 4bcfa0520550e343dd154fd4436715a306c015a02d16ec4a12bb2ed3cf606e0e
+  eligible_train_manifest:
+    path: docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_sample_manifest.csv
+    sha256: dc0559f12f02817f8ec74916d03dd20e40ec0584ec58c59b34b5e02cc9a60e68
+  eligible_validation_manifest:
+    path: docs/phase_a_protocol_prefreeze/runs/run_20261001T014523Z/eligible_validation_manifest.csv
+    sha256: ac5405d8185d6760acc15a4ab364804c1d8ec8de84064737d0757f6688aeb410
+  combined_eligibility_source:
+    path: docs/b0_pretraining_closure/runs/run_20260930T095416Z/formal_sample_eligibility_2023_2024.csv
+    sha256: b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90
+  SP04_mapping:
+    path: config/spatial/sp04_target_cell_membership_v1.csv
+    sha256: 3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd
+  SP04_manifest:
+    path: config/spatial/sp04_coordinate_manifest_v1.json
+    sha256: e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473
+  yunnan_mask:
+    path: F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc
+    sha256: 9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef
+  prior_gpu_manifest:
+    path: docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json
+    sha256: c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8
+  protocol:
+    path: config/training/phase_a_training_protocol_v1.yaml
+    sha256: dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a
+  protocol_document:
+    path: docs/training_protocol/PHASE_A_TRAINING_PROTOCOL_v1.0.md
+    sha256: 3480baca7e7dd1839a534660fef5e7a41a9e013107954cdef44574e110631e2c
+  scheduler_implementation:
+    path: src/yuntapr/training/phase_a_protocol.py
+    sha256: 95ed5a182590a8a84ee7659720a89ea7e36687800cb7e7441f60d30d795a8b19
+forbidden:
+- 2025 source access
+- Phase-B
+- Phase-B normalization
+- B1-B8
+- hyperparameter search
+- protocol changes
+- normalization fitting
+- mid-epoch resume
+authority: Researcher's B0 PHASE-A FORMAL DEVELOPMENT TRAINING v1 attachment and F-drive
+  checkpoint-root confirmation
+authorization_document: docs/formal_training_authorization/B0_PHASE_A_FORMAL_AUTHORIZATION_v1.md

@@ -1,0 +1,44 @@
+{
+  "run_id": "run_20261001T035003_243409Z",
+  "sealed_utc": "2026-10-01T14:59:45.980221+00:00",
+  "training_log_closed": true,
+  "closure_script_sha256": "17a59848fd1159b91d42d23df376b6bc8143cc656c2922ea0cf9927f411f9819",
+  "initialization_snapshot_retained": true,
+  "pre_log_close_evidence_index_retained": true,
+  "pre_log_close_mismatches": [
+    "execution.log"
+  ],
+  "mismatch_explanation": "FINAL stdout and Tee log close occur after the in-process evidence index is created; only the closed log hash is refreshed.",
+  "final_manifest_sha256": "73df746befdfb41adfd3f89ddb7e078e88d35f969a12678c0c68f7cf105199c0",
+  "completed_epochs": 19,
+  "selection_and_early_stop_independently_recomputed": true,
+  "historical_files_and_locked_implementation_unchanged": true,
+  "checkpoint_bytes_unchanged": true,
+  "checkpoint_identities": {
+    "BEST": {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_phase_a\\run_20261001T035003_243409Z\\epoch_011.pt",
+      "filename": "epoch_011.pt",
+      "bytes": 52062315,
+      "sha256": "3f517f31394a4efa54ea0abed7757c7d59eb048416cfa98f02ab91ba60c24fe3",
+      "epoch": 11,
+      "global_update": 64460,
+      "global_val_core_loss": 0.04730775889882134,
+      "authorization_manifest_sha256": "04fa458828b0f74d3e4fe0b4887282327b736b72476f059955c354fefbb6e963",
+      "CHECKPOINT_BINARY_NOT_COMMITTED_TO_GIT": true
+    },
+    "LAST": {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_phase_a\\run_20261001T035003_243409Z\\epoch_019.pt",
+      "filename": "epoch_019.pt",
+      "bytes": 52062315,
+      "sha256": "6bb680f74f0b3ce0b02be435ac8b28ba7e0fa8e8409af83ebfa558a8564e0558",
+      "epoch": 19,
+      "global_update": 111340,
+      "global_val_core_loss": 0.048634870497155404,
+      "authorization_manifest_sha256": "04fa458828b0f74d3e4fe0b4887282327b736b72476f059955c354fefbb6e963",
+      "CHECKPOINT_BINARY_NOT_COMMITTED_TO_GIT": true
+    }
+  },
+  "no_training_or_raw_data_read_during_seal": true,
+  "no_phase_b_execution": true,
+  "status_fields_copied_from_actual_final_status": true
+}
