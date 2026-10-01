@@ -1,0 +1,17 @@
+REAL_FIXTURE_BATCH_1_PASS
+REAL_FIXTURE_BATCH_2_PASS
+REAL_FIXTURE_BATCH_3_PASS
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\resume_phase_a_optimizer_v1.py", line 561, in <module>
+    main()
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\resume_phase_a_optimizer_v1.py", line 549, in main
+    globals()[args.phase](args.out)
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\resume_phase_a_optimizer_v1.py", line 408, in gpu
+    steps=[update(model,optimizer,observed,samples,u,run) for u,samples in enumerate(fixtures,1)]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\resume_phase_a_optimizer_v1.py", line 391, in update
+    step,memory,precision=perform_update(model,optimizer,observed,samples,batch_identities[u-1]["CPU_tensor_sha256"],u,run,config)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\resume_phase_a_optimizer_v1.py", line 277, in perform_update
+    raise RuntimeError("STOP: forward precision/finite/strict-quantile gate failure: "+repr(precision))
+RuntimeError: STOP: forward precision/finite/strict-quantile gate failure: {'run': 'A', 'global_update': 1, 'parameters': ['torch.float32'], 'raw_quantile': 'torch.float32', 'backbone_autocast_output': 'torch.float32', 'autocast_enabled': True, 'autocast_dtype': 'torch.bfloat16', 'qlog': 'torch.float64', 'qphysical': 'torch.float64', 'pinball': 'torch.float64', 'strict_crossing_count': 0, 'finite_outputs': True, 'finite_loss': True, 'valid_Yunnan_supervised_pixels': 6860, 'rainy_pixels': 24}

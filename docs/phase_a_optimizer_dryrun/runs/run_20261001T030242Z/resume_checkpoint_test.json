@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "exact_pass": true,
+  "checkpoint_sha256": "58e0c60d7dfe92800684ff3172c4e59020b7fafb3585b284710ff939b4dcdaf4",
+  "checkpoint_bytes": 52066875,
+  "global_update": 3,
+  "checkpoint_global_update": 2,
+  "checkpoint_completed_epoch": 0,
+  "schema_complete": true,
+  "engineering_partial_update_exception": true,
+  "original_model_optimizer_destroyed": true,
+  "temporary_checkpoint_deleted": true,
+  "temporary_root_deleted": true,
+  "optimizer_logically_equivalent": true,
+  "comparison": {
+    "steps": [
+      {
+        "global_update": 1,
+        "exact": true,
+        "field_exact": {
+          "global_update": true,
+          "LR": true,
+          "loss": true,
+          "pre_clip_norm": true,
+          "clipping_triggered": true
+        }
+      },
+      {
+        "global_update": 2,
+        "exact": true,
+        "field_exact": {
+          "global_update": true,
+          "LR": true,
+          "loss": true,
+          "pre_clip_norm": true,
+          "clipping_triggered": true
+        }
+      },
+      {
+        "global_update": 3,
+        "exact": true,
+        "field_exact": {
+          "global_update": true,
+          "LR": true,
+          "loss": true,
+          "pre_clip_norm": true,
+          "clipping_triggered": true
+        }
+      }
+    ],
+    "model_state_exact": true,
+    "optimizer_state_exact": true,
+    "initial_state_exact": true,
+    "RNG_states_exact": true
+  },
+  "restored": [
+    "model",
+    "optimizer",
+    "RNG",
+    "global_update",
+    "protocol identity"
+  ],
+  "formal_checkpoint_created": false
+}

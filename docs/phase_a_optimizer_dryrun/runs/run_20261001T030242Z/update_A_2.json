@@ -1,0 +1,74 @@
+{
+  "step": {
+    "run": "A",
+    "global_update": 2,
+    "LR": 3.412969283276451e-08,
+    "LR_hex": "0x1.252bfcfd90a6fp-25",
+    "loss": 0.5301685911744226,
+    "loss_hex": "0x1.0f7241f0ebcbdp-1",
+    "L_occ": 0.08535056561231613,
+    "L_qr": 0.4448180255621065,
+    "pre_clip_norm": 6.478634357452393,
+    "pre_clip_norm_hex": "0x1.9ea1f20000000p+2",
+    "clip_threshold": 5.0,
+    "clipping_triggered": true,
+    "post_clip_norm": 4.999999523162842,
+    "post_clip_interpretation": "PyTorch coefficient=min(1,5/(pre_norm+1e-6)); foreach=False, no GradScaler",
+    "actual_optimizer_group_LRs": [
+      3.412969283276451e-08,
+      3.412969283276451e-08
+    ],
+    "valid_Yunnan_supervised_pixels": 6860,
+    "rainy_pixels": 741,
+    "sample_ids": [
+      "2023-06-06T23:00:00+00:00",
+      "2023-07-25T21:00:00+00:00"
+    ],
+    "step_seconds": 0.2726510000002236,
+    "scope": "ENGINEERING_ONLY",
+    "optimizer_step_performed": true
+  },
+  "memory": {
+    "run": "A",
+    "global_update": 2,
+    "allocated_MiB": 83.6767578125,
+    "reserved_MiB": 3260.0,
+    "device_free_MiB": 3662.0,
+    "peak_allocated_MiB": 2735.42529296875,
+    "peak_reserved_MiB": 3260.0,
+    "pre_device_free_MiB": 3668.0,
+    "pre_reserved_MiB": 3254.0,
+    "estimated_min_device_free_MiB": 3662.0,
+    "dedicated_total_MiB": 8150.5625,
+    "mem_get_info_total_MiB": 8150.5625,
+    "reserved_fraction": 0.3999723945433214,
+    "estimated_free_fraction": 0.44929414380909294,
+    "safe_20pct": true,
+    "optimizer_state_first_initialized": false,
+    "optimizer_state_parameter_tensors": 74,
+    "optimizer_cuda_state_MiB": 33.03040313720703
+  },
+  "precision": {
+    "run": "A",
+    "global_update": 2,
+    "parameters": [
+      "torch.float32"
+    ],
+    "raw_quantile": "torch.float32",
+    "backbone_autocast_output": "torch.float32",
+    "autocast_enabled": true,
+    "autocast_dtype": "torch.bfloat16",
+    "qlog": "torch.float64",
+    "qphysical": "torch.float64",
+    "pinball": "torch.float64",
+    "strict_crossing_count": 0,
+    "finite_outputs": true,
+    "finite_loss": true,
+    "valid_Yunnan_supervised_pixels": 6860,
+    "rainy_pixels": 741,
+    "gradients_finite": true,
+    "parameters_after_step_finite": true,
+    "optimizer_state_finite": true,
+    "pass_": true
+  }
+}

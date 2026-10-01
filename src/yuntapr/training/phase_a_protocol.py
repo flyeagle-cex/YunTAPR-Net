@@ -111,7 +111,7 @@ def lr_for_update(u, *, steps_per_epoch=5860):
     if W < 1 or not 1 <= u <= U:
         raise ValueError("Update outside the protocol horizon")
     if u <= W:
-        return 1e-4 * u / W
+        return 1e-4 * (u / W)
     progress = (u - W) / (U - W)
     return 1e-6 + (1e-4 - 1e-6) * (1 + math.cos(math.pi * progress)) / 2
 

@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "initial_model_state_sha256": "57a4d103a31aa7be1a52af079cdf7fb81bc73c51ba3e0e97d395513d21d9023d",
+  "model_state_sha256": "0e22354fd53dc7254511d880c62144e8674d49061cb8f41993914b2bc939b153",
+  "optimizer_state_sha256": "c4e4c33f3eb54edff74180d1211febfe928e20de3bab67ada107681370d00c00",
+  "RNG_states_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab",
+  "global_update": 3,
+  "steps": [
+    {
+      "run": "C",
+      "global_update": 1,
+      "LR": 1.7064846416382254e-08,
+      "LR_hex": "0x1.252bfcfd90a6fp-26",
+      "loss": 0.11387200039427303,
+      "loss_hex": "0x1.d26b7259f9dd0p-4",
+      "L_occ": 0.09998686611652374,
+      "L_qr": 0.013885134277749291,
+      "pre_clip_norm": 5.281282424926758,
+      "pre_clip_norm_hex": "0x1.5200880000000p+2",
+      "clip_threshold": 5.0,
+      "clipping_triggered": true,
+      "post_clip_norm": 4.999999046325684,
+      "post_clip_interpretation": "PyTorch coefficient=min(1,5/(pre_norm+1e-6)); foreach=False, no GradScaler",
+      "actual_optimizer_group_LRs": [
+        1.7064846416382254e-08,
+        1.7064846416382254e-08
+      ],
+      "valid_Yunnan_supervised_pixels": 6860,
+      "rainy_pixels": 24,
+      "sample_ids": [
+        "2023-03-01T00:00:00+00:00",
+        "2023-04-18T23:00:00+00:00"
+      ],
+      "step_seconds": 0.27813349999996717,
+      "scope": "ENGINEERING_ONLY",
+      "optimizer_step_performed": true
+    },
+    {
+      "run": "C",
+      "global_update": 2,
+      "LR": 3.412969283276451e-08,
+      "LR_hex": "0x1.252bfcfd90a6fp-25",
+      "loss": 0.5301685911744226,
+      "loss_hex": "0x1.0f7241f0ebcbdp-1",
+      "L_occ": 0.08535056561231613,
+      "L_qr": 0.4448180255621065,
+      "pre_clip_norm": 6.478634357452393,
+      "pre_clip_norm_hex": "0x1.9ea1f20000000p+2",
+      "clip_threshold": 5.0,
+      "clipping_triggered": true,
+      "post_clip_norm": 4.999999523162842,
+      "post_clip_interpretation": "PyTorch coefficient=min(1,5/(pre_norm+1e-6)); foreach=False, no GradScaler",
+      "actual_optimizer_group_LRs": [
+        3.412969283276451e-08,
+        3.412969283276451e-08
+      ],
+      "valid_Yunnan_supervised_pixels": 6860,
+      "rainy_pixels": 741,
+      "sample_ids": [
+        "2023-06-06T23:00:00+00:00",
+        "2023-07-25T21:00:00+00:00"
+      ],
+      "step_seconds": 0.28158629999961704,
+      "scope": "ENGINEERING_ONLY",
+      "optimizer_step_performed": true
+    },
+    {
+      "run": "C",
+      "global_update": 3,
+      "LR": 5.119453924914676e-08,
+      "LR_hex": "0x1.b7c1fb7c58fa6p-25",
+      "loss": 1.2195140223037155,
+      "loss_hex": "0x1.3832122aced0cp+0",
+      "L_occ": 0.0950678214430809,
+      "L_qr": 1.1244462008606346,
+      "pre_clip_norm": 12.338016510009766,
+      "pre_clip_norm_hex": "0x1.8ad1080000000p+3",
+      "clip_threshold": 5.0,
+      "clipping_triggered": true,
+      "post_clip_norm": 5.0,
+      "post_clip_interpretation": "PyTorch coefficient=min(1,5/(pre_norm+1e-6)); foreach=False, no GradScaler",
+      "actual_optimizer_group_LRs": [
+        5.119453924914676e-08,
+        5.119453924914676e-08
+      ],
+      "valid_Yunnan_supervised_pixels": 6860,
+      "rainy_pixels": 1972,
+      "sample_ids": [
+        "2023-09-12T21:30:00+00:00",
+        "2023-10-31T23:30:00+00:00"
+      ],
+      "step_seconds": 0.2927538000003551,
+      "scope": "ENGINEERING_ONLY",
+      "optimizer_step_performed": true
+    }
+  ],
+  "seed": 2026,
+  "scope": "ENGINEERING_ONLY",
+  "formal_epoch_completed": false
+}

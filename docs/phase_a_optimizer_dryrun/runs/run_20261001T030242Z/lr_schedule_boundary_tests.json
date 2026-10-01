@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "boundaries": [
+    {
+      "u": 1,
+      "LR": 1.7064846416382254e-08,
+      "hex": "0x1.252bfcfd90a6fp-26"
+    },
+    {
+      "u": 5860,
+      "LR": 0.0001,
+      "hex": "0x1.a36e2eb1c432dp-14"
+    },
+    {
+      "u": 5861,
+      "LR": 9.99999999970373e-05,
+      "hex": "0x1.a36e2eb18ed3cp-14"
+    },
+    {
+      "u": 293000,
+      "LR": 1e-06,
+      "hex": "0x1.0c6f7a0b5ed8dp-20"
+    }
+  ],
+  "warmup_updates_checked": 5860,
+  "cosine_updates_checked": 287140,
+  "comparison": "EXACT; no tolerance/clamp/round/isclose",
+  "warmup_evaluation": "base_lr*(u/W)",
+  "cosine_formula_unchanged": true,
+  "real_updates_used_for_scheduler_sweep": 0
+}

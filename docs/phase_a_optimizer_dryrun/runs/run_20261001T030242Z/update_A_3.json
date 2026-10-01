@@ -1,0 +1,74 @@
+{
+  "step": {
+    "run": "A",
+    "global_update": 3,
+    "LR": 5.119453924914676e-08,
+    "LR_hex": "0x1.b7c1fb7c58fa6p-25",
+    "loss": 1.2195140223037155,
+    "loss_hex": "0x1.3832122aced0cp+0",
+    "L_occ": 0.0950678214430809,
+    "L_qr": 1.1244462008606346,
+    "pre_clip_norm": 12.338016510009766,
+    "pre_clip_norm_hex": "0x1.8ad1080000000p+3",
+    "clip_threshold": 5.0,
+    "clipping_triggered": true,
+    "post_clip_norm": 5.0,
+    "post_clip_interpretation": "PyTorch coefficient=min(1,5/(pre_norm+1e-6)); foreach=False, no GradScaler",
+    "actual_optimizer_group_LRs": [
+      5.119453924914676e-08,
+      5.119453924914676e-08
+    ],
+    "valid_Yunnan_supervised_pixels": 6860,
+    "rainy_pixels": 1972,
+    "sample_ids": [
+      "2023-09-12T21:30:00+00:00",
+      "2023-10-31T23:30:00+00:00"
+    ],
+    "step_seconds": 0.2814668000000893,
+    "scope": "ENGINEERING_ONLY",
+    "optimizer_step_performed": true
+  },
+  "memory": {
+    "run": "A",
+    "global_update": 3,
+    "allocated_MiB": 83.6767578125,
+    "reserved_MiB": 3260.0,
+    "device_free_MiB": 3662.0,
+    "peak_allocated_MiB": 2735.42529296875,
+    "peak_reserved_MiB": 3260.0,
+    "pre_device_free_MiB": 3662.0,
+    "pre_reserved_MiB": 3260.0,
+    "estimated_min_device_free_MiB": 3662.0,
+    "dedicated_total_MiB": 8150.5625,
+    "mem_get_info_total_MiB": 8150.5625,
+    "reserved_fraction": 0.3999723945433214,
+    "estimated_free_fraction": 0.44929414380909294,
+    "safe_20pct": true,
+    "optimizer_state_first_initialized": false,
+    "optimizer_state_parameter_tensors": 74,
+    "optimizer_cuda_state_MiB": 33.03040313720703
+  },
+  "precision": {
+    "run": "A",
+    "global_update": 3,
+    "parameters": [
+      "torch.float32"
+    ],
+    "raw_quantile": "torch.float32",
+    "backbone_autocast_output": "torch.float32",
+    "autocast_enabled": true,
+    "autocast_dtype": "torch.bfloat16",
+    "qlog": "torch.float64",
+    "qphysical": "torch.float64",
+    "pinball": "torch.float64",
+    "strict_crossing_count": 0,
+    "finite_outputs": true,
+    "finite_loss": true,
+    "valid_Yunnan_supervised_pixels": 6860,
+    "rainy_pixels": 1972,
+    "gradients_finite": true,
+    "parameters_after_step_finite": true,
+    "optimizer_state_finite": true,
+    "pass_": true
+  }
+}
