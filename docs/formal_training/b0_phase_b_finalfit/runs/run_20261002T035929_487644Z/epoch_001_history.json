@@ -1,0 +1,68 @@
+{
+  "epoch": 1,
+  "coverage": {
+    "samples": 23447,
+    "updates": 11724,
+    "denominator": 80423210,
+    "permutation_sha256": "0ec2d43735e7bbb99c900278784427bf5a6ce31641f76739c0fee028d30fe0cb",
+    "identities_exactly_once": true,
+    "tail_batch_size": 1,
+    "tail_denominator": 3430
+  },
+  "training_metrics": {
+    "S_occ": 2773521.1127663823,
+    "S_qr": 3103205.653862554,
+    "D_valid": 80423210,
+    "N_rain": 8998149,
+    "training_core_loss": 0.07307252180842988,
+    "wall_seconds": 3014.6261997999973,
+    "IO": {
+      "copy_seconds": 431.4315386007547,
+      "read_seconds": 301.31678030000694,
+      "temporary_bytes_peak_per_worker": 6387344,
+      "cleanup_success": true
+    },
+    "checkpoint_selection_uses_training_metrics": false,
+    "formal_epoch_telemetry": {
+      "epoch": 1,
+      "samples": 23447,
+      "updates": 11724,
+      "global_update_start": 1,
+      "global_update_end": 11724,
+      "global_train_occurrence_loss": 0.034486575613761034,
+      "global_train_quantile_loss": 0.03858594619466885,
+      "global_train_core_loss": 0.07307252180842988,
+      "N_valid": 80423210,
+      "N_rain": 8998149,
+      "LR_start": 8.5295121119072e-09,
+      "LR_end": 0.0001,
+      "gradient_norm_min": 0.010124963708221912,
+      "gradient_norm_max": 23.5958251953125,
+      "gradient_norm_mean": 0.8960040227946304,
+      "clip_count": 89,
+      "clip_fraction": 0.007591265779597407,
+      "GPU_peak_allocated_bytes": 2867190272,
+      "GPU_peak_reserved_bytes": 3418357760,
+      "IO_copy_seconds": 431.4315386007547,
+      "IO_read_seconds": 301.31678030000694,
+      "wall_seconds": 3014.6261997999973,
+      "singleton_sample_id": "2024-03-20T05:30:00+00:00",
+      "singleton_actual_denominator": 3430,
+      "singleton_LR": 0.0001,
+      "identities_exactly_once": true,
+      "aggregation": "GLOBAL_RAW_NUMERATORS_DIVIDED_BY_TOTAL_ACTUAL_VALID_PIXELS_NOT_BATCH_AVERAGE"
+    }
+  },
+  "checkpoint": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_phase_b_finalfit\\run_20261002T035929_487644Z\\epoch_001.pt",
+    "filename": "epoch_001.pt",
+    "bytes": 52071595,
+    "sha256": "e5bfdf4c28e8814d7ed1ef6bd46af4038cb716982a0488f136df6afabdd49cec",
+    "epoch": 1,
+    "global_update": 11724,
+    "authorization_sha256": "488eec0c1d2860f2556e0d28fd8ddaca4fa966e5efc4acc30fc3fd7af42d212b",
+    "checkpoint_kind": "FINALFIT_COMPLETED_EPOCH",
+    "CHECKPOINT_BINARY_NOT_COMMITTED_TO_GIT": true
+  },
+  "validation_executed": false
+}

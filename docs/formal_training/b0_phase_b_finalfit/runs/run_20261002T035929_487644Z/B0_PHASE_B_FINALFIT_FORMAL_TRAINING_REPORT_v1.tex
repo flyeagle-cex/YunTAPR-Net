@@ -1,0 +1,155 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=20mm]{geometry}
+\usepackage{amsmath,array,longtable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\begin{document}
+\begin{center}
+{\Large\bfseries YunTAPR-Net B0 Phase-B FinalFit}\par
+{\large Formal Training Completion and Evidence Report v1}
+\end{center}
+\textbf{Run:} run\_20261002T035929\_487644Z\\
+\textbf{Baseline:} \path{4de37ac087183bddf3b9f8c7d548a0f976a50e91}\\
+\textbf{Scope:} B0 Phase-B FinalFit only.
+
+\section*{Completed authorized run}
+All eleven fixed-budget epochs completed, with 23,447 frozen identities exactly
+once in each epoch. The training population contains 11,720 scenes from 2023 and
+11,727 from 2024. No 2025 scenes or pixels were read. Each epoch contains 11,723
+full batches of two scenes and one actual singleton: 11,724 optimizer updates,
+128,964 in total. No identities were skipped, duplicated, padded, replaced or
+dropped. The singleton denominator is 3,430; a full batch uses 6,860.
+
+Initialization used fresh seed 2026. Its logical model state SHA256 matched the
+independently verified fresh initialization identity before training:
+\begin{quote}\small\path{57a4d103a31aa7be1a52af079cdf7fb81bc73c51ba3e0e97d395513d21d9023d}\end{quote}
+No Phase-A model, optimizer or scheduler state initialized FinalFit. Historical
+authorization fields and all 1,656 baseline files remained unchanged.
+
+\section*{Unchanged scientific and numerical protocol}
+The frozen Phase-B normalization was reused, without refitting:
+\[
+\mu=270.5900486586461\,\mathrm{K},\qquad
+\sigma=20.368583874067266\,\mathrm{K}.
+\]
+Artifact SHA256:
+\begin{quote}\small\path{c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327}\end{quote}
+Manifest SHA256:
+\begin{quote}\small\path{00e6bd018eae6aeb05be0740b55a92b7a5cc9a44b9ab2b80affbad3e3282ccff}\end{quote}
+AdamW used $(\beta_1,\beta_2)=(0.9,0.999)$, $\epsilon=10^{-8}$ and weight decay
+$10^{-4}$ for Conv2d kernels only. Forward precision was BF16; parameters and
+raw quantiles were FP32. Quantile transformations and pinball calculations used
+FP64. No GradScaler was used. Global gradient clipping remained 5, with nonfinite
+errors causing STOP. Architecture, loss and hyperparameters were unchanged.
+
+The stateless scheduler retained the frozen 50-epoch horizon:
+$W=11{,}724$, $U=586{,}200$, base LR $10^{-4}$ and cosine minimum $10^{-6}$.
+The actual first-epoch singleton LR was exactly $10^{-4}$. The cosine horizon
+was not compressed to eleven epochs.
+
+There was no independent 2024 validation, early stopping, BEST selection,
+epoch reselection, threshold calibration or training-loss budget adjustment.
+
+\newpage
+\section*{Actual epoch evidence}
+The losses below are global raw numerator sums divided by the total actual
+valid-pixel denominator, not averages of batch losses. Each epoch contains
+80,423,210 valid pixels. Full precision values and all requested I/O, rainy-pixel,
+LR, clipping, GPU and singleton metrics are preserved in
+\path{training_history.csv} and the eleven epoch summary JSON files.
+
+{\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{rrrrrrr}
+Epoch & Scenes & Updates & Occurrence & Quantile & Core & End LR\\\hline
+1 & 23,447 & 11,724 & 0.03448658 & 0.03858595 & 0.07307252 & 0.0001 \\
+2 & 23,447 & 11,724 & 0.03200169 & 0.01448328 & 0.04648497 & 9.98983e-05 \\
+3 & 23,447 & 11,724 & 0.03099689 & 0.0141999 & 0.04519679 & 9.959361e-05 \\
+4 & 23,447 & 11,724 & 0.03028817 & 0.01400176 & 0.04428993 & 9.908718e-05 \\
+5 & 23,447 & 11,724 & 0.02965103 & 0.01383817 & 0.04348921 & 9.83811e-05 \\
+6 & 23,447 & 11,724 & 0.02919559 & 0.01370123 & 0.04289682 & 9.747826e-05 \\
+7 & 23,447 & 11,724 & 0.02875113 & 0.01357739 & 0.04232852 & 9.638238e-05 \\
+8 & 23,447 & 11,724 & 0.02835876 & 0.01346868 & 0.04182744 & 9.509796e-05 \\
+9 & 23,447 & 11,724 & 0.02801436 & 0.01334646 & 0.04136082 & 9.363028e-05 \\
+10 & 23,447 & 11,724 & 0.02764786 & 0.01322562 & 0.04087348 & 9.198536e-05 \\
+11 & 23,447 & 11,724 & 0.02736705 & 0.01311352 & 0.04048058 & 9.016997e-05 \\
+\end{longtable}}
+
+{\small\setlength{\tabcolsep}{5pt}
+\begin{longtable}{rrrrrrr}
+Epoch & Norm min & Norm max & Norm mean & Clips & GPU GiB & Minutes\\\hline
+1 & 0.010125 & 23.596 & 0.896 & 89 & 2.670 & 50.24 \\
+2 & 0.0036288 & 4.3711 & 0.33657 & 0 & 2.670 & 50.11 \\
+3 & 0.0030602 & 2.3496 & 0.23979 & 0 & 2.670 & 50.08 \\
+4 & 0.0043125 & 2.3836 & 0.19901 & 0 & 2.670 & 50.10 \\
+5 & 0.0033622 & 1.5836 & 0.17405 & 0 & 2.670 & 50.07 \\
+6 & 0.0042983 & 1.4916 & 0.1625 & 0 & 2.670 & 50.12 \\
+7 & 0.0033529 & 1.5495 & 0.15112 & 0 & 2.670 & 50.91 \\
+8 & 0.0026405 & 1.131 & 0.1435 & 0 & 2.670 & 50.68 \\
+9 & 0.0030733 & 1.5721 & 0.13591 & 0 & 2.670 & 50.54 \\
+10 & 0.004444 & 1.1662 & 0.13054 & 0 & 2.670 & 50.07 \\
+11 & 0.0027811 & 1.138 & 0.12741 & 0 & 2.670 & 50.14 \\
+\end{longtable}}
+The GPU column reports peak allocated memory. Peak reserved memory, summed
+source staging/read times, singleton identity and its exact LR remain in the
+CSV/JSON evidence. Displayed numbers are rounded only for this PDF.
+
+\section*{Checkpoint identity and integrity}
+Only completed epoch boundaries produced checkpoint payloads. LAST and FINAL
+both identify epoch 11, global update 128,964. All eleven boundary files remain
+under the approved local F: root. Temporary write, fsync/close, round-trip
+verification, SHA checks and atomic rename were performed. Retained boundary
+payloads were independently reverified after training.
+
+\textbf{FINAL local path:}
+\begin{quote}\small\path{F:/pytorch/Research/outputs/formal_training/b0_phase_b_finalfit/}\\
+\path{run_20261002T035929_487644Z/epoch_011.pt}\end{quote}
+\textbf{FINAL SHA256:}
+\begin{quote}\small\path{05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65}\end{quote}
+Binary model and optimizer states are excluded from Git. Checkpoint registry
+and identity JSON preserve paths, sizes, hashes, epoch/update counters,
+authorization and complete environment/provenance metadata.
+
+\newpage
+\section*{Post-training closure}
+The actual local update log was reread to check every sample identity, seeded
+order, LR, precision gate, denominator and optimizer update. The eleven
+epochs were independently checked for exact coverage. Global losses, gradient
+statistics, clipping and singleton metadata were recomputed and compared with
+the JSON and CSV histories. FINAL passed read-only readability, SHA256 and
+provenance verification.
+
+The current 242 regression tests and 12 legal new formal-run tests
+were rerun after training: 254 actual tests, zero failures, errors or
+skips. Tests used isolated fixtures, cleaned all temporary test artifacts and
+never applied FINAL state to a test model. FINAL SHA256 before and after tests
+was identical. Original source identity and runtime read/QC/causality checks
+passed; no source or numerical failure was bypassed.
+
+\begin{tabular}{ll}
+Phase-B authorized & true\\
+Formal training started & true\\
+FinalFit completed & true\\
+Completed epochs & 11\\
+Formal optimizer updates & 128,964\\
+FINAL epoch & 11\\
+2025 pixels read & 0\\
+B1 started / B1--B8 authorized & false / false\\
+2025 Final Test authorized / executed & false / false
+\end{tabular}
+
+\section*{Evidence and limits}
+The run directory contains independent authorization references,
+\path{formal_run_manifest.json}, \path{training_history.csv}, eleven summaries
+and histories, checkpoint registry and identities, runtime and verification
+reports, actual post-training test logs, final status and artifact hashes.
+This editable LaTeX source accompanies the PDF. The machine-readable evidence
+contains full precision numbers and exact provenance.
+
+A report-only execution-manifest path error after all tests passed was recorded. Its failure history and timestamped metadata correction are preserved. The correction rechecked FINAL SHA/provenance and added zero formal optimizer updates.
+
+This report establishes fixed-budget FinalFit completion. It makes no 2025
+Final Test or B1--B8 performance claim. Execution stops after evidence
+publication. Subsequent stages remain unauthorized.
+\end{document}

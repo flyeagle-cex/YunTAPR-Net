@@ -1,0 +1,68 @@
+{
+  "epoch": 8,
+  "coverage": {
+    "samples": 23447,
+    "updates": 11724,
+    "denominator": 80423210,
+    "permutation_sha256": "06f45cdf8c0d9ff0c9c8c0e4b4ee2484b1aa5369a340b0f5f57b2d24cfed40f5",
+    "identities_exactly_once": true,
+    "tail_batch_size": 1,
+    "tail_denominator": 3430
+  },
+  "training_metrics": {
+    "S_occ": 2280702.4582196595,
+    "S_qr": 1083194.6603678574,
+    "D_valid": 80423210,
+    "N_rain": 8998149,
+    "training_core_loss": 0.041827441587913704,
+    "wall_seconds": 3040.5697303999987,
+    "IO": {
+      "copy_seconds": 433.20669009921403,
+      "read_seconds": 308.039136599029,
+      "temporary_bytes_peak_per_worker": 6387344,
+      "cleanup_success": true
+    },
+    "checkpoint_selection_uses_training_metrics": false,
+    "formal_epoch_telemetry": {
+      "epoch": 8,
+      "samples": 23447,
+      "updates": 11724,
+      "global_update_start": 82069,
+      "global_update_end": 93792,
+      "global_train_occurrence_loss": 0.028358759345960695,
+      "global_train_quantile_loss": 0.013468682241953005,
+      "global_train_core_loss": 0.041827441587913704,
+      "N_valid": 80423210,
+      "N_rain": 8998149,
+      "LR_start": 9.638227790435061e-05,
+      "LR_end": 9.509795896116975e-05,
+      "gradient_norm_min": 0.002640519058331847,
+      "gradient_norm_max": 1.1310265064239502,
+      "gradient_norm_mean": 0.14350491228593015,
+      "clip_count": 0,
+      "clip_fraction": 0.0,
+      "GPU_peak_allocated_bytes": 2866496512,
+      "GPU_peak_reserved_bytes": 3418357760,
+      "IO_copy_seconds": 433.20669009921403,
+      "IO_read_seconds": 308.039136599029,
+      "wall_seconds": 3040.5697303999987,
+      "singleton_sample_id": "2023-10-01T06:30:00+00:00",
+      "singleton_actual_denominator": 3430,
+      "singleton_LR": 9.509795896116975e-05,
+      "identities_exactly_once": true,
+      "aggregation": "GLOBAL_RAW_NUMERATORS_DIVIDED_BY_TOTAL_ACTUAL_VALID_PIXELS_NOT_BATCH_AVERAGE"
+    }
+  },
+  "checkpoint": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_phase_b_finalfit\\run_20261002T035929_487644Z\\epoch_008.pt",
+    "filename": "epoch_008.pt",
+    "bytes": 52071595,
+    "sha256": "a096b8b860d9a5632bb237cf0f449afae306b91e6616e22d28c81febb059a6b4",
+    "epoch": 8,
+    "global_update": 93792,
+    "authorization_sha256": "488eec0c1d2860f2556e0d28fd8ddaca4fa966e5efc4acc30fc3fd7af42d212b",
+    "checkpoint_kind": "FINALFIT_COMPLETED_EPOCH",
+    "CHECKPOINT_BINARY_NOT_COMMITTED_TO_GIT": true
+  },
+  "validation_executed": false
+}

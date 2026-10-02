@@ -1,0 +1,117 @@
+from copy import deepcopy
+import json
+import os
+from pathlib import Path
+import unittest
+from unittest.mock import patch
+
+from yuntapr.contracts.loader import sha256
+from yuntapr.training import formal_phase_b as b
+import execute_b0_phase_b_finalfit_formal_v1 as execution
+
+
+class TelemetryUnitTests(unittest.TestCase):
+    def ledger(self, epoch=1):
+        ledger = execution.EpochTelemetry(epoch)
+        for index in range(11724):
+            size = 1 if index == 11723 else 2
+            u = (epoch-1)*11724+index+1
+            ledger.record({"scope": b.SCOPE, "scheduler_u": u, "batch_size": size,
+                "valid_denominator": size*3430, "LR": b.finalfit_lr(u), "pre_clip_norm": 6. if index == 0 else 2.,
+                "rainy_count": size}, [f"fixture_{index}_{i}" for i in range(size)])
+        return ledger
+
+    def metrics(self):
+        return {"S_occ": 100., "S_qr": 300., "D_valid": 80423210, "N_rain": 23447,
+            "IO": {"copy_seconds": 1., "read_seconds": 2.}, "wall_seconds": 4.}
+
+    def coverage(self):
+        class FixtureCoverage:
+            def complete(self): return {"updates": 11724}
+        return FixtureCoverage()
+
+    def test_global_loss_uses_raw_numerators_and_actual_total_valid(self):
+        result = self.ledger().complete(self.metrics(), self.coverage(), 123, 456)
+        self.assertEqual(result["global_train_occurrence_loss"], 100/80423210)
+        self.assertEqual(result["global_train_quantile_loss"], 300/80423210)
+        self.assertEqual(result["global_train_core_loss"], 400/80423210)
+
+    def test_real_epoch_one_tail_lr_and_denominator_metadata(self):
+        result = self.ledger().complete(self.metrics(), self.coverage(), 123, 456)
+        self.assertEqual(result["singleton_actual_denominator"], 3430)
+        self.assertEqual(result["singleton_LR"], 1e-4)
+        self.assertEqual(result["LR_start"], 1e-4*(1/11724))
+        self.assertEqual(result["global_update_start"], 1)
+        self.assertEqual(result["global_update_end"], 11724)
+
+    def test_clip_and_gradient_norm_stats_from_all_actual_steps(self):
+        result = self.ledger().complete(self.metrics(), self.coverage(), 123, 456)
+        self.assertEqual(result["gradient_norm_min"], 2.)
+        self.assertEqual(result["gradient_norm_max"], 6.)
+        self.assertEqual(result["gradient_norm_mean"], (6+11723*2)/11724)
+        self.assertEqual(result["clip_count"], 1)
+        self.assertEqual(result["clip_fraction"], 1/11724)
+
+    def test_incomplete_or_wrong_update_does_not_make_epoch_summary(self):
+        with self.assertRaises(ValueError): execution.EpochTelemetry(1).complete(self.metrics(), self.coverage(), 0, 0)
+        ledger = execution.EpochTelemetry(1)
+        wrong = {"scope": b.SCOPE, "scheduler_u": 2, "batch_size": 2,
+            "valid_denominator": 6860, "LR": b.finalfit_lr(2), "pre_clip_norm": 2., "rainy_count": 0}
+        with self.assertRaises(ValueError): ledger.record(wrong, ["a", "b"])
+
+    def test_epoch_eleven_replays_fifty_epoch_horizon(self):
+        result = self.ledger(11).complete(self.metrics(), self.coverage(), 0, 0)
+        self.assertEqual(result["global_update_end"], 128964)
+        self.assertEqual(result["LR_end"], b.finalfit_lr(128964))
+        self.assertGreater(result["LR_end"], 1e-6)
+
+    def test_telemetry_fixture_performs_no_model_or_optimizer_update(self):
+        with patch.object(execution.runner, "execute_update", side_effect=AssertionError("fixture is metadata only")) as step:
+            self.ledger().complete(self.metrics(), self.coverage(), 0, 0)
+            step.assert_not_called()
+
+
+class FormalExecutionArtifactTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.out = Path(os.environ["YUNTAPR_PHASE_B_FORMAL_EVIDENCE"])
+        cls.manifest = execution.read(cls.out/"run_manifest.json")
+        cls.registry = execution.read(cls.out/"checkpoint_registry.json")
+
+    def test_eleven_actual_complete_epochs_and_exact_total_updates(self):
+        epochs = [execution.read(p) for p in sorted(self.out.glob("epoch_*_summary.json"))]
+        self.assertEqual([r["epoch"] for r in epochs], list(range(1, 12)))
+        self.assertEqual(sum(r["updates"] for r in epochs), 128964)
+        for row in epochs:
+            self.assertEqual(row["samples"], 23447)
+            self.assertEqual(row["N_valid"], 80423210)
+            self.assertTrue(row["identities_exactly_once"])
+
+    def test_final_and_last_both_epoch_eleven_without_best(self):
+        self.assertNotIn("BEST", self.registry)
+        self.assertEqual(self.registry["FINAL"], self.registry["LAST"])
+        self.assertEqual(self.registry["FINAL"]["epoch"], 11)
+        self.assertEqual(self.registry["FINAL"]["global_update"], 128964)
+
+    def test_initialization_and_phase_b_normalization_identity(self):
+        value = execution.read(self.out/"formal_run_manifest.json")
+        self.assertEqual(value["initial_model_state_sha256"], "57a4d103a31aa7be1a52af079cdf7fb81bc73c51ba3e0e97d395513d21d9023d")
+        self.assertEqual(value["checkpoint_expected"]["normalization_artifact_sha256"], b.NORMALIZATION_SHA)
+        self.assertEqual(value["checkpoint_expected"]["PHASE_B_MODEL_INITIALIZATION"], "FRESH_SEED_2026")
+
+    def test_all_baseline_runner_code_hashes_unchanged(self):
+        self.assertEqual(self.manifest["checkpoint_expected"]["implementation_sha256"], b.implementation_hashes())
+
+    def test_epoch_one_actual_singleton_lr_and_every_epoch_denominator(self):
+        epoch1 = execution.read(self.out/"epoch_001_summary.json")
+        self.assertEqual(epoch1["singleton_LR"], 1e-4)
+        for p in self.out.glob("epoch_*_summary.json"):
+            self.assertEqual(execution.read(p)["singleton_actual_denominator"], 3430)
+
+    def test_no_2025_or_next_stage_execution(self):
+        summary = execution.read(self.out/"runtime_summary.json")
+        self.assertEqual(summary["2025_PIXELS_READ"], 0)
+        self.assertFalse(summary["B1_STARTED"])
+        self.assertFalse(summary["B1_TO_B8_AUTHORIZED"])
+        self.assertFalse(summary["FINAL_TEST_2025_AUTHORIZED"])
+        self.assertFalse(summary["FINAL_TEST_2025_EXECUTED"])
