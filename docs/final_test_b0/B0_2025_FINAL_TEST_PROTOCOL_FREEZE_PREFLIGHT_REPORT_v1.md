@@ -2,6 +2,8 @@
 
 本轮完成评价协议冻结、独立 Final Test runner 和零 2025 读取 preflight。最终版本实际执行 **60 项测试，全部通过，failure/error/skip 均为 0**。只对已冻结 FINAL 做只读身份核验及 synthetic 输入的 CUDA forward，没有执行正式 Final Test。
 
+术语约定：**评价样本全集（population）**指按固定资格规则确定的全部评价场景。全样本评价按这些场景中的有效像元观测累计分子和分母，同一格点在不同时次分别计数；conditional 指标按有效 rainy 像元观测统计。分母是累计观测计数，不是场景数或去重后的地理格点数；不对场景或 batch loss 简单取平均。
+
 ## 身份、基线与执行证据
 
 - baseline：`ddbb69ccca6c806973a89a91127ea02c9af42afd`；基线 1,711 个文件逐文件 Git blob / SHA256 核验，均保持原样。
@@ -16,19 +18,19 @@
 
 ## FROZEN：评价时期、资格规则与指标
 
-测试窗口起点仅允许 UTC `[2025-03-01 00:00, 2025-10-01 00:00)`，间隔 30 分钟，即日历上 10,272 个候选槽位。该数来自日期运算，**不是读取 2025 数据得到的 eligible scene 数**；实际 eligible population 当前 `NOT_INSPECTED`。未来正式授权后的 catalogue 必须逐一登记全部槽位、固定资格结论及拒绝原因，再冻结 population identity。
+测试窗口起点仅允许 UTC `[2025-03-01 00:00, 2025-10-01 00:00)`，间隔 30 分钟，即日历上 10,272 个候选槽位。该数来自日期运算，**不是读取 2025 数据得到的 eligible scene 数**；实际符合资格的评价样本数当前 `NOT_INSPECTED`。未来正式授权后的 catalogue 必须逐一登记全部槽位、固定资格结论及拒绝原因，再冻结评价样本全集身份。
 
-沿用 V1.1 正式 B0 规则：IMERG V07 Final provenance、精确网格/时间、501×501 B13 全场 valid/finite、预期最新 nominal=T+20min、obs_start≤obs_end≤analysis_time=T+30min、无 older-frame fallback，以及冻结云南 mask 中有效监督像元数>0。保留 IMERG 部分有效场，不新增每场 3,430 像元全部有效的要求；缺测继续 masked，绝不当 0。固定时间顺序、每个 eligible identity 一次，batch=2、drop_last=false、worker=0。population 冻结后任一 SHA/size/QC/因果/cleanup 问题必须停止，不跳过、不替代。
+沿用 V1.1 正式 B0 规则：IMERG V07 Final provenance、精确网格/时间、501×501 B13 全场 valid/finite、预期最新 nominal=T+20min、obs_start≤obs_end≤analysis_time=T+30min、无 older-frame fallback，以及冻结云南 mask 中有效监督像元数>0。保留 IMERG 部分有效场，不新增每场 3,430 像元全部有效的要求；缺测继续 masked，绝不当 0。固定时间顺序、每个 eligible identity 一次，batch=2、drop_last=false、worker=0。评价样本清单冻结后任一 SHA/size/QC/因果/cleanup 问题必须停止，不跳过、不替代。
 
 9 月 30 日 23:30 起始窗口允许，其结束时刻 10 月 1 日 00:00 是窗口边界；所用卫星 nominal 为 9 月 30 日 23:50。10 月源文件与 10 月起始窗口在打开前拒绝。拒绝规则同时检查目录和文件名的日期，覆盖错放在 9 月目录的 10 月文件。
 
-预声明主要指标：global core loss、occurrence loss、quantile loss、Brier、AUROC、Average Precision、conditional mean pinball、每个 tau 的 pinball、32 tau conditional coverage、coverage error、crossing/nonfinite/support violation。`S_occ/N_valid`、`S_qr/N_valid` 和 `(S_occ+S_qr)/N_valid` 使用全人口原始分子与真实 valid 分母；conditional pinball 和 coverage 使用 `N_rain`，不得平均 batch loss。rainy 判定沿用 float32 target > float32(0.1)，在 float64 提升前判断。tau=(i-0.5)/32。AUROC/AP 继承 exact equal-score ties 与 non-interpolated grouped AP，禁止排名分箱近似。空组、无雨 conditional 指标或单类别 AUROC 记录 null 与原因，不造 0。
+预声明主要指标：global core loss、occurrence loss、quantile loss、Brier、AUROC、Average Precision、conditional mean pinball、每个 tau 的 pinball、32 tau conditional coverage、coverage error、crossing/nonfinite/support violation。`S_occ/N_valid`、`S_qr/N_valid` 和 `(S_occ+S_qr)/N_valid` 使用评价样本全集内有效像元的原始分子与真实 valid 分母；conditional pinball 和 coverage 使用 `N_rain`，不得平均 batch loss。rainy 判定沿用 float32 target > float32(0.1)，在 float64 提升前判断。tau=(i-0.5)/32。AUROC/AP 继承 exact equal-score ties 与 non-interpolated grouped AP，禁止排名分箱近似。空组、无雨 conditional 指标或单类别 AUROC 记录 null 与原因，不造 0。
 
 POD/FAR/CSI 保持 `THRESHOLD_NOT_FROZEN`。不得在查看 2025 结果后增删主要指标、挑阈值、校准或更换 epoch/checkpoint。
 
 ## 2024 诊断定义的原样继承
 
-`docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z/case_selection_rules.json` 的完整解析对象在协议 `inherited_diagnostics` 中逐值一致，并绑定原文件与旧实现 SHA256。未改动旧 Scientific Review 代码或结果。新协议仅声明测试时期、授权/schema 和现有统计量在本测试人口上的应用。
+`docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z/case_selection_rules.json` 的完整解析对象在协议 `inherited_diagnostics` 中逐值一致，并绑定原文件与旧实现 SHA256。未改动旧 Scientific Review 代码或结果。新协议仅声明测试时期、授权/schema 和现有统计量在本测试评价样本全集上的应用。
 
 - monthly：相同统计量应用于 3–9 月，空月明确无 eligible scenes。
 - spatial：相同 per-cell valid/rain count、频率、概率、Brier、conditional pinball 与 proxy；conditional pinball 展示门槛仍为 30 个 rainy observation，仅影响展示；使用已冻结精确坐标、mask，禁止重造坐标、transpose/flip。
@@ -41,7 +43,7 @@ POD/FAR/CSI 保持 `THRESHOLD_NOT_FROZEN`。不得在查看 2025 结果后增删
 
 ## 实现与未来正式入口
 
-入口 `scripts/test_b0_2025_final_v1.py`，模块 `src/yuntapr/evaluation/final_test_b0.py`，测试 `tests/final_test_b0/`。preflight 和 run 为独立 action。本轮只调用 preflight；run 缺少新的研究者 authorization 时，在读取 population、源文件及 FINAL 前拒绝。未来授权必须绑定协议、实现、FINAL、normalization 与完整候选 catalogue 的 SHA256；当前 release 不提供该授权。
+入口 `scripts/test_b0_2025_final_v1.py`，模块 `src/yuntapr/evaluation/final_test_b0.py`，测试 `tests/final_test_b0/`。preflight 和 run 为独立 action。本轮只调用 preflight；run 缺少新的研究者 authorization 时，在读取评价样本清单、源文件及 FINAL 前拒绝。未来授权必须绑定协议、实现、FINAL、normalization 与完整候选 catalogue 的 SHA256；当前 release 不提供该授权。
 
 FINAL 全文件 SHA、size、原 training provenance、模型 schema 在模型 state application 前核验；只应用 model state，未实例化/应用 optimizer，也未应用 RNG state。加载后的 model eval/requires_grad=false，在 inference_mode 下前向。历史 checkpoint payload 内 optimizer 字典的反序列化不等于创建或恢复 optimizer；该字典未用于推理。绑定既有训练依赖的冻结清单，并独立记录新增 evaluation 实现 hash，未重定义旧 training 清单。
 
@@ -60,11 +62,11 @@ runtime guards 禁止所有 torch optimizer 构造/step、backward、train(True)
 |新增 preflight artifact tests|6|PASS|
 |合计|60|0 failure / 0 error / 0 skip|
 
-即 50 项新增测试 + 10 项既有 inference-only regression。测试覆盖冻结 provenance、错误授权/日期/目录拒绝、部分 IMERG valid mask、缺失/重复/乱序人口、variable-size 分母、ties、无雨/单类/空 bin、完整诊断 count reconciliation、数值异常停止、readonly FINAL 与 baseline 身份。
+即 50 项新增测试 + 10 项既有 inference-only regression。测试覆盖冻结 provenance、错误授权/日期/目录拒绝、部分 IMERG valid mask、缺失/重复/乱序评价样本、variable-size 分母、ties、无雨/单类/空 bin、完整诊断 count reconciliation、数值异常停止、readonly FINAL 与 baseline 身份。
 
 既有包含真实 optimizer/backward 的整套 254 项 training/resume regression **本轮 NOT_RUN**，因为本轮明确禁止这些操作；未将其计为本轮 PASS。此前的训练任务测试记录保持不变。guard tests 中仅有被入口拒绝的操作尝试，没有实际 optimizer 创建、参数更新或 backward。
 
-只读真实 FINAL CUDA smoke：synthetic 270 K 常量 B13、历史 2024 时间标签 normalization fixture、四个 synthetic target cells `[0, float32(0.1), 1, 20]`；schema 中 2025 日期仅为 synthetic 标签。valid=4/rain=2，**不是 2025 Final Test 结果**。FP32 raw quantiles、FP64 log/physical quantiles，CUDA 峰值 allocated=448,776,192 bytes、reserved=685,768,704 bytes；wall 0.583057 s 为 smoke 整段记录，非全人口性能预测。模型 state/FINAL 文件 hash 前后不变；no grad/no optimizer/no training。
+只读真实 FINAL CUDA smoke：synthetic 270 K 常量 B13、历史 2024 时间标签 normalization fixture、四个 synthetic target cells `[0, float32(0.1), 1, 20]`；schema 中 2025 日期仅为 synthetic 标签。valid=4/rain=2，**不是 2025 Final Test 结果**。FP32 raw quantiles、FP64 log/physical quantiles，CUDA 峰值 allocated=448,776,192 bytes、reserved=685,768,704 bytes；wall 0.583057 s 为 smoke 整段记录，非全样本推理性能预测。模型 state/FINAL 文件 hash 前后不变；no grad/no optimizer/no training。
 
 日志：最新 run 的 `unit_test_results.txt`、`unit_test_summary.json`、`artifact_test_results.txt`、`preflight_manifest.json`、`final_identity_verification.json`、`synthetic_FINAL_forward_smoke.json`、`final_status.json`。raw source opened=0；3 次 Python raw-open probe 均被 guard 在 I/O 前拒绝。
 
@@ -87,4 +89,4 @@ OPTIMIZER_STEPS=0
 BACKWARD_CALLS=0
 ```
 
-`FINAL_TEST_RUNNER_READY=true` 仅表示本轮 fixture/schema/只读 synthetic preflight 闭环，不等于实际 2025 源数据可用性或全人口 reinference 已被验证。2025 catalogue、真实 eligible count、正式推理和测试结果均 `NOT_RUN / NOT_INSPECTED`，留待单独授权。完成报告、源码与日志的 GitHub main 提交后停止；不进入 B1–B8。
+`FINAL_TEST_RUNNER_READY=true` 仅表示本轮 fixture/schema/只读 synthetic preflight 闭环，不等于实际 2025 源数据可用性或全样本重新推理 已被验证。2025 catalogue、真实 eligible count、正式推理和测试结果均 `NOT_RUN / NOT_INSPECTED`，留待单独授权。完成报告、源码与日志的 GitHub main 提交后停止；不进入 B1–B8。
