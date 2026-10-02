@@ -154,7 +154,7 @@ def main():
         if key=="coverage_minus_tau":ax.axhline(0,color="#777777",ls="--")
         ax.set(xlim=(0,1),xlabel="Conditional quantile level tau",ylabel=ylabel,title=title+" | 32 unchanged quantiles")
         ax.legend();ax.grid(axis="y",alpha=.18);save(fig,name)
-    with Dataset(str(out/"spatial_cell_metrics.nc")) as nc:
+    with Dataset("scientific_review_spatial.nc", memory=(out/"spatial_cell_metrics.nc").read_bytes()) as nc:
         lat,lon=nc["lat"][:].data,nc["lon"][:].data
         mask=np.asarray(nc["yunnan_evaluation_mask"][:],dtype=bool)
         if lat.shape!=(100,) or lon.shape!=(100,) or not np.all(np.diff(lat)>0):
@@ -176,11 +176,15 @@ def main():
                 options={"cmap":"RdBu_r","norm":TwoSlopeNorm(vmin=-limit,vcenter=0,vmax=limit)}
             elif key in ("rain_frequency","mean_probability"):
                 options.update(vmin=0,vmax=1)
+            elif key=="valid_count" and np.ptp(values.compressed())==0:
+                options.update(vmin=0,vmax=float(values.compressed()[0]))
             image=ax.pcolormesh(lon,lat,values,shading="nearest",rasterized=True,**options)
             ax.contour(lon,lat,mask.astype(float),levels=[.5],colors="#333333",linewidths=.5)
             ax.set(xlabel="Longitude (degrees E)",ylabel="Latitude (degrees N)",title=title+" | BEST epoch 11")
             ax.set_aspect(1/np.cos(np.deg2rad(float(np.mean(lat)))))
-            fig.colorbar(image,ax=ax,label=units,shrink=.85)
+            label=(f"Count (all Yunnan cells = {int(values.compressed()[0])})"
+                if key=="valid_count" and np.ptp(values.compressed())==0 else units)
+            fig.colorbar(image,ax=ax,label=label,shrink=.85)
             save(fig,"spatial_"+key+".png",dpi=300,note="Frozen Yunnan mask only; actual ascending target coordinates, no transpose/flip. Diagnostic display only.")
     rate=rows(out/"rainrate_stratified_metrics.csv")
     fig,axes=plt.subplots(1,2,figsize=(11,4))

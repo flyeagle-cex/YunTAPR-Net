@@ -39,6 +39,11 @@ STAGING = Path(r"F:\pytorch\Research\stage0_himawari\cache\staging")
 AUTH_SHA = "04fa458828b0f74d3e4fe0b4887282327b736b72476f059955c354fefbb6e963"
 PROTOCOL_SHA = "dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a"
 CODE_PATHS = ("scripts/review_b0_phase_a_scientific_v1.py", "src/yuntapr/training/scientific_review.py")
+RECOVERY_BASELINE = "1130bc0160d1db317e93641d8c3631f637fcfe2c"
+BLOCKED_RUN = "run_20261002T000346_890906Z"
+PREFLIGHT_ROOT = ROOT / "docs/scientific_review/b0_phase_a/preflights"
+REVIEW_EDITABLE = {*CODE_PATHS, "scripts/plot_b0_scientific_review_v1.py", "docs/scientific_review/b0_phase_a/README.md",
+    "tests/scientific_review/test_review_full_artifacts.py"}
 
 
 def now():
@@ -55,13 +60,13 @@ def status_defaults():
         "MONTHLY_ANALYSIS_COMPLETED": False, "SPATIAL_ANALYSIS_COMPLETED": False,
         "RELIABILITY_ANALYSIS_COMPLETED": False, "QUANTILE_CALIBRATION_REVIEW_COMPLETED": False,
         "QUANTILE_CROSSING_COUNT": None, "NONFINITE_COUNT": None, "2025_PIXELS_READ": 0,
-        "MODEL_PARAMETERS_UPDATED": False, "OPTIMIZER_STEPS": 0, "B0_PHASE_A_ACCEPTED": "UNDECIDED",
+        "MODEL_PARAMETERS_UPDATED": False, "OPTIMIZER_STEPS": 0, "BACKWARD_CALLS": 0, "B0_PHASE_A_ACCEPTED": "UNDECIDED",
         "ACCEPT_B0_PHASE_A": "UNDECIDED", "TRANSFER_EPOCH_BUDGET_TO_PHASE_B": "UNDECIDED",
         "PHASE_B_AUTHORIZED": False, "B1_TO_B8_AUTHORIZED": False, "scope": SCOPE}
 
 
 def identities():
-    if subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() != BASELINE:
+    if subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip() != RECOVERY_BASELINE:
         raise ValueError("STOP: review baseline mismatch")
     authorization = FormalAuthorization.load(AUTH_SHA)
     protocol = load_protocol(expected_sha256=PROTOCOL_SHA)
@@ -97,7 +102,79 @@ def region_audit():
         "matches": [], "no_posthoc_regions_created": True, "fallback": "Yunnan-wide spatial cell diagnostics"}
 
 
-def initialize():
+def source_preflight():
+    """Verify every required frozen Validation source BEFORE creating a new run."""
+    auth, protocol, formal_preflight, best, payload = identities()
+    del payload
+    ledger, pairs = population(auth)
+    out = PREFLIGHT_ROOT / ("preflight_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ"))
+    out.mkdir(parents=True, exist_ok=False)
+    began = time.perf_counter()
+    started = {"status": "RUNNING", "started_utc": now(), "baseline_commit": RECOVERY_BASELINE,
+        "scientific_baseline_commit": BASELINE, "source_identity_ledger_sha256": sha256(FORMAL / "source_identity_preflight.csv"),
+        "required_scenes": N_SCENES, "raw_years_authorized": [2024], "source_root": str(Path(r"H:\葵花202303_202510")),
+        "old_blocked_run": BLOCKED_RUN, "old_blocked_run_immutable": True, "PHASE_B_AUTHORIZED": False}
+    atomic_json(out / "summary.json", started)
+    days, checked, byte_sum = {}, [], 0
+    try:
+        with (out / "source_checks.csv").open("x", encoding="utf-8", newline="") as stream:
+            writer = None
+            for index, identity in enumerate(ledger):
+                h, i = guard_identity(identity)
+                if not h.is_file() or not i.is_file():
+                    raise FileNotFoundError("Required frozen Validation source missing: " + identity["sample_id"])
+                size = h.stat().st_size
+                if size != int(identity["b13_bytes"]):
+                    raise ValueError("B13 source size mismatch: " + identity["sample_id"])
+                digest = sha256(h)
+                if digest != identity["b13_sha256"] or h.stat().st_size != size:
+                    raise ValueError("B13 source SHA/stable-size mismatch: " + identity["sample_id"])
+                if str(i) not in days:
+                    before = i.stat().st_size
+                    idigest = sha256(i)
+                    if before <= 0 or i.stat().st_size != before or idigest != identity["imerg_sha256"]:
+                        raise ValueError("IMERG source SHA/stable-size mismatch: " + str(i))
+                    days[str(i)] = {"absolute_local_path": str(i), "bytes": before, "sha256": idigest,
+                        "size_policy": "positive and stable across hash; historical identity independently pins SHA, not byte count"}
+                if days[str(i)]["sha256"] != identity["imerg_sha256"]:
+                    raise ValueError("Inconsistent frozen IMERG day identity")
+                row = {"index": index, "sample_id": identity["sample_id"], "window_start": identity["window_start"],
+                    "b13_path": str(h), "b13_bytes": size, "b13_sha256": digest, "imerg_path": str(i),
+                    "imerg_bytes": days[str(i)]["bytes"], "imerg_sha256": days[str(i)]["sha256"],
+                    "required_files_exist": True, "size_check": True, "SHA_check": True, "frozen_identity_resolves": True}
+                if writer is None:
+                    writer = csv.DictWriter(stream, fieldnames=list(row))
+                    writer.writeheader()
+                writer.writerow(row)
+                checked.append(identity["sample_id"])
+                byte_sum += size
+                if (index + 1) % 250 == 0 or index + 1 == N_SCENES:
+                    stream.flush()
+                    progress = {**started, "scenes_checked": index + 1, "days_checked": len(days), "wall_seconds": time.perf_counter()-began, "updated_utc": now()}
+                    atomic_json(out / "progress.json", progress)
+                    print("SOURCE_PREFLIGHT " + json.dumps(progress), flush=True)
+        summary = {**started, "status": "PASS", "completed_utc": now(), "scenes_checked": len(checked),
+            "days_checked": len(days), "wall_seconds": time.perf_counter()-began, "b13_source_bytes": byte_sum,
+            "imerg_source_bytes": sum(v["bytes"] for v in days.values()), "2025_PIXELS_READ": 0,
+            "all_required_files_exist": True, "all_sizes_verified": True, "all_SHAs_match": True,
+            "all_frozen_validation_identities_resolve": True, "source_checks_sha256": sha256(out / "source_checks.csv")}
+        atomic_json(out / "imerg_day_identities.json", {"days": list(days.values())})
+        atomic_json(out / "summary.json", summary)
+        print("SOURCE_PREFLIGHT_PASS " + str(out), flush=True)
+    except Exception:
+        atomic_json(out / "failure.json", {**started, "status": "FAIL", "scenes_checked": len(checked), "traceback": traceback.format_exc(), "failed_utc": now()})
+        raise
+
+
+def initialize(source_preflight_path):
+    checked_path = Path(source_preflight_path).resolve()
+    if not checked_path.is_relative_to(PREFLIGHT_ROOT.resolve()) or checked_path.name != "summary.json":
+        raise ValueError("Explicit recovery source preflight summary required")
+    source_check = read(checked_path)
+    if (source_check["status"] != "PASS" or source_check["scenes_checked"] != N_SCENES
+            or not all(source_check[k] for k in ("all_required_files_exist", "all_sizes_verified", "all_SHAs_match", "all_frozen_validation_identities_resolve"))
+            or sha256(checked_path.parent / "source_checks.csv") != source_check["source_checks_sha256"]):
+        raise ValueError("Source preflight has not passed or its ledger changed")
     auth, protocol, preflight, best, payload = identities()
     with InferenceOnlyGuard() as guard:
         # Full payload verification reads optimizer tensors as inert bytes. No
@@ -107,9 +184,23 @@ def initialize():
     run_id = "run_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ")
     out = PUBLIC / run_id
     out.mkdir(parents=True, exist_ok=False)
-    baseline_paths = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", BASELINE], cwd=ROOT, text=True, encoding="utf-8").splitlines()
-    retained = {p: sha256(ROOT / p) for p in baseline_paths}
-    manifest = {"run_id": run_id, "created_utc": now(), "scope": SCOPE, "baseline_commit": BASELINE,
+    baseline_paths = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", RECOVERY_BASELINE], cwd=ROOT, text=True, encoding="utf-8").splitlines()
+    retained = {p: sha256(ROOT / p) for p in baseline_paths if p not in REVIEW_EDITABLE}
+    # Validate the immutable parent bytes, including every file in the blocked run.
+    tree = subprocess.check_output(["git", "ls-tree", "-r", "-z", RECOVERY_BASELINE], cwd=ROOT).decode("utf-8")
+    blobs = {entry.split("\t", 1)[1]: entry.split("\t", 1)[0].split()[2] for entry in tree.split("\0") if entry}
+    for p in retained:
+        expected_blob = blobs[p]
+        data = (ROOT / p).read_bytes()
+        actual_blob = hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        if actual_blob != expected_blob:
+            raise ValueError("Immutable recovery-parent file changed: " + p)
+    manifest = {"run_id": run_id, "created_utc": now(), "scope": SCOPE, "baseline_commit": RECOVERY_BASELINE,
+        "scientific_baseline_commit": BASELINE, "old_blocked_run": BLOCKED_RUN, "old_blocked_run_immutable": True,
+        "source_identity_preflight": {"summary_path": str(checked_path.relative_to(ROOT)).replace("\\", "/"), "summary_sha256": sha256(checked_path), **source_check},
+        "approved_test_scope": {"TEST_FIXTURE_ONLY": True, "temporary_optimizer_backward_steps_allowed": True,
+            "formal_BEST_state_not_applied_to_test_models": True, "fixture_updates_not_review_optimizer_steps": True,
+            "cleanup_required": True, "authority": "Researcher recovery decision in this chat"},
         "formal_run_id": FORMAL.name, "public_directory": str(out), "private_directory": str(PRIVATE / run_id),
         "formal_best": best, "formal_model_state_sha256": model_sha, "formal_identity": auth.config["identity"],
         "formal_authorization_sha256": AUTH_SHA, "review_authority": "researcher Scientific Characterization Review v1 attachment",
@@ -120,6 +211,12 @@ def initialize():
         "review_guard_attempts": guard.attempts, "PHASE_B_AUTHORIZED": False,
         "CHECKPOINT_SELECTION_REMAINS_EPOCH_11": True, "minimum_count_rule": diagnostic_rules()["spatial_conditional_pinball_min_rain_count"]}
     atomic_json(out / "review_manifest.json", manifest)
+    atomic_json(out / "researcher_recovery_decision.json", {"recorded_utc": now(), "scope": SCOPE,
+        "TEST_FIXTURE_ONLY": True, "existing_171_fixture_optimizer_backward_steps": "APPROVED",
+        "immutable_blocked_run": BLOCKED_RUN, "original_source_path_unchanged": str(Path(r"H:\葵花202303_202510")),
+        "new_run_required": True, "target_test_counts": {"existing": 171, "units": 8, "full_artifacts": 11},
+        "MODEL_PARAMETERS_UPDATED": False, "OPTIMIZER_STEPS": 0, "BACKWARD_CALLS": 0,
+        "B0_PHASE_A_ACCEPTED": "UNDECIDED", "TRANSFER_EPOCH_BUDGET_TO_PHASE_B": "UNDECIDED", "PHASE_B_AUTHORIZED": False})
     atomic_json(out / "case_selection_rules.json", diagnostic_rules())
     atomic_json(out / "region_audit.json", region_audit())
     atomic_json(out / "final_status.json", {"run_id": run_id, "state": "INITIALIZED", "updated_utc": now(), **status_defaults(), "BEST_CHECKPOINT_VERIFIED": True})
@@ -348,7 +445,11 @@ def write_metrics(out, acc, global_report, yunnan):
             cases.append({"rank": rank, **entry[-1]})
     table(out / "case_diagnostics.csv", cases)
     spatial = acc.spatial_metrics(yunnan)
-    with Dataset(str(out / "spatial_cell_metrics.nc"), "w", format="NETCDF4") as nc:
+    # netCDF4 on this Windows host cannot write a Unicode repository path.
+    # Write the small aggregate in this run's English private path, then copy
+    # exact bytes to Git. This is an output workaround, never a source fallback.
+    english_nc = PRIVATE / out.name / "spatial_cell_metrics.nc"
+    with Dataset(str(english_nc), "w", format="NETCDF4") as nc:
         nc.createDimension("lat", 100)
         nc.createDimension("lon", 100)
         for axis, units in (("lat", "degrees_north"), ("lon", "degrees_east")):
@@ -366,6 +467,16 @@ def write_metrics(out, acc, global_report, yunnan):
         nc.minimum_count_scope = "DISPLAY_DIAGNOSTIC_ONLY"
         nc.coordinate_policy = "Exact frozen target Float32 axes; ascending latitude; no transpose or flip"
         nc.quantile_loss_domain = "log1p(rate_mm_h), dimensionless"
+    public_nc = out / "spatial_cell_metrics.nc"
+    with english_nc.open("rb") as source, public_nc.open("xb") as destination:
+        import shutil
+        shutil.copyfileobj(source, destination)
+    if sha256(public_nc) != sha256(english_nc) or public_nc.stat().st_size != english_nc.stat().st_size:
+        raise ValueError("Spatial aggregate output copy SHA/size mismatch")
+    atomic_json(out / "spatial_artifact_identity.json", {"public_path": str(public_nc.relative_to(ROOT)).replace("\\", "/"),
+        "english_local_path": str(english_nc), "bytes": english_nc.stat().st_size, "sha256": sha256(english_nc),
+        "copy_size_and_SHA_match": True, "scope": "SMALL_AGGREGATE_OUTPUT_UNICODE_WORKAROUND_ONLY",
+        "reader_policy": "Read public bytes into netCDF4 memory dataset; no source path changes"})
     atomic_json(out / "spatial_summary.json", {"status": "NO_PREDEFINED_SUBREGION_MASK_AVAILABLE", "shape": [100,100],
         "Yunnan_cells": int(yunnan.sum()), "global_valid": int(spatial["valid_count"].sum()), "global_rain": int(spatial["rainy_count"].sum()),
         "target_coordinate_hashes": {k: hashlib.sha256(acc.axes[k].tobytes()).hexdigest() for k in ("target_lat", "target_lon")},
@@ -377,15 +488,23 @@ def write_metrics(out, acc, global_report, yunnan):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["init", "infer", "check"])
+    parser.add_argument("action", choices=["preflight", "init", "infer", "check"])
     parser.add_argument("--run-id")
+    parser.add_argument("--source-preflight")
     args = parser.parse_args()
+    if args.action == "preflight":
+        source_preflight()
+        return
     if args.action == "init":
-        initialize()
+        if not args.source_preflight:
+            raise ValueError("init requires a passed --source-preflight summary")
+        initialize(args.source_preflight)
         return
     if not args.run_id or Path(args.run_id).name != args.run_id or not args.run_id.startswith("run_"):
         raise ValueError("Explicit safe run identifier required")
     out = PUBLIC / args.run_id
+    if args.run_id == BLOCKED_RUN:
+        raise ValueError("The blocked run is immutable and cannot be reused")
     try:
         if args.action == "infer":
             inference(out)

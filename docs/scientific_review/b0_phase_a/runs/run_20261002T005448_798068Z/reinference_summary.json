@@ -1,0 +1,214 @@
+{
+  "status": "PASS",
+  "global": {
+    "S_occ": 1298996.0620608318,
+    "S_qr": 603892.7818593872,
+    "D_valid": 40223610,
+    "global_val_core_loss": 0.04730775889882134,
+    "global_L_occ": 0.032294367961026665,
+    "global_core_L_qr": 0.015013390937794673,
+    "N_valid": 40223610,
+    "N_rain": 4809183,
+    "prevalence": 0.1195611980128089,
+    "Brier_Score": 0.09485221785034452,
+    "AUROC": 0.8881853941862204,
+    "Average_Precision": 0.5568845072477755,
+    "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+    "AUROC_convention": "TRAPEZOID_GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+    "undefined_reason": null,
+    "probability_cutoff_status": "THRESHOLD_NOT_FROZEN",
+    "conditional_mean_pinball": 0.12557076365349107,
+    "per_tau_pinball": [
+      0.009194427809866554,
+      0.027392570647795367,
+      0.04338474012303157,
+      0.05882444253807101,
+      0.07385969543606483,
+      0.08807206236486839,
+      0.10107192587848834,
+      0.11320911543015023,
+      0.1249471041569373,
+      0.13513313230764964,
+      0.14481967022492673,
+      0.1534427798465812,
+      0.16048999620301563,
+      0.16750744221841032,
+      0.1726188408774417,
+      0.1773592385926378,
+      0.18031713872949648,
+      0.18233630582489366,
+      0.1832573035267422,
+      0.18287375140920092,
+      0.18108770740572674,
+      0.17779691966220004,
+      0.17309487403782856,
+      0.16668103158094008,
+      0.15865554995209724,
+      0.14877900217596457,
+      0.13674452601924322,
+      0.12224814460018546,
+      0.10501385107624389,
+      0.08415228041881154,
+      0.058653294627105376,
+      0.025245571209101335
+    ],
+    "per_tau_conditional_coverage": [
+      0.0030608109527127583,
+      0.08937713536789929,
+      0.1018407908370299,
+      0.12071343510945622,
+      0.16268813226695678,
+      0.20358405991204742,
+      0.22837101436980045,
+      0.25473141695793233,
+      0.29477418513705966,
+      0.320681080341505,
+      0.3577821846247065,
+      0.38877954945777693,
+      0.40274304388084214,
+      0.44798004151640725,
+      0.4704545449819647,
+      0.509204993862783,
+      0.5301282982993161,
+      0.5591201249775689,
+      0.5896905981743676,
+      0.6199606045351155,
+      0.653446125880425,
+      0.6721792454144498,
+      0.7035111785099465,
+      0.7343742169927824,
+      0.7642649489528679,
+      0.7905226313908205,
+      0.8205231533089924,
+      0.8499387525906168,
+      0.8796211331529701,
+      0.9108640698430481,
+      0.9424846174495751,
+      0.9774913951080673
+    ],
+    "coverage_convention": "R <= physical conditional quantile, rainy valid cells only",
+    "strict_crossing_count": 0,
+    "nonfinite_count": 0,
+    "POD": "THRESHOLD_NOT_FROZEN",
+    "FAR": "THRESHOLD_NOT_FROZEN",
+    "CSI": "THRESHOLD_NOT_FROZEN",
+    "DIAGNOSTIC_PROXY_METRIC": {
+      "name": "p_rain_times_mean_32_physical_conditional_quantiles",
+      "MAE": 0.2592703396658745,
+      "RMSE": 0.8455210291919731,
+      "Bias": 0.05369086300647708,
+      "is_exact_expected_precipitation": false
+    },
+    "checkpoint_metric": "global_val_core_loss",
+    "numerator_dtype": "float64"
+  },
+  "numeric_checks": {
+    "qlog_crossing_count": 0,
+    "qphysical_crossing_count": 0,
+    "nonfinite_qlog": 0,
+    "nonfinite_qphysical": 0,
+    "q1_support_violation": 0
+  },
+  "reconciliation": {
+    "scenes": true,
+    "global_counts": true,
+    "monthly_valid": true,
+    "monthly_rain": true,
+    "monthly_scenes": true,
+    "spatial_valid": true,
+    "spatial_rain": true,
+    "rate_strata": true,
+    "probability_bins": true,
+    "probability_bin_rain": true,
+    "probability_frequencies": true,
+    "probability_histogram": true,
+    "numerics": true
+  },
+  "formal_reproduction": {
+    "global_val_core_loss": {
+      "official": 0.04730775889882134,
+      "review": 0.04730775889882134,
+      "difference": 0.0,
+      "pass": true
+    },
+    "global_L_occ": {
+      "official": 0.032294367961026665,
+      "review": 0.032294367961026665,
+      "difference": 0.0,
+      "pass": true
+    },
+    "global_core_L_qr": {
+      "official": 0.015013390937794673,
+      "review": 0.015013390937794673,
+      "difference": 0.0,
+      "pass": true
+    },
+    "Brier_Score": {
+      "official": 0.09485221785034452,
+      "review": 0.09485221785034452,
+      "difference": 0.0,
+      "pass": true
+    },
+    "AUROC": {
+      "official": 0.8881853941862204,
+      "review": 0.8881853941862204,
+      "difference": 0.0,
+      "pass": true
+    },
+    "Average_Precision": {
+      "official": 0.5568845072477755,
+      "review": 0.5568845072477755,
+      "difference": 0.0,
+      "pass": true
+    },
+    "conditional_mean_pinball": {
+      "official": 0.12557076365349107,
+      "review": 0.12557076365349107,
+      "difference": 0.0,
+      "pass": true
+    },
+    "coverage_exact": true
+  },
+  "runtime": {
+    "scenes": 11727,
+    "wall_seconds": 522.9213684000006,
+    "peak_GPU_allocated_bytes": 3449582080,
+    "peak_GPU_reserved_bytes": 4729077760,
+    "I_O": {
+      "copy_seconds_sum": 191.80026830003408,
+      "read_seconds_sum": 159.5686534000697,
+      "temporary_bytes_peak_per_worker": 6019956,
+      "cleanup_success": true,
+      "samples": 11727
+    },
+    "read_ledger": {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\scientific_review\\b0_phase_a\\run_20261002T005448_798068Z\\read_ledger.csv",
+      "bytes": 4732590,
+      "sha256": "73b7ed436371baf1306e86a2e447f727c493f86bff3a0f9212dba3ddde6e4313"
+    },
+    "2025_PIXELS_READ": 0,
+    "source_years_read": [
+      2024
+    ],
+    "model": {
+      "model_state_sha256_before": "015e02a97fc916757c0442269000703393759657156df407a4d672ec34478dca",
+      "model_state_sha256_after": "015e02a97fc916757c0442269000703393759657156df407a4d672ec34478dca",
+      "eval": true,
+      "no_grad": true,
+      "optimizer_created": false,
+      "optimizer_steps": 0,
+      "backward_calls": 0,
+      "prohibited_attempts": {
+        "optimizer_creation": 0,
+        "optimizer_step": 0,
+        "backward": 0
+      }
+    },
+    "preservation": {
+      "all_baseline_files_unchanged": true,
+      "files_checked": 1495,
+      "BEST_sha256": "3f517f31394a4efa54ea0abed7757c7d59eb048416cfa98f02ab91ba60c24fe3"
+    },
+    "finished_utc": "2026-10-02T01:04:16.704594+00:00"
+  }
+}

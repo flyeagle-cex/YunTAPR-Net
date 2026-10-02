@@ -25,7 +25,7 @@ class FullReviewArtifacts(unittest.TestCase):
 
     def test_spatial_counts_and_coordinate_identity(self):
         mapping=load_sp04()
-        with Dataset(str(self.out/"spatial_cell_metrics.nc")) as nc:
+        with Dataset("scientific_review_spatial.nc", memory=(self.out/"spatial_cell_metrics.nc").read_bytes()) as nc:
             self.assertEqual(int(nc["valid_count"][:].sum()),N_VALID)
             self.assertEqual(int(nc["rainy_count"][:].sum()),N_RAIN)
             np.testing.assert_array_equal(nc["lat"][:],mapping.axes["target_lat"])

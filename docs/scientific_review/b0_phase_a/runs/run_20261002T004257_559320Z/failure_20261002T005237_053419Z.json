@@ -1,0 +1,6 @@
+{
+  "failed_utc": "2026-10-02T00:52:37.053419+00:00",
+  "scope": "SCIENTIFIC_RESULT_REVIEW_ONLY",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\review_b0_phase_a_scientific_v1.py\", line 495, in main\n    inference(out)\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\review_b0_phase_a_scientific_v1.py\", line 377, in inference\n    write_metrics(out, acc, global_report, yunnan)\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\review_b0_phase_a_scientific_v1.py\", line 447, in write_metrics\n    with Dataset(str(out / \"spatial_cell_metrics.nc\"), \"w\", format=\"NETCDF4\") as nc:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"src/netCDF4/_netCDF4.pyx\", line 2521, in netCDF4._netCDF4.Dataset.__init__\n  File \"src/netCDF4/_netCDF4.pyx\", line 2158, in netCDF4._netCDF4._ensure_nc_success\nPermissionError: [Errno 13] Permission denied: 'C:\\\\Users\\\\chenerxiao\\\\Documents\\\\极端降水预测\\\\YunTAPR-Net-push-chunks\\\\docs\\\\scientific_review\\\\b0_phase_a\\\\runs\\\\run_20261002T004257_559320Z\\\\spatial_cell_metrics.nc'\n",
+  "no_automatic_retry_or_next_stage": true
+}
