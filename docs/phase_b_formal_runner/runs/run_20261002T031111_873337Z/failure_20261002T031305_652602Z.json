@@ -1,0 +1,8 @@
+{
+  "action": "tests",
+  "error": "RuntimeError('STOP test failure: scientific_freeze_v1_1')",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\audit_b0_phase_b_runner_v1.py\", line 336, in <module>\n    {\"units\": lambda: tests(out, True), \"preflight\": lambda: preflight(out),\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\audit_b0_phase_b_runner_v1.py\", line 337, in <lambda>\n    \"tests\": lambda: tests(out), \"report\": lambda: report(out)}[args.action]()\n                     ^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\audit_b0_phase_b_runner_v1.py\", line 190, in tests\n    if not item[\"pass\"]: raise RuntimeError(\"STOP test failure: \"+name)\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: STOP test failure: scientific_freeze_v1_1\n",
+  "PHASE_B_AUTHORIZED": false,
+  "PHASE_B_FORMAL_TRAINING_STARTED": false,
+  "FORMAL_OPTIMIZER_STEPS": 0
+}
