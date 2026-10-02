@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\review_b0_phase_a_scientific_v1.py", line 403, in <module>
+    main()
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\review_b0_phase_a_scientific_v1.py", line 391, in main
+    inference(out)
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\review_b0_phase_a_scientific_v1.py", line 234, in inference
+    for index, (samples, details) in enumerate(loader):
+                                     ^^^^^^^^^^^^^^^^^
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\data\dataloader.py", line 741, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\data\dataloader.py", line 1548, in _next_data
+    return self._process_data(data, worker_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\data\dataloader.py", line 1586, in _process_data
+    data.reraise()
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\_utils.py", line 785, in reraise
+    raise exception
+FileNotFoundError: Caught FileNotFoundError in DataLoader worker process 0.
+Original Traceback (most recent call last):
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\data\_utils\worker.py", line 358, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+           ^^^^^^^^^^^^^^^^^^^^
+  File "F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\data\_utils\fetch.py", line 54, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\training\scientific_review.py", line 138, in __getitem__
+    x, valid, observed = self.b13_reader(h, utc(pair["expected_nominal"]))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\data\staging.py", line 113, in __call__
+    with self.staging.local(source_path) as english_path:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\data\staging.py", line 50, in local
+    source = source.resolve(strict=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1240, in resolve
+    s = self._flavour.realpath(self, strict=strict)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen ntpath>", line 695, in realpath
+FileNotFoundError: [WinError 3] 系统找不到指定的路径。: 'H:\\葵花202303_202510\\202403\\01\\NC_H09_20240301_0020_R21_FLDK.06001_06001.nc'
+
