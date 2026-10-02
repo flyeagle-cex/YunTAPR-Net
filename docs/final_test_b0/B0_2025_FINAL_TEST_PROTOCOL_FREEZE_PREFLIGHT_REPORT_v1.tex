@@ -1,0 +1,128 @@
+\documentclass[UTF8,11pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{amsmath,array,longtable,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,pdftitle={YunTAPR-Net B0 Final Test Preflight v1}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{3em}
+\renewcommand{\arraystretch}{1.15}
+\title{YunTAPR-Net\\B0 2025 Final Test\\协议冻结与 Runner Preflight v1}
+\author{工程执行记录；科研决策依据研究者既有批准}
+\date{2026-10-02 UTC}
+\begin{document}
+\maketitle
+\textbf{结果：协议冻结、runner preflight 已通过；正式 2025 Final Test 未授权、未执行。}
+
+最新完整 preflight 实际执行 60 项测试，failure/error/skip 均为 0。仅对已冻结 FINAL 做只读身份验证和 synthetic 输入的 CUDA forward。没有打开 2025 raw source、读取 2025 像元、执行 backward、创建 optimizer 或更新参数。
+
+\section{基线与冻结身份}
+Baseline：\path{ddbb69ccca6c806973a89a91127ea02c9af42afd}。基线 1,711 个文件逐文件 Git blob 与 SHA256 核验，全部保持原样。最新 run：\path{run_20261002T152029_621524Z}。
+
+协议 SHA256：\par{\small\ttfamily 6d08def2602dda3d931937c68cadeae86b5c16b60f9f7132c9e134b962cdbe3b}\par
+
+唯一 FINAL 位于：\\
+\path{F:/pytorch/Research/outputs/formal_training/b0_phase_b_finalfit/}\\
+\path{run_20261002T035929_487644Z/epoch_011.pt}。
+
+FINAL：epoch 11，global update 128,964，52,071,595 bytes。SHA256：
+\par{\small\ttfamily 05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65}\par
+读取前后完全相同。
+
+Phase-B normalization 不 refit：
+\[
+\mu=270.5900486586461\ \mathrm{K},\qquad
+\sigma=20.368583874067266\ \mathrm{K}.
+\]
+Normalization SHA256：
+\par{\small\ttfamily c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327}\par
+
+模型逻辑 state SHA256：
+\par{\small\ttfamily d6e64fe6f3e38eb421806858fc0f484ebfb2ec0fcc952604813fa448f8e49944}\par
+只读推理前后不变。只应用 model state；未创建或应用 optimizer，未应用 RNG state。checkpoint 内历史 optimizer 字典仅随文件反序列化，未作为推理状态使用。
+
+\section{FROZEN：时期、资格与全人口指标}
+测试窗口起点为 UTC [2025-03-01 00:00, 2025-10-01 00:00)，30 分钟间隔，共 10,272 个日历候选槽位。此数来自日期运算，不来自读取 2025；实际 eligible population 仍为 NOT INSPECTED。
+
+未来 catalogue 必须逐一登记全部槽位、资格与拒绝原因。资格继承 V1.1：IMERG V07 Final provenance、精确网格与时间，B13 的 $501\times501$ 全场 valid/finite，最新 nominal=$T+20$ min，obs\_start$\leq$obs\_end$\leq$analysis\_time=$T+30$ min，无 older-frame fallback，冻结云南 mask 中 valid 监督数大于 0。IMERG 部分有效场保留，不要求每场全部 3,430 像元有效。缺测保持 masked，绝不置零。
+
+固定时间顺序，每个 eligible identity 恰好一次；batch=2、drop\_last=false、worker=0。冻结人口后 SHA、size、QC、因果或 cleanup 失败即停止，不跳过、不替代。9 月 30 日 23:30 窗口允许，结束于 10 月 1 日 00:00；所用卫星 nominal 仍是 9 月 30 日 23:50。10 月起始窗口和源文件在 I/O 前拒绝，并核对目录与文件名日期。
+
+主要指标已预声明：global core / occurrence / quantile loss、Brier、AUROC、Average Precision、conditional mean pinball、per-tau pinball、32 tau coverage、coverage error、crossing / nonfinite / support violation。
+\[
+L_{occ}=\frac{S_{occ}}{N_{valid}},\quad
+L_{qr}=\frac{S_{qr}}{N_{valid}},\quad
+L_{core}=\frac{S_{occ}+S_{qr}}{N_{valid}}.
+\]
+全人口累计原始分子和真实 valid 分母，不平均 batch loss。conditional pinball 与 coverage 使用 $N_{rain}$；rainy 判定在 float64 提升前采用 float32 target $>$ float32(0.1)。$\tau_i=(i-0.5)/32$，$i=1,\ldots,32$。AUROC/AP 使用既有 exact equal-score tie / non-interpolated grouped AP，不做排名分箱近似。空组、无雨和单类别指标记录 null 与原因。
+
+POD/FAR/CSI：THRESHOLD\_NOT\_FROZEN。禁止查看结果后改主要指标、调阈值、校准、选择 checkpoint 或 epoch。
+
+\section{原样继承 2024 Scientific Review 诊断}
+原 case\_selection\_rules.json 的完整解析对象与本协议 inherited\_diagnostics 逐值一致，绑定原文件和实现 SHA256；旧审计结果与源码没有修改。
+\begin{longtable}{p{28mm}p{112mm}}
+\textbf{诊断} & \textbf{继承定义}\\\hline
+Monthly & 既有统计量应用于 3--9 月；空月明确无 eligible scenes。\\
+Spatial & 既有 per-cell valid/rain count、频率、概率、Brier、conditional pinball 和 proxy；rain count 30 仅为展示门槛。精确冻结坐标与 mask，无 transpose/flip。\\
+Reliability & 原 0.1 固定 edges，边界右归，末 bin 包括 1；仅诊断，不校准。\\
+Rain-rate & 原 (0.1,1]、(1,5]、(5,10]、(10,20]、(20,30]、(30,50]、(50,inf)；descriptive only。\\
+Quantile & 原 low $\tau<0.2$、middle $0.2\leq\tau\leq0.8$、high $\tau>0.8$。\\
+Exceedance & 原 10/20/30/50 mm/h；descriptive only，extreme definition 未冻结。\\
+Histogram/cases & 原 0.01 probability histogram edges，三类 top-10 case 与 tie 顺序全部沿用。\\
+Proxy & $p_{rain}$ 乘 32 个 physical conditional quantile 的平均，MAE/RMSE/Bias；不是精确期望降水，遗漏 drizzle 分量。\\\hline
+\end{longtable}
+
+\section{正式入口与零读取 gate}
+入口：\path{scripts/test_b0_2025_final_v1.py}；模块：\path{src/yuntapr/evaluation/final_test_b0.py}；测试：\path{tests/final_test_b0/}。
+
+preflight 与 run 为独立 action。本轮只运行 preflight；future run 必须另获研究者授权，绑定 protocol、implementation、FINAL、normalization、完整候选 catalogue SHA256。无授权时，在 population/source/FINAL I/O 前拒绝；本轮没有生成该授权或真实 2025 catalogue。
+
+先核验 FINAL 全文件 SHA、size、训练 provenance 与 model schema，再应用 model state。eval/requires\_grad=false、inference\_mode 下 BF16 forward；FP32 参数和 raw quantiles、FP64 log/physical quantiles 与统计。冻结训练依赖清单独立核验，新 evaluation 实现另行记录 hash，不重定义旧训练清单。
+
+Guard 禁止 optimizer 构造/step、backward、train(True)、正式 checkpoint 写入或其它正式 checkpoint 读取。preflight 禁止 H/IMERG raw root 的 Python open 和直接 netCDF4 backend open。未来独立授权后才允许原路径只读与 bounded English staging，copy size/SHA 核验，仅清理自建副本。
+
+\section{实际测试与只读 CUDA smoke}
+\begin{longtable}{p{100mm}r l}
+\textbf{实际 suite} & \textbf{数量} & \textbf{结果}\\\hline
+新增 ProtocolTests &14&PASS\\
+新增 GuardTests &12&PASS\\
+新增 AccumulatorTests &18&PASS\\
+既有 tied AUROC/AP test &1&PASS\\
+既有 unequal-partition full-population test &1&PASS\\
+既有 Scientific Review inference-only units &8&PASS\\
+新增 preflight artifact tests &6&PASS\\\hline
+合计：50 新增 + 10 既有 inference-only &60&PASS\\
+\end{longtable}
+实际 failure/error/skip 均为 0。覆盖 provenance、未授权/日期/源路径拒绝、部分 valid mask、重复/缺失/乱序人口、variable-size 分母、ties、无雨/单类/空组、诊断计数 reconciliation、数值停止与只读身份。
+
+既有含真实 optimizer/backward 的整套 254 项 training/resume regression 本轮 NOT RUN，因其操作被本任务明确禁止；未记作本轮 PASS。既有历史测试证据保持不变。guard 中仅有被入口拒绝的尝试，无实际优化或 backward。
+
+真实只读 FINAL 使用 synthetic 常量 270 K B13，normalization 时间为历史 2024 fixture；四个 synthetic target cells 为 [0, float32(0.1),1,20]，valid=4、rain=2。schema 2025 日期只是合成标签，\textbf{这些数值不是 Final Test 结果}。RAW source opened=0；三次 raw-open fixture probe 均在 I/O 前拒绝。
+
+GPU 峰值 allocated 448,776,192 bytes，reserved 685,768,704 bytes。Smoke 段 wall time 0.5830575 s，不是全人口性能预测。模型 state 与 FINAL SHA 前后不变；实际 optimizer creation/steps、backward、training、parameter update 均为 0。
+
+\section{历史保留、清理与最终状态}
+两个早期 unit probe 失败以独立 JSON 保留：Windows tempfile ACL 与 optimizer rejection fixture 的 subclass signature。仅修复自建 fixture/guard；两个自建临时目录经绝对路径及身份核验后清理成功，源数据、正式 checkpoint、旧 cache 未触碰。
+
+先前独立成功 run \path{run_20261002T151525_945067Z} 的 57 项记录保留；最终 guard 增强后的 60 项 run 是本报告依据，未覆盖历史。未安装或升级任何环境包。
+
+\begin{longtable}{p{111mm}l}
+\textbf{状态字段} & \textbf{实际值}\\\hline
+FINAL\_TEST\_PROTOCOL\_FROZEN & true\\
+FINAL\_TEST\_RUNNER\_READY & true\\
+FINAL\_TEST\_2025\_AUTHORIZED & false\\
+FINAL\_TEST\_2025\_EXECUTED & false\\
+2025\_PIXELS\_READ & 0\\
+MODEL\_PARAMETERS\_UPDATED & false\\
+OPTIMIZER\_STEPS & 0\\
+BACKWARD\_CALLS & 0\\
+\hline
+\end{longtable}
+
+Runner ready 仅指 fixture/schema/只读 synthetic preflight 完成。真实 2025 source availability、eligible count、正式 reinference 与测试结果均 NOT RUN / NOT INSPECTED。本轮将源码、协议、报告与日志提交 GitHub main 后停止，不进入 B1--B8。
+
+\section{证据定位与可编辑性}
+最新证据：\path{docs/final_test_b0/preflight/}\\
+\path{run_20261002T152029_621524Z/}。内含 manifest、unit/artifact test logs、FINAL identity、synthetic smoke 和 final status。SHA256 索引覆盖交付文件；正式模型/optimizer/checkpoint binary 不提交 Git。
+
+本 PDF 由对应同名 UTF-8 \texttt{.tex} 编译；可直接手动编辑后用已有 XeLaTeX 重编译，disable-installer，不安装或升级依赖。详尽工程说明同时保存在同名 Markdown 与 README。
+\end{document}

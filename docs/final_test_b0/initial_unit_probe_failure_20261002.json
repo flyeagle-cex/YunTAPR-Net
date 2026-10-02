@@ -1,0 +1,20 @@
+{
+  "state": "INITIAL_ENGINEERING_UNIT_PROBE_FAILED",
+  "tests_executed": 41,
+  "failures": 0,
+  "errors": 2,
+  "errors_preserved": [
+    "TemporaryDirectory default short-name Windows TEMP path was denied by sandbox permissions",
+    "Optimizer rejection probe called AdamW.__init__ without params; subclass signature rejected before the inherited base guard"
+  ],
+  "engineering_corrections": [
+    "Use caller-owned workspace tmp/final_test_b0_units for the isolated fixture",
+    "Block optimizer subclass constructors before signature/initialization handling"
+  ],
+  "2025_PIXELS_READ": 0,
+  "FINAL_TEST_2025_EXECUTED": false,
+  "MODEL_PARAMETERS_UPDATED": false,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "not_a_PASS_record": true
+}
