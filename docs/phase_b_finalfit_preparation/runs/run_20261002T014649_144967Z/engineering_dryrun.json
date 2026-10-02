@@ -1,0 +1,188 @@
+{
+  "status": "PASS",
+  "scope": "ENGINEERING_ONLY",
+  "batches": [
+    {
+      "scope": "ENGINEERING_ONLY",
+      "engineering_update": 1,
+      "batch_size": 2,
+      "sample_ids": [
+        "2023-06-19T13:30:00+00:00",
+        "2024-05-19T23:30:00+00:00"
+      ],
+      "valid_denominator": 6860,
+      "loss": 1.1169352163660886,
+      "occurrence_reference_abs_error": 4.995242733341065e-09,
+      "quantile_reference_abs_error": 0.0,
+      "LR": 8.5295121119072e-09,
+      "pre_clip_norm": 9.344099998474121,
+      "post_clip_norm": 5.0,
+      "model_parameters_changed": true,
+      "raw_quantile_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "pinball_dtype": "torch.float64",
+      "forward_pass": true,
+      "loss_pass": true,
+      "backward_pass": true,
+      "clip_pass": true,
+      "optimizer_step_pass": true,
+      "peak_GPU_allocated_bytes": 2834648064,
+      "peak_GPU_reserved_bytes": 3412066304
+    },
+    {
+      "scope": "ENGINEERING_ONLY",
+      "engineering_update": 2,
+      "batch_size": 1,
+      "sample_ids": [
+        "2024-03-20T05:30:00+00:00"
+      ],
+      "valid_denominator": 3430,
+      "loss": 0.21722547850662596,
+      "occurrence_reference_abs_error": 1.1548398071159482e-09,
+      "quantile_reference_abs_error": 0.0,
+      "LR": 1.70590242238144e-08,
+      "pre_clip_norm": 3.1597256660461426,
+      "post_clip_norm": 3.1597259044647217,
+      "model_parameters_changed": true,
+      "raw_quantile_dtype": "torch.float32",
+      "qlog_dtype": "torch.float64",
+      "pinball_dtype": "torch.float64",
+      "forward_pass": true,
+      "loss_pass": true,
+      "backward_pass": true,
+      "clip_pass": true,
+      "optimizer_step_pass": true,
+      "peak_GPU_allocated_bytes": 1471532544,
+      "peak_GPU_reserved_bytes": 3416260608
+    }
+  ],
+  "actual_source_read_audit": [
+    {
+      "finalfit_index": 5292,
+      "sample_id": "2023-06-19T13:30:00+00:00",
+      "year": "2023",
+      "nominal_time": "2023-06-19 13:50:00+00:00",
+      "obs_start": "2023-06-19 13:50:40.744271+00:00",
+      "obs_end": "2023-06-19 13:59:38.440814+00:00",
+      "date_created": "2023-06-19 14:09:33+00:00",
+      "normalization_sha256": "c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327",
+      "operations": [
+        {
+          "source_path": "H:\\葵花202303_202510\\202306\\19\\NC_H09_20230619_1350_R21_FLDK.06001_06001.nc",
+          "temporary_bytes": 3692664,
+          "copy_seconds": 0.012480400000640657,
+          "read_seconds": 0.010424600000987994,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "853adce7aa16db5897b1b91c21cec3519fc229f315bfdb1e0a9ea3ca42554ad5",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        },
+        {
+          "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230619.nc",
+          "temporary_bytes": 1012250,
+          "copy_seconds": 0.002062800000203424,
+          "read_seconds": 0.0043089000009786105,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "2cbb63764eca1c39c19a206b3de230ea1ddcbde5b1bfc2dab96063ff58bb122e",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        }
+      ]
+    },
+    {
+      "finalfit_index": 15549,
+      "sample_id": "2024-05-19T23:30:00+00:00",
+      "year": "2024",
+      "nominal_time": "2024-05-19 23:50:00+00:00",
+      "obs_start": "2024-05-19 23:50:40.570393+00:00",
+      "obs_end": "2024-05-19 23:59:38.275185+00:00",
+      "date_created": "2024-05-20 00:07:43+00:00",
+      "normalization_sha256": "c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327",
+      "operations": [
+        {
+          "source_path": "H:\\葵花202303_202510\\202405\\19\\NC_H09_20240519_2350_R21_FLDK.06001_06001.nc",
+          "temporary_bytes": 5202894,
+          "copy_seconds": 0.01596820000122534,
+          "read_seconds": 0.00950860000011744,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "f18dbf17d398cdc25bf40462861859e32c1763ed9f05f61a3f99e629930cfef9",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        },
+        {
+          "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240519.nc",
+          "temporary_bytes": 919503,
+          "copy_seconds": 0.0027782999986811774,
+          "read_seconds": 0.003894199999194825,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "66988d60bdb01bc1d09377649d31a4d5d1ad664c160aa4d18e6c19589fe25a06",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        }
+      ]
+    },
+    {
+      "finalfit_index": 12642,
+      "sample_id": "2024-03-20T05:30:00+00:00",
+      "year": "2024",
+      "nominal_time": "2024-03-20 05:50:00+00:00",
+      "obs_start": "2024-03-20 05:50:40.559911+00:00",
+      "obs_end": "2024-03-20 05:59:38.653092+00:00",
+      "date_created": "2024-03-20 06:08:39+00:00",
+      "normalization_sha256": "c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327",
+      "operations": [
+        {
+          "source_path": "H:\\葵花202303_202510\\202403\\20\\NC_H09_20240320_0550_R21_FLDK.06001_06001.nc",
+          "temporary_bytes": 5369191,
+          "copy_seconds": 0.01655190000019502,
+          "read_seconds": 0.008943299999373266,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "01f1bec9e33a37d5deab15a3099fff2ca1265fc299ff7d21fcc9299ad0b5b910",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        },
+        {
+          "source_path": "F:\\云南极端降水数据\\raw\\IMERG\\2024\\imerg_20240320.nc",
+          "temporary_bytes": 568160,
+          "copy_seconds": 0.0024606999995739898,
+          "read_seconds": 0.003040399999008514,
+          "size_match": true,
+          "sha256_match": true,
+          "source_sha256": "64e1a22efb863e0142c926dc040ef64c271d75cb42cb1ed0e61a41a61b0f4705",
+          "cleanup_success": true,
+          "error": null,
+          "cleanup_error": null
+        }
+      ]
+    }
+  ],
+  "initial_model_state_sha256": "57a4d103a31aa7be1a52af079cdf7fb81bc73c51ba3e0e97d395513d21d9023d",
+  "checkpoint_load_calls": 0,
+  "phase_a_model_optimizer_scheduler_state_loaded": false,
+  "temporary_model_optimizer_released": true,
+  "temporary_checkpoint_binaries_created": 0,
+  "temporary_checkpoint_binaries_remaining": 0,
+  "owned_staging_files_remaining": 0,
+  "ENGINEERING_OPTIMIZER_STEPS": 2,
+  "ENGINEERING_BACKWARD_CALLS": 2,
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "2025_PIXELS_READ": 0,
+  "PHASE_B_AUTHORIZED": false,
+  "PHASE_B_FORMAL_TRAINING_STARTED": false,
+  "wall_seconds": 3.4636914000002434,
+  "preservation": {
+    "all_baseline_files_unchanged": true,
+    "files_checked": 1586,
+    "BEST_sha256": "3f517f31394a4efa54ea0abed7757c7d59eb048416cfa98f02ab91ba60c24fe3"
+  }
+}

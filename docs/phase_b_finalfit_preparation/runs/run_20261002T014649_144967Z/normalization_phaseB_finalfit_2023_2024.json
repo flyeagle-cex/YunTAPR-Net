@@ -1,0 +1,63 @@
+{
+  "normalization_version": "PHASE_B_FINALFIT_2023_2024_ELIGIBLE_v1",
+  "status": "FINALFIT_DERIVED_PARAMETER",
+  "ready": true,
+  "fit_years": [
+    2023,
+    2024
+  ],
+  "fit_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "eligible_scene_count": 23447,
+  "valid_pixel_count": 5885220447,
+  "mean_K": 270.5900486586461,
+  "std_K": 20.368583874067266,
+  "ddof": 0,
+  "min_K": 177.1199951171875,
+  "p1_K": 209.55999755859375,
+  "q1_K": 260.6300048828125,
+  "median_K": 275.3999938964844,
+  "q3_K": 285.8800048828125,
+  "p99_K": 300.0299987792969,
+  "max_K": 330.9700012207031,
+  "IQR_K": 25.25,
+  "scene_native_shape": [
+    501,
+    501
+  ],
+  "full_valid_pixels_per_scene": 251001,
+  "sample_manifest_sha256": "00e6bd018eae6aeb05be0740b55a92b7a5cc9a44b9ab2b80affbad3e3282ccff",
+  "source_ledger_sha256": "13c09083643fc4415a490c49769b556bad7ad7af8824353e70e43450424ec10b",
+  "scientific_contract_sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+  "statistics_method": "Full raw reread of every eligible scene; frozen float32 decoder promoted to float64; exact int16 code histogram, no rebinning; independently merged per-frame float64 central moments; type-7/linear percentiles",
+  "streaming_mean_K": 270.5900486586464,
+  "streaming_std_K": 20.368583874067294,
+  "independent_moments_agree_atol_K": 1e-09,
+  "phase_a_constants_reused": false,
+  "partial_rejected_scenes_included": false,
+  "older_fallback_included": false,
+  "2025_PIXELS_READ": 0,
+  "source_years_read": [
+    2023,
+    2024
+  ],
+  "source_root": "H:\\葵花202303_202510",
+  "baseline_commit": "5050b6cc77ab75eacb96e1494a165d61142227f4",
+  "code_sha256": {
+    "scripts/prepare_b0_phase_b_finalfit_v1.py": "87ecd311a61ce3bbb10880851caf1d289bc480558dfdfafeda6dbd424b6ae734",
+    "src/yuntapr/training/phase_b_preparation.py": "789338ea040e4999fa2e420d14ef402e37a4f5208cb0dbbe7f5c89739ddc410e",
+    "src/yuntapr/data/himawari_b13.py": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857",
+    "src/yuntapr/data/staging.py": "f84c55bfba9b998b2ee3486ee08b5857a2a1f48f76c68245dc7a06f31adebbe4"
+  },
+  "PHASE_B_FORMAL_TRAINING_STARTED": false,
+  "PHASE_B_AUTHORIZED": false,
+  "completed_utc": "2026-10-02T02:05:21.162903+00:00"
+}

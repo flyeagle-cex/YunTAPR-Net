@@ -1,0 +1,24 @@
+{
+  "scope": "PRE_IMPLEMENTATION_GATE_DEBUGGING; not scientific outcome",
+  "attempts": [
+    {
+      "gate": "new preparation unit tests",
+      "executed": 12,
+      "errors": 1,
+      "reason": "test replay loop attempted progress beyond 50-epoch horizon",
+      "resolution": "bound the test loop to 100 half-epoch points; frozen production scheduler unchanged",
+      "rerun_executed": 12,
+      "rerun_pass": true
+    },
+    {
+      "gate": "init",
+      "error": "AttributeError: str object has no attribute open",
+      "reason": "new script passed identity JSON string to existing Path-only SHA function",
+      "resolution": "new script coerces Path arguments; existing SHA implementation unchanged",
+      "history_modified": false,
+      "run_or_acceptance_created_before_error": false,
+      "rerun_pass": true
+    }
+  ],
+  "historical_results_not_modified": true
+}

@@ -1,0 +1,88 @@
+{
+  "run_id": "run_20261002T014649_144967Z",
+  "baseline_commit": "5050b6cc77ab75eacb96e1494a165d61142227f4",
+  "private_directory": "F:\\pytorch\\Research\\outputs\\phase_b_finalfit_preparation\\run_20261002T014649_144967Z",
+  "scope": "ACCEPTANCE_AND_FINALFIT_PREPARATION_ONLY",
+  "population": {
+    "2023": 11720,
+    "2024": 11727
+  },
+  "total_scenes": 23447,
+  "sort_rule": "ascending UTC window_start, sample_id, source_role; FinalFit index zero-based",
+  "source_ledger_sha256": "13c09083643fc4415a490c49769b556bad7ad7af8824353e70e43450424ec10b",
+  "finalfit_manifest_sha256": "00e6bd018eae6aeb05be0740b55a92b7a5cc9a44b9ab2b80affbad3e3282ccff",
+  "acceptance_sha256": "d91add2d00495e781acb3fc58b0f95a41ac1801b53fbaaafcff25e25402f6b1c",
+  "identity": {
+    "scientific_contract_v1.1": {
+      "path": "config/science_contract_v1.1.yaml",
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    },
+    "scientific_freeze_v1.1_document": {
+      "path": "docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md",
+      "sha256": "48e164cc7b6569d33e1929418ce60b13173957efbab3d97ca70cca0e6f7f1b6c"
+    },
+    "engineering_v4": {
+      "path": "config/b0_engineering_v4.yaml",
+      "sha256": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7"
+    },
+    "phase_a_normalization_artifact": {
+      "path": "docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_2023_final_eligible.json",
+      "sha256": "4bcfa0520550e343dd154fd4436715a306c015a02d16ec4a12bb2ed3cf606e0e"
+    },
+    "eligible_train_manifest": {
+      "path": "docs/b0_pretraining_closure/runs/run_20260930T095416Z/normalization_phaseA_sample_manifest.csv",
+      "sha256": "dc0559f12f02817f8ec74916d03dd20e40ec0584ec58c59b34b5e02cc9a60e68"
+    },
+    "eligible_validation_manifest": {
+      "path": "docs/phase_a_protocol_prefreeze/runs/run_20261001T014523Z/eligible_validation_manifest.csv",
+      "sha256": "ac5405d8185d6760acc15a4ab364804c1d8ec8de84064737d0757f6688aeb410"
+    },
+    "combined_eligibility_source": {
+      "path": "docs/b0_pretraining_closure/runs/run_20260930T095416Z/formal_sample_eligibility_2023_2024.csv",
+      "sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90"
+    },
+    "SP04_mapping": {
+      "path": "config/spatial/sp04_target_cell_membership_v1.csv",
+      "sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+    },
+    "SP04_manifest": {
+      "path": "config/spatial/sp04_coordinate_manifest_v1.json",
+      "sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473"
+    },
+    "yunnan_mask": {
+      "path": "F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+      "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+    },
+    "prior_gpu_manifest": {
+      "path": "docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json",
+      "sha256": "c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8"
+    },
+    "phase_a_protocol": {
+      "path": "config/training/phase_a_training_protocol_v1.yaml",
+      "sha256": "dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a"
+    },
+    "scientific_review_manifest": {
+      "path": "docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z/review_manifest.json",
+      "sha256": "5e2a38c4b8ac6a09d078b13e05851c098c576c2d2923bcc488ba05abae366a1a"
+    },
+    "scientific_review_report": {
+      "path": "docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z/B0_PHASE_A_SCIENTIFIC_REVIEW.md",
+      "sha256": "c0823c400ad02e00c58f7702f56267dcaacb24a1faab7c98d771ba832b520e03"
+    }
+  },
+  "formal_best": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_phase_a\\run_20261001T035003_243409Z\\epoch_011.pt",
+    "filename": "epoch_011.pt",
+    "bytes": 52062315,
+    "sha256": "3f517f31394a4efa54ea0abed7757c7d59eb048416cfa98f02ab91ba60c24fe3",
+    "epoch": 11,
+    "global_update": 64460,
+    "global_val_core_loss": 0.04730775889882134,
+    "authorization_manifest_sha256": "04fa458828b0f74d3e4fe0b4887282327b736b72476f059955c354fefbb6e963",
+    "CHECKPOINT_BINARY_NOT_COMMITTED_TO_GIT": true
+  },
+  "2025_PIXELS_READ": 0,
+  "PHASE_B_AUTHORIZED": false,
+  "PHASE_B_FORMAL_TRAINING_STARTED": false,
+  "created_utc": "2026-10-02T01:46:49.296824+00:00"
+}

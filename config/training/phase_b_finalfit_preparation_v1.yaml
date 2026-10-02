@@ -1,0 +1,84 @@
+version: v1
+status: RESEARCHER_APPROVED_PREPARATION_ONLY
+baseline_commit: 5050b6cc77ab75eacb96e1494a165d61142227f4
+B0_PHASE_A_ACCEPTED: true
+TRANSFER_EPOCH_BUDGET_TO_PHASE_B: 11
+FINALFIT_EPOCHS: 11
+PHASE_B_AUTHORIZED: false
+PHASE_B_FORMAL_TRAINING_STARTED: false
+B1_TO_B8_AUTHORIZED: false
+PHASE_B_MODEL_INITIALIZATION: FRESH_SEED_2026
+PRIMARY_SEED: 2026
+phase_a_model_state_allowed: false
+phase_a_optimizer_state_allowed: false
+phase_a_scheduler_state_allowed: false
+architecture_loss_optimizer_precision_and_clipping: inherit exactly from SHA-pinned
+  Phase-A protocol
+inherited_protocol:
+  path: config/training/phase_a_training_protocol_v1.yaml
+  sha256: dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a
+scientific_contract:
+  path: config/science_contract_v1.1.yaml
+  sha256: 14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3
+acceptance:
+  path: config/decisions/b0_phase_a_acceptance_v1.yaml
+  sha256: d91add2d00495e781acb3fc58b0f95a41ac1801b53fbaaafcff25e25402f6b1c
+finalfit_manifest:
+  path: docs/phase_b_finalfit_preparation/runs/run_20261002T014649_144967Z/phase_b_finalfit_manifest.csv
+  sha256: 00e6bd018eae6aeb05be0740b55a92b7a5cc9a44b9ab2b80affbad3e3282ccff
+normalization:
+  path: docs/phase_b_finalfit_preparation/runs/run_20261002T014649_144967Z/normalization_phaseB_finalfit_2023_2024.json
+  sha256: c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327
+  status: READY
+physical_batch: 2
+gradient_accumulation_steps: 1
+drop_last: false
+singleton_effective_batch: 1
+steps_per_epoch: 11724
+total_planned_updates: 128964
+FINALFIT_TAIL_BATCH_POLICY: ALLOW_SINGLETON_NO_DROP_NO_DUPLICATE
+loss_denominator: all valid Yunnan supervised pixels in the actual batch; singleton
+  is not divided by physical batch 2
+population_years:
+- 2023
+- 2024
+months:
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+counts:
+  '2023': 11720
+  '2024': 11727
+  '2025': 0
+sampling:
+  shuffle: true
+  epoch_seed_rule: 2026 + zero_based_epoch_index
+  permutation: independent torch.Generator randperm(23447)
+  once_per_epoch: true
+  duplicate_drop_padding_replacement: false
+scheduler:
+  type: ONE_EPOCH_LINEAR_WARMUP_THEN_COSINE
+  rule: SAME_EPOCH_PROGRESS_ON_50_EPOCH_HORIZON
+  base_lr: 0.0001
+  min_lr: 1.0e-06
+  horizon_epochs: 50
+  warmup_epochs: 1
+  W: 11724
+  U: 586200
+  update_index_base: 1
+  warmup: base_lr * (u/W)
+  cosine: min_lr+(base_lr-min_lr)*(1+cos(pi*(u-W)/(U-W)))/2
+  apply_before_optimizer_step: true
+  warmup_range: 0<lr<=base_lr; may be below min_lr
+  cosine_range: min_lr<=lr<=base_lr
+early_stopping: false
+validation_triggered_scheduler: false
+epoch_reselection: false
+2025_access: false
+ENGINEERING_ONLY_TWO_BATCH_DRYRUN_AUTHORIZED: true
+formal_training_entrypoint_provided: false
