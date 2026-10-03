@@ -185,6 +185,7 @@ class FinalAuthorization:
 
     @classmethod
     def load(cls, path, expected_sha, population_path):
+        raise PermissionError("FINAL_TEST_2025_AUTHORIZED=false; Legacy v1 execution authorization is superseded; separate researcher authorization must bind v1.1 candidate and eligible population manifests")
         if path is None or not expected_sha:
             raise PermissionError("FINAL_TEST_2025_AUTHORIZED=false; separate researcher authorization required")
         path = Path(path)

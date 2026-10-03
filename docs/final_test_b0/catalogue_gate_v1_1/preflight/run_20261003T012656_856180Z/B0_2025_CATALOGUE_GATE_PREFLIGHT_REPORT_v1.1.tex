@@ -1,0 +1,103 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{booktabs,array,hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\begin{document}
+\begin{center}
+{\LARGE YunTAPR-Net B0 2025}\par
+{\Large Catalogue Gate / Protocol v1.1}\par
+{\large 实现与零真实数据访问预检报告}\par
+2026-10-03（报告日期；run 时间为 UTC）
+\end{center}
+\section*{本轮结论}
+协议 v1.1 与 catalogue runner 就绪，98 项 fixture 测试全部通过。
+本轮未构建真实 2025 catalogue，未执行 Final Test，未加载 FINAL，未进行模型推理或训练。
+所有旧 v1 YAML、文档与审计证据保持原字节。仅两个旧代码入口增加永久拒绝，防止绕过两阶段授权。
+
+\begin{tabular}{ll}
+\toprule 状态 & 本轮实际值\\\midrule
+Protocol v1.1 frozen / catalogue runner ready & true / true\\
+Catalogue / Final Test authorized & false / false\\
+2025 catalogue QC access / Final Test executed & false / false\\
+2025 model inference scenes / metrics computed & 0 / false\\
+2025 outcome summaries exposed / pixels read & false / 0\\
+Checkpoint loads / model forward calls & 0 / 0\\
+Backward / optimizer steps / parameter updates & 0 / 0 / false\\
+真实 eligible / rejected 数量 & NOT\_INSPECTED\\\bottomrule
+\end{tabular}
+
+\section*{版本与来源}
+科学基线：\par{\small\ttfamily 299d3f1080840b24db3ba6fe39684a1e6bca530a}\par
+研究者批准的 main 工程起点：\par{\small\ttfamily 65e1086bc2f0d830a6f45e01253b4ccffcae1130}\par
+完成 run：\par{\small\ttfamily\detokenize{run_20261003T012656_856180Z}}\par
+v1.1 协议 SHA256：\par{\small\ttfamily b1be82d5bc03293c35ddc793faa1187e97fa48c537039181c0eb68a689f15eb8}\par
+\code{FINAL} 为 Phase-B epoch 011，11 epoch、128964 updates；本轮只继承身份记录，不读取 checkpoint 字节。normalization mean=270.5900486586461 K，std=20.368583874067266 K，不 refit。
+
+\newpage
+\section*{科学定义完全继承}
+程序逐项比较 v1 的十个子树：FINAL、identity、normalization、population、primary metrics、metric definitions、inherited diagnostics、diagnostic declarations、inference、prohibitions。任何变更均拒绝。
+
+评价窗口为 UTC 2025-03-01 00:00 至 2025-10-01 00:00 的左闭右开区间，每 30 分钟一个计划槽位，共 10272 个。October 在来源 I/O 前拒绝；9 月 30 日 23:30 的最后窗口允许，来源只能为 September。
+
+资格保持：expected latest B13=T+20min；obs\_start $\leq$ obs\_end $\leq$ T+30min；B13 501$\times$501 全有效且有限；IMERG V07 Final 网格、时间和独立 provenance 通过；有效云南监督像元数大于零。不使用 older fallback，不要求每景 3430 像元全部有效。
+
+云南 mask 沿用 GADM 4.1 center-in-polygon，精确 SP04 坐标，无 transpose 或 flip。有效监督集合为 IMERG valid mask 与冻结云南 mask 的交集；固定顺序、每身份一次，无丢弃、补齐或替换。
+
+\section*{评价指标与诊断}
+原 primary metrics 全部保持：global core/occurrence/quantile loss、Brier、AUROC、Average Precision、conditional mean 与 per-tau pinball、32 tau coverage、coverage error、crossing/nonfinite/support violation counts。按全体有效像元累积分子与分母，不平均 batch loss；同分概率采用精确分组，未定义指标为 null 并说明原因。
+
+32 个 $\tau_i=(i-0.5)/32$；rainy 判断先在 float32 用 $R>0.1$ 比较，再提升到 FP64。monthly、spatial、reliability、case、雨强描述区间、quantile groups 和 DIAGNOSTIC\_PROXY 原样继承 2024 review。reliability 使用冻结 0.1 间隔 bins，最后箱含 1；三类 case 各 top10，固定 scene 顺序与 row-major 像元次序处理并列。
+
+雨强区间为 (0.1,1]、(1,5]、(5,10]、(10,20]、(20,30]、(30,50]、(50,$\infty$)。10/20/30/50 exceedance 仅为描述诊断。POD/FAR/CSI 继续 THRESHOLD\_NOT\_FROZEN，不选择阈值。
+
+禁止训练、backward、optimizer、参数更新、normalization refit、校准、threshold tuning、checkpoint/epoch selection、architecture/loss/LR 修改、2025 October 及 B1-B8。禁止查看 2025 结果后更改指标。
+
+\newpage
+\section*{Catalogue 与授权闭合}
+候选目录采用固定 28 列：计划时间与身份、expected nominal、B13/IMERG 路径、大小、SHA、可读性、全有效性、有限性、时间、网格与来源 QC、有效云南监督数、eligible 和固定 rejection reason。eligible manifest 为固定 12 列身份投影，必须逐值等于候选 eligible filter。
+
+所有额外字段、重复 header、嵌套值、非法产品枚举或时间均拒绝。尤其禁止 rainy count、降雨频率/雨强/bin/exceedance、loss、Brier、AUROC、AP、pinball、coverage、预测概率、quantiles、proxy 及任何未知结果别名。拒绝行同样受白名单约束。valid count 是允许的有效性 QC，不能扩展为降水结果统计。
+
+\textbf{第一阶段}必须另获研究者 catalogue-only 授权，scope 为\par
+\code{B0_2025_FINAL_TEST_CATALOGUE_ONLY}。\par
+授权先于 raw discovery、hash、reader 或 staging；绑定协议、实现、冻结 roots 和独立 completion manifest SHA。manifest 只能为 root/manifests 位置的 JSON/JSONL，不能指定 raw NC 或 October。仅允许全部 10272 槽位身份、时间、因果、full-valid 与 valid-mask QC；禁止 FINAL/model/forward/loss/metrics，包括导入 aliases。
+
+English staging 每次仅复制一个文件，验证 size 与 SHA，仅删除自有 UUID 临时副本。IMERG 日缓存只存 48 个 validity counts 与身份；没有降水 occurrence 或 intensity 聚合。copy/read seconds、hash/copy bytes、temporary peak 与 cleanup 独立登记。失败保留实际访问事实并输出受控错误类型；只向本流程新建 run 目录写失败记录。
+
+\textbf{第二阶段}必须在真实 catalogue freeze 后另获 Final Test 授权，绑定 protocol、implementation、FINAL、normalization、candidate CSV、eligible CSV 和 freeze-record SHA。严格复算全部槽位、资格、身份投影与 rejection counts；要求 QC=true、inference=0、metrics=false、outcome exposure=false。fixture freeze 不能当真实授权证据。
+
+同一已核验字节用于解析；授权与 CSV snapshot 不可变。正式 dataset 必须等于授权 snapshot；不重新读取路径替换样本集合。只有该授权后才允许 FINAL 只读推理；rainy count 此时才动态进入 runtime ledger，绝不回填 catalogue。
+
+\newpage
+\section*{真实执行的测试与历史}
+\begin{tabular}{lrrr}
+\toprule Suite & 执行 & 失败/错误 & 跳过\\\midrule
+Catalogue schema / authorization / guards & 80 & 0 / 0 & 0\\
+Synthetic NetCDF backend / staging & 18 & 0 / 0 & 0\\
+合计 & 98 & 0 / 0 & 0\\\bottomrule
+\end{tabular}
+
+全部测试在固定原始 roots 的 source guard 与 catalogue-only model/metric guard 外层执行。覆盖 10272 精确窗口、October、missing/duplicate/reordered、rain-invariant eligibility、结果字段拒绝、身份投影、模型与 metric 阻断、guard 回滚/复用、路径保护、双 CSV/freeze SHA、不可变授权和 snapshots。
+
+positive authorization 测试只验证 synthetic metadata，不能代表真实 2025 freeze、授权或样本数量。fixture CSV/NetCDF/staging 临时目录经 ownership 核验后清理；没有临时模型、checkpoint 或 optimizer。本轮未重新执行全项目训练 regression suite，不把未运行项目标成 PASS。
+
+保留失败预检 run：\par{\small\ttfamily\detokenize{run_20261003T012450_839209Z}}\par
+该 run 有 80 执行、1 failure、0 errors/skips；源访问为零。失败是嵌套 guard 下的 descriptor fixture 假设。改用不可能执行真实指标的静态 fixture descriptor 后，新建独立 run 完整通过。没有覆盖失败记录。
+
+本轮使用既有\par\code{F:/pytorch/Research/.venv-cuda/Scripts/python.exe}\par
+没有安装或升级依赖。manifest 保留原始文件身份与实现 SHA；完整测试日志、status、此 Markdown/LaTeX/PDF 及 render verification 均为独立新证据。旧证据字节保持不变。
+
+\section*{访问语义与停止点}
+QC access、Final Test execution、inference scenes、metrics computed 与 outcome exposure 分别记录。pixel read 只是 raw-access telemetry，不是 Final Test 执行判据。未来 formal 部分失败使用 source-open 事实及 completed-sample 下界，不冒充精确零读取。
+
+FROZEN：v1.1 协议、schema、防泄漏与授权顺序；全部原科学定义。
+
+NOT\_EXECUTED：真实 catalogue、真实资格统计、FINAL 加载、2025 推理与指标。
+
+RESEARCHER\_AUTHORIZATION\_REQUIRED：先 catalogue-only；真实 freeze 后再单独 Final Test。
+
+完成 GitHub main 提交后 STOP。本报告、runner-ready 状态与发布 commit 均不是生产执行授权。可编辑源码为同名 .tex；协议和完整证据见仓库新的 catalogue\_gate\_v1\_1 目录。
+\end{document}

@@ -172,6 +172,7 @@ def preflight():
 
 
 def formal(args):
+    raise PermissionError("Legacy v1 formal action is superseded: separate researcher authorization and frozen v1.1 candidate/eligible manifests are required; use test_b0_2025_final_v1_1.py")
     # This gate precedes source discovery, source existence checks and FINAL loading.
     with f.RawSourceGuard(preflight=True):
         protocol=f.load_protocol()
