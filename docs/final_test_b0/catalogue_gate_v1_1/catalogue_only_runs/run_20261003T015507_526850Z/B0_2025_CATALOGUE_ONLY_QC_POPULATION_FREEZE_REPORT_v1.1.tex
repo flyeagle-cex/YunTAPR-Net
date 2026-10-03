@@ -1,0 +1,113 @@
+\documentclass[UTF8,11pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=21mm]{geometry}
+\usepackage{array,hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,pdftitle={B0 2025 Catalogue QC Freeze v1.1}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}\renewcommand{\arraystretch}{1.15}
+\begin{document}
+\begin{center}{\LARGE YunTAPR-Net}\par{\Large B0 2025 Catalogue-only QC}\par{\Large 资格样本清单冻结 v1.1}\par 2026-10-03 UTC\end{center}
+\textbf{已冻结真实 catalogue；正式 Final Test 未授权、未执行。}
+
+本轮真实检查 March--September 的全部 10272 个半小时槽位。实际 eligible=10244，rejected=28。最终 128 项 catalogue 与 artifact 测试全部通过，零失败、错误、跳过。未加载 FINAL、实例化模型、forward、backward 或 optimizer，未计算任何预测或降雨结果统计。
+
+\section*{独立 run 与历史}
+Baseline：{\small\texttt{c661d8a31dbd8cc205624716d8a2d0fcd0867023}}。\par
+Run：{\small\texttt{run\_20261003T015507\_526850Z}}。\par
+完成 UTC：\texttt{2026-10-03T02:19:36.127822+00:00}。基线 1771 个文件的 Git blob 与 SHA256 均保持不变。旧 v1/v1.1、preflight、失败、final status 均保留；本轮全部交付文件为新增。
+
+\section*{冻结资格与拒绝计数}
+UTC 候选窗口为 [2025-03-01 00:00, 2025-10-01 00:00)，固定 30 min、10272 行。candidate 严格 28 列；eligible manifest 严格 12 个 identity 字段，为 eligible rows 的精确投影。无缺槽、重复、重排、October source、older fallback 或 silent replacement。
+
+资格保持原 v1.1：IMERG V07 Final；B13 nominal=T+20min；obs\_start$\leq$obs\_end$\leq$T+30min；501×501 全有效有限；IMERG 时间/网格 provenance；云南有效监督像元数大于 0。保留部分 IMERG 有效性，不依据雨强筛样本，不新增 3430 全有效条件。
+
+\begin{tabular}{p{132mm}r}\hline 固定拒绝原因 & 槽位计数\\\hline
+{\scriptsize\texttt{B13\_FULL\_SCENE\_REQUIRED}} & 28 \\
+{\scriptsize\texttt{B13\_METADATA\_INVALID}} & 16 \\
+{\scriptsize\texttt{B13\_NOT\_READABLE}} & 4 \\
+{\scriptsize\texttt{EXPECTED\_LATEST\_B13\_MISSING\_NO\_FORMAL\_FALLBACK}} & 4 \\
+\hline\end{tabular}
+
+同一槽位可能含多个拒绝原因，原因计数之和不必等于 rejected。身份、基础设施、复制 SHA 与清理异常按固定规则停止；没有临时变更规则或替代源数据。
+\newpage
+\section*{冻结哈希与授权来源}
+\textbf{candidate CSV}\\{\footnotesize\texttt{b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d}}\par
+\textbf{eligible identity CSV}\\{\footnotesize\texttt{53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e}}\par
+\textbf{catalogue freeze record}\\{\footnotesize\texttt{0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f}}\par
+\textbf{independent authorization}\\{\footnotesize\texttt{00ed1e1de442832e2197d71ee5412aafa95496b144cae73781adfeb3e13ac1c0}}\par
+\textbf{frozen v1.1 protocol}\\{\footnotesize\texttt{b1be82d5bc03293c35ddc793faa1187e97fa48c537039181c0eb68a689f15eb8}}\par
+\textbf{normalization}\\{\footnotesize\texttt{c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327}}\par
+\textbf{FINAL registered binary identity (NOT RECOMPUTED)}\\{\footnotesize\texttt{05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65}}\par
+\textbf{FINAL frozen identity record}\\{\footnotesize\texttt{d88bc7ec861ffcfd654ba339ea519f5fc061adb6ebcaf7477d052230b4b5899a}}\par
+\textbf{completion metadata manifest}\\{\footnotesize\texttt{7efef36f05545ac6b9482e5d8fd68367aea875bc59145606a1bf45b5848968c1}}\par
+\section*{已批准的 manifest 路径适配}
+H 原始根目录：\texttt{H:/葵花202303\_202510}。IMERG 原始根目录：\texttt{F:/云南极端降水数据/raw/IMERG}。只读既有 manifest：\texttt{F:/云南极端降水数据/manifests/imerg\_manifest.jsonl}，384292 bytes，SHA 与历史登记一致。没有扩大 raw scope，也没有把 manifest 复制到 raw root。
+
+原冻结协议、reader、28/12 列 schema、资格和旧 implementation bundle 原字节保留。新适配器、入口、适配器测试 SHA 由独立授权锁定；原 freeze record 的授权 SHA 递归绑定新执行闭包。授权 scope 仅为 catalogue-only QC。
+
+\textbf{FINAL 文件 SHA 未重新计算。}按研究者明确批准，只核验仓库冻结 identity 记录不变。登记的二进制 SHA 不构成本轮对实际文件的重新核验；实际 FINAL 未打开。Normalization identity 保持冻结，未 refit。
+\newpage
+\section*{真实 I/O 与中文路径成本}
+单文件英文 staging 位于以下新 run 专用子目录：\par
+{\small\texttt{F:/pytorch/Research/stage0\_himawari/cache/staging/}}\par
+{\small\texttt{catalogue\_only\_run\_20261003T015507\_526850Z}}。
+
+byte cap=734003200。每次先 copy、核验大小与 source/staged SHA256，再交 netCDF4 读取；只删除流程自建 UUID 副本。原 H/IMERG 和旧 diagnostic cache 均只读保留。所有本轮临时副本已清理，空 staging 子目录保留登记。
+
+\begin{tabular}{p{103mm}r}\hline 实测 raw-access telemetry & 值\\\hline
+{\scriptsize\texttt{2025\_PIXELS\_READ}} & 2676986256 \\
+{\scriptsize\texttt{2025\_CATALOGUE\_QC\_ACCESS}} & true \\
+{\scriptsize\texttt{raw\_source\_open\_events}} & 20964 \\
+{\scriptsize\texttt{b13\_pixel\_values\_read}} & 2574266256 \\
+{\scriptsize\texttt{imerg\_pixel\_values\_read}} & 102720000 \\
+{\scriptsize\texttt{source\_hash\_bytes\_read}} & 45912491227 \\
+{\scriptsize\texttt{source\_copy\_bytes\_read}} & 45912491227 \\
+{\scriptsize\texttt{source\_copy\_bytes\_written}} & 45912491227 \\
+{\scriptsize\texttt{copy\_seconds}} & 144.563557 \\
+{\scriptsize\texttt{read\_seconds}} & 97.779709 \\
+{\scriptsize\texttt{temporary\_bytes\_peak}} & 6112392 \\
+{\scriptsize\texttt{cleanup\_success}} & true \\
+\hline\end{tabular}
+
+最后槽位 QC elapsed=346.151848 s；其后另行完整核验 projection、hash 与历史。copy/read 为逐文件实测加总，read 含 reader/QC，不含 SHA 时间。原始源复制读取和源 SHA 读取各为 45912491227 bytes；还有 staging 写入、staged SHA 与 netCDF staging 读取。像元读取量和 I/O 数量仅属工程 telemetry，不能解释为 Final Test 指标。
+
+\section*{实际测试与环境}
+原 gate 80 项、原 backend 18 项、新 adapter 22 项、真实 artifact 8 项，总计 128 项，均 PASS。closure tests 仅读仓库元数据，不重读原始 2025 像元。未运行训练、optimizer、backward fixture；拒绝探针没有执行被禁止操作。临时 fixture 已清理。
+
+首次启动器缺 scripts 导入路径，118 项中 2 项 import error；其失败日志保留。外部启动器修正后 118 项通过，增加 staging 限定检查后 120 项通过；真实 QC 完成后闭环 128 项通过。没有真实 QC 失败重跑。
+
+Python：\texttt{F:/pytorch/Research/.venv-cuda/Scripts/python.exe}。版本：Python 3.12.14，numpy 2.5.3，torch 2.11.0+cu128，netCDF4 1.7.4，PyYAML 6.0.3。环境包未安装、升级。
+\newpage
+\section*{最终状态}
+{\footnotesize\begin{verbatim}
+FINAL_TEST_PROTOCOL_V1_1_FROZEN=true
+FINAL_TEST_CATALOGUE_AUTHORIZED=true
+REAL_2025_CANDIDATE_CATALOGUE=FROZEN
+REAL_2025_CANDIDATE_COUNT=10272
+REAL_2025_ELIGIBLE_COUNT=10244
+REAL_2025_REJECTED_COUNT=28
+2025_CATALOGUE_QC_ACCESS=true
+FINAL_TEST_2025_AUTHORIZED=false
+FINAL_TEST_2025_EXECUTED=false
+2025_MODEL_INFERENCE_SCENES=0
+2025_FINAL_TEST_METRICS_COMPUTED=false
+2025_TARGET_OUTCOME_SUMMARIES_EXPOSED=false
+MODEL_PARAMETERS_UPDATED=false
+OPTIMIZER_STEPS=0
+BACKWARD_CALLS=0
+FINAL_CHECKPOINT_LOADS=0
+MODEL_FORWARD_CALLS=0
+FINAL_actual_file_sha256_recomputed=false
+FINAL_identity_record_sha256_unchanged=true
+second_stage_researcher_authorization_required=true
+\end{verbatim}}
+\section*{证据与停止点}
+本 run 的 catalogue/ 保存两个 CSV 和原 schema freeze record；final\_status.json 保存全部状态；execution\_manifest.json、authorization\_binding.json、history\_before.json 保存来源链。closure\_test\_summary.json 和完整测试日志记录实测结果。独立授权位于 config/evaluation/，对应来源说明位于 catalogue\_gate\_v1\_1/。
+
+\textbf{FROZEN：}v1.1 协议、真实候选 catalogue、资格 identity projection、两个 CSV 和 freeze record 的 SHA，以及原 FINAL/normalization 登记身份。
+
+\textbf{NOT\_YET\_AUTHORIZED：}正式 2025 Final Test。
+
+\textbf{RESEARCHER\_DECISION\_REQUIRED：}对冻结候选、资格清单、freeze record、协议/实现、FINAL 和 normalization 的第二阶段独立授权。
+
+本轮仅提交源码、测试、CSV/JSON、日志和报告；不上传源 nc、staging cache、checkpoint、optimizer 或 model binary。完成 GitHub main 发布后 STOP，不执行 Final Test，不进入 B1--B8。
+\end{document}
