@@ -1,0 +1,32 @@
+{
+  "scripts": {
+    "prepare_yuntapr_b1_protocol_v1.py": "13d275bf5cfefa7f0637d5f85f548d675c722456b950b2aa7eb6ecde1756c9c7",
+    "resume_yuntapr_b1_protocol_v1.py": "83692115824b19ea4d73b3e7cdf0287bfe9b80450ca8027d936b5abc2fc7ca08",
+    "preserve_yuntapr_b1_runner_execution_sources.py": "618f9d11ddea82ede56da9d712ffd96e039d8b89f5d47d89862da552f08138b7",
+    "test_yuntapr_b1_protocol_v1.py": "4db16f57dca056643374c3a88b9a3779b21483ea3d84c327ffd5fdcc40de4298",
+    "recheck_yuntapr_b1_protocol_tests_v1.py": "a35a7d47bff43610dca34782336d2d7ebdcff4bc0c9ede4bcc0b9a090955d094",
+    "audit_yuntapr_b1_validation_2024_v1.py": "f0003769fefc4cbf6d0bc98334ec4dfff16eb3cb50149ce63838bdcd12669ace",
+    "close_yuntapr_b1_protocol_v1.py": "4000a2ab2479d75d17d99ce75c71f4c06a21b0611322a5672466a0c9b84c001f",
+    "build_yuntapr_b1_protocol_report_v1.py": "dec55000fd52de52f7f1028d9f11631e83dbf3e1d1858ba8e4ed37195bf82e95",
+    "compile_yuntapr_b1_protocol_pdf_v1.py": "f40566885eab29cbb61cbbc9ebd65c8339792b0bf4dc9bd4e2e0887e1d998d9c",
+    "repair_yuntapr_b1_protocol_pdf_layout_v1.py": "cc853d7c1db4ed56c111ae73a6fb74bad6b005b2e48b654be2543698acbcce9f",
+    "repair_yuntapr_b1_protocol_pdf_layout_v2.py": "75a91c47a16c3eec532e418f87456e7afd8e44cc535c4128c5b7ddd0e65fdf8b"
+  },
+  "source_archive_before_hardening": {
+    "src/yuntapr/training/paired_phase_a.py": {
+      "snapshot_path": "docs/b1_training_protocol/preflight/run_20261003T074333_289400Z/engineering_execution_sources/src/yuntapr/training/paired_phase_a.py",
+      "sha256": "f36c72b70df4b360034a32de21d11d5497e38b25298ff5e813c0b657b953e096"
+    },
+    "scripts/paired_phase_a_entry.py": {
+      "snapshot_path": "docs/b1_training_protocol/preflight/run_20261003T074333_289400Z/engineering_execution_sources/scripts/paired_phase_a_entry.py",
+      "sha256": "83142aa314d9c7ed32ae88a82029d143fa6eafe8fa975b880c65b28b21ea9725"
+    },
+    "scripts/preflight_b1_b0_matched_phase_a_v1.py": {
+      "snapshot_path": "docs/b1_training_protocol/preflight/run_20261003T074333_289400Z/engineering_execution_sources/scripts/preflight_b1_b0_matched_phase_a_v1.py",
+      "sha256": "a077e37a71077804229d699f52fe3567011156558cc0e47a49d17731b64acb0b"
+    }
+  },
+  "GPU_and_fixture_optimizer_steps_separate_from_formal": true,
+  "no_2025_source_reads": true,
+  "all_frozen_historical_data_readonly": true
+}

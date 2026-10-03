@@ -1,0 +1,114 @@
+\documentclass[10pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=20mm]{geometry}
+\usepackage{amsmath,booktabs,tabularx,hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{document}
+\begin{center}{\Large B1 与 B0-Matched-Control}\\[5pt]
+{\large Phase-A 训练协议冻结与工程入口核验 v1}\end{center}
+\textbf{完整协议已冻结，正式训练尚未授权或启动。}本轮只执行真实历史小样本工程验证与隔离测试。2025 原始源访问、像元读取、模型推理均为0；正式 optimizer steps=0。
+\noindent Run\par{\small\ttfamily run\_20261003T074333\_289400Z}\par
+\noindent Baseline\par{\small\ttfamily 207a1872341f4fcdfd85eb534c892400fcf2ba99}\par
+\section*{1. 科学设计与样本集合}
+2023年3--10月 Train=10,455；2024年3--10月 Validation=10,501。B1与独立matched control同一common intersection，scene、target、mask及排序规则完全相同；历史B0不可变。
+
+B1仅B13六槽，输入$[B,6,501,501]$。$A=T+30$分钟，nominal offsets为$A-[60,50,40,30,20,10]$分钟，最旧到最新对应通道0到5。B0-Matched只用同一scene的slot5，输入$[B,1,501,501]$。实际逐帧$obs\_start\le obs\_end\le A$；date\_created只记录，不声称实时availability。
+
+M1：六槽必须全部可读、full-valid、finite、metadata-valid、causal；任一不合格整scene拒绝。禁止fallback、重复、零占位及插值；窗口起点历史不足拒绝，不读2月补齐。10月最后target的analysis标签可跨到11月1日零点，原始帧与target仍全部在10月。
+
+\textbf{两模型共用已冻结B1 scaler}：mean=271.60515414265217 K；std=19.93959597783802 K；ddof=0。B0-Matched本轮正式采纳共享scaler，旧scaler文件不改写、不重拟合。2024/2025/IMERG不参与fit；FP32 Kelvin转FP64计算标准化，再输出FP32。
+\noindent Normalization SHA256\par{\small\ttfamily 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31}\par
+\section*{2. 架构与 paired initialization}
+四层 residual U-Net：48--96--192--256，GN/GELU、learned stride2、exact resize/concat无crop；SP04输出$48\times100\times100$；direct1$\times$1 heads为48到1及48到32。无额外信息源或temporal module。云南正式mask=3430格点，无flip、transpose或坐标重建。
+
+B0-Matched参数4,329,361；B1为4,331,761；增加2,400。两个不同形tensor仅enc0 conv1/skip kernels。分别重新设seed=2026创建fresh模型，再复制同名同形张量；72个shared tensors逐bit一致、fresh replay通过。两个B1输入kernel保留其native初始化，skip原生零初始化保持。不加载历史checkpoint，不转移optimizer/scheduler state。
+\newpage
+\section*{3. 完整共享训练协议}
+Occurrence为$P(R>0.1\,\mathrm{mm/h})$，$R=0.1$为negative。focal $\alpha=0.5,\gamma=2$；32个conditional quantiles，$\tau_i=(i-0.5)/32$；$L=L_{occ}+L_{qr}$，quantile axis mean，无extra multiplier，KD=0。FP32 raw head，FP64 monotonic transform、physical quantiles和pinball，$\epsilon_{mono}=10^{-4}$。BF16 forward、FP32参数、无GradScaler、TF32=false；crossing/support/nonfinite均不得修复后继续。
+
+AdamW：betas=(0.9,0.999)，eps=$10^{-8}$，WD=$10^{-4}$仅Conv2d kernel；bias/GN affine no-decay。amsgrad/maximize/capturable/differentiable/foreach/fused全部false。decay参数：B0-Matched 4,322,832；B1 4,325,232；两者no-decay 6,529。分组disjoint且complete，unknown参数拒绝。全局grad norm clip=5，nonfinite立即停止，记录pre/post与clip频率。
+
+实测冻结physical batch=2，accumulation=1，drop\_last=false。每epoch 5227个batch2加1个singleton；实际loss分母6860/3430，singleton不补齐、不丢弃、不重复。每scene exactly once；两模型同一seed=2026+epoch index的独立Generator permutation。全部50个epoch计划通过。
+
+$W=5228$，$U=261400$；max epochs=50，U是固定数学horizon，允许early stopping提前结束。one-based update $u$，LR必须在step前应用：
+\[
+lr(u)=\begin{cases}
+10^{-4}u/W,&1\le u\le W,\\
+10^{-6}+\frac{10^{-4}-10^{-6}}2\left[1+\cos\!\left(\pi\frac{u-W}{U-W}\right)\right],&W<u\le U.
+\end{cases}
+\]
+首步$1.9127773527161438\times10^{-8}$；$u=W$精确$10^{-4}$；$u=U$精确$10^{-6}$。全部261400个数学值已验证。min\_lr下界仅用于cosine，不clamp warmup；不以validation调LR，不压缩cosine horizon。
+
+\textbf{Validation batch=8，两模型相同。}每completed epoch完整固定顺序10501场景，无shuffle/drop/replacement。以float64全样本原始numerators累计：$val_{core}=(S_{occ}+S_{qr})/N_{valid}$，禁止batch-average。继承Brier、AUROC、exact-score-group AP、conditional pinball、32 tau coverage/error及DIAGNOSTIC\_PROXY定义。POD/FAR/CSI仍THRESHOLD\_NOT\_FROZEN。
+
+每模型独立BEST：任何strict lower exact global core才更新，tie保留最早epoch。ES独立patience=8、min\_delta=$10^{-4}$，仅$val<best_{ES}-10^{-4}$重置计数；不可与BEST混用。其它diagnostic不能选择checkpoint。
+
+\section*{4. 正式入口与恢复政策}
+两个新入口分别为B1和B0-Matched；共同真实loop执行固定Train、full Val、BEST/ES及epoch边界保存。缺少另行researcher authorization时，在raw读取、model/optimizer构造之前拒绝。auth须为repository JSON且SHA、model、protocol/scaler/sample/code identity全部匹配；raw/checkpoint路径作为auth在hash前拒绝。模板全部AUTHORIZED=false。
+
+checkpoint根目录固定F盘b1\_phase\_a与b0\_matched\_phase\_a；仅completed Train+Val epoch边界。先验证file root/name/size/SHA，再核对provenance、coverage、model/optimizer/RNG兼容性，之后才能应用state；只从verified LAST恢复下一完整epoch，无mid-epoch exact resume。atomic回读校验后登记BEST/LAST，Git绝不上传binary。checkpoint保留train numerators，以恢复LAST已写而history中断的边界记录。隔离toy fixture next-update/RNG replay通过。
+\newpage
+\section*{5. 真实 GPU 与六帧 loader 证据}
+RTX5060 Laptop GPU，总8150.5625 MiB；torch2.11.0+cu128/CUDA12.8。既有CUDA Python；未安装/升级包。deterministic algorithms、cuDNN deterministic、benchmark=false、CUBLAS配置与seed保持冻结。
+
+继承安全判据：reserved peak不超过$(1-margin)\,total$，estimated min free不低于$margin\,total$；15\%记录最低安全，20\%用于本轮配置冻结。train均2warmup+5measured，实际创建AdamW state并更新。
+\begin{center}\begin{tabular}{lrrr}\toprule
+Train batch2 & Allocated MiB & Reserved MiB & Min free MiB\\\midrule
+B0\_MATCHED & 2738.308 & 3268 & 3654 \\
+B1 & 2758.600 & 3282 & 3640 \\
+\bottomrule\end{tabular}\end{center}
+两者均通过20\%余量。共同validation batch选择8，9及已测更大候选不满足共同标准；另用16个真实2024 Validation fixtures核验8通过、9/16不安全。此为当前设备及搜索边界下的工程选择，不声称任意运行环境的永久最大值。
+\begin{center}\begin{tabular}{lrrr}\toprule
+2024 inference batch8 & Allocated MiB & Reserved MiB & Min free MiB\\\midrule
+B0\_MATCHED & 3288.368 & 4180 & 2746 \\
+B1 & 3331.057 & 4272 & 2654 \\
+\bottomrule\end{tabular}\end{center}
+\textbf{没有执行完整10501 Validation，也不把fresh模型诊断当作科学效果。}loader两个worker，pin\_memory=false、persistent\_workers=false、prefetch=1。两模型各32个真实2023 Train scenes，另2024 fixtures；B0 latest与B1slot5 normalized tensor和target逐值一致。每worker独立ASCII staging，单文件700MiB cap；size与frozen/source/staged SHA在decode前验证，只删自身UUID副本，记录copy/read/time/bytes/cleanup；无worker error、deadlock、staging conflict。H原始永久只读、无整月永久复制，旧diagnostic cache保持。
+
+四个独立smoke，临时fresh model/optimizer，各1次step：
+\begin{center}\begin{tabular}{llrrr}\toprule
+Case & Model & Batch & $u$ & Denominator\\\midrule
+A & B0\_MATCHED & 2 & 1 & 6860 \\
+B & B1 & 2 & 1 & 6860 \\
+C & B0\_MATCHED & 1 & 5228 & 3430 \\
+D & B1 & 1 & 5228 & 3430 \\
+\bottomrule\end{tabular}\end{center}
+两个singleton在$u=5228$的LR均精确$10^{-4}$，未执行前5227步。所有case crossing/support/nonfinite=0，$p\in[0,1]$，post-clip不超过5。四次加GPU feasibility十四次，共18次ENGINEERING\_ONLY更新；临时模型/optimizer销毁，无正式checkpoint、optimizer或history。formal steps仍0。
+
+GPU后仅强化auth路径与history恢复；执行源码归档，数值functions AST逐项一致，最终hash与tests独立核验。原始2025源始终禁止打开；全部raw访问限冻结2023/2024时间及路径。
+\newpage
+\section*{6. 测试闭环与可追溯历史}
+288个不同case全部通过，含复验实际调用299次，0skip。新增49项，继承相关239项。TEST\_FIXTURE\_ONLY允许隔离optimizer/backward，28次step/51次backward独立计数，临时binary清理；测试无真实raw/checkpoint打开，formal步骤=0。
+\begin{center}{\small\begin{tabular}{lr}\toprule
+Suite & Cases\\\midrule
+新增protocol/model/data/runner & 33 \\
+新增真实preflight artifacts & 16 \\
+继承B0 data/spatial/model/loss & 20 \\
+继承scientific contracts & 72 \\
+继承QC & 8 \\
+继承quantile numerics & 14 \\
+继承Phase-A protocol & 17 \\
+继承Phase-A runner & 9 \\
+继承Phase-B runner & 32 \\
+继承GPU safety & 6 \\
+继承B1 audit & 30 \\
+继承B1 science/scaler & 31 \\
+\bottomrule\end{tabular}}\end{center}
+保留初始单位失败（跨月analysis标签、Windows临时ACL）与修正后的检查。旧run因psutil监测包缺失在GPU前失败；新run改用Windows原生working-set monitor，loader配置未改、未安装包。旧run、trace、执行代码及全部先前报告不覆盖。
+
+回归首次缺两项旧evidence目录绑定，补只读绑定后复验；旧Phase-B hash test的glob会把后来新增代码算入原执行清单。其原始文件逐SHA仍一致，TEST\_FIXTURE\_ONLY中复制原inventory后调用原hash函数通过，临时代码副本清理；旧测试与证据未改，新代码另有独立hash检查。所有失败、setUpClass error、复验日志保留，无跳过或用NOT\_RUN作PASS。
+
+1982个baseline文件及失败run文件逐SHA仍byte-identical。所有新文件独立登记，旧B1 pending状态由新decision registry补充，不回写历史。Normalization未refit，历史B0、Phase-A、Scientific Review、FinalFit、2025 catalogue及B1 audit/science均保持原bytes。
+\section*{7. 交付身份与最终边界}
+\noindent Protocol SHA256\par{\small\ttfamily 284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6}\par
+\noindent B0-Matched initial model state SHA256\par{\small\ttfamily 57a4d103a31aa7be1a52af079cdf7fb81bc73c51ba3e0e97d395513d21d9023d}\par
+\noindent B1 initial model state SHA256\par{\small\ttfamily 9aa5dad0456e8d78862fb485d4c37f172aa1360e1d350ac9df101a953799718e}\par
+\textbf{FROZEN：}B1设计/M1/共同样本集合、两模型共享scaler、paired initialization、完整Phase-A protocol；physical2、accum1、steps5228、W5228、U261400、validation8及双worker设置。
+
+\textbf{READY：}B1与B0-Matched正式runner及entrypoints。
+
+\textbf{NOT AUTHORIZED / NOT STARTED：}两种正式训练与2025 Final Test。FORMAL\_OPTIMIZER\_STEPS=0；2025 raw access/pixels/inference=0。不进入B2或下一阶段；正式训练仍需另行研究者授权。
+
+详尽norm/sample/source/code hashes、两轮失败与复验、GPU原始读数、copy/read/cleanup日志、loss及grad norm见同名Markdown和独立run目录。此文档LaTeX源可手动修改；科学合同变更仍须另行研究者决策。
+\end{document}

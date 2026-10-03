@@ -1,0 +1,170 @@
+version: v1
+status: RESEARCHER_APPROVED_ENGINEERING_CLOSURE
+models:
+- B0_MATCHED
+- B1
+identity:
+  scientific_contract_v1.1:
+    path: config/science_contract_v1.1.yaml
+    sha256: 14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3
+  engineering_v4:
+    path: config/b0_engineering_v4.yaml
+    sha256: bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7
+  SP04_mapping:
+    path: config/spatial/sp04_target_cell_membership_v1.csv
+    sha256: 3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd
+  SP04_manifest:
+    path: config/spatial/sp04_coordinate_manifest_v1.json
+    sha256: e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473
+  yunnan_mask:
+    path: F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc
+    sha256: 9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef
+  prior_gpu_manifest:
+    path: docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json
+    sha256: c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8
+  normalization:
+    path: docs\b1_scientific_freeze\runs\run_20261003T045139_110133Z\normalization_b1_2023_shared_v1.json
+    sha256: 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31
+  B1_2023:
+    path: docs\b1_scientific_freeze\runs\run_20261003T045139_110133Z\b1_2023_formal_manifest.csv
+    sha256: f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219
+  B1_2024:
+    path: docs\b1_scientific_freeze\runs\run_20261003T045139_110133Z\b1_2024_formal_manifest.csv
+    sha256: eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c
+  B0_MATCHED_2023:
+    path: docs\b1_scientific_freeze\runs\run_20261003T045139_110133Z\b0_matched_control_2023_formal_manifest.csv
+    sha256: 05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc
+  B0_MATCHED_2024:
+    path: docs\b1_scientific_freeze\runs\run_20261003T045139_110133Z\b0_matched_control_2024_formal_manifest.csv
+    sha256: 5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a
+normalization_sha256: 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31
+B0_MATCHED_CONTROL_NORMALIZATION: USE_FROZEN_B1_SHARED_SCALER
+input:
+  B1:
+  - 6
+  - 501
+  - 501
+  B0_MATCHED:
+  - 1
+  - 501
+  - 501
+  offset_minutes:
+  - 60
+  - 50
+  - 40
+  - 30
+  - 20
+  - 10
+  ordering: OLDEST_TO_LATEST
+  missing_policy: M1_STRICT_COMPLETE_REJECT_NO_FALLBACK
+architecture:
+  channels:
+  - 48
+  - 96
+  - 192
+  - 256
+  heads: DIRECT_1X1_48_TO_1_AND_32
+  SP04: UNCHANGED
+  parameters:
+    B1:
+      DECAY_GROUP: 4325232
+      NO_DECAY_GROUP: 6529
+      total: 4331761
+    B0_MATCHED:
+      DECAY_GROUP: 4322832
+      NO_DECAY_GROUP: 6529
+      total: 4329361
+  only_shape_changes:
+  - backbone.enc0.conv1.weight
+  - backbone.enc0.skip.weight
+initialization:
+  seed: 2026
+  independent_reseed: true
+  copy_same_name_same_shape_only: true
+  historical_checkpoint_transfer: false
+loss:
+  occurrence_threshold: 0.1
+  occurrence_strict_greater: true
+  focal_alpha: 0.5
+  focal_gamma: 2.0
+  quantiles: 32
+  tau: (i-0.5)/32
+  formula: L_occ+L_qr
+  quantile_axis_reduction: mean
+  KD: 0
+  external: false
+optimizer:
+  name: AdamW
+  betas:
+  - 0.9
+  - 0.999
+  eps: 1.0e-08
+  weight_decay: 0.0001
+  decay: Conv2d.weight_only
+  amsgrad: false
+  maximize: false
+  capturable: false
+  differentiable: false
+  foreach: false
+  fused: false
+gradient:
+  global_clip_norm: 5.0
+  error_if_nonfinite: true
+scheduler:
+  base_lr: 0.0001
+  min_lr: 1.0e-06
+  W: 5228
+  U: 261400
+  fixed_horizon_epochs: 50
+  rule: ONE_BASED_LINEAR_WARMUP_THEN_FIXED_50_EPOCH_COSINE
+  apply_before_optimizer_step: true
+  min_lr_lower_bound: COSINE_ONLY
+training:
+  scenes: 10455
+  physical_batch: 2
+  accumulation: 1
+  steps_per_epoch: 5228
+  drop_last: false
+  tail_policy: ALLOW_SINGLETON_NO_DROP_NO_DUPLICATE
+  max_epochs: 50
+  epoch_seed: 2026+zero_based_epoch_index
+  every_scene_exactly_once: true
+validation:
+  scenes: 10501
+  batch: 8
+  fixed_order: true
+  shuffle: false
+  drop_last: false
+  metric: global_val_core_loss
+  accumulation: (S_occ+S_qr)/N_valid_FLOAT64_RAW_SUM
+  BEST: STRICT_LOWER_EARLIEST_TIE
+  early_stop_patience: 8
+  early_stop_min_delta: 0.0001
+precision:
+  forward: BF16
+  parameters: FP32
+  raw_quantiles: FP32
+  transform_physical_pinball: FP64
+  GradScaler: false
+  TF32: false
+loader:
+  num_workers: 2
+  pin_memory: false
+  persistent_workers: false
+  prefetch_factor: 1
+  per_worker_staging: true
+  max_temporary_bytes_per_worker: 734003200
+  verify_sha256_before_decode: true
+checkpoint:
+  roots:
+    B1: F:\pytorch\Research\outputs\formal_training\b1_phase_a
+    B0_MATCHED: F:\pytorch\Research\outputs\formal_training\b0_matched_phase_a
+  boundary: COMPLETED_TRAIN_AND_VALIDATION_EPOCH_ONLY
+  resume: VERIFIED_LAST_TO_NEXT_COMPLETE_EPOCH
+  provenance_before_state_application: true
+  Git_binary_allowed: false
+authorization:
+  B1_TRAINING_AUTHORIZED: false
+  B0_MATCHED_CONTROL_TRAINING_AUTHORIZED: false
+  separate_researcher_authorization_required: true
+  2025_raw_access: false
