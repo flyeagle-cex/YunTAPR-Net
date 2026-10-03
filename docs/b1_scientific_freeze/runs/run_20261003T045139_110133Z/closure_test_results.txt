@@ -1,0 +1,101 @@
+NEW_SYNTHETIC_UNITS
+test_bad_histogram_or_weight_rejected (tests.b1_scientific_freeze.test_scientific_freeze.ExposureTests.test_bad_histogram_or_weight_rejected) ... ok
+test_int64_exposure_denominator_exceeds_32bit (tests.b1_scientific_freeze.test_scientific_freeze.ExposureTests.test_int64_exposure_denominator_exceeds_32bit) ... ok
+test_overlapping_scenes_keep_repeated_frame_exposure (tests.b1_scientific_freeze.test_scientific_freeze.ExposureTests.test_overlapping_scenes_keep_repeated_frame_exposure) ... ok
+test_validation_and_2025_never_fit (tests.b1_scientific_freeze.test_scientific_freeze.ExposureTests.test_validation_and_2025_never_fit) ... ok
+test_weighted_histogram_matches_independently_expanded_pixels (tests.b1_scientific_freeze.test_scientific_freeze.ExposureTests.test_weighted_histogram_matches_independently_expanded_pixels) ... ok
+test_only_whitelisted_train_source_allowed (tests.b1_scientific_freeze.test_scientific_freeze.GuardTests.test_only_whitelisted_train_source_allowed) ... ok
+test_validation_february_2025_unlisted_imerg_checkpoint_rejected_before_io (tests.b1_scientific_freeze.test_scientific_freeze.GuardTests.test_validation_february_2025_unlisted_imerg_checkpoint_rejected_before_io) ... ok
+test_write_rejected_even_for_whitelisted_source (tests.b1_scientific_freeze.test_scientific_freeze.GuardTests.test_write_rejected_even_for_whitelisted_source) ... ok
+test_actual_causal_end_equality_allowed (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_actual_causal_end_equality_allowed) ... ok
+test_each_kind_incomplete_rejects_whole_scene (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_each_kind_incomplete_rejects_whole_scene) ... ok
+test_each_slot_missing_rejects_without_substitution (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_each_slot_missing_rejects_without_substitution) ... ok
+test_exact_six_ordered_causal_and_latest (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_exact_six_ordered_causal_and_latest) ... ok
+test_future_end_and_reverse_interval_rejected (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_future_end_and_reverse_interval_rejected) ... ok
+test_native_one_invalid_pixel_rejected (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_native_one_invalid_pixel_rejected) ... ok
+test_scan_bucket_deviation_is_not_new_exclusion (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_scan_bucket_deviation_is_not_new_exclusion) ... ok
+test_window_start_no_february_even_when_fixture_exists (tests.b1_scientific_freeze.test_scientific_freeze.M1Tests.test_window_start_no_february_even_when_fixture_exists) ... ok
+test_flip_rejects_before_pixels (tests.b1_scientific_freeze.test_scientific_freeze.PhysicalReaderTests.test_flip_rejects_before_pixels) ... ok
+test_packing_change_rejects_before_pixels (tests.b1_scientific_freeze.test_scientific_freeze.PhysicalReaderTests.test_packing_change_rejects_before_pixels) ... ok
+test_partial_is_rejected_no_missing_zero (tests.b1_scientific_freeze.test_scientific_freeze.PhysicalReaderTests.test_partial_is_rejected_no_missing_zero) ... ok
+test_real_reader_returns_packed_int16_exactly_once (tests.b1_scientific_freeze.test_scientific_freeze.PhysicalReaderTests.test_real_reader_returns_packed_int16_exactly_once) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.140s
+
+OK
+NEW_REAL_FREEZE_ARTIFACTS
+test_every_real_frame_read_sha_size_cleanup_and_io_totals (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_every_real_frame_read_sha_size_cleanup_and_io_totals) ... ok
+test_independent_float32_decode_and_centered_variance_replay (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_independent_float32_decode_and_centered_variance_replay) ... ok
+test_real_completion_and_train_only_exposure_denominator (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_real_completion_and_train_only_exposure_denominator) ... ok
+test_real_execution_no_outcome_model_or_parameter_operations (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_real_execution_no_outcome_model_or_parameter_operations) ... ok
+test_only_approved_items_frozen_and_training_unauthorized (tests.b1_scientific_freeze.test_freeze_artifacts.ProtocolArtifactTests.test_only_approved_items_frozen_and_training_unauthorized) ... ok
+test_exact_approved_common_intersection_membership (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_exact_approved_common_intersection_membership) ... ok
+test_formal_exact_counts_order_unique_roles_and_target_identities (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_formal_exact_counts_order_unique_roles_and_target_identities) ... ok
+test_signed_references_and_all_1941_historical_files_unchanged (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_signed_references_and_all_1941_historical_files_unchanged) ... ok
+test_six_causal_source_sha_bindings_and_control_latest (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_six_causal_source_sha_bindings_and_control_latest) ... ok
+test_train_exposure_rebuilt_independently_from_six_nominal_columns (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_train_exposure_rebuilt_independently_from_six_nominal_columns) ... ok
+test_window_start_targets_excluded_with_no_february_slots (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_window_start_targets_excluded_with_no_february_slots) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 2.631s
+
+OK
+EXISTING_B1_SYNTHETIC
+test_authority_without_exact_researcher_confirmation_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_authority_without_exact_researcher_confirmation_rejected) ... ok
+test_definition_explicitly_keeps_other_decisions_unfrozen (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_definition_explicitly_keeps_other_decisions_unfrozen) ... ok
+test_exact_calendar_population_no_2025_or_october_exclusion (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_exact_calendar_population_no_2025_or_october_exclusion) ... ok
+test_exact_offsets_order_and_latest_equals_b0 (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_exact_offsets_order_and_latest_equals_b0) ... ok
+test_first_target_outside_scope_is_distinct_from_missing (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_first_target_outside_scope_is_distinct_from_missing) ... ok
+test_wrong_year_month_cadence_and_naive_timestamp_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_wrong_year_month_cadence_and_naive_timestamp_rejected) ... ok
+test_2025_all_months_raw_and_imerg_checkpoint_never_opened (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_2025_all_months_raw_and_imerg_checkpoint_never_opened) ... ok
+test_direct_backend_original_path_rejected_before_netcdf_io (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_direct_backend_original_path_rejected_before_netcdf_io) ... ok
+test_model_forward_torch_load_backward_optimizer_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_model_forward_torch_load_backward_optimizer_rejected) ... ok
+test_readonly_correct_development_path_and_no_february (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_readonly_correct_development_path_and_no_february) ... ok
+test_actual_reader_preserves_cf_and_only_b13_pixel_counter (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_actual_reader_preserves_cf_and_only_b13_pixel_counter) ... ok
+test_missing_values_never_zero_and_multireason_time_error (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_missing_values_never_zero_and_multireason_time_error) ... ok
+test_native_latitude_flip_is_rejected_before_pixels (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_native_latitude_flip_is_rejected_before_pixels) ... ok
+test_complete_valid_causal_candidate_not_a_formal_policy (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_complete_valid_causal_candidate_not_a_formal_policy) ... ok
+test_no_slot_drop_duplicate_or_reorder (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_no_slot_drop_duplicate_or_reorder) ... ok
+test_partial_all_fill_and_missing_collect_multiple_slot_reasons (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_partial_all_fill_and_missing_collect_multiple_slot_reasons) ... ok
+test_real_observation_end_controls_causality (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_real_observation_end_controls_causality) ... ok
+test_scan_bucket_deviation_is_diagnostic_only (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_scan_bucket_deviation_is_diagnostic_only) ... ok
+test_valid_target_required_but_partial_imerg_mask_retained (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_valid_target_required_but_partial_imerg_mask_retained) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.175s
+
+OK
+EXISTING_B1_REAL_AUDIT
+test_candidate_population_and_multi_reason_reconciliation (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_candidate_population_and_multi_reason_reconciliation) ... ok
+test_cli_path_fix_and_immutable_predecessor_resolution (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_cli_path_fix_and_immutable_predecessor_resolution) ... ok
+test_complete_fixed_native_and_target_schedule (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_complete_fixed_native_and_target_schedule) ... ok
+test_identity_hashes_code_definition_and_csv_bindings (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_identity_hashes_code_definition_and_csv_bindings) ... ok
+test_immutable_1802_baseline_files_and_parameter_fixture (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_immutable_1802_baseline_files_and_parameter_fixture) ... ok
+test_no_training_no_fit_no_model_no_2025_and_pending_decisions (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_no_training_no_fit_no_model_no_2025_and_pending_decisions) ... ok
+test_original_population_and_intersection_exact_sets (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_original_population_and_intersection_exact_sets) ... ok
+test_outside_scope_not_misreported_as_missing (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_outside_scope_not_misreported_as_missing) ... ok
+test_raw_io_and_bounded_cleanup_reconciliation (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_raw_io_and_bounded_cleanup_reconciliation) ... ok
+test_real_metadata_causality_and_order_independently (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_real_metadata_causality_and_order_independently) ... ok
+test_reported_per_slot_reason_counts (tests.b1_temporal_audit.test_full_audit_artifacts.B1FullAuditArtifactTests.test_reported_per_slot_reason_counts) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.116s
+
+OK
+EXISTING_DATA_SPATIAL
+test_engineering_config_all_explicit (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_engineering_config_all_explicit) ... ok
+test_exact_axis_match_rejects_flip_and_reconstructed_rounding (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_exact_axis_match_rejects_flip_and_reconstructed_rounding) ... ok
+test_membership_10000_by_25_and_orientation (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_membership_10000_by_25_and_orientation) ... ok
+test_projection_real_indices_not_reshape_or_flip (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_projection_real_indices_not_reshape_or_flip) ... ok
+test_status_and_unset_development_parameters (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_status_and_unset_development_parameters) ... ok
+test_v07_final_provenance_requires_metadata_and_manifest (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_v07_final_provenance_requires_metadata_and_manifest) ... ok
+test_b13_packed_fill_and_partial (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_b13_packed_fill_and_partial) ... ok
+test_zero_is_valid_missing_excluded (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_zero_is_valid_missing_excluded) ... ok
+test_causal_latest_and_no_fallback (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_causal_latest_and_no_fallback) ... ok
+test_missing_other_band_remains_b0_candidate (tests.b0_skeleton.test_b13_only_candidate.B13OnlyCandidateTests.test_missing_other_band_remains_b0_candidate) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.103s
+
+OK

@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-10-03T04:58:05.451425+00:00",
+  "scope": "APPROVED_2023_TRAIN_B13_FIT_ONLY",
+  "code_sha256": {
+    "src/yuntapr/data/b1_scientific_freeze.py": "727d8da5c884b22893384f4f8e4eaf6b88cef7eb67abd76ba8fc4b950a2a79d7",
+    "scripts/freeze_b1_science_v1.py": "3d658e484ffa71f523994265480a90d2cb1d5747fd7a8450de1753e05c37d1f1"
+  },
+  "staging_root": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\b1_normalization_run_20261003T045139_110133Z",
+  "exposure_plan": {
+    "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/normalization_train_exposure_plan.csv",
+    "sha256": "bcf3f6ddd6a33182c1cbf02948a01bd7d853bca893685b643646b7e1a1038c7d"
+  },
+  "normalization_rule": {
+    "status": "FIT_RULE_FROZEN_VALUES_PENDING_REAL_2023_FIT",
+    "shared_across_all_six_slots": true,
+    "fit_role": "Train",
+    "fit_years": [
+      2023
+    ],
+    "fit_months": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "fit_scene_count": 10455,
+    "weighting": "SCENE_SLOT_EXPOSURE_EACH_NATIVE_PIXEL",
+    "scene_slot_exposures": 62730,
+    "weighted_native_pixel_count": 15745292730,
+    "unique_frames_to_read": 33219,
+    "ddof": 0,
+    "ddof_provenance": "Inherited population-variance definition of pinned B0 Phase-A normalizer; not a new fitted parameter",
+    "decode_semantics": "Inherited float32 packed B13 reader; moments in float64; transform float64 then cast float32",
+    "no_validation_or_2025_fitting": true,
+    "no_imerg_value_reads": true,
+    "b0_matched_control_normalization": "RESEARCHER_DECISION_REQUIRED_NO_SILENT_REUSE"
+  }
+}

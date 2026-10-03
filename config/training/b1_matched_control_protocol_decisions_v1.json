@@ -1,0 +1,56 @@
+{
+  "version": "v1",
+  "status": "APPROVED_ITEMS_ONLY_OTHER_PARAMETERS_PENDING",
+  "researcher_clarification": "只冻结已批准项，其余参数待研究者决定（推荐）",
+  "design": {
+    "path": "config/b1/b1_scientific_design_freeze_v1.json",
+    "sha256": "705b1d6a33176494dc40a63bf8e1a30d1f7bdb0e74fe8181d6cdfcd9ac339bba"
+  },
+  "approved_items": {
+    "b1_input": "B13 SIX CAUSAL SLOTS",
+    "b0_matched_control_input": "B13 LATEST SLOT 5",
+    "Train_scenes": 10455,
+    "Validation_scenes": 10501,
+    "eligibility": "M1_COMMON_INTERSECTION",
+    "b1_normalization": "2023_B1_TRAIN_SCENE_SLOT_EXPOSURE_SHARED",
+    "historical_b0_immutable": true,
+    "2025_outcomes_sealed": true
+  },
+  "RESEARCHER_DECISION_REQUIRED": {
+    "optimizer": "NOT_YET_FROZEN",
+    "optimizer_groups": "NOT_YET_FROZEN",
+    "base_lr": "NOT_YET_FROZEN",
+    "lr_schedule": "NOT_YET_FROZEN",
+    "physical_batch": "NOT_YET_FROZEN",
+    "accumulation": "NOT_YET_FROZEN",
+    "drop_last": "NOT_YET_FROZEN",
+    "steps_per_epoch": "NOT_YET_FROZEN",
+    "warmup_updates": "NOT_YET_FROZEN",
+    "cosine_horizon_updates": "NOT_YET_FROZEN",
+    "epoch_budget": "NOT_YET_FROZEN",
+    "early_stopping": "NOT_YET_FROZEN",
+    "checkpoint_selection": "NOT_YET_FROZEN",
+    "initialization_seed": "NOT_YET_FROZEN",
+    "initialization_checkpoint_policy": "NOT_YET_FROZEN",
+    "resume_policy": "NOT_YET_FROZEN",
+    "AMP_mode": "NOT_YET_FROZEN",
+    "loader_workers": "NOT_YET_FROZEN",
+    "gradient_clipping": "NOT_YET_FROZEN",
+    "focal_alpha_gamma": "NOT_YET_FROZEN",
+    "b0_matched_control_normalization": "NOT_YET_FROZEN"
+  },
+  "inherited_science_contract": {
+    "path": "config/science_contract_v1.1.yaml",
+    "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+  },
+  "b0_phase_a_protocol_reference_only": {
+    "path": "config/training/phase_a_training_protocol_v1.yaml",
+    "sha256": "dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a"
+  },
+  "automatic_phase_a_protocol_inheritance_approved": false,
+  "TRAINING_PROTOCOL_FULLY_FROZEN": false,
+  "B1_TRAINING_AUTHORIZED": false,
+  "B0_MATCHED_CONTROL_TRAINING_AUTHORIZED": false,
+  "formal_train_entrypoint_provided": false,
+  "created_utc": "2026-10-03T04:57:11.086299+00:00"
+}

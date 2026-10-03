@@ -1,0 +1,53 @@
+{
+  "normalization_version": "B1_2023_M1_COMMON_INTERSECTION_SCENE_SLOT_SHARED_v1",
+  "status": "TRAIN_ONLY_FITTED_FROZEN",
+  "ready": true,
+  "mean_K": 271.60515414265217,
+  "std_K": 19.93959597783802,
+  "ddof": 0,
+  "valid_pixel_count": 15745292730,
+  "fit_years": [
+    2023
+  ],
+  "fit_months": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "fit_role": "Train",
+  "fit_scene_count": 10455,
+  "scene_slot_exposures": 62730,
+  "weighting": "SCENE_SLOT_EXPOSURE_EACH_NATIVE_PIXEL",
+  "unique_frames_read": 33219,
+  "all_six_slots_share_identical_scaler": true,
+  "packing_scale_float32": 0.009999999776482582,
+  "packing_offset_float32": 273.1499938964844,
+  "transform": "((Kelvin_float32.astype(float64)-mean_K)/std_K).astype(float32)",
+  "training_manifest": {
+    "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/b1_2023_formal_manifest.csv",
+    "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+  },
+  "exposure_plan": {
+    "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/normalization_train_exposure_plan.csv",
+    "sha256": "bcf3f6ddd6a33182c1cbf02948a01bd7d853bca893685b643646b7e1a1038c7d"
+  },
+  "histogram": {
+    "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/normalization_scene_slot_packed_histogram.csv",
+    "sha256": "ed803fd3e91e1aa1f2ac2103b8593a32e650781604a23eeddb77a3f22dfb96ae"
+  },
+  "generation_code_sha256": {
+    "src/yuntapr/data/b1_scientific_freeze.py": "727d8da5c884b22893384f4f8e4eaf6b88cef7eb67abd76ba8fc4b950a2a79d7",
+    "scripts/freeze_b1_science_v1.py": "3d658e484ffa71f523994265480a90d2cb1d5747fd7a8450de1753e05c37d1f1"
+  },
+  "2024_PIXELS_READ_FOR_FIT": 0,
+  "2025_PIXELS_READ": 0,
+  "IMERG_PIXELS_READ": 0,
+  "MODEL_PARAMETERS_UPDATED": false,
+  "B0_MATCHED_CONTROL_SCALER_ADOPTION": "RESEARCHER_DECISION_REQUIRED",
+  "created_utc": "2026-10-03T05:18:21.345541+00:00"
+}

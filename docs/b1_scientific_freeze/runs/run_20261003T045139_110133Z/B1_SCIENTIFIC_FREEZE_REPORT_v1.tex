@@ -1,0 +1,112 @@
+\documentclass[11pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=23mm]{geometry}
+\usepackage{amsmath,booktabs,tabularx,hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\begin{document}
+\begin{center}{\LARGE YunTAPR-Net B1 科学冻结 v1}\\[5pt]
+{\large 设计、样本集合与共享 normalization}\\[3pt]
+2026-10-03 / 研究者独立决策更新\end{center}
+\textbf{已完成批准项冻结；训练协议其余参数待决。}未训练 B1 或 B0-Matched-Control，2025 outcome 继续封存。全部 1941 个 baseline 文件保持原 SHA 与 Git blob；历史 B0、旧 B1 审计及失败记录均不回写。
+\section*{1. 冻结设计与 M1}
+仅 B13 六个因果时相。T 为既有冻结的 IMERG native 30min window start，analysis time $A=T+30$min；通道 0--5 最旧到最新：
+\begin{center}\begin{tabular}{crr}\toprule
+通道 & nominal（相对 A，min）& nominal（相对 T，min）\\\midrule
+0 & $-60$ & $-30$\\1 & $-50$ & $-20$\\2 & $-40$ & $-10$\\
+3 & $-30$ & $0$\\4 & $-20$ & $10$\\5 & $-10$ & $20$\\\bottomrule
+\end{tabular}\end{center}
+Input $[B,6,501,501]$；axis 1 是有序 B13 时相。独立 B0-Matched-Control 使用 slot 5 的最新单帧。逐帧实际 CF 检查：$\mathrm{obs\_start}\leq\mathrm{obs\_end}\leq A$。预期扫描桶 $[n,n+10\mathrm{min})$ 仅诊断；date created 仅记录，不声称历史实时回放。
+
+\textbf{M1：任一六槽不完整即拒绝整个监督场景。}Missing、unreadable、partial、all-fill、不完整身份/时间或 noncausal 均不得静默进入监督。禁止 fallback、重复、零占位与插值。窗口起点历史不足直接拒绝，\textbf{不读 2 月补齐}；不根据可用率改时相。
+
+继承 B0 四层 residual U-Net 48/96/192/256、decoder、SP04、heads、target/mask、概率语义和 loss family；只改最前端输入接口。原参数 4,329,361，六槽接口 4,331,761，差值 2,400；沿用已核验隔离计数证据，本轮不实现/运行正式模型。无其它信息源或 temporal attention/recurrent。Native lat 降序、lon 升序，精确坐标核验，无 flip / transpose / 轴重构；云南主评价 mask 3430 cells。
+
+\textbf{术语：population 表示样本集合或样本总体。}新报告统一正确用词，研究者原话仅在 provenance 中逐字保存。
+\newpage
+\section*{2. 正式样本集合与 primary 公平比较}
+\begin{center}\small\begin{tabular}{lrr}\toprule
+样本集合 & 2023 Train & 2024 Validation\\\midrule
+固定日历目标 & 11,760 & 11,760\\
+历史 B0 原资格集合 & 11,720 & 11,727\\
+正式 B1 / common intersection & 10,455 & 10,501\\
+独立 B0-Matched-Control & 10,455 & 10,501\\
+日历目标被拒绝 & 1,305 & 1,259\\
+历史 B0 不在共同集合 & 1,265 & 1,226\\\bottomrule
+\end{tabular}\end{center}
+对全部 23,520 日历目标用冻结 QC 独立重算 M1，与旧候选和交集身份及顺序逐值一致。B1 与 control 的 target/day/index/SHA 和原 B0 identity 相同；control 单帧身份与原 B0 ledger 一致。正式 manifest 保存六个 nominal，并绑定原 frame index，签名 CSV 包含每帧 path/bytes/SHA、实际 CF 时间与 QC。
+
+\textbf{Primary：独立 B0-Matched-Control vs B1，在 common intersection 比较。}不修改历史 B0，不把历史 B0 原集合结果替代 matched-control 结果。本轮没有训练或输出比较效果。Control 的 scaler 与训练参数仍待研究者决定。
+\section*{3. 真实 Train-only normalization}
+仅 2023 B1 Train 的 10,455 场景参与；六槽共享单一 scaler。计权为 \textbf{scene-slot exposure}：62,730 个槽位暴露，每次含 251,001 native pixels，总权重 15,745,292,730。ddof=0 继承原 B0 样本总体方差定义；2024 / 2025 / raw IMERG 无拟合读取。
+
+每个不同帧只解码一次，按实际出现次数 $m_f$ 累加 int64 packed-code histogram，严格等价于逐场景六槽展开；\textbf{未改成 unique-frame weighting}。真实读取 33,219 个不同 2023 文件；实际像元读数与加权暴露分开记账。
+\[
+N=\sum_f m_f\,251001,\quad
+\mu=\frac{\sum_k h_k x_k}{N},\quad
+\sigma=\sqrt{\frac{\sum_k h_k(x_k-\mu)^2}{N}}.
+\]
+$x_k$ 使用原 reader 的 float32 scale/offset 乘加，保持实际 Kelvin 舍入；mean 与 centered variance 使用 float64。归一化先用 float64 计算，最后转 float32。
+\textbf{mean=271.60515414265217 K；std=19.93959597783802 K。}\par
+Normalization SHA256：\par{\footnotesize\texttt{656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31}}
+
+完整 histogram、逐帧 copy/read/cleanup 日志、样本集合与生成代码 SHA 已登记。初始 config 的 value-pending 状态是拟合前历史事件；最终 registry 绑定完成值并 supersede，原事件不覆盖。
+\newpage
+\section*{4. 训练协议：仅已批准项冻结}
+研究者明确：\textbf{只冻结已批准项，其余参数待研究者决定。}已冻结 inputs、M1、Train/Validation identities、B1 shared fit rule、primary comparison集合、历史不变与2025封存。
+
+\begin{tabularx}{\linewidth}{lX}\toprule
+类别 & NOT\_YET\_FROZEN / RESEARCHER\_DECISION\_REQUIRED\\\midrule
+优化与 loss 数值 & optimizer、parameter groups、LR、focal alpha/gamma、clipping\\
+采样与预算 & physical batch、accumulation、drop last、steps、W、U、epochs\\
+选择与恢复 & early stopping、checkpoint selection、初始化 seed/checkpoint policy、resume\\
+执行设置 & AMP、loader workers、B1 memory preflight\\
+Control preprocessing & 是否使用 B1 shared scaler或独立 latest-slot scaler\\\bottomrule
+\end{tabularx}
+
+\textbf{不自动继承旧 Phase-A 的具体训练参数。}其 protocol 仅为不可变参考，50epoch、AdamW、LR、seed等未批准设置均未静默进入新协议。SP04 / heads / loss family 仍继承科学合同；训练数值审批独立。没有正式 training entrypoint、optimizer、backward、参数更新、checkpoint 初始化或恢复。本轮没有做 B1 GPU memory feasibility benchmark，不声称 training-ready。
+\section*{5. I/O、只读隔离与验证}
+Copy read / staging write 各 146,487,514,556 bytes（136.427 GiB）；额外 source SHA read 同量。source opens=66,438。copy=462.740s，read/QC/histogram/额外 staged SHA=456.740s，总 elapsed=1215.896s。暂存峰值 6,391,406 bytes（6.095 MiB），单文件cap=700MiB；cleanup success=true。
+
+白名单只含批准的2023 Train源，禁止2024、2月、2025、未登记H文件、raw IMERG及checkpoint打开。Source/staging size 与 SHA、冻结 SHA 在 decode 前验证；随后逐文件检查真实坐标、CF时间和 full-valid 501$\times$501。原盘永久只读；旧五个 diagnostic caches 保留。自己的 staging child 完成后为空，独立核验记录在 execution closure。
+
+\textbf{实际71项相关测试全部通过、零skip：}20新 synthetic/reader/guard units，11新真实冻结/scaler artifacts，19既有B1 units，11既有真实审计，10既有data/spatial regression。测试无raw source或2025读取，无optimizer/backward；临时NetCDF fixtures已清理。此数量不是所有历史训练 suites的声明。另存20项unit和6项sample-set preflight；后者初始测试属性命名错误已修复并保留失败记录，未改变拟合代码。
+\newpage
+\section*{6. 最终状态与证据入口}
+{\small\ttfamily\setlength{\parskip}{1.5pt}
+B1\_DESIGN\_FROZEN=true\par
+B1\_MISSING\_POLICY\_FROZEN=true\par
+B1\_SAMPLE\_SETS\_FROZEN=true\par
+B1\_NORMALIZATION\_FROZEN=true\par
+B1\_FAIRNESS\_PRIMARY\_SAMPLE\_SET\_FROZEN=true\par
+B1\_TRAINING\_PROTOCOL\_FULLY\_FROZEN=false\par
+B1\_TRAINING\_AUTHORIZED=false\par
+B1\_TRAINING\_STARTED=false\par
+B0\_MATCHED\_CONTROL\_TRAINING\_AUTHORIZED=false\par
+B0\_MATCHED\_CONTROL\_TRAINING\_STARTED=false\par
+2025\_FINAL\_TEST\_EXECUTED=false\par
+2025\_MODEL\_INFERENCE\_SCENES=0\par
+2025\_PIXELS\_READ=0\par
+MODEL\_PARAMETERS\_UPDATED=false\par
+MODEL\_FORWARD\_CALLS=0\par
+MODEL\_CHECKPOINT\_LOADS=0\par
+OPTIMIZER\_STEPS=0\par BACKWARD\_CALLS=0\par}
+
+\textbf{FROZEN：}批准的科学设计、M1、样本集合、B1共享scaler、primary comparison集合。
+
+\textbf{NOT\_YET\_FROZEN / RESEARCHER\_DECISION\_REQUIRED：}其余具体训练参数及control scaler。完成后 STOP；不自动进入训练或Final Test。
+
+完整证据：本run的 scientific freeze manifest、sample set freeze、normalization execution、closure test summary与delivery artifact SHA索引。\par
+工程入口：freeze\_b1\_science\_v1.py。\par
+冻结与拟合源码：b1\_scientific\_freeze.py。\par
+测试：tests/b1\_scientific\_freeze。完整路径见配套Markdown与JSON；本轮无图表。
+
+Baseline commit：\par{\footnotesize\texttt{1fd70ba9a563aa673012fa1b1494b86d72511eb6}}
+
+Frame identity index SHA256：\par{\footnotesize\texttt{a5054200d6bde11f2342c292ca72428d0558d5b5c5c640017844f0b4ed8c540e}}
+
+Normalization artifact SHA256：\par{\footnotesize\texttt{656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31}}
+
+Run：\par{\footnotesize\texttt{run\_20261003T045139\_110133Z}}
+
+\textbf{历史B0不可变，2025 outcome封存；旧审计及失败记录保留。}
+\end{document}

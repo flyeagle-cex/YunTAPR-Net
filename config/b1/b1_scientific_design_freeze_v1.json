@@ -1,0 +1,91 @@
+{
+  "version": "v1",
+  "authority": "EXPLICIT_RESEARCHER_APPROVAL",
+  "baseline": "1fd70ba9a563aa673012fa1b1494b86d72511eb6",
+  "researcher_decisions": {
+    "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/researcher_decisions.json",
+    "sha256": "cd5207c22821627430294437a5ec7af5f44e2847efd2d7c9a9e9e9402c9c0f81"
+  },
+  "slot_definition": {
+    "path": "config/b1/b1_six_slot_audit_definition_v1.json",
+    "sha256": "b6887a59900aa2f736cec4ab0d8727511e59eb9fc4e0418ebcb7d71778cd66d4"
+  },
+  "missing_policy": "M1_STRICT_SIX_SLOT_FULL_VALID_CAUSAL",
+  "window_start_history": "REJECT_NO_FEBRUARY_READ",
+  "substitution_prohibited": [
+    "older fallback",
+    "nearest",
+    "duplicate",
+    "zero",
+    "interpolation"
+  ],
+  "input": {
+    "shape": "[B,6,501,501]",
+    "channels": [
+      "B13"
+    ],
+    "ordering": "OLDEST_TO_LATEST",
+    "nominal_offsets_before_analysis_minutes": [
+      60,
+      50,
+      40,
+      30,
+      20,
+      10
+    ],
+    "native_lat": "descending",
+    "native_lon": "ascending",
+    "no_flip_transpose_or_coordinate_reconstruction": true
+  },
+  "backbone": {
+    "inherit": "B0 residual U-Net four levels 48/96/192/256 + decoder + SP04 + frozen heads/loss family",
+    "only_frontend_input_channels_change": true,
+    "parameter_count_verified": 4331761,
+    "historical_b0_parameter_count": 4329361,
+    "parameter_delta": 2400,
+    "parameter_evidence": {
+      "path": "docs/b1_scientific_design/candidates/run_20261003T024550_523841Z/candidate_parameter_inventory.json",
+      "sha256": "d0d6805486478cf39962565dd1a4cafb424dfab4bf66a8dcdc91779b7f832b9b"
+    }
+  },
+  "normalization": {
+    "status": "FIT_RULE_FROZEN_VALUES_PENDING_REAL_2023_FIT",
+    "shared_across_all_six_slots": true,
+    "fit_role": "Train",
+    "fit_years": [
+      2023
+    ],
+    "fit_months": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "fit_scene_count": 10455,
+    "weighting": "SCENE_SLOT_EXPOSURE_EACH_NATIVE_PIXEL",
+    "scene_slot_exposures": 62730,
+    "weighted_native_pixel_count": 15745292730,
+    "unique_frames_to_read": 33219,
+    "ddof": 0,
+    "ddof_provenance": "Inherited population-variance definition of pinned B0 Phase-A normalizer; not a new fitted parameter",
+    "decode_semantics": "Inherited float32 packed B13 reader; moments in float64; transform float64 then cast float32",
+    "no_validation_or_2025_fitting": true,
+    "no_imerg_value_reads": true,
+    "b0_matched_control_normalization": "RESEARCHER_DECISION_REQUIRED_NO_SILENT_REUSE"
+  },
+  "primary_comparison": "COMMON_INTERSECTION_WITH_INDEPENDENT_B0_MATCHED_CONTROL",
+  "formal_scene_counts": {
+    "2023": 10455,
+    "2024": 10501
+  },
+  "historical_b0_immutable": true,
+  "2025_outcomes_sealed": true,
+  "additional_sources_or_temporal_modules_authorized": false,
+  "B1_TRAINING_AUTHORIZED": false,
+  "B0_MATCHED_CONTROL_TRAINING_AUTHORIZED": false,
+  "created_utc": "2026-10-03T04:57:11.083291+00:00"
+}
