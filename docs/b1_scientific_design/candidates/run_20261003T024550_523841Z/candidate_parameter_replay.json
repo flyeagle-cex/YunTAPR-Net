@@ -1,0 +1,68 @@
+{
+  "status": "MEASURED_ISOLATED_PARAMETER_FIXTURE_ONLY",
+  "TEST_FIXTURE_ONLY": true,
+  "B0_actual_parameters": 4329361,
+  "B1_six_channel_candidate_parameters": 4331761,
+  "delta_parameters": 2400,
+  "delta_percent": 0.055435432619271065,
+  "changed_parameter_tensors": {
+    "backbone.enc0.conv1.weight": {
+      "b0": {
+        "shape": [
+          48,
+          1,
+          3,
+          3
+        ],
+        "numel": 432
+      },
+      "six_channel_candidate": {
+        "shape": [
+          48,
+          6,
+          3,
+          3
+        ],
+        "numel": 2592
+      }
+    },
+    "backbone.enc0.skip.weight": {
+      "b0": {
+        "shape": [
+          48,
+          1,
+          1,
+          1
+        ],
+        "numel": 48
+      },
+      "six_channel_candidate": {
+        "shape": [
+          48,
+          6,
+          1,
+          1
+        ],
+        "numel": 288
+      }
+    }
+  },
+  "unchanged_parameter_tensor_count": 72,
+  "parameter_names_identical": true,
+  "skip_initialization": "zeros; identical engineering policy to B0",
+  "B1_FORMAL_MODEL_IMPLEMENTED": false,
+  "FORWARD_CALLS": 0,
+  "CHECKPOINT_LOADS": 0,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "2025_RAW_PIXELS_READ": 0,
+  "raw_source_open_events": 0,
+  "source_sha256": {
+    "src/yuntapr/models/b0.py": "6b9b8c28c8b12b7948d9658deedc68e0e54df42a956850d357d4f15d06c6227d",
+    "src/yuntapr/models/backbone_b0.py": "79f35a29349eae9dcba705b7e127899972d0bcea723773043547f0d7f341819f",
+    "src/yuntapr/models/blocks.py": "925ed0246258d4f709f4279f22e3829cf5aff89ce44dbe67f93ab1cb7c40bfd6",
+    "src/yuntapr/models/probability_heads.py": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50"
+  },
+  "count_script_sha256": "d4b4aa9b81820b95918daec31bc32abe7095f3cc7d9c5839df6b49fc35f05dfe",
+  "created_utc": "2026-10-03T03:22:03.382175+00:00"
+}

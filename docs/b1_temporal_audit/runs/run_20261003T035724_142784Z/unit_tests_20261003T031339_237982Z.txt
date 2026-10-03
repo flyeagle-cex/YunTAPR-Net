@@ -1,0 +1,189 @@
+test_authority_without_exact_researcher_confirmation_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_authority_without_exact_researcher_confirmation_rejected) ... ok
+test_definition_explicitly_keeps_other_decisions_unfrozen (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_definition_explicitly_keeps_other_decisions_unfrozen) ... ok
+test_exact_calendar_population_no_2025_or_october_exclusion (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_exact_calendar_population_no_2025_or_october_exclusion) ... ok
+test_exact_offsets_order_and_latest_equals_b0 (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_exact_offsets_order_and_latest_equals_b0) ... ok
+test_first_target_outside_scope_is_distinct_from_missing (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_first_target_outside_scope_is_distinct_from_missing) ... ok
+test_wrong_year_month_cadence_and_naive_timestamp_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1DefinitionTests.test_wrong_year_month_cadence_and_naive_timestamp_rejected) ... ok
+test_2025_all_months_raw_and_imerg_checkpoint_never_opened (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_2025_all_months_raw_and_imerg_checkpoint_never_opened) ... ok
+test_direct_backend_original_path_rejected_before_netcdf_io (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_direct_backend_original_path_rejected_before_netcdf_io) ... ok
+test_model_forward_torch_load_backward_optimizer_rejected (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_model_forward_torch_load_backward_optimizer_rejected) ... ok
+test_readonly_correct_development_path_and_no_february (tests.b1_temporal_audit.test_b1_temporal_audit.B1GuardTests.test_readonly_correct_development_path_and_no_february) ... ok
+test_actual_reader_preserves_cf_and_only_b13_pixel_counter (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_actual_reader_preserves_cf_and_only_b13_pixel_counter) ... ERROR
+test_missing_values_never_zero_and_multireason_time_error (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_missing_values_never_zero_and_multireason_time_error) ... ERROR
+test_native_latitude_flip_is_rejected_before_pixels (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_native_latitude_flip_is_rejected_before_pixels) ... ERROR
+test_complete_valid_causal_candidate_not_a_formal_policy (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_complete_valid_causal_candidate_not_a_formal_policy) ... ok
+test_no_slot_drop_duplicate_or_reorder (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_no_slot_drop_duplicate_or_reorder) ... ok
+test_partial_all_fill_and_missing_collect_multiple_slot_reasons (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_partial_all_fill_and_missing_collect_multiple_slot_reasons) ... ok
+test_real_observation_end_controls_causality (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_real_observation_end_controls_causality) ... ok
+test_scan_bucket_deviation_is_diagnostic_only (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_scan_bucket_deviation_is_diagnostic_only) ... ok
+test_valid_target_required_but_partial_imerg_mask_retained (tests.b1_temporal_audit.test_b1_temporal_audit.B1SlotQcTests.test_valid_target_required_but_partial_imerg_mask_retained) ... ok
+
+======================================================================
+ERROR: test_actual_reader_preserves_cf_and_only_b13_pixel_counter (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_actual_reader_preserves_cf_and_only_b13_pixel_counter)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 146, in check_fixture
+    path=Path(directory)/'synthetic_b13.nc';self.fixture(path,kind)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 127, in fixture
+    with netCDF4.Dataset(str(path),'w') as ds:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\evaluation\final_test_b0.py", line 268, in checked_dataset
+    return self.nc_original(path,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/netCDF4/_netCDF4.pyx", line 2521, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2158, in netCDF4._netCDF4._ensure_nc_success
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_jyz1loun\\synthetic_b13.nc'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_jyz1loun'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 153, in test_actual_reader_preserves_cf_and_only_b13_pixel_counter
+    result,telemetry=self.check_fixture('full')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 145, in check_fixture
+    with tempfile.TemporaryDirectory(prefix='yuntapr_b1_reader_') as directory:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_jyz1loun'
+
+======================================================================
+ERROR: test_missing_values_never_zero_and_multireason_time_error (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_missing_values_never_zero_and_multireason_time_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 146, in check_fixture
+    path=Path(directory)/'synthetic_b13.nc';self.fixture(path,kind)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 127, in fixture
+    with netCDF4.Dataset(str(path),'w') as ds:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\evaluation\final_test_b0.py", line 268, in checked_dataset
+    return self.nc_original(path,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/netCDF4/_netCDF4.pyx", line 2521, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2158, in netCDF4._netCDF4._ensure_nc_success
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_0o_n3avd\\synthetic_b13.nc'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_0o_n3avd'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 161, in test_missing_values_never_zero_and_multireason_time_error
+    result,_=self.check_fixture(kind)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 145, in check_fixture
+    with tempfile.TemporaryDirectory(prefix='yuntapr_b1_reader_') as directory:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_0o_n3avd'
+
+======================================================================
+ERROR: test_native_latitude_flip_is_rejected_before_pixels (tests.b1_temporal_audit.test_b1_temporal_audit.B1PhysicalReaderTests.test_native_latitude_flip_is_rejected_before_pixels)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 146, in check_fixture
+    path=Path(directory)/'synthetic_b13.nc';self.fixture(path,kind)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 127, in fixture
+    with netCDF4.Dataset(str(path),'w') as ds:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\evaluation\final_test_b0.py", line 268, in checked_dataset
+    return self.nc_original(path,*args,**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "src/netCDF4/_netCDF4.pyx", line 2521, in netCDF4._netCDF4.Dataset.__init__
+  File "src/netCDF4/_netCDF4.pyx", line 2158, in netCDF4._netCDF4._ensure_nc_success
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_tf4uw82a\\synthetic_b13.nc'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_tf4uw82a'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 168, in test_native_latitude_flip_is_rejected_before_pixels
+    result,telemetry=self.check_fixture('flip')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_temporal_audit\test_b1_temporal_audit.py", line 145, in check_fixture
+    with tempfile.TemporaryDirectory(prefix='yuntapr_b1_reader_') as directory:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_b1_reader_tf4uw82a'
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.135s
+
+FAILED (errors=3)

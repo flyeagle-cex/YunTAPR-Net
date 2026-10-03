@@ -1,0 +1,60 @@
+{
+  "baseline": "4286f8151fea2185c99b3cea0c8e532e8cd90070",
+  "definition_sha256": "b6887a59900aa2f736cec4ab0d8727511e59eb9fc4e0418ebcb7d71778cd66d4",
+  "definition": {
+    "version": "v1",
+    "authority": "RESEARCHER_EXPLICIT_APPROVAL",
+    "status": "FROZEN_FOR_TEMPORAL_AUDIT",
+    "baseline_commit": "4286f8151fea2185c99b3cea0c8e532e8cd90070",
+    "analysis_time": "T+30min",
+    "nominal_offsets_minutes_before_analysis": [
+      60,
+      50,
+      40,
+      30,
+      20,
+      10
+    ],
+    "ordering": "OLDEST_TO_LATEST",
+    "tensor_shape": "[B,6,501,501]",
+    "axis_1": "ORDERED_B13_TIME_SLOTS",
+    "time_axis_5d_used": false,
+    "causality": "actual_CF_obs_start<=actual_CF_obs_end<=analysis_time",
+    "expected_scan_buckets": "[nominal,nominal+10min); diagnostic only, not an extra exclusion threshold",
+    "outside_period_policy": "OUTSIDE_AUDIT_SCOPE_SEPARATE_FROM_MISSING_NO_FEBRUARY_READ",
+    "years": [
+      2023,
+      2024
+    ],
+    "months": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "channels": [
+      "B13"
+    ],
+    "missing_policy": "RESEARCHER_DECISION_REQUIRED",
+    "normalization": "RESEARCHER_DECISION_REQUIRED",
+    "fairness_population": "RESEARCHER_DECISION_REQUIRED",
+    "B1_DESIGN_FROZEN": false,
+    "B1_TRAINING_AUTHORIZED": false,
+    "2025_ACCESS_AUTHORIZED": false,
+    "approved_utc": "2026-10-03T03:14:39.491414+00:00",
+    "researcher_confirmation": "批准该时相与审计定义；其余决策保持待定（推荐）"
+  },
+  "code_sha256": {
+    "src/yuntapr/data/b1_temporal_audit.py": "f1f7e45b00734e09122a2b299c2a76837d10ee1d9bbd71261a6831f02d77cabe",
+    "scripts/audit_b1_temporal_v1.py": "3eb3da0038089e92cc05df40074a1f420168e683ff625a406a2efb07ed96b4d3",
+    "tests/b1_temporal_audit/test_b1_temporal_audit.py": "4d9900b9338915019c4a26feb8e19e868fb0a862d4c3d8a8a6958bf4747882e3"
+  },
+  "B1_DESIGN_FROZEN": false,
+  "scope": "B1_2023_2024_B13_TEMPORAL_QC_ONLY",
+  "staging_root": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\b1_temporal_run_20261003T024550_523841Z",
+  "created_utc": "2026-10-03T03:15:08.731368+00:00"
+}

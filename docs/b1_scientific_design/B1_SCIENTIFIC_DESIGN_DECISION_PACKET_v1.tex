@@ -1,0 +1,154 @@
+\documentclass[UTF8,11pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{array,booktabs,hyperref}
+\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}\setlength{\emergencystretch}{3em}
+\renewcommand{\arraystretch}{1.18}
+\begin{document}
+\begin{center}{\LARGE YunTAPR-Net B1}\par{\Large Scientific Design Decision Packet v1}\par 真实六槽审计与待决科学政策；2026-10-03\end{center}
+\textbf{时相与 tensor 已批准；审计已执行；B1 整体设计尚未冻结。}
+
+Baseline：\texttt{4286f8151fea2185c99b3cea0c8e532e8cd90070}。独立 run：\par
+\texttt{run\_20261003T035724\_142784Z}。1802 个历史文件原字节保留。
+
+\section*{批准的六时相与输入合同}
+T 为冻结 IMERG 窗口起点，A=T+30min。\textbf{[B,6,501,501]} 的 channel 0--5 是最旧至最新的 B13 时相，不是六个 AHI 波段，不采用第五维 time axis。
+\begin{center}\begin{tabular}{rll}\toprule 通道 & 精确 nominal & 预期扫描桶（仅诊断）\\\midrule
+0 & A-60min=T-30min & [A-60min,A-50min)\\
+1 & A-50min=T-20min & [A-50min,A-40min)\\
+2 & A-40min=T-10min & [A-40min,A-30min)\\
+3 & A-30min=T & [A-30min,A-20min)\\
+4 & A-20min=T+10min & [A-20min,A-10min)\\
+5 & A-10min=T+20min & [A-10min,A)\\\bottomrule\end{tabular}\end{center}
+每帧唯一 expected nominal 固定，保留真实 CF obs\_start、obs\_end、date\_created。真实硬因果约束：obs\_start $\leq$ obs\_end $\leq$ A。nominal 不能证明实际因果；date\_created 不作 operational availability。扫描桶只作 metadata 对照，偏离不产生额外剔除条件。
+
+每年 3 月 1 日 00:00 target 的前三个 nominal 在 2 月，分别标为 OUTSIDE\_AUDIT\_SCOPE；两年共六槽、两个 target。\textbf{未读取 2 月，不能当作已证实 missing。}10 月末 target 的 analysis 可到 11 月初，但其六槽仍在 10 月。不得按可用率移动 offsets。
+
+native latitude 降序、longitude 升序，沿用精确 SP04 坐标；无 flip、transpose、重构坐标。normalized 数值/dtype 待正式 normalization 决策；本轮不创建 training tensor。
+
+\section*{本轮安全边界}
+只审计 2023/2024 March--October B13，不打开 raw IMERG、checkpoint 或任何 2025 source。未执行 Final Test、模型推理、normalization fit、训练、backward 或 optimizer。当前整体 B1\_DESIGN\_FROZEN=false。
+\newpage
+\section*{真实 audit：70,560 native / 23,520 targets / 141,120 slots}
+重新读取当前 H 盘 B13；每个可用文件只读一次 B13 packed pixels，多个 scene-slot 通过 nominal 引用同一帧。每次只暂存一个文件，原始/staged size 与 SHA256 一致，读完 QC 后清理自己的 English 副本。
+\begin{center}\small\begin{tabular}{lrr}\toprule 指标 & 2023 Train & 2024 Validation\\\midrule
+日历 target & 11760 & 11760\\
+B0 原 eligible & 11720 & 11727\\
+六槽 present & 10502 & 10545\\
+六槽 full-valid causal & 10455 & 10501\\
+B1 候选 eligible & 10455 & 10501\\
+与 B0 交集候选 & 10455 & 10501\\
+不满足/未解决候选条件 & 1305 & 1259\\
+\bottomrule\end{tabular}\end{center}
+六槽 present 只表示文件存在。六槽 full-valid causal 再结合 pinned target-validity 中有效云南像元数大于零，得到 B1 \textbf{候选}集合。target partial-valid 保留既有 mask，不新增全有效要求。B0 原始资格集合逐身份保留。
+\textbf{2023\_TRAIN 各槽原因计数}\par\begin{center}\scriptsize\begin{tabular}{rrrrrrrrr}\toprule 槽 & missing & unread & partial & all-fill & meta & noncausal & outside & bucket\\\midrule
+0 & 66 & 1 & 17 & 7 & 0 & 0 & 1 & 0\\
+1 & 543 & 0 & 14 & 11 & 0 & 0 & 1 & 0\\
+2 & 26 & 0 & 14 & 0 & 0 & 0 & 1 & 0\\
+3 & 66 & 1 & 17 & 7 & 0 & 0 & 0 & 0\\
+4 & 543 & 0 & 14 & 11 & 0 & 0 & 0 & 0\\
+5 & 26 & 0 & 14 & 0 & 0 & 0 & 0 & 0\\
+\bottomrule\end{tabular}\end{center}
+\textbf{2024\_VALIDATION 各槽原因计数}\par\begin{center}\scriptsize\begin{tabular}{rrrrrrrrr}\toprule 槽 & missing & unread & partial & all-fill & meta & noncausal & outside & bucket\\\midrule
+0 & 51 & 0 & 16 & 7 & 0 & 0 & 1 & 0\\
+1 & 541 & 0 & 14 & 10 & 0 & 0 & 1 & 0\\
+2 & 20 & 0 & 13 & 0 & 0 & 0 & 1 & 0\\
+3 & 51 & 0 & 16 & 7 & 0 & 0 & 0 & 0\\
+4 & 541 & 0 & 14 & 10 & 0 & 0 & 0 & 0\\
+5 & 20 & 0 & 13 & 0 & 0 & 0 & 0 & 0\\
+\bottomrule\end{tabular}\end{center}
+
+上述原因是 scene-slot incidence；同一 target 可有多原因，不能把列数相加当作拒绝 target 数。扫描桶偏离只作诊断，outside-scope 与 missing 分开。完整组合列表保存在审计 Markdown/JSON，未做单原因优先级覆盖。
+
+\textbf{B1 candidate 与 intersection 均未冻结为正式监督或主比较集合。}Formal missing policy 尚未选择，当前统计分类不会自动转为科学剔除规则。
+\newpage
+\section*{源身份、I/O 与测试证据}
+definition SHA256：\par{\footnotesize\texttt{b6887a59900aa2f736cec4ab0d8727511e59eb9fc4e0418ebcb7d71778cd66d4}}\par
+native frame identity index SHA256：\par{\footnotesize\texttt{a5054200d6bde11f2342c292ca72428d0558d5b5c5c640017844f0b4ed8c540e}}\par
+index 绑定 16 个逐月 native QC CSV；全部 present 源逐文件登记 bytes/SHA。16 个六槽 CSV 通过 expected nominal 联结 native rows；六个集合 CSV 的每行绑定 index SHA。开始/结束源码与定义 SHA 相同。
+
+原盘 copy read / staging write 各 306,101,365,884 bytes（285.079 GiB）；额外原盘 SHA read 306,101,365,884 bytes。copy=967.487s；read/QC=649.401s；总 elapsed=2250.931s。暂存峰值 636,106,619 bytes（606.639 MiB）；cleanup success=true。
+中文路径 workaround 包含 copy、原始/staged hash 以及临时写入开销；read/QC 秒数包含 netCDF4 读取及有效性/时间检查。staged hash 读取、目录/清理等开销纳入总 elapsed；本轮数据不是一个只计 native reader 的存储速度 benchmark。没有永久复制全量原 nc，五个历史 diagnostic cache 保持不动。
+
+closure 实际 40 tests 全通过、零 skip：19 B1 synthetic/guard/reader、11 full-audit artifact、10 相关既有 data/spatial regression。closure 不读取原始 source，2025 pixels=0；实际 optimizer/backward=0。
+初次 fixture 异常类型断言和 Temp ACL 失败记录保留；修复测试工程问题后重测通过，六个失败临时目录已清理。没有把 NOT\_RUN 记为 PASS，也没有声称执行全部历史训练 suites。
+
+原始 raw/QC run 完成全部读取和集合后，终态登记遭遇 CLI str/Path 错误；原失败记录和代码保留。当前独立 closure 复制 QC/身份 metadata 并复算，不重读 raw。原 audit-hook 终态 counter 未捕获，staging 实测 I/O counter 完整保留。CLI 现已明确解析为 Path。
+
+\section*{历史保留与候选联结}
+1802 个 baseline 文件逐字节 SHA256/Git blob 核验不变；旧 B0 科学合同、训练、review、2025 catalogue 证据均未修改。本轮只引用签名的 2023/2024 target-validity，不打开混合年份 IMERG QC 表。
+
+逐月 native、六槽、候选集合、完整原因组合、开始/结束状态和测试日志位于：\par
+{\small\texttt{docs/b1\_temporal\_audit/runs/}}\par
+{\small\texttt{run\_20261003T035724\_142784Z/}}。
+\newpage
+\section*{Backbone 继承与实际参数公平性}
+B1 唯一主要信息增量：单帧 B13 变为六时相 B13。继承 4-level residual U-Net 48$\rightarrow$96$\rightarrow$192$\rightarrow$256、decoder、SP04 feature projection、target、云南 mask、occurrence 与 32 conditional quantile heads、loss 与 probability semantics。
+
+不增加其它 AHI 波段、GFS、DEM、DOTE、DTFM、MEE、ERA5 teacher、attention、Transformer 或 recurrent 模块。
+
+实际隔离 CPU fixture：\textbf{B0=4,329,361；六通道候选=4,331,761}。增加 2400（0.055435\%）：首残差块 conv1 kernel 增加 $48\times5\times3\times3=2160$，input skip kernel 增加 $48\times5\times1\times1=240$。其余 72 个参数张量名称/shape/数量不变，skip 零初始化继承 B0。
+
+计数已用独立 published script 重放。fixture 已销毁、RNG 恢复，无 forward、checkpoint、backward 或 optimizer。\textbf{未提供 callable 正式 B1 model 或 training runner。}
+
+\section*{Normalization：A/B 均未选择}
+\textbf{A：六槽共用一个 2023 Train-only B13 scaler。}相同 Kelvin 共用零点和尺度，跨时相 normalized 差值保持物理温差比例，减少 lag-specific preprocessing 对 B0/B1 比较的干扰。仍须决定复用 B0 Phase-A scaler 或最终 B1 Train pooled fit，以及 unique-frame 或重复 scene-slot 计权。
+
+\textbf{B：逐 slot 独立 2023 Train-only scaler。}允许各 lag 分布分别中心化；同一 Kelvin 在不同 slot 的 z-score 不同，比较会混入 center/scale 差异，增加与 B0 的预处理因素。每槽拟合资格集合和计权也须先固定。
+
+禁止 2024 Validation 和 2025 拟合。B0 Phase-A 2023-only mean=271.7078191073734 K，std=19.896814653342556 K，仅是 A 的复用候选，未自动选用。\textbf{包含 2024 的 Phase-B normalization 不能用于 B1 development。}
+
+本轮不拟合 mean/std/histogram，不因审计可用率选择 A/B。以上均为研究者待决（RESEARCHER DECISION REQUIRED）。
+\newpage
+\section*{缺帧/无效帧政策：待研究者决定}
+候选 M1（未选择）：任一 required slot missing、unreadable、partial、all-fill、metadata/time/grid invalid 或 noncausal，则整个 scene 不进入 Formal B1 supervision；全部原因保留。它继承 B0 full-scene-required 输入语义，便于控制信息差异，但当前只是候选。
+
+若要保留 partial，必须先批准输入有效性 mask、feature 处理与公平控制；本轮没有实现该路线。首端范围外槽位也须明确覆盖边界处理，不能把未读 2 月等同 missing。
+
+任何政策都禁止代码静默使用 older fallback、nearest、duplicate、zero placeholder 或 interpolation。缺测不能代表物理零值。政策未决定前不启动正式 B1 supervision。
+
+\section*{公平比较集合：待研究者决定}
+每年保存 B0 original eligible、B1 candidate eligible 和 intersection candidate 的 identity-only CSV。交集 $I_y=E_{B0,y}\cap E_{\mathrm{B1,candidate},y}$；B0 原 manifest、历史指标不变。B1 candidate 正式化仍需 missing policy。
+
+候选 F1（未选择）：primary comparison 用共同 2024 intersection，未来另获批准后对 B0/B1 只读重算，独立保存指标；各自原资格集合结果可作为次要描述。\textbf{共同评价集合控制评价组成，不能自动消除训练集合差异的 confounding。}是否未来加入 common 2023 Train 的匹配训练控制，需另作研究者决定。
+
+候选 F2（未选择）：各自资格集合为 primary，必须说明不同集合上的指标不是严格 paired 信息增量比较。不得根据后续 2025 结果决定 F1/F2。
+
+本轮没有重算 B0、加载 checkpoint、重训 B0 或训练/推理 B1。任何未来模型实验必须先完成科学决策与独立授权。
+
+\section*{三项明确待决}
+1. 缺帧、partial/all-fill 和首端范围外槽位政策。\par
+2. normalization A/B、拟合集合与计权（2023 Train-only）。\par
+3. primary fairness population，以及未来是否重算 B0。
+\newpage
+\section*{冻结、未冻结与最终状态}
+FROZEN：六个 nominal offsets、最旧至最新顺序、[B,6,501,501] B13 input、真实 CF 因果检查、本次 2023/2024 审计定义。整体设计尚未冻结。
+
+NOT\_YET\_FROZEN / RESEARCHER\_DECISION\_REQUIRED：missing policy、normalization、primary fairness population。正式监督资格/normalization 配置和 callable B1 训练模型未实现，未授权。
+
+{\small\ttfamily\setlength{\parskip}{1.5pt}
+B1\_DESIGN\_FROZEN=false\par
+B1\_SLOT\_DEFINITION\_FROZEN=true\par
+B1\_TENSOR\_CONTRACT\_FROZEN=true\par
+B1\_TEMPORAL\_AUDIT\_EXECUTED=true\par
+B1\_MISSING\_POLICY\_FROZEN=false\par
+B1\_NORMALIZATION\_FROZEN=false\par
+B1\_FAIRNESS\_PRIMARY\_POPULATION\_FROZEN=false\par
+B1\_FORMAL\_MODEL\_IMPLEMENTED=false\par
+B1\_TRAINING\_STARTED=false\par
+B1\_NORMALIZATION\_FITTED=false\par
+2025\_FINAL\_TEST\_EXECUTED=false\par
+2025\_MODEL\_INFERENCE\_SCENES=0\par
+2025\_RAW\_PIXELS\_READ=0\par
+MODEL\_CHECKPOINT\_LOADS=0\par
+MODEL\_FORWARD\_CALLS=0\par
+OPTIMIZER\_STEPS=0; BACKWARD\_CALLS=0\par}
+
+\section*{关键来源 SHA256}
+B0 2023 原资格：\par{\footnotesize\texttt{dc0559f12f02817f8ec74916d03dd20e40ec0584ec58c59b34b5e02cc9a60e68}}\par
+B0 2024 原资格：\par{\footnotesize\texttt{ac5405d8185d6760acc15a4ab364804c1d8ec8de84064737d0757f6688aeb410}}\par
+2023/2024 target-validity：\par{\footnotesize\texttt{b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90}}\par
+
+本 PDF/LaTeX 与同名 Markdown 来自同一次完成审计。逐条明细、完整 multi-reason、源/输出 hash 和实际 tests 数量在 run artifacts，不依赖任何 2025 结果。
+
+\textbf{本轮完成后 STOP。不自动训练 B1，不执行 B0 2025 Final Test。}
+\end{document}

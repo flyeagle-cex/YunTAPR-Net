@@ -1,0 +1,423 @@
+{
+  "scope": "CURRENT_RAW_B13_2023_2024_MARCH_OCTOBER",
+  "population_policy_status": "CANDIDATE_ONLY_MISSING_POLICY_NOT_FROZEN",
+  "definition_sha256": "b6887a59900aa2f736cec4ab0d8727511e59eb9fc4e0418ebcb7d71778cd66d4",
+  "native_months": [
+    {
+      "month": "202303",
+      "native_slots": 4464,
+      "status_counts": {
+        "ALL_FILL": 5,
+        "FULL_VALID": 4367,
+        "MISSING": 81,
+        "PARTIAL": 11
+      }
+    },
+    {
+      "month": "202304",
+      "native_slots": 4320,
+      "status_counts": {
+        "ALL_FILL": 4,
+        "FULL_VALID": 4222,
+        "MISSING": 79,
+        "PARTIAL": 15
+      }
+    },
+    {
+      "month": "202305",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4384,
+        "MISSING": 80
+      }
+    },
+    {
+      "month": "202306",
+      "native_slots": 4320,
+      "status_counts": {
+        "FULL_VALID": 4242,
+        "MISSING": 78
+      }
+    },
+    {
+      "month": "202307",
+      "native_slots": 4464,
+      "status_counts": {
+        "CORRUPT_OR_UNREADABLE": 1,
+        "FULL_VALID": 4382,
+        "MISSING": 81
+      }
+    },
+    {
+      "month": "202308",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4385,
+        "MISSING": 79
+      }
+    },
+    {
+      "month": "202309",
+      "native_slots": 4320,
+      "status_counts": {
+        "ALL_FILL": 9,
+        "FULL_VALID": 4214,
+        "MISSING": 78,
+        "PARTIAL": 19
+      }
+    },
+    {
+      "month": "202310",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4385,
+        "MISSING": 79
+      }
+    },
+    {
+      "month": "202403",
+      "native_slots": 4464,
+      "status_counts": {
+        "ALL_FILL": 6,
+        "FULL_VALID": 4370,
+        "MISSING": 77,
+        "PARTIAL": 11
+      }
+    },
+    {
+      "month": "202404",
+      "native_slots": 4320,
+      "status_counts": {
+        "ALL_FILL": 3,
+        "FULL_VALID": 4228,
+        "MISSING": 77,
+        "PARTIAL": 12
+      }
+    },
+    {
+      "month": "202405",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4384,
+        "MISSING": 80
+      }
+    },
+    {
+      "month": "202406",
+      "native_slots": 4320,
+      "status_counts": {
+        "FULL_VALID": 4246,
+        "MISSING": 74
+      }
+    },
+    {
+      "month": "202407",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4390,
+        "MISSING": 74
+      }
+    },
+    {
+      "month": "202408",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4387,
+        "MISSING": 77
+      }
+    },
+    {
+      "month": "202409",
+      "native_slots": 4320,
+      "status_counts": {
+        "ALL_FILL": 8,
+        "FULL_VALID": 4218,
+        "MISSING": 74,
+        "PARTIAL": 20
+      }
+    },
+    {
+      "month": "202410",
+      "native_slots": 4464,
+      "status_counts": {
+        "FULL_VALID": 4385,
+        "MISSING": 79
+      }
+    }
+  ],
+  "annual": [
+    {
+      "role": "2023_TRAIN",
+      "candidate_targets": 11760,
+      "B0_original_eligible": 11720,
+      "all_6_slots_present": 10502,
+      "all_6_slots_full_valid_causal": 10455,
+      "six_slot_candidate_eligible": 10455,
+      "intersection_with_B0_original": 10455,
+      "candidate_rejected_or_unresolved": 1305,
+      "outside_scope_targets": 1,
+      "missing_by_slot": [
+        66,
+        543,
+        26,
+        66,
+        543,
+        26
+      ],
+      "unreadable_by_slot": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "partial_by_slot": [
+        17,
+        14,
+        14,
+        17,
+        14,
+        14
+      ],
+      "all_fill_by_slot": [
+        7,
+        11,
+        0,
+        7,
+        11,
+        0
+      ],
+      "metadata_error_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "noncausal_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outside_scope_by_slot": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "scan_bucket_deviation_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "rejection_or_unresolved_reason_counts": {
+        "S0_ALL_FILL": 7,
+        "S0_CORRUPT_OR_UNREADABLE": 1,
+        "S0_MISSING": 66,
+        "S0_OUTSIDE_AUDIT_SCOPE": 1,
+        "S0_PARTIAL": 17,
+        "S1_ALL_FILL": 11,
+        "S1_MISSING": 543,
+        "S1_OUTSIDE_AUDIT_SCOPE": 1,
+        "S1_PARTIAL": 14,
+        "S2_MISSING": 26,
+        "S2_OUTSIDE_AUDIT_SCOPE": 1,
+        "S2_PARTIAL": 14,
+        "S3_ALL_FILL": 7,
+        "S3_CORRUPT_OR_UNREADABLE": 1,
+        "S3_MISSING": 66,
+        "S3_PARTIAL": 17,
+        "S4_ALL_FILL": 11,
+        "S4_MISSING": 543,
+        "S4_PARTIAL": 14,
+        "S5_MISSING": 26,
+        "S5_PARTIAL": 14
+      },
+      "multi_reason_combinations": {
+        "S0_ALL_FILL;S4_MISSING": 7,
+        "S0_CORRUPT_OR_UNREADABLE": 1,
+        "S0_MISSING": 63,
+        "S0_MISSING;S1_MISSING": 2,
+        "S0_MISSING;S2_MISSING": 1,
+        "S0_OUTSIDE_AUDIT_SCOPE;S1_OUTSIDE_AUDIT_SCOPE;S2_OUTSIDE_AUDIT_SCOPE": 1,
+        "S0_PARTIAL;S1_ALL_FILL;S4_MISSING": 11,
+        "S0_PARTIAL;S1_MISSING": 1,
+        "S0_PARTIAL;S1_PARTIAL;S3_MISSING;S4_MISSING": 1,
+        "S0_PARTIAL;S1_PARTIAL;S4_MISSING": 3,
+        "S0_PARTIAL;S4_MISSING": 1,
+        "S1_MISSING": 536,
+        "S1_MISSING;S2_MISSING": 1,
+        "S1_MISSING;S2_MISSING;S3_MISSING": 1,
+        "S1_MISSING;S4_MISSING": 2,
+        "S1_PARTIAL;S2_PARTIAL;S3_PARTIAL;S4_MISSING": 1,
+        "S1_PARTIAL;S2_PARTIAL;S4_MISSING": 5,
+        "S1_PARTIAL;S4_MISSING": 4,
+        "S2_MISSING": 23,
+        "S2_PARTIAL": 4,
+        "S2_PARTIAL;S3_ALL_FILL": 3,
+        "S2_PARTIAL;S3_PARTIAL": 1,
+        "S3_ALL_FILL": 4,
+        "S3_CORRUPT_OR_UNREADABLE": 1,
+        "S3_MISSING": 62,
+        "S3_MISSING;S4_MISSING": 1,
+        "S3_MISSING;S5_MISSING": 1,
+        "S3_PARTIAL;S4_ALL_FILL": 11,
+        "S3_PARTIAL;S4_PARTIAL": 4,
+        "S4_MISSING": 505,
+        "S4_MISSING;S5_MISSING": 2,
+        "S4_PARTIAL": 4,
+        "S4_PARTIAL;S5_PARTIAL": 6,
+        "S5_MISSING": 23,
+        "S5_PARTIAL": 8
+      }
+    },
+    {
+      "role": "2024_VALIDATION",
+      "candidate_targets": 11760,
+      "B0_original_eligible": 11727,
+      "all_6_slots_present": 10545,
+      "all_6_slots_full_valid_causal": 10501,
+      "six_slot_candidate_eligible": 10501,
+      "intersection_with_B0_original": 10501,
+      "candidate_rejected_or_unresolved": 1259,
+      "outside_scope_targets": 1,
+      "missing_by_slot": [
+        51,
+        541,
+        20,
+        51,
+        541,
+        20
+      ],
+      "unreadable_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "partial_by_slot": [
+        16,
+        14,
+        13,
+        16,
+        14,
+        13
+      ],
+      "all_fill_by_slot": [
+        7,
+        10,
+        0,
+        7,
+        10,
+        0
+      ],
+      "metadata_error_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "noncausal_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "outside_scope_by_slot": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "scan_bucket_deviation_by_slot": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "rejection_or_unresolved_reason_counts": {
+        "S0_ALL_FILL": 7,
+        "S0_MISSING": 51,
+        "S0_OUTSIDE_AUDIT_SCOPE": 1,
+        "S0_PARTIAL": 16,
+        "S1_ALL_FILL": 10,
+        "S1_MISSING": 541,
+        "S1_OUTSIDE_AUDIT_SCOPE": 1,
+        "S1_PARTIAL": 14,
+        "S2_MISSING": 20,
+        "S2_OUTSIDE_AUDIT_SCOPE": 1,
+        "S2_PARTIAL": 13,
+        "S3_ALL_FILL": 7,
+        "S3_MISSING": 51,
+        "S3_PARTIAL": 16,
+        "S4_ALL_FILL": 10,
+        "S4_MISSING": 541,
+        "S4_PARTIAL": 14,
+        "S5_MISSING": 20,
+        "S5_PARTIAL": 13
+      },
+      "multi_reason_combinations": {
+        "S0_ALL_FILL;S4_MISSING": 7,
+        "S0_MISSING": 50,
+        "S0_MISSING;S1_MISSING;S2_MISSING;S3_MISSING": 1,
+        "S0_OUTSIDE_AUDIT_SCOPE;S1_OUTSIDE_AUDIT_SCOPE;S2_OUTSIDE_AUDIT_SCOPE": 1,
+        "S0_PARTIAL;S1_ALL_FILL;S4_MISSING": 10,
+        "S0_PARTIAL;S1_PARTIAL;S4_MISSING": 5,
+        "S0_PARTIAL;S4_MISSING": 1,
+        "S1_MISSING": 537,
+        "S1_MISSING;S3_MISSING": 1,
+        "S1_MISSING;S4_MISSING": 1,
+        "S1_MISSING;S5_MISSING": 1,
+        "S1_PARTIAL;S2_PARTIAL;S4_MISSING": 5,
+        "S1_PARTIAL;S4_MISSING": 4,
+        "S2_MISSING": 17,
+        "S2_MISSING;S4_MISSING": 2,
+        "S2_PARTIAL": 4,
+        "S2_PARTIAL;S3_ALL_FILL": 3,
+        "S2_PARTIAL;S3_PARTIAL": 1,
+        "S3_ALL_FILL": 4,
+        "S3_MISSING": 48,
+        "S3_MISSING;S4_MISSING;S5_MISSING": 1,
+        "S3_PARTIAL;S4_ALL_FILL": 10,
+        "S3_PARTIAL;S4_PARTIAL": 5,
+        "S4_MISSING": 505,
+        "S4_PARTIAL": 4,
+        "S4_PARTIAL;S5_PARTIAL": 5,
+        "S5_MISSING": 18,
+        "S5_PARTIAL": 8
+      }
+    }
+  ],
+  "raw_access_telemetry": {
+    "raw_source_open_events": 138626,
+    "source_hash_bytes_read": 306101365884,
+    "source_copy_bytes_read": 306101365884,
+    "source_copy_bytes_written": 306101365884,
+    "b13_pixel_values_read": 17397381312,
+    "copy_seconds": 967.4869589998616,
+    "read_seconds": 649.4011269998427,
+    "temporary_bytes_peak": 636106619,
+    "cleanup_success": true
+  },
+  "2025_RAW_PIXELS_READ": 0
+}
