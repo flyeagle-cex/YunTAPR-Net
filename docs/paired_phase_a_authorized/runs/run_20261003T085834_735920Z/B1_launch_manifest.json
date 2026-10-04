@@ -1,0 +1,76 @@
+{
+  "utc": "2026-10-03T20:45:25.330129+00:00",
+  "command": [
+    "F:\\pytorch\\Research\\.venv-cuda\\Scripts\\python.exe",
+    "-u",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\launch_authorized_paired_phase_a_v1.py",
+    "--model",
+    "B1",
+    "--authorization",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\config\\training\\b1_phase_a_formal_authorization_v1.json",
+    "--authorization-sha256",
+    "6fc8400abd9a50edbca067d1a7f6c48e4a4629394ab72ade8b98f50f3e8dd356"
+  ],
+  "sequential": true,
+  "run_id": "run_20261003T093522_417735Z",
+  "predecessor_completed": {
+    "exit_code": 0,
+    "successful": true,
+    "status": {
+      "status": "FORMAL_PHASE_A_COMPLETE",
+      "model": "B0_MATCHED",
+      "run_id": "run_20261003T093519_542831Z",
+      "completed_epoch": 21,
+      "selected_best_epoch": 13,
+      "selected_best_val_core": 0.04907351353296674,
+      "global_update": 109788,
+      "BEST": {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_a\\run_20261003T093519_542831Z\\epoch_013.pt",
+        "bytes": 52181547,
+        "sha256": "87f9008f506e2e2d77910736da61f494200e0cbb278756e543d236eb705b7493",
+        "epoch": 13,
+        "global_update": 67964,
+        "protocol_sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6",
+        "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "model": "B0_MATCHED",
+        "binary_not_committed": true
+      },
+      "LAST": {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_a\\run_20261003T093519_542831Z\\epoch_021.pt",
+        "bytes": 52181547,
+        "sha256": "8c1859d99881a2016f15e643c5d634a9883e84a1cdede86e02efe2b4a10349a9",
+        "epoch": 21,
+        "global_update": 109788,
+        "protocol_sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6",
+        "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "model": "B0_MATCHED",
+        "binary_not_committed": true
+      },
+      "FORMAL_OPTIMIZER_STEPS": 109788,
+      "OPTIMIZER_STEPS_COMPLETED": 109788,
+      "BACKWARD_CALLS": 109788,
+      "TRAIN_FORWARD_CALLS": 109788,
+      "VALIDATION_FORWARD_CALLS": 27573,
+      "CHECKPOINT_LOADS": 21,
+      "ENGINEERING_OPTIMIZER_STEPS": 0,
+      "TEST_FIXTURE_OPTIMIZER_STEPS": 0,
+      "PIXELS_2025_READ": 0,
+      "RAW_ACCESS_2025": 0,
+      "MODEL_INFERENCE_SCENES_2025": 0,
+      "2025_PIXELS_READ": 0,
+      "2025_RAW_ACCESS": 0,
+      "2025_MODEL_INFERENCE_SCENES": 0,
+      "2025_FINAL_TEST_EXECUTED": false,
+      "Phase_B_authorized": false,
+      "B2_authorized": false,
+      "historical_files_byte_identical": true,
+      "source_cleanup_state": {
+        "owned_root": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\authorized_paired_run_20261003T093519_542831Z",
+        "remaining_temporary_files": [],
+        "cleanup_success": true,
+        "raw_source_deleted": false,
+        "old_diagnostic_cache_touched": false
+      }
+    }
+  }
+}

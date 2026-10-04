@@ -1,0 +1,70 @@
+\documentclass[UTF8,11pt,fontset=windows]{ctexart}
+\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage{amsmath,booktabs,longtable,tabularx,array,hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\begin{document}
+\begin{center}{\Large\bfseries B0-Matched 与 B1 Phase-A 配对比较}\end{center}
+本轮仅执行 Phase-A Development：2023 年 3--10 月为 Train，2024 年 3--10 月为 Validation。2025 raw access、pixels read、model inference scenes 均为 0，Final Test 未执行。原 Phase-A launch scope 不含 Phase-B。研究者后续追加授权已独立登记：双方完整性及只读重推理对账通过后，按各自 BEST epoch 预算继续配对 fresh FinalFit。B2 训练与 2025 Final Test 始终未授权。历史 B0、冻结科学合同和基线全部 2061 个文件保持 byte-identical。
+
+\begin{tabularx}{\textwidth}{@{}p{41mm}Y@{}}\toprule
+B0-Matched BEST epoch & 13 \\
+B1 BEST epoch & 15 \\
+共同 Validation scenes & 10501 \\
+Delta core: B1 minus B0 & -0.001201910007277228 \\
+\bottomrule\end{tabularx}
+
+输入分别为 B0-Matched 的 latest B13 单帧与 B1 的六个因果 B13 历史槽位；B1 的 offsets 为 analysis time 减去 [60,50,40,30,20,10] 分钟，按最旧到最新排列。M1 严格六槽资格规则、共同 Train 10455 / Validation 10501 样本集合、SP04、云南 mask 和 heads 均不变。双方共享已冻结的 2023 train-only normalization；本轮没有 refit。
+
+\begin{tabularx}{\textwidth}{@{}Yrr@{}}\toprule 指标 & B0-Matched BEST & B1 BEST \\ \midrule
+exact global core & 0.04907351353296674 & 0.04787160352568951 \\
+Brier & 0.09315261792422803 & 0.09392464048396917 \\
+AUROC & 0.8876376262558283 & 0.8940050888743675 \\
+Average Precision & 0.5658271604514816 & 0.5849030052620285 \\
+conditional mean pinball & 0.12616981365248964 & 0.12424061094322172 \\
+\bottomrule\end{tabularx}
+
+只报告数值差异，科研解释由研究者审阅决定。BEST 与 early stopping 各自独立；辅助指标未参与 checkpoint selection。
+\section*{32 tau 条件覆盖诊断}\small\begin{longtable}{rrrrr}\toprule $\tau$ & B0 coverage & B1 coverage & B0 error & B1 error\\\midrule\endhead
+0.015625 & 0.003099675 & 0.003092559 & -0.01252532 & -0.01253244 \\
+0.046875 & 0.09519303 & 0.09169528 & 0.04831803 & 0.04482028 \\
+0.078125 & 0.108812 & 0.1046166 & 0.03068699 & 0.0264916 \\
+0.109375 & 0.1284842 & 0.1380554 & 0.01910919 & 0.02868042 \\
+0.140625 & 0.1723476 & 0.1688976 & 0.03172255 & 0.02827261 \\
+0.171875 & 0.2139058 & 0.2134248 & 0.04203084 & 0.04154981 \\
+0.203125 & 0.2397082 & 0.2348481 & 0.03658322 & 0.03172311 \\
+0.234375 & 0.2656738 & 0.2685718 & 0.03129884 & 0.03419681 \\
+0.265625 & 0.3067133 & 0.2990811 & 0.04108829 & 0.03345608 \\
+0.296875 & 0.3316226 & 0.3252024 & 0.03474756 & 0.02832738 \\
+0.328125 & 0.3715592 & 0.3549682 & 0.04343418 & 0.0268432 \\
+0.359375 & 0.4027723 & 0.3945586 & 0.04339732 & 0.03518356 \\
+0.390625 & 0.4172997 & 0.4046709 & 0.02667474 & 0.01404586 \\
+0.421875 & 0.462684 & 0.4488302 & 0.04080903 & 0.02695523 \\
+0.453125 & 0.4853202 & 0.4669615 & 0.03219524 & 0.01383648 \\
+0.484375 & 0.5246342 & 0.5040862 & 0.04025917 & 0.0197112 \\
+0.515625 & 0.5456798 & 0.5197064 & 0.03005485 & 0.004081445 \\
+0.546875 & 0.5752831 & 0.553212 & 0.0284081 & 0.006336982 \\
+0.578125 & 0.6066748 & 0.5805809 & 0.02854982 & 0.002455883 \\
+0.609375 & 0.6359374 & 0.6065007 & 0.02656237 & -0.002874311 \\
+0.640625 & 0.6705106 & 0.6345592 & 0.02988561 & -0.006065777 \\
+0.671875 & 0.6896586 & 0.6586734 & 0.01778363 & -0.01320156 \\
+0.703125 & 0.7210239 & 0.6898243 & 0.01789888 & -0.01330069 \\
+0.734375 & 0.7511193 & 0.7159874 & 0.01674429 & -0.01838759 \\
+0.765625 & 0.779944 & 0.7453985 & 0.01431896 & -0.02022648 \\
+0.796875 & 0.8064502 & 0.7715447 & 0.009575207 & -0.02533028 \\
+0.828125 & 0.8357452 & 0.8011046 & 0.00762023 & -0.02702039 \\
+0.859375 & 0.8640373 & 0.8317171 & 0.004662273 & -0.02765792 \\
+0.890625 & 0.8914856 & 0.8603118 & 0.0008605669 & -0.03031321 \\
+0.921875 & 0.9207606 & 0.8926211 & -0.001114425 & -0.02925391 \\
+0.953125 & 0.9501964 & 0.9277779 & -0.002928629 & -0.02534712 \\
+0.984375 & 0.9806494 & 0.9690126 & -0.00372562 & -0.01536241 \\
+\bottomrule\end{longtable}\normalsize
+coverage 使用 rainy valid cells 上 R <= physical conditional quantile；coverage error 为 empirical coverage 减 tau。完整 per-tau pinball 数值见 CSV/Markdown；没有概率阈值挑选或后校准。
+
+新增及相关 pre-training unique tests=336，post-training read-only tests=28，均通过、0 skipped。
+
+本表来自训练时的 BEST Validation，独立完整只读 reinference 和 reconciliation 在后续报告登记。追加授权已预先规定双方按各自 BEST epoch 预算继续 fresh FinalFit，不依据比较方向决定是否继续。B2 训练及 2025 Final Test 未授权。
+\end{document}
