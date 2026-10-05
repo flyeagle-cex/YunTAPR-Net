@@ -1,0 +1,123 @@
+"""Two completed BESTs, full fixed-order 2024 reinference, no fitting."""
+import argparse, gc, json, math, os, sys, traceback
+from pathlib import Path
+ROOT = Path(os.environ.get('YUNTAPR_REPO_ROOT', Path(__file__).resolve().parents[1]))
+sys.path[:0] = [str(ROOT/'src'), str(ROOT), str(ROOT/'scripts')]
+import torch
+from torch.utils.data import DataLoader
+import paired_extended_v1 as x
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.training.phase_a_protocol import seed_reproducibility, state_digest
+from yuntapr.training.phase_a_validation import GlobalValidationAccumulator
+from yuntapr.models.b1 import paired_models
+from yuntapr.spatial.sp04_mapping import load_sp04
+from yuntapr.data.masks import read_frozen_yunnan_mask
+
+def main():
+    parser=argparse.ArgumentParser(); parser.add_argument('--registry', required=True, type=Path)
+    args=parser.parse_args(); registry=x.read(args.registry); run=Path(registry['run_directory'])
+    authority=x.read(x.verify_pin({'path':registry['authority_path'], 'sha256':registry['authority_sha256'],
+                                  'bytes':Path(registry['authority_path']).stat().st_size}))
+    active=x.read(registry['phase_a_active_registry']); phase_a=Path(active['run_directory'])
+    if not (phase_a/'both_formal_runs_completed.json').exists(): raise PermissionError('Both Phase-A runs must complete first')
+    closure=x.read(phase_a/'final_delivery_status.json')
+    if not closure['post_training_tests']['all_passed']: raise PermissionError('Phase-A integrity must pass first')
+    fw=a.RawFirewall(); fw.install()
+    contract=frozen.RunnerContract.load(); frames=a.data.load_frames()
+    seed_reproducibility(); mapping=load_sp04()
+    mask=read_frozen_yunnan_mask(Path(contract.protocol['identity']['yunnan_mask']['path']), mapping)
+    review=run/'phase_a_scientific_review'; review.mkdir(exist_ok=False)
+    reports={}
+    for kind in ('B0_MATCHED','B1'):
+        public=review/kind; public.mkdir(exist_ok=False)
+        source=Path(active['formal_runs'][kind]['public_directory'])
+        status=x.read(source/'final_status.json'); best=status['BEST']; before_file=best['sha256']
+        ckpt=Path(best['absolute_local_path']).resolve()
+        if (ckpt.parent!=Path(active['formal_runs'][kind]['checkpoint_directory']).resolve()
+            or ckpt.name!=f"epoch_{best['epoch']:03d}.pt" or ckpt.stat().st_size!=best['bytes']
+            or x.sha256(ckpt)!=before_file): raise ValueError('BEST readonly file identity failed')
+        expected=x.read(source/'run_manifest.json')
+        payload=torch.load(ckpt,map_location='cpu',weights_only=False); frozen.validate_payload(payload, expected)
+        if payload['completed_epoch']!=status['selected_best_epoch']: raise ValueError('Never reselect BEST')
+        history=x.read(source/'training_validation_history.json'); training_best=history[best['epoch']-1]['validation']
+        cap={'AUTHORIZED':True,'operation':'PHASE_A_BEST_FULL_2024_READONLY_REINFERENCE',
+             'model':kind,'2025_raw_access':False,'authority':x.pin(run/'extended_authority.json'),
+             'BEST':best,'validation_manifest_sha256':a.data.PINS[kind,2024],
+             'normalization_sha256':a.data.SCALER_SHA,'OPTIMIZER_STEPS':0,'BACKWARD_CALLS':0}
+        x.save(public/'inference_authorization.json',cap)
+        # Only the selected 2024 exact identities are enabled, never 2023 or 2025.
+        validation_contract=type('ValidationContract',(),{'records':{
+            (kind,2023):[],(kind,2024):contract.records[kind,2024]}})()
+        allowed=a.allowed_sources(validation_contract,kind,frames)
+        fw.allowed={fw.key(p) for p in allowed}; fw.authorized=True
+        fw.log_path=public/f'raw_access_parent_{os.getpid()}.jsonl'
+        stage=a.data.STAGE_ROOT/('extended_paired_'+review.parent.name+'_'+kind.lower()+'_review')
+        dataset=x.LoggedDataset(kind,contract.records[kind,2024],frames,mapping,mask,stage)
+        dataset.context={'public':str(public),'authorization':x.pin(public/'inference_authorization.json'),
+                         'allowed_sources':allowed,'normalization_sha256':a.data.SCALER_SHA}
+        try:
+            with x.inference_only():
+                anchor,temporal,initial=paired_models(); model=temporal if kind=='B1' else anchor
+                del anchor,temporal; model.load_state_dict(payload['model_state_dict'],strict=True)
+                state_before=state_digest(model.state_dict())
+                if state_before!=payload['model_state_dict_sha256']: raise ValueError('BEST model state identity failed')
+                del payload; gc.collect(); model=model.cuda().eval(); accumulator=GlobalValidationAccumulator()
+                seen=[]; support=0
+                with torch.inference_mode():
+                    loader=DataLoader(dataset,batch_size=8,shuffle=False,drop_last=False,num_workers=2,
+                        pin_memory=False,persistent_workers=False,prefetch_factor=1,
+                        worker_init_fn=x.worker_init,collate_fn=a.data.collate)
+                    with a.loader_items(loader) as iterator:
+                        for j,items in enumerate(iterator,1):
+                            batch=a.data.make_batch(items); output,_=frozen.forward_loss(model,batch)
+                            support+=int((output.conditional_quantiles_log[:,0]<=math.log1p(.1)).sum())
+                            accumulator.add(output,batch.y_imerg,batch.imerg_valid_mask,batch.yunnan_eval_mask)
+                            seen.extend(batch.indices)
+                            if j%50==0:
+                                a.atomic_json(public/'progress.json',{'scenes':len(seen),'total':10501,
+                                    'MODEL_PARAMETERS_UPDATED':False,'OPTIMIZER_STEPS':0,'BACKWARD_CALLS':0,'2025_RAW_ACCESS':0})
+                                print(json.dumps({'operation':'READONLY_REINFERENCE','model':kind,'scenes':len(seen)}),flush=True)
+                            del batch,output,items
+                if seen!=list(range(10501)) or accumulator.n_valid!=10501*3430:
+                    raise ValueError('Full fixed-order Validation required')
+                metrics=accumulator.report(); metrics.update(validation_scenes=10501,support_violation_count=support,
+                    coverage_error=[None if c is None else c-(i+.5)/32 for i,c in enumerate(metrics['per_tau_conditional_coverage'])])
+                if any(metrics[k]!=0 for k in ('strict_crossing_count','nonfinite_count','support_violation_count')):
+                    raise FloatingPointError('Scientific Review numerical violation')
+                reconciliation=x.reconcile(training_best,metrics)
+                state_after=state_digest(model.state_dict())
+                if state_after!=state_before or x.sha256(ckpt)!=before_file: raise ValueError('Readonly model/BEST changed')
+                cleanup=x.staging_state(stage)
+                if not cleanup['cleanup_success']: raise IOError('Review staging cleanup failed')
+                result={'status':'FULL_2024_REINFERENCE_RECONCILIATION_PASS','model':kind,
+                    'BEST':best,'training_time_BEST_validation':training_best,'reinference':metrics,
+                    'reconciliation':reconciliation,'model_state_sha256_before':state_before,
+                    'model_state_sha256_after':state_after,'MODEL_PARAMETERS_UPDATED':False,
+                    'OPTIMIZER_STEPS':0,'BACKWARD_CALLS':0,'2025_RAW_ACCESS':0,'2025_PIXELS_READ':0,
+                    '2025_MODEL_INFERENCE_SCENES':0,'2025_FINAL_TEST_EXECUTED':False,'staging':cleanup}
+                x.save(public/'final_status.json',result); reports[kind]=result
+                del model,accumulator; gc.collect(); torch.cuda.empty_cache()
+        except BaseException as error:
+            x.save(public/'failure.json',{'error':repr(error),'traceback':traceback.format_exc(),
+                'OPTIMIZER_STEPS':0,'BACKWARD_CALLS':0,'2025_RAW_ACCESS':0,'utc':x.now()})
+            raise
+    left=reports['B0_MATCHED']['reinference']; right=reports['B1']['reinference']
+    delta=right['global_val_core_loss']-left['global_val_core_loss']
+    def difference(key):
+        return None if left[key] is None or right[key] is None else right[key]-left[key]
+    pair={'status':'PAIRED_FULL_REINFERENCE_PASS','primary':'SAME_10501_SCENES_BEST_VS_BEST',
+        'B0_MATCHED':reports['B0_MATCHED'],'B1':reports['B1'],'Delta_core':delta,
+        'relative_delta_core_percent':100*delta/left['global_val_core_loss'],
+        'Delta_Brier':difference('Brier_Score'),'Delta_AUROC':difference('AUROC'),
+        'Delta_AP':difference('Average_Precision'),'Delta_conditional_pinball':difference('conditional_mean_pinball'),
+        'per_tau_pinball_difference':[b-a for a,b in zip(left['per_tau_pinball'],right['per_tau_pinball'])],
+        'per_tau_coverage_difference':[b-a for a,b in zip(left['per_tau_conditional_coverage'],right['per_tau_conditional_coverage'])],
+        'continuation_independent_of_metric_direction':True,
+        'Phase_B_epoch_budgets':{k:reports[k]['BEST']['epoch'] for k in reports},
+        '2025_RAW_ACCESS':0,'2025_FINAL_TEST_EXECUTED':False,'completed_utc':x.now()}
+    a.verify_history(phase_a/'historical_file_snapshot.json',x.sha256(phase_a/'historical_file_snapshot.json'))
+    x.save(review/'paired_scientific_review.json',pair)
+    print(json.dumps({k:v for k,v in pair.items() if k not in reports},ensure_ascii=False),flush=True)
+
+if __name__=='__main__': main()

@@ -1,0 +1,542 @@
+{
+  "status": "FAILED_FORMAL_RUN_EVIDENCE_READY_FOR_PUBLICATION",
+  "recorded_utc": "2026-10-05T14:28:20.957036+00:00",
+  "bound_commit": "96d1acac4562d1d8aa98ee45ddcdd96136aca183",
+  "request": "先把这次失败提交GitHub",
+  "failure_error": "FloatingPointError('QUANTILE_PHYSICAL_OVERFLOW: expm1(qlog) nonfinite')",
+  "run_id": "run_20261005T103053_888886Z",
+  "completed_epochs": 4,
+  "formal_optimizer_steps_completed": 50537,
+  "backward_calls": 50537,
+  "train_forward_calls": 50538,
+  "failed_forward_attempt": 50538,
+  "uncheckpointed_updates_since_LAST": 8625,
+  "uncheckpointed_update_disposition": "Retained in immutable logs; no resume or discard decision executed",
+  "LAST_actual_file_identity_verified_read_only": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_b_finalfit\\run_20261005T103053_888886Z\\epoch_004.pt",
+    "bytes": 52269803,
+    "sha256": "5bda7d3fae1c0f6c44d4ec767f5a69749781e11ef3bb41aaa32e7d99355da8e0",
+    "model_state_sha256": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7",
+    "epoch": 4,
+    "global_update": 41912,
+    "model": "B0_MATCHED",
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "finalfit_manifest_sha256": "c5a3883328304d70521cf2049dfc30f069289866c46f791d72d2f4f91037402a",
+    "binary_not_committed": true,
+    "actual_sha256": "5bda7d3fae1c0f6c44d4ec767f5a69749781e11ef3bb41aaa32e7d99355da8e0",
+    "actual_bytes": 52269803,
+    "deserialized": false
+  },
+  "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+  "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+  "B1_STARTED": false,
+  "B1_planned_run_id": "run_20261005T103053_937817Z",
+  "publication_optimizer_steps": 0,
+  "publication_backward_calls": 0,
+  "2025_RAW_ACCESS": 0,
+  "automatic_restart": false,
+  "training_resumed": false,
+  "full_regression_gate": {
+    "path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/full_regression/20261005T102323_606546Z/test_summary.json",
+    "count": 691,
+    "passed": true
+  },
+  "original_failure_records_modified": false,
+  "checkpoint_binaries_published": false,
+  "source_code_snapshot": [
+    {
+      "source_path": "scripts/audit_paired_phase_b_preflight_extended_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/audit_paired_phase_b_preflight_extended_v1.py.txt",
+      "sha256": "5e33c7e377031e1f24c78dcfee658aecfffb94ac11b25c2c49837a120a831267"
+    },
+    {
+      "source_path": "scripts/authorized_paired_phase_a_entry.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/authorized_paired_phase_a_entry.py.txt",
+      "sha256": "9e73a4e1aa22cd0a89005e46a0042542773178fb4c4778656ddb783392c80a0c"
+    },
+    {
+      "source_path": "scripts/launch_authorized_paired_phase_a_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/launch_authorized_paired_phase_a_v1.py.txt",
+      "sha256": "42e9547888fdfe6605bd52aceb7a666302157461b4de57c2783e3b5d97a5317f"
+    },
+    {
+      "source_path": "scripts/paired_extended_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/paired_extended_v1.py.txt",
+      "sha256": "0b5d0a0729a97a29b9b956d09b6829c74359218249693f1eff75aa143e83956a"
+    },
+    {
+      "source_path": "scripts/paired_phase_a_entry.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/paired_phase_a_entry.py.txt",
+      "sha256": "193687f412089b0312c8ee6df0d9fb1d9b33fa31546ceccc47dbed09473c538f"
+    },
+    {
+      "source_path": "scripts/prepare_paired_phase_b_extended_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/prepare_paired_phase_b_extended_v1.py.txt",
+      "sha256": "56e6a8daadb09994db9e3ed08375978987ef0314859a22e7a32ff1cb3ed1b567"
+    },
+    {
+      "source_path": "scripts/review_paired_phase_a_extended_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/review_paired_phase_a_extended_v1.py.txt",
+      "sha256": "dfc9b35a236ed4b45e2a45dae84f035fce5228137a7484588ce3554d89ef1dfb"
+    },
+    {
+      "source_path": "scripts/train_b0_matched_phase_a_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/train_b0_matched_phase_a_v1.py.txt",
+      "sha256": "9b772a5e5c4fdf4fa4327a9c772b6f09a915726060739ddf0fea781bdbbae169"
+    },
+    {
+      "source_path": "scripts/train_b1_phase_a_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/train_b1_phase_a_v1.py.txt",
+      "sha256": "f98974b741f19fefdf0f78d7641384832985c20e6d3ceabfc26b67192474bd97"
+    },
+    {
+      "source_path": "scripts/train_paired_phase_b_finalfit_extended_v1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/scripts/train_paired_phase_b_finalfit_extended_v1.py.txt",
+      "sha256": "ac301771353af0622116b7fe993f580e08bdd1b337f4a67b738a3f28d964a11c"
+    },
+    {
+      "source_path": "src/yuntapr/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/__init__.py.txt",
+      "sha256": "2d4dae85df531298acab4ae4da33907d968e57235429fc219ac04623d4de5bdd"
+    },
+    {
+      "source_path": "src/yuntapr/contracts/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/contracts/__init__.py.txt",
+      "sha256": "1ecb7fb4f558e7e8139a774374db54f98096871d9979b8fccee253b7dd28f645"
+    },
+    {
+      "source_path": "src/yuntapr/contracts/loader.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/contracts/loader.py.txt",
+      "sha256": "776d1aa774342e955eba9ff28809477e0f357a5d60eec7819ba55d3351b06964"
+    },
+    {
+      "source_path": "src/yuntapr/data/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/__init__.py.txt",
+      "sha256": "ec826cc0faeb4a373ff65877fdc980032baad23e0a2525d006ffda2b2e0912a7"
+    },
+    {
+      "source_path": "src/yuntapr/data/b1_scientific_freeze.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/b1_scientific_freeze.py.txt",
+      "sha256": "727d8da5c884b22893384f4f8e4eaf6b88cef7eb67abd76ba8fc4b950a2a79d7"
+    },
+    {
+      "source_path": "src/yuntapr/data/b1_temporal_audit.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/b1_temporal_audit.py.txt",
+      "sha256": "f1f7e45b00734e09122a2b299c2a76837d10ee1d9bbd71261a6831f02d77cabe"
+    },
+    {
+      "source_path": "src/yuntapr/data/dataset_b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/dataset_b0.py.txt",
+      "sha256": "19e5ef7c16c2ce1fdd0df2a16acc44bf740b9d4b5400001c406136879c8762e3"
+    },
+    {
+      "source_path": "src/yuntapr/data/dataset_b1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/dataset_b1.py.txt",
+      "sha256": "b84f7d4dac9fc51c0de4cc23090410dd09ce5d910a63cc041df8d54c799fb1b7"
+    },
+    {
+      "source_path": "src/yuntapr/data/development_audit.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/development_audit.py.txt",
+      "sha256": "ed65703ded7e6db6e14ebc5fcd9b772ebc76486e5e8b6a476b66dfba1dd7fe8b"
+    },
+    {
+      "source_path": "src/yuntapr/data/formal_policy.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/formal_policy.py.txt",
+      "sha256": "3c0a0b97dc25b3ae0f942ec2cef367217fc981c01d1f09501d9f957adab2f490"
+    },
+    {
+      "source_path": "src/yuntapr/data/himawari_b13.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/himawari_b13.py.txt",
+      "sha256": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857"
+    },
+    {
+      "source_path": "src/yuntapr/data/imerg_v07.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/imerg_v07.py.txt",
+      "sha256": "eff89d4a2fb21473288b90f892799866ff839b7119901886e2ea358183b8d7b2"
+    },
+    {
+      "source_path": "src/yuntapr/data/masks.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/masks.py.txt",
+      "sha256": "c397a5866af834098fd5f36e4acd23a26dfa607058ad298f8781a9766d5a8542"
+    },
+    {
+      "source_path": "src/yuntapr/data/normalization.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/normalization.py.txt",
+      "sha256": "cc10f0fc37e9fc2ac3e163025881c02ccbb805a35b884bc86702f6a72b7e6afb"
+    },
+    {
+      "source_path": "src/yuntapr/data/sample_schema.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/sample_schema.py.txt",
+      "sha256": "371a051b2aa7b5b2ac193df513a4ecc27850e923a371a4ec5cb3fe59a9d61b99"
+    },
+    {
+      "source_path": "src/yuntapr/data/staging.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/data/staging.py.txt",
+      "sha256": "f84c55bfba9b998b2ee3486ee08b5857a2a1f48f76c68245dc7a06f31adebbe4"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/__init__.py.txt",
+      "sha256": "129e5b9fc26dafd3b7c5e7d5b0bd676dced59e2cd6d2b134ee9742a56d19fddc"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/catalogue_backend_b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/catalogue_backend_b0.py.txt",
+      "sha256": "3fb2a6246aa8589f2a990f84e9547e04ab73f25816929999d19fe6d69efff375"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/catalogue_execution_v1_1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/catalogue_execution_v1_1.py.txt",
+      "sha256": "fda661f07056da8276db97f7576b7b765c6514f98498fcf97ec9d4fb0d1035c6"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/catalogue_gate_b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/catalogue_gate_b0.py.txt",
+      "sha256": "881e587ba7ebcb217645d5906f623ce6c455c9c6479d0fc98d43f5c1d63dcd07"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/final_test_b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/final_test_b0.py.txt",
+      "sha256": "ac73a66d202964da465ca79abb3e24ad439febe37fec72f6c8ef83ae62bc4b8a"
+    },
+    {
+      "source_path": "src/yuntapr/evaluation/final_test_b0_v1_1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/evaluation/final_test_b0_v1_1.py.txt",
+      "sha256": "0eb2f72feca6f568751dcf7a64319a9aadf8637bfa5061ba97fd77512487a045"
+    },
+    {
+      "source_path": "src/yuntapr/losses/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/losses/__init__.py.txt",
+      "sha256": "40206e500ba1cb5df1a4858f754fcdf83e49a108d0ec73cab31dafc9152aac1e"
+    },
+    {
+      "source_path": "src/yuntapr/losses/focal.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/losses/focal.py.txt",
+      "sha256": "7cd5042f88856c37889bee86f1f340e0e93373486620ee4a7a4d1f61df380e58"
+    },
+    {
+      "source_path": "src/yuntapr/losses/pinball.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/losses/pinball.py.txt",
+      "sha256": "b3ebd505238fe881039f143fe9c73462735782ecfa0dee1e63b5463c3cb49b78"
+    },
+    {
+      "source_path": "src/yuntapr/losses/total_loss.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/losses/total_loss.py.txt",
+      "sha256": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0"
+    },
+    {
+      "source_path": "src/yuntapr/metrics/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/metrics/__init__.py.txt",
+      "sha256": "350f75bcc8be415c283773a339d442a62cc2192d0bb84b62576cc54f4f074cf2"
+    },
+    {
+      "source_path": "src/yuntapr/metrics/deterministic.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/metrics/deterministic.py.txt",
+      "sha256": "43db58494627a6f83fee72241a394937fb144f481f580d40fe1018b5e1a91793"
+    },
+    {
+      "source_path": "src/yuntapr/metrics/probabilistic.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/metrics/probabilistic.py.txt",
+      "sha256": "310147262c0090e805d45bba36d7f992f157da8e52939a4361e18e4e4d8da110"
+    },
+    {
+      "source_path": "src/yuntapr/models/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/__init__.py.txt",
+      "sha256": "1e98d33cb0665c9eb26b67921b8ef55ab1b76958f25240bf1ebd376e5218a26e"
+    },
+    {
+      "source_path": "src/yuntapr/models/b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/b0.py.txt",
+      "sha256": "6b9b8c28c8b12b7948d9658deedc68e0e54df42a956850d357d4f15d06c6227d"
+    },
+    {
+      "source_path": "src/yuntapr/models/b1.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/b1.py.txt",
+      "sha256": "7b115b45831527c165a1bcb9ea22a4ad4dc2f42495d9a1e4b572be6f37eee46e"
+    },
+    {
+      "source_path": "src/yuntapr/models/backbone_b0.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/backbone_b0.py.txt",
+      "sha256": "79f35a29349eae9dcba705b7e127899972d0bcea723773043547f0d7f341819f"
+    },
+    {
+      "source_path": "src/yuntapr/models/blocks.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/blocks.py.txt",
+      "sha256": "925ed0246258d4f709f4279f22e3829cf5aff89ce44dbe67f93ab1cb7c40bfd6"
+    },
+    {
+      "source_path": "src/yuntapr/models/monotonic_quantiles.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/monotonic_quantiles.py.txt",
+      "sha256": "d0b26433b986d5ce89a3eec92ee88cdf47d33d09809eba5a8bf11b5a2152c532"
+    },
+    {
+      "source_path": "src/yuntapr/models/probability_heads.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/models/probability_heads.py.txt",
+      "sha256": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50"
+    },
+    {
+      "source_path": "src/yuntapr/spatial/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/spatial/__init__.py.txt",
+      "sha256": "811e5f8e967d25595aa30c5976ded23d1d9ed35334c34fb19fc06fe86376ae5c"
+    },
+    {
+      "source_path": "src/yuntapr/spatial/projection.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/spatial/projection.py.txt",
+      "sha256": "88661698d642e1f2e350d819452bdedd075f42da17bfe18e0ab5efde0e34662c"
+    },
+    {
+      "source_path": "src/yuntapr/spatial/sp04_mapping.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/spatial/sp04_mapping.py.txt",
+      "sha256": "a4a4d0c8744acd6754588f01c7d1976ccd109b7c9224ba362a4bc474cdc35202"
+    },
+    {
+      "source_path": "src/yuntapr/training/__init__.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/__init__.py.txt",
+      "sha256": "1d9d8338a97125e175d456f4260be66331a28f4949f62d1cacbade34089b8258"
+    },
+    {
+      "source_path": "src/yuntapr/training/batch_contract.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/batch_contract.py.txt",
+      "sha256": "e5089ce2a51a9ce0eb7e0b06b0ccf12f655a946b807443e7adcfb17fc336224e"
+    },
+    {
+      "source_path": "src/yuntapr/training/formal_b0_matched_phase_a.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/formal_b0_matched_phase_a.py.txt",
+      "sha256": "550e89cd5126da1357eace1014146192735e95c4261203748a255baa208b8efe"
+    },
+    {
+      "source_path": "src/yuntapr/training/formal_b1_phase_a.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/formal_b1_phase_a.py.txt",
+      "sha256": "ff3ea86d36ade9d5016b018151cfe6e86c86931c289ab69aa2b158b7f1e27f54"
+    },
+    {
+      "source_path": "src/yuntapr/training/formal_phase_a.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/formal_phase_a.py.txt",
+      "sha256": "61061d245f1f614211d1418eec7d01cd80039dd37e58fb9650d37b05887b3c99"
+    },
+    {
+      "source_path": "src/yuntapr/training/formal_phase_b.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/formal_phase_b.py.txt",
+      "sha256": "9f9e8fb203334a4195c982181553daa11fb95f327fccfa2f626cf1dab91a2b55"
+    },
+    {
+      "source_path": "src/yuntapr/training/forward_step.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/forward_step.py.txt",
+      "sha256": "a0d3f52ece5d383c2f8016c1d0245f963fa637dbe253414a7907131381d7170c"
+    },
+    {
+      "source_path": "src/yuntapr/training/paired_phase_a.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/paired_phase_a.py.txt",
+      "sha256": "a3fa22c048983727aebc66dbecbaf0ac6b49ad95b60102af2ec8ab809ed9338e"
+    },
+    {
+      "source_path": "src/yuntapr/training/paired_phase_a_audit.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/paired_phase_a_audit.py.txt",
+      "sha256": "0ef4f4589376b213e3fb5c8ea83efe3c94867fc3f69e33be35341ef2dca6eb09"
+    },
+    {
+      "source_path": "src/yuntapr/training/phase_a_protocol.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/phase_a_protocol.py.txt",
+      "sha256": "95ed5a182590a8a84ee7659720a89ea7e36687800cb7e7441f60d30d795a8b19"
+    },
+    {
+      "source_path": "src/yuntapr/training/phase_a_validation.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/phase_a_validation.py.txt",
+      "sha256": "9b654748879d22d10805728f6b25ef40f2042a0ef8121e588d4a3769995d7a1c"
+    },
+    {
+      "source_path": "src/yuntapr/training/phase_b_preparation.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/phase_b_preparation.py.txt",
+      "sha256": "789338ea040e4999fa2e420d14ef402e37a4f5208cb0dbbe7f5c89739ddc410e"
+    },
+    {
+      "source_path": "src/yuntapr/training/scientific_review.py",
+      "archived_path": "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/failure_publication/run_20261005T142819_869305Z/source_execution_code/src/yuntapr/training/scientific_review.py.txt",
+      "sha256": "303bf6b6f181bb9147d22ed970dd3bc6c1b233052d1952ec2c9ac8d8531c3b01"
+    }
+  ],
+  "step_event_summary": [
+    {
+      "path": "docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z/logs/epoch_001/step_events.jsonl",
+      "records": 41913,
+      "event_counts": {
+        "BACKWARD_CALL": 10478,
+        "OPTIMIZER_STEP_CALLED": 10478,
+        "OPTIMIZER_STEP_RETURNED": 10478,
+        "TRAIN_UPDATE_AUDITED": 10478,
+        "CHECKPOINT_DESERIALIZATION_CALL": 1
+      },
+      "max_completed_optimizer_steps": 10478
+    },
+    {
+      "path": "docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z/logs/epoch_002/step_events.jsonl",
+      "records": 41913,
+      "event_counts": {
+        "BACKWARD_CALL": 10478,
+        "OPTIMIZER_STEP_CALLED": 10478,
+        "OPTIMIZER_STEP_RETURNED": 10478,
+        "TRAIN_UPDATE_AUDITED": 10478,
+        "CHECKPOINT_DESERIALIZATION_CALL": 1
+      },
+      "max_completed_optimizer_steps": 20956
+    },
+    {
+      "path": "docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z/logs/epoch_003/step_events.jsonl",
+      "records": 41913,
+      "event_counts": {
+        "BACKWARD_CALL": 10478,
+        "OPTIMIZER_STEP_CALLED": 10478,
+        "OPTIMIZER_STEP_RETURNED": 10478,
+        "TRAIN_UPDATE_AUDITED": 10478,
+        "CHECKPOINT_DESERIALIZATION_CALL": 1
+      },
+      "max_completed_optimizer_steps": 31434
+    },
+    {
+      "path": "docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z/logs/epoch_004/step_events.jsonl",
+      "records": 41913,
+      "event_counts": {
+        "BACKWARD_CALL": 10478,
+        "OPTIMIZER_STEP_CALLED": 10478,
+        "OPTIMIZER_STEP_RETURNED": 10478,
+        "TRAIN_UPDATE_AUDITED": 10478,
+        "CHECKPOINT_DESERIALIZATION_CALL": 1
+      },
+      "max_completed_optimizer_steps": 41912
+    },
+    {
+      "path": "docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z/logs/epoch_005/step_events.jsonl",
+      "records": 34500,
+      "event_counts": {
+        "BACKWARD_CALL": 8625,
+        "OPTIMIZER_STEP_CALLED": 8625,
+        "OPTIMIZER_STEP_RETURNED": 8625,
+        "TRAIN_UPDATE_AUDITED": 8625
+      },
+      "max_completed_optimizer_steps": 50537
+    }
+  ],
+  "verbose_local_logs_not_uploaded": [
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_11104.jsonl",
+      "bytes": 8633872,
+      "sha256": "d74972b71c4e283458720d9075f33969eec614c1c55afe1164b8ce0046abaa4f",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_12088.jsonl",
+      "bytes": 8633872,
+      "sha256": "73ebde4c9737a64a9002f744ab58e6405feac27d8ed5a829a3b93805f3a5768d",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_12956.jsonl",
+      "bytes": 8633872,
+      "sha256": "a537c3db7adc66fe5560f41f0598af12e25821dbf2322e34b8f936074ce443fc",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_18336.jsonl",
+      "bytes": 8633872,
+      "sha256": "908ab89374ec740c0d377a392f579e244caa1c529d04a328de8ede2a4a0a084e",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_21840.jsonl",
+      "bytes": 7109472,
+      "sha256": "739e948c94604ecd4b83a11f17bb06aa80226344077d3e197ebb466799e4dc00",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_28632.jsonl",
+      "bytes": 8633872,
+      "sha256": "cef13e665debce2fa93621dc77d80a2258725c48d74b2bf9001cc682da57efd1",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_36248.jsonl",
+      "bytes": 8633872,
+      "sha256": "2599d574076aa76cf70eb3533bc29c6fc10d56abfbdf507cd2e424d46b45e112",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_40136.jsonl",
+      "bytes": 8633872,
+      "sha256": "1c5ea6a633b0e78b59a77486b4c69727f18adfda49030aca678ddc9a5798bd96",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_40344.jsonl",
+      "bytes": 8633872,
+      "sha256": "de5f7394a0246bae0a24e2dd5fdb403715df2e8b9d1dea7c0addcbdc0f8732f8",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\raw_access_worker_40608.jsonl",
+      "bytes": 7109472,
+      "sha256": "6223eca9896ccfd7479520c4ab080cf4127aaf231b22c2bfeab4aec0092568d8",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_11104.jsonl",
+      "bytes": 9017740,
+      "sha256": "085923ed1aa4e633b1267317c15fd749d7ca9ba0f29895a70d97ad533d4acee2",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_12088.jsonl",
+      "bytes": 9018005,
+      "sha256": "db4646551ba0ae4035e1146b3a4522e062101679960051b44d327e742291a3c2",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_12956.jsonl",
+      "bytes": 9018039,
+      "sha256": "d10edd2da456b06fe956e05ede825c10a5a3897d12045f73a9e72626284f1354",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_18336.jsonl",
+      "bytes": 9018005,
+      "sha256": "a4f67977cfbbf0114dce910167d1266969cd5d7b0207cf8c581060838301fc78",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_21840.jsonl",
+      "bytes": 7425517,
+      "sha256": "54062bd92503fad2132de8f425c2768c42505bad6fd1aa4385eb49baad2df9bc",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_28632.jsonl",
+      "bytes": 9017926,
+      "sha256": "72ea8f257a36729e70e718819e6cbcea42bd637ed15dd8446f7acb483e0d2ec8",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_36248.jsonl",
+      "bytes": 9018134,
+      "sha256": "502cc8abce5b54910ebfa29eb02f7017509057180d03d9a1f020c28dc82718c9",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_40136.jsonl",
+      "bytes": 9018092,
+      "sha256": "b39fbe51d4d61bd856afac1e078e172bfd8cc5abb29619c66002243571ab593a",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_40344.jsonl",
+      "bytes": 9018051,
+      "sha256": "b97e8c2f22b2e801cd826fcd6a12779137a58bb4346027767bab53e53f152468",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training\\b0_matched_phase_b_finalfit\\runs\\run_20261005T103053_888886Z\\staging_worker_40608.jsonl",
+      "bytes": 7425732,
+      "sha256": "258b7c08957358bf2b048906ef496fde094e5fbebc4e9d983705d610a2f9b555",
+      "reason": "Verbose I/O event log retained locally and registered by hash"
+    }
+  ]
+}

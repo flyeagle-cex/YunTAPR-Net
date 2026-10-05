@@ -1,0 +1,140 @@
+"""Freeze approved common FinalFit identities and fit one shared native scaler."""
+import argparse, csv, gc, json, os, sys, time, traceback
+from pathlib import Path
+from dataclasses import asdict
+ROOT=Path(os.environ.get('YUNTAPR_REPO_ROOT',Path(__file__).resolve().parents[1]))
+sys.path[:0]=[str(ROOT/'src'),str(ROOT),str(ROOT/'scripts')]
+import numpy as np
+import torch
+import paired_extended_v1 as x
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.data.b1_scientific_freeze import accumulate_packed,histogram_summary,read_packed_frame
+from yuntapr.models.b1 import paired_models
+from yuntapr.training.phase_a_protocol import state_digest,lr_for_update
+from yuntapr.spatial.sp04_mapping import load_sp04
+
+FILES=('paired_extended_v1.py','review_paired_phase_a_extended_v1.py',
+       'prepare_paired_phase_b_extended_v1.py','train_paired_phase_b_finalfit_extended_v1.py',
+       'audit_paired_phase_b_preflight_extended_v1.py')
+def code_hashes():
+    values=a.code_hashes()
+    values.update({'scripts/'+n:x.sha256(ROOT/'scripts'/n) for n in FILES})
+    return values
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--registry',required=True,type=Path)
+    args=parser.parse_args();registry=x.read(args.registry);run=Path(registry['run_directory'])
+    if x.sha256(registry['authority_path'])!=registry['authority_sha256']:raise PermissionError('Extended authority changed')
+    authority=x.read(registry['authority_path']);active=x.read(registry['phase_a_active_registry'])
+    review=x.read(run/'phase_a_scientific_review/paired_scientific_review.json')
+    if review['status']!='PAIRED_FULL_REINFERENCE_PASS':raise PermissionError('Real readonly review required before FinalFit preparation')
+    fw=a.RawFirewall();fw.install();contract=frozen.RunnerContract.load();frames=a.data.load_frames()
+    out=run/'phase_b_preparation';out.mkdir(exist_ok=False)
+    records={k:x.union_records(contract,k) for k in ('B0_MATCHED','B1')}
+    keys=('sample_id','window_start','analysis_time','imerg_day_path','imerg_index','imerg_sha256','target_valid_yunnan_cells')
+    if [[r[k] for k in keys] for r in records['B0_MATCHED']]!=[[r[k] for k in keys] for r in records['B1']]:
+        raise ValueError('Both models require exactly the same FinalFit scenes/targets')
+    for kind,rows in records.items():x.table(out/(kind.lower()+'_finalfit_manifest.csv'),rows)
+    scene_identity=[{k:r[k] for k in keys} for r in records['B1']]
+    x.table(out/'common_finalfit_identity_manifest.csv',scene_identity)
+    plan=x.exposure_plan(records['B1'],frames);x.table(out/'finalfit_six_slot_exposure_plan.csv',plan)
+    expected_pixels=x.SCENES*6*251001
+    years={str(y):sum(r['scene_slot_exposures'] for r in plan if a.data.utc(r['nominal']).year==y) for y in (2023,2024)}
+    if years!={'2023':10455*6,'2024':10501*6}:raise ValueError('Year exposure reconciliation failed')
+    stagepath=a.data.STAGE_ROOT/('extended_paired_'+run.name+'_normalization')
+    if stagepath.exists():raise FileExistsError('Independent owned staging child required')
+    stage=a.data.BoundedEnglishStaging(stagepath,734003200,True,True)
+    allowed=[str(a.data.H_ROOT/r['relative_path']) for r in plan]
+    fw.allowed={fw.key(p) for p in allowed};fw.authorized=True;fw.log_path=out/'normalization_raw_access.jsonl'
+    histogram=np.zeros(65536,dtype=np.int64);mapping=load_sp04();began=time.perf_counter()
+    telemetry={'b13_pixel_values_read':0,'2025_RAW_ACCESS':0,'2025_PIXELS_READ':0,'IMERG_PIXELS_READ':0}
+    x.save(out/'normalization_start.json',{'utc':x.now(),'authority':x.pin(registry['authority_path']),
+        'fit_scenes':20956,'exposures':125736,'weighted_native_pixel_count':expected_pixels,
+        'year_exposures':years,'2025_exposures':0,'unique_frames':len(plan),'ddof':0,
+        'exposure_plan':x.pin(out/'finalfit_six_slot_exposure_plan.csv'),'code_hashes':code_hashes()})
+    try:
+        with (out/'normalization_frame_read_log.csv').open('x',encoding='utf8',newline='') as stream:
+            fields=['nominal','source_sha256','source_bytes','scene_slot_exposures','copy_seconds','read_seconds','temporary_bytes','cleanup_success']
+            writer=csv.DictWriter(stream,fieldnames=fields,lineterminator='\n');writer.writeheader()
+            for i,identity in enumerate(plan,1):
+                source=a.data.guard_source(a.data.H_ROOT/identity['relative_path'],'B13')
+                if source.stat().st_size!=int(identity['source_bytes']):raise ValueError('Frozen normalization source size changed')
+                with stage.local(source) as local:
+                    a.data.pinned(local,identity['source_sha256'])
+                    raw=read_packed_frame(local,mapping,identity,telemetry)
+                    accumulate_packed(histogram,raw,int(identity['scene_slot_exposures']))
+                record=stage.records[-1]
+                if not record.cleanup_success or not record.sha256_match or not record.size_match or record.error:
+                    raise IOError('Normalization staging failed')
+                row={k:identity[k] for k in fields[:4]}
+                row.update({k:getattr(record,k) for k in fields[4:]});writer.writerow(row);stream.flush()
+                del stage.records[:]
+                if i%100==0 or i==len(plan):
+                    a.atomic_json(out/'normalization_progress.json',{'completed_unique_frames':i,'total_unique_frames':len(plan),
+                        'weighted_pixels_so_far':int(histogram.sum()),'2025_RAW_ACCESS':0,'elapsed_seconds':time.perf_counter()-began})
+                    print(json.dumps({'operation':'FINALFIT_SHARED_NORMALIZATION','frames':i,'total':len(plan)}),flush=True)
+        stats=histogram_summary(histogram)
+        if stats['valid_pixel_count']!=expected_pixels or telemetry['b13_pixel_values_read']!=len(plan)*251001:
+            raise ValueError('Real normalization weighted/unique pixel count mismatch')
+        with (out/'finalfit_packed_histogram.csv').open('x',encoding='utf8',newline='') as f:
+            w=csv.writer(f);w.writerow(['packed_int16_code','weighted_count'])
+            w.writerows((i-32768,int(n)) for i,n in enumerate(histogram))
+        scaler={'normalization_version':'PAIRED_FINALFIT_2023_2024_SIX_SLOT_EXPOSURE_SHARED_v1',
+            'status':'FINALFIT_ONLY_FITTED_FROZEN','ready':True,**stats,'fit_scene_count':20956,'fit_role':'FinalFit_2023_2024_COMMON_UNION',
+            'fit_years':[2023,2024],'fit_months':list(range(3,11)),'scene_slot_exposures':125736,
+            'year_exposures':years,'2025_exposures':0,'unique_frames_read':len(plan),
+            'weighting':'SCENE_SLOT_EXPOSURE_EACH_NATIVE_PIXEL','all_six_slots_share_identical_scaler':True,
+            'B0_MATCHED_AND_B1_USE_IDENTICAL_SCALER':True,'float32_Kelvin_decode':True,'moments_dtype':'float64',
+            'transform':'((Kelvin_float32.astype(float64)-mean_K)/std_K).astype(float32)',
+            'manifest':x.pin(out/'common_finalfit_identity_manifest.csv'),
+            'exposure_plan':x.pin(out/'finalfit_six_slot_exposure_plan.csv'),
+            'histogram':x.pin(out/'finalfit_packed_histogram.csv'),'code_hashes':code_hashes(),
+            '2025_PIXELS_READ':0,'IMERG_PIXELS_READ':0,'created_utc':x.now()}
+        x.save(out/'normalization_phase_b_shared_finalfit_v1.json',scaler)
+        cleanup=x.staging_state(stagepath)
+        if not cleanup['cleanup_success']:raise IOError('Normalization owned staging remains')
+        x.save(out/'normalization_execution.json',{'status':'PASS_REAL_FINALFIT_NORMALIZATION',
+            'normalization':x.pin(out/'normalization_phase_b_shared_finalfit_v1.json'),
+            'real_unique_frames_read':len(plan),'telemetry':telemetry,'source_open_events':fw.raw_opens,
+            'forbidden_source_attempts':fw.forbidden_attempts,'cleanup':cleanup,'elapsed_seconds':time.perf_counter()-began})
+    except BaseException as error:
+        x.save(out/'normalization_failure.json',{'error':repr(error),'traceback':traceback.format_exc(),
+            'telemetry':telemetry,'completed_weighted_pixels':int(histogram.sum()),'utc':x.now()})
+        raise
+    # Fresh initialization replay is isolated, without any trained checkpoint read.
+    anchor,temporal,initial=paired_models();a.verify_initialization(anchor,temporal,initial)
+    x.save(out/'phase_b_paired_initialization_manifest.json',initial);del anchor,temporal;gc.collect()
+    phase_a=x.read(Path(active['run_directory'])/'final_delivery_status.json')
+    protocol={'version':'v1','authority':x.pin(registry['authority_path']),
+        'inherits_unchanged':x.pin(ROOT/frozen.CONFIG),'architecture_and_loss':'IDENTICAL_TO_FROZEN_PAIRED_PHASE_A',
+        'initialization':'FRESH_INDEPENDENT_RESEED_2026_THEN_SAME_NAME_SHAPE_COPY',
+        'initialization_manifest':x.pin(out/'phase_b_paired_initialization_manifest.json'),
+        'phase_a_weights_or_optimizer_scheduler_transfer':False,
+        'normalization':x.pin(out/'normalization_phase_b_shared_finalfit_v1.json'),
+        'common_sample_identity':x.pin(out/'common_finalfit_identity_manifest.csv'),
+        'manifests':{k:x.pin(out/(k.lower()+'_finalfit_manifest.csv')) for k in records},
+        'scene_order_identity_sha256':state_digest([r['sample_id'] for r in records['B1']]),
+        'training':{'scenes':20956,'batch':2,'accumulation':1,'drop_last':False,'steps_per_epoch':10478,
+                    'epoch_shuffle':'Generator seed=2026+zero_based_epoch_index','no_singleton_tail':True},
+        'scheduler':{'rule':'SAME_EPOCH_PROGRESS_ON_50_EPOCH_HORIZON','W':10478,'U':523900,
+                     'base_lr':1e-4,'min_lr':1e-6,'min_lr_lower_bound':'COSINE_ONLY','apply_before_step':True},
+        'epoch_budgets':review['Phase_B_epoch_budgets'],
+        'epoch_budget_provenance':{k:phase_a['models'][k]['checkpoint_registry']['BEST'] for k in records},
+        'selection':{'validation':False,'early_stopping':False,'BEST':False,'FINAL':'LAST_COMPLETED_FIXED_BUDGET_EPOCH'},
+        'loader':contract.protocol['loader'],'precision':contract.protocol['precision'],
+        'optimizer':contract.protocol['optimizer'],'gradient':contract.protocol['gradient'],
+        'checkpoint_roots':{k:str(p) for k,p in x.ROOTS.items()},'2025_raw_access':False,
+        'FINAL_TEST_2025_AUTHORIZED':False,'B2_TRAINING_AUTHORIZED':False,'created_utc':x.now()}
+    for k,e in protocol['epoch_budgets'].items():
+        if type(e)!=int or not 1<=e<=50 or e!=phase_a['models'][k]['BEST_epoch']:raise ValueError('Own BEST budget required')
+    x.save(out/'paired_phase_b_finalfit_protocol_v1.json',protocol)
+    a.verify_history(Path(active['run_directory'])/'historical_file_snapshot.json',
+        x.sha256(Path(active['run_directory'])/'historical_file_snapshot.json'))
+    x.save(out/'preparation_status.json',{'status':'FINALFIT_PREPARATION_FROZEN_TESTS_PENDING',
+        'protocol':x.pin(out/'paired_phase_b_finalfit_protocol_v1.json'),'normalization':protocol['normalization'],
+        'active_formal_authorization_created':False,'2025_RAW_ACCESS':0,'created_utc':x.now()})
+    print(json.dumps({'status':'FINALFIT_PREPARATION_FROZEN_TESTS_PENDING','mean_K':stats['mean_K'],
+                      'std_K':stats['std_K'],'normalization_sha256':protocol['normalization']['sha256']}),flush=True)
+
+if __name__=='__main__':main()

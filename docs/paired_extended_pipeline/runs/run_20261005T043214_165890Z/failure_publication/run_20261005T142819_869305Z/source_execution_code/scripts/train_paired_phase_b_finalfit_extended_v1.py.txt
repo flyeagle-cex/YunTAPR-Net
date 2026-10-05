@@ -1,0 +1,172 @@
+"""Explicitly authorized fresh paired FinalFit; no Validation/BEST/2025 path."""
+import argparse, gc, json, os, re, sys, traceback
+from pathlib import Path
+from dataclasses import asdict
+ROOT=Path(os.environ.get('YUNTAPR_REPO_ROOT',Path(__file__).resolve().parents[1]))
+sys.path[:0]=[str(ROOT/'src'),str(ROOT),str(ROOT/'scripts')]
+import torch
+from torch.utils.data import DataLoader
+import paired_extended_v1 as x
+from prepare_paired_phase_b_extended_v1 import code_hashes
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.training.phase_a_protocol import seed_reproducibility,state_digest,parameter_groups
+from yuntapr.training.formal_phase_a import train_numerators
+from yuntapr.models.b1 import paired_models
+from yuntapr.spatial.sp04_mapping import load_sp04
+from yuntapr.data.masks import read_frozen_yunnan_mask
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--authorization',required=True,type=Path)
+    parser.add_argument('--authorization-sha256',required=True);parser.add_argument('--resume-run-id')
+    args=parser.parse_args();fw=a.RawFirewall();fw.install()
+    cap_path=args.authorization.resolve()
+    if not cap_path.is_relative_to(ROOT.resolve()) or cap_path.suffix!='.json':raise PermissionError('Repository JSON authority required')
+    if x.sha256(cap_path)!=args.authorization_sha256:raise PermissionError('Active authority SHA changed')
+    cap=x.read(cap_path);kind=cap.get('model')
+    if (kind not in x.ROOTS or cap.get('operation')!='PAIRED_PHASE_B_FINALFIT_FORMAL' or not cap.get('AUTHORIZED')
+        or cap.get('2025_raw_access') is not False or cap.get('Phase_A_state_transfer_allowed') is not False
+        or cap.get('validation_allowed') is not False or cap.get('BEST_selection_allowed') is not False):
+        raise PermissionError('Explicit model-specific FinalFit scope required')
+    for name in ('authority','protocol','normalization','manifest','initialization','pretraining_gate'):
+        x.verify_pin(cap[name])
+    protocol=x.read(cap['protocol']['path']);scaler=x.read(cap['normalization']['path'])
+    gate=x.read(cap['pretraining_gate']['path'])
+    if gate['status']!='PASS_REGRESSION_CONTRACT_ENGINEERING_PREFLIGHT':raise PermissionError('Passed pretraining gates required')
+    if code_hashes()!=cap['code_hashes']:raise PermissionError('Implementation identity changed')
+    x.verify_additive_snapshot(cap['phase_a_completed_snapshot'])
+    if (cap['normalization']!=protocol['normalization'] or cap['manifest']!=protocol['manifests'][kind]
+        or cap['epoch_budget']!=protocol['epoch_budgets'][kind] or protocol['training']['steps_per_epoch']!=10478
+        or protocol['scheduler']['W']!=10478 or protocol['scheduler']['U']!=523900):
+        raise PermissionError('FinalFit frozen contract mismatch')
+    contract=frozen.RunnerContract.load();frames=a.data.load_frames()
+    with Path(cap['manifest']['path']).open(encoding='utf8',newline='') as f:
+        import csv
+        records=list(csv.DictReader(f))
+    x.validate_records(records)
+    runid=args.resume_run_id or cap['planned_run_id']
+    if runid!=cap['planned_run_id'] or not re.fullmatch(r'run_\d{8}T\d{6}_\d{6}Z',runid):raise PermissionError('Exact allocated run required')
+    public=Path(cap['public_directory']);local=x.ROOTS[kind]/runid
+    if public.name!=runid or Path(cap['checkpoint_directory']).resolve()!=local.resolve():raise PermissionError('Exact output roots required')
+    if args.resume_run_id and not cap.get('resume_authorized'):raise PermissionError('No automatic failed-training resume')
+    if not args.resume_run_id:
+        if public.exists() or local.exists():raise FileExistsError('Do not overwrite any formal run')
+        public.mkdir(parents=True,exist_ok=False);local.mkdir(parents=True,exist_ok=False)
+    stage=a.data.STAGE_ROOT/('extended_paired_'+runid+'_'+kind.lower()+'_finalfit')
+    current=audit=x.FinalFitAudit(public,kind);audit.snapshot(status='AUTHORIZATION_METADATA_GATE_PASS')
+    registry={};history=[];lock=None
+    lockpath=Path(cap['pretraining_gate']['path']).parent/'phase_b_sequential_execution.lock'
+    try:
+        lock=lockpath.open('x',encoding='utf8');lock.write(json.dumps({'model':kind,'run_id':runid,'pid':os.getpid()}));lock.flush();os.fsync(lock.fileno())
+        # No Phase-A checkpoint is ever opened by this process, even for initialization.
+        def checkpoint_firewall(event,values):
+            if event=='open' and isinstance(values[0],(str,bytes,os.PathLike)):
+                value=os.fsdecode(values[0]).replace('/','\\').lower()
+                root=r'f:\pytorch\research\outputs\formal_training'+'\\'
+                if value.startswith(root) and not value.startswith(str(local.resolve()).lower()+'\\'):
+                    raise PermissionError('Phase-A/historical/other-model checkpoint access forbidden')
+        sys.addaudithook(checkpoint_firewall)
+        from train_b0_phase_b_finalfit_v1 import environment
+        environment_info=environment();seed_reproducibility()
+        mapping=load_sp04();mask=read_frozen_yunnan_mask(Path(contract.protocol['identity']['yunnan_mask']['path']),mapping)
+        anchor,temporal,initial=paired_models();a.verify_initialization(anchor,temporal,initial)
+        if initial!=x.read(cap['initialization']['path']):raise ValueError('Fresh paired initialization changed')
+        model=temporal if kind=='B1' else anchor;del anchor,temporal;gc.collect()
+        _,groups=parameter_groups(model,check_counts=False)
+        if groups['counts']!=frozen.COUNTS[kind] or not groups['disjoint'] or not groups['complete_union']:
+            raise ValueError('Frozen groups/counts changed')
+        model=model.cuda()
+        if state_digest(model.state_dict())!=x.INITIAL[kind]:raise ValueError('Fresh initial state changed')
+        optimizer,actual_groups=frozen.optimizer_for(model,kind)
+        if actual_groups!=groups:raise ValueError('AdamW groups changed')
+        expected={'scope':'PAIRED_PHASE_B_FINALFIT_FORMAL','model':kind,'run_id':runid,'epoch_budget':cap['epoch_budget'],
+            'authority':cap['authority'],'active_authorization_sha256':args.authorization_sha256,
+            'protocol':cap['protocol'],'normalization':cap['normalization'],'manifest':cap['manifest'],
+            'paired_initialization':initial,'initial_model_state_sha256':x.INITIAL[kind],
+            'code_hashes':cap['code_hashes'],'environment':environment_info,'optimizer_groups':groups,
+            'Phase_A_state_transfer_allowed':False,'validation_allowed':False,'BEST_selection_allowed':False,
+            'FINAL_TEST_2025_AUTHORIZED':False,'2025_raw_access':False,'provenance_before_state_application':True}
+        if not args.resume_run_id:
+            x.save(public/'run_manifest.json',expected)
+            x.save(public/'first_update_identity_gate.json',{'status':'PASS','initial_model_sha256':state_digest(model.state_dict()),
+                'expected_initial_sha256':x.INITIAL[kind],'paired_initialization':initial,'optimizer_groups':groups,
+                'CHECKPOINT_LOADS_BEFORE_FIRST_UPDATE':0,'FORMAL_OPTIMIZER_STEPS':0})
+        else:
+            if x.read(public/'run_manifest.json')!=expected:raise ValueError('Verified resume provenance mismatch')
+            registry=x.read(public/'checkpoint_registry.json')
+            with audit.instrument(model,optimizer):payload=x.apply_verified(registry['LAST'],expected,model,optimizer)
+            audit.completed_epoch=payload['completed_epoch'];n=payload['global_update']
+            for k in ('FORMAL_OPTIMIZER_STEPS','OPTIMIZER_STEPS_COMPLETED','BACKWARD_CALLS','TRAIN_FORWARD_CALLS'):
+                setattr(audit.counters,k,n)
+            audit.verified_last=registry['LAST'];history=x.read(public/'training_history.json')
+            if len(history)!=audit.completed_epoch:raise ValueError('Complete epoch resume history required')
+            del payload
+        allowed=a.allowed_sources(contract,kind,frames);fw.allowed={fw.key(p) for p in allowed};fw.authorized=True
+        fw.log_path=public/f'raw_access_parent_{os.getpid()}.jsonl'
+        dataset=x.FinalFitDataset(kind,records,frames,mapping,mask,stage);dataset.scaler=scaler
+        dataset.context={'public':str(public),'authorization':x.pin(cap_path),'allowed_sources':allowed,
+                         'normalization_sha256':cap['normalization']['sha256']}
+        with audit.instrument(model,optimizer):
+            for epoch in range(audit.completed_epoch+1,cap['epoch_budget']+1):
+                audit.epoch=epoch;audit.phase='TRAIN';audit.snapshot()
+                order,plan=x.batch_plan(epoch);seen=[];denominator=0;socc=sqr=0.;nrain=clips=0
+                pre_norms=[];post_norms=[];lr_start=None;lr_end=None
+                order_sha=state_digest([records[i]['sample_id'] for i in order]);model.train()
+                loader=DataLoader(dataset,batch_sampler=plan,num_workers=2,pin_memory=False,persistent_workers=False,
+                    prefetch_factor=1,worker_init_fn=x.worker_init,collate_fn=a.data.collate)
+                with a.loader_items(loader) as iterator:
+                    for j,items in enumerate(iterator,1):
+                        batch=a.data.make_batch(items);u=(epoch-1)*10478+j
+                        if len(items)!=2:raise ValueError('FinalFit batch must contain exactly two scenes')
+                        if u==1 and state_digest(model.state_dict())!=x.INITIAL[kind]:raise ValueError('Fresh SHA gate failed immediately before first formal step')
+                        metrics,out=x.execute_update(model,optimizer,batch,u)
+                        if metrics['actual_denominator']!=6860:raise ValueError('Actual full-batch denominator failed')
+                        seen.extend(batch.indices);denominator+=metrics['actual_denominator']
+                        aa,bb,n,r=train_numerators(out,batch);socc+=aa;sqr+=bb;nrain+=r
+                        clips+=int(metrics['clipped']);pre_norms.append(metrics['pre_clip_norm']);post_norms.append(metrics['post_clip_norm'])
+                        lr_start=metrics['LR'] if lr_start is None else lr_start;lr_end=metrics['LR']
+                        audit.event('TRAIN_UPDATE_AUDITED',sample_ids=batch.sample_ids,**metrics)
+                        if j%100==0 or j==10478:
+                            audit.snapshot(update=u,train_steps_this_epoch=j)
+                            print(json.dumps({'operation':'PHASE_B_FINALFIT','model':kind,'epoch':epoch,'update':u,
+                                              'epoch_steps':j,'epoch_budget':cap['epoch_budget']}),flush=True)
+                        del batch,out,items
+                complete=x.coverage(epoch,seen,denominator)
+                if any(getattr(audit.counters,k)!=epoch*10478 for k in ('FORMAL_OPTIMIZER_STEPS','OPTIMIZER_STEPS_COMPLETED','BACKWARD_CALLS')):
+                    raise ValueError('Actual completed epoch update count failed')
+                if audit.counters.VALIDATION_FORWARD_CALLS!=0:raise ValueError('No FinalFit validation path permitted')
+                cleanup=x.staging_state(stage)
+                if not cleanup['cleanup_success']:raise IOError('FinalFit owned staging remains')
+                metrics={'S_occ':socc,'S_qr':sqr,'N_valid':denominator,'N_rain':nrain,'L_occ':socc/denominator,
+                    'L_qr':sqr/denominator,'global_core_loss':(socc+sqr)/denominator,'optimizer_steps':10478,
+                    'clip_count':clips,'clip_fraction':clips/10478,'pre_clip_norm':pre_norms,'post_clip_norm':post_norms,
+                    'LR_start':lr_start,'LR_end':lr_end,'ordered_sample_identity_sha256':order_sha}
+                audit.phase='CHECKPOINT_BOUNDARY';payload=x.payload_for(model,optimizer,expected,epoch,complete,metrics,audit.counters)
+                registry=x.save_checkpoint(public,payload,expected,registry);audit.verified_last=registry['LAST'];audit.completed_epoch=epoch
+                history.append({'epoch':epoch,'global_update':epoch*10478,'training':metrics,'checkpoint':registry['LAST']})
+                a.atomic_json(public/'training_history.json',history);audit.snapshot(status='COMPLETED_FINALFIT_EPOCH')
+                audit.event('COMPLETED_EPOCH_BOUNDARY',training_core=metrics['global_core_loss'],LAST=registry['LAST'])
+                del payload;gc.collect()
+        if code_hashes()!=cap['code_hashes']:raise ValueError('Implementation changed during FinalFit')
+        a.verify_history(cap['historical_snapshot']['path'],cap['historical_snapshot']['sha256'])
+        x.verify_additive_snapshot(cap['phase_a_completed_snapshot'])
+        if audit.completed_epoch!=cap['epoch_budget'] or 'FINAL' not in registry:raise ValueError('Final fixed-budget epoch not completed')
+        status={'status':'FORMAL_PAIRED_PHASE_B_FINALFIT_COMPLETE','model':kind,'run_id':runid,
+            'epoch_budget':cap['epoch_budget'],'completed_epochs':audit.completed_epoch,
+            **asdict(audit.counters),'LAST':registry['LAST'],'FINAL':registry['FINAL'],
+            'normalization_sha256':cap['normalization']['sha256'],'finalfit_scenes':20956,
+            'validation_executed':False,'BEST_selection_executed':False,'phase_a_state_transfer':False,
+            '2025_RAW_ACCESS':0,'2025_PIXELS_READ':0,'2025_MODEL_INFERENCE_SCENES':0,
+            '2025_FINAL_TEST_EXECUTED':False,'FINAL_TEST_2025_AUTHORIZED':False,
+            'source_cleanup_state':x.staging_state(stage),'completed_utc':x.now()}
+        audit.phase='COMPLETE';audit.snapshot(status='FORMAL_PAIRED_PHASE_B_FINALFIT_COMPLETE')
+        x.save(public/'final_status.json',status);lock.close();lock=None;lockpath.unlink()
+        print(json.dumps(status),flush=True)
+    except BaseException as error:
+        try:cleanup=x.staging_state(stage)
+        except BaseException as second:cleanup={'cleanup_audit_error':repr(second)}
+        audit.preserve_failure(error,registry,cleanup);raise
+    finally:
+        if lock is not None:lock.close()
+
+if __name__=='__main__':main()

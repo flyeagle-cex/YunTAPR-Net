@@ -1,0 +1,339 @@
+"""Additive extended-pipeline contracts; inherited science is never rewritten.
+
+Drafted outside the repository while Phase-A runs. This file is installed as an
+independent script dependency only after Phase-A completes and closes integrity.
+"""
+from collections import Counter
+from contextlib import contextmanager
+from dataclasses import asdict
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+import csv, gc, hashlib, json, math, os, re, time, uuid
+import netCDF4
+import numpy as np
+import torch
+from torch.utils.data import get_worker_info
+from yuntapr.contracts.loader import REPO_ROOT, sha256
+from yuntapr.data import dataset_b1 as data
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as audit
+from yuntapr.training.phase_a_protocol import state_digest, lr_for_update, capture_rng, restore_rng
+from yuntapr.training.formal_phase_a import atomic_json, assert_determinism
+from yuntapr.training.formal_phase_b import compatible_states
+from yuntapr.data.b1_scientific_freeze import strict_scene_frames
+
+SCENES = 20956
+STEPS = W = 10478
+U = 523900
+ROOTS = {k: Path(r'F:\pytorch\Research\outputs\formal_training') / v for k, v in
+         [('B0_MATCHED', 'b0_matched_phase_b_finalfit'), ('B1', 'b1_phase_b_finalfit')]}
+INITIAL = audit.INITIAL
+
+def now(): return datetime.now(timezone.utc).isoformat()
+def read(p): return json.loads(Path(p).read_text(encoding='utf8'))
+def save(p, value):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(value, f, ensure_ascii=False, indent=2, allow_nan=False); f.write('\n')
+
+def pin(p): return {'path': str(Path(p).resolve()), 'bytes': Path(p).stat().st_size, 'sha256': sha256(p)}
+def verify_pin(ref):
+    p = Path(ref['path'])
+    if p.stat().st_size != ref['bytes'] or sha256(p) != ref['sha256']:
+        raise ValueError('Provenance pin mismatch: ' + str(p))
+    return p
+
+def verify_additive_snapshot(ref):
+    snapshot=read(verify_pin(ref))
+    for rel,digest in snapshot['files'].items():
+        p=(REPO_ROOT/rel).resolve()
+        if not p.is_relative_to(REPO_ROOT.resolve()) or sha256(p)!=digest:
+            raise ValueError('Completed Phase-A metadata/source changed: '+rel)
+    return {'file_count':len(snapshot['files']),'all_byte_identical':True,
+            'checkpoint_binaries_not_opened_by_formal_runner':True}
+
+def table(p, rows):
+    if not rows: raise ValueError('Empty manifest')
+    with Path(p).open('x', encoding='utf8', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator='\n')
+        w.writeheader(); w.writerows(rows)
+
+def union_records(contract, kind):
+    records = []
+    for year in (2023, 2024):
+        for original in contract.records[kind, year]:
+            row = dict(original)
+            row['development_role'] = row.pop('role')
+            row['role'] = 'FinalFit'
+            row['index'] = str(len(records))
+            records.append(row)
+    validate_records(records)
+    return records
+
+def validate_records(records):
+    if len(records) != SCENES or len({r['sample_id'] for r in records}) != SCENES:
+        raise ValueError('Exactly 20956 unique frozen common scenes required')
+    if [r['sample_id'] for r in records] != sorted(r['sample_id'] for r in records):
+        raise ValueError('Fixed chronological FinalFit union required')
+    counts = Counter()
+    for i, row in enumerate(records):
+        t = data.allowed_time(row['window_start']); counts[t.year] += 1
+        if str(row['index']) != str(i) or row['sample_id'] != row['window_start']:
+            raise ValueError('FinalFit identity/index mismatch')
+        if data.utc(row['analysis_time']) != t + timedelta(minutes=30):
+            raise ValueError('Analysis-time binding changed')
+        if int(row['target_valid_yunnan_cells']) != 3430:
+            raise ValueError('Frozen target eligibility changed')
+    if counts != Counter({2023: 10455, 2024: 10501}):
+        raise ValueError('FinalFit year counts changed')
+
+def exposure_plan(records, frames):
+    validate_records(records); counts = Counter(); minimum = {}
+    for r in records:
+        for fr in strict_scene_frames(r['window_start'], frames):
+            n = fr['nominal']; counts[n] += 1
+            minimum[n] = min(minimum.get(n, r['analysis_time']), r['analysis_time'])
+    plan = [{**{k: frames[n][k] for k in ('nominal', 'relative_path', 'source_bytes',
+                'source_sha256', 'obs_start', 'obs_end', 'date_created')},
+             'scene_slot_exposures': counts[n], 'minimum_analysis_time': minimum[n]}
+            for n in sorted(counts)]
+    if sum(r['scene_slot_exposures'] for r in plan) != SCENES * 6:
+        raise ValueError('Exactly six exposures per frozen scene required')
+    return plan
+
+def batch_plan(epoch):
+    if type(epoch) is not int or not 1 <= epoch <= 50: raise ValueError('Epoch range')
+    g = torch.Generator().manual_seed(2026 + epoch - 1)
+    order = torch.randperm(SCENES, generator=g).tolist()
+    return order, [order[i:i+2] for i in range(0, SCENES, 2)]
+
+def coverage(epoch, seen, denominator):
+    order, plan = batch_plan(epoch)
+    if seen != order or denominator != SCENES * 3430 or len(plan) != STEPS or any(len(x) != 2 for x in plan):
+        raise ValueError('Every identity exactly once; no singleton/drop/duplicate')
+    return {'samples': SCENES, 'updates': STEPS, 'denominator': denominator,
+            'order_sha256': state_digest(order), 'no_singleton_tail': True}
+
+def normalize(kelvin, scaler):
+    x = np.asarray(kelvin)
+    if x.dtype != np.float32 or not np.isfinite(x).all(): raise ValueError('Full-valid FP32 Kelvin required')
+    if scaler['ddof'] != 0 or scaler['std_K'] <= 0: raise ValueError('Frozen scaler contract')
+    return ((x.astype(np.float64) - scaler['mean_K']) / scaler['std_K']).astype(np.float32)
+
+def reconcile(expected, actual, absolute=1e-12, relative=1e-12):
+    """Reuse the historical Scientific Review numerical tolerance."""
+    keys = ('global_val_core_loss', 'global_L_occ', 'global_core_L_qr', 'Brier_Score',
+            'AUROC', 'Average_Precision', 'conditional_mean_pinball', 'N_valid',
+            'N_rain', 'prevalence', 'per_tau_pinball', 'per_tau_conditional_coverage',
+            'coverage_error', 'strict_crossing_count', 'nonfinite_count', 'support_violation_count')
+    def same(a, b):
+        if isinstance(a, list): return isinstance(b, list) and len(a) == len(b) and all(same(x,y) for x,y in zip(a,b))
+        if a is None or b is None: return a is b
+        if isinstance(a, int): return a == b
+        return math.isclose(a, b, abs_tol=absolute, rel_tol=relative)
+    checks = {k: same(expected[k], actual[k]) for k in keys}
+    if not all(checks.values()): raise ValueError('Training BEST/reinference reconciliation failure: ' + str(checks))
+    return {'PASS': True, 'absolute_tolerance': absolute, 'relative_tolerance': relative, 'checks': checks}
+
+@contextmanager
+def inference_only():
+    from unittest.mock import patch
+    def reject(*a, **k): raise PermissionError('Read-only scientific inference: optimizer/backward prohibited')
+    with patch.object(torch.Tensor, 'backward', reject), patch.object(torch.autograd, 'backward', reject), \
+         patch.object(torch.optim.Optimizer, '__init__', reject), patch.object(torch.optim.AdamW, '__init__', reject):
+        yield
+
+class LoggedDataset(data.TemporalDataset):
+    """Inherited Phase-A reader with new operation-specific read-only telemetry."""
+    def __getitem__(self, index):
+        item = super().__getitem__(index)
+        audit.append_jsonl(Path(self.context['public']) / f'staging_worker_{os.getpid()}.jsonl',
+                           {'sample_id': item['sample_id'], 'index': index,
+                            'year': int(item['sample_id'][:4]), 'staging': item['staging']}, sync=False)
+        return item
+
+class FinalFitDataset(LoggedDataset):
+    """Same native reader/QC as Phase-A, with the separately pinned FinalFit scaler."""
+    def __getitem__(self, index):
+        if self.staging is None: self.set_worker('parent_' + str(os.getpid()))
+        r = self.records[index]; t = data.allowed_time(r['window_start']); a = data.utc(r['analysis_time'])
+        if a != t + timedelta(minutes=30): raise ValueError('Frozen analysis-time binding changed')
+        slots = range(6) if self.model == 'B1' else (5,)
+        values = []; details = []; before = len(self.staging.records)
+        for s in slots:
+            nominal = (a - timedelta(minutes=data.OFFSETS[s])).isoformat(); data.allowed_time(nominal)
+            fr = self.frames[nominal]; data.check_frame(fr, a)
+            source = data.guard_source(data.H_ROOT / fr['relative_path'], 'B13')
+            if source.stat().st_size != int(fr['source_bytes']): raise ValueError('Native source size changed')
+            with self.staging.local(source) as local:
+                data.pinned(local, fr['source_sha256'])
+                x, valid, actual = data.read_b13_local(local, self.mapping, nominal)
+                if not valid.all() or not np.isfinite(x).all(): raise ValueError('M1 real frame rejected')
+                if (actual.obs_start != data.utc(fr['obs_start']) or actual.obs_end != data.utc(fr['obs_end'])
+                    or actual.date_created != data.utc(fr['date_created']) or not actual.obs_start <= actual.obs_end <= a):
+                    raise ValueError('CF identity/causality changed')
+                values.append(normalize(x, self.scaler)); details.append({'slot': s, 'nominal_time': nominal,
+                    'obs_start': actual.obs_start.isoformat(), 'obs_end': actual.obs_end.isoformat(),
+                    'date_created': actual.date_created.isoformat(), 'causality_pass': True, 'source_sha256': fr['source_sha256']})
+        source = data.guard_source(r['imerg_day_path'], 'IMERG')
+        with self.staging.local(source) as local:
+            data.pinned(local, r['imerg_sha256'])
+            with netCDF4.Dataset(str(local)) as ds:
+                if ds.source != 'GPM_3IMERGHH_07' or 'IMERG Final Run V07' not in ds.title: raise ValueError('IMERG metadata changed')
+            y, valid, actual_time = data.read_imerg_local(local, int(r['imerg_index']), self.mapping)
+            if actual_time != t or int((valid & self.yunnan).sum()) != 3430: raise ValueError('Target eligibility changed')
+        records = [asdict(x) for x in self.staging.records[before:]]
+        if not all(x['cleanup_success'] and x['sha256_match'] and x['size_match'] and not x['error'] for x in records):
+            raise IOError('Staging copy/QC/hash/cleanup failed')
+        del self.staging.records[:]
+        item = {'x': np.stack(values), 'y': y[None], 'valid': valid[None], 'yunnan': self.yunnan[None],
+                'index': index, 'sample_id': r['sample_id'], 'frames': details, 'staging': records,
+                'worker_pid': os.getpid(), 'target_sha256': r['imerg_sha256'],
+                'normalization_sha256': self.context['normalization_sha256']}
+        audit.append_jsonl(Path(self.context['public']) / f'staging_worker_{os.getpid()}.jsonl',
+                           {'sample_id': item['sample_id'], 'index': index, 'year': t.year, 'staging': records}, sync=False)
+        return item
+
+def worker_init(worker_id):
+    info = get_worker_info(); context = info.dataset.context
+    cap = read(verify_pin(context['authorization']))
+    if cap['model'] != info.dataset.model or not cap['AUTHORIZED'] or cap['2025_raw_access']:
+        raise PermissionError('Worker authorization mismatch')
+    fw = audit.RawFirewall(True, context['allowed_sources'], Path(context['public']) / f'raw_access_worker_{os.getpid()}.jsonl')
+    fw.install(); info.dataset.firewall = fw; data.worker_init(worker_id)
+    audit.append_jsonl(Path(context['public']) / f'worker_identity_{os.getpid()}.jsonl',
+        {'pid': os.getpid(), 'worker_id': worker_id, 'operation': cap['operation'],
+         'staging_root': str(info.dataset.staging.root), 'temporary_byte_cap': 734003200, '2025_firewall_active': True})
+
+def staging_state(root):
+    p = Path(root).resolve()
+    if p.parent != data.STAGE_ROOT.resolve() or not p.name.startswith('extended_paired_run_'):
+        raise ValueError('Exact owned English staging subtree required')
+    remaining = [pin(q) for q in p.rglob('*') if q.is_file()] if p.exists() else []
+    return {'owned_root': str(p), 'remaining_temporary_files': remaining, 'cleanup_success': not remaining,
+            'raw_source_deleted': False, 'old_diagnostic_cache_touched': False}
+
+class FinalFitAudit(audit.RunAudit):
+    def snapshot(self, **values):
+        atomic_json(self.public / 'execution_counters.json', {'scope': 'PAIRED_PHASE_B_FINALFIT_ONLY',
+            **asdict(self.counters), 'completed_epoch': self.completed_epoch, 'phase': self.phase,
+            'epoch': self.epoch, **values})
+
+def execute_update(model, optimizer, batch, update):
+    """Identical numerical update to Phase-A; only its approved steps/epoch changes."""
+    started = time.perf_counter(); assert_determinism(); optimizer.zero_grad(set_to_none=True)
+    lr = lr_for_update(update, steps_per_epoch=STEPS)
+    for group in optimizer.param_groups: group['lr'] = lr
+    out, loss = frozen.forward_loss(model, batch); loss.total.backward()
+    if any(p.grad is None or not torch.isfinite(p.grad).all() for p in model.parameters()):
+        raise FloatingPointError('Nonfinite/missing gradient')
+    pre = torch.nn.utils.clip_grad_norm_(model.parameters(), 5., error_if_nonfinite=True)
+    post = torch.sqrt(sum(p.grad.detach().double().square().sum() for p in model.parameters()))
+    if not torch.isfinite(post) or post > 5.00001: raise FloatingPointError('Gradient clip failed')
+    optimizer.step()
+    if (any(not torch.isfinite(p).all() for p in model.parameters()) or
+        any(not torch.isfinite(v).all() for s in optimizer.state.values() for v in s.values() if isinstance(v, torch.Tensor))):
+        raise FloatingPointError('Nonfinite state after update')
+    torch.cuda.synchronize()
+    return {'LR': lr, 'update': update, 'actual_denominator': loss.valid_supervised_count,
+            'loss': float(loss.total.detach()), 'pre_clip_norm': float(pre), 'post_clip_norm': float(post),
+            'clipped': bool(pre > 5), 'wall_seconds': time.perf_counter() - started}, out
+
+def validate_payload(payload, expected):
+    # All provenance is checked before applying model/optimizer/RNG state.
+    for k, v in expected.items():
+        if payload.get(k) != v: raise ValueError('Provenance before state application: ' + k)
+    epoch = payload.get('completed_epoch')
+    if (type(epoch) is not int or not 1 <= epoch <= expected['epoch_budget'] or
+        payload.get('global_update') != epoch * STEPS or payload.get('training_completed') is not True or
+        payload.get('validation_completed') is not False or payload.get('validation_samples') != 0 or
+        payload.get('last_applied_lr') != lr_for_update(epoch * STEPS, steps_per_epoch=STEPS)):
+        raise ValueError('Complete FinalFit-only epoch boundary required')
+    order, _ = batch_plan(epoch)
+    if payload.get('coverage') != coverage(epoch, order, SCENES * 3430): raise ValueError('Coverage boundary mismatch')
+    if any(k in payload for k in ('selection', 'BEST', 'best_checkpoint_value', 'early_stopping')):
+        raise ValueError('FinalFit has no BEST/validation selection')
+    for name in ('model_state_dict', 'optimizer_state_dict', 'rng_states'):
+        if state_digest(payload[name]) != payload[name + '_sha256']: raise ValueError('State checksum mismatch: ' + name)
+    def finite(x):
+        if isinstance(x, torch.Tensor) and not torch.isfinite(x).all(): raise ValueError('Nonfinite checkpoint')
+        if isinstance(x, dict):
+            for v in x.values(): finite(v)
+        if isinstance(x, (tuple, list)):
+            for v in x: finite(v)
+    finite(payload['model_state_dict']); finite(payload['optimizer_state_dict'])
+    if expected.get('TEST_FIXTURE_ONLY') is not True:
+        t = payload['training_metrics']; c = payload['audit_counters']
+        if (t['N_valid'] != SCENES * 3430 or t['optimizer_steps'] != STEPS or
+            t['global_core_loss'] != (t['S_occ'] + t['S_qr']) / t['N_valid'] or
+            any(c[k] != epoch * STEPS for k in ('FORMAL_OPTIMIZER_STEPS', 'OPTIMIZER_STEPS_COMPLETED', 'BACKWARD_CALLS')) or
+            c['VALIDATION_FORWARD_CALLS'] != 0): raise ValueError('Actual formal count/denominator mismatch')
+        import random
+        rng=payload['rng_states'];random.Random().setstate(rng['python'])
+        np.random.RandomState().set_state(rng['numpy']);torch.Generator().set_state(rng['torch_cpu'].cpu())
+        if len(rng['torch_cuda'])!=torch.cuda.device_count():raise ValueError('CUDA RNG device count changed')
+        for i,state in enumerate(rng['torch_cuda']):torch.Generator(device=f'cuda:{i}').set_state(state.cpu())
+        state=payload['optimizer_state_dict'];identifiers=[]
+        for group in state['param_groups']:
+            name=group.get('group_name')
+            decay=1e-4 if name=='DECAY_GROUP' else 0. if name=='NO_DECAY_GROUP' else None
+            if (decay is None or group['weight_decay']!=decay or group['betas']!=(.9,.999)
+                or group['eps']!=1e-8 or group['lr']!=payload['last_applied_lr'] or
+                any(group[k] is not False for k in ('amsgrad','maximize','capturable','differentiable','foreach','fused'))):
+                raise ValueError('AdamW frozen settings changed')
+            identifiers.extend(group['params'])
+        if len(identifiers)!=len(set(identifiers)) or set(identifiers)!=set(state['state']):
+            raise ValueError('AdamW complete disjoint state coverage required')
+        for values in state['state'].values():
+            if set(values)!={'step','exp_avg','exp_avg_sq'} or float(values['step'])!=payload['global_update']:
+                raise ValueError('Actual per-parameter AdamW step boundary mismatch')
+
+def payload_for(model, optimizer, expected, epoch, complete, metrics, counters):
+    p = {**expected, 'completed_epoch': epoch, 'global_update': epoch * STEPS,
+         'last_applied_lr': lr_for_update(epoch * STEPS, steps_per_epoch=STEPS),
+         'training_completed': True, 'validation_completed': False, 'validation_samples': 0,
+         'coverage': complete, 'training_metrics': metrics, 'audit_counters': asdict(counters),
+         'model_state_dict': model.state_dict(), 'optimizer_state_dict': optimizer.state_dict(), 'rng_states': capture_rng()}
+    for n in ('model_state_dict', 'optimizer_state_dict', 'rng_states'): p[n + '_sha256'] = state_digest(p[n])
+    validate_payload(p, expected); return p
+
+def checkpoint_path(identity, expected):
+    p = Path(identity['absolute_local_path']).resolve()
+    if (p.parent != ROOTS[expected['model']].resolve() / expected['run_id'] or
+        p.name != f"epoch_{identity['epoch']:03d}.pt" or p.stat().st_size != identity['bytes'] or
+        sha256(p) != identity['sha256']): raise ValueError('Own FinalFit file identity required before deserialization')
+    return p
+
+def load_verified(identity, expected):
+    p = checkpoint_path(identity, expected); payload = torch.load(p, map_location='cpu', weights_only=False)
+    validate_payload(payload, expected)
+    if payload['completed_epoch'] != identity['epoch'] or payload['global_update'] != identity['global_update']:
+        raise ValueError('Registry boundary mismatch')
+    return payload
+
+def apply_verified(identity, expected, model, optimizer):
+    payload = load_verified(identity, expected); compatible_states(payload, model, optimizer)
+    model.load_state_dict(payload['model_state_dict'], strict=True)
+    optimizer.load_state_dict(payload['optimizer_state_dict']); restore_rng(payload['rng_states']); return payload
+
+def save_checkpoint(public, payload, expected, registry):
+    validate_payload(payload, expected)
+    local = ROOTS[expected['model']] / expected['run_id']; local.mkdir(parents=True, exist_ok=True)
+    dest = local / f"epoch_{payload['completed_epoch']:03d}.pt"
+    if dest.exists(): raise FileExistsError('Never overwrite completed checkpoint')
+    tmp = local / (dest.name + '.tmp_' + uuid.uuid4().hex)
+    with tmp.open('xb') as f: torch.save(payload, f); f.flush(); os.fsync(f.fileno())
+    digest = sha256(tmp); probe = torch.load(tmp, map_location='cpu', weights_only=False); validate_payload(probe, expected)
+    if state_digest(probe) != state_digest(payload): raise ValueError('Checkpoint roundtrip changed')
+    del probe; os.replace(tmp, dest)
+    identity = {'absolute_local_path': str(dest.resolve()), 'bytes': dest.stat().st_size, 'sha256': sha256(dest),
+        'model_state_sha256': payload['model_state_dict_sha256'], 'epoch': payload['completed_epoch'],
+        'global_update': payload['global_update'], 'model': expected['model'],
+        'protocol_sha256': expected['protocol']['sha256'], 'normalization_sha256': expected['normalization']['sha256'],
+        'finalfit_manifest_sha256': expected['manifest']['sha256'], 'binary_not_committed': True}
+    if identity['sha256'] != digest: raise ValueError('Atomic checkpoint changed')
+    registry = {**registry, 'LAST': identity}
+    if payload['completed_epoch'] == expected['epoch_budget']: registry['FINAL'] = identity
+    atomic_json(Path(public) / 'checkpoint_registry.json', registry)
+    atomic_json(Path(public) / 'last_checkpoint_identity.json', identity)
+    if 'FINAL' in registry: atomic_json(Path(public) / 'final_checkpoint_identity.json', identity)
+    return registry

@@ -1,0 +1,38 @@
+"""Strict B0-Matched then B1; any failed formal process stops without restart."""
+from pathlib import Path
+import datetime,json,os,subprocess,sys,traceback
+BASE=Path(__file__).parent;REPO=BASE/'YunTAPR-Net-push-chunks'
+active=json.loads((BASE/'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+run=Path(active['run_directory']);registry=json.loads((run/'phase_b_execution_registry.json').read_text(encoding='utf8'))
+def save(path,value):
+    with path.open('x',encoding='utf8',newline='\n') as f:json.dump(value,f,indent=2,ensure_ascii=False,allow_nan=False);f.write('\n')
+env=dict(os.environ,PYTHONUTF8='1',PYTHONHASHSEED='2026',CUBLAS_WORKSPACE_CONFIG=':4096:8',YUNTAPR_REPO_ROOT=str(REPO))
+python=Path(r'F:\pytorch\Research\.venv-cuda\Scripts\python.exe')
+try:
+    for kind in ('B0_MATCHED','B1'):
+        spec=registry['formal_runs'][kind];cap=spec['authorization']
+        cmd=[str(python),str(REPO/'scripts/paired_extended_path_adapter_v1.py'),'--script',str(REPO/'scripts/train_paired_phase_b_finalfit_extended_v1.py'),'--',
+             '--authorization',cap['path'],'--authorization-sha256',cap['sha256']]
+        save(run/(kind.lower()+'_phase_b_launch_manifest.json'),{'command':cmd,'launch_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'expected_epoch_budget':spec['epoch_budget'],'sequential_execution':True,'automatic_restart':False})
+        with (run/(kind.lower()+'_phase_b_console.log')).open('x',encoding='utf8',newline='\n') as console:
+            process=subprocess.Popen(cmd,cwd=REPO,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,encoding='utf8')
+            save(run/(kind.lower()+'_phase_b_process_identity.json'),{'pid':process.pid,'parent_pid':os.getpid(),'run_id':spec['run_id']})
+            for line in process.stdout:console.write(line);console.flush();print(line,end='',flush=True)
+            rc=process.wait()
+        statuspath=Path(spec['public_directory'])/'final_status.json'
+        status=json.loads(statuspath.read_text(encoding='utf8')) if statuspath.exists() else {'status':'NO_COMPLETED_STATUS'}
+        save(run/(kind.lower()+'_phase_b_execution_result.json'),{'returncode':rc,'status':status})
+        if (rc!=0 or status['status']!='FORMAL_PAIRED_PHASE_B_FINALFIT_COMPLETE'
+            or status['completed_epochs']!=spec['epoch_budget'] or status['FORMAL_OPTIMIZER_STEPS']!=spec['epoch_budget']*10478
+            or status['BACKWARD_CALLS']!=spec['epoch_budget']*10478 or status['VALIDATION_FORWARD_CALLS']!=0
+            or status['2025_RAW_ACCESS']!=0 or status['2025_PIXELS_READ']!=0
+            or not status['source_cleanup_state']['cleanup_success']):
+            save(run/'phase_b_sequence_STOP_failure.json',{'model':kind,'returncode':rc,'final_status':status,'next_model_launch_allowed':False})
+            raise RuntimeError('Formal FinalFit failed: preserve evidence and STOP')
+    save(run/'both_phase_b_formal_runs_completed.json',{'status':'BOTH_PHASE_B_COMPLETE','formal_runs':registry['formal_runs'],
+        '2025_RAW_ACCESS':0,'2025_FINAL_TEST_EXECUTED':False,'completed_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()})
+except BaseException as error:
+    name='phase_b_orchestration_failure_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')+'.json'
+    save(run/name,{'error':repr(error),'traceback':traceback.format_exc(),'automatic_restart':False,'next_stage_allowed':False})
+    raise

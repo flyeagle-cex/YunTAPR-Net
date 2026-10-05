@@ -1,0 +1,104 @@
+"""Synthetic contracts and isolated real-data GPU smoke before formal authority."""
+import argparse,csv,gc,io,json,os,sys,time,unittest
+from pathlib import Path
+ROOT=Path(os.environ.get('YUNTAPR_REPO_ROOT',Path(__file__).resolve().parents[1]))
+sys.path[:0]=[str(ROOT/'src'),str(ROOT),str(ROOT/'scripts')]
+import torch
+from torch.utils.data import DataLoader
+import paired_extended_v1 as x
+from prepare_paired_phase_b_extended_v1 import code_hashes
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.models.b1 import paired_models
+from yuntapr.spatial.sp04_mapping import load_sp04
+from yuntapr.data.masks import read_frozen_yunnan_mask
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--registry',required=True,type=Path)
+    args=parser.parse_args();reg=x.read(args.registry);run=Path(reg['run_directory']);prep=run/'phase_b_preparation'
+    protocol=x.read(prep/'paired_phase_b_finalfit_protocol_v1.json')
+    x.verify_pin(protocol['normalization']);scaler=x.read(protocol['normalization']['path'])
+    if protocol['training']!={'scenes':20956,'batch':2,'accumulation':1,'drop_last':False,'steps_per_epoch':10478,
+        'epoch_shuffle':'Generator seed=2026+zero_based_epoch_index','no_singleton_tail':True}:raise ValueError('Training contract changed')
+    out=prep/'pretraining_tests';out.mkdir(exist_ok=False)
+    from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+    log=io.StringIO()
+    with PreflightSourceGuard() as guard:
+        suite=unittest.defaultTestLoader.loadTestsFromName('test_paired_extended_contract_v1')
+        result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+        if guard.raw_open_events:raise PermissionError('Contract tests must never open raw')
+    (out/'contract_test_results.txt').write_text(log.getvalue(),encoding='utf8')
+    summary={'count':result.testsRun,'passed':result.wasSuccessful() and not result.skipped,
+        'errors':len(result.errors),'failures':len(result.failures),'skipped':len(result.skipped),
+        'TEST_FIXTURE_ONLY':True,'FORMAL_OPTIMIZER_STEPS':0,'RAW_SOURCE_OPENS':0}
+    x.save(out/'contract_test_summary.json',summary)
+    if not summary['passed']:raise RuntimeError('Contract tests failed; no formal cap created')
+    fw=a.RawFirewall();fw.install();contract=frozen.RunnerContract.load();frames=a.data.load_frames()
+    allowed=a.allowed_sources(contract,'B1',frames);fw.allowed={fw.key(p) for p in allowed};fw.authorized=True
+    fw.log_path=out/'preflight_raw_access.jsonl'
+    # Normalization already read/hash-verified every needed six-slot B13 frame.
+    # Recheck required source existence/size; independently hash every IMERG day.
+    source_start=time.perf_counter();imerg={r['imerg_day_path']:r['imerg_sha256'] for y in (2023,2024) for r in contract.records['B1',y]}
+    source_identities=[]
+    for i,(path,digest) in enumerate(sorted(imerg.items()),1):
+        p=a.data.guard_source(path,'IMERG');before=p.stat().st_size
+        if before<=0 or x.sha256(p)!=digest or p.stat().st_size!=before:raise ValueError('Required IMERG SHA/size preflight failed')
+        source_identities.append({'path':str(p),'bytes':before,'sha256':digest})
+        if i%25==0:print(json.dumps({'operation':'IMERG_IDENTITY_PREFLIGHT','days':i,'total':len(imerg)}),flush=True)
+    with (prep/'finalfit_six_slot_exposure_plan.csv').open(encoding='utf8',newline='') as f:
+        plan=list(csv.DictReader(f))
+    for r in plan:
+        p=a.data.guard_source(a.data.H_ROOT/r['relative_path'],'B13')
+        if not p.is_file() or p.stat().st_size!=int(r['source_bytes']):raise ValueError('Required B13 existence/size changed')
+    x.save(out/'required_source_identity_preflight.json',{'status':'PASS','required_unique_B13_frames':len(plan),
+        'B13_SHA_evidence':'Each unique frame streamed through SHA-verified normalization staging',
+        'B13_SHA_evidence_pin':x.pin(prep/'normalization_execution.json'),'IMERG_days':source_identities,
+        'elapsed_seconds':time.perf_counter()-source_start,'2025_RAW_ACCESS':0})
+    mapping=load_sp04();mask=read_frozen_yunnan_mask(Path(contract.protocol['identity']['yunnan_mask']['path']),mapping)
+    from train_b0_phase_b_finalfit_v1 import environment
+    environment_info=environment();results={};engineering_steps=backward_calls=0
+    for kind in ('B0_MATCHED','B1'):
+        public=out/kind;public.mkdir();manifest=x.verify_pin(protocol['manifests'][kind])
+        with manifest.open(encoding='utf8',newline='') as f:rows=list(csv.DictReader(f))
+        stage=a.data.STAGE_ROOT/('extended_paired_'+run.name+'_'+kind.lower()+'_engineering')
+        cap={'AUTHORIZED':True,'model':kind,'operation':'ENGINEERING_ONLY_REAL_BATCH2_PREFLIGHT',
+             '2025_raw_access':False,'authority':protocol['authority'],'normalization_sha256':protocol['normalization']['sha256'],
+             'FORMAL_OPTIMIZER_STEPS':0,'TEST_FIXTURE_ONLY':True}
+        x.save(public/'engineering_authorization.json',cap)
+        dataset=x.FinalFitDataset(kind,rows,frames,mapping,mask,stage);dataset.scaler=scaler
+        dataset.context={'public':str(public),'authorization':x.pin(public/'engineering_authorization.json'),
+                         'allowed_sources':a.allowed_sources(contract,kind,frames),
+                         'normalization_sha256':protocol['normalization']['sha256']}
+        # Two frozen 2023 identities, both paths tested at u=1 and warmup end.
+        loader=DataLoader(dataset,batch_sampler=[[0,1]],num_workers=2,pin_memory=False,persistent_workers=False,
+            prefetch_factor=1,worker_init_fn=x.worker_init,collate_fn=a.data.collate)
+        with a.loader_items(loader) as iterator:items=next(iterator)
+        anchor,temporal,initial=paired_models();a.verify_initialization(anchor,temporal,initial)
+        model=temporal if kind=='B1' else anchor;del anchor,temporal;gc.collect();model=model.cuda().train()
+        if x.state_digest(model.state_dict())!=x.INITIAL[kind]:raise ValueError('Engineering fresh replay mismatch')
+        optimizer,groups=frozen.optimizer_for(model,kind);batch=a.data.make_batch(items)
+        local=[]
+        for u in (1,10478):
+            metrics,output=x.execute_update(model,optimizer,batch,u)
+            if metrics['actual_denominator']!=6860 or metrics['LR']!=x.lr_for_update(u,steps_per_epoch=10478):
+                raise ValueError('Engineering denominator/scheduler failed')
+            engineering_steps+=1;backward_calls+=1;local.append(metrics);del output
+        if local[-1]['LR']!=1e-4:raise ValueError('Warmup end must equal exact base LR')
+        cleanup=x.staging_state(stage)
+        if not cleanup['cleanup_success']:raise IOError('Engineering owned staging remains')
+        results[kind]={'status':'PASS','sample_ids':batch.sample_ids,'initialization':initial,'updates':local,
+            'ENGINEERING_ONLY':True,'FORMAL_OPTIMIZER_STEPS':0,'synthetically_forced_u_does_not_imply_skipped_formal_updates':True,
+            'optimizer_groups':groups,'cleanup':cleanup,'formal_checkpoint_created':False}
+        del batch,items,optimizer,model,dataset;gc.collect();torch.cuda.empty_cache()
+    x.save(out/'engineering_gpu_preflight.json',{'status':'PASS','models':results,'environment':environment_info,
+        'ENGINEERING_OPTIMIZER_STEPS':engineering_steps,'ENGINEERING_BACKWARD_CALLS':backward_calls,
+        'FORMAL_OPTIMIZER_STEPS':0,'all_engineering_model_optimizer_artifacts_discarded':True,
+        '2025_RAW_ACCESS':0,'2025_PIXELS_READ':0,'formal_checkpoint_created':False})
+    gate={'status':'PASS_REGRESSION_CONTRACT_ENGINEERING_PREFLIGHT','contract_tests':summary,
+        'engineering_preflight':x.pin(out/'engineering_gpu_preflight.json'),
+        'source_identity_preflight':x.pin(out/'required_source_identity_preflight.json'),
+        'code_hashes':code_hashes(),'protocol':x.pin(prep/'paired_phase_b_finalfit_protocol_v1.json'),
+        'normalization':protocol['normalization'],'FORMAL_OPTIMIZER_STEPS':0,'2025_RAW_ACCESS':0,'completed_utc':x.now()}
+    x.save(prep/'pretraining_gate.json',gate);print(json.dumps(gate),flush=True)
+
+if __name__=='__main__':main()
