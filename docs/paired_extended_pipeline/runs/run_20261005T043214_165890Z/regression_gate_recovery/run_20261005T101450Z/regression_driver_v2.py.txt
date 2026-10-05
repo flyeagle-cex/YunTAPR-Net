@@ -1,0 +1,108 @@
+"""All repository regression modules, isolated fixtures, immutable attempt output."""
+from contextlib import nullcontext
+from pathlib import Path
+import datetime,gc,hashlib,io,json,os,shutil,sys,tempfile,unittest,uuid
+from unittest.mock import patch
+BASE=Path(__file__).parent;REPO=BASE/'YunTAPR-Net-push-chunks'
+sys.path[:0]=[str(REPO/'src'),str(REPO),str(REPO/'scripts')]
+import torch,netCDF4
+from yuntapr.training import formal_phase_b as legacy
+extended=json.loads((BASE/'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+active=json.loads((BASE/'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+run=Path(extended['run_directory']);a_run=Path(active['run_directory'])
+assert (a_run/'both_formal_runs_completed.json').exists(),'Never run artifact checks as if unfinished formal training passed'
+stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+out=run/'full_regression'/stamp;out.mkdir(parents=True,exist_ok=False)
+fixture_parent=Path(r'C:\Users\chenerxiao\.codex\visualizations\2026\09\27\01a0e260-daf4-7292-a541-ec5e83b0661d\tmp\extended_regression')
+fixture=fixture_parent/stamp;fixture.mkdir(parents=True,exist_ok=False)
+from paired_pipeline_fixture_scope_v1 import FixtureScope
+fixture_scope=FixtureScope(BASE)
+env={
+ 'YUNTAPR_PROTOCOL_DRYRUN_EVIDENCE':'docs/phase_a_optimizer_dryrun/runs/run_20261001T030242Z',
+ 'YUNTAPR_SCIENTIFIC_REVIEW_EVIDENCE':'docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z',
+ 'YUNTAPR_PHASE_B_PREPARATION_EVIDENCE':'docs/phase_b_finalfit_preparation/runs/run_20261002T014649_144967Z',
+ 'YUNTAPR_PHASE_B_RUNNER_EVIDENCE':'docs/phase_b_formal_runner/runs/run_20261002T031500_884240Z',
+ 'YUNTAPR_PHASE_B_FORMAL_EVIDENCE':'docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z',
+ 'YUNTAPR_FINAL_TEST_PREFLIGHT_EVIDENCE':'docs/final_test_b0/preflight/run_20261002T152029_621524Z',
+ 'B0_CATALOGUE_ARTIFACT_RUN':'docs/final_test_b0/catalogue_gate_v1_1/catalogue_only_runs/run_20261003T015507_526850Z'}
+os.environ.update({k:str(REPO/v) for k,v in env.items()})
+os.environ.update(TEST_FIXTURE_ONLY='true',TEMP=str(fixture),TMP=str(fixture),TORCHINDUCTOR_CACHE_DIR=str(fixture/'torchinductor'),
+    YUNTAPR_PAIRED_AUTHORIZATION_REGISTRY=str(a_run/'authorization_registry.json'),YUNTAPR_REPO_ROOT=str(REPO),
+    YUNTAPR_SYNTHETIC_FIXTURE_ROOT=str(fixture))
+tempfile.tempdir=str(fixture);sys.dont_write_bytecode=True;torch.set_num_threads(2)
+inventory=json.loads((REPO/env['YUNTAPR_PHASE_B_RUNNER_EVIDENCE']/'engineering_preflight.json').read_text(encoding='utf8'))['implementation_sha256']
+snapshot=fixture/'legacy_inventory';snapshot.mkdir()
+for rel,digest in inventory.items():
+    p=REPO/rel;assert hashlib.sha256(p.read_bytes()).hexdigest()==digest,rel
+    dest=snapshot/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+from paired_pipeline_frozen_inventory_v2 import verify_frozen_inventory
+verified_inventory=verify_frozen_inventory(REPO,inventory)
+original_inventory=legacy.implementation_hashes;assert original_inventory(snapshot)==verified_inventory
+from paired_pipeline_historical_inventory_v1 import historical_final_test_fixture,scoped_final_test_suite
+from yuntapr.evaluation import final_test_b0 as historical_final_test_module
+final_test_snapshot=historical_final_test_fixture(REPO,fixture/'historical_final_test_inventory',
+    REPO/env['YUNTAPR_FINAL_TEST_PREFLIGHT_EVIDENCE']/'preflight_manifest.json',historical_final_test_module)
+allowed_current={Path(v['checkpoint_directory']).resolve() for v in active['formal_runs'].values()}
+roots=[r'h:\葵花202303_202510'+'\\',r'f:\云南极端降水数据\raw\imerg'+'\\']
+checkpoint_prefix=r'f:\pytorch\research\outputs\formal_training'+'\\'
+enabled={'value':True};raw_events={'count':0};counts={'TEST_FIXTURE_OPTIMIZER_STEPS':0,'TEST_FIXTURE_BACKWARD_CALLS':0}
+def textpath(value):return os.fsdecode(value).replace('/','\\').lower()
+def audit(event,args):
+    if not enabled['value']:return
+    if event=='open' and isinstance(args[0],(str,bytes,os.PathLike)):
+        value=textpath(args[0]);mode=args[1] if args[1] is not None else args[2]
+        writing=isinstance(mode,str) and any(c in mode for c in 'wax+') or isinstance(mode,int) and mode&(os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC)
+        if any(value.startswith(root) for root in roots):raise PermissionError('All actual raw access prohibited in regression fixtures')
+        if value.startswith(checkpoint_prefix) and writing:raise PermissionError('All formal checkpoint writes prohibited in regression fixtures')
+        if writing:
+            p=Path(args[0]).resolve()
+            if not p.is_relative_to(fixture.resolve()) and not p.is_relative_to(out.resolve()) and not fixture_scope.allows(p):
+                raise PermissionError('Regression write outside owned fixture/report: '+str(p))
+    if event in ('os.remove','os.rename','os.rmdir'):
+        for p in args[:2]:
+            if isinstance(p,(str,bytes,os.PathLike)) and (textpath(p).startswith(checkpoint_prefix) or any(textpath(p).startswith(r) for r in roots)):
+                raise PermissionError('Formal checkpoint/source mutation prohibited')
+sys.addaudithook(audit)
+oldload=torch.load;oldstep=torch.optim.AdamW.step;oldback=torch.Tensor.backward;oldds=netCDF4.Dataset
+def load(path,*args,**kwargs):
+    if isinstance(path,(str,bytes,os.PathLike)) and textpath(path).startswith(checkpoint_prefix):
+        p=Path(path).resolve()
+        if not any(p.is_relative_to(r) for r in allowed_current):
+            raise PermissionError('Historical model/optimizer checkpoint deserialization prohibited in test fixtures')
+    return oldload(path,*args,**kwargs)
+def step(self,*args,**kwargs):counts['TEST_FIXTURE_OPTIMIZER_STEPS']+=1;return oldstep(self,*args,**kwargs)
+def backward(self,*args,**kwargs):counts['TEST_FIXTURE_BACKWARD_CALLS']+=1;return oldback(self,*args,**kwargs)
+def dataset(path,*args,**kwargs):
+    if any(textpath(path).startswith(r) for r in roots):raise PermissionError('Real raw netCDF rejected before decode')
+    return oldds(path,*args,**kwargs)
+modules=['.'.join(p.relative_to(REPO).with_suffix('').parts) for p in sorted((REPO/'tests').rglob('test*.py'))]
+results=[];log=io.StringIO();cleanup=False
+try:
+    with patch.object(torch,'load',load),patch.object(torch.optim.AdamW,'step',step),patch.object(torch.Tensor,'backward',backward),patch.object(netCDF4,'Dataset',dataset):
+        for module in modules:
+            scope='READ_ONLY_CURRENT_PHASE_A_ARTIFACTS' if module=='tests.paired_phase_a_authorized.test_formal_artifacts' else 'TEST_FIXTURE_ONLY_OR_READ_ONLY_IDENTITY_ARTIFACTS'
+            context=patch.object(legacy,'implementation_hashes',side_effect=lambda:original_inventory(snapshot)) if module in ('tests.formal_phase_b.test_finalfit','tests.formal_phase_b_execution.test_execution') else nullcontext()
+            with context:
+                suite=unittest.defaultTestLoader.loadTestsFromName(module)
+                if module=='tests.final_test_b0.test_final_test':
+                    suite=scoped_final_test_suite(suite,historical_final_test_module,final_test_snapshot)
+                result=unittest.TextTestRunner(stream=log,verbosity=2).run(suite)
+            item={'module':module,'scope':scope,'count':result.testsRun,'passed':result.wasSuccessful() and not result.skipped,
+                  'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped)}
+            results.append(item);print(json.dumps(item),flush=True);gc.collect()
+            if not item['passed']:break
+finally:
+    enabled['value']=False;gc.collect();torch.cuda.empty_cache()
+    assert fixture.resolve().parent==fixture_parent.resolve()
+    shutil.rmtree(fixture);cleanup=not fixture.exists() and fixture_scope.cleanup_complete()
+summary={'status':'PASS' if all(r['passed'] for r in results) and len(results)==len(modules) and cleanup else 'FAIL_IMMUTABLE_ATTEMPT',
+    'suites':results,'total_count':sum(r['count'] for r in results),'all_repository_modules_executed':len(results)==len(modules),
+    'fixture_cleanup_success':cleanup,'TEST_FIXTURE_ONLY':True,**counts,'FORMAL_OPTIMIZER_STEPS':0,
+    'RAW_SOURCE_OPENS':raw_events['count'],'2025_RAW_ACCESS':0,'2025_PIXELS_READ':0,
+    'formal_checkpoints_never_applied_to_fixture_models':True,
+    'legacy_inventory_fixture_independently_SHA_verified':True,'legacy_inventory_patch_scope':'Only inherited formal_phase_b and formal_phase_b_execution tests; exact historical code bytes',
+    'current_frozen_files_independently_verified':len(verified_inventory),'historical_test_bytes_unchanged':True}
+(out/'test_results.txt').write_text(log.getvalue(),encoding='utf8')
+(out/'test_summary.json').write_text(json.dumps(summary,indent=2),encoding='utf8')
+print(json.dumps({'attempt_directory':str(out),**summary}),flush=True)
+if summary['status']!='PASS':print(log.getvalue(),flush=True);raise SystemExit(1)

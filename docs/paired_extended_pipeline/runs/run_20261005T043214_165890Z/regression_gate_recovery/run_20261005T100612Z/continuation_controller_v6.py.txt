@@ -1,0 +1,201 @@
+"""Approved regression-gate recovery; append-only journal, unchanged production bytes.
+
+Reuse the complete, hash-verified preparation from v5. Only the historical inventory
+test changes under researcher approval. Every later gate retains its original runner.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import traceback
+import urllib.request
+
+import execute_yuntapr_extended_pipeline_resumed_v5 as previous
+
+BASE, REPO, PYTHON = previous.BASE, previous.REPO, previous.PYTHON
+sha, read, write_new, atomic_replace = previous.sha, previous.read, previous.write_new, previous.atomic_replace
+RUN = REPO / "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z"
+OLD_JOURNAL = RUN / "sequential_execution_v4"
+RECOVERY = RUN / "regression_gate_recovery/run_20261005T100612Z"
+JOURNAL = RUN / "sequential_execution_recovery_20261005T100612Z"
+TEST = REPO / "tests/formal_phase_b_execution/test_execution.py"
+BASELINE_MANIFEST = REPO / "docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z/run_manifest.json"
+
+
+def now():
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def production_inventory():
+    gate = read(RUN / "phase_b_preparation/pretraining_gate.json")
+    actual = {rel: sha(REPO / rel) for rel in gate["code_hashes"]}
+    if actual != gate["code_hashes"]:
+        raise PermissionError("Production code changed after the completed preflight")
+    return actual
+
+
+def baseline_comparison():
+    expected = read(BASELINE_MANIFEST)["checkpoint_expected"]["implementation_sha256"]
+    actual = {p.relative_to(REPO).as_posix(): sha(p)
+              for p in sorted((REPO / "src/yuntapr").rglob("*.py"))}
+    runner = "scripts/train_b0_phase_b_finalfit_v1.py"
+    actual[runner] = sha(REPO / runner)
+    missing = sorted(set(expected) - set(actual))
+    changed = {rel: {"expected": digest, "actual": actual.get(rel)}
+               for rel, digest in expected.items() if rel in actual and actual[rel] != digest}
+    added = {rel: actual[rel] for rel in sorted(set(actual) - set(expected))}
+    if len(expected) != 39 or missing or changed:
+        raise PermissionError("Frozen baseline implementation file missing or changed")
+    return {"frozen_files_verified": len(expected), "current_files": len(actual),
+            "missing": missing, "changed": changed, "later_modules": added,
+            "later_module_count": len(added), "baseline_manifest_sha256": sha(BASELINE_MANIFEST)}
+
+
+def validate():
+    ext = read(previous.EXT_POINTER)
+    resume = read(previous.RESUME_POINTER)
+    if Path(ext["run_directory"]).resolve() != RUN.resolve():
+        raise PermissionError("Active run differs from the approved regression recovery")
+    if Path(resume["pipeline_journal"]).resolve() != OLD_JOURNAL.resolve():
+        raise PermissionError("Unexpected active journal; do not overwrite or retry")
+    if not PYTHON.is_file() or not Path(r"H:\葵花202303_202510").is_dir():
+        raise FileNotFoundError("Frozen interpreter or H: source unavailable")
+    if sha(ext["authority_path"]) != ext["authority_sha256"]:
+        raise PermissionError("Original researcher authorization changed")
+    authority = read(ext["authority_path"])
+    if (authority.get("raw_2025_access_allowed") or authority.get("final_test_2025_authorized")
+            or authority.get("b2_training_authorized")):
+        raise PermissionError("2025 outcome and B2 training must remain sealed")
+    failures = list(OLD_JOURNAL.glob("STOP_failure_*.json"))
+    if len(failures) != 1 or read(failures[0])["stage"] != "all_repository_regressions":
+        raise PermissionError("Recovery requires the specific immutable regression-gate stop")
+    for stage in ("finalfit_union_and_shared_scaler", "gpu_and_source_preflight"):
+        if read(OLD_JOURNAL / f"{stage}_result.json")["returncode"] != 0:
+            raise PermissionError("Preparation prerequisite did not pass: " + stage)
+    summaries = sorted((RUN / "full_regression").glob("*/test_summary.json"))
+    failed = read(summaries[-1])
+    bad = [suite for suite in failed["suites"] if not suite["passed"]]
+    if (len(bad) != 1 or bad[0]["module"] != "tests.formal_phase_b_execution.test_execution"
+            or bad[0]["failures"] != 1 or bad[0]["errors"] or bad[0]["skipped"]
+            or not failed["fixture_cleanup_success"] or failed["FORMAL_OPTIMIZER_STEPS"]
+            or failed["2025_RAW_ACCESS"]):
+        raise PermissionError("Previous test failure is outside the approved inventory correction")
+    failed_log = summaries[-1].parent / "test_results.txt"
+    if "FAIL: test_all_baseline_runner_code_hashes_unchanged" not in failed_log.read_text(encoding="utf-8"):
+        raise PermissionError("Expected baseline inventory failure not evidenced")
+    target = (RECOVERY / "targeted_test_results.txt").read_text(encoding="utf-8-sig")
+    if "Ran 15 tests" not in target or "\nOK" not in target or "FAILED" in target:
+        raise PermissionError("Corrected artifact suite and negative-case unit tests must pass")
+    plan = read(OLD_JOURNAL / "execution_plan.json")
+    for path, digest in plan["source_inventory"].items():
+        if sha(path) != digest:
+            raise PermissionError("Original authorized stage bytes changed: " + path)
+    if (RUN / "phase_b_execution_registry.json").exists():
+        raise PermissionError("Phase-B has already been authorized; inspect before continuation")
+    for kind in ("b0_matched", "b1"):
+        if (REPO / f"config/training/{kind}_phase_b_finalfit_extended_authorization_v1.json").exists():
+            raise PermissionError("Existing Phase-B authorization must not be overwritten")
+    if JOURNAL.exists():
+        raise FileExistsError("Recovery journal exists; automatic restart is prohibited")
+    production = production_inventory()
+    comparison = baseline_comparison()
+    with urllib.request.urlopen("http://127.0.0.1:8765/api/status", timeout=10) as response:
+        status = json.load(response)
+    if status.get("state") not in {"FAILED", "PROCESS_NOT_DETECTED"} or status.get("processes"):
+        raise PermissionError("Observer reports concurrent or unresolved pipeline activity")
+    return ext, resume, plan, summaries[-1], failures[0], production, comparison
+
+
+def run_pipeline():
+    ext, resume, plan, failed_summary, failed_stop, production, comparison = validate()
+    JOURNAL.mkdir(exist_ok=False)
+    approval = {
+        "researcher_confirmation": "是，以后只要是自动化脚本运行，你不需要实时监控，可以直接写一个让我可以看见的可视化程序，跑完之后我会告诉你脚本运行完毕",
+        "recorded_utc": now(), "bound_commit": subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
+        "scope": "Correct only the historical regression inventory comparison: verify every frozen path/hash, permit subsequently added modules; create a new regression attempt and continue the original authorized gates only on PASS.",
+        "runtime_preference": "Browser visualization; no continuous assistant polling; researcher notifies on completion",
+        "original_extended_authority": {"path": ext["authority_path"], "sha256": ext["authority_sha256"]},
+        "failed_attempt_preserved": {"path": str(failed_summary), "sha256": sha(failed_summary)},
+        "failed_stop_preserved": {"path": str(failed_stop), "sha256": sha(failed_stop)},
+        "test_before": {"path": str(RECOVERY / "historical_test_before.py.txt"), "sha256": sha(RECOVERY / "historical_test_before.py.txt")},
+        "test_after": {"path": str(TEST), "sha256": sha(TEST)},
+        "targeted_tests": {"path": str(RECOVERY / "targeted_test_results.txt"), "sha256": sha(RECOVERY / "targeted_test_results.txt"), "count": 15, "passed": True},
+        "production_code_unchanged": True, "normalization_refit": False,
+        "2025_RAW_ACCESS": 0, "FINAL_TEST_2025_AUTHORIZED": False, "B2_TRAINING_AUTHORIZED": False,
+    }
+    write_new(RECOVERY / "researcher_recovery_approval.json", approval)
+    write_new(RECOVERY / "baseline_inventory_comparison.json", comparison)
+    prep_pins = {str(p): sha(p) for p in sorted((RUN / "phase_b_preparation").rglob("*")) if p.is_file()}
+    old_journal_pins = {str(p): sha(p) for p in sorted(OLD_JOURNAL.rglob("*")) if p.is_file()}
+    inventory = dict(plan["source_inventory"])
+    for p in (Path(__file__), Path(previous.__file__), previous.ADAPTER, TEST):
+        inventory[str(p.resolve())] = sha(p)
+    stages = plan["stages"]
+    write_new(JOURNAL / "execution_plan.json", {
+        "source_inventory": inventory, "stages": stages,
+        "continued_stages": [s[0] for s in stages[2:]], "prior_journal": str(OLD_JOURNAL),
+        "approval": {"path": str(RECOVERY / "researcher_recovery_approval.json"), "sha256": sha(RECOVERY / "researcher_recovery_approval.json")},
+        "preparation_sha256": prep_pins, "prior_journal_sha256": old_journal_pins,
+        "production_code_sha256": production, "production_code_changed": False,
+        "automatic_restart_after_failure": False, "started_utc": now(),
+        "2025_RAW_ACCESS": 0, "FINAL_TEST_2025_AUTHORIZED": False, "B2_TRAINING_AUTHORIZED": False,
+    })
+    for stage in ("finalfit_union_and_shared_scaler", "gpu_and_source_preflight"):
+        for suffix in ("start", "result"):
+            value = read(OLD_JOURNAL / f"{stage}_{suffix}.json")
+            value["inherited_by_identity"] = {"path": str(OLD_JOURNAL / f"{stage}_{suffix}.json"),
+                                             "sha256": sha(OLD_JOURNAL / f"{stage}_{suffix}.json")}
+            write_new(JOURNAL / f"{stage}_{suffix}.json", value)
+    with previous.RESUME_POINTER.open("rb") as source, (JOURNAL / "resume_registry_before.json").open("xb") as target:
+        shutil.copyfileobj(source, target)
+    resume["pipeline_journal"] = str(JOURNAL)
+    atomic_replace(previous.RESUME_POINTER, resume)
+    env = dict(os.environ, PYTHONUTF8="1", PYTHONHASHSEED="2026", CUBLAS_WORKSPACE_CONFIG=":4096:8",
+               YUNTAPR_REPO_ROOT=str(REPO), PYTHONDONTWRITEBYTECODE="1")
+    stage_name = "PREFLIGHT"
+    try:
+        for stage_name, script, args in stages[2:]:
+            for path, digest in {**inventory, **prep_pins, **old_journal_pins}.items():
+                if sha(path) != digest:
+                    raise PermissionError("Pinned source or inherited immutable evidence changed: " + path)
+            production_inventory()
+            cmd = [str(PYTHON), str(previous.ADAPTER), "--repo", str(REPO), "--allowlist-json",
+                   str(JOURNAL / "execution_plan.json"), "--script", script, "--", *args]
+            write_new(JOURNAL / f"{stage_name}_start.json", {"command": cmd, "utc": now(), "2025_RAW_ACCESS": 0})
+            with (JOURNAL / f"{stage_name}_console.txt").open("x", encoding="utf-8", newline="\n") as log:
+                proc = subprocess.Popen(cmd, cwd=REPO, env=env, stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
+                write_new(JOURNAL / f"{stage_name}_process.json", {"pid": proc.pid, "parent_pid": os.getpid(), "utc": now()})
+                for line in proc.stdout:
+                    log.write(line); log.flush()
+                    print(stage_name + ": " + line, end="", flush=True)
+                code = proc.wait()
+            write_new(JOURNAL / f"{stage_name}_result.json", {"returncode": code, "utc": now(), "2025_RAW_ACCESS": 0})
+            if code != 0:
+                raise RuntimeError("Authorized stage failed; preserve and STOP: " + stage_name)
+        write_new(JOURNAL / "core_pipeline_completion.json", {"status": "ALL_AUTHORIZED_NUMERICAL_STAGES_COMPLETED",
+            "FINAL_TEST_2025_AUTHORIZED": False, "2025_RAW_ACCESS": 0, "B2_TRAINING_AUTHORIZED": False,
+            "reports_visual_QA_and_Git_publication": "PENDING_SEPARATE_OPERATIONS", "utc": now()})
+    except BaseException as exc:
+        write_new(JOURNAL / ("STOP_failure_" + dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ") + ".json"),
+                  {"stage": stage_name, "error": repr(exc), "traceback": traceback.format_exc(),
+                   "automatic_restart": False, "next_stage_allowed": False, "2025_RAW_ACCESS": 0, "utc": now()})
+        raise
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verify-only", action="store_true")
+    args = parser.parse_args()
+    if args.verify_only:
+        verified = validate()
+        print(json.dumps({"status": "REGRESSION_RECOVERY_PREFLIGHT_PASS", "baseline": verified[-1],
+                          "normalization_refit": False, "2025_RAW_ACCESS": 0}, ensure_ascii=False))
+    else:
+        run_pipeline()

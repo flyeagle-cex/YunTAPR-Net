@@ -1,0 +1,325 @@
+"""Append-only continuation of the approved extended pipeline after a stopped preparation attempt.
+
+This runner preserves every prior journal, does not reuse partial normalization, and starts a
+fresh sibling run from the last verified Phase-A/scientific-review gates. The Phase-B formal
+caps are still created only by the existing gated authorization stage.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import traceback
+import urllib.request
+
+BASE = Path(__file__).resolve().parent
+REPO = BASE / "YunTAPR-Net-push-chunks"
+PYTHON = Path(r"F:\pytorch\Research\.venv-cuda\Scripts\python.exe")
+EXT_POINTER = BASE / "YunTAPR-extended-pipeline-active-v1.json"
+RESUME_POINTER = BASE / "YunTAPR-paired-resume-active-v1.json"
+OLD_JOURNAL = REPO / "docs/paired_extended_pipeline/runs/run_20261003T192249_157188Z/closure_path_recovery/run_20261004T233807_321860Z/sequential_execution_v3"
+OLD_RUN = REPO / "docs/paired_extended_pipeline/runs/run_20261003T192249_157188Z"
+V3_PLAN = OLD_JOURNAL / "execution_plan.json"
+REVIEW = OLD_RUN / "phase_a_scientific_review/paired_scientific_review.json"
+ADAPTER = BASE / "paired_extended_path_adapter_continuation_v1.py"
+
+
+def utc_now():
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def sha(path):
+    h = hashlib.sha256()
+    with Path(path).open("rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def write_new(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("x", encoding="utf-8", newline="\n") as f:
+        json.dump(value, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write("\n")
+
+
+def atomic_replace(path, value):
+    path = Path(path)
+    temp = path.with_name(path.name + ".continuation.tmp")
+    if temp.exists():
+        raise FileExistsError(temp)
+    with temp.open("x", encoding="utf-8", newline="\n") as f:
+        json.dump(value, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write("\n")
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(temp, path)
+
+
+def fresh_run_id():
+    return "run_" + dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ")
+
+
+def validate(run_id):
+    if not PYTHON.is_file():
+        raise FileNotFoundError(f"Pinned interpreter unavailable: {PYTHON}")
+    if not REPO.is_dir():
+        raise FileNotFoundError(REPO)
+    if not Path(r"H:\葵花202303_202510").is_dir():
+        raise FileNotFoundError("Frozen Himawari H: source root is unavailable")
+    ext = read(EXT_POINTER)
+    resume = read(RESUME_POINTER)
+    authority_path = Path(ext["authority_path"])
+    authority_hash = sha(authority_path)
+    if authority_hash != ext["authority_sha256"]:
+        raise PermissionError("Researcher extended authorization SHA changed")
+    authority = read(authority_path)
+    if authority.get("raw_2025_access_allowed") or authority.get("final_test_2025_authorized") or authority.get("b2_training_authorized"):
+        raise PermissionError("The 2025 and B2-training prohibitions must remain active")
+    if authority.get("phase_a_artifacts_remain_immutable") is not True:
+        raise PermissionError("Phase-A immutability is not pinned")
+
+    old_run = Path(ext["run_directory"])
+    review = read(REVIEW)
+    if review.get("status") != "PAIRED_FULL_REINFERENCE_PASS":
+        raise PermissionError("Last complete Phase-A scientific review did not pass")
+    active_journal = Path(resume["pipeline_journal"])
+    source_journal = OLD_JOURNAL
+    source_plan_path = source_journal / "execution_plan.json"
+    # A fresh sibling may follow only the narrowly audited sandbox-write denial from v4.
+    # Any scientific/data error, source read, or later-stage failure remains a hard stop.
+    if active_journal.resolve() != OLD_JOURNAL.resolve():
+        prev_root = active_journal.parent
+        failures = sorted(active_journal.glob("STOP_failure_*.json"))
+        prep = prev_root / "phase_b_preparation"
+        previous_result = read(active_journal / "finalfit_union_and_shared_scaler_result.json")
+        previous_console = (active_journal / "finalfit_union_and_shared_scaler_console.txt").read_text(encoding="utf-8")
+        if (len(failures) != 1 or previous_result.get("returncode") != 1
+                or "PermissionError" not in previous_console
+                or "stage0_himawari" not in previous_console or "cache" not in previous_console
+                or "staging" not in previous_console or "WinError 5" not in previous_console
+                or (active_journal / "gpu_and_source_preflight_start.json").exists()
+                or (prev_root / "phase_b_execution_registry.json").exists()
+                or any(prep.glob("normalization_raw_access.jsonl"))
+                or any(prep.glob("normalization_frame_read_log.csv"))
+                or any(prep.glob("normalization_phase_b_shared_finalfit_v1.json"))):
+            raise PermissionError("Previous continuation failure is outside the permitted filesystem-denial recovery")
+    source_plan = read(source_plan_path)
+    for stage in ("phase_a_closure", "install_extended_additions", "full_readonly_scientific_review"):
+        result = read(source_journal / f"{stage}_result.json")
+        if result.get("returncode") != 0:
+            raise PermissionError(f"Previously completed prerequisite did not pass: {stage}")
+    if not (source_journal / "finalfit_union_and_shared_scaler_start.json").is_file():
+        raise PermissionError("Expected the preserved partial normalization attempt")
+    if (source_journal / "finalfit_union_and_shared_scaler_result.json").exists():
+        raise PermissionError("The prior normalization stage already has a terminal result")
+    if (source_journal / "STOP_failure.json").exists():
+        raise PermissionError("An immutable prior stop/failure record exists; inspect before continuation")
+
+    # The monitor is the shared read-only gate against concurrent pipeline execution.
+    with urllib.request.urlopen("http://127.0.0.1:8765/api/status", timeout=4) as response:
+        monitor = json.loads(response.read().decode("utf-8"))
+    allowed_monitor_states = {"PROCESS_NOT_DETECTED"}
+    if active_journal.resolve() != OLD_JOURNAL.resolve():
+        allowed_monitor_states.add("FAILED")
+    if monitor.get("state") not in allowed_monitor_states or monitor.get("processes"):
+        raise PermissionError("Monitor reports an active or unresolved pipeline process")
+
+    # Every previously pinned orchestrator/runner path must still match its recorded SHA.
+    inventory = source_plan["source_inventory"]
+    for path, expected in inventory.items():
+        p = Path(path)
+        if not p.is_file() or sha(p) != expected:
+            raise PermissionError(f"Pinned pipeline source changed: {p}")
+    stage4 = REPO / "scripts/prepare_paired_phase_b_extended_v1.py"
+    stage5 = REPO / "scripts/audit_paired_phase_b_preflight_extended_v1.py"
+    stage9 = REPO / "scripts/close_paired_phase_b_extended_v1.py"
+    stage10 = REPO / "scripts/prepare_paired_final_test_readiness_v1.py"
+    stage11 = BASE / "YunTAPR-extended-build/audit_b2_spectral_design_extended_v1.py"
+    pinned_hashes = set(inventory.values())
+    for p in (stage4, stage5, stage9, stage10, stage11):
+        if not p.is_file() or sha(p) not in pinned_hashes:
+            raise PermissionError(f"Stage bytes are not represented by a prior authorized source pin: {p}")
+
+    new_run = REPO / "docs/paired_extended_pipeline/runs" / run_id
+    new_journal = new_run / "sequential_execution_v4"
+    if new_run.exists() or new_journal.exists():
+        raise FileExistsError("Continuation run ID already exists")
+    # Formal checkpoint roots are checked for this new ID only; old run directories remain untouched.
+    for name in ("b0_matched_phase_b_finalfit", "b1_phase_b_finalfit"):
+        p = Path(r"F:\pytorch\Research\outputs\formal_training") / name / run_id
+        if p.exists():
+            raise FileExistsError(f"Continuation checkpoint directory already exists: {p}")
+    cap_paths = [REPO / "config/training/b0_matched_phase_b_finalfit_extended_authorization_v1.json",
+                 REPO / "config/training/b1_phase_b_finalfit_extended_authorization_v1.json"]
+    if any(p.exists() for p in cap_paths):
+        raise FileExistsError("A prior Phase-B cap exists; do not overwrite it")
+    return ext, resume, authority, review, inventory, source_plan, new_run, new_journal
+
+
+def make_continuation(run_id, verified):
+    ext, resume, authority, review, inventory, source_plan, run, journal = verified
+    run.mkdir(parents=True, exist_ok=False)
+    journal.mkdir(parents=True, exist_ok=False)
+    inherited_dir = run / "phase_a_scientific_review"
+    inherited_dir.mkdir(exist_ok=False)
+    inherited_review = inherited_dir / "paired_scientific_review.json"
+    with REVIEW.open("rb") as source, inherited_review.open("xb") as target:
+        shutil.copyfileobj(source, target)
+    if sha(inherited_review) != sha(REVIEW):
+        raise IOError("Inherited read-only scientific review copy differs")
+    write_new(run / "continuation_authorization.json", {
+        "status": "RESEARCHER_CONFIRMED_CONTINUE_AUTHORIZED_EXTENDED_PIPELINE",
+        "confirmation_received_utc": utc_now(),
+        "scope": "Continue original approved extension through its existing gates, including Phase-B shared normalization and formal paired FinalFit; Phase-B starts only after the existing source, regression, and per-model authorization gates pass.",
+        "raw_2025_access_allowed": False,
+        "final_test_2025_authorized": False,
+        "b2_training_authorized": False,
+        "source_extended_authorization_sha256": ext["authority_sha256"],
+        "prior_audit_only_stop_record_preserved": str(OLD_RUN / "phase_a_resume_audit_20261005T005847Z/scope_revision_stop.json"),
+        "prior_partial_normalization_is_not_resumed_or_overwritten": True,
+        "prior_partial_logs_preserved": str(OLD_RUN / "phase_b_preparation"),
+    })
+    write_new(run / "inherited_review_identity.json", {
+        "source_path": str(REVIEW), "source_sha256": sha(REVIEW),
+        "copied_path": str(inherited_review), "copied_sha256": sha(inherited_review),
+        "status": review["status"], "source_run_unchanged": True,
+    })
+
+    active = {"run_directory": str(run), "authority_path": ext["authority_path"],
+              "authority_sha256": ext["authority_sha256"],
+              "phase_a_active_registry": ext["phase_a_active_registry"]}
+    active_local = run / "active_registry.json"
+    write_new(active_local, active)
+    # Save byte-exact registry snapshots before switching the shared pointers used by the
+    # approved downstream authorization/training entrypoints and live monitor.
+    with EXT_POINTER.open("rb") as f, (run / "active_registry_previous.json").open("xb") as o:
+        shutil.copyfileobj(f, o)
+    with RESUME_POINTER.open("rb") as f, (run / "resume_registry_previous.json").open("xb") as o:
+        shutil.copyfileobj(f, o)
+
+    new_resume = dict(resume)
+    new_resume["pipeline_journal"] = str(journal)
+    new_resume["extension_registry_path"] = str(EXT_POINTER)
+    # Point extension consumers and the browser monitor to this fresh append-only run.
+    atomic_replace(EXT_POINTER, active)
+    atomic_replace(RESUME_POINTER, new_resume)
+
+    old_stages = source_plan["stages"]
+    # Continue at the interrupted normalization stage; prior PASS stages are inherited by
+    # exact source/result pins and are not rerun or rewritten.
+    stages = old_stages[3:]
+    write_new(journal / "execution_plan.json", {
+        "schema_version": "1.0", "source_inventory": inventory,
+        "continuation_runner": str(Path(__file__).resolve()),
+        "continuation_runner_sha256": sha(__file__),
+        "path_adapter": str(ADAPTER.resolve()),
+        "path_adapter_sha256": sha(ADAPTER),
+        "continuation_parent_run": str(OLD_RUN),
+        "prior_journal": str(OLD_JOURNAL),
+        "prior_filesystem_denial_attempt_journal": str(Path(resume["pipeline_journal"])),
+        "prior_stages_inherited": {name: read(OLD_JOURNAL / f"{name}_result.json") for name in
+                                    ("phase_a_closure", "install_extended_additions", "full_readonly_scientific_review")},
+        "inherited_review_sha256": sha(inherited_review),
+        "stages": stages,
+        "researcher_continuation_authorization": str(run / "continuation_authorization.json"),
+        "extended_authority_sha256": ext["authority_sha256"],
+        "prior_partial_normalization_preserved": str(OLD_RUN / "phase_b_preparation"),
+        "restart_policy": "FRESH_SIBLING_RUN; never resume in-memory partial histogram; never overwrite old run",
+        "automatic_restart_after_failure": False,
+        "scientific_parameters_changed": False,
+        "FINAL_TEST_2025_AUTHORIZED": False, "B2_TRAINING_AUTHORIZED": False,
+        "2025_RAW_ACCESS": 0, "started_utc": utc_now(),
+    })
+    return active_local, stages, inventory, journal, run
+
+
+def run_pipeline(run_id):
+    verified = validate(run_id)
+    active_local, stages, inventory, journal, run = make_continuation(run_id, verified)
+    env = dict(os.environ, PYTHONUTF8="1", PYTHONHASHSEED="2026",
+               CUBLAS_WORKSPACE_CONFIG=":4096:8", YUNTAPR_REPO_ROOT=str(REPO),
+               PYTHONDONTWRITEBYTECODE="1")
+    old_registry = str(EXT_POINTER)
+    new_registry = str(active_local)
+    stage_name = "PREFLIGHT"
+    try:
+        for entry in stages:
+            stage_name, script, args = entry
+            script = Path(script)
+            args = [new_registry if str(a) == old_registry else str(a) for a in args]
+            # Registry-aware stages from the previous plan receive the fresh sibling registry.
+            args = [new_registry if str(a) == str(EXT_POINTER) else str(a) for a in args]
+            if sha(__file__) != read(journal / "execution_plan.json")["continuation_runner_sha256"]:
+                raise PermissionError("Continuation orchestrator changed during execution")
+            if sha(ADAPTER) != read(journal / "execution_plan.json")["path_adapter_sha256"]:
+                raise PermissionError("Continuation adapter changed during execution")
+            for source, expected in inventory.items():
+                if sha(source) != expected:
+                    raise PermissionError("Pinned authorized source changed during execution: " + source)
+            if script.is_relative_to(REPO):
+                cmd = [str(PYTHON), str(ADAPTER), "--repo", str(REPO), "--allowlist-json",
+                       str(journal / "execution_plan.json"), "--script", str(script), "--", *args]
+            else:
+                cmd = [str(PYTHON), str(ADAPTER), "--repo", str(REPO), "--allowlist-json",
+                       str(journal / "execution_plan.json"), "--script", str(script), "--", *args]
+            write_new(journal / f"{stage_name}_start.json", {"command": cmd, "utc": utc_now(),
+                "fresh_continuation_run": str(run), "2025_RAW_ACCESS": 0})
+            print(json.dumps({"stage": stage_name, "state": "RUNNING", "run_directory": str(run), "utc": utc_now()}), flush=True)
+            with (journal / f"{stage_name}_console.txt").open("x", encoding="utf-8", newline="\n") as log:
+                proc = subprocess.Popen(cmd, cwd=REPO, env=env, stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace")
+                write_new(journal / f"{stage_name}_process.json", {"pid": proc.pid,
+                    "parent_pid": os.getpid(), "utc": utc_now()})
+                assert proc.stdout is not None
+                for line in proc.stdout:
+                    log.write(line); log.flush(); print(stage_name + ": " + line, end="", flush=True)
+                code = proc.wait()
+            write_new(journal / f"{stage_name}_result.json", {"returncode": code, "utc": utc_now(),
+                "2025_RAW_ACCESS": 0})
+            if code != 0:
+                raise RuntimeError("Authorized stage failed; preserve and STOP: " + stage_name)
+        completion = {"status": "ALL_AUTHORIZED_NUMERICAL_STAGES_COMPLETED",
+            "FINAL_TEST_2025_AUTHORIZED": False, "2025_RAW_ACCESS": 0,
+            "B2_TRAINING_AUTHORIZED": False, "formal_training": "completed only under separate model-specific caps",
+            "reports_visual_QA_and_Git_publication": "PENDING_SEPARATE_OPERATIONS", "utc": utc_now()}
+        write_new(journal / "core_pipeline_completion.json", completion)
+        print(json.dumps(completion, ensure_ascii=False), flush=True)
+    except BaseException as exc:
+        name = "STOP_failure_" + dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S_%fZ") + ".json"
+        write_new(journal / name, {"stage": stage_name, "error": repr(exc),
+            "traceback": traceback.format_exc(), "automatic_restart": False,
+            "next_stage_allowed": False, "2025_RAW_ACCESS": 0, "utc": utc_now()})
+        raise
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--verify-only", action="store_true")
+    parser.add_argument("--run-id", default=None)
+    args = parser.parse_args()
+    run_id = args.run_id or fresh_run_id()
+    verified = validate(run_id)
+    if args.verify_only:
+        print(json.dumps({"status": "CONTINUATION_PREFLIGHT_PASS", "run_id": run_id,
+            "interrupted_normalization_will_restart_as_fresh_sibling": True,
+            "old_logs_preserved": True, "phase_a_review": verified[3]["status"],
+            "remaining_stages": [s[0] for s in verified[5]["stages"][3:]],
+            "2025_RAW_ACCESS": 0, "B2_TRAINING_AUTHORIZED": False}, ensure_ascii=False), flush=True)
+        return
+    run_pipeline(run_id)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,60 @@
+test_engineering_config_all_explicit (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_engineering_config_all_explicit) ... ok
+test_exact_axis_match_rejects_flip_and_reconstructed_rounding (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_exact_axis_match_rejects_flip_and_reconstructed_rounding) ... ok
+test_membership_10000_by_25_and_orientation (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_membership_10000_by_25_and_orientation) ... ok
+test_projection_real_indices_not_reshape_or_flip (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_projection_real_indices_not_reshape_or_flip) ... ok
+test_status_and_unset_development_parameters (tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests.test_status_and_unset_development_parameters) ... ok
+test_b13_packed_fill_and_partial (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_b13_packed_fill_and_partial) ... ok
+test_causal_latest_and_no_fallback (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_causal_latest_and_no_fallback) ... ok
+test_dataset_partial_and_2025_october_roles (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_dataset_partial_and_2025_october_roles) ... ok
+test_forbidden_imports_absent_and_no_formal_checkpoint (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_forbidden_imports_absent_and_no_formal_checkpoint) ... ok
+test_masked_loss_denominator_and_empty_rain (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_masked_loss_denominator_and_empty_rain) ... ok
+test_metric_excludes_invalid_target (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_metric_excludes_invalid_target) ... ok
+test_missing_focal_development_values_fail_loudly (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_missing_focal_development_values_fail_loudly) ... ok
+test_v07_final_provenance_requires_metadata_and_manifest (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_v07_final_provenance_requires_metadata_and_manifest) ... ok
+test_zero_is_valid_missing_excluded (tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_zero_is_valid_missing_excluded) ... ok
+test_full_forward_shapes_and_quantile_support (tests.b0_skeleton.test_b0_skeleton.ModelTests.test_full_forward_shapes_and_quantile_support) ... ok
+test_full_model_backward_finite_engineering_only (tests.b0_skeleton.test_b0_skeleton.ModelTests.test_full_model_backward_finite_engineering_only) ... ok
+test_head_backward_and_state_dict_reload_engineering_only (tests.b0_skeleton.test_b0_skeleton.ModelTests.test_head_backward_and_state_dict_reload_engineering_only) ... ok
+test_tau_exact_and_strict_failure (tests.b0_skeleton.test_b0_skeleton.ModelTests.test_tau_exact_and_strict_failure) ... ok
+test_wrong_input_or_mask_fails (tests.b0_skeleton.test_b0_skeleton.ModelTests.test_wrong_input_or_mask_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 5.534s
+
+OK
+test_missing_other_band_remains_b0_candidate (tests.b0_skeleton.test_b13_only_candidate.B13OnlyCandidateTests.test_missing_other_band_remains_b0_candidate) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK
+test_every_real_frame_read_sha_size_cleanup_and_io_totals (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_every_real_frame_read_sha_size_cleanup_and_io_totals) ... ok
+test_independent_float32_decode_and_centered_variance_replay (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_independent_float32_decode_and_centered_variance_replay) ... ok
+test_real_completion_and_train_only_exposure_denominator (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_real_completion_and_train_only_exposure_denominator) ... ok
+test_real_execution_no_outcome_model_or_parameter_operations (tests.b1_scientific_freeze.test_freeze_artifacts.NormalizationArtifactTests.test_real_execution_no_outcome_model_or_parameter_operations) ... ok
+test_only_approved_items_frozen_and_training_unauthorized (tests.b1_scientific_freeze.test_freeze_artifacts.ProtocolArtifactTests.test_only_approved_items_frozen_and_training_unauthorized) ... ok
+test_exact_approved_common_intersection_membership (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_exact_approved_common_intersection_membership) ... ok
+test_formal_exact_counts_order_unique_roles_and_target_identities (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_formal_exact_counts_order_unique_roles_and_target_identities) ... ok
+test_signed_references_and_all_1941_historical_files_unchanged (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_signed_references_and_all_1941_historical_files_unchanged) ... ERROR
+test_six_causal_source_sha_bindings_and_control_latest (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_six_causal_source_sha_bindings_and_control_latest) ... ok
+test_train_exposure_rebuilt_independently_from_six_nominal_columns (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_train_exposure_rebuilt_independently_from_six_nominal_columns) ... ok
+test_window_start_targets_excluded_with_no_february_slots (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_window_start_targets_excluded_with_no_february_slots) ... ok
+
+======================================================================
+ERROR: test_signed_references_and_all_1941_historical_files_unchanged (tests.b1_scientific_freeze.test_freeze_artifacts.SampleSetArtifactTests.test_signed_references_and_all_1941_historical_files_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\b1_scientific_freeze\test_freeze_artifacts.py", line 68, in test_signed_references_and_all_1941_historical_files_unchanged
+    self.assertEqual(f.verify_history(self.artifact_run),1941)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\data\b1_scientific_freeze.py", line 39, in verify_history
+    def verify_history(run):return audit.verify_history(read(run/'history_before.json'))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\data\b1_temporal_audit.py", line 214, in verify_history
+    raise ValueError('Immutable baseline history changed')
+ValueError: Immutable baseline history changed
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.280s
+
+FAILED (errors=1)

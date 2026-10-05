@@ -1,0 +1,60 @@
+"""Metadata-only recovery checks; owned fixtures; no raw data or optimizer actions."""
+import io
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+BASE = Path(__file__).resolve().parent
+REPO = BASE / "YunTAPR-Net-push-chunks"
+OUT = REPO / "docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z/regression_gate_recovery/run_20261005T101450Z"
+FIXTURE = OUT / "targeted_fixture_attempt3"
+FIXTURE.mkdir(exist_ok=False)
+os.environ.update(PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", TEMP=str(FIXTURE), TMP=str(FIXTURE),
+    YUNTAPR_PHASE_B_FORMAL_EVIDENCE=str(REPO / "docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z"))
+tempfile.tempdir = str(FIXTURE)
+sys.path[:0] = [str(REPO / "src"), str(REPO), str(REPO / "scripts")]
+
+def audit(event, args):
+    if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+        value = os.fsdecode(args[0]).replace("/", "\\").lower()
+        if value.startswith(("h:\\", "f:\\云南极端降水数据\\raw\\")):
+            raise PermissionError("Actual raw source opens prohibited in targeted recovery fixtures")
+sys.addaudithook(audit)
+
+from yuntapr.training import formal_phase_b as legacy
+from paired_pipeline_frozen_inventory_v2 import verify_frozen_inventory
+import torch
+
+expected = json.loads((Path(os.environ["YUNTAPR_PHASE_B_FORMAL_EVIDENCE"]) / "run_manifest.json").read_text(encoding="utf8"))["checkpoint_expected"]["implementation_sha256"]
+
+class ScopedArtifactSuite(unittest.TestSuite):
+    def run(self, result, debug=False):
+        with patch.object(legacy, "implementation_hashes", side_effect=lambda: verify_frozen_inventory(REPO, expected)):
+            return super().run(result, debug)
+
+suite = unittest.TestSuite([
+    unittest.defaultTestLoader.loadTestsFromName("tests.paired_pipeline_frozen_inventory.test_inventory"),
+    unittest.defaultTestLoader.loadTestsFromName("tests.b1_scientific_freeze.test_freeze_artifacts"),
+    ScopedArtifactSuite(unittest.defaultTestLoader.loadTestsFromName("tests.formal_phase_b_execution.test_execution"))])
+log = io.StringIO()
+with patch.object(torch.Tensor, "backward", side_effect=AssertionError("Metadata checks cannot call backward")), \
+     patch.object(torch.optim.AdamW, "step", side_effect=AssertionError("Metadata checks cannot update parameters")):
+    result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+cleanup = not any(FIXTURE.iterdir())
+if cleanup:
+    FIXTURE.rmdir()
+with (OUT / "targeted_test_results_attempt3.txt").open("x", encoding="utf8") as output:
+    output.write(log.getvalue())
+summary = {"count": result.testsRun, "passed": result.wasSuccessful() and not result.skipped,
+    "failures": len(result.failures), "errors": len(result.errors), "skipped": len(result.skipped),
+    "fixture_cleanup_success": cleanup, "historical_test_bytes_unchanged": True,
+    "frozen_code_files_verified": len(verify_frozen_inventory(REPO, expected)),
+    "FORMAL_OPTIMIZER_STEPS": 0, "BACKWARD_CALLS": 0, "RAW_SOURCE_OPENS": 0, "2025_RAW_ACCESS": 0}
+with (OUT / "targeted_test_summary.json").open("x", encoding="utf8") as output:
+    json.dump(summary, output, indent=2)
+print(json.dumps(summary))
+sys.exit(0 if summary["passed"] and result.testsRun == 27 and cleanup else 1)
