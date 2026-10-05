@@ -1,0 +1,1428 @@
+追加扩大授权：
+
+YunTAPR-Net
+UNATTENDED EXTENDED PIPELINE
+
+Phase-A Completion
+→ Scientific Review
+→ Paired Phase-B FinalFit
+→ Final-Test Readiness Package
+→ B2 Scientific Design / 2023-2024 Audit
+
+我预计约 9 小时后回来。
+
+在冻结条件满足的情况下，
+不需要等待我逐阶段在线确认。
+
+当前基线：
+
+6c7d436cfbab70f3d9ef181c59c938ca14bb3afa
+
+Frozen Phase-A protocol SHA256：
+
+284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6
+
+Development normalization SHA256：
+
+656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31
+
+
+==================================================
+A. 总体原则
+==================================================
+
+本追加授权允许在无人值守期间依次完成：
+
+STAGE 1
+B0-Matched Phase-A
+
+STAGE 2
+B1 Phase-A
+
+STAGE 3
+Phase-A post-training scientific review
++ paired comparison
+
+STAGE 4
+B0-Matched + B1
+Phase-B FinalFit preparation
+
+STAGE 5
+B0-Matched + B1
+Phase-B FinalFit
+
+STAGE 6
+Phase-B integrity / provenance closure
+
+STAGE 7
+2025 Final Test readiness package ONLY
+
+STAGE 8
+B2 scientific-design preparation
++ 2023/2024 data availability audit
+IF AND ONLY IF
+authoritative B2 channel definition
+can be found in existing frozen project evidence.
+
+绝对禁止：
+
+2025 model inference
+2025 Final Test
+2025 outcome inspection
+B2 formal training
+B3-B8 training
+
+
+任何必须改变已经冻结科学定义的情况：
+
+STOP。
+
+
+==================================================
+B. Phase-A 正式训练
+==================================================
+
+继续按已授权规则执行：
+
+1.
+B0-Matched-Control
+
+2.
+B1
+
+
+严格顺序。
+
+不得并行。
+
+
+Phase-A：
+
+Train = 10455
+Validation = 10501
+
+batch = 2
+accumulation = 1
+steps/epoch = 5228
+validation batch = 8
+
+W = 5228
+U = 261400
+
+max epochs = 50
+
+early stopping patience = 8
+min_delta = 1e-4
+
+
+两个模型分别独立：
+
+BEST
+early stopping
+completed epoch
+
+
+B0-Matched 失败：
+
+不启动 B1。
+
+保存失败证据并 STOP。
+
+
+B0-Matched 成功：
+
+继续 B1。
+
+
+==================================================
+C. Phase-A 完成后的自动科学审阅
+==================================================
+
+两个 Phase-A 均成功后：
+
+对两个 BEST checkpoint
+重新执行完整：
+
+2024 Validation
+10501 scenes
+
+只读 inference。
+
+
+核验：
+
+global core loss
+L_occ
+L_qr
+Brier
+AUROC
+AP
+
+conditional mean pinball
+
+32 tau pinball
+32 tau coverage
+coverage error
+
+crossing
+support violation
+nonfinite
+
+N_valid
+N_rain
+prevalence
+
+
+training-time BEST validation
+
+vs
+
+post-training reinference
+
+必须 reconciliation PASS。
+
+
+不得：
+
+重新选择 BEST
+校准
+调 threshold
+改变 metric。
+
+
+==================================================
+D. Paired Phase-A comparison
+==================================================
+
+Primary：
+
+B0-Matched BEST
+vs
+B1 BEST
+
+
+同一：
+
+10501 Validation scenes
+
+
+计算：
+
+Delta_core =
+B1_core - B0_matched_core
+
+
+以及：
+
+relative_delta_core_percent
+
+
+辅助报告：
+
+Delta Brier
+Delta AUROC
+Delta AP
+Delta conditional pinball
+
+per-tau differences
+
+coverage differences
+
+
+但是：
+
+不要因为结果好坏
+决定是否运行 Phase-B。
+
+
+本追加授权提前冻结：
+
+只要两个 Phase-A
+均合法完成并通过 integrity audit，
+
+则：
+
+B0-Matched 和 B1
+都进入 Phase-B FinalFit。
+
+
+这是预先决定的
+paired continuation，
+
+不是对 B1 科学优劣的认可。
+
+
+==================================================
+E. Phase-B epoch budget 预先冻结规则
+==================================================
+
+现在提前冻结：
+
+B0-Matched Phase-B epoch budget
+=
+B0-Matched Phase-A selected BEST epoch
+
+
+B1 Phase-B epoch budget
+=
+B1 Phase-A selected BEST epoch
+
+
+记为：
+
+E_B0 =
+B0_MATCHED_BEST_EPOCH
+
+E_B1 =
+B1_BEST_EPOCH
+
+
+不得：
+
+根据其它 metric 改 epoch
+
+不得：
+
+人工取平均
+
+不得：
+
+让两个模型强制用相同 epoch
+
+不得：
+
+根据 B1 是否优于 B0
+改变 FinalFit epoch budget。
+
+
+==================================================
+F. Phase-B FinalFit 样本集合
+==================================================
+
+Phase-B FinalFit
+必须使用冻结 common sample sets：
+
+2023 Train =
+10455
+
+2024 Validation =
+10501
+
+
+FinalFit union：
+
+10455 + 10501
+=
+20956 scenes
+
+
+两模型必须使用：
+
+完全相同 20956 scene identities。
+
+
+顺序必须固定、可复现。
+
+
+不得加入：
+
+历史 B0 原来额外的 scenes
+
+不得加入：
+
+被 M1 拒绝的 scenes
+
+不得加入：
+
+2025。
+
+
+==================================================
+G. Phase-B normalization
+==================================================
+
+Phase-B 开始前：
+
+重新计算一个
+FinalFit-only shared normalization。
+
+
+使用：
+
+2023 + 2024
+20956 common scenes
+
+
+B1 六个 slots
+全部 scene-slot exposures。
+
+
+规则继续保持：
+
+all six slots share
+ONE scaler
+
+scene-slot exposure weighting
+
+ddof=0
+
+float32 Kelvin decode
+
+moments float64
+
+transform float64
+then cast float32
+
+
+2025：
+绝对不得参与。
+
+
+得到：
+
+mean_phaseB
+std_phaseB
+normalization SHA256
+
+
+该 Phase-B scaler
+同时用于：
+
+B0-Matched
+B1
+
+
+B0-Matched 仍只输入 latest slot，
+但 preprocessing 使用同一 shared FinalFit scaler。
+
+
+目的：
+
+继续维持 paired experiment
+中 preprocessing 一致。
+
+
+不得：
+
+分别为两个模型拟合 scaler。
+
+不得：
+
+逐 slot scaler。
+
+
+==================================================
+H. Phase-B normalization audit
+==================================================
+
+必须保存：
+
+FinalFit normalization sample manifest
+
+scene-slot exposure plan
+
+unique frame identities
+
+weighted pixel count
+
+mean
+std
+ddof
+
+normalization SHA
+
+2023 exposure count
+2024 exposure count
+
+2025 exposure = 0
+
+
+验证：
+
+B0-Matched Phase-B scaler
+==
+B1 Phase-B scaler
+
+
+==================================================
+I. Phase-B fresh initialization
+==================================================
+
+两个 Phase-B：
+
+必须 fresh start。
+
+
+禁止：
+
+加载 Phase-A BEST weights
+
+禁止：
+
+加载 Phase-A LAST
+
+禁止：
+
+optimizer transfer
+
+禁止：
+
+scheduler transfer。
+
+
+使用：
+
+seed = 2026
+
+
+重新执行 paired initialization：
+
+分别 reseed=2026
+fresh B0-Matched
+fresh B1
+
+然后：
+
+same-name
+same-shape
+
+参数复制为 bit-identical。
+
+
+B1 两个 shape-different input kernels：
+
+保留自己的 deterministic fresh init。
+
+
+重新生成：
+
+Phase-B paired initialization manifest。
+
+
+==================================================
+J. Phase-B 模型与训练规则
+==================================================
+
+architecture：
+
+完全不变。
+
+
+loss：
+
+完全不变。
+
+
+optimizer：
+
+AdamW
+betas .9/.999
+eps 1e-8
+
+weight_decay 1e-4
+Conv2d kernel only
+
+
+batch：
+
+physical = 2
+accumulation = 1
+
+
+FinalFit scenes：
+
+20956
+
+
+因此：
+
+steps_per_epoch =
+
+20956 / 2
+=
+10478
+
+
+无 singleton tail。
+
+
+drop_last=false
+
+
+==================================================
+K. Phase-B scheduler
+==================================================
+
+沿用已经冻结的：
+
+SAME_EPOCH_PROGRESS_ON_50_EPOCH_HORIZON
+
+
+Phase-B：
+
+steps_per_epoch =
+10478
+
+
+因此：
+
+W_B =
+10478
+
+
+U_B =
+10478 * 50
+=
+523900
+
+
+warmup：
+
+1 complete Phase-B epoch
+
+
+cosine：
+
+固定 50-epoch mathematical horizon。
+
+
+实际训练：
+
+B0-Matched：
+E_B0 epochs
+
+B1：
+E_B1 epochs
+
+
+不得把 cosine
+压缩到 E_B0 或 E_B1。
+
+
+==================================================
+L. Phase-B 不做 Validation
+==================================================
+
+FinalFit 使用：
+
+2023 + 2024
+
+所以：
+
+不得再把 2024
+当独立 Validation。
+
+
+Phase-B：
+
+no validation
+no early stopping
+no BEST selection
+
+
+FINAL：
+
+最后一个完整 epoch。
+
+
+即：
+
+B0-Matched FINAL =
+epoch E_B0
+
+B1 FINAL =
+epoch E_B1
+
+
+角色必须标：
+
+FINAL / LAST
+
+不得标：
+
+BEST。
+
+
+==================================================
+M. Phase-B 执行顺序
+==================================================
+
+严格：
+
+B0-Matched Phase-B
+↓
+完整成功
+↓
+B1 Phase-B
+
+
+不得并行。
+
+
+如果 B0-Matched Phase-B 失败：
+
+保存证据
+STOP
+
+不运行 B1 Phase-B。
+
+
+==================================================
+N. Phase-B formal checkpoint roots
+==================================================
+
+建议：
+
+F:\pytorch\Research\outputs\formal_training\
+b0_matched_phase_b_finalfit
+
+和：
+
+F:\pytorch\Research\outputs\formal_training\
+b1_phase_b_finalfit
+
+
+每次：
+
+独立 timestamped run
+
+
+不得覆盖任何旧 run。
+
+
+==================================================
+O. Phase-B checkpoint / integrity
+==================================================
+
+每完整 epoch保存
+可验证 epoch-boundary checkpoint。
+
+
+最终至少保存：
+
+FINAL checkpoint
+
+
+登记：
+
+path
+bytes
+SHA256
+
+model state SHA
+
+epoch
+global update
+
+protocol identity
+
+FinalFit sample manifest SHA
+
+Phase-B normalization SHA
+
+initialization identity
+
+optimizer identity
+
+scheduler identity
+
+environment
+
+source identities
+
+formal update count
+
+
+如果：
+
+completed epochs = E
+
+必须满足：
+
+formal optimizer steps =
+E * 10478
+
+
+否则：
+
+STOP。
+
+
+==================================================
+P. Phase-B 成功后完整性审计
+==================================================
+
+分别核验：
+
+B0-Matched FINAL
+
+B1 FINAL
+
+
+检查：
+
+checkpoint readable
+SHA stable
+
+model parameter count
+
+no nonfinite
+
+FINAL epoch correct
+
+formal optimizer step count
+
+no validation selection
+
+no Phase-A state transfer
+
+normalization correct
+
+same FinalFit sample set
+
+paired initialization provenance
+
+historical artifacts unchanged
+
+
+不得执行 2025 inference。
+
+
+==================================================
+Q. Phase-B 训练结果的解释边界
+==================================================
+
+Phase-B training loss
+可以记录。
+
+
+但是：
+
+不得用 Phase-B train loss
+判断 generalization。
+
+
+不得写：
+
+B1 final model better
+
+B1 generalizes better
+
+
+真正泛化结论
+仍需未来冻结的 2025 Final Test。
+
+
+==================================================
+R. 2025 Final Test readiness package
+==================================================
+
+两个 Phase-B FinalFit 都成功后：
+
+允许准备：
+
+FINAL_TEST_READINESS_PACKET
+
+
+只读取：
+
+Git / repository evidence
+
+frozen 2025 catalogue identity
+
+eligible manifest identity
+
+checkpoint binary identity/hash
+
+normalization identities
+
+protocol identities
+
+
+不得打开任何 2025 raw source。
+
+
+已有冻结 2025 eligible manifest：
+
+10244 scenes
+
+
+Eligible manifest SHA256：
+
+53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e
+
+
+Candidate catalogue SHA256：
+
+b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d
+
+
+Catalogue freeze record SHA256：
+
+0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f
+
+
+readiness package
+可以绑定：
+
+B0-Matched FINAL SHA
+
+B1 FINAL SHA
+
+各自 normalization SHA
+
+2025 frozen manifest SHA
+
+evaluation protocol SHA
+
+model architecture identity
+
+
+但必须：
+
+FINAL_TEST_2025_AUTHORIZED=false
+
+
+不能创建一个能直接绕过研究者批准的
+active authorization。
+
+
+==================================================
+S. Final Test runner preflight
+==================================================
+
+允许：
+
+synthetic / fixture
+zero-2025-raw preflight
+
+
+验证未来：
+
+B0-Matched FINAL
+和
+B1 FINAL
+
+都可接入同一 frozen
+2025 eligible identity set。
+
+
+但：
+
+2025_RAW_ACCESS=0
+
+2025_MODEL_INFERENCE_SCENES=0
+
+
+不得重新构建 catalogue。
+
+
+==================================================
+T. Phase-B 成功后的科学结果包
+==================================================
+
+生成：
+
+B0_MATCHED_PHASE_B_FINALFIT_REPORT_v1
+
+B1_PHASE_B_FINALFIT_REPORT_v1
+
+B0_MATCHED_B1_FINALFIT_INTEGRITY_COMPARISON_v1
+
+FINAL_TEST_READINESS_PACKET_v1
+
+
+Markdown
+LaTeX
+PDF
+
+
+注意：
+
+FinalFit integrity comparison
+
+不是泛化性能 comparison。
+
+
+==================================================
+U. 如果 Phase-A / Phase-B 较早完成，继续 B2 准备
+==================================================
+
+如果前述所有工作完成，
+继续利用剩余时间做：
+
+B2 SCIENTIFIC DESIGN PREPARATION
++
+2023/2024 DATA AVAILABILITY AUDIT
+
+
+但只有在项目已有
+明确、权威、冻结或研究者批准的
+B2 7-channel AHI channel list
+
+能够从现有：
+
+config
+docs
+scientific freeze
+research evidence
+
+中找到时，
+才允许执行真实多通道 audit。
+
+
+不得根据常识
+自己猜 7 个 channel。
+
+
+==================================================
+V. B2 定义边界
+==================================================
+
+既有路线：
+
+B0 =
+B13 × 1
+
+B1 =
+B13 × 6
+
+B2 =
+7 AHI IR/WV channels × 1 latest causal time
+
+
+B2 的科研问题：
+
+在不增加历史时间信息的情况下，
+增加多光谱 IR/WV 信息
+带来什么变化？
+
+
+B2 不得加入：
+
+GFS
+DEM
+DOTE
+DTFM
+MEE
+ERA5
+attention
+Transformer
+RNN
+
+
+==================================================
+W. B2 若找到权威 channel list
+==================================================
+
+仅对：
+
+2023 Mar-Oct
+2024 Mar-Oct
+
+进行：
+
+source availability
+readability
+full-valid / partial / all-fill
+metadata
+causality
+
+audit。
+
+
+latest time
+继续使用：
+
+analysis_time - 10 min
+
+
+不得：
+
+读取 2025。
+
+
+不得：
+
+训练 B2。
+
+
+输出：
+
+B2 design decision packet
+
+B2 temporal/spectral audit
+
+B2 candidate sample sets
+
+B0/B1/B2 common intersection analysis
+
+
+但保持：
+
+B2_DESIGN_FROZEN=false
+
+除非所需所有规则
+已经在既有研究者批准文件中明确。
+
+
+==================================================
+X. 如果 B2 channel list 不够明确
+==================================================
+
+不要猜。
+
+
+生成：
+
+B2_CHANNEL_DEFINITION_DECISION_PACKET
+
+
+列出：
+
+现有证据中找到的候选 channel definitions
+
+来源文件
+
+是否一致
+
+缺失决策
+
+
+状态：
+
+B2_CHANNEL_SET_FROZEN=false
+
+B2_TRAINING_AUTHORIZED=false
+
+
+然后 STOP B2 路线。
+
+
+==================================================
+Y. B2 normalization 不允许擅自确定
+==================================================
+
+即使完成 2023/2024 audit：
+
+不得自动决定：
+
+per-channel scaler
+shared scaler
+channel-wise mean/std
+
+不得开始 normalization fit。
+
+
+仅形成：
+
+RESEARCHER_DECISION_REQUIRED
+
+
+除非历史正式科学合同
+已经明确冻结。
+
+
+==================================================
+Z. 2025 绝对防火墙
+==================================================
+
+整个 9 小时无人值守期间：
+
+无论进入哪个阶段：
+
+2025_RAW_ACCESS = 0
+
+2025_PIXELS_READ = 0
+
+2025_MODEL_INFERENCE_SCENES = 0
+
+2025_FINAL_TEST_EXECUTED = false
+
+
+唯一可使用的是：
+
+已经提交 Git 的
+2025 catalogue identity / hashes / evidence。
+
+
+不得打开真实：
+
+2025 Himawari
+2025 IMERG。
+
+
+==================================================
+AA. 不允许自动进入正式 B2 training
+==================================================
+
+即使 B2 audit 全部顺利：
+
+B2_TRAINING_AUTHORIZED=false
+
+
+不要训练。
+
+
+==================================================
+AB. 不允许自动执行 2025 Final Test
+==================================================
+
+即使：
+
+B1 Phase-A 很好
+
+B1 Phase-B 完成
+
+B2 audit 完成
+
+
+仍然：
+
+FINAL_TEST_2025_AUTHORIZED=false
+
+
+必须等研究者回来。
+
+
+==================================================
+AC. 失败策略
+==================================================
+
+对任何正式训练失败：
+
+不要自动改变：
+
+batch
+workers
+LR
+normalization
+sample set
+model
+precision
+epoch budget
+
+
+保存：
+
+failure evidence
+checkpoint identity
+formal update count
+source access telemetry
+cleanup state
+
+然后 STOP。
+
+
+允许：
+
+只对纯 logging/report/orchestration bug
+在完全不改变科研计算的情况下
+修复后从 verified completed epoch resume。
+
+
+必须：
+
+保留旧失败记录。
+
+
+==================================================
+AD. GitHub 发布策略
+==================================================
+
+每个重大完成节点可以提交：
+
+1.
+Phase-A closure
+
+2.
+Phase-B preparation/freeze
+
+3.
+Phase-B completion
+
+4.
+Final-Test readiness / B2 preparation
+
+
+如果全部连续完成，
+也可以使用清晰分段的 commits。
+
+
+禁止提交：
+
+.pt
+.pth
+.ckpt
+
+optimizer binary
+
+raw source
+
+cache
+staging
+
+venv
+
+
+必须提交：
+
+source
+configs
+authorization evidence
+hash identities
+CSV
+JSON
+Markdown
+LaTeX
+PDF
+tests
+reports
+
+
+==================================================
+AE. 最终我回来时要看到的总摘要
+==================================================
+
+最终回复最前面输出：
+
+==============================
+PHASE-A
+==============================
+
+B0-Matched:
+completed epochs
+BEST epoch
+BEST val_core
+BEST SHA
+formal updates
+
+B1:
+completed epochs
+BEST epoch
+BEST val_core
+BEST SHA
+formal updates
+
+Delta core
+Delta Brier
+Delta AUROC
+Delta AP
+
+
+==============================
+PHASE-B
+==============================
+
+B0-Matched:
+epoch budget E_B0
+completed epochs
+FINAL SHA
+formal updates
+
+B1:
+epoch budget E_B1
+completed epochs
+FINAL SHA
+formal updates
+
+FinalFit scenes =
+20956
+
+Phase-B normalization:
+mean
+std
+SHA
+
+steps/epoch =
+10478
+
+W =
+10478
+
+U =
+523900
+
+
+==============================
+FINAL TEST READINESS
+==============================
+
+2025 eligible scenes =
+10244
+
+B0-Matched FINAL ready =
+true/false
+
+B1 FINAL ready =
+true/false
+
+Final Test authorized =
+false
+
+2025 raw reads =
+0
+
+
+==============================
+B2
+==============================
+
+channel authoritative definition found =
+true/false
+
+2023/2024 audit completed =
+true/false
+
+candidate counts =
+...
+
+design frozen =
+true/false
+
+training authorized =
+false
+
+
+==============================
+INTEGRITY
+==============================
+
+tests =
+historical files unchanged =
+protocol violations =
+2025 access =
+GitHub latest commits =
+
+
+==================================================
+AF. 最终停止点
+==================================================
+
+允许无人值守走到：
+
+Phase-A completion
++
+Phase-A scientific review
++
+B0-Matched/B1 Phase-B FinalFit
++
+Phase-B closure
++
+Final Test readiness package
++
+B2 scientific-design/data-audit preparation
+
+
+之后：
+
+STOP。
+
+
+绝对不要：
+
+执行 2025 Final Test
+
+训练 B2
+
+开始 B3-B8。

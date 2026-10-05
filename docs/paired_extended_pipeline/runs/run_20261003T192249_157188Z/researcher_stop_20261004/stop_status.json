@@ -1,0 +1,90 @@
+{
+  "status": "STOPPED_BY_RESEARCHER",
+  "researcher_message": "先停止吧",
+  "recorded_utc": "2026-10-04T04:52:45.8495050Z",
+  "all_training_and_pipeline_processes_stopped": true,
+  "automatic_restart": false,
+  "B0_MATCHED": {
+    "status": "FORMAL_PHASE_A_COMPLETE",
+    "completed_epochs": 21,
+    "BEST_epoch": 13,
+    "FORMAL_OPTIMIZER_STEPS": 109788
+  },
+  "B1": {
+    "status": "STOPPED_DURING_EPOCH_9_VALIDATION",
+    "last_completed_epoch": 8,
+    "current_epoch": 9,
+    "last_persisted_phase": "VALIDATION",
+    "FORMAL_OPTIMIZER_STEPS": 47052,
+    "BACKWARD_CALLS": 47052,
+    "partial_validation_scenes_last_persisted": 8800,
+    "partial_validation_counter_is_not_a_completed_validation_result": true,
+    "LAST_epoch": 8,
+    "BEST_epoch": 8,
+    "LAST_checkpoint_update": 41824,
+    "incomplete_epoch_updates_not_in_LAST": 5228,
+    "epoch_009_checkpoint_exists": false
+  },
+  "preserved_checkpoint_identity_checks": [
+    {
+      "path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_phase_a\\run_20261003T093522_417735Z\\epoch_008.pt",
+      "epoch": 8,
+      "bytes": 52210347,
+      "sha256": "bca986c01cbd179e98b366d279a6bde486212a99653fc4e3743ada4ed5975e3d",
+      "size_and_sha256_pass": true
+    },
+    {
+      "path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_a\\run_20261003T093519_542831Z\\epoch_013.pt",
+      "epoch": 13,
+      "bytes": 52181547,
+      "sha256": "87f9008f506e2e2d77910736da61f494200e0cbb278756e543d236eb705b7493",
+      "size_and_sha256_pass": true
+    },
+    {
+      "path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_a\\run_20261003T093519_542831Z\\epoch_021.pt",
+      "epoch": 21,
+      "bytes": 52181547,
+      "sha256": "8c1859d99881a2016f15e643c5d634a9883e84a1cdede86e02efe2b4a10349a9",
+      "size_and_sha256_pass": true
+    }
+  ],
+  "staging_cleanup": {
+    "utc": "2026-10-04T04:50:40.2816494Z",
+    "scope": "ONLY_TWO_TEMPORARY_COPIES_OWNED_BY_STOPPED_B1_WORKERS",
+    "receipts": [
+      {
+        "absolute_path": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\authorized_paired_run_20261003T093522_417735Z\\2024\\worker_0_156908\\yuntapr_b0_c005638ffc734796b52adfeadd666776.nc",
+        "bytes": 3234963,
+        "cleanup_success": true,
+        "error": null
+      },
+      {
+        "absolute_path": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\authorized_paired_run_20261003T093522_417735Z\\2024\\worker_1_159492\\yuntapr_b0_a42e6f2fee60448eae729bb9c526195a.nc",
+        "bytes": 3146020,
+        "cleanup_success": true,
+        "error": null
+      }
+    ],
+    "remaining_file_count": 0,
+    "cleanup_success": true,
+    "H_original_files_modified": false,
+    "H_original_files_deleted": false,
+    "prior_backend_diagnostic_caches_touched": false,
+    "directories_deleted": false
+  },
+  "future_stages": {
+    "full_paired_scientific_review": "NOT_RUN",
+    "paired_phase_b_finalfit": "NOT_RUN",
+    "final_test_readiness": "NOT_RUN",
+    "B2_audit": "NOT_RUN"
+  },
+  "PIXELS_2025_READ": 0,
+  "RAW_ACCESS_2025": 0,
+  "MODEL_INFERENCE_SCENES_2025": 0,
+  "FINAL_TEST_2025_EXECUTED": false,
+  "FORMAL_TRAINING_COMPLETE": false,
+  "MODEL_OR_OPTIMIZER_BINARIES_UPLOADED": false,
+  "scientific_parameters_changed": false,
+  "checkpoint_directories_preserved": true,
+  "next_action": "Await an explicit researcher resume instruction. Any resumed execution must verify the completed epoch-boundary checkpoint and preserve this stop record; no continuation has been launched."
+}

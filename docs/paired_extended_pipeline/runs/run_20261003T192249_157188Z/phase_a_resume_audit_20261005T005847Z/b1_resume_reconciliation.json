@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "created_utc": "2026-10-05T00:58:47Z",
+  "scope": "READ_ONLY_PHASE_A_RESUME_RECONCILIATION",
+  "verified_resume_checkpoint": {
+    "epoch": 8,
+    "completed_global_update": 41824,
+    "path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_phase_a\\run_20261003T093522_417735Z\\epoch_008.pt",
+    "bytes": 52210347,
+    "sha256": "bca986c01cbd179e98b366d279a6bde486212a99653fc4e3743ada4ed5975e3d",
+    "matches_preflight_sha256": true,
+    "matches_resume_plan_stop_record_sha256": true,
+    "protocol_sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6",
+    "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+    "last_applied_lr": 9.509795896116975e-05,
+    "actual_file_sha256_recomputed_read_only": "bca986c01cbd179e98b366d279a6bde486212a99653fc4e3743ada4ed5975e3d",
+    "matches_resume_plan_completed_epoch_and_update": true,
+    "stop_record_sha256_matches_plan": true,
+    "stop_record_actual_sha256": "602e1db13dc1072b4a47159c7ede0dec3a7661b207eecee783b2f4c46594421c"
+  },
+  "accounting": {
+    "discarded_uncheckpointed_updates": 5228,
+    "retained_model_trajectory_updates": 83648,
+    "all_attempt_updates": 88876,
+    "reconciliation_identity": true,
+    "previous_interrupted_attempt_optimizer_step_events": {
+      "BACKWARD_CALL": 47052,
+      "OPTIMIZER_STEP_CALLED": 47052,
+      "OPTIMIZER_STEP_RETURNED": 47052
+    },
+    "checkpoint_loads_in_resumed_execution": 9
+  },
+  "restored_state_identity": {
+    "model": {
+      "recorded_sha256": "f866218d8166d184ded6f39f702e15d3cfea2d457a8230d85a568748f39b9845",
+      "observed_logical_sha256": "f866218d8166d184ded6f39f702e15d3cfea2d457a8230d85a568748f39b9845",
+      "match": true
+    },
+    "optimizer": {
+      "recorded_sha256": "75df88e67ac938fa95447d5f2c305054f55d9671409469832692d7ad5160de36",
+      "observed_logical_sha256": "75df88e67ac938fa95447d5f2c305054f55d9671409469832692d7ad5160de36",
+      "match": true
+    },
+    "scheduler": {
+      "type": "stateless schedule; no scheduler state_dict is serialized or restored",
+      "identity_fields": {
+        "protocol_sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6",
+        "scheduler_settings": {
+          "base_lr": 0.0001,
+          "min_lr": 1e-06,
+          "W": 5228,
+          "U": 261400,
+          "fixed_horizon_epochs": 50,
+          "rule": "ONE_BASED_LINEAR_WARMUP_THEN_FIXED_50_EPOCH_COSINE",
+          "apply_before_optimizer_step": true,
+          "min_lr_lower_bound": "COSINE_ONLY"
+        },
+        "completed_epoch": 8,
+        "global_update": 41824,
+        "last_applied_lr": 9.509795896116975e-05
+      },
+      "reconstruction": "update-index LR is a deterministic function of frozen scheduler settings and global update; no mutable scheduler payload exists"
+    },
+    "rng": {
+      "recorded_sha256": "b0acf40be13d2479bb0e2eb6579497fab2d6d54bc6340f5418cd547ebaedf8db",
+      "observed_logical_sha256": "b0acf40be13d2479bb0e2eb6579497fab2d6d54bc6340f5418cd547ebaedf8db",
+      "match": true
+    },
+    "early_stopping": {
+      "payload_selection": {
+        "best_checkpoint_value": 0.04790841807544905,
+        "selected_checkpoint_epoch": 8,
+        "early_stop_best": 0.04790841807544905,
+        "non_improvement_count": 0,
+        "completed_epoch": 8
+      },
+      "resume_preflight": "model_optimizer_rng_payload_validated_read_only=true; state_not_applied_by_preflight=true",
+      "validation_selection_state_was_applied_by_resumed_runner": "yes, to continue Phase-A from completed epoch boundary; checkpoint selection state stored at epoch 8",
+      "actual_preflight_status": "RESUME_PREFLIGHT_PASS"
+    },
+    "provenance_before_state_application": {
+      "implementation_path": "src/yuntapr/training/paired_phase_a.py",
+      "implementation_sha256": "a3fa22c048983727aebc66dbecbaf0ac6b49ad95b60102af2ec8ab809ed9338e",
+      "validation_precedes_model_optimizer_rng_application": true,
+      "preflight_verified_frozen_57_code_files_unchanged": true,
+      "original_2061_files_unchanged": true
+    }
+  },
+  "epoch9_exact_replay": {
+    "receipt_status": "REAL_FULL_EPOCH9_REPLAY_AUDITED_METRICS_EXACT_PASS",
+    "updates_compared": 5228,
+    "fields": [
+      "sample_ids",
+      "update",
+      "LR",
+      "actual_denominator",
+      "loss",
+      "pre_clip_norm",
+      "post_clip_norm",
+      "clipped",
+      "quantile_crossing",
+      "support_violation",
+      "nonfinite",
+      "probability_in_unit_interval",
+      "raw_quantile_dtype",
+      "quantile_pinball_dtype"
+    ],
+    "exact_equality": true,
+    "differences": [],
+    "extra_optimizer_steps": 0,
+    "extra_forward_calls": 0,
+    "extra_raw_reads": 0,
+    "limitation": "Recorded samples, LR, loss and gradient norms; this is not a per-update full-state SHA assertion",
+    "receipt_sha256": "c40568245885446fb9c0445932845dc45d44e4e90a9bc2efce6aa7db2974c467"
+  },
+  "retained_phase_a_final_status": "B1_RESUME_FORMAL_PHASE_A_COMPLETE",
+  "formal_training_actions_during_this_audit": {
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "model_parameter_updates": false
+  },
+  "2025_RAW_ACCESS": 0,
+  "evidence_hashes": {
+    "resume_plan.json": "55e24ff2e7c086e60daaf8b5616ae229c380344ff71bcbbe3144b38b94f97b04",
+    "preflight_status.json": "06c4d47e970b8275ce0ef2d3317f578ff26032e376c67e58ccdfb250726d4866",
+    "resume_completion.json": "e03a47775630879d33514e14325f3267d12c09666c808d5307d67863c104e7f3",
+    "B1_execution_result.json": "ca2d38d6ac7e5a10e9a58e48db3336be77c29cd0f33569c0a7283fe2c3f25380",
+    "real_replay_full_epoch9_metrics.json": "c40568245885446fb9c0445932845dc45d44e4e90a9bc2efce6aa7db2974c467"
+  }
+}

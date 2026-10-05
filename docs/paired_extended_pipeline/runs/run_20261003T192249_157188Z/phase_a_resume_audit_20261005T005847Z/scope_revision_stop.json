@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "created_utc": "2026-10-05T00:58:47Z",
+  "event": "AUTOMATIC_PIPELINE_HALTED_AT_USER_SCOPE_CHANGE; audit continued in this directory",
+  "process_status": "PROCESS_NOT_DETECTED",
+  "partial_stage": "shared B0-Matched/B1 Phase-B preparation: normalization input enumeration/read only; scaler fit did not complete",
+  "last_recorded_progress": {
+    "completed_unique_frames": 52700,
+    "total_unique_frames": 66516,
+    "weighted_pixels_so_far": 25001456607,
+    "2025_RAW_ACCESS": 0,
+    "elapsed_seconds": 2060.6244485999996
+  },
+  "partial_logs": {
+    "normalization_progress.json": {
+      "sha256": "da96c86cee8ce9c75b2efa5a15ec856457e18593b80c2c1d4a5b88fe4208d798"
+    },
+    "normalization_frame_read_log.csv": {
+      "bytes": 8197596,
+      "lines": 52713,
+      "sha256": "3b459c04ada22c2a828377eccc870b8c4335820895195f02a2250a46dd36e299"
+    },
+    "normalization_raw_access.jsonl": {
+      "bytes": 22560729,
+      "sha256": "3384f5f2db78c258ed619319e7646b43c34295aa1159a39b016e66fa98a9d40f"
+    }
+  },
+  "staging_directory": {
+    "path": "F:\\pytorch\\Research\\stage0_himawari\\cache\\staging\\extended_paired_run_20261003T192249_157188Z_normalization",
+    "observed_state": "empty; no temporary files",
+    "cleanup_success": true,
+    "raw_source_deleted": false,
+    "prior_diagnostic_cache_touched": false
+  },
+  "work_not_started": {
+    "normalization_output_or_scaler_sha256": null,
+    "GPU_preflight": false,
+    "formal_phase_b_training": false,
+    "formal_optimizer_steps": 0,
+    "backward_calls": 0,
+    "model_parameter_updates": false,
+    "2025_raw_access": 0
+  },
+  "resumption_policy": "No automatic resume from partial normalization. Current researcher instruction limits this turn to audit/evidence only; preserve these partial logs as incomplete provenance."
+}

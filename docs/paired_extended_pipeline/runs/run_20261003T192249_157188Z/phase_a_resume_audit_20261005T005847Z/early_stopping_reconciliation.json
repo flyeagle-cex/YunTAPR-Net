@@ -1,0 +1,401 @@
+{
+  "schema_version": "1.0",
+  "created_utc": "2026-10-05T00:58:47Z",
+  "audit_only": true,
+  "rule": {
+    "patience": 8,
+    "min_delta": 0.0001,
+    "checkpoint_selection": "strict new low validation core; no min_delta",
+    "early_stopping": "improve only when global_val_core_loss < best_es_value - min_delta; otherwise counter increments; stop when counter >= patience"
+  },
+  "source_code": {
+    "path": "src/yuntapr/training/phase_a_protocol.py",
+    "sha256": "95ed5a182590a8a84ee7659720a89ea7e36687800cb7e7441f60d30d795a8b19"
+  },
+  "models": [
+    {
+      "model": "B0-Matched",
+      "run_id": "run_20261003T093519_542831Z",
+      "best_checkpoint_epoch": 13,
+      "best_checkpoint_value": 0.04907351353296674,
+      "best_checkpoint_sha256": "87f9008f506e2e2d77910736da61f494200e0cbb278756e543d236eb705b7493",
+      "best_es_epoch": 13,
+      "best_es_value": 0.04907351353296674,
+      "final_early_stop_counter": 8,
+      "termination_reason": "EARLY_STOPPING_PATIENCE_REACHED",
+      "completed_epoch": 21,
+      "completed_global_update": 109788,
+      "patience": 8,
+      "min_delta": 0.0001,
+      "rule_source": "src/yuntapr/training/phase_a_protocol.py::ValidationSelection.update; strict lower checkpoint selection; ES improves iff val < previous_ES_best - 1e-4; stop iff counter >= 8",
+      "history_replay_matches_recorded_selection_and_counters": true,
+      "completed_epoch_is_first_epoch_where_counter_reaches_patience": true,
+      "epoch_trace": [
+        {
+          "epoch": 1,
+          "completed_global_update": 5228,
+          "global_val_core_loss": 0.05334208796319459,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 2,
+          "completed_global_update": 10456,
+          "global_val_core_loss": 0.05241842871259625,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 3,
+          "completed_global_update": 15684,
+          "global_val_core_loss": 0.051109492442329416,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 4,
+          "completed_global_update": 20912,
+          "global_val_core_loss": 0.05024635554748063,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 5,
+          "completed_global_update": 26140,
+          "global_val_core_loss": 0.05139889903386354,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 6,
+          "completed_global_update": 31368,
+          "global_val_core_loss": 0.049797023671939174,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 7,
+          "completed_global_update": 36596,
+          "global_val_core_loss": 0.04940153881418125,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 8,
+          "completed_global_update": 41824,
+          "global_val_core_loss": 0.0494539428764957,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 9,
+          "completed_global_update": 47052,
+          "global_val_core_loss": 0.049306866025869325,
+          "checkpoint_selected": true,
+          "early_stop_improvement": false,
+          "early_stop_counter": 2,
+          "stop": false
+        },
+        {
+          "epoch": 10,
+          "completed_global_update": 52280,
+          "global_val_core_loss": 0.04929465643199227,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 11,
+          "completed_global_update": 57508,
+          "global_val_core_loss": 0.049529345927697505,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 12,
+          "completed_global_update": 62736,
+          "global_val_core_loss": 0.05024667687073832,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 2,
+          "stop": false
+        },
+        {
+          "epoch": 13,
+          "completed_global_update": 67964,
+          "global_val_core_loss": 0.04907351353296674,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 14,
+          "completed_global_update": 73192,
+          "global_val_core_loss": 0.049331664544020784,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 15,
+          "completed_global_update": 78420,
+          "global_val_core_loss": 0.049347569104423124,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 2,
+          "stop": false
+        },
+        {
+          "epoch": 16,
+          "completed_global_update": 83648,
+          "global_val_core_loss": 0.04947893685889834,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 3,
+          "stop": false
+        },
+        {
+          "epoch": 17,
+          "completed_global_update": 88876,
+          "global_val_core_loss": 0.04938054315812303,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 4,
+          "stop": false
+        },
+        {
+          "epoch": 18,
+          "completed_global_update": 94104,
+          "global_val_core_loss": 0.049606689094641235,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 5,
+          "stop": false
+        },
+        {
+          "epoch": 19,
+          "completed_global_update": 99332,
+          "global_val_core_loss": 0.04999486102655745,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 6,
+          "stop": false
+        },
+        {
+          "epoch": 20,
+          "completed_global_update": 104560,
+          "global_val_core_loss": 0.05011869921005737,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 7,
+          "stop": false
+        },
+        {
+          "epoch": 21,
+          "completed_global_update": 109788,
+          "global_val_core_loss": 0.050820558884547874,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 8,
+          "stop": true
+        }
+      ],
+      "source_history_sha256": "42781a540fa581aee4ac5f4f0d173c83ea0517df7defab79711de924c5404013",
+      "source_checkpoint_registry_sha256": "05ae36e458707598f82d55b3ab4d3d061ab21a9e7626c2f52280d3107ae0fc94",
+      "source_final_status_sha256": "b6579cfe1106cf9c893cfb082bc24a1b630ea924f780fbde9a42e48e7d004138",
+      "status_artifact_termination_claim": "FORMAL_PHASE_A_COMPLETE"
+    },
+    {
+      "model": "B1",
+      "run_id": "run_20261003T093522_417735Z",
+      "best_checkpoint_epoch": 15,
+      "best_checkpoint_value": 0.04787160352568951,
+      "best_checkpoint_sha256": "564bec95ea18df837f3dfb9b9235c2fdabdfd601daaa03b0cd46cd7fa978a0bd",
+      "best_es_epoch": 8,
+      "best_es_value": 0.04790841807544905,
+      "final_early_stop_counter": 8,
+      "termination_reason": "EARLY_STOPPING_PATIENCE_REACHED",
+      "completed_epoch": 16,
+      "completed_global_update": 83648,
+      "patience": 8,
+      "min_delta": 0.0001,
+      "rule_source": "src/yuntapr/training/phase_a_protocol.py::ValidationSelection.update; strict lower checkpoint selection; ES improves iff val < previous_ES_best - 1e-4; stop iff counter >= 8",
+      "history_replay_matches_recorded_selection_and_counters": true,
+      "completed_epoch_is_first_epoch_where_counter_reaches_patience": true,
+      "epoch_trace": [
+        {
+          "epoch": 1,
+          "completed_global_update": 5228,
+          "global_val_core_loss": 0.05261094212844051,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 2,
+          "completed_global_update": 10456,
+          "global_val_core_loss": 0.05146283630323682,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 3,
+          "completed_global_update": 15684,
+          "global_val_core_loss": 0.050328509046382294,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 4,
+          "completed_global_update": 20912,
+          "global_val_core_loss": 0.04882147199049365,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 5,
+          "completed_global_update": 26140,
+          "global_val_core_loss": 0.05050560700337314,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 6,
+          "completed_global_update": 31368,
+          "global_val_core_loss": 0.048423741448638556,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 7,
+          "completed_global_update": 36596,
+          "global_val_core_loss": 0.04827170796736811,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 8,
+          "completed_global_update": 41824,
+          "global_val_core_loss": 0.04790841807544905,
+          "checkpoint_selected": true,
+          "early_stop_improvement": true,
+          "early_stop_counter": 0,
+          "stop": false
+        },
+        {
+          "epoch": 9,
+          "completed_global_update": 47052,
+          "global_val_core_loss": 0.04804479253616367,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 1,
+          "stop": false
+        },
+        {
+          "epoch": 10,
+          "completed_global_update": 52280,
+          "global_val_core_loss": 0.04829557035381929,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 2,
+          "stop": false
+        },
+        {
+          "epoch": 11,
+          "completed_global_update": 57508,
+          "global_val_core_loss": 0.04854466975470289,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 3,
+          "stop": false
+        },
+        {
+          "epoch": 12,
+          "completed_global_update": 62736,
+          "global_val_core_loss": 0.04829665312243324,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 4,
+          "stop": false
+        },
+        {
+          "epoch": 13,
+          "completed_global_update": 67964,
+          "global_val_core_loss": 0.048161623832933556,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 5,
+          "stop": false
+        },
+        {
+          "epoch": 14,
+          "completed_global_update": 73192,
+          "global_val_core_loss": 0.04789823972338034,
+          "checkpoint_selected": true,
+          "early_stop_improvement": false,
+          "early_stop_counter": 6,
+          "stop": false
+        },
+        {
+          "epoch": 15,
+          "completed_global_update": 78420,
+          "global_val_core_loss": 0.04787160352568951,
+          "checkpoint_selected": true,
+          "early_stop_improvement": false,
+          "early_stop_counter": 7,
+          "stop": false
+        },
+        {
+          "epoch": 16,
+          "completed_global_update": 83648,
+          "global_val_core_loss": 0.04842521762056438,
+          "checkpoint_selected": false,
+          "early_stop_improvement": false,
+          "early_stop_counter": 8,
+          "stop": true
+        }
+      ],
+      "source_history_sha256": "93a017b1e58cc3723741ca9557820a64f5fb39a91b34948f0846a6e6d8970829",
+      "source_checkpoint_registry_sha256": "ca5896bfad26aa51eaae263817fac967121ab6b5d26e2240a2b30013be1a3296",
+      "source_final_status_sha256": "5f699bee9410f87cef65ab5a0ce44cb3322a28ebfa8590de25ddcdc504dc11d9",
+      "status_artifact_termination_claim": "FORMAL_PHASE_A_COMPLETE"
+    }
+  ],
+  "2025_RAW_ACCESS": 0,
+  "MODEL_PARAMETERS_UPDATED": false,
+  "OPTIMIZER_STEPS": 0
+}
