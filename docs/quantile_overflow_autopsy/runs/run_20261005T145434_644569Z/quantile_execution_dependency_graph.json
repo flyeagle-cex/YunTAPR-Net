@@ -1,0 +1,197 @@
+{
+  "baseline": "9303f1ec99f7623439583e6e1609fbde043213db",
+  "production_code_modified": false,
+  "qlog_finite_guard_before_physical_transform": true,
+  "objective_inputs": {
+    "TRAINING_OBJECTIVE_REQUIRED": [
+      "rain_logit",
+      "conditional_quantiles_log",
+      "IMERG target",
+      "IMERG validity mask",
+      "Yunnan evaluation mask"
+    ]
+  },
+  "objective_has_physical_dependency": false,
+  "execution_has_eager_physical_dependency": true,
+  "edges": [
+    [
+      "raw FP32 head",
+      "FP64 softplus increments"
+    ],
+    [
+      "FP64 softplus increments",
+      "FP64 monotonic qlog"
+    ],
+    [
+      "FP64 monotonic qlog",
+      "finite/support/strict-order guards"
+    ],
+    [
+      "finite/support/strict-order guards",
+      "FP64 expm1"
+    ],
+    [
+      "FP64 expm1",
+      "physical finite guard"
+    ],
+    [
+      "physical finite guard",
+      "B0Output"
+    ],
+    [
+      "B0Output.rain_logit",
+      "core focal loss"
+    ],
+    [
+      "B0Output.conditional_quantiles_log",
+      "core pinball loss"
+    ],
+    [
+      "physical quantiles",
+      "threshold_censored_mean"
+    ]
+  ],
+  "physical_consumers": [
+    {
+      "file": "src/yuntapr/evaluation/final_test_b0.py",
+      "line": 393,
+      "source": "\"physical_support_violation\":int((output.conditional_quantiles_physical[:,0]<=.1).sum())}",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/metrics/deterministic.py",
+      "line": 7,
+      "source": "return output.rain_prob * output.conditional_quantiles_physical.mean(dim=1, keepdim=True)",
+      "classification": "INFERENCE_OUTPUT_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/models/probability_heads.py",
+      "line": 14,
+      "source": "conditional_quantiles_physical: torch.Tensor",
+      "classification": "INFERENCE_OUTPUT_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/models/probability_heads.py",
+      "line": 15,
+      "source": "threshold_censored_mean: torch.Tensor",
+      "classification": "INFERENCE_OUTPUT_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/formal_phase_a.py",
+      "line": 219,
+      "source": "q, physical = output.conditional_quantiles_log, output.conditional_quantiles_physical",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/phase_a_validation.py",
+      "line": 61,
+      "source": "or output.conditional_quantiles_physical.dtype != torch.float64):",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/phase_a_validation.py",
+      "line": 68,
+      "source": "physical = output.conditional_quantiles_physical.movedim(1, -1)[valid.squeeze(1)]",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/scientific_review.py",
+      "line": 177,
+      "source": "q, p = output.conditional_quantiles_log, output.conditional_quantiles_physical",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/scientific_review.py",
+      "line": 242,
+      "source": "(\"rain_logit\", \"rain_prob\", \"conditional_quantiles_log\", \"conditional_quantiles_physical\")})",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "src/yuntapr/training/scientific_review.py",
+      "line": 251,
+      "source": "physical = output.conditional_quantiles_physical.movedim(1, -1).cpu().numpy()[valid]",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/audit_b0_training_environment.py",
+      "line": 227,
+      "source": "\"qphysical_dtype\": str(output.conditional_quantiles_physical.dtype),",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/audit_b0_training_environment.py",
+      "line": 230,
+      "source": "and torch.isfinite(output.conditional_quantiles_physical).all()),",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/audit_phase_a_prefreeze.py",
+      "line": 469,
+      "source": "output.conditional_quantiles_physical, loss.total, loss.occurrence, loss.conditional_quantile))",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/benchmark_b0_gpu_feasibility.py",
+      "line": 153,
+      "source": "\"qphysical_dtype\": str(output.conditional_quantiles_physical.dtype),",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/prepare_paired_final_test_readiness_v1.py",
+      "line": 78,
+      "source": "if loss.valid_supervised_count!=3430 or not torch.isfinite(output.conditional_quantiles_physical).all():",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/quantile_numerical_closure_v1.py",
+      "line": 145,
+      "source": "and torch.isfinite(output.conditional_quantiles_physical).all() and torch.isfinite(loss.total)",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/quantile_numerical_closure_v1.py",
+      "line": 153,
+      "source": "\"qphysical_dtype\": str(output.conditional_quantiles_physical.dtype),",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/quantile_numerical_closure_v1.py",
+      "line": 168,
+      "source": "\"qphysical_finite\": bool(torch.isfinite(output.conditional_quantiles_physical).all()),",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/resume_phase_a_optimizer_v1.py",
+      "line": 260,
+      "source": "qlog, qphysical = output.conditional_quantiles_log, output.conditional_quantiles_physical",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/test_b0_2025_final_v1.py",
+      "line": 114,
+      "source": "or output.conditional_quantiles_physical.dtype!=torch.float64):",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/test_b0_2025_final_v1.py",
+      "line": 123,
+      "source": "'qphysical_dtype':str(output.conditional_quantiles_physical.dtype),'synthetic_metrics':metrics,",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/validate_b0_phase_b_preparation_v1.py",
+      "line": 159,
+      "source": "q=output.conditional_quantiles_log;physical=output.conditional_quantiles_physical",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    },
+    {
+      "file": "scripts/verify_b0_real_sample.py",
+      "line": 163,
+      "source": "output.conditional_quantiles_physical, output.threshold_censored_mean, losses.total)):",
+      "classification": "DIAGNOSTIC_REQUIRED"
+    }
+  ],
+  "active_finalfit_path": "execute_update -> forward_loss -> model -> heads -> expm1 -> physical guard -> core loss -> backward",
+  "censored_mean_extra_risk": "mean reduces physical quantiles; finite expm1 values alone do not guarantee a finite mean reduction",
+  "limitations": "Static dependency classification is not a proposal to change the frozen B0Output contract."
+}

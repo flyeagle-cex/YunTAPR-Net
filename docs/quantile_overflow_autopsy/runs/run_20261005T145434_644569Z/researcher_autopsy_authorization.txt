@@ -1,0 +1,489 @@
+任务：
+
+YunTAPR-Net
+B0-Matched Phase-B QUANTILE_PHYSICAL_OVERFLOW
+NUMERICAL AUTOPSY v1
+
+Baseline commit:
+
+9303f1ec99f7623439583e6e1609fbde043213db
+
+本轮仅诊断。
+
+禁止：
+- 恢复正式 Phase-B training
+- 启动 B1
+- 修改 frozen science
+- clamp qlog/qphysical
+- sort quantiles
+- 改 loss
+- 改 LR
+- 改 batch
+- 改 normalization
+- 改 architecture
+- 访问 2025
+
+==================================================
+1. 冻结失败身份
+==================================================
+
+失败 run：
+
+run_20261005T103053_888886Z
+
+最后可信 checkpoint：
+
+epoch = 4
+global_update = 41912
+
+SHA256 =
+5bda7d3fae1c0f6c44d4ec767f5a69749781e11ef3bb41aaa32e7d99355da8e0
+
+model_state SHA256 =
+c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7
+
+失败前实际 optimizer updates：
+
+50537
+
+失败 forward：
+
+50538
+
+因此 epoch 5：
+
+successful updates = 8625
+
+下一次 forward 触发：
+
+QUANTILE_PHYSICAL_OVERFLOW:
+expm1(qlog) nonfinite
+
+以上全部保持 immutable。
+
+==================================================
+2. 首先做静态代码路径审计
+==================================================
+
+证明并记录：
+
+A.
+monotonic_quantiles() 在 expm1 之前
+已经要求 qlog finite。
+
+B.
+core loss 使用：
+rain_logit
+conditional_quantiles_log
+
+而不是：
+conditional_quantiles_physical。
+
+C.
+conditional_quantiles_physical 当前用于：
+物理 quantile 输出
+threshold_censored_mean / diagnostics
+以及其它哪些真实路径。
+
+输出：
+
+quantile_execution_dependency_graph.json
+
+明确区分：
+
+TRAINING_OBJECTIVE_REQUIRED
+DIAGNOSTIC_REQUIRED
+INFERENCE_OUTPUT_REQUIRED
+
+不得先改代码。
+
+==================================================
+3. 分析已有 epoch 1-5 日志
+==================================================
+
+只读分析现有日志。
+
+按 update / epoch 提取：
+
+loss
+L_occ / L_qr（如有）
+LR
+pre_clip_norm
+post_clip_norm
+clip flag
+rainy count
+valid denominator
+
+如果已有其它数值：
+一并分析。
+
+重点看：
+
+epoch 4 后半段
+epoch 5 全部 8625 成功 updates
+
+检测：
+
+趋势漂移
+突然跳变
+持续 clip
+loss 爆炸
+gradient 爆炸
+周期性异常
+单一 batch 异常
+
+输出：
+
+pre_failure_training_dynamics.csv
+pre_failure_training_dynamics_report.md
+
+不得从结果反推修改参数。
+
+==================================================
+4. 隔离 ENGINEERING replay
+==================================================
+
+从 epoch 4 verified checkpoint
+建立完全隔离的 disposable clone。
+
+必须验证：
+
+checkpoint SHA
+model state SHA
+optimizer state
+RNG state
+scheduler update
+sample permutation
+
+全部一致。
+
+然后在：
+
+ENGINEERING_OVERFLOW_REPLAY_ONLY
+
+scope 下重放 epoch 5。
+
+允许：
+forward
+backward
+optimizer step
+
+但这些绝不能计入 FORMAL_OPTIMIZER_STEPS。
+
+不得生成可被正式 resume 使用的 checkpoint。
+
+目标是精确复现：
+
+前 8625 updates 成功
+第 8626 个 batch 的 forward overflow
+
+如果不能精确复现：
+
+STOP
+标记 REPRODUCTION_FAILURE。
+
+==================================================
+5. 在 replay 中增加纯观测 instrumentation
+==================================================
+
+不得改变计算结果。
+
+每个 update 至少记录：
+
+raw quantile head:
+min
+max
+mean
+std
+absmax
+
+qlog:
+global min
+global max
+per-tau max
+per-tau median
+
+softplus increments:
+max
+mean
+per-tau max
+
+backbone target features:
+min/max/mean/std/absmax
+
+occurrence logits:
+min/max
+
+parameter norms:
+global
+quantile-head weight/bias
+last decoder block
+
+optimizer moments:
+quantile head exp_avg norm
+quantile head exp_avg_sq norm
+
+gradient norms:
+quantile head
+backbone
+global pre/post clip
+
+LR
+
+sample IDs
+
+==================================================
+6. 对失败 batch 做精确捕获
+==================================================
+
+在发生 expm1 前捕获：
+
+sample IDs
+
+window_start
+analysis_time
+
+qlog max value
+qlog max location：
+batch index
+tau index
+row
+column
+
+raw head value at corresponding position
+
+32 个 qlog values at that pixel
+
+32 个 raw values at that pixel
+
+32 increments
+
+local target feature vector（48维）
+
+rain_logit
+rain_prob
+
+target IMERG value
+rain/valid status
+Yunnan mask status
+
+输入 B13：
+min/max/mean/std
+normalized min/max
+source SHA identity
+
+不得打开其它未授权数据。
+
+==================================================
+7. 计算 overflow 数学边界
+==================================================
+
+用当前实际 dtype 明确计算：
+
+float64 最大有限值对应的：
+
+log1p(max_float64)
+
+并比较：
+
+failing qlog_max
+
+报告：
+
+overflow_margin =
+qlog_max - log1p(float64_max)
+
+同时检查：
+
+float32
+float64
+
+但不得改变冻结 FP64 path。
+
+==================================================
+8. 判断 overflow 来源层级
+==================================================
+
+基于 replay 证据，把原因分类为：
+
+A.
+single-batch input/source anomaly
+
+B.
+feature activation instability
+
+C.
+quantile head parameter drift
+
+D.
+monotonic cumulative-increment explosion
+
+E.
+optimizer-state instability
+
+F.
+physical-transform-only overflow while
+log-domain optimization remains numerically finite
+
+允许多个同时成立。
+
+必须基于证据，
+不得猜。
+
+==================================================
+9. 特别检查累计单调结构
+==================================================
+
+当前：
+
+q1 = z0 + softplus(a1) + epsilon
+qi = q(i-1) + softplus(ai) + epsilon
+
+所以高 tau qlog 是 32 个正增量累计。
+
+检查失败前：
+
+每个 tau 的 qlog growth
+
+尤其：
+tau 1
+tau 8
+tau 16
+tau 24
+tau 32
+
+判断是否属于：
+
+all quantiles shift upward
+
+还是：
+
+upper-tail cumulative runaway。
+
+输出：
+
+per_tau_growth_diagnostics.csv
+
+==================================================
+10. 不允许“修复”
+==================================================
+
+本轮禁止实施：
+
+clamp
+cap
+nan_to_num
+sort
+gradient change
+different initialization
+different LR
+different weight decay
+different batch
+loss regularization
+quantile redesign
+skip physical transform
+lazy qphysical
+detach
+更改 epsilon
+
+这些只能形成候选方案。
+
+==================================================
+11. 形成三个层级的解决方案
+==================================================
+
+诊断完成后，只提出方案，不执行。
+
+分类为：
+
+OPTION A:
+纯工程路径修复
+不改变训练 objective / qlog / gradients / model parameters
+
+OPTION B:
+数值稳定性协议修改
+可能改变训练轨迹
+
+OPTION C:
+科学模型/quantile parameterization 修改
+
+每个方案必须写：
+
+是否改变科学语义
+是否改变训练轨迹
+是否需要重新跑 Phase-A
+是否需要重新跑 Phase-B from scratch
+是否影响 B0-Matched vs B1 公平性
+是否影响未来 2025 Final Test
+优缺点
+风险
+
+==================================================
+12. 特别评估一个候选，但不要执行
+==================================================
+
+评估：
+
+在 formal TRAINING path 中
+是否可以不 materialize
+conditional_quantiles_physical / threshold_censored_mean，
+
+而继续严格计算：
+
+qlog
+loss
+monotonicity
+support
+
+仅在：
+validation/inference/diagnostic
+需要物理量时再执行 expm1。
+
+必须回答：
+
+这是否属于纯工程解耦，
+还是会改变 frozen model semantics。
+
+不要实现。
+
+==================================================
+13. 输出
+==================================================
+
+生成：
+
+QUANTILE_OVERFLOW_NUMERICAL_AUTOPSY_v1.md
+QUANTILE_OVERFLOW_NUMERICAL_AUTOPSY_v1.json
+
+pre_failure_training_dynamics.csv
+per_tau_growth_diagnostics.csv
+failing_batch_identity.json
+failing_tensor_diagnostics.json
+replay_reconciliation.json
+solution_options.json
+
+可选生成 LaTeX/PDF。
+
+==================================================
+14. 状态要求
+==================================================
+
+最终必须保持：
+
+B0_MATCHED_PHASE_B_COMPLETED=false
+B1_PHASE_B_STARTED=false
+
+FORMAL_OPTIMIZER_STEPS
+不得因本轮增加。
+
+2025_RAW_ACCESS=0
+
+FORMAL_RESUME_AUTHORIZED=false
+
+输出：
+
+RESEARCHER_DECISION_REQUIRED=true
+
+然后 STOP。
+
+完成后提交 GitHub main。

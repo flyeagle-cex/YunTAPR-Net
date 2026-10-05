@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\replay.py", line 265, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\replay.py", line 255, in main
+    try:replay(args.run)
+        ^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\replay.py", line 235, in replay
+    'immutable_history':c.verify_snapshot(run),'staging':x.staging_state(stage),
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\common.py", line 94, in verify_snapshot
+    verify(ref)
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\common.py", line 53, in verify
+    if p.stat().st_size != ref['bytes'] or digest(p) != ref['sha256']:
+                                           ^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\common.py", line 28, in digest
+    with Path(path).open('rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_autopsy_v1\replay.py", line 81, in guard
+    if mutate or p!=last:raise PermissionError('No checkpoint writes or other checkpoint reads in replay')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: No checkpoint writes or other checkpoint reads in replay

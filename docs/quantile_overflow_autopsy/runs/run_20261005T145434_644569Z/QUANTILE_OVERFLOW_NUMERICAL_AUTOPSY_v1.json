@@ -1,0 +1,675 @@
+{
+  "utc": "2026-10-05T16:05:14.719080+00:00",
+  "baseline": "9303f1ec99f7623439583e6e1609fbde043213db",
+  "scope": "ENGINEERING_OVERFLOW_REPLAY_ONLY",
+  "status": {
+    "B0_MATCHED_PHASE_B_COMPLETED": false,
+    "B1_PHASE_B_STARTED": false,
+    "FORMAL_OPTIMIZER_STEPS": 50537,
+    "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+    "ENGINEERING_OPTIMIZER_STEPS": 8625,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "FORMAL_RESUME_AUTHORIZED": false,
+    "RESEARCHER_DECISION_REQUIRED": true,
+    "NUMERICAL_REPRODUCTION_VERIFIED": true,
+    "ORIGINAL_REPLAY_CLOSEOUT_PASS": false,
+    "READ_ONLY_EVIDENCE_CLOSURE_PASS": true,
+    "FINAL_CLONE_STATE_HASH_CAPTURED": false,
+    "POSTPROCESSING_OPTIMIZER_STEPS": 0,
+    "2025_MODEL_INFERENCE_SCENES": 0
+  },
+  "replay_reconciliation": {
+    "status": "REPRODUCTION_FAILURE",
+    "utc": "2026-10-05T15:50:19.851912+00:00",
+    "scope": "ENGINEERING_OVERFLOW_REPLAY_ONLY",
+    "counts": {
+      "ENGINEERING_OPTIMIZER_STEPS": 8625,
+      "ENGINEERING_BACKWARD_CALLS": 8625,
+      "ENGINEERING_FORWARD_CALLS": 8626,
+      "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+      "FORMAL_OPTIMIZER_STEPS": 50537,
+      "2025_RAW_ACCESS": 0,
+      "2025_PIXELS_READ": 0,
+      "B1_PHASE_B_STARTED": false
+    },
+    "exact_matches": {
+      "sample_ids": 8625,
+      "update": 8625,
+      "LR": 8625,
+      "actual_denominator": 8625,
+      "loss": 8625,
+      "pre_clip_norm": 8625,
+      "post_clip_norm": 8625,
+      "clipped": 8625
+    },
+    "error_type": "PermissionError",
+    "error": "No checkpoint writes or other checkpoint reads in replay",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\replay.py\", line 235, in replay\n    'immutable_history':c.verify_snapshot(run),'staging':x.staging_state(stage),\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 94, in verify_snapshot\n    verify(ref)\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 53, in verify\n    if p.stat().st_size != ref['bytes'] or digest(p) != ref['sha256']:\n                                           ^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 28, in digest\n    with Path(path).open('rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\AppData\\Roaming\\uv\\python\\cpython-3.12.14-windows-x86_64-none\\Lib\\pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\replay.py\", line 81, in guard\n    if mutate or p!=last:raise PermissionError('No checkpoint writes or other checkpoint reads in replay')\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: No checkpoint writes or other checkpoint reads in replay\n",
+    "FORMAL_RESUME_AUTHORIZED": false,
+    "RESEARCHER_DECISION_REQUIRED": true,
+    "automatic_retry": false
+  },
+  "immutable_history": {
+    "all_byte_identical": true,
+    "file_count": 114,
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "formal_optimizer_steps": 50537
+  },
+  "readonly_closeout": {
+    "status": "EXACT_NUMERICAL_REPRODUCTION_VERIFIED_WITH_CLOSEOUT_ERROR",
+    "utc": "2026-10-05T16:02:11.155763+00:00",
+    "scope": "READ_ONLY_POSTPROCESSING_NO_REPLAY",
+    "original_execution_status": "REPRODUCTION_FAILURE",
+    "original_terminal_error_preserved": {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\quantile_overflow_autopsy\\runs\\run_20261005T145434_644569Z\\replay_reconciliation.json",
+      "bytes": 2584,
+      "sha256": "ced7605bbf71a87b138d08d942c63f5bed997adb48772dbd39f1fc51979ea729"
+    },
+    "original_terminal_progress_preserved": {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\quantile_overflow_autopsy\\runs\\run_20261005T145434_644569Z\\progress.json",
+      "bytes": 803,
+      "sha256": "c2e2b2fa18d74cc7b950ef829d3ccdb4a5951a6861e1ac4b8c2228b132eae82a"
+    },
+    "numerical_reproduction_verified": true,
+    "successful_updates": 8625,
+    "failed_forward_batch": 8626,
+    "exception": "QUANTILE_PHYSICAL_OVERFLOW: expm1(qlog) nonfinite",
+    "exact_matches": {
+      "sample_ids": 8625,
+      "update": 8625,
+      "LR": 8625,
+      "actual_denominator": 8625,
+      "loss": 8625,
+      "pre_clip_norm": 8625,
+      "post_clip_norm": 8625,
+      "clipped": 8625
+    },
+    "tolerance": 0,
+    "wall_seconds_excluded": true,
+    "original_counts": {
+      "ENGINEERING_OPTIMIZER_STEPS": 8625,
+      "ENGINEERING_BACKWARD_CALLS": 8625,
+      "ENGINEERING_FORWARD_CALLS": 8626,
+      "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+      "FORMAL_OPTIMIZER_STEPS": 50537,
+      "2025_RAW_ACCESS": 0,
+      "2025_PIXELS_READ": 0,
+      "B1_PHASE_B_STARTED": false
+    },
+    "postprocessing_forward_calls": 0,
+    "postprocessing_backward_calls": 0,
+    "postprocessing_optimizer_steps": 0,
+    "postprocessing_checkpoint_deserializations": 0,
+    "postprocessing_raw_source_opens": 0,
+    "restored_state_identities": {
+      "model_state_dict": {
+        "expected": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7",
+        "actual": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7"
+      },
+      "optimizer_state_dict": {
+        "expected": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4",
+        "actual": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4"
+      },
+      "rng_states": {
+        "expected": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f",
+        "actual": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f"
+      }
+    },
+    "scheduler": {
+      "stateless": true,
+      "restored_boundary": 41912,
+      "last_lr": 9.908717827105774e-05,
+      "next_update": 41913,
+      "next_lr": 9.908712037068942e-05
+    },
+    "epoch_5_permutation_sha256": "c2ddfa325adce09d227ee51d72a2886e937bc35f63365b57dc450634ba5923b5",
+    "tau_csv_rows_verified": 276032,
+    "source_journal_audit": {
+      "scenes": 17252,
+      "verified_copies": 34504,
+      "unique_sources": 17742,
+      "raw_read_only_open_events": 69008,
+      "all_sources_match_frozen_manifest_SHA": true,
+      "all_copy_size_SHA_cleanup_checks_pass": true,
+      "temporary_bytes_cumulative": 89506953440,
+      "copy_seconds_sum_across_workers": 518.6373449001694,
+      "read_seconds_sum_across_workers": 502.6489968999267,
+      "2025_RAW_ACCESS": 0,
+      "raw_write_events": 0,
+      "no_extra_prefetch_scenes": true
+    },
+    "immutable_history": {
+      "all_byte_identical": true,
+      "file_count": 114,
+      "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+      "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+      "formal_optimizer_steps": 50537
+    },
+    "staging_cleanup_success": true,
+    "clone_final_model_state_sha256": "NOT_CAPTURED_DUE_TO_ORIGINAL_CLOSEOUT_ERROR",
+    "clone_final_optimizer_state_sha256": "NOT_CAPTURED_DUE_TO_ORIGINAL_CLOSEOUT_ERROR",
+    "formal_resume_authorized": false,
+    "B1_PHASE_B_STARTED": false,
+    "RESEARCHER_DECISION_REQUIRED": true,
+    "explanation": "The replay had already completed exact numeric reconciliation and captured the expected forward exception. Hashing earlier completed checkpoints during closeout conflicted with its LAST-only checkpoint read guard. This independent process verifies bytes and saved journals, without reconstructing or updating a model. Original failure status is not rewritten."
+  },
+  "overflow": {
+    "float32": {
+      "finfo_max": 3.4028234663852886e+38,
+      "log1p_finfo_max": 88.72283905206835,
+      "qlog_max": 721.2174966216189,
+      "overflow_margin": 632.4946575695506
+    },
+    "float64": {
+      "finfo_max": 1.7976931348623157e+308,
+      "log1p_finfo_max": 709.782712893384,
+      "qlog_max": 721.2174966216189,
+      "overflow_margin": 11.434783728234947
+    }
+  },
+  "failing_location": {
+    "batch_index": 0,
+    "tau_index_zero_based": 31,
+    "tau_ordinal": 32,
+    "tau": 0.984375,
+    "row": 99,
+    "column": 3
+  },
+  "maximum_pixel_Yunnan_mask": false,
+  "maximum_pixel_IMERG_valid": true,
+  "mechanism_classification": {
+    "A_SINGLE_BATCH_INPUT_SOURCE_ANOMALY": {
+      "status": "NOT_ESTABLISHED",
+      "evidence": "Each actual staged input passed frozen size/SHA/CF causality/full-valid checks; failing input statistics and SHA identities are preserved.",
+      "limit": "Identity/QC checks do not rule out a physically valid but unusual meteorological scene. No alternative sources or retrospective exclusions were used."
+    },
+    "B_FEATURE_ACTIVATION_INSTABILITY": {
+      "status": "QUANTIFIED_CAUSALITY_NOT_ESTABLISHED",
+      "failure_absmax": 34.14405822753906,
+      "successful_distribution": {
+        "first": 9.40334701538086,
+        "last": 19.883764266967773,
+        "min": 7.059332847595215,
+        "max": 34.64955139160156,
+        "mean": 13.218437881746153,
+        "median": 12.597566604614258,
+        "p99": 26.024492263793945,
+        "first_quarter_mean": 11.52681278740099,
+        "last_quarter_mean": 15.029061855986741,
+        "all_finite": true
+      },
+      "limit": "A changing-batch feature excursion is not proof of independent causal activation instability."
+    },
+    "C_QUANTILE_PARAMETER_DRIFT": {
+      "status": "NORM_EVOLUTION_QUANTIFIED_CAUSALITY_NOT_ESTABLISHED",
+      "weight": {
+        "first": 4.1445079644876,
+        "last": 4.2709647343674355,
+        "min": 4.1445079644876,
+        "max": 4.273620789315612,
+        "mean": 4.208859025883883,
+        "median": 4.207366891544915,
+        "p99": 4.269281691395033,
+        "first_quarter_mean": 4.163956358869341,
+        "last_quarter_mean": 4.2552186915950045,
+        "all_finite": true
+      },
+      "bias": {
+        "first": 0.5971337479763437,
+        "last": 0.6141927183642678,
+        "min": 0.5969071634844667,
+        "max": 0.6149387426821051,
+        "mean": 0.6059489004035967,
+        "median": 0.6055886336745049,
+        "p99": 0.614326794185045,
+        "first_quarter_mean": 0.5997868267531228,
+        "last_quarter_mean": 0.6122814568826374,
+        "all_finite": true
+      },
+      "limit": "Norm changes alone cannot identify harmful parameter drift; no frozen-point counterfactual intervention was executed."
+    },
+    "D_CUMULATIVE_POSITIVE_INCREMENT_OVERFLOW": {
+      "status": "DIRECT_MECHANISM_SUPPORTED",
+      "evidence": {
+        "base": 0.09531017980432487,
+        "qlog_at_tau_1": 24.899046730707646,
+        "qlog_at_tau_8": 166.86805794533964,
+        "qlog_at_tau_16": 343.23622339397315,
+        "qlog_at_tau_24": 531.7230077308615,
+        "qlog_at_tau_32": 721.2174966216189,
+        "upper_31_increment_sum": 696.3184498909117,
+        "first_increment": 24.80373655090332,
+        "reconstructed_max_pixel_qlog": 721.2174966216194,
+        "actual_max_qlog": 721.2174966216189,
+        "reconstruction_difference": 4.547473508864641e-13,
+        "important_limit": "Per-update spatial maxima use changing batches. They are not fixed-input probes and cannot alone separate weight drift from input dependence.",
+        "first_overflowing_tau_ordinal_at_pixel": 32,
+        "upper_31_fraction_of_total_increment_sum": 0.9656039752801244,
+        "pattern": "At the failure pixel q1 is elevated, with strong additional positive cumulative growth through q32. Only q32 crosses the FP64 physical boundary; this is not an equal additive shift of all quantiles."
+      },
+      "limit": "This establishes how finite raw heads accumulate to an overflowing physical transform, not an independently identified optimizer/input cause."
+    },
+    "E_OPTIMIZER_STATE_INSTABILITY": {
+      "status": "NO_NONFINITE_OPTIMIZER_STATE_OBSERVED_CAUSAL_INSTABILITY_NOT_ESTABLISHED",
+      "exp_avg": {
+        "first": 0.0033427062771154217,
+        "last": 0.004069461711994568,
+        "min": 0.0002235257725929377,
+        "max": 0.014946411992273761,
+        "mean": 0.0027729222360181596,
+        "median": 0.002255087208525794,
+        "p99": 0.00900522381075824,
+        "first_quarter_mean": 0.0029559116282877065,
+        "last_quarter_mean": 0.002802899907775662,
+        "all_finite": true
+      },
+      "exp_avg_sq": {
+        "first": 1.9313637515494872e-05,
+        "last": 1.991335128958004e-05,
+        "min": 1.890607875348424e-05,
+        "max": 2.4244656188695144e-05,
+        "mean": 2.138599996646214e-05,
+        "median": 2.1320533955262284e-05,
+        "p99": 2.392340369213931e-05,
+        "first_quarter_mean": 2.194572599435568e-05,
+        "last_quarter_mean": 2.1270099508528636e-05,
+        "all_finite": true
+      },
+      "evidence": "Frozen update verifies every parameter and moment finite after all 8625 successful replay updates; failed forward performs no backward or optimizer step."
+    },
+    "F_PHYSICAL_ONLY_OVERFLOW_WITH_FINITE_LOG_DOMAIN": {
+      "status": "SUPPORTED_FOR_OBSERVED_FORWARD_AND_READONLY_LOG_OBJECTIVE",
+      "qlog_finite": true,
+      "raw_finite": true,
+      "physical_nonfinite_count": 1,
+      "log_objective_diagnostic": {
+        "occurrence": 0.02884073369204998,
+        "quantile": 0.008627774760122917,
+        "total": 0.037468508452172894,
+        "all_finite": true,
+        "backward_calls": 0,
+        "used_for_optimizer": false,
+        "formal_loss_not_reached": true
+      },
+      "limit": "Actual frozen core loss is not reached at the failed forward. No failed-batch backward was executed, so failed-batch gradient finiteness and future optimization stability are not established."
+    }
+  },
+  "cumulative_decomposition": {
+    "base": 0.09531017980432487,
+    "qlog_at_tau_1": 24.899046730707646,
+    "qlog_at_tau_8": 166.86805794533964,
+    "qlog_at_tau_16": 343.23622339397315,
+    "qlog_at_tau_24": 531.7230077308615,
+    "qlog_at_tau_32": 721.2174966216189,
+    "upper_31_increment_sum": 696.3184498909117,
+    "first_increment": 24.80373655090332,
+    "reconstructed_max_pixel_qlog": 721.2174966216194,
+    "actual_max_qlog": 721.2174966216189,
+    "reconstruction_difference": 4.547473508864641e-13,
+    "important_limit": "Per-update spatial maxima use changing batches. They are not fixed-input probes and cannot alone separate weight drift from input dependence.",
+    "first_overflowing_tau_ordinal_at_pixel": 32,
+    "upper_31_fraction_of_total_increment_sum": 0.9656039752801244,
+    "pattern": "At the failure pixel q1 is elevated, with strong additional positive cumulative growth through q32. Only q32 crosses the FP64 physical boundary; this is not an equal additive shift of all quantiles."
+  },
+  "growth_by_tau": {
+    "1": {
+      "successful_max": {
+        "first": 3.54652159210344,
+        "last": 14.432039687539577,
+        "min": 0.18821249371749188,
+        "max": 22.9177673575387,
+        "mean": 9.080309439479663,
+        "median": 8.856779210991954,
+        "p99": 17.794152113230325,
+        "first_quarter_mean": 8.071034658932865,
+        "last_quarter_mean": 10.383868389981194,
+        "all_finite": true
+      },
+      "successful_median": {
+        "first": 0.10176004733153021,
+        "last": 0.09762279315115772,
+        "min": 0.09582950136073345,
+        "max": 0.10836826812418292,
+        "mean": 0.09809738652410785,
+        "median": 0.09776632169626918,
+        "p99": 0.10253867842605356,
+        "first_quarter_mean": 0.09819614582520399,
+        "last_quarter_mean": 0.0980630245736184,
+        "all_finite": true
+      },
+      "failed_batch_global_max": 24.899046730707646,
+      "failed_max_pixel_qlog": 24.899046730707646
+    },
+    "8": {
+      "successful_max": {
+        "first": 21.727318303168648,
+        "last": 97.0143041598107,
+        "min": 1.2852382651166925,
+        "max": 156.61971680307684,
+        "mean": 61.83790958153103,
+        "median": 60.89419023846064,
+        "p99": 122.74706392293588,
+        "first_quarter_mean": 55.76739521055493,
+        "last_quarter_mean": 69.88205641232106,
+        "all_finite": true
+      },
+      "successful_median": {
+        "first": 0.22020938790364908,
+        "last": 0.16697618480709828,
+        "min": 0.12077890589279185,
+        "max": 0.29288689659446504,
+        "mean": 0.1690294459512869,
+        "median": 0.16535203864821518,
+        "p99": 0.23224182782745303,
+        "first_quarter_mean": 0.1692348793628116,
+        "last_quarter_mean": 0.17000195934319828,
+        "all_finite": true
+      },
+      "failed_batch_global_max": 166.86805794533964,
+      "failed_max_pixel_qlog": 166.86805794533964
+    },
+    "16": {
+      "successful_max": {
+        "first": 43.82444786870479,
+        "last": 198.68303601126135,
+        "min": 2.497780955926328,
+        "max": 320.80788032553056,
+        "mean": 127.74836685926381,
+        "median": 125.90880194823508,
+        "p99": 252.75760397479394,
+        "first_quarter_mean": 115.63616263103367,
+        "last_quarter_mean": 143.71730439471503,
+        "all_finite": true
+      },
+      "successful_median": {
+        "first": 0.4134687593745548,
+        "last": 0.2659974105783394,
+        "min": 0.1656973512369689,
+        "max": 0.5848058075636936,
+        "mean": 0.27926764078360355,
+        "median": 0.26986699488519583,
+        "p99": 0.43166382520884816,
+        "first_quarter_mean": 0.2811870071659142,
+        "last_quarter_mean": 0.2803821073398783,
+        "all_finite": true
+      },
+      "failed_batch_global_max": 343.23622339397315,
+      "failed_max_pixel_qlog": 343.23622339397315
+    },
+    "24": {
+      "successful_max": {
+        "first": 66.16201453269466,
+        "last": 310.83609961622443,
+        "min": 3.6435451147488744,
+        "max": 501.7307401298906,
+        "mean": 198.00718569105592,
+        "median": 195.62611731665373,
+        "p99": 393.2849616532043,
+        "first_quarter_mean": 178.94678476292077,
+        "last_quarter_mean": 222.92705023245338,
+        "all_finite": true
+      },
+      "successful_median": {
+        "first": 0.7121161986603913,
+        "last": 0.44678378494616244,
+        "min": 0.2824472483817165,
+        "max": 0.9865540760729042,
+        "mean": 0.4787975218525481,
+        "median": 0.46474877998283365,
+        "p99": 0.7366592390495256,
+        "first_quarter_mean": 0.4844307651103808,
+        "last_quarter_mean": 0.4777153017859623,
+        "all_finite": true
+      },
+      "failed_batch_global_max": 531.7230077308615,
+      "failed_max_pixel_qlog": 531.7230077308615
+    },
+    "32": {
+      "successful_max": {
+        "first": 89.78619792576768,
+        "last": 422.0358053734487,
+        "min": 6.850995979351557,
+        "max": 679.287446526666,
+        "mean": 268.17990788008757,
+        "median": 264.9733648416252,
+        "p99": 529.3487152515569,
+        "first_quarter_mean": 241.42665909371496,
+        "last_quarter_mean": 302.9077462106446,
+        "all_finite": true
+      },
+      "successful_median": {
+        "first": 1.7172300268849676,
+        "last": 1.3138405175367942,
+        "min": 0.9581323074090711,
+        "max": 2.129394008649358,
+        "mean": 1.394606515759734,
+        "median": 1.383158891204689,
+        "p99": 1.7824008871765797,
+        "first_quarter_mean": 1.3984275730003188,
+        "last_quarter_mean": 1.3744035627138855,
+        "all_finite": true
+      },
+      "failed_batch_global_max": 721.2174966216189,
+      "failed_max_pixel_qlog": 721.2174966216189
+    }
+  },
+  "successful_update_distributions": {
+    "feature_absmax": {
+      "first": 9.40334701538086,
+      "last": 19.883764266967773,
+      "min": 7.059332847595215,
+      "max": 34.64955139160156,
+      "mean": 13.218437881746153,
+      "median": 12.597566604614258,
+      "p99": 26.024492263793945,
+      "first_quarter_mean": 11.52681278740099,
+      "last_quarter_mean": 15.029061855986741,
+      "all_finite": true
+    },
+    "raw_max": {
+      "first": 5.792724609375,
+      "last": 23.447141647338867,
+      "min": 0.7955443859100342,
+      "max": 37.86621856689453,
+      "mean": 15.272853740885639,
+      "median": 15.018821716308594,
+      "p99": 29.401294708251953,
+      "first_quarter_mean": 13.546194654117047,
+      "last_quarter_mean": 17.32392085621441,
+      "all_finite": true
+    },
+    "qlog_max": {
+      "first": 89.78619792576768,
+      "last": 422.0358053734487,
+      "min": 6.850995979351557,
+      "max": 679.287446526666,
+      "mean": 268.17990788008757,
+      "median": 264.9733648416252,
+      "p99": 529.3487152515569,
+      "first_quarter_mean": 241.42665909371496,
+      "last_quarter_mean": 302.9077462106446,
+      "all_finite": true
+    },
+    "increment_max": {
+      "first": 5.795869630299226,
+      "last": 23.447241647338867,
+      "min": 1.1681285304459408,
+      "max": 37.866318566894535,
+      "mean": 15.273730691385216,
+      "median": 15.018922016507108,
+      "p99": 29.401394708251953,
+      "first_quarter_mean": 13.547111681181615,
+      "last_quarter_mean": 17.3247771387174,
+      "all_finite": true
+    },
+    "param_global": {
+      "first": 64.42827288270325,
+      "last": 67.56156353818353,
+      "min": 64.42827288270325,
+      "max": 67.56156353818353,
+      "mean": 66.01316860528819,
+      "median": 65.99496634732738,
+      "p99": 67.51864555688391,
+      "first_quarter_mean": 64.83654254018815,
+      "last_quarter_mean": 67.18634970123105,
+      "all_finite": true
+    },
+    "param_quantile_weight": {
+      "first": 4.1445079644876,
+      "last": 4.2709647343674355,
+      "min": 4.1445079644876,
+      "max": 4.273620789315612,
+      "mean": 4.208859025883883,
+      "median": 4.207366891544915,
+      "p99": 4.269281691395033,
+      "first_quarter_mean": 4.163956358869341,
+      "last_quarter_mean": 4.2552186915950045,
+      "all_finite": true
+    },
+    "param_quantile_bias": {
+      "first": 0.5971337479763437,
+      "last": 0.6141927183642678,
+      "min": 0.5969071634844667,
+      "max": 0.6149387426821051,
+      "mean": 0.6059489004035967,
+      "median": 0.6055886336745049,
+      "p99": 0.614326794185045,
+      "first_quarter_mean": 0.5997868267531228,
+      "last_quarter_mean": 0.6122814568826374,
+      "all_finite": true
+    },
+    "param_last_decoder": {
+      "first": 13.699885192413992,
+      "last": 14.14345381968633,
+      "min": 13.699885192413992,
+      "max": 14.143528391001094,
+      "mean": 13.921399631835229,
+      "median": 13.931680544068445,
+      "p99": 14.13102714745042,
+      "first_quarter_mean": 13.75708366243855,
+      "last_quarter_mean": 14.08050681251847,
+      "all_finite": true
+    },
+    "Adam_exp_avg": {
+      "first": 0.0033427062771154217,
+      "last": 0.004069461711994568,
+      "min": 0.0002235257725929377,
+      "max": 0.014946411992273761,
+      "mean": 0.0027729222360181596,
+      "median": 0.002255087208525794,
+      "p99": 0.00900522381075824,
+      "first_quarter_mean": 0.0029559116282877065,
+      "last_quarter_mean": 0.002802899907775662,
+      "all_finite": true
+    },
+    "Adam_exp_avg_sq": {
+      "first": 1.9313637515494872e-05,
+      "last": 1.991335128958004e-05,
+      "min": 1.890607875348424e-05,
+      "max": 2.4244656188695144e-05,
+      "mean": 2.138599996646214e-05,
+      "median": 2.1320533955262284e-05,
+      "p99": 2.392340369213931e-05,
+      "first_quarter_mean": 2.194572599435568e-05,
+      "last_quarter_mean": 2.1270099508528636e-05,
+      "all_finite": true
+    },
+    "gradient_quantile": {
+      "first": 0.020467803379776522,
+      "last": 0.0090070911251941,
+      "min": 0.0,
+      "max": 0.11675493489194198,
+      "mean": 0.010170024651355187,
+      "median": 0.006186551798647471,
+      "p99": 0.056158382700928745,
+      "first_quarter_mean": 0.010624982040637238,
+      "last_quarter_mean": 0.01000896737252004,
+      "all_finite": true
+    },
+    "gradient_backbone": {
+      "first": 0.1251659933390534,
+      "last": 0.08085643275584586,
+      "min": 0.001934077342747082,
+      "max": 0.8293650623070157,
+      "mean": 0.10836626136270577,
+      "median": 0.08800985361464063,
+      "p99": 0.405994944134953,
+      "first_quarter_mean": 0.11128506101961377,
+      "last_quarter_mean": 0.10690538638066477,
+      "all_finite": true
+    }
+  },
+  "growth_interpretation": "At the failure pixel q1 is elevated, with strong additional positive cumulative growth through q32. Only q32 crosses the FP64 physical boundary; this is not an equal additive shift of all quantiles. Changing-batch growth cannot establish a unique upstream cause or a new scientific instability threshold.",
+  "solutions": {
+    "implemented": false,
+    "researcher_decision_required": true,
+    "options": [
+      {
+        "option": "A",
+        "level": "ENGINEERING_PATH_DECOUPLING_PROPOSAL_ONLY",
+        "proposal": "Separate log-domain training computation from eager physical materialization; retain expm1 and physical guards where physical outputs are required.",
+        "scientific_semantics": "Objective/qlog/support/monotonicity can remain identical. The frozen eager B0Output and failure-contract semantics WOULD change; therefore this is not an automatically approved purely internal change.",
+        "training_trajectory": "Can be identical before the previous overflow only after deterministic output/loss/gradient/state equivalence tests. There is no original successful trajectory beyond forward 50538 to compare.",
+        "redo_Phase_A": "Not mathematically required by an exactly unchanged objective alone; researcher must review model-output contract, validation/selection path and physical diagnostics before accepting reuse of historical Phase-A evidence.",
+        "redo_Phase_B_from_scratch": "Requires an explicit new execution decision. A clean new run from scratch is the conservative proposal; this audit grants no resume or restart authority.",
+        "B0_vs_B1_fairness": "Use the same approved path and checks for both; never silently patch only one model.",
+        "2025_Final_Test": "Still sealed. Physical overflow must have a predeclared validation/inference failure policy before any future evaluation; no outcome-guided changes.",
+        "pros": [
+          "Preserves the established log-domain objective if equivalence is demonstrated",
+          "Avoids materializing unused physical quantities inside the optimization step"
+        ],
+        "risks": [
+          "Does not bound physical quantiles or solve inference overflow",
+          "Removing an eager guard changes which updates can occur",
+          "threshold_censored_mean reduction can overflow even if individual quantiles are finite"
+        ]
+      },
+      {
+        "option": "B",
+        "level": "NUMERICAL_STABILITY_PROTOCOL_PROPOSAL_ONLY",
+        "proposal": "Researcher-designed changes to optimization/stability controls; no specific LR, decay, clipping or regularization value selected in this audit.",
+        "scientific_semantics": "Potentially unchanged model family, but the frozen training protocol changes; regularization would also change the objective.",
+        "training_trajectory": "Expected to change; cannot be treated as continuation of the immutable trajectory.",
+        "redo_Phase_A": "Yes for a revised paired development protocol and renewed epoch selection.",
+        "redo_Phase_B_from_scratch": "Yes after revised Phase-A decisions and normalization/provenance verification.",
+        "B0_vs_B1_fairness": "Apply a predeclared comparable protocol to both models and recompute paired evidence.",
+        "2025_Final_Test": "No 2025 outcomes may guide this redesign; evaluation waits for renewed readiness.",
+        "pros": [
+          "Can target activation/parameter/optimizer stability under development evidence"
+        ],
+        "risks": [
+          "A stability setting may hide a mechanism rather than establish the cause",
+          "Requires renewed development and fair-comparison evidence"
+        ]
+      },
+      {
+        "option": "C",
+        "level": "SCIENTIFIC_PARAMETERIZATION_PROPOSAL_ONLY",
+        "proposal": "Researcher-defined alternative positive monotonic quantile parameterization; no cap, distribution family or scientific parameter chosen here.",
+        "scientific_semantics": "Yes: quantile representation/support/tail behavior or hypothesis class may change.",
+        "training_trajectory": "Changes initialization, representation and gradients.",
+        "redo_Phase_A": "Yes; requires independent scientific freeze and paired development.",
+        "redo_Phase_B_from_scratch": "Yes; new model identities and protocol are required.",
+        "B0_vs_B1_fairness": "Use an explicitly shared head family and matched information design; retain old baselines as history.",
+        "2025_Final_Test": "Remain sealed until the redesigned model and protocol are frozen; no test-set adaptation.",
+        "pros": [
+          "Can address physical tail behavior structurally"
+        ],
+        "risks": [
+          "Introduces new scientific assumptions",
+          "An arbitrary bound can distort extreme precipitation",
+          "Requires full renewed scientific review"
+        ]
+      }
+    ]
+  },
+  "fixes_implemented": false,
+  "limitations": [
+    "Scalar norms and changing input batches do not establish unique causality.",
+    "Here the actual physical nonfinite count is exactly one and the captured maximum is outside Yunnan; no inference is made about unobserved batches.",
+    "Original post-replay closeout failed. Its status is immutable, and final disposable model/optimizer hashes were not captured; they are not reconstructed or inferred.",
+    "No hypothetical repaired run, future gradient or 2025 outcome was inspected."
+  ]
+}

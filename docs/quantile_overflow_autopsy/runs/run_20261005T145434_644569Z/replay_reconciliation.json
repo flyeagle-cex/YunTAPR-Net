@@ -1,0 +1,31 @@
+{
+  "status": "REPRODUCTION_FAILURE",
+  "utc": "2026-10-05T15:50:19.851912+00:00",
+  "scope": "ENGINEERING_OVERFLOW_REPLAY_ONLY",
+  "counts": {
+    "ENGINEERING_OPTIMIZER_STEPS": 8625,
+    "ENGINEERING_BACKWARD_CALLS": 8625,
+    "ENGINEERING_FORWARD_CALLS": 8626,
+    "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+    "FORMAL_OPTIMIZER_STEPS": 50537,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "B1_PHASE_B_STARTED": false
+  },
+  "exact_matches": {
+    "sample_ids": 8625,
+    "update": 8625,
+    "LR": 8625,
+    "actual_denominator": 8625,
+    "loss": 8625,
+    "pre_clip_norm": 8625,
+    "post_clip_norm": 8625,
+    "clipped": 8625
+  },
+  "error_type": "PermissionError",
+  "error": "No checkpoint writes or other checkpoint reads in replay",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\replay.py\", line 235, in replay\n    'immutable_history':c.verify_snapshot(run),'staging':x.staging_state(stage),\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 94, in verify_snapshot\n    verify(ref)\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 53, in verify\n    if p.stat().st_size != ref['bytes'] or digest(p) != ref['sha256']:\n                                           ^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\common.py\", line 28, in digest\n    with Path(path).open('rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\AppData\\Roaming\\uv\\python\\cpython-3.12.14-windows-x86_64-none\\Lib\\pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_autopsy_v1\\replay.py\", line 81, in guard\n    if mutate or p!=last:raise PermissionError('No checkpoint writes or other checkpoint reads in replay')\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: No checkpoint writes or other checkpoint reads in replay\n",
+  "FORMAL_RESUME_AUTHORIZED": false,
+  "RESEARCHER_DECISION_REQUIRED": true,
+  "automatic_retry": false
+}

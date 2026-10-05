@@ -1,0 +1,63 @@
+{
+  "implemented": false,
+  "researcher_decision_required": true,
+  "options": [
+    {
+      "option": "A",
+      "level": "ENGINEERING_PATH_DECOUPLING_PROPOSAL_ONLY",
+      "proposal": "Separate log-domain training computation from eager physical materialization; retain expm1 and physical guards where physical outputs are required.",
+      "scientific_semantics": "Objective/qlog/support/monotonicity can remain identical. The frozen eager B0Output and failure-contract semantics WOULD change; therefore this is not an automatically approved purely internal change.",
+      "training_trajectory": "Can be identical before the previous overflow only after deterministic output/loss/gradient/state equivalence tests. There is no original successful trajectory beyond forward 50538 to compare.",
+      "redo_Phase_A": "Not mathematically required by an exactly unchanged objective alone; researcher must review model-output contract, validation/selection path and physical diagnostics before accepting reuse of historical Phase-A evidence.",
+      "redo_Phase_B_from_scratch": "Requires an explicit new execution decision. A clean new run from scratch is the conservative proposal; this audit grants no resume or restart authority.",
+      "B0_vs_B1_fairness": "Use the same approved path and checks for both; never silently patch only one model.",
+      "2025_Final_Test": "Still sealed. Physical overflow must have a predeclared validation/inference failure policy before any future evaluation; no outcome-guided changes.",
+      "pros": [
+        "Preserves the established log-domain objective if equivalence is demonstrated",
+        "Avoids materializing unused physical quantities inside the optimization step"
+      ],
+      "risks": [
+        "Does not bound physical quantiles or solve inference overflow",
+        "Removing an eager guard changes which updates can occur",
+        "threshold_censored_mean reduction can overflow even if individual quantiles are finite"
+      ]
+    },
+    {
+      "option": "B",
+      "level": "NUMERICAL_STABILITY_PROTOCOL_PROPOSAL_ONLY",
+      "proposal": "Researcher-designed changes to optimization/stability controls; no specific LR, decay, clipping or regularization value selected in this audit.",
+      "scientific_semantics": "Potentially unchanged model family, but the frozen training protocol changes; regularization would also change the objective.",
+      "training_trajectory": "Expected to change; cannot be treated as continuation of the immutable trajectory.",
+      "redo_Phase_A": "Yes for a revised paired development protocol and renewed epoch selection.",
+      "redo_Phase_B_from_scratch": "Yes after revised Phase-A decisions and normalization/provenance verification.",
+      "B0_vs_B1_fairness": "Apply a predeclared comparable protocol to both models and recompute paired evidence.",
+      "2025_Final_Test": "No 2025 outcomes may guide this redesign; evaluation waits for renewed readiness.",
+      "pros": [
+        "Can target activation/parameter/optimizer stability under development evidence"
+      ],
+      "risks": [
+        "A stability setting may hide a mechanism rather than establish the cause",
+        "Requires renewed development and fair-comparison evidence"
+      ]
+    },
+    {
+      "option": "C",
+      "level": "SCIENTIFIC_PARAMETERIZATION_PROPOSAL_ONLY",
+      "proposal": "Researcher-defined alternative positive monotonic quantile parameterization; no cap, distribution family or scientific parameter chosen here.",
+      "scientific_semantics": "Yes: quantile representation/support/tail behavior or hypothesis class may change.",
+      "training_trajectory": "Changes initialization, representation and gradients.",
+      "redo_Phase_A": "Yes; requires independent scientific freeze and paired development.",
+      "redo_Phase_B_from_scratch": "Yes; new model identities and protocol are required.",
+      "B0_vs_B1_fairness": "Use an explicitly shared head family and matched information design; retain old baselines as history.",
+      "2025_Final_Test": "Remain sealed until the redesigned model and protocol are frozen; no test-set adaptation.",
+      "pros": [
+        "Can address physical tail behavior structurally"
+      ],
+      "risks": [
+        "Introduces new scientific assumptions",
+        "An arbitrary bound can distort extreme precipitation",
+        "Requires full renewed scientific review"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "status": "EXACT_NUMERICAL_REPRODUCTION_VERIFIED_WITH_CLOSEOUT_ERROR",
+  "utc": "2026-10-05T16:02:11.155763+00:00",
+  "scope": "READ_ONLY_POSTPROCESSING_NO_REPLAY",
+  "original_execution_status": "REPRODUCTION_FAILURE",
+  "original_terminal_error_preserved": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\quantile_overflow_autopsy\\runs\\run_20261005T145434_644569Z\\replay_reconciliation.json",
+    "bytes": 2584,
+    "sha256": "ced7605bbf71a87b138d08d942c63f5bed997adb48772dbd39f1fc51979ea729"
+  },
+  "original_terminal_progress_preserved": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\quantile_overflow_autopsy\\runs\\run_20261005T145434_644569Z\\progress.json",
+    "bytes": 803,
+    "sha256": "c2e2b2fa18d74cc7b950ef829d3ccdb4a5951a6861e1ac4b8c2228b132eae82a"
+  },
+  "numerical_reproduction_verified": true,
+  "successful_updates": 8625,
+  "failed_forward_batch": 8626,
+  "exception": "QUANTILE_PHYSICAL_OVERFLOW: expm1(qlog) nonfinite",
+  "exact_matches": {
+    "sample_ids": 8625,
+    "update": 8625,
+    "LR": 8625,
+    "actual_denominator": 8625,
+    "loss": 8625,
+    "pre_clip_norm": 8625,
+    "post_clip_norm": 8625,
+    "clipped": 8625
+  },
+  "tolerance": 0,
+  "wall_seconds_excluded": true,
+  "original_counts": {
+    "ENGINEERING_OPTIMIZER_STEPS": 8625,
+    "ENGINEERING_BACKWARD_CALLS": 8625,
+    "ENGINEERING_FORWARD_CALLS": 8626,
+    "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+    "FORMAL_OPTIMIZER_STEPS": 50537,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "B1_PHASE_B_STARTED": false
+  },
+  "postprocessing_forward_calls": 0,
+  "postprocessing_backward_calls": 0,
+  "postprocessing_optimizer_steps": 0,
+  "postprocessing_checkpoint_deserializations": 0,
+  "postprocessing_raw_source_opens": 0,
+  "restored_state_identities": {
+    "model_state_dict": {
+      "expected": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7",
+      "actual": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7"
+    },
+    "optimizer_state_dict": {
+      "expected": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4",
+      "actual": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4"
+    },
+    "rng_states": {
+      "expected": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f",
+      "actual": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f"
+    }
+  },
+  "scheduler": {
+    "stateless": true,
+    "restored_boundary": 41912,
+    "last_lr": 9.908717827105774e-05,
+    "next_update": 41913,
+    "next_lr": 9.908712037068942e-05
+  },
+  "epoch_5_permutation_sha256": "c2ddfa325adce09d227ee51d72a2886e937bc35f63365b57dc450634ba5923b5",
+  "tau_csv_rows_verified": 276032,
+  "source_journal_audit": {
+    "scenes": 17252,
+    "verified_copies": 34504,
+    "unique_sources": 17742,
+    "raw_read_only_open_events": 69008,
+    "all_sources_match_frozen_manifest_SHA": true,
+    "all_copy_size_SHA_cleanup_checks_pass": true,
+    "temporary_bytes_cumulative": 89506953440,
+    "copy_seconds_sum_across_workers": 518.6373449001694,
+    "read_seconds_sum_across_workers": 502.6489968999267,
+    "2025_RAW_ACCESS": 0,
+    "raw_write_events": 0,
+    "no_extra_prefetch_scenes": true
+  },
+  "immutable_history": {
+    "all_byte_identical": true,
+    "file_count": 114,
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "formal_optimizer_steps": 50537
+  },
+  "staging_cleanup_success": true,
+  "clone_final_model_state_sha256": "NOT_CAPTURED_DUE_TO_ORIGINAL_CLOSEOUT_ERROR",
+  "clone_final_optimizer_state_sha256": "NOT_CAPTURED_DUE_TO_ORIGINAL_CLOSEOUT_ERROR",
+  "formal_resume_authorized": false,
+  "B1_PHASE_B_STARTED": false,
+  "RESEARCHER_DECISION_REQUIRED": true,
+  "explanation": "The replay had already completed exact numeric reconciliation and captured the expected forward exception. Hashing earlier completed checkpoints during closeout conflicted with its LAST-only checkpoint read guard. This independent process verifies bytes and saved journals, without reconstructing or updating a model. Original failure status is not rewritten."
+}
