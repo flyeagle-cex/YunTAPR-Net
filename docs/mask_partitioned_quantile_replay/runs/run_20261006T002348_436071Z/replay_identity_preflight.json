@@ -1,0 +1,103 @@
+{
+  "utc": "2026-10-06T00:28:34.658432+00:00",
+  "scope": "ENGINEERING_DIAGNOSTIC_REPLAY_ONLY",
+  "checkpoint_identity": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_phase_b_finalfit\\run_20261005T103053_888886Z\\epoch_004.pt",
+    "bytes": 52269803,
+    "sha256": "5bda7d3fae1c0f6c44d4ec767f5a69749781e11ef3bb41aaa32e7d99355da8e0",
+    "model_state_sha256": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7",
+    "epoch": 4,
+    "global_update": 41912,
+    "model": "B0_MATCHED",
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "finalfit_manifest_sha256": "c5a3883328304d70521cf2049dfc30f069289866c46f791d72d2f4f91037402a",
+    "binary_not_committed": true
+  },
+  "provenance_verified_before_state_application": true,
+  "state_hashes": {
+    "model_state_dict": {
+      "expected": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7",
+      "actual": "c723e0d022964fbfcd4cc1603a04656eb16e68dda8e1a7795d602baba372fdc7"
+    },
+    "optimizer_state_dict": {
+      "expected": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4",
+      "actual": "b81771d9ec883ce24c8edc7fcece89a1528a20f970ce45568b9194f43bde62e4"
+    },
+    "rng_states": {
+      "expected": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f",
+      "actual": "f637064fcf014c437f4207e950d89cdde790b6e4c7b2953173a4e8a087fe155f"
+    }
+  },
+  "scheduler": {
+    "stateless": true,
+    "restored_boundary": 41912,
+    "last_lr": 9.908717827105774e-05,
+    "next_update": 41913,
+    "next_lr": 9.908712037068942e-05
+  },
+  "epoch_5_permutation_sha256": "c2ddfa325adce09d227ee51d72a2886e937bc35f63365b57dc450634ba5923b5",
+  "historical_sample_ids_exact_match": true,
+  "environment": {
+    "python": "F:\\pytorch\\Research\\.venv-cuda\\Scripts\\python.exe",
+    "python_version": "3.12.14",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "numpy": "2.5.3",
+    "netCDF4": "1.7.4",
+    "PyYAML": "6.0.3",
+    "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "dedicated_bytes": 8546484224,
+    "driver": "573.24",
+    "deterministic": true,
+    "GradScaler": false,
+    "num_workers": 2,
+    "prefetch_factor": 1
+  },
+  "source_preflight": {
+    "required_file_count": 17742,
+    "required_scenes": 17252,
+    "ordered_sample_identity_sha256": "f453efcdcb3119bea1a35b01be8c592314066bf46203ca9d9ed8856a8978a6c1",
+    "all_files_exist_and_B13_sizes_match": true,
+    "actual_source_SHA_verified_on_each_staged_read": true,
+    "scope": "Only first 8626 epoch-5 batches; no extra prefetch batches or 2025"
+  },
+  "observer_fixture_gate": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\mask_partitioned_quantile_replay\\runs\\run_20261006T002348_436071Z\\observer_test_result.json",
+    "bytes": 7101,
+    "sha256": "4124b662e87e2fceb6a0208f59c8e0a74d39087b473a06239b52342604ff79b6"
+  },
+  "engineering_model_parameters_updated": false,
+  "formal_optimizer_steps": 50537,
+  "2025_RAW_ACCESS": 0,
+  "model_binary_written": false,
+  "exact_prior_autopsy_preflight": {
+    "all_exact": true,
+    "prior_identity_preflight": {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\quantile_overflow_autopsy\\runs\\run_20261005T145434_644569Z\\replay_identity_preflight.json",
+      "bytes": 3181,
+      "sha256": "5f46a79620819dcc9413aadda2bac71f9b047ab2feb7ecc33aa48f51c686ad6d"
+    },
+    "fields": [
+      "checkpoint_identity",
+      "model",
+      "optimizer",
+      "RNG",
+      "scheduler",
+      "permutation",
+      "environment",
+      "sources"
+    ]
+  },
+  "frozen_mask_identity": {
+    "path": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+    "bytes": 20916,
+    "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+  },
+  "frozen_target_mask_logical_sha256": "6530e9376d67c71456e813c816a55893112e2a9179279fa82fff3be0c3285535",
+  "frozen_target_mask_shape": [
+    100,
+    100
+  ],
+  "frozen_target_mask_true_cells": 3430
+}

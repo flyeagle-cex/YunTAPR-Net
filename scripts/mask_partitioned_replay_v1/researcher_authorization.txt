@@ -1,0 +1,38 @@
+任务：YunTAPR-Net MASK-PARTITIONED QUANTILE EXTREMES REPLAY v1
+来源：研究者本轮聊天指令的 UTF-8 转录。本文件绑定本轮独立执行 scope；不替代或修改此前任何授权/历史证据。
+
+目的：解决高 qlog upper-tail extrema 是否主要/仅发生于 Yunnan evaluation mask 外这一未决问题。
+这是 ENGINEERING_DIAGNOSTIC_REPLAY_ONLY；不得恢复正式训练。
+
+起点：原 B0-Matched Phase-B epoch 4 verified checkpoint；epoch=4，global_update=41912。
+SHA256=5bda7d3fae1c0f6c44d4ec767f5a69749781e11ef3bb41aaa32e7d99355da8e0。
+重新验证 model state、optimizer state、RNG state、scheduler boundary、epoch-5 permutation 与已完成 autopsy 完全一致。
+
+严格重放 epoch 5：8625 successful updates，failed forward=batch 8626。
+前8625次 sample ids、update、LR、loss、pre/post clip norm、denominator、clipped 与原 formal history 零容差一致。
+如任一不一致，STOP；不自动重试。
+
+每次 forward 的 qlog [B,32,100,100] 得到后、执行 expm1 前，以冻结 Yunnan mask 划分 YUNNAN_INSIDE/YUNNAN_OUTSIDE。
+分别记录 global qlog max/min、per-tau qlog max/median，以及 log1p(10/50/100/500/1000 mm/h) 的 exceedance counts。
+明确区分 scene-pixel-tau exposure 与 scene-pixel any-tau exposure。
+每个 forward 分别保存两区最大值的 sample_id、batch index、tau、row、column、qlog value。
+不保存完整 tensor，只保存 aggregate + argmax identity。
+
+对8625成功更新和8625+失败forward两个cohort分别汇总两区：
+per-forward max distribution median/p90/p99/p99.9/max、per-tau max distribution、threshold exceedance totals。
+FP64 physical boundary=log1p(float64_max)=709.782712893384。
+明确 INSIDE_PHYSICAL_OVERFLOW_RISK_OBSERVED 和 OUTSIDE_PHYSICAL_OVERFLOW_RISK_OBSERVED 为 true/false；仅针对此冻结 replay trajectory，不是未来保证。
+第8626个forward保存 inside_max_qlog/location、outside_max_qlog/location 和各区是否有任意 qlog>FP64 boundary。
+
+严禁 clamp、cap、sort qlog、mask qlog before loss、mask physical transform、skip expm1、lazy qphysical。
+不得修改 forward、loss、optimizer、LR、batch、normalization、architecture。
+observer只读tensor，随后仍允许原始forward按原逻辑触发overflow。
+描述性经验分位数计算不改变模型 qlog；阈值不成为训练规则或QC。
+
+输出：mask_partitioned_quantile_extremes.json、mask_partitioned_quantile_extremes.csv、
+mask_partitioned_replay_reconciliation.json、inside_vs_outside_extreme_summary.md。
+给出 INSIDE_MAX_QLOG、OUTSIDE_MAX_QLOG、INSIDE/OUTSIDE_PER_FORWARD_MAX_P99/P99_9、INSIDE/OUTSIDE_THRESHOLD_COUNTS。
+
+FORMAL_OPTIMIZER_STEPS=50537；FORMAL_OPTIMIZER_STEPS_ADDED=0；B1_PHASE_B_STARTED=false。
+2025_RAW_ACCESS=0；FORMAL_RESUME_AUTHORIZED=false；RESEARCHER_DECISION_REQUIRED=true。
+完成后提交 GitHub main，然后 STOP。

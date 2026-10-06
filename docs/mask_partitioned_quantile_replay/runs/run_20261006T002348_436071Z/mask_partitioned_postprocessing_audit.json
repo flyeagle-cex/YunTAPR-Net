@@ -1,0 +1,67 @@
+{
+  "utc": "2026-10-06T02:27:49.111240+00:00",
+  "status": "PASS",
+  "scope": "ENGINEERING_DIAGNOSTIC_REPLAY_ONLY",
+  "checks_run": 10,
+  "checks_passed": [
+    "exact_replay_counters",
+    "initial_model_optimizer_RNG_scheduler_permutation_matches_prior",
+    "fixture_gate_and_executed_source_identities",
+    "all_8625_updates_formal_history_zero_tolerance",
+    "all_8626_partition_unions_match_prior_autopsy",
+    "original_failed_forward_physical_transform_and_outside_identity",
+    "both_cohorts_region_distributions_and_exposure_totals",
+    "all_17252_region_CSV_rows_match_journal",
+    "all_sources_copy_SHA_cleanup_and_2025_firewall_journals",
+    "all_192_or_actual_count_historical_files_byte_identical"
+  ],
+  "tests": {
+    "passed": 34,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "immutable_history": {
+    "all_byte_identical": true,
+    "file_count": 192,
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "formal_optimizer_steps": 50537
+  },
+  "source_journal_audit": {
+    "scenes": 17252,
+    "verified_copies": 34504,
+    "unique_sources": 17742,
+    "raw_read_only_open_events": 69008,
+    "all_sources_match_frozen_manifest_SHA": true,
+    "all_copy_size_SHA_cleanup_checks_pass": true,
+    "temporary_bytes_cumulative": 89506953440,
+    "copy_seconds_sum_across_workers": 426.3780092999077,
+    "read_seconds_sum_across_workers": 567.5113627999735,
+    "2025_RAW_ACCESS": 0,
+    "raw_write_events": 0,
+    "no_extra_prefetch_scenes": true
+  },
+  "replay_counters": {
+    "ENGINEERING_OPTIMIZER_STEPS": 8625,
+    "ENGINEERING_BACKWARD_CALLS": 8625,
+    "ENGINEERING_FORWARD_CALLS": 8626,
+    "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+    "FORMAL_OPTIMIZER_STEPS": 50537,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "B1_PHASE_B_STARTED": false
+  },
+  "POSTPROCESSING_FORWARD_CALLS": 0,
+  "POSTPROCESSING_BACKWARD_CALLS": 0,
+  "POSTPROCESSING_OPTIMIZER_STEPS": 0,
+  "POSTPROCESSING_RAW_SOURCE_OPENS": 0,
+  "POSTPROCESSING_CHECKPOINT_DESERIALIZATIONS": 0,
+  "FORMAL_RESUME_AUTHORIZED": false,
+  "RESEARCHER_DECISION_REQUIRED": true,
+  "formal_reconciliation_identity": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\mask_partitioned_quantile_replay\\runs\\run_20261006T002348_436071Z\\mask_partitioned_replay_reconciliation.json",
+    "bytes": 15658,
+    "sha256": "0e29c6fcfc86526de75c8b2794414b7b34e3a5bb406807de76cab9aba57b85b4"
+  }
+}

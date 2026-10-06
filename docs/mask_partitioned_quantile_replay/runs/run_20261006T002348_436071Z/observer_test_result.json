@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-06T00:24:03.320258+00:00",
+  "status": "PASS",
+  "TEST_FIXTURE_ONLY": true,
+  "suite_counts": {
+    "existing_autopsy": 19,
+    "mask_partitioned": 15
+  },
+  "counts": {
+    "passed": 34,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+  "2025_RAW_ACCESS": 0,
+  "temporary_checkpoints_created": 0,
+  "fixture_models_optimizer_artifacts": "In-memory isolated fixtures, released/GC; no formal checkpoint opened by tests.",
+  "cuda_equivalence": "Frozen execute_update output/loss/gradient/model/optimizer/RNG exact identity",
+  "diagnostic_source_hashes": {
+    "scripts/mask_partitioned_replay_v1/__init__.py": "cfca2c99be7fc1f41fecd9d405ceb9cfb8a0841484dd75954845e59f41620d20",
+    "scripts/mask_partitioned_replay_v1/close.py": "8ffa5efbd4f45af35024e63ad5ebca8d46994452c8d3907d8684a9e0ebb4272a",
+    "scripts/mask_partitioned_replay_v1/common.py": "609591943fe5326f0d2788df7f538036c9153cf02da9f5c03eefb2c5c19f6aab",
+    "scripts/mask_partitioned_replay_v1/monitor.py": "793592bf01984e0801e46a4f80945d43f5d47422ed6692448a30347b17411a26",
+    "scripts/mask_partitioned_replay_v1/observer.py": "fec5e73cab367583fe0e96168744d96d7150af32c95583e725269e96084c36cd",
+    "scripts/mask_partitioned_replay_v1/prepare.py": "775cd6325f7ae2e5656a9049e3d0f7b62b03a793cee82ab602df7252d15f84e6",
+    "scripts/mask_partitioned_replay_v1/replay.py": "7f31002093684519ad325de4405d3cde78ea28449e2fbe4b1fd7e23440b881e3",
+    "scripts/mask_partitioned_replay_v1/summary.py": "7b5a8ea63a97896d48cd42d373ef968c68be0a03ac2dff9a6bffffe9615e8638",
+    "scripts/mask_partitioned_replay_v1/test_gate.py": "6488c8df3d00b14502028a5f19847cdce21b3357ae77da17322cc3a2af0bf3ea"
+  },
+  "test_source_hashes": {
+    "tests/mask_partitioned_replay/test_partitioned_observer.py": "35319a033dd2963e6b8b517ff44473eb6efdf8d6c74f8e9bfc629498ff33b6a5"
+  },
+  "immutable_history": {
+    "all_byte_identical": true,
+    "file_count": 192,
+    "protocol_sha256": "2b218f4b45ac86992973161935d9ae5fc3593bd9056198e6a74beb1d083acaea",
+    "normalization_sha256": "d67a6eba30b2a971577d145e8b960ea1b6d0ed31fad998b166dc905ed93c14db",
+    "formal_optimizer_steps": 50537
+  },
+  "console": "test_2025_reject_B13 (test_observation.ObservationTests.test_2025_reject_B13) ... ok\ntest_2025_reject_IMERG (test_observation.ObservationTests.test_2025_reject_IMERG) ... ok\ntest_cuda_two_update_frozen_path_bit_exact_with_observer (test_observation.ObservationTests.test_cuda_two_update_frozen_path_bit_exact_with_observer) ... ok\ntest_failure_capture_before_original_expm1_no_bypass (test_observation.ObservationTests.test_failure_capture_before_original_expm1_no_bypass) ... ok\ntest_float64_overflow_can_have_finite_strict_monotonic_qlog (test_observation.ObservationTests.test_float64_overflow_can_have_finite_strict_monotonic_qlog) ... ok\ntest_mathematical_limits (test_observation.ObservationTests.test_mathematical_limits) ... ok\ntest_nonfinite_raw_rejected_before_transform (test_observation.ObservationTests.test_nonfinite_raw_rejected_before_transform) ... ok\ntest_numpy_input_observation_no_mutation (test_observation.ObservationTests.test_numpy_input_observation_no_mutation) ... ok\ntest_observation_does_not_mutate_or_attach_gradient (test_observation.ObservationTests.test_observation_does_not_mutate_or_attach_gradient) ... ok\ntest_physical_guard_is_still_executed_in_fixture (test_observation.ObservationTests.test_physical_guard_is_still_executed_in_fixture) ... ok\ntest_reconciliation_excludes_wall_time_only (test_observation.ObservationTests.test_reconciliation_excludes_wall_time_only) ... ok\ntest_reconciliation_reject_LR (test_observation.ObservationTests.test_reconciliation_reject_LR) ... ok\ntest_reconciliation_reject_actual_denominator (test_observation.ObservationTests.test_reconciliation_reject_actual_denominator) ... ok\ntest_reconciliation_reject_clipped (test_observation.ObservationTests.test_reconciliation_reject_clipped) ... ok\ntest_reconciliation_reject_loss (test_observation.ObservationTests.test_reconciliation_reject_loss) ... ok\ntest_reconciliation_reject_post_clip_norm (test_observation.ObservationTests.test_reconciliation_reject_post_clip_norm) ... ok\ntest_reconciliation_reject_pre_clip_norm (test_observation.ObservationTests.test_reconciliation_reject_pre_clip_norm) ... ok\ntest_reconciliation_reject_sample_ids (test_observation.ObservationTests.test_reconciliation_reject_sample_ids) ... ok\ntest_reconciliation_reject_update (test_observation.ObservationTests.test_reconciliation_reject_update) ... ok\ntest_checkpoint_hash_reads_allow_pinned_earlier_checkpoints (test_partitioned_observer.PartitionedObserverTests.test_checkpoint_hash_reads_allow_pinned_earlier_checkpoints) ... ok\ntest_cohort_distributions_and_threshold_totals (test_partitioned_observer.PartitionedObserverTests.test_cohort_distributions_and_threshold_totals) ... ok\ntest_cuda_frozen_update_output_loss_grad_model_optimizer_rng_bit_exact (test_partitioned_observer.PartitionedObserverTests.test_cuda_frozen_update_output_loss_grad_model_optimizer_rng_bit_exact) ... ok\ntest_fp64_risk_each_region_and_exact_boundary (test_partitioned_observer.PartitionedObserverTests.test_fp64_risk_each_region_and_exact_boundary) ... ok\ntest_native_argmax_coordinates_and_sample_identity (test_partitioned_observer.PartitionedObserverTests.test_native_argmax_coordinates_and_sample_identity) ... ok\ntest_observer_readonly_tensor_gradient_and_rng (test_partitioned_observer.PartitionedObserverTests.test_observer_readonly_tensor_gradient_and_rng) ... ok\ntest_only_last_checkpoint_can_be_deserialized (test_partitioned_observer.PartitionedObserverTests.test_only_last_checkpoint_can_be_deserialized) ... ok\ntest_original_expm1_called_once_and_original_overflow_raised (test_partitioned_observer.PartitionedObserverTests.test_original_expm1_called_once_and_original_overflow_raised) ... ok\ntest_partition_exhausts_grid_and_exposure_denominators (test_partitioned_observer.PartitionedObserverTests.test_partition_exhausts_grid_and_exposure_denominators) ... ok\ntest_per_tau_lower_median_convention (test_partitioned_observer.PartitionedObserverTests.test_per_tau_lower_median_convention) ... ok\ntest_pixel_tau_vs_any_tau_and_strict_threshold (test_partitioned_observer.PartitionedObserverTests.test_pixel_tau_vs_any_tau_and_strict_threshold) ... ok\ntest_tie_identity_first_native_position (test_partitioned_observer.PartitionedObserverTests.test_tie_identity_first_native_position) ... ok\ntest_union_must_exactly_match_previous_autopsy (test_partitioned_observer.PartitionedObserverTests.test_union_must_exactly_match_previous_autopsy) ... ok\ntest_validation_rejects_conflated_pixel_counts (test_partitioned_observer.PartitionedObserverTests.test_validation_rejects_conflated_pixel_counts) ... ok\ntest_wrong_shape_dtype_mask_and_nonfinite_rejected (test_partitioned_observer.PartitionedObserverTests.test_wrong_shape_dtype_mask_and_nonfinite_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 34 tests in 6.771s\n\nOK\n"
+}
