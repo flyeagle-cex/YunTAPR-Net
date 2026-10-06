@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-05T23:58:34.126691+00:00",
+  "scope": "STDLIB_SYNTHETIC_FIXTURES_AND_SAVED_ARTIFACTS_ONLY",
+  "passed": 24,
+  "run": 24,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "synthetic_unit_tests": 16,
+  "saved_artifact_tests": 8,
+  "successful": true,
+  "FORWARD_CALLS": 0,
+  "BACKWARD_CALLS": 0,
+  "OPTIMIZER_STEPS": 0,
+  "2025_RAW_ACCESS": 0,
+  "test_sources": [
+    {
+      "relative_path": "scripts/verify_saved_quantile_extremes_v1.py",
+      "sha256": "77e947c9d926f0e2b83c8d9a45215db46a4b99548e476b08bb7cb933bc6aa9eb"
+    },
+    {
+      "relative_path": "tests/saved_quantile_extremes/test_extremes.py",
+      "sha256": "0e52679b83ce48ece4fd224616e4a9c6f67186a7e7178197b1ac27a804bd6290"
+    }
+  ],
+  "console": "test_2025_identity_rejected_even_as_saved_metadata (test_extremes.SavedExtremesTests.test_2025_identity_rejected_even_as_saved_metadata) ... ok\ntest_csv_missing_is_blank_with_status_not_zero (test_extremes.SavedExtremesTests.test_csv_missing_is_blank_with_status_not_zero) ... ok\ntest_file_guard_denies_raw_and_checkpoint_and_old_artifact_writes (test_extremes.SavedExtremesTests.test_file_guard_denies_raw_and_checkpoint_and_old_artifact_writes) ... ok\ntest_full_grid_min_proves_all_without_double_counting_witness (test_extremes.SavedExtremesTests.test_full_grid_min_proves_all_without_double_counting_witness) ... ok\ntest_global_max_cannot_be_assigned_to_unobserved_region (test_extremes.SavedExtremesTests.test_global_max_cannot_be_assigned_to_unobserved_region) ... ok\ntest_invalid_witness_rejected (test_extremes.SavedExtremesTests.test_invalid_witness_rejected) ... ok\ntest_linear_percentile_and_singleton (test_extremes.SavedExtremesTests.test_linear_percentile_and_singleton) ... ok\ntest_one_outside_pixel_is_not_32_spatial_pixels (test_extremes.SavedExtremesTests.test_one_outside_pixel_is_not_32_spatial_pixels) ... ok\ntest_outside_witness_does_not_prove_inside_exceedances (test_extremes.SavedExtremesTests.test_outside_witness_does_not_prove_inside_exceedances) ... ok\ntest_region_pixel_percentiles_remain_unknown (test_extremes.SavedExtremesTests.test_region_pixel_percentiles_remain_unknown) ... ok\ntest_single_forward_region_max_percentile_is_not_pixel_percentile (test_extremes.SavedExtremesTests.test_single_forward_region_max_percentile_is_not_pixel_percentile) ... ok\ntest_stdlib_only_no_model_runtime_loaded (test_extremes.SavedExtremesTests.test_stdlib_only_no_model_runtime_loaded) ... ok\ntest_strict_threshold_equality_is_not_exceedance (test_extremes.SavedExtremesTests.test_strict_threshold_equality_is_not_exceedance) ... ok\ntest_success_cohort_does_not_use_failure_witness (test_extremes.SavedExtremesTests.test_success_cohort_does_not_use_failure_witness) ... ok\ntest_witness_attains_global_bound_proves_region_max (test_extremes.SavedExtremesTests.test_witness_attains_global_bound_proves_region_max) ... ok\ntest_witness_below_global_max_is_only_a_lower_bound (test_extremes.SavedExtremesTests.test_witness_below_global_max_is_only_a_lower_bound) ... ok\ntest_cohort_counts_and_update_scope (__main__.main.<locals>.ArtifactTests.test_cohort_counts_and_update_scope) ... ok\ntest_csv_matches_json_and_preserves_null_status (__main__.main.<locals>.ArtifactTests.test_csv_matches_json_and_preserves_null_status) ... ok\ntest_input_and_generated_artifact_hashes (__main__.main.<locals>.ArtifactTests.test_input_and_generated_artifact_hashes) ... ok\ntest_no_model_raw_checkpoint_or_2025_access (__main__.main.<locals>.ArtifactTests.test_no_model_raw_checkpoint_or_2025_access) ... ok\ntest_outside_aggregate_max_proof_and_inside_unknown (__main__.main.<locals>.ArtifactTests.test_outside_aggregate_max_proof_and_inside_unknown) ... ok\ntest_pixel_percentiles_not_replaced_by_maximum_percentiles (__main__.main.<locals>.ArtifactTests.test_pixel_percentiles_not_replaced_by_maximum_percentiles) ... ok\ntest_scope_stays_descriptive_and_incomplete (__main__.main.<locals>.ArtifactTests.test_scope_stays_descriptive_and_incomplete) ... ok\ntest_threshold_count_units_and_unknown_totals (__main__.main.<locals>.ArtifactTests.test_threshold_count_units_and_unknown_totals) ... ok\n\n----------------------------------------------------------------------\nRan 24 tests in 0.073s\n\nOK\n"
+}
