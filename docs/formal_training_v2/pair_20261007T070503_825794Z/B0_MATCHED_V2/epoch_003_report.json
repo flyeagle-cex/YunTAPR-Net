@@ -1,0 +1,314 @@
+{
+  "epoch": 3,
+  "training": {
+    "scenes": 10455,
+    "steps": 5228,
+    "N_valid": 35860650,
+    "exactly_once": true,
+    "ordered_sample_ids_sha256": "f9cec6dcb9b9dc54be0da2ade21f1ac552c0dfdd2b511a4e07c0b39b69f860ee",
+    "global_core_loss": 0.043982346402793936,
+    "S_occ": 1081876.81759418,
+    "S_qr": 495358.7129351726
+  },
+  "validation": {
+    "S_occ": 1225671.0962195816,
+    "S_qr": 575253.9148697084,
+    "N_valid": 36018430,
+    "N_rain": 4496600,
+    "scenes": 10501,
+    "forwards": 1313,
+    "global_val_core_loss": 0.05000009748035353,
+    "global_L_occ": 0.03402899838276076,
+    "global_core_L_qr": 0.01597109909759277,
+    "numerator_dtype": "float64",
+    "physical_materialization": false,
+    "strict_crossing_count": 0,
+    "support_violation_count": 0,
+    "nonfinite_count": 0
+  },
+  "selection": {
+    "best_checkpoint_value": 0.05000009748035353,
+    "selected_checkpoint_epoch": 3,
+    "early_stop_best": 0.05000009748035353,
+    "non_improvement_count": 0,
+    "completed_epoch": 3
+  },
+  "decision": {
+    "checkpoint_selected": true,
+    "early_stop_improvement": true,
+    "stop": false
+  },
+  "diagnostics": {
+    "TRAIN": {
+      "phase": "TRAIN",
+      "forwards": 5228,
+      "scenes": 10455,
+      "qlog_unit": "log1p(mm/h)",
+      "FP64_physical_boundary": 709.782712893384,
+      "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+      "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+      "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+      "YUNNAN_INSIDE": {
+        "max_qlog": 6.192043525957435,
+        "q32_per_forward_max_p99": 4.522283379370083,
+        "q32_per_forward_max_p99_9": 5.317213267487317,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 1147540800,
+        "scene_pixel_any_tau_exposure": 35860650,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 1094814,
+            "scene_pixel_any_tau_exposure": 429243
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 3209,
+            "scene_pixel_any_tau_exposure": 1963
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 226,
+            "scene_pixel_any_tau_exposure": 137
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      },
+      "YUNNAN_OUTSIDE": {
+        "max_qlog": 10.885330612227786,
+        "q32_per_forward_max_p99": 6.288863318808204,
+        "q32_per_forward_max_p99_9": 7.563615205115643,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 2198059200,
+        "scene_pixel_any_tau_exposure": 68689350,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 6323002,
+            "scene_pixel_any_tau_exposure": 2020239
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 101004,
+            "scene_pixel_any_tau_exposure": 51308
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 18824,
+            "scene_pixel_any_tau_exposure": 10549
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 543,
+            "scene_pixel_any_tau_exposure": 333
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 134,
+            "scene_pixel_any_tau_exposure": 87
+          }
+        }
+      }
+    },
+    "VALIDATION": {
+      "phase": "VALIDATION",
+      "forwards": 1313,
+      "scenes": 10501,
+      "qlog_unit": "log1p(mm/h)",
+      "FP64_physical_boundary": 709.782712893384,
+      "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+      "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+      "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+      "YUNNAN_INSIDE": {
+        "max_qlog": 5.6739563028810585,
+        "q32_per_forward_max_p99": 4.7370406113383545,
+        "q32_per_forward_max_p99_9": 5.327542733435915,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 1152589760,
+        "scene_pixel_any_tau_exposure": 36018430,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 1376287,
+            "scene_pixel_any_tau_exposure": 599684
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 2298,
+            "scene_pixel_any_tau_exposure": 1505
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 187,
+            "scene_pixel_any_tau_exposure": 122
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      },
+      "YUNNAN_OUTSIDE": {
+        "max_qlog": 7.107405211694674,
+        "q32_per_forward_max_p99": 5.995688773875965,
+        "q32_per_forward_max_p99_9": 6.5761119224114255,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 2207730240,
+        "scene_pixel_any_tau_exposure": 68991570,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 7443956,
+            "scene_pixel_any_tau_exposure": 2771368
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 57572,
+            "scene_pixel_any_tau_exposure": 34381
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 7486,
+            "scene_pixel_any_tau_exposure": 5022
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 20,
+            "scene_pixel_any_tau_exposure": 17
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 1,
+            "scene_pixel_any_tau_exposure": 1
+          }
+        }
+      }
+    }
+  },
+  "checkpoint": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_003.pt",
+    "bytes": 52086571,
+    "sha256": "25422d3bb9f1bf05bff7aa95a10fe8dc62a70893d88c6229dc210d7ccf0c3246",
+    "epoch": 3,
+    "model": "B0_MATCHED_V2",
+    "run_id": "run_20261007T070503_825794Z",
+    "global_update": 15684,
+    "scope": "FORMAL"
+  },
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 19623,
+    "TRAIN_FORWARDS": 15684,
+    "VALIDATION_FORWARDS": 3939,
+    "BACKWARD_CALLS": 15684,
+    "OPTIMIZER_STEP_ATTEMPTS": 15684,
+    "OPTIMIZER_STEPS": 15684,
+    "CHECKPOINT_WRITES": 3
+  },
+  "io": {
+    "RAW_SOURCE_OPENS": 251472,
+    "NATIVE_DECODES": 188605,
+    "DENIED_ATTEMPTS": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "log_files": [
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_parent.jsonl",
+        "bytes": 272,
+        "sha256": "9e27d60d929ce22705c0ec3ab1245faf1730c8db87f42840670846090e0b8f44"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_13796.jsonl",
+        "bytes": 14227242,
+        "sha256": "4caf446f6ee2c490724875e74bad030c27f3d66536e231c0e1dae60827f8987e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_3604.jsonl",
+        "bytes": 14224524,
+        "sha256": "ffe9e5a21a25c2402158e013d28ad8d832dd502c37047a5d6a0cdd61ea3972ca"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_37936.jsonl",
+        "bytes": 14227242,
+        "sha256": "892bac8bd447b31c38a710bc7eaecbbecbbc82eb6fd0fcfca9ebee4e571d8818"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_43276.jsonl",
+        "bytes": 14229966,
+        "sha256": "17649267c0a16898cb1360f36330710804ab6bbbd639b92dab109f77d77b2944"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_43744.jsonl",
+        "bytes": 14227242,
+        "sha256": "9a4ad4b7c1484368bafbfa0ac761f5c12eb8358b17d598c553c2a1e5dfdf31c3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_44360.jsonl",
+        "bytes": 14298066,
+        "sha256": "6fdb60884840182d0f4e970747f9d601fb036c03f136b8abd880b87c5b1d0b4f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_44600.jsonl",
+        "bytes": 14284446,
+        "sha256": "37b17698c200afe2552b31e95763d5fbb1de8c6b59bff23c1c5fbd0c2f370818"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_44932.jsonl",
+        "bytes": 14298066,
+        "sha256": "53de797520f51b3beef942803b9ec6ae2419372639335d730defe51181db3b2c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_45248.jsonl",
+        "bytes": 14284446,
+        "sha256": "669be5561fc03d494f9f4c203b8e62fea0aef21213efc0ffa928edbe9c9295af"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_45328.jsonl",
+        "bytes": 14229966,
+        "sha256": "0930c36109caf25d15497928377030ae4f33a4fbdae760b389278451e7727c63"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_47792.jsonl",
+        "bytes": 14229966,
+        "sha256": "2db37bac3b7048a400f07ba4c73c4cb6b3baf4ba4d2656a7a4b0fa99f0e238eb"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\raw_access_worker_47824.jsonl",
+        "bytes": 14284446,
+        "sha256": "eca28074efb01c26d9894bbbd0aeeb819e390d8853da4052abd8a0e150f923a3"
+      }
+    ],
+    "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+  },
+  "local_epoch_artifacts": [
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\diagnostics.csv",
+      "bytes": 2592,
+      "sha256": "2a2d520fc7375a37687267259808983eab5eb25d9f1bc9d287817e5b61b8d393"
+    },
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\diagnostics.json",
+      "bytes": 4735,
+      "sha256": "4130fa29f38c48a51de9db25c7de6e8d35d543b820f5d155ebd7bc927dc7f05a"
+    },
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\steps.jsonl",
+      "bytes": 4153580,
+      "sha256": "8bd938e2063b386203e6c420745ab50a0dca933d62146b9cc099316e9738e47c"
+    },
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\train_diagnostics.jsonl",
+      "bytes": 9223307,
+      "sha256": "14dda757ca23c133fd53bfa8809304730da2959e1ccac4f59d2d9eec750f9b8c"
+    },
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\validation_calls.jsonl",
+      "bytes": 453104,
+      "sha256": "1602aa152b4c0229411ae09c220c334626563f8a65cb1acfd23ae3a07e1d78c5"
+    },
+    {
+      "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\validation_diagnostics.jsonl",
+      "bytes": 2556681,
+      "sha256": "f9ed20b069b8013340532a0a38239800a3ff0f97cd72ec19dc302095508d69c2"
+    }
+  ]
+}
