@@ -1,0 +1,14 @@
+usage: test_gate.py [-h] --authorization AUTHORIZATION --authorization-sha256
+                    AUTHORIZATION_SHA256 [--resume-run-id RESUME_RUN_ID]
+test_gate.py: error: the following arguments are required: --authorization, --authorization-sha256
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 153, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 132, in main
+    regression=run_suite(dest,'V1_REGRESSION',paths)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 90, in run_suite
+    if value['status']!='PASS':raise AssertionError('STOP: '+phase+' did not pass; original failure evidence preserved')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: STOP: V1_REGRESSION did not pass; original failure evidence preserved

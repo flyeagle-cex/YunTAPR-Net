@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 113, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 82, in main
+    head=run_suite(dest,'V2_NUMERICAL',[ROOT/'tests/quantile_head_v2/test_v2.py'])
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\¼«¶Ë½µË®Ô¤²â\YunTAPR-Net-push-chunks\scripts\quantile_head_v2\test_gate.py", line 53, in run_suite
+    if value['status']!='PASS':raise AssertionError('STOP: '+phase+' did not pass; original failure evidence preserved')
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: STOP: V2_NUMERICAL did not pass; original failure evidence preserved

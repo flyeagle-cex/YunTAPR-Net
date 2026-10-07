@@ -1,0 +1,169 @@
+"""Run isolated engineering tests with live progress; preserve every attempt."""
+from pathlib import Path
+import sys
+ROOT=Path(__file__).resolve().parents[2]
+sys.path[:0]=[str(ROOT/'scripts'),str(ROOT/'src'),str(ROOT)]
+from quantile_head_v2 import common as c
+import argparse
+import gc
+import importlib
+import io
+import os
+import platform
+import time
+import types
+import unittest
+import torch
+from quantile_head_v2 import governance,verification
+
+
+class ProgressResult(unittest.TextTestResult):
+    def __init__(self,*args,run,phase,**kwargs):
+        super().__init__(*args,**kwargs);self.run=run;self.phase=phase;self.started=time.monotonic()
+    def startTest(self,test):
+        super().startTest(test)
+        c.progress(self.run,self.phase,status='RUNNING',pid=os.getpid(),tests_completed=self.testsRun-1,
+                   current_test=test.id(),elapsed_seconds=time.monotonic()-self.started,
+                   failures=len(self.failures),errors=len(self.errors),skipped=len(self.skipped),
+                   formal_optimizer_steps_added=0,raw_2025_access=0)
+
+
+def module_for(path):
+    package='tests'
+    if package not in sys.modules:
+        value=types.ModuleType(package);value.__path__=[str(ROOT/'tests')];sys.modules[package]=value
+    return importlib.import_module('.'.join(path.relative_to(ROOT).with_suffix('').parts))
+
+
+def run_suite(run,phase,paths):
+    suite=unittest.TestSuite();counts={}
+    isolated=None
+    if phase=='V1_REGRESSION':
+        import subprocess
+        isolated_paths=[p for p in paths if p.parent.name=='saved_quantile_extremes']
+        assert len(isolated_paths)==1,'Exact known stdlib-only module required'
+        paths=[p for p in paths if p not in isolated_paths]
+        result=subprocess.run([sys.executable,'-B',str(ROOT/'scripts/quantile_head_v2/stdlib_test_gate.py'),
+            '--output',str(run/'stdlib_regression_tests.json')],cwd=ROOT,capture_output=True,text=True,encoding='utf8')
+        c.write(run/'stdlib_subprocess_invocation.json',{'returncode':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
+        if result.returncode:raise AssertionError('Stdlib-only subprocess failed; original evidence preserved')
+        isolated=c.read(run/'stdlib_regression_tests.json');counts.update(isolated['suite_counts'])
+    for path in paths:
+        module=module_for(path);selected=unittest.defaultTestLoader.loadTestsFromModule(module)
+        counts[path.relative_to(ROOT).as_posix()]=selected.countTestCases();suite.addTests(selected)
+    if phase=='V1_REGRESSION':
+        from paired_pipeline_historical_inventory_v1 import historical_final_test_fixture,scoped_final_test_suite
+        from yuntapr.evaluation import final_test_b0
+        proof=Path(os.environ['YUNTAPR_FINAL_TEST_PREFLIGHT_EVIDENCE'])/'preflight_manifest.json'
+        fixture=historical_final_test_fixture(ROOT,run/'historical_final_test_source_fixture',proof,final_test_b0)
+        c.write(run/'historical_final_test_fixture_identity.json',{
+            'description':'historical source fixture（历史源码测试夹具）：复用既有适配器，从原 Git 字节恢复旧报告所绑定的入口源码；只隔离旧报告身份测试，不替换当前数值测试。',
+            'proof':c.pin(proof),'sources':{p.relative_to(fixture).as_posix():c.pin(p) for p in sorted(fixture.rglob('*')) if p.is_file()},
+            'TEST_FIXTURE_ONLY':True,'original_worktree_unchanged':True})
+        suite=scoped_final_test_suite(suite,final_test_b0,fixture)
+        # Legacy preflight used a recursive source inventory. Check every old
+        # pin independently; additions do not redefine that historical snapshot.
+        from paired_pipeline_frozen_inventory_v2 import verify_frozen_inventory
+        from yuntapr.training import formal_phase_b
+        from unittest.mock import patch
+        evidence=Path(os.environ['YUNTAPR_PHASE_B_RUNNER_EVIDENCE'])/'runner_manifest.json'
+        expected=c.read(evidence)['implementation_sha256']
+        verified=verify_frozen_inventory(ROOT,expected)
+        c.write(run/'historical_phase_b_inventory_identity.json',{
+            'description':'frozen dependency inventory（冻结依赖清单）：旧 Phase-B preflight（训练前工程检查）的每个源码哈希仍独立逐文件核验；只隔离其报告身份测试，新增模块不加入历史身份。',
+            'evidence':c.pin(evidence),'verified_code_sha256':verified,'TEST_FIXTURE_ONLY':True})
+        def flatten(items):
+            for item in items:
+                if isinstance(item,unittest.TestSuite):yield from flatten(item)
+                else:yield item
+        class FrozenPhaseBArtifactSuite(unittest.TestSuite):
+            def run(self,result,debug=False):
+                with patch.object(formal_phase_b,'implementation_hashes',
+                        side_effect=lambda:verify_frozen_inventory(ROOT,expected)):
+                    return super().run(result,debug)
+        prefix='tests.formal_phase_b.test_finalfit.FinalFitArtifactTests.'
+        cases=list(flatten(suite))
+        # Flattening would discard the Final Test wrapper; keep that wrapper intact.
+        phase_b_cases=[case for case in cases if case.id().startswith(prefix)]
+        other_cases=[case for case in cases if not case.id().startswith(prefix)]
+        suite=scoped_final_test_suite(unittest.TestSuite(other_cases),final_test_b0,fixture)
+        suite.addTest(FrozenPhaseBArtifactSuite(phase_b_cases))
+    console=io.StringIO()
+    runner=unittest.TextTestRunner(stream=console,verbosity=2,failfast=True,
+        resultclass=lambda *args,**kw:ProgressResult(*args,run=run,phase=phase,**kw))
+    result=runner.run(suite)
+    value={'status':'PASS' if result.wasSuccessful() and not result.skipped else 'FAIL',
+           'TEST_FIXTURE_ONLY':True,'suite_counts':counts,'planned_tests':sum(counts.values()),
+           'counts':{'run':result.testsRun,'passed':result.testsRun-len(result.failures)-len(result.errors)-len(result.skipped),
+                     'failed':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped)},
+           'console':console.getvalue(),'formal_optimizer_steps_added':0,'2025_RAW_ACCESS':0}
+    if isolated is not None:
+        for name,count in isolated['counts'].items():value['counts'][name]+=count
+        value['console']=isolated['console']+'\n'+value['console']
+        value['stdlib_only_tests_in_separate_clean_process']=isolated['counts']['run']
+    c.write(run/(phase.lower()+'_tests.json'),value)
+    if value['status']!='PASS':raise AssertionError('STOP: '+phase+' did not pass; original failure evidence preserved')
+    gc.collect();torch.cuda.empty_cache()
+    return value
+
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--run',required=True,type=Path);args=parser.parse_args()
+    run=args.run.resolve()
+    if run.parent!=c.RUN_ROOT.resolve():raise ValueError('Exact isolated run required')
+    attempts=run/'test_attempts';attempts.mkdir(exist_ok=True)
+    dest=attempts/('attempt_%03d'%(len(list(attempts.glob('attempt_*')))+1));dest.mkdir()
+    # Pass the top-level run to the live monitor while preserving per-attempt results.
+    original_progress=c.progress
+    def progress(_run,phase,**values):original_progress(run,phase,attempt=dest.name,**values)
+    c.progress=progress
+    try:
+        from yuntapr.training.phase_a_protocol import seed_reproducibility
+        seed_reproducibility();torch.set_num_threads(2)
+        assert torch.cuda.is_available(),'Actual CUDA verification required'
+        governance.install()
+        source_paths=list((ROOT/'src/yuntapr/models/quantile_v2').glob('*.py'))
+        source_paths+=list((ROOT/'scripts/quantile_head_v2').glob('*.py'))
+        source_paths+=list((ROOT/'tests/quantile_head_v2').glob('*.py'))
+        c.write(dest/'executed_code_identity.json',{p.relative_to(ROOT).as_posix():c.digest(p) for p in sorted(source_paths)})
+        c.write(dest/'environment.json',{'python':platform.python_version(),'sys_executable':sys.executable,
+            'torch':torch.__version__,'CUDA':torch.version.cuda,'GPU':torch.cuda.get_device_name(),
+            'deterministic_algorithms':torch.are_deterministic_algorithms_enabled(),
+            'PYTHONUTF8':os.environ.get('PYTHONUTF8'),'utf8_mode':sys.flags.utf8_mode,
+            'TEMP':os.environ.get('TEMP'),'TMP':os.environ.get('TMP'),
+            'PYTHONHASHSEED':os.environ.get('PYTHONHASHSEED'),
+            'CUBLAS_WORKSPACE_CONFIG':os.environ.get('CUBLAS_WORKSPACE_CONFIG')})
+        head=run_suite(dest,'V2_NUMERICAL',[ROOT/'tests/quantile_head_v2/test_v2.py'])
+        c.write(dest/'numerical_verification.json',verification.RESULTS)
+        related=['b0_skeleton','scientific_freeze','scientific_freeze_v1_1','development_qc',
+            'quantile_numerical_closure','phase_a_protocol_prefreeze','phase_a_protocol_v1',
+            'phase_a_optimizer_resume','formal_phase_a','formal_phase_b','b1_temporal_audit',
+            'b1_scientific_freeze','b1_training_protocol','paired_phase_a_authorized',
+            'paired_phase_a_resume','paired_pipeline_fixture_scope','paired_pipeline_frozen_inventory',
+            'scientific_review','quantile_overflow_autopsy','quantile_autopsy_closeout',
+            'saved_quantile_extremes','mask_partitioned_replay','final_test_b0','final_test_catalogue']
+        paths=sorted(p for folder in related for p in (ROOT/'tests'/folder).glob('test_*.py'))
+        from quantile_head_v2.regression_scope import historical_fixture_environment
+        with historical_fixture_environment(dest):
+            regression=run_suite(dest,'V1_REGRESSION',paths)
+        c.progress(run,'HISTORICAL_BYTE_RECONCILIATION',status='RUNNING',pid=os.getpid(),
+                   tests_completed=head['counts']['run']+regression['counts']['run'],formal_optimizer_steps_added=0,raw_2025_access=0)
+        immutable=c.verify_history(run)
+        c.write(dest/'historical_inventory_after.json',immutable)
+        c.write(dest/'governance_counters.json',governance.COUNTERS)
+        output={'status':'PASS','attempt':dest.name,'tests':head['counts']['run']+regression['counts']['run'],
+                'v2_tests':head['counts'],'regression_tests':regression['counts'],'historical_immutability':immutable,
+                'FORMAL_OPTIMIZER_STEPS_ADDED':0,'2025_RAW_ACCESS':0,'formal_training_started':False}
+        c.write(run/'test_gate_result.json',output)
+        c.progress(run,'TESTS_COMPLETE_AWAITING_DECISION_PACKET',status='PASS',pid=os.getpid(),tests_completed=output['tests'],
+                   formal_optimizer_steps_added=0,raw_2025_access=0)
+        print(__import__('json').dumps(output),flush=True)
+    except BaseException as exc:
+        import traceback
+        c.write(dest/'failure.json',{'status':'STOP','error':str(exc),'traceback':traceback.format_exc(),
+            'FORMAL_OPTIMIZER_STEPS_ADDED':0,'2025_RAW_ACCESS':0})
+        c.progress(run,'FAILED_STOP',status='FAIL',pid=os.getpid(),error=str(exc),formal_optimizer_steps_added=0,raw_2025_access=0)
+        raise
+
+
+if __name__=='__main__':main()

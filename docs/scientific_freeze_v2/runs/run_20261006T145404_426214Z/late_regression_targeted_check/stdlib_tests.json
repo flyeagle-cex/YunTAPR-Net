@@ -1,0 +1,21 @@
+{
+  "description": "stdlib-only fixture（仅标准库测试夹具）：在独立 Python 进程验证未加载模型或原始数据后端，不隐藏父进程模块。",
+  "status": "PASS",
+  "TEST_FIXTURE_ONLY": true,
+  "planned_tests": 16,
+  "suite_counts": {
+    "tests/saved_quantile_extremes/test_extremes.py": 16
+  },
+  "counts": {
+    "run": 16,
+    "passed": 16,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "console": "test_2025_identity_rejected_even_as_saved_metadata (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_2025_identity_rejected_even_as_saved_metadata) ... ok\ntest_csv_missing_is_blank_with_status_not_zero (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_csv_missing_is_blank_with_status_not_zero) ... ok\ntest_file_guard_denies_raw_and_checkpoint_and_old_artifact_writes (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_file_guard_denies_raw_and_checkpoint_and_old_artifact_writes) ... ok\ntest_full_grid_min_proves_all_without_double_counting_witness (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_full_grid_min_proves_all_without_double_counting_witness) ... ok\ntest_global_max_cannot_be_assigned_to_unobserved_region (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_global_max_cannot_be_assigned_to_unobserved_region) ... ok\ntest_invalid_witness_rejected (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_invalid_witness_rejected) ... ok\ntest_linear_percentile_and_singleton (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_linear_percentile_and_singleton) ... ok\ntest_one_outside_pixel_is_not_32_spatial_pixels (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_one_outside_pixel_is_not_32_spatial_pixels) ... ok\ntest_outside_witness_does_not_prove_inside_exceedances (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_outside_witness_does_not_prove_inside_exceedances) ... ok\ntest_region_pixel_percentiles_remain_unknown (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_region_pixel_percentiles_remain_unknown) ... ok\ntest_single_forward_region_max_percentile_is_not_pixel_percentile (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_single_forward_region_max_percentile_is_not_pixel_percentile) ... ok\ntest_stdlib_only_no_model_runtime_loaded (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_stdlib_only_no_model_runtime_loaded) ... ok\ntest_strict_threshold_equality_is_not_exceedance (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_strict_threshold_equality_is_not_exceedance) ... ok\ntest_success_cohort_does_not_use_failure_witness (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_success_cohort_does_not_use_failure_witness) ... ok\ntest_witness_attains_global_bound_proves_region_max (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_witness_attains_global_bound_proves_region_max) ... ok\ntest_witness_below_global_max_is_only_a_lower_bound (tests.saved_quantile_extremes.test_extremes.SavedExtremesTests.test_witness_below_global_max_is_only_a_lower_bound) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.006s\n\nOK\n",
+  "torch_imported": false,
+  "netCDF4_imported": false,
+  "2025_RAW_ACCESS": 0,
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0
+}

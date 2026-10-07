@@ -1,0 +1,43 @@
+"""Explicit historical evidence bindings and frozen-inventory test isolation."""
+from contextlib import contextmanager
+import os
+from quantile_head_v2 import common as c,governance
+
+
+@contextmanager
+def historical_fixture_environment(attempt):
+    bindings={
+        'YUNTAPR_PROTOCOL_DRYRUN_EVIDENCE':'docs/phase_a_optimizer_dryrun/runs/run_20261001T030242Z',
+        'YUNTAPR_SCIENTIFIC_REVIEW_EVIDENCE':'docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z',
+        'YUNTAPR_PHASE_B_RUNNER_EVIDENCE':'docs/phase_b_formal_runner/runs/run_20261002T031500_884240Z',
+        'YUNTAPR_FINAL_TEST_PREFLIGHT_EVIDENCE':'docs/final_test_b0/preflight/run_20261002T152029_621524Z',
+        'B0_CATALOGUE_ARTIFACT_RUN':'docs/final_test_b0/catalogue_gate_v1_1/catalogue_only_runs/run_20261003T015507_526850Z',
+        'YUNTAPR_PAIRED_AUTHORIZATION_REGISTRY':'docs/paired_phase_a_authorized/runs/run_20261003T085834_735920Z/authorization_registry.json',
+    }
+    for name,path in bindings.items():
+        if not (c.ROOT/path).exists():raise ValueError('Historical fixture evidence missing: '+path)
+        os.environ[name]=str(c.ROOT/path)
+    from yuntapr.training import paired_phase_a as p
+    from yuntapr.training import paired_phase_a_audit as a
+    reference=c.read(c.ROOT/'docs/formal_training/b0_matched_phase_a/runs/run_20261003T093519_542831Z/run_manifest.json')
+    old_inventory={name:digest for name,digest in reference['code_hashes'].items() if name not in a.ADAPTERS}
+    def frozen_inventory(root=c.ROOT):
+        for name,digest in old_inventory.items():
+            if c.digest(root/name)!=digest:raise ValueError('Frozen v1 trained dependency changed: '+name)
+        return dict(old_inventory)
+    frozen_inventory()
+    allowed={}
+    for kind,runid in (('b0_matched_phase_a','run_20261003T093519_542831Z'),('b1_phase_a','run_20261003T093522_417735Z')):
+        registry=c.read(c.ROOT/f'docs/formal_training/{kind}/runs/{runid}/checkpoint_registry.json')
+        for ref in registry.values():allowed[ref['absolute_local_path']]=ref
+    c.write(attempt/'legacy_regression_scope.json',{
+        'description':'historical fixture isolation（历史测试夹具隔离）：旧训练身份按当时冻结的依赖清单核验，新增 v2 模块不静默加入旧身份；旧 BEST/LAST 仅只读检查，不应用于 v2。',
+        'TEST_FIXTURE_ONLY':True,'environment_bindings':bindings,
+        'frozen_inventory_source':c.pin(c.ROOT/'docs/formal_training/b0_matched_phase_a/runs/run_20261003T093519_542831Z/run_manifest.json'),
+        'v1_dependency_inventory':old_inventory,'readonly_Phase_A_checkpoints':allowed,
+        'metadata_function_adapter_only':True,'model_forward_loss_optimizer_scheduler_unchanged':True,
+        'old_source_files_modified':False,'historical_state_applied_to_v2':False,'2025_RAW_ACCESS':0})
+    original=p.implementation_hashes;p.implementation_hashes=frozen_inventory
+    try:
+        with governance.readonly_legacy_checkpoint_validation(allowed):yield
+    finally:p.implementation_hashes=original

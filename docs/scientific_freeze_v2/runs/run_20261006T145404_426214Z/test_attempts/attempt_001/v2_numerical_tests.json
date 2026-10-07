@@ -1,0 +1,18 @@
+{
+  "status": "FAIL",
+  "TEST_FIXTURE_ONLY": true,
+  "suite_counts": {
+    "tests/quantile_head_v2/test_v2.py": 37
+  },
+  "planned_tests": 37,
+  "counts": {
+    "run": 5,
+    "passed": 4,
+    "failed": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "console": "test_2023_2024_raw_also_not_needed (tests.quantile_head_v2.test_v2.GovernanceTests.test_2023_2024_raw_also_not_needed) ... ok\ntest_2025_himawari_blocked_before_open (tests.quantile_head_v2.test_v2.GovernanceTests.test_2025_himawari_blocked_before_open) ... ok\ntest_2025_imerg_blocked_before_open (tests.quantile_head_v2.test_v2.GovernanceTests.test_2025_imerg_blocked_before_open) ... ok\ntest_v2_candidate_cannot_authorize_formal_training (tests.quantile_head_v2.test_v2.GovernanceTests.test_v2_candidate_cannot_authorize_formal_training) ... ok\ntest_A_cpu_two_batches_bit_exact (tests.quantile_head_v2.test_v2.ModelAndEquivalenceTests.test_A_cpu_two_batches_bit_exact) ... ERROR\n\n======================================================================\nERROR: test_A_cpu_two_batches_bit_exact (tests.quantile_head_v2.test_v2.ModelAndEquivalenceTests.test_A_cpu_two_batches_bit_exact)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\tests\\quantile_head_v2\\test_v2.py\", line 178, in test_A_cpu_two_batches_bit_exact\n    self.assertTrue(v.equivalence(torch.device('cpu'))['qlog_loss_gradients_optimizer_model_RNG_exact'])\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_head_v2\\verification.py\", line 64, in equivalence\n    loss.total.backward()\n  File \"F:\\pytorch\\Research\\.venv-cuda\\Lib\\site-packages\\torch\\_tensor.py\", line 631, in backward\n    torch.autograd.backward(\n  File \"F:\\pytorch\\Research\\.venv-cuda\\Lib\\site-packages\\torch\\autograd\\__init__.py\", line 381, in backward\n    _engine_run_backward(\n  File \"F:\\pytorch\\Research\\.venv-cuda\\Lib\\site-packages\\torch\\autograd\\graph.py\", line 869, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: DNNL does not support bf16/f16 backward on the platform with avx2_vnni_2\n\n----------------------------------------------------------------------\nRan 5 tests in 2.776s\n\nFAILED (errors=1)\n",
+  "formal_optimizer_steps_added": 0,
+  "2025_RAW_ACCESS": 0
+}

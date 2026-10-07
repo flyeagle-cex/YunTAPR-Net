@@ -1,0 +1,39 @@
+{
+  "description": "fresh initialization（全新初始化）与 paired comparison（配对比较）工程身份；seed（随机种子）2026 仅是未冻结候选。",
+  "models": {
+    "B0_MATCHED_V2": {
+      "parameters": {
+        "DECAY_GROUP": 4322880,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4329410
+      },
+      "head_parameters": 1666,
+      "initial_state_sha256": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "fresh_replay_exact": true
+    },
+    "B1_V2": {
+      "parameters": {
+        "DECAY_GROUP": 4325280,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4331810
+      },
+      "head_parameters": 1666,
+      "initial_state_sha256": "0283da4945ff2d7d31b077db18fa357814c4de14b060162aa7e83125536f745b",
+      "fresh_replay_exact": true
+    }
+  },
+  "same_head_family": true,
+  "native_unpaired_head_parameters_bit_identical": false,
+  "head_parameters_bit_identical_in_disposable_paired_fixture": true,
+  "pairing_policy": "CANDIDATE_V1_FRESH_SAME_NAME_SAME_SHAPE_COPY_TEST_FIXTURE_ONLY",
+  "B1_native_input_kernels_unchanged": true,
+  "only_shape_differences": [
+    "backbone.enc0.conv1.weight",
+    "backbone.enc0.skip.weight"
+  ],
+  "parameter_count_difference": 2400,
+  "seed_candidate": 2026,
+  "seed_scientifically_approved": false,
+  "historical_checkpoint_loaded": false,
+  "formal_initializer_created": false
+}

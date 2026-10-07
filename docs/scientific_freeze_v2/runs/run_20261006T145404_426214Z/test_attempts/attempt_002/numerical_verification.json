@@ -1,0 +1,518 @@
+{
+  "a_path_equivalence_cpu": {
+    "description": "exact equivalence（精确等价性）：正常 synthetic fixture（合成测试夹具）中仅移除未参与核心损失的物理生成。",
+    "device": "cpu",
+    "autocast": "DISABLED_FP32",
+    "TEST_FIXTURE_ONLY": true,
+    "qlog_loss_gradients_optimizer_model_RNG_exact": true,
+    "comparison_tolerance": 0,
+    "paths": [
+      [
+        {
+          "batch": 2,
+          "update": 1,
+          "LR": 1.9127773527161438e-08,
+          "denominator": 6860,
+          "qlog_sha256": "3bca6594c45096314a7db1921426e415a6aeb2d5f66a48a6d1322761c0cd0f61",
+          "loss_sha256": "1f091b49eda8ba74b9eab74c0da69e58bb884453b91cefe5429ff1050aeb8dfd",
+          "gradients_before_clip_sha256": "fb3ee49d9fca7c99be3d17e47ab27c2d4cd61658d48b0986fbf56376ffdfdce0",
+          "gradients_after_clip_sha256": "b90d6f17a0620073cef4d97b8e5a59dbc0dff2ddf1cdebac1c99e173cfc90ece",
+          "pre_clip_norm": 16.572368621826172,
+          "optimizer_state_sha256": "1ecae2ddb370f68108f97e89975f2d3d563e77d9b958d6d6ddd97c8f622fea6d",
+          "model_state_after_update_sha256": "46e65e69e28d3e6d65c2f1ef2ff8343575a73aeb8830b47f707976b4dc56027e",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        },
+        {
+          "batch": 1,
+          "update": 5228,
+          "LR": 0.0001,
+          "denominator": 3430,
+          "qlog_sha256": "c85f82669be48575b55103469d6d9410b345f8f011864da74054a74eb248673c",
+          "loss_sha256": "cb9c8b81734268a05ba81cf3d63fac88f9c075449acfb0fe5524f92bc46e80c0",
+          "gradients_before_clip_sha256": "d2e0758401797e759ef658261c1da05eaa0f488f5435ed42b2187ec4865a8f11",
+          "gradients_after_clip_sha256": "93c6bab2a634683a0351d694cb05d4f7ba2e8d4442578df5d53a2db03381d4e4",
+          "pre_clip_norm": 16.839811325073242,
+          "optimizer_state_sha256": "138b4c64a77d6e0485a23f7914108558aa3a1c9d40e879789174f6548749c0b1",
+          "model_state_after_update_sha256": "184012df18d09f02273ada11a3cf3a80a0188f31a2ca7dabe78e9e497297a2d8",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        }
+      ],
+      [
+        {
+          "batch": 2,
+          "update": 1,
+          "LR": 1.9127773527161438e-08,
+          "denominator": 6860,
+          "qlog_sha256": "3bca6594c45096314a7db1921426e415a6aeb2d5f66a48a6d1322761c0cd0f61",
+          "loss_sha256": "1f091b49eda8ba74b9eab74c0da69e58bb884453b91cefe5429ff1050aeb8dfd",
+          "gradients_before_clip_sha256": "fb3ee49d9fca7c99be3d17e47ab27c2d4cd61658d48b0986fbf56376ffdfdce0",
+          "gradients_after_clip_sha256": "b90d6f17a0620073cef4d97b8e5a59dbc0dff2ddf1cdebac1c99e173cfc90ece",
+          "pre_clip_norm": 16.572368621826172,
+          "optimizer_state_sha256": "1ecae2ddb370f68108f97e89975f2d3d563e77d9b958d6d6ddd97c8f622fea6d",
+          "model_state_after_update_sha256": "46e65e69e28d3e6d65c2f1ef2ff8343575a73aeb8830b47f707976b4dc56027e",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        },
+        {
+          "batch": 1,
+          "update": 5228,
+          "LR": 0.0001,
+          "denominator": 3430,
+          "qlog_sha256": "c85f82669be48575b55103469d6d9410b345f8f011864da74054a74eb248673c",
+          "loss_sha256": "cb9c8b81734268a05ba81cf3d63fac88f9c075449acfb0fe5524f92bc46e80c0",
+          "gradients_before_clip_sha256": "d2e0758401797e759ef658261c1da05eaa0f488f5435ed42b2187ec4865a8f11",
+          "gradients_after_clip_sha256": "93c6bab2a634683a0351d694cb05d4f7ba2e8d4442578df5d53a2db03381d4e4",
+          "pre_clip_norm": 16.839811325073242,
+          "optimizer_state_sha256": "138b4c64a77d6e0485a23f7914108558aa3a1c9d40e879789174f6548749c0b1",
+          "model_state_after_update_sha256": "184012df18d09f02273ada11a3cf3a80a0188f31a2ca7dabe78e9e497297a2d8",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        }
+      ]
+    ],
+    "engineering_optimizer_steps": 4,
+    "formal_optimizer_steps_added": 0,
+    "historical_checkpoint_loaded": false,
+    "temporary_models_optimizers_destroyed": true
+  },
+  "a_path_equivalence_cuda": {
+    "description": "exact equivalence（精确等价性）：正常 synthetic fixture（合成测试夹具）中仅移除未参与核心损失的物理生成。",
+    "device": "cuda",
+    "autocast": "BF16",
+    "TEST_FIXTURE_ONLY": true,
+    "qlog_loss_gradients_optimizer_model_RNG_exact": true,
+    "comparison_tolerance": 0,
+    "paths": [
+      [
+        {
+          "batch": 2,
+          "update": 1,
+          "LR": 1.9127773527161438e-08,
+          "denominator": 6860,
+          "qlog_sha256": "1be454e04799b0aed526288d6b7584da268fef2f368ac681806c9a9496b0d1c3",
+          "loss_sha256": "4d018202cf0f45dd72dadabfb888df0355689d4d2b3f74e517884367b2ac9a68",
+          "gradients_before_clip_sha256": "7e01cc468ceb0a65016aa349f9670d49470d2b1c93a00c4e9dab26eb4c63b0eb",
+          "gradients_after_clip_sha256": "b9c856a582d415d49c01763750ac8a1076ea8e75a407f26f717a798fb2f16bfc",
+          "pre_clip_norm": 16.563495635986328,
+          "optimizer_state_sha256": "a713fd477b99d7db13a9fc26147b771e97b94112df5f3547ba7a5abef5807c33",
+          "model_state_after_update_sha256": "e516f3cdb34c19b63cda7621f48f5b4d186c6e06378b768adc1ef0d992883dd6",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        },
+        {
+          "batch": 1,
+          "update": 5228,
+          "LR": 0.0001,
+          "denominator": 3430,
+          "qlog_sha256": "dffbfb5013f9c8189eea90798327a35400f4a4f0b2a170434131350346d865eb",
+          "loss_sha256": "ca6af603dfa935b59432130f09e542df10174ce7baef4e522d69c266bb1cfd1d",
+          "gradients_before_clip_sha256": "01ecab08af16f9d241094a123e2bc84b8a1e532876a9bb83b475946eb77ae3c9",
+          "gradients_after_clip_sha256": "b06f958b0fa05b75e10a7c6e96475e584456814a129eac865da732af4e6b2a39",
+          "pre_clip_norm": 16.83346939086914,
+          "optimizer_state_sha256": "43ddf608c3d0a38d6433e8671904c49d970c37cdc28ec39f512edd301bf07f7a",
+          "model_state_after_update_sha256": "c91e3bc1cb2250e2460cfcf58cd987d2b6f12bf0c00312a4f542bcca58c1f82b",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        }
+      ],
+      [
+        {
+          "batch": 2,
+          "update": 1,
+          "LR": 1.9127773527161438e-08,
+          "denominator": 6860,
+          "qlog_sha256": "1be454e04799b0aed526288d6b7584da268fef2f368ac681806c9a9496b0d1c3",
+          "loss_sha256": "4d018202cf0f45dd72dadabfb888df0355689d4d2b3f74e517884367b2ac9a68",
+          "gradients_before_clip_sha256": "7e01cc468ceb0a65016aa349f9670d49470d2b1c93a00c4e9dab26eb4c63b0eb",
+          "gradients_after_clip_sha256": "b9c856a582d415d49c01763750ac8a1076ea8e75a407f26f717a798fb2f16bfc",
+          "pre_clip_norm": 16.563495635986328,
+          "optimizer_state_sha256": "a713fd477b99d7db13a9fc26147b771e97b94112df5f3547ba7a5abef5807c33",
+          "model_state_after_update_sha256": "e516f3cdb34c19b63cda7621f48f5b4d186c6e06378b768adc1ef0d992883dd6",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        },
+        {
+          "batch": 1,
+          "update": 5228,
+          "LR": 0.0001,
+          "denominator": 3430,
+          "qlog_sha256": "dffbfb5013f9c8189eea90798327a35400f4a4f0b2a170434131350346d865eb",
+          "loss_sha256": "ca6af603dfa935b59432130f09e542df10174ce7baef4e522d69c266bb1cfd1d",
+          "gradients_before_clip_sha256": "01ecab08af16f9d241094a123e2bc84b8a1e532876a9bb83b475946eb77ae3c9",
+          "gradients_after_clip_sha256": "b06f958b0fa05b75e10a7c6e96475e584456814a129eac865da732af4e6b2a39",
+          "pre_clip_norm": 16.83346939086914,
+          "optimizer_state_sha256": "43ddf608c3d0a38d6433e8671904c49d970c37cdc28ec39f512edd301bf07f7a",
+          "model_state_after_update_sha256": "c91e3bc1cb2250e2460cfcf58cd987d2b6f12bf0c00312a4f542bcca58c1f82b",
+          "RNG_state_sha256": "268456d6ac4f5e5ee223a181f3cabaa9822eb7af39a6fd2c6c13bc5bfee2ecab"
+        }
+      ]
+    ],
+    "engineering_optimizer_steps": 4,
+    "formal_optimizer_steps_added": 0,
+    "historical_checkpoint_loaded": false,
+    "temporary_models_optimizers_destroyed": true
+  },
+  "model_identity": {
+    "description": "fresh initialization（全新初始化）与 paired comparison（配对比较）工程身份；seed（随机种子）2026 仅是未冻结候选。",
+    "models": {
+      "B0_MATCHED_V2": {
+        "parameters": {
+          "DECAY_GROUP": 4322880,
+          "NO_DECAY_GROUP": 6530,
+          "total": 4329410
+        },
+        "head_parameters": 1666,
+        "initial_state_sha256": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+        "fresh_replay_exact": true
+      },
+      "B1_V2": {
+        "parameters": {
+          "DECAY_GROUP": 4325280,
+          "NO_DECAY_GROUP": 6530,
+          "total": 4331810
+        },
+        "head_parameters": 1666,
+        "initial_state_sha256": "0283da4945ff2d7d31b077db18fa357814c4de14b060162aa7e83125536f745b",
+        "fresh_replay_exact": true
+      }
+    },
+    "same_head_family": true,
+    "native_unpaired_head_parameters_bit_identical": false,
+    "head_parameters_bit_identical_in_disposable_paired_fixture": true,
+    "pairing_policy": "CANDIDATE_V1_FRESH_SAME_NAME_SAME_SHAPE_COPY_TEST_FIXTURE_ONLY",
+    "B1_native_input_kernels_unchanged": true,
+    "only_shape_differences": [
+      "backbone.enc0.conv1.weight",
+      "backbone.enc0.skip.weight"
+    ],
+    "parameter_count_difference": 2400,
+    "seed_candidate": 2026,
+    "seed_scientifically_approved": false,
+    "historical_checkpoint_loaded": false,
+    "formal_initializer_created": false
+  },
+  "v2_extreme_stress": {
+    "levels": [
+      -10000.0,
+      -1000.0,
+      -100.0,
+      -50.0,
+      0.0,
+      50.0,
+      100.0,
+      1000.0,
+      10000.0
+    ],
+    "cases": [
+      {
+        "raw_dtype": "torch.float32",
+        "transform_dtype": "torch.float64",
+        "mixed_scene_pixels": 50000,
+        "raw_allocation_values": 1600000,
+        "constant_cases": 81,
+        "all_requested_cases_pass": true,
+        "gradient_finite": true,
+        "description": "physical-risk diagnostic（物理转换风险诊断）：仅比较浮点边界，不改变梯度、损失或样本。",
+        "max_qlog": 10000.095410179803,
+        "per_tau_qlog_range": [
+          {
+            "min": 0.09531017980440727,
+            "max": 8028.646038712023
+          },
+          {
+            "min": 0.0953101798045181,
+            "max": 8654.466222424986
+          },
+          {
+            "min": 0.09531017980461472,
+            "max": 9345.585837937737
+          },
+          {
+            "min": 0.09531017980476178,
+            "max": 9345.58588466519
+          },
+          {
+            "min": 0.09531017980491138,
+            "max": 9778.419144216992
+          },
+          {
+            "min": 0.09531017980505879,
+            "max": 9778.419175759973
+          },
+          {
+            "min": 0.09531017980532129,
+            "max": 9778.637846576721
+          },
+          {
+            "min": 0.09531017980546364,
+            "max": 9778.637878119702
+          },
+          {
+            "min": 0.09531017980595231,
+            "max": 9810.18088926372
+          },
+          {
+            "min": 0.09531017980730543,
+            "max": 9876.840654915664
+          },
+          {
+            "min": 0.09531017980760349,
+            "max": 9949.483747112337
+          },
+          {
+            "min": 0.09531018115645538,
+            "max": 9949.483845600846
+          },
+          {
+            "min": 0.09531018115665012,
+            "max": 9998.728198260653
+          },
+          {
+            "min": 0.09531018115684485,
+            "max": 9998.728296749161
+          },
+          {
+            "min": 0.09531018115703958,
+            "max": 9998.728395237667
+          },
+          {
+            "min": 0.09531018665741936,
+            "max": 9999.411164044928
+          },
+          {
+            "min": 0.09531018665791315,
+            "max": 9999.808998702189
+          },
+          {
+            "min": 0.09531018665840692,
+            "max": 9999.809039933405
+          },
+          {
+            "min": 0.09531037978896917,
+            "max": 9999.809081164622
+          },
+          {
+            "min": 0.09531037978916777,
+            "max": 9999.809122395838
+          },
+          {
+            "min": 0.09531064883153423,
+            "max": 9999.938170216035
+          },
+          {
+            "min": 0.09531089541250364,
+            "max": 10000.095183689924
+          },
+          {
+            "min": 0.09531096351813012,
+            "max": 10000.095206338912
+          },
+          {
+            "min": 0.09531096351844016,
+            "max": 10000.095279995605
+          },
+          {
+            "min": 0.09531143177674795,
+            "max": 10000.09529626863
+          },
+          {
+            "min": 0.09531143177723919,
+            "max": 10000.095339174468
+          },
+          {
+            "min": 0.09531143518281472,
+            "max": 10000.09535670466
+          },
+          {
+            "min": 0.09531193602805733,
+            "max": 10000.095367399688
+          },
+          {
+            "min": 0.0953123815535989,
+            "max": 10000.095378094717
+          },
+          {
+            "min": 0.09531262543999507,
+            "max": 10000.095388789745
+          },
+          {
+            "min": 0.09531586487869344,
+            "max": 10000.095399806509
+          },
+          {
+            "min": 0.09541017980432487,
+            "max": 10000.095410179803
+          }
+        ],
+        "boundaries": {
+          "32": 88.72283905206835,
+          "64": 709.782712893384
+        },
+        "FP64_PHYSICAL_OVERFLOW_RISK": true,
+        "FP32_PHYSICAL_OVERFLOW_RISK": true,
+        "unit": "log1p(mm/h)",
+        "affects_gradient_loss_or_batch_selection": false
+      },
+      {
+        "raw_dtype": "torch.float64",
+        "transform_dtype": "torch.float64",
+        "mixed_scene_pixels": 50000,
+        "raw_allocation_values": 1600000,
+        "constant_cases": 81,
+        "all_requested_cases_pass": true,
+        "gradient_finite": true,
+        "description": "physical-risk diagnostic（物理转换风险诊断）：仅比较浮点边界，不改变梯度、损失或样本。",
+        "max_qlog": 10000.095410179803,
+        "per_tau_qlog_range": [
+          {
+            "min": 0.09531017980440727,
+            "max": 8028.646038712023
+          },
+          {
+            "min": 0.0953101798045181,
+            "max": 8654.466222424986
+          },
+          {
+            "min": 0.09531017980461472,
+            "max": 9345.585837937737
+          },
+          {
+            "min": 0.09531017980476178,
+            "max": 9345.58588466519
+          },
+          {
+            "min": 0.09531017980491138,
+            "max": 9778.419144216992
+          },
+          {
+            "min": 0.09531017980505879,
+            "max": 9778.419175759973
+          },
+          {
+            "min": 0.09531017980532129,
+            "max": 9778.637846576721
+          },
+          {
+            "min": 0.09531017980546364,
+            "max": 9778.637878119702
+          },
+          {
+            "min": 0.09531017980595231,
+            "max": 9810.18088926372
+          },
+          {
+            "min": 0.09531017980730543,
+            "max": 9876.840654915664
+          },
+          {
+            "min": 0.09531017980760349,
+            "max": 9949.483747112337
+          },
+          {
+            "min": 0.09531018115645538,
+            "max": 9949.483845600846
+          },
+          {
+            "min": 0.09531018115665012,
+            "max": 9998.728198260653
+          },
+          {
+            "min": 0.09531018115684485,
+            "max": 9998.728296749161
+          },
+          {
+            "min": 0.09531018115703958,
+            "max": 9998.728395237667
+          },
+          {
+            "min": 0.09531018665741936,
+            "max": 9999.411164044928
+          },
+          {
+            "min": 0.09531018665791315,
+            "max": 9999.808998702189
+          },
+          {
+            "min": 0.09531018665840692,
+            "max": 9999.809039933405
+          },
+          {
+            "min": 0.09531037978896917,
+            "max": 9999.809081164622
+          },
+          {
+            "min": 0.09531037978916777,
+            "max": 9999.809122395838
+          },
+          {
+            "min": 0.09531064883153423,
+            "max": 9999.938170216035
+          },
+          {
+            "min": 0.09531089541250364,
+            "max": 10000.095183689924
+          },
+          {
+            "min": 0.09531096351813012,
+            "max": 10000.095206338912
+          },
+          {
+            "min": 0.09531096351844016,
+            "max": 10000.095279995605
+          },
+          {
+            "min": 0.09531143177674795,
+            "max": 10000.09529626863
+          },
+          {
+            "min": 0.09531143177723919,
+            "max": 10000.095339174468
+          },
+          {
+            "min": 0.09531143518281472,
+            "max": 10000.09535670466
+          },
+          {
+            "min": 0.09531193602805733,
+            "max": 10000.095367399688
+          },
+          {
+            "min": 0.0953123815535989,
+            "max": 10000.095378094717
+          },
+          {
+            "min": 0.09531262543999507,
+            "max": 10000.095388789745
+          },
+          {
+            "min": 0.09531586487869344,
+            "max": 10000.095399806509
+          },
+          {
+            "min": 0.09541017980432487,
+            "max": 10000.095410179803
+          }
+        ],
+        "boundaries": {
+          "32": 88.72283905206835,
+          "64": 709.782712893384
+        },
+        "FP64_PHYSICAL_OVERFLOW_RISK": true,
+        "FP32_PHYSICAL_OVERFLOW_RISK": true,
+        "unit": "log1p(mm/h)",
+        "affects_gradient_loss_or_batch_selection": false
+      }
+    ],
+    "all_required_cases_pass": true
+  },
+  "fp64_finite_raw_counterexample": {
+    "finite_raw": true,
+    "largest_raw": 1e+20,
+    "epsilon_w": 0.0001,
+    "epsilon_span": 0.0001,
+    "guard_rejects": true,
+    "repair_applied": false
+  },
+  "native_fp32_counterexample": {
+    "finite_raw": true,
+    "largest_raw": 10000.0,
+    "adjacent_equal_count": 31,
+    "production_transform_dtype": "float64",
+    "native_fp32_approved": false
+  }
+}

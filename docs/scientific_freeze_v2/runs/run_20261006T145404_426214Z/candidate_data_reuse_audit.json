@@ -1,0 +1,45 @@
+{
+  "description": "candidate data reuse（候选数据复用）：只核验旧 manifest（样本身份清单）和 normalization（仅训练集拟合的标准化）记录，未打开卫星或降水原始文件。",
+  "RESEARCHER_APPROVAL_REQUIRED": true,
+  "V2_DATA_REUSE_APPROVED": false,
+  "source_protocol": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\config\\training\\b1_b0_matched_phase_a_protocol_v1.yaml",
+    "bytes": 5082,
+    "sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6"
+  },
+  "training_scenes": 10455,
+  "validation_scenes": 10501,
+  "paired_target_identities_exact": true,
+  "mean_K": 271.60515414265217,
+  "std_K": 19.93959597783802,
+  "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+  "fit_years": [
+    2023
+  ],
+  "fit_scene_slot_exposures": 62730,
+  "metadata_refs": {
+    "normalization": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\normalization_b1_2023_shared_v1.json",
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+    },
+    "B1_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2023_formal_manifest.csv",
+      "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+    },
+    "B1_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2024_formal_manifest.csv",
+      "sha256": "eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c"
+    },
+    "B0_MATCHED_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv",
+      "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc"
+    },
+    "B0_MATCHED_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2024_formal_manifest.csv",
+      "sha256": "5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a"
+    }
+  },
+  "normalization_refit": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_OUTCOME_GUIDED_CHOICE": false
+}

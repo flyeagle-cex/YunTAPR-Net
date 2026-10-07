@@ -1,0 +1,7 @@
+{
+  "status": "STOP",
+  "error": "STOP: V1_REGRESSION did not pass; original failure evidence preserved",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_head_v2\\test_gate.py\", line 132, in main\n    regression=run_suite(dest,'V1_REGRESSION',paths)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\scripts\\quantile_head_v2\\test_gate.py\", line 90, in run_suite\n    if value['status']!='PASS':raise AssertionError('STOP: '+phase+' did not pass; original failure evidence preserved')\n                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: STOP: V1_REGRESSION did not pass; original failure evidence preserved\n",
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+  "2025_RAW_ACCESS": 0
+}

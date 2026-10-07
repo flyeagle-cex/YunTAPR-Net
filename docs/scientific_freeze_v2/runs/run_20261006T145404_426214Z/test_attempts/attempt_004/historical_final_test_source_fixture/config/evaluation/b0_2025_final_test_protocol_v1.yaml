@@ -1,0 +1,318 @@
+version: v1
+status: FROZEN_BEFORE_2025_RAW_ACCESS
+baseline_commit: ddbb69ccca6c806973a89a91127ea02c9af42afd
+FINAL_TEST_PROTOCOL_FROZEN: true
+FINAL_TEST_2025_AUTHORIZED: false
+FINAL_TEST_2025_EXECUTED: false
+scope: B0_2025_FINAL_TEST_PROTOCOL_AND_PREFLIGHT_ONLY
+FINAL:
+  absolute_local_path: F:\pytorch\Research\outputs\formal_training\b0_phase_b_finalfit\run_20261002T035929_487644Z\epoch_011.pt
+  sha256: 05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65
+  bytes: 52071595
+  epoch: 11
+  global_update: 128964
+identity:
+  final_checkpoint_identity:
+    path: docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z/final_checkpoint_identity.json
+    sha256: d88bc7ec861ffcfd654ba339ea519f5fc061adb6ebcaf7477d052230b4b5899a
+  finalfit_run_manifest:
+    path: docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z/run_manifest.json
+    sha256: fc282a6672bf3418ffd18217fd6b1a3196df16a07bd1e11616ddea3508087ee5
+  finalfit_completion:
+    path: docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z/final_status.json
+    sha256: 644a036e268c0507181e6f83603e412c5a51b6db8f24787b9880618527c2a007
+  scientific_contract:
+    path: config/science_contract_v1.1.yaml
+    sha256: 14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3
+  frozen_loss_protocol:
+    path: config/training/phase_a_training_protocol_v1.yaml
+    sha256: dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a
+  inherited_diagnostic_rules:
+    path: docs/scientific_review/b0_phase_a/runs/run_20261002T005448_798068Z/case_selection_rules.json
+    sha256: 36a0f8798af895b6723b510ce537f95f69b289ac47f4d56fc83ca638ef0d1e17
+  inherited_diagnostic_implementation:
+    path: src/yuntapr/training/scientific_review.py
+    sha256: 303bf6b6f181bb9147d22ed970dd3bc6c1b233052d1952ec2c9ac8d8531c3b01
+normalization:
+  mean_K: 270.5900486586461
+  std_K: 20.368583874067266
+  sha256: c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327
+  path: docs/phase_b_finalfit_preparation/runs/run_20261002T014649_144967Z/normalization_phaseB_finalfit_2023_2024.json
+  refit_allowed: false
+  float64_transform_float32_output: true
+population:
+  year: 2025
+  months:
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  window_start_UTC_interval:
+  - '2025-03-01T00:00:00+00:00'
+  - '2025-10-01T00:00:00+00:00'
+  interval: LEFT_CLOSED_RIGHT_OPEN
+  cadence_minutes: 30
+  expected_candidate_slots: 10272
+  eligibility: UNCHANGED_V1_1_FORMAL_B0_SUPERVISION_RULES
+  required:
+  - IMERG_V07_Final_provenance
+  - expected_latest_B13_T_plus_20min
+  - obs_start_le_obs_end_le_T_plus_30min
+  - B13_501x501_all_valid_finite
+  - IMERG_grid_time_provenance
+  - valid_Yunnan_supervised_pixels_gt_0
+  - no_older_fallback
+  not_required: 3430 valid pixels per scene; partial IMERG validity is retained under
+    the frozen mask
+  mask: GADM4.1_Yunnan_center_in_polygon_on_exact_frozen_SP04_target_axes
+  order: window_start_UTC_then_sample_id; unique once; no shuffle/drop/padding/replacement
+  candidate_catalog_required: all 10272 scheduled windows, with eligible flag and
+    fixed-rule rejection reasons
+  eligible_population_count: NOT_INSPECTED_IN_THIS_ZERO_2025_READ_PREFLIGHT
+  runtime_read_QC_SHA_causality_failure: STOP_NO_SKIP_NO_SUBSTITUTION
+  October: HARD_REJECT_BEFORE_SOURCE_IO
+  Sep30_2330_window: allowed; window end Oct1 0000 is a boundary, sources remain September
+primary_metrics:
+- global_core_loss
+- occurrence_loss
+- quantile_loss
+- Brier
+- AUROC
+- Average_Precision
+- conditional_mean_pinball
+- per_tau_pinball
+- 32_tau_conditional_coverage
+- coverage_error
+- crossing_count
+- nonfinite_count
+- support_violation_count
+metric_definitions:
+  rainy: float32 R > float32(0.1), before float64 promotion
+  occurrence: float64 focal BCE alpha=0.5 gamma=2, S_occ / N_valid
+  quantile: mean over 32 tau of log1p conditional rainy pinball, S_qr / N_valid
+  global_core_loss: (S_occ+S_qr)/N_valid over full eligible population; never batch-average
+  Brier: sum((p-rainy)^2)/N_valid
+  AUROC: exact equal-score groups with half credit for ties; no binned approximation
+  Average_Precision: NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP
+  conditional_mean_pinball: S_qr/N_rain
+  tau: (i-0.5)/32, i=1..32
+  coverage: R <= physical conditional quantile, valid rainy cells only
+  coverage_error: per-tau signed coverage-minus-tau, per-tau absolute error, mean
+    absolute error; inherited low/middle/high groups
+  undefined: null with reason; no-rain conditional metrics null; single-class AUROC
+    null; empty bins null
+  numerical_check_population: all output cells; statistical population is IMERG_valid
+    AND frozen Yunnan mask
+  strict_crossing: adjacent q_i <= q_(i-1) in either log or physical domain
+  support: qlog_1 <= log1p(0.1) or physical q_1 <= 0.1
+  numerical_violation_action: STOP_NO_REPAIR
+  POD_FAR_CSI: THRESHOLD_NOT_FROZEN
+  probability_threshold: null
+  no_post_2025_metric_selection: true
+inherited_diagnostics:
+  scope: SCIENTIFIC_RESULT_REVIEW_ONLY
+  declared_before_inference: true
+  case_rules:
+  - MAX_ABSOLUTE_DIAGNOSTIC_PROXY_ERROR
+  - HIGHEST_TRUE_RAIN_RATE
+  - LOWEST_TRUE_RATE_AMONG_RAINY
+  top_N_each: 10
+  ties: frozen scene order, then target row-major cell index
+  probability_edges:
+  - 0.0
+  - 0.1
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 1.0
+  last_probability_bin_includes_one: true
+  rainrate_bins:
+  - (0.1,1]
+  - (1,5]
+  - (5,10]
+  - (10,20]
+  - (20,30]
+  - (30,50]
+  - (50,inf)
+  rate_bin_status: DESCRIPTIVE_RATE_BINS_ONLY
+  rainy_definition: float32 target > float32(0.1), before float64 promotion; frozen
+    production convention
+  spatial_conditional_pinball_min_rain_count: 30
+  minimum_count_scope: DISPLAY_DIAGNOSTIC_ONLY
+  quantile_groups:
+    low: tau < 0.2
+    middle: 0.2 <= tau <= 0.8
+    high: tau > 0.8
+  group_status: ANALYTIC_GROUPING_ONLY
+  exceedances_mm_h:
+  - 10
+  - 20
+  - 30
+  - 50
+  exceedance_status: DESCRIPTIVE_ONLY
+  extreme_definition: NOT_FROZEN
+  probability_histogram_edges:
+  - 0.0
+  - 0.01
+  - 0.02
+  - 0.03
+  - 0.04
+  - 0.05
+  - 0.06
+  - 0.07
+  - 0.08
+  - 0.09
+  - 0.1
+  - 0.11
+  - 0.12
+  - 0.13
+  - 0.14
+  - 0.15
+  - 0.16
+  - 0.17
+  - 0.18
+  - 0.19
+  - 0.2
+  - 0.21
+  - 0.22
+  - 0.23
+  - 0.24
+  - 0.25
+  - 0.26
+  - 0.27
+  - 0.28
+  - 0.29
+  - 0.3
+  - 0.31
+  - 0.32
+  - 0.33
+  - 0.34
+  - 0.35
+  - 0.36
+  - 0.37
+  - 0.38
+  - 0.39
+  - 0.4
+  - 0.41
+  - 0.42
+  - 0.43
+  - 0.44
+  - 0.45
+  - 0.46
+  - 0.47
+  - 0.48
+  - 0.49
+  - 0.5
+  - 0.51
+  - 0.52
+  - 0.53
+  - 0.54
+  - 0.55
+  - 0.56
+  - 0.57
+  - 0.58
+  - 0.59
+  - 0.6
+  - 0.61
+  - 0.62
+  - 0.63
+  - 0.64
+  - 0.65
+  - 0.66
+  - 0.67
+  - 0.68
+  - 0.69
+  - 0.7
+  - 0.71
+  - 0.72
+  - 0.73
+  - 0.74
+  - 0.75
+  - 0.76
+  - 0.77
+  - 0.78
+  - 0.79
+  - 0.8
+  - 0.81
+  - 0.82
+  - 0.83
+  - 0.84
+  - 0.85
+  - 0.86
+  - 0.87
+  - 0.88
+  - 0.89
+  - 0.9
+  - 0.91
+  - 0.92
+  - 0.93
+  - 0.94
+  - 0.95
+  - 0.96
+  - 0.97
+  - 0.98
+  - 0.99
+  - 1.0
+  no_evaluation_population_changes: true
+  no_cutoff_selection: true
+  metric_comparison_tolerance:
+    absolute: 1.0e-12
+    relative: 1.0e-12
+  integer_counts_and_quantile_coverage_require_exact_match: true
+diagnostic_declarations:
+  monthly: same 2024 metrics, restricted to authorized March-September
+  spatial: same per-cell counts/frequency/probability/Brier/conditional pinball/proxy
+    diagnostics; no invented subregions
+  spatial_lat_lon: exact frozen coordinates, ascending latitude, no transpose or flip
+  DIAGNOSTIC_PROXY: p_rain*mean(32 physical conditional quantiles); MAE/RMSE/Bias;
+    not exact expectation; drizzle omitted
+  rainrate_bins: DESCRIPTIVE_RATE_BINS_ONLY; no threshold tuning or extreme definition
+  reliability: BINNED_DIAGNOSTIC; no recalibration; exact-edge right bin, final bin
+    includes one
+inference:
+  checkpoint_role: FINAL_ONLY_NO_SELECTION
+  read_only: true
+  model_eval: true
+  torch_inference_mode: true
+  physical_batch: 2
+  drop_last: false
+  num_workers: 0
+  forward: BF16_cuda_FP32_parameters_and_raw_quantiles_FP64_quantile_and_metrics
+  seed: 2026
+  normalization_source: PHASE_B_FINALFIT
+  cache_policy: bounded English staging, SHA and size, own copies only
+prohibitions:
+- training
+- backward
+- optimizer_creation
+- optimizer_step
+- parameter_update
+- normalization_refit
+- temperature_scaling
+- isotonic_calibration
+- Platt_calibration
+- threshold_tuning
+- checkpoint_selection
+- epoch_selection
+- architecture_change
+- loss_change
+- LR_change
+- 2025_October
+- B1-B8
+future_execution_gate:
+  separate_researcher_authorization: true
+  must_bind:
+  - protocol_sha256
+  - implementation_sha256
+  - FINAL_sha256
+  - normalization_sha256
+  - population_manifest_sha256
+  this_release_is_not_execution_authorization: true

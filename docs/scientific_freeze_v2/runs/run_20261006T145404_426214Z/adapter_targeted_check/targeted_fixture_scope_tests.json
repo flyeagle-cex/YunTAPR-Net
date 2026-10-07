@@ -1,0 +1,19 @@
+{
+  "status": "FAIL",
+  "TEST_FIXTURE_ONLY": true,
+  "suite_counts": {
+    "tests/paired_phase_a_authorized/test_audit.py": 48,
+    "tests/paired_phase_a_authorized/test_formal_artifacts.py": 28
+  },
+  "planned_tests": 76,
+  "counts": {
+    "run": 10,
+    "passed": 9,
+    "failed": 0,
+    "errors": 1,
+    "skipped": 0
+  },
+  "console": "test_2025_authorization_rejected (tests.paired_phase_a_authorized.test_audit.AuditTests.test_2025_authorization_rejected) ... ok\ntest_2025_himawari_rejected_before_io (tests.paired_phase_a_authorized.test_audit.AuditTests.test_2025_himawari_rejected_before_io) ... ok\ntest_2025_imerg_rejected_before_io (tests.paired_phase_a_authorized.test_audit.AuditTests.test_2025_imerg_rejected_before_io) ... ok\ntest_actual_step_backward_forward_counters_and_fixture_cleanup (tests.paired_phase_a_authorized.test_audit.AuditTests.test_actual_step_backward_forward_counters_and_fixture_cleanup) ... ok\ntest_automatic_resume_rejected (tests.paired_phase_a_authorized.test_audit.AuditTests.test_automatic_resume_rejected) ... ok\ntest_b0_authorization_cannot_launch_b1 (tests.paired_phase_a_authorized.test_audit.AuditTests.test_b0_authorization_cannot_launch_b1) ... ok\ntest_b1_authorization_cannot_launch_b0 (tests.paired_phase_a_authorized.test_audit.AuditTests.test_b1_authorization_cannot_launch_b0) ... ok\ntest_bad_authorization_sha (tests.paired_phase_a_authorized.test_audit.AuditTests.test_bad_authorization_sha) ... ok\ntest_cross_model_resume_rejected (tests.paired_phase_a_authorized.test_audit.AuditTests.test_cross_model_resume_rejected) ... ok\ntest_failure_after_real_step_retains_actual_count (tests.paired_phase_a_authorized.test_audit.AuditTests.test_failure_after_real_step_retains_actual_count) ... ERROR\n\n======================================================================\nERROR: test_failure_after_real_step_retains_actual_count (tests.paired_phase_a_authorized.test_audit.AuditTests.test_failure_after_real_step_retains_actual_count)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\tests\\paired_phase_a_authorized\\test_audit.py\", line 173, in test_failure_after_real_step_retains_actual_count\n    failure=json.loads((self.root/'failure.json').read_text());self.assertEqual(failure['FORMAL_OPTIMIZER_STEPS'],1)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\AppData\\Roaming\\uv\\python\\cpython-3.12.14-windows-x86_64-none\\Lib\\pathlib.py\", line 1028, in read_text\n    return f.read()\n           ^^^^^^^^\nUnicodeDecodeError: 'gbk' codec can't decode byte 0xab in position 217: illegal multibyte sequence\n\n----------------------------------------------------------------------\nRan 10 tests in 0.261s\n\nFAILED (errors=1)\n",
+  "formal_optimizer_steps_added": 0,
+  "2025_RAW_ACCESS": 0
+}

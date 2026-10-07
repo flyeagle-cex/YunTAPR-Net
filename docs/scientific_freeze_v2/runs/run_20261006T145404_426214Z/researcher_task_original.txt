@@ -1,0 +1,862 @@
+任务名称：
+
+YunTAPR-Net Quantile Head v2
+Scientific Freeze + Engineering Implementation + Numerical Verification
+
+本任务属于科研方法升级。
+
+研究者已经批准总体方向：
+
+A.
+TRAINING-PATH DECOUPLING
+（训练路径解耦：正式训练目标只依赖 rain_logit 与 log-domain quantiles，
+不因为未参与训练目标的 physical materialization 而阻断优化）
+
++
+
+C.
+NORMALIZED MONOTONIC QUANTILE PARAMETERIZATION v2
+（归一化单调分位数参数化 v2：
+不再使用 32 个无界正增量直接累计决定 q32，
+而改为“总尺度 + 归一化单调分配”）
+
+
+==================================================
+0. 最高治理原则
+==================================================
+
+研究者负责：
+
+- 科学假设
+- 数学公式
+- 模型语义
+- 实验设计
+- 是否接受 v2
+- 是否重新开始正式 Phase-A / Phase-B
+
+Codex 负责：
+
+- 工程实现
+- 单元测试
+- 等价性验证
+- 数值压力测试
+- provenance
+  （来源追踪：记录每项结果由什么代码、配置、数据和 commit 产生）
+- hash
+  （哈希：用于验证文件内容是否被修改的数字指纹）
+- 报告生成
+
+禁止 Codex 自主新增科学假设。
+
+本轮：
+
+FORMAL_TRAINING_AUTHORIZED=false
+
+B0_MATCHED_V2_PHASE_A_STARTED=false
+B1_V2_PHASE_A_STARTED=false
+
+B0_MATCHED_PHASE_B_RESUME_AUTHORIZED=false
+B1_PHASE_B_STARTED=false
+
+2025_RAW_ACCESS=0
+
+不得恢复旧 Phase-B。
+
+
+==================================================
+1. 历史 v1 全部不可修改
+==================================================
+
+以下均作为 immutable historical baseline
+（不可变历史基线：只能读取和引用，不得覆盖或改写）：
+
+旧 B0
+旧 B0-Matched
+旧 B1
+
+旧 Phase-A
+旧 Phase-B failure
+quantile overflow autopsy
+mask-partitioned replay
+
+不得：
+
+修改历史 JSON
+修改历史 CSV
+修改历史 checkpoint
+修改历史 protocol
+覆盖旧 scientific freeze
+删除失败记录
+把 v2 结果写进 v1 artifact
+
+
+v2 必须创建独立：
+
+config/science_v2/
+docs/scientific_freeze_v2/
+src/...v2
+tests/...v2
+
+或其它明确版本隔离路径。
+
+
+==================================================
+2. 解释语言要求
+==================================================
+
+所有生成给研究者阅读的 Markdown / JSON description /
+report / scientific decision packet 中：
+
+每一个重要英文专业术语首次出现时，
+必须紧跟中文解释。
+
+例如：
+
+quantile
+（分位数：概率分布中某个累计概率位置对应的预测值）
+
+log-domain
+（对数域：对降水值做 log1p 变换后的数值空间）
+
+physical domain
+（物理域：以 mm/h 等真实物理单位表达的降水空间）
+
+monotonicity
+（单调性：高分位数必须严格大于低分位数的约束）
+
+overflow
+（溢出：计算结果超过当前浮点类型能够表示的范围）
+
+后文可使用缩写，
+但首次出现必须解释。
+
+
+==================================================
+3. v2 数学定义
+==================================================
+
+保持：
+
+occurrence threshold = 0.1 mm/h
+
+rain occurrence：
+
+p = P(R > 0.1 mm/h)
+
+32 个 conditional quantiles
+（条件分位数：在已经发生 R>0.1 mm/h 的条件下预测的降水分布分位点）
+
+tau_i = (i - 0.5) / 32
+
+
+保持：
+
+z0 = log1p(0.1)
+
+
+v2 quantile head：
+
+模型输出：
+
+allocation logits:
+a_1 ... a_32
+
+以及：
+
+span logit:
+s
+
+
+定义：
+
+w_i = softplus(a_i) + epsilon_w
+
+W = sum_{j=1}^{32} w_j
+
+c_i = sum_{j=1}^{i} w_j / W
+
+
+因此：
+
+0 < c_1 < c_2 < ... < c_32 = 1
+
+
+定义总跨度：
+
+S = softplus(s) + epsilon_span
+
+
+最终：
+
+q_i = z0 + S * c_i
+
+
+因此：
+
+q_32 = z0 + S
+
+
+而不是旧版本：
+
+q_32 =
+z0 + Σ softplus(a_i)
+
+
+==================================================
+4. epsilon 处理
+==================================================
+
+不要自行选择新的科学常数。
+
+优先检查是否可以复用当前已经冻结的：
+
+epsilon_mono = 1e-4
+
+但必须形成一个明确 decision record
+（决策记录：说明为什么复用或为什么不能复用）。
+
+如果 epsilon_w / epsilon_span 的具体值
+会改变科学或数值语义：
+
+不要自行决定。
+
+标记：
+
+RESEARCHER_DECISION_REQUIRED=true
+
+并暂停该部分实现。
+
+可以先使用 symbolic placeholder
+（符号占位：先保留变量而不擅自确定数值）
+完成结构设计。
+
+
+==================================================
+5. 不允许 physical cap
+==================================================
+
+v2 暂时禁止：
+
+qlog clamp
+（截断：强行把超过阈值的数压回指定范围）
+
+physical cap
+（物理上限：人为限制最大预测雨强）
+
+nan_to_num
+（非有限数替换：把 NaN/Inf 强行替换成普通数值）
+
+sort quantiles
+（排序修复：训练后再排序分位数）
+
+hard maximum rain rate
+（硬最大雨强约束）
+
+不得因为旧模型出现 overflow
+就人为设：
+
+500 mm/h
+1000 mm/h
+或其它上限。
+
+如果未来需要 physical upper bound
+（物理上界：模型允许输出的最大物理雨强），
+必须由研究者结合气象学依据单独批准。
+
+
+==================================================
+6. strict monotonicity
+==================================================
+
+证明：
+
+对于所有有限 raw outputs：
+
+w_i > 0
+
+S > 0
+
+因此：
+
+q_1 > z0
+
+且：
+
+q_1 < q_2 < ... < q_32
+
+不得依赖：
+
+sort
+clamp
+post-processing repair
+（后处理修复：模型输出后再人为调整结果）
+
+必须从参数化本身保证。
+
+
+==================================================
+7. TRAINING PATH DECOUPLING
+==================================================
+
+正式 training forward
+（训练前向传播：输入通过模型得到用于损失函数计算结果的过程）
+不得为了 core loss
+（核心损失：正式优化使用的主要目标函数）
+强制 materialize：
+
+conditional_quantiles_physical
+
+或：
+
+threshold_censored_mean
+
+
+训练核心路径必须是：
+
+input
+→ backbone
+→ SP04
+→ occurrence head
+→ v2 quantile raw outputs
+→ monotonic qlog
+→ log-domain loss
+→ backward
+
+
+其中：
+
+core loss =
+L_occ + L_qr
+
+保持与既有科学定义一致。
+
+
+physical conversion：
+
+Q_i = expm1(q_i)
+
+只能在显式调用：
+
+physical inference
+（物理推理：输出真实 mm/h 分位数）
+
+diagnostic
+（诊断：不参与模型参数更新的分析）
+
+evaluation physical products
+（物理评价产品：需要真实物理量的输出）
+
+时执行。
+
+
+==================================================
+8. 不允许隐藏 physical 问题
+==================================================
+
+虽然 training path 不主动 materialize physical quantiles，
+
+仍必须保留：
+
+qlog finite guard
+（有限性保护：检查 qlog 是否出现 NaN/Inf）
+
+strict monotonicity guard
+（严格单调保护）
+
+support guard
+（支持域保护：保证条件分位数严格位于 0.1 mm/h 以上）
+
+
+另外新增只读：
+
+physical-risk diagnostic
+（物理转换风险诊断）
+
+通过比较：
+
+qlog
+
+与：
+
+log1p(float64_max)
+
+判断：
+
+PHYSICAL_OVERFLOW_RISK
+
+但这个 diagnostic：
+
+不得影响 gradient
+不得改变 loss
+不得 clamp
+不得自动跳 batch
+
+
+==================================================
+9. output API
+==================================================
+
+设计明确接口：
+
+LogDomainOutput
+（对数域输出：训练和核心评价直接使用的结果）
+
+至少包含：
+
+rain_logit
+rain_prob
+conditional_quantiles_log
+
+
+PhysicalQuantileOutput
+（物理分位数输出：显式请求后才执行 expm1）
+
+包含：
+
+conditional_quantiles_physical
+threshold_censored_mean
+
+
+不要让正式 training forward
+隐式生成 PhysicalQuantileOutput。
+
+
+==================================================
+10. 参数量和公平性
+==================================================
+
+旧 quantile head：
+
+48 → 32
+
+
+v2 若采用：
+
+48 → 33
+
+其中：
+
+32 allocation logits
++ 1 span logit
+
+必须报告：
+
+B0-Matched-v2 parameter count
+B1-v2 parameter count
+
+并证明：
+
+两模型使用完全相同的 v2 head family
+（输出头族：两模型共享相同的概率输出结构）
+
+它们之间仍只保留原 B0-Matched vs B1
+的输入信息差异：
+
+B0-Matched：
+latest B13 only
+（只使用最近一帧 B13）
+
+B1：
+six causal B13 slots
+（6 个满足因果性的历史 B13 时次）
+
+
+==================================================
+11. 不继承旧正式权重
+==================================================
+
+v2 属于新的模型结构。
+
+因此不得直接把：
+
+旧 B0-Matched Phase-A BEST
+旧 B1 Phase-A BEST
+旧 Phase-B checkpoint
+
+当成 v2 正式初始化。
+
+可以做 engineering weight-compatibility study
+（工程权重兼容性研究：检查哪些层理论上形状相同），
+
+但不得形成正式训练状态。
+
+
+正式 v2 应使用：
+
+fresh initialization
+（全新初始化：不继承旧模型训练后的参数）
+
+具体 seed
+（随机种子：控制随机初始化和数据顺序的固定整数）
+
+暂时建议继续沿用 2026，
+但必须在 freeze packet 中注明
+这是“保持 paired comparison 可重复性”的候选，
+等待研究者确认。
+
+
+==================================================
+12. Phase-A 数据治理候选
+==================================================
+
+不得访问 2025。
+
+候选继续复用已有：
+
+2023 matched Train
+= 10,455 scenes
+
+2024 matched Validation
+= 10,501 scenes
+
+
+候选继续复用：
+
+B1 shared train normalization
+
+mean =
+271.60515414265217 K
+
+std =
+19.93959597783802 K
+
+
+但是本轮不要直接声明正式冻结。
+
+生成：
+
+V2_DATA_REUSE_DECISION_PACKET.md
+
+回答：
+
+1.
+为什么 head 改变不要求重新定义样本集合？
+
+2.
+为什么 normalization 可以或不可以复用？
+
+3.
+复用是否会影响 B0-v2 / B1-v2 公平性？
+
+4.
+是否存在任何 outcome-guided choice
+（结果导向选择：根据模型表现反过来调整数据或规则）？
+
+最后：
+
+RESEARCHER_APPROVAL_REQUIRED=true
+
+
+==================================================
+13. Phase-A training protocol
+==================================================
+
+本轮只生成 candidate protocol
+（候选训练协议：供研究者批准，但尚不执行）。
+
+优先保持旧 paired Phase-A：
+
+AdamW
+（自适应矩估计带解耦权重衰减的优化器）
+
+base LR = 1e-4
+
+min LR = 1e-6
+
+1 epoch warmup
+（预热：训练初期逐步增加学习率）
+
+50 epoch fixed horizon
+（固定训练跨度：学习率调度按 50 个 epoch 定义）
+
+physical batch = 2
+
+validation batch = 8
+
+BF16 forward
+（bfloat16 前向计算：降低显存并提高 GPU 计算效率）
+
+FP64 monotonic transform + pinball
+（64 位浮点单调变换与分位数损失）
+
+gradient clip norm = 5
+（梯度裁剪：限制梯度整体范数避免极端更新）
+
+patience = 8
+
+min_delta = 1e-4
+
+
+但不得直接认定这些对 v2 最优。
+
+标记：
+
+CANDIDATE_REUSE_OF_V1_PROTOCOL=true
+
+RESEARCHER_APPROVAL_REQUIRED=true
+
+
+==================================================
+14. 必须完成的工程测试
+==================================================
+
+A.
+Shape tests
+（形状测试：验证所有张量维度完全符合设计）
+
+B.
+Strict monotonicity tests
+（严格单调测试）
+
+C.
+Support tests
+（支持域测试）
+
+D.
+Float32 / Float64 stress tests
+（单精度/双精度压力测试）
+
+E.
+Extreme raw-logit tests
+（极端原始输出测试）
+
+F.
+Autocast tests
+（自动混合精度测试）
+
+G.
+Gradient finiteness tests
+（梯度有限性测试）
+
+H.
+Determinism tests
+（确定性测试：相同输入和种子得到完全一致结果）
+
+I.
+B0-v2 / B1-v2 head identity tests
+（输出头一致性测试）
+
+J.
+2025 firewall tests
+（2025 防火墙测试：任何 v2 开发过程都不能读取 2025）
+
+
+==================================================
+15. A 路径等价性证明
+==================================================
+
+这是最重要的工程验证之一。
+
+使用 v1 head 的历史兼容 fixture
+（测试夹具：用于固定输入和状态的测试环境），
+对不存在 physical overflow 的正常 batch：
+
+比较：
+
+旧路径：
+qlog → expm1 → loss
+
+与：
+
+解耦路径：
+qlog → loss
+
+
+必须证明在 expm1 本身不溢出的 batch 中：
+
+qlog EXACT MATCH
+
+loss EXACT MATCH
+
+gradient EXACT MATCH
+
+optimizer update EXACT MATCH
+
+model state after update EXACT MATCH
+
+RNG state EXACT MATCH
+
+
+仅允许 wall time
+（运行耗时）
+不同。
+
+
+如果无法逐值一致：
+
+STOP。
+
+
+==================================================
+16. v2 参数化专项测试
+==================================================
+
+随机生成大量 extreme logits
+（极端 logits：非常大的正值和负值），包括：
+
+-1e4
+-1e3
+-100
+-50
+0
+50
+100
+1e3
+1e4
+
+在允许的数据类型范围内验证：
+
+qlog finite
+
+strict monotonicity
+
+no crossing
+
+support valid
+
+gradient finite
+
+
+不得为了通过测试加入 clamp。
+
+
+==================================================
+17. physical-risk reporting
+==================================================
+
+对 v2 engineering fixtures
+输出：
+
+max_qlog
+
+per-tau qlog range
+
+FP64_PHYSICAL_OVERFLOW_RISK
+
+FP32_PHYSICAL_OVERFLOW_RISK
+
+
+注意：
+
+这只是 diagnostic，
+不是训练停止规则。
+
+
+==================================================
+18. 生成 Scientific Freeze v2 Decision Packet
+==================================================
+
+生成：
+
+docs/scientific_freeze_v2/
+YUNTAPR_QUANTILE_HEAD_V2_DECISION_PACKET.md
+
+必须包含：
+
+1. v1 failure mechanism
+2. A 工程解耦理由
+3. C 参数化修改理由
+4. 完整数学公式
+5. tensor shapes
+6. parameter counts
+7. gradient path
+8. physical-output path
+9. 与 v1 的差异
+10. 哪些科学语义保持不变
+11. 哪些科学语义发生改变
+12. Phase-A 是否必须重跑
+13. Phase-B 是否必须从 scratch
+14. B0-v2 / B1-v2 fairness
+15. 2025 governance
+16. 尚待研究者决定的所有事项
+
+
+==================================================
+19. 建议状态
+==================================================
+
+本轮完成后：
+
+V2_IMPLEMENTATION_READY=true/false
+
+V2_TESTS_PASS=true/false
+
+V2_SCIENTIFIC_FREEZE_READY_FOR_RESEARCHER_REVIEW=true/false
+
+
+但：
+
+V2_SCIENTIFIC_FREEZE_APPROVED=false
+
+V2_PHASE_A_AUTHORIZED=false
+
+V2_PHASE_A_STARTED=false
+
+V2_PHASE_B_AUTHORIZED=false
+
+2025_RAW_ACCESS=0
+
+
+必须：
+
+RESEARCHER_DECISION_REQUIRED=true
+
+
+==================================================
+20. GitHub
+==================================================
+
+全部完成后：
+
+运行完整相关 tests。
+
+记录：
+
+test count
+pass/fail
+code SHA
+config SHA
+decision packet SHA
+
+确认历史 artifact byte-identical。
+
+提交 GitHub main。
+
+commit message 建议：
+
+Prepare YunTAPR quantile head v2 scientific freeze and verified log-domain training path
+
+然后 STOP。
+
+等待研究者审查。
+
+==================================================
+21. 严禁事项
+==================================================
+
+禁止：
+
+正式 Phase-A training
+正式 Phase-B training
+恢复 epoch 4
+启动 B1 Phase-B
+访问 2025
+
+禁止：
+
+根据现有 overflow 数值自行设置物理上限
+
+禁止：
+
+删掉历史失败记录
+
+禁止：
+
+为了“让训练能跑”而静默改变科研规则
+
+禁止：
+
+Codex 自己宣布 v2 scientifically accepted
+（科学上已接受）
+
+最终决策只能由研究者完成。
