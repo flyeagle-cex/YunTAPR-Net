@@ -1,0 +1,94 @@
+研究者完成 YunTAPR-Net Quantile Head v2 科学审查。
+
+批准 Scientific Freeze v2（科学冻结 v2）。
+
+正式冻结：
+
+1. training-path decoupling
+   （训练路径解耦）
+
+2. normalized monotonic quantile parameterization v2
+   （归一化单调分位数参数化 v2）
+
+3. occurrence threshold = 0.1 mm/h
+
+4. 32 conditional quantiles
+   （32 个条件分位数）
+
+5. tau_i = (i-0.5)/32
+
+6. z0 = log1p(0.1)
+
+7. epsilon_w = 1e-4
+
+8. epsilon_span = 1e-4
+
+9. FP64 normalized transform
+   （FP64 归一化变换）
+
+10. strict floating-point guards
+    （严格浮点保护）
+
+11. no clamp / sort / nan_to_num /
+    automatic repair / automatic batch skip
+
+12. B0-Matched-v2 = latest B13 only
+
+13. B1-v2 = six causal B13 slots
+
+14. 2023 Train = 10,455
+
+15. 2024 Validation = 10,501
+
+16. shared Phase-A normalization:
+    mean = 271.60515414265217 K
+    std = 19.93959597783802 K
+
+17. seed = 2026
+
+18. fresh same-name same-shape paired initialization
+    （全新同名同形配对初始化）
+
+19. candidate Phase-A protocol currently recorded
+    is accepted as the frozen Phase-A protocol.
+
+同时增加正式 Phase-A 计划要求：
+
+每个 epoch 保存 read-only upper-tail diagnostics
+（只读上尾诊断），至少包括：
+
+- Yunnan inside max qlog
+- Yunnan outside max qlog
+- q32 per-forward max p99 / p99.9
+- FP64 physical overflow risk
+- descriptive exceedance counts at
+  10 / 50 / 100 / 500 / 1000 mm/h
+
+这些 diagnostics：
+
+不得影响 loss
+不得影响 BEST selection
+不得影响 early stopping
+不得自动调参
+不得自动 skip batch
+不得成为 outcome-guided protocol change。
+
+本次操作只记录科学冻结批准。
+
+必须保持：
+
+V2_SCIENTIFIC_FREEZE_APPROVED=true
+
+FORMAL_TRAINING_AUTHORIZED=false
+V2_PHASE_A_AUTHORIZED=false
+V2_PHASE_A_STARTED=false
+V2_PHASE_B_AUTHORIZED=false
+
+B0_MATCHED_PHASE_B_RESUME_AUTHORIZED=false
+B1_PHASE_B_STARTED=false
+
+2025_RAW_ACCESS=0
+
+不得开始任何正式训练。
+
+提交 GitHub main 后 STOP。

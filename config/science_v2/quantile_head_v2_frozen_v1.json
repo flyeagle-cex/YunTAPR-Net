@@ -1,0 +1,71 @@
+{
+  "version": "QUANTILE_HEAD_V2_SCIENTIFIC_FREEZE_v1",
+  "description": "normalized monotonic quantile parameterization（归一化单调分位数参数化）：独立总跨度与正权重累计分配；training-path decoupling（训练路径解耦）：核心损失不生成物理分位数。",
+  "status": "FROZEN_RESEARCHER_APPROVED",
+  "occurrence_threshold_mm_h": 0.1,
+  "occurrence_semantics": "P(R > 0.1 mm/h)",
+  "conditional_quantiles": 32,
+  "tau_formula": "(i - 0.5) / 32, i=1..32",
+  "z0_formula": "log1p(0.1)",
+  "allocation_channels": "0..31",
+  "span_channel": 32,
+  "formulas": {
+    "w_i": "softplus(a_i) + epsilon_w",
+    "W": "sum_j w_j; same FP64 prefix endpoint as numerator c_32",
+    "c_i": "sum_{j<=i} w_j / W",
+    "S": "softplus(s) + epsilon_span",
+    "q_i": "z0 + S * c_i",
+    "q_32": "z0 + S"
+  },
+  "numerics": {
+    "epsilon_w": 0.0001,
+    "epsilon_span": 0.0001,
+    "epsilon_status": "FROZEN_RESEARCHER_APPROVED",
+    "description": "epsilon（正值下界）：权重下界不等于旧分位数增量下界；总跨度下界也不保证固定的相邻分位数间距。",
+    "parameters": "float32",
+    "head_raw_outputs": "float32",
+    "normalized_transform_and_qlog": "float64",
+    "mathematical_strictness": "ALL_FINITE_REAL_LOGITS_AND_POSITIVE_EPSILONS",
+    "floating_point_strictness": "GUARDED_REPRESENTABLE_OUTPUTS_ONLY",
+    "failure_action": "RAISE_NO_REPAIR_NO_AUTOMATIC_BATCH_SKIP",
+    "physical_cap": null
+  },
+  "output_api": {
+    "training": "LogDomainOutput（对数域输出）：rain_logit、rain_prob、conditional_quantiles_log",
+    "explicit_physical": "PhysicalQuantileOutput（物理分位数输出）：conditional_quantiles_physical、threshold_censored_mean",
+    "implicit_physical_materialization": false
+  },
+  "authorization": {
+    "V2_SCIENTIFIC_FREEZE_APPROVED": true,
+    "FORMAL_TRAINING_AUTHORIZED": false,
+    "V2_PHASE_A_AUTHORIZED": false,
+    "V2_PHASE_A_STARTED": false,
+    "V2_PHASE_B_AUTHORIZED": false,
+    "B0_MATCHED_V2_PHASE_A_STARTED": false,
+    "B1_V2_PHASE_A_STARTED": false,
+    "B0_MATCHED_PHASE_B_RESUME_AUTHORIZED": false,
+    "B1_PHASE_B_STARTED": false,
+    "2025_RAW_ACCESS": 0,
+    "RESEARCHER_TRAINING_AUTHORIZATION_REQUIRED": true
+  },
+  "approval": {
+    "researcher_approval": {
+      "path": "docs/scientific_freeze_v2/approval_runs/run_20261007T012725Z/researcher_approval.txt",
+      "bytes": 1993,
+      "sha256": "78a944b3315d9acfe5023c228db175fe501ec2c0d8657239e549dcaf96a4fb06"
+    },
+    "binding_baseline_commit": "93e0f4ed78625638391dd98a1a63078818daf8be"
+  },
+  "accepted_candidate": {
+    "path": "config/science_v2/quantile_head_v2_candidate.json",
+    "bytes": 2273,
+    "sha256": "17360fd0926e3430a10cf91b3417aad00212b1ab6d68e8f430bff87832384bb0"
+  },
+  "prohibited_repairs": [
+    "clamp",
+    "sort",
+    "nan_to_num",
+    "automatic_repair",
+    "automatic_batch_skip"
+  ]
+}

@@ -1,0 +1,277 @@
+{
+  "version": "V2_PHASE_A_PROTOCOL_FROZEN_v1",
+  "status": "FROZEN_RESEARCHER_APPROVED_TRAINING_NOT_AUTHORIZED",
+  "models": [
+    "B0_MATCHED_V2",
+    "B1_V2"
+  ],
+  "identity": {
+    "scientific_contract_v1.1": {
+      "path": "config/science_contract_v1.1.yaml",
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    },
+    "engineering_v4": {
+      "path": "config/b0_engineering_v4.yaml",
+      "sha256": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7"
+    },
+    "SP04_mapping": {
+      "path": "config/spatial/sp04_target_cell_membership_v1.csv",
+      "sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+    },
+    "SP04_manifest": {
+      "path": "config/spatial/sp04_coordinate_manifest_v1.json",
+      "sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473"
+    },
+    "yunnan_mask": {
+      "path": "F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+      "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+    },
+    "prior_gpu_manifest": {
+      "path": "docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json",
+      "sha256": "c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8"
+    },
+    "normalization": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\normalization_b1_2023_shared_v1.json",
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+    },
+    "B1_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2023_formal_manifest.csv",
+      "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+    },
+    "B1_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2024_formal_manifest.csv",
+      "sha256": "eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c"
+    },
+    "B0_MATCHED_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv",
+      "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc"
+    },
+    "B0_MATCHED_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2024_formal_manifest.csv",
+      "sha256": "5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a"
+    }
+  },
+  "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+  "B0_MATCHED_CONTROL_NORMALIZATION": "USE_FROZEN_B1_SHARED_SCALER",
+  "input": {
+    "B1": [
+      6,
+      501,
+      501
+    ],
+    "B0_MATCHED": [
+      1,
+      501,
+      501
+    ],
+    "offset_minutes": [
+      60,
+      50,
+      40,
+      30,
+      20,
+      10
+    ],
+    "ordering": "OLDEST_TO_LATEST",
+    "missing_policy": "M1_STRICT_COMPLETE_REJECT_NO_FALLBACK"
+  },
+  "architecture": {
+    "channels": [
+      48,
+      96,
+      192,
+      256
+    ],
+    "heads": "DIRECT_1X1_48_TO_1_AND_33_ALLOCATION32_SPAN1",
+    "SP04": "UNCHANGED",
+    "parameters": {
+      "B0_MATCHED_V2": {
+        "DECAY_GROUP": 4322880,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4329410
+      },
+      "B1_V2": {
+        "DECAY_GROUP": 4325280,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4331810
+      }
+    },
+    "only_shape_changes": [
+      "backbone.enc0.conv1.weight",
+      "backbone.enc0.skip.weight"
+    ]
+  },
+  "initialization": {
+    "seed": 2026,
+    "independent_reseed": true,
+    "copy_same_name_same_shape_only": true,
+    "historical_checkpoint_transfer": false,
+    "seed_status": "FROZEN_RESEARCHER_APPROVED",
+    "policy_status": "FROZEN_FRESH_SAME_NAME_SAME_SHAPE_PAIRED_INITIALIZATION"
+  },
+  "loss": {
+    "occurrence_threshold": 0.1,
+    "occurrence_strict_greater": true,
+    "focal_alpha": 0.5,
+    "focal_gamma": 2.0,
+    "quantiles": 32,
+    "tau": "(i-0.5)/32",
+    "formula": "L_occ+L_qr",
+    "quantile_axis_reduction": "mean",
+    "KD": 0,
+    "external": false
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.0001,
+    "decay": "Conv2d.weight_only",
+    "amsgrad": false,
+    "maximize": false,
+    "capturable": false,
+    "differentiable": false,
+    "foreach": false,
+    "fused": false
+  },
+  "gradient": {
+    "global_clip_norm": 5.0,
+    "error_if_nonfinite": true
+  },
+  "scheduler": {
+    "base_lr": 0.0001,
+    "min_lr": 1e-06,
+    "W": 5228,
+    "U": 261400,
+    "fixed_horizon_epochs": 50,
+    "rule": "ONE_BASED_LINEAR_WARMUP_THEN_FIXED_50_EPOCH_COSINE",
+    "apply_before_optimizer_step": true,
+    "min_lr_lower_bound": "COSINE_ONLY"
+  },
+  "training": {
+    "scenes": 10455,
+    "physical_batch": 2,
+    "accumulation": 1,
+    "steps_per_epoch": 5228,
+    "drop_last": false,
+    "tail_policy": "ALLOW_SINGLETON_NO_DROP_NO_DUPLICATE",
+    "max_epochs": 50,
+    "epoch_seed": "2026+zero_based_epoch_index",
+    "every_scene_exactly_once": true
+  },
+  "validation": {
+    "scenes": 10501,
+    "batch": 8,
+    "fixed_order": true,
+    "shuffle": false,
+    "drop_last": false,
+    "metric": "global_val_core_loss",
+    "accumulation": "(S_occ+S_qr)/N_valid_FLOAT64_RAW_SUM",
+    "BEST": "STRICT_LOWER_EARLIEST_TIE",
+    "early_stop_patience": 8,
+    "early_stop_min_delta": 0.0001
+  },
+  "precision": {
+    "forward": "BF16",
+    "parameters": "FP32",
+    "raw_quantiles": "FP32",
+    "GradScaler": false,
+    "TF32": false,
+    "transform_and_pinball": "FP64",
+    "physical_materialization": "EXPLICIT_ONLY_FP64"
+  },
+  "loader": {
+    "num_workers": 2,
+    "pin_memory": false,
+    "persistent_workers": false,
+    "prefetch_factor": 1,
+    "per_worker_staging": true,
+    "max_temporary_bytes_per_worker": 734003200,
+    "verify_sha256_before_decode": true
+  },
+  "checkpoint": {
+    "roots": null,
+    "boundary": "COMPLETED_TRAIN_AND_VALIDATION_EPOCH_ONLY",
+    "resume": "VERIFIED_LAST_TO_NEXT_COMPLETE_EPOCH",
+    "provenance_before_state_application": true,
+    "Git_binary_allowed": false,
+    "status": "FORMAL_V2_RUNNER_AND_ROOTS_NOT_AUTHORIZED"
+  },
+  "authorization": {
+    "V2_SCIENTIFIC_FREEZE_APPROVED": true,
+    "FORMAL_TRAINING_AUTHORIZED": false,
+    "V2_PHASE_A_AUTHORIZED": false,
+    "V2_PHASE_A_STARTED": false,
+    "V2_PHASE_B_AUTHORIZED": false,
+    "B0_MATCHED_V2_PHASE_A_STARTED": false,
+    "B1_V2_PHASE_A_STARTED": false,
+    "B0_MATCHED_PHASE_B_RESUME_AUTHORIZED": false,
+    "B1_PHASE_B_STARTED": false,
+    "2025_RAW_ACCESS": 0,
+    "RESEARCHER_TRAINING_AUTHORIZATION_REQUIRED": true
+  },
+  "description": "研究者接受已有 v2 候选 Phase-A 协议作为冻结协议；原数值设置不变，新增逐 epoch 只读上尾诊断计划。未授权正式训练。",
+  "RESEARCHER_APPROVAL_REQUIRED": false,
+  "source_protocol_identity": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\config\\training\\b1_b0_matched_phase_a_protocol_v1.yaml",
+    "bytes": 5082,
+    "sha256": "284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6"
+  },
+  "approval": {
+    "researcher_approval": {
+      "path": "docs/scientific_freeze_v2/approval_runs/run_20261007T012725Z/researcher_approval.txt",
+      "bytes": 1993,
+      "sha256": "78a944b3315d9acfe5023c228db175fe501ec2c0d8657239e549dcaf96a4fb06"
+    },
+    "binding_baseline_commit": "93e0f4ed78625638391dd98a1a63078818daf8be"
+  },
+  "accepted_candidate": {
+    "path": "config/science_v2/phase_a_protocol_candidate_v1.json",
+    "bytes": 7221,
+    "sha256": "c22f74df4f21d3e98f4ebb067b3c5e3204c9fd3bee8ccfb0fce82ee6e9c4ac9e"
+  },
+  "ACCEPTED_CANDIDATE_REUSE_OF_V1_PROTOCOL": true,
+  "approval_scope": "SCIENTIFIC_PROTOCOL_ONLY; separate formal training authorization remains required",
+  "shared_phase_a_normalization": {
+    "mean_K": 271.60515414265217,
+    "std_K": 19.93959597783802,
+    "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+    "refit": false
+  },
+  "model_input_semantics": {
+    "B0_MATCHED_V2": "LATEST_B13_ONLY",
+    "B1_V2": "SIX_CAUSAL_B13_SLOTS"
+  },
+  "upper_tail_diagnostics": {
+    "status": "FROZEN_PHASE_A_PLAN_REQUIREMENT_ONLY",
+    "frequency": "EVERY_EPOCH",
+    "read_only": true,
+    "save_required": true,
+    "minimum_metrics": [
+      "Yunnan inside max qlog",
+      "Yunnan outside max qlog",
+      "q32 per-forward max p99",
+      "q32 per-forward max p99.9",
+      "FP64 physical overflow risk",
+      "descriptive exceedance counts"
+    ],
+    "descriptive_thresholds_mm_h": [
+      10,
+      50,
+      100,
+      500,
+      1000
+    ],
+    "affects_loss": false,
+    "affects_BEST_selection": false,
+    "affects_early_stopping": false,
+    "automatic_tuning": false,
+    "automatic_batch_skip": false,
+    "outcome_guided_protocol_change": false,
+    "execution_in_this_approval_update": "NOT_RUN_NOT_AUTHORIZED",
+    "scope_note": "仅登记研究者指定的逐 epoch 只读诊断要求；本次不新增统计口径、不实现或执行诊断、不生成结果。"
+  }
+}
