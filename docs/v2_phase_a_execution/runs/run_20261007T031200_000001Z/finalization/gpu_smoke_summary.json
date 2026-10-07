@@ -1,0 +1,279 @@
+{
+  "status": "PASS",
+  "passed": 8,
+  "total": 8,
+  "engineering_optimizer_steps": 4,
+  "formal_optimizer_steps": 0,
+  "temporary_checkpoints_remaining": 0,
+  "evidence": {
+    "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_execution\\runs\\run_20261007T031200_000001Z\\gpu_smoke.json",
+    "bytes": 30510,
+    "sha256": "f6d46a7039570b9a288e6db3b60e619ac6108899611ebbe8e038152e28e81030"
+  },
+  "cases": [
+    {
+      "model": "B0_MATCHED_V2",
+      "case": "train_batch2",
+      "metrics": {
+        "update": 1,
+        "LR": 1.9127773527161438e-08,
+        "loss": 0.10161911825919244,
+        "L_occ": 0.1012238934636116,
+        "L_qr": 0.00039522479558083657,
+        "actual_denominator": 6860,
+        "pre_clip_norm": 6.367124080657959,
+        "post_clip_norm": 4.999999200498028,
+        "clipped": true,
+        "sample_ids": [
+          "2023-03-01T00:30:00+00:00",
+          "2023-03-01T01:00:00+00:00"
+        ],
+        "indices": [
+          0,
+          1
+        ]
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 1,
+        "VALIDATION_FORWARDS": 0,
+        "BACKWARD_CALLS": 1,
+        "OPTIMIZER_STEP_ATTEMPTS": 1,
+        "OPTIMIZER_STEPS": 1,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 2834127872,
+      "peak_reserved_bytes": 3416260608
+    },
+    {
+      "model": "B0_MATCHED_V2",
+      "case": "train_singleton",
+      "metrics": {
+        "update": 5228,
+        "LR": 0.0001,
+        "loss": 0.10868795284650853,
+        "L_occ": 0.1083788052201271,
+        "L_qr": 0.00030914762638143014,
+        "actual_denominator": 3430,
+        "pre_clip_norm": 6.802290916442871,
+        "post_clip_norm": 4.99999893498022,
+        "clipped": true,
+        "sample_ids": [
+          "2023-10-31T23:30:00+00:00"
+        ],
+        "indices": [
+          10454
+        ]
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 1,
+        "VALIDATION_FORWARDS": 0,
+        "BACKWARD_CALLS": 1,
+        "OPTIMIZER_STEP_ATTEMPTS": 1,
+        "OPTIMIZER_STEPS": 1,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 1435579904,
+      "peak_reserved_bytes": 1665138688
+    },
+    {
+      "model": "B0_MATCHED_V2",
+      "case": "validation_batch8",
+      "metrics": {
+        "S_occ": 2597.259430490969,
+        "S_qr": 7.144493368522001,
+        "N_valid": 27440,
+        "N_rain": 96,
+        "scenes": 8,
+        "forwards": 1,
+        "global_val_core_loss": 0.09491267944094355,
+        "global_L_occ": 0.09465231160681374,
+        "global_core_L_qr": 0.00026036783412981053,
+        "numerator_dtype": "float64",
+        "physical_materialization": false,
+        "strict_crossing_count": 0,
+        "support_violation_count": 0,
+        "nonfinite_count": 0
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 0,
+        "VALIDATION_FORWARDS": 1,
+        "BACKWARD_CALLS": 0,
+        "OPTIMIZER_STEP_ATTEMPTS": 0,
+        "OPTIMIZER_STEPS": 0,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 3440071680,
+      "peak_reserved_bytes": 4852809728
+    },
+    {
+      "model": "B0_MATCHED_V2",
+      "case": "validation_tail5",
+      "metrics": {
+        "S_occ": 1733.1891616119851,
+        "S_qr": 25.219573726546425,
+        "N_valid": 17150,
+        "N_rain": 321,
+        "scenes": 5,
+        "forwards": 1,
+        "global_val_core_loss": 0.10253112159408348,
+        "global_L_occ": 0.10106059251381838,
+        "global_core_L_qr": 0.0014705290802650977,
+        "numerator_dtype": "float64",
+        "physical_materialization": false,
+        "strict_crossing_count": 0,
+        "support_violation_count": 0,
+        "nonfinite_count": 0
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 0,
+        "VALIDATION_FORWARDS": 1,
+        "BACKWARD_CALLS": 0,
+        "OPTIMIZER_STEP_ATTEMPTS": 0,
+        "OPTIMIZER_STEPS": 0,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 2157620736,
+      "peak_reserved_bytes": 3055550464
+    },
+    {
+      "model": "B1_V2",
+      "case": "train_batch2",
+      "metrics": {
+        "update": 1,
+        "LR": 1.9127773527161438e-08,
+        "loss": 0.11279351658311625,
+        "L_occ": 0.11238743364810944,
+        "L_qr": 0.0004060829350068075,
+        "actual_denominator": 6860,
+        "pre_clip_norm": 8.006965637207031,
+        "post_clip_norm": 4.9999998099890295,
+        "clipped": true,
+        "sample_ids": [
+          "2023-03-01T00:30:00+00:00",
+          "2023-03-01T01:00:00+00:00"
+        ],
+        "indices": [
+          0,
+          1
+        ]
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 1,
+        "VALIDATION_FORWARDS": 0,
+        "BACKWARD_CALLS": 1,
+        "OPTIMIZER_STEP_ATTEMPTS": 1,
+        "OPTIMIZER_STEPS": 1,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 2858972672,
+      "peak_reserved_bytes": 3435134976
+    },
+    {
+      "model": "B1_V2",
+      "case": "train_singleton",
+      "metrics": {
+        "update": 5228,
+        "LR": 0.0001,
+        "loss": 0.10785323217421425,
+        "L_occ": 0.10726641863584518,
+        "L_qr": 0.0005868135383690597,
+        "actual_denominator": 3430,
+        "pre_clip_norm": 6.715326309204102,
+        "post_clip_norm": 4.999999578574635,
+        "clipped": true,
+        "sample_ids": [
+          "2023-10-31T23:30:00+00:00"
+        ],
+        "indices": [
+          10454
+        ]
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 1,
+        "VALIDATION_FORWARDS": 0,
+        "BACKWARD_CALLS": 1,
+        "OPTIMIZER_STEP_ATTEMPTS": 1,
+        "OPTIMIZER_STEPS": 1,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 1448222720,
+      "peak_reserved_bytes": 1673527296
+    },
+    {
+      "model": "B1_V2",
+      "case": "validation_batch8",
+      "metrics": {
+        "S_occ": 3934.7844448484448,
+        "S_qr": 7.539729218109597,
+        "N_valid": 27440,
+        "N_rain": 96,
+        "scenes": 8,
+        "forwards": 1,
+        "global_val_core_loss": 0.14367070605198815,
+        "global_L_occ": 0.14339593457902494,
+        "global_core_L_qr": 0.0002747714729631777,
+        "numerator_dtype": "float64",
+        "physical_materialization": false,
+        "strict_crossing_count": 0,
+        "support_violation_count": 0,
+        "nonfinite_count": 0
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 0,
+        "VALIDATION_FORWARDS": 1,
+        "BACKWARD_CALLS": 0,
+        "OPTIMIZER_STEP_ATTEMPTS": 0,
+        "OPTIMIZER_STEPS": 0,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 3490858496,
+      "peak_reserved_bytes": 4460642304
+    },
+    {
+      "model": "B1_V2",
+      "case": "validation_tail5",
+      "metrics": {
+        "S_occ": 1698.698994025935,
+        "S_qr": 27.11899893478853,
+        "N_valid": 17150,
+        "N_rain": 321,
+        "scenes": 5,
+        "forwards": 1,
+        "global_val_core_loss": 0.10063078676155823,
+        "global_L_occ": 0.09904950402483587,
+        "global_core_L_qr": 0.0015812827367223633,
+        "numerator_dtype": "float64",
+        "physical_materialization": false,
+        "strict_crossing_count": 0,
+        "support_violation_count": 0,
+        "nonfinite_count": 0
+      },
+      "counters": {
+        "scope": "ENGINEERING_ONLY",
+        "FORWARD_CALLS": 1,
+        "TRAIN_FORWARDS": 0,
+        "VALIDATION_FORWARDS": 1,
+        "BACKWARD_CALLS": 0,
+        "OPTIMIZER_STEP_ATTEMPTS": 0,
+        "OPTIMIZER_STEPS": 0,
+        "CHECKPOINT_WRITES": 0
+      },
+      "peak_allocated_bytes": 2188620800,
+      "peak_reserved_bytes": 3040870400
+    }
+  ]
+}

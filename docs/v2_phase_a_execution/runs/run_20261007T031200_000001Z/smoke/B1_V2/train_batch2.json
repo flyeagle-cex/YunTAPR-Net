@@ -1,0 +1,113 @@
+{
+  "model": "B1_V2",
+  "case": "train_batch2",
+  "sample_ids": [
+    "2023-03-01T00:30:00+00:00",
+    "2023-03-01T01:00:00+00:00"
+  ],
+  "metrics": {
+    "update": 1,
+    "LR": 1.9127773527161438e-08,
+    "loss": 0.11279351658311625,
+    "L_occ": 0.11238743364810944,
+    "L_qr": 0.0004060829350068075,
+    "actual_denominator": 6860,
+    "pre_clip_norm": 8.006965637207031,
+    "post_clip_norm": 4.9999998099890295,
+    "clipped": true,
+    "sample_ids": [
+      "2023-03-01T00:30:00+00:00",
+      "2023-03-01T01:00:00+00:00"
+    ],
+    "indices": [
+      0,
+      1
+    ]
+  },
+  "wall_seconds": 0.43699999999989814,
+  "counters": {
+    "scope": "ENGINEERING_ONLY",
+    "FORWARD_CALLS": 1,
+    "TRAIN_FORWARDS": 1,
+    "VALIDATION_FORWARDS": 0,
+    "BACKWARD_CALLS": 1,
+    "OPTIMIZER_STEP_ATTEMPTS": 1,
+    "OPTIMIZER_STEPS": 1,
+    "CHECKPOINT_WRITES": 0
+  },
+  "peak_allocated_bytes": 2858972672,
+  "peak_reserved_bytes": 3435134976,
+  "diagnostics": {
+    "phase": "TRAIN",
+    "forwards": 1,
+    "scenes": 2,
+    "qlog_unit": "log1p(mm/h)",
+    "FP64_physical_boundary": 709.782712893384,
+    "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+    "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+    "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+    "YUNNAN_INSIDE": {
+      "max_qlog": 1.0828441404639382,
+      "q32_per_forward_max_p99": 1.0828441404639382,
+      "q32_per_forward_max_p99_9": 1.0828441404639382,
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 219520,
+      "scene_pixel_any_tau_exposure": 6860,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        }
+      }
+    },
+    "YUNNAN_OUTSIDE": {
+      "max_qlog": 1.1409653954614056,
+      "q32_per_forward_max_p99": 1.1409653954614056,
+      "q32_per_forward_max_p99_9": 1.1409653954614056,
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 420480,
+      "scene_pixel_any_tau_exposure": 13140,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        }
+      }
+    }
+  },
+  "FORMAL_OPTIMIZER_STEPS": 0
+}
