@@ -7,3 +7,7 @@
 CPU 合成测试 5/5 PASS，见 `synthetic_test_results.txt`。测试不构建模型，不读取 checkpoint/raw，不执行 forward/backward/optimizer。既有 770 项预检测试证据保持原样；本轮没有重新运行整套 regression。
 
 尚未完成：两模型正常结束后的 BEST 只读全量 2024 reinference、最终 counters/历史/身份对账、paired comparison packet。该组件测试通过不代表这些工作完成。后续仅在两个 `final_report.json` 均为 COMPLETE 且 BEST 身份、SHA、完成标记及授权核验通过后，才允许独立评价进程使用 GPU；不与训练竞争资源。不访问 2025，不加载 optimizer 状态用于执行，不进入 Phase-B。
+
+`run_review.py` 为独立执行入口，要求原授权 SHA。即使传入 `--execute`，两模型尚未完成时也会在导入 PyTorch、读取 checkpoint 或 raw 之前返回 `REVIEW_INFERENCE_ALLOWED=false`；当前拒绝证据见 `early_execution_rejected.json`。完成门另有 4 项纯元数据生命周期测试。真实评价尚未运行；语法/禁止更新调用检查不能替代未来真实全量核验。
+
+正式评价前重新核验所有完成 checkpoint 和逐 epoch 本地 artifact SHA；BEST provenance 核验后仅应用模型状态，不应用 optimizer/RNG。只允许 2024 源白名单，固定 batch8/顺序全量推理；逐项精确复核训练时保存的 BEST validation 指标，检查前后模型与 checkpoint 身份不变，再生成 `paired_comparison_packet.json`。最终仍需对训练、恢复计数、发布状态及人类可读决策包进行收尾审计，不因 JSON 生成而自动标记整个 Goal 完成。
