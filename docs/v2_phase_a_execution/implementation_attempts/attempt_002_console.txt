@@ -1,0 +1,309 @@
+test_audit_failure_does_not_publish_last (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_audit_failure_does_not_publish_last) ... ERROR
+test_continuous_vs_resumed_exact_next_update (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_continuous_vs_resumed_exact_next_update) ... ERROR
+test_half_epoch_rejected (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_half_epoch_rejected) ... ok
+test_permutation_tamper (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_permutation_tamper) ... ok
+test_roundtrip_and_provenance_before_application (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_roundtrip_and_provenance_before_application) ... ERROR
+test_state_digest_tamper (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_state_digest_tamper) ... ok
+test_counts_both_units_and_regions (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_counts_both_units_and_regions) ... ok
+test_fp64_risk_does_not_materialize_or_stop (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_fp64_risk_does_not_materialize_or_stop) ... ok
+test_observer_does_not_modify_tensor_or_rng (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_observer_does_not_modify_tensor_or_rng) ... ok
+test_partition_argmax_identity (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_partition_argmax_identity) ... ok
+test_percentile_exact_linear_forward_weighting (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_percentile_exact_linear_forward_weighting) ... ok
+test_phase_separation_and_empty_rejection (tests.formal_phase_a_v2.test_runner.DiagnosticTests.test_phase_separation_and_empty_rejection) ... ok
+test_2025_rejected_before_open (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_2025_rejected_before_open) ... ERROR
+test_atomic_immutable_no_overwrite (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_atomic_immutable_no_overwrite) ... ERROR
+test_best_and_early_stop_separate (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_best_and_early_stop_separate) ... ok
+test_counter_scopes (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_counter_scopes) ... ok
+test_exact_min_delta_is_not_improvement (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_exact_min_delta_is_not_improvement) ... ok
+test_lr_boundaries (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_lr_boundaries) ... ok
+test_no_implicit_train_cli (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_no_implicit_train_cli) ... usage: python.exe -m unittest [-h]
+                              {preflight,initialization-proof,train,resume,monitor,publish}
+                              ...
+python.exe -m unittest: error: the following arguments are required: command
+usage: python.exe -m unittest train [-h] --authorization AUTHORIZATION
+                                    --authorization-sha256
+                                    AUTHORIZATION_SHA256
+python.exe -m unittest train: error: the following arguments are required: --authorization, --authorization-sha256
+ok
+test_numerical_guards (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_numerical_guards) ... ok
+test_raw_write_rejected (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_raw_write_rejected) ... ERROR
+test_tie_preserves_earliest_and_eight_stops (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_tie_preserves_earliest_and_eight_stops) ... ok
+test_bad_denominator (tests.formal_phase_a_v2.test_runner.ValidationTests.test_bad_denominator) ... ok
+test_global_accumulation_not_mean_of_batch_means (tests.formal_phase_a_v2.test_runner.ValidationTests.test_global_accumulation_not_mean_of_batch_means) ... ok
+test_no_physical_attribute_or_expm1_required (tests.formal_phase_a_v2.test_runner.ValidationTests.test_no_physical_attribute_or_expm1_required) ... ok
+test_occurrence_threshold_float32_boundary (tests.formal_phase_a_v2.test_runner.ValidationTests.test_occurrence_threshold_float32_boundary) ... ok
+test_zero_rain_no_skip (tests.formal_phase_a_v2.test_runner.ValidationTests.test_zero_rain_no_skip) ... ok
+
+======================================================================
+ERROR: test_audit_failure_does_not_publish_last (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_audit_failure_does_not_publish_last)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 193, in test_audit_failure_does_not_publish_last
+    _,_,p,e=self.fixture();store=ck.CheckpointStore(Path(temp)/'states',Path(temp)/'records','B0_MATCHED_V2','fixture',scope='TEST_FIXTURE_ONLY')
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\training\checkpoint_v2.py", line 125, in __init__
+    self.root.mkdir(parents=True, exist_ok=True); self.public.mkdir(parents=True, exist_ok=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp4apctucs\\states'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp4apctucs'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 192, in test_audit_failure_does_not_publish_last
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp4apctucs'
+
+======================================================================
+ERROR: test_continuous_vs_resumed_exact_next_update (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_continuous_vs_resumed_exact_next_update)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 200, in test_continuous_vs_resumed_exact_next_update
+    model,opt,p,e=self.fixture();store=ck.CheckpointStore(Path(temp)/'states',Path(temp)/'records','B0_MATCHED_V2','fixture',scope='TEST_FIXTURE_ONLY')
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\training\checkpoint_v2.py", line 125, in __init__
+    self.root.mkdir(parents=True, exist_ok=True); self.public.mkdir(parents=True, exist_ok=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp6bruuxxt\\states'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp6bruuxxt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 199, in test_continuous_vs_resumed_exact_next_update
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmp6bruuxxt'
+
+======================================================================
+ERROR: test_roundtrip_and_provenance_before_application (tests.formal_phase_a_v2.test_runner.CheckpointTests.test_roundtrip_and_provenance_before_application)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 172, in test_roundtrip_and_provenance_before_application
+    model,opt,p,expected=self.fixture();store=ck.CheckpointStore(Path(temp)/'states',Path(temp)/'records','B0_MATCHED_V2','fixture',scope='TEST_FIXTURE_ONLY')
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\training\checkpoint_v2.py", line 125, in __init__
+    self.root.mkdir(parents=True, exist_ok=True); self.public.mkdir(parents=True, exist_ok=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpgqez4fow\\states'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpgqez4fow'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 171, in test_roundtrip_and_provenance_before_application
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpgqez4fow'
+
+======================================================================
+ERROR: test_2025_rejected_before_open (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_2025_rejected_before_open)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpa0xf6_bs'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 133, in test_2025_rejected_before_open
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpa0xf6_bs'
+
+======================================================================
+ERROR: test_atomic_immutable_no_overwrite (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_atomic_immutable_no_overwrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 147, in test_atomic_immutable_no_overwrite
+    p=Path(temp)/'evidence.json';atomic_json(p,{'a':1},immutable=True)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\src\yuntapr\training\phase_a_audit_v2.py", line 39, in atomic_json
+    with tmp.open('x', encoding='utf-8', newline='\n') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpf8jamo0x\\evidence.json.8308bab5a2e74591b8b7ba8ffebf5429.tmp'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpf8jamo0x'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 146, in test_atomic_immutable_no_overwrite
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpf8jamo0x'
+
+======================================================================
+ERROR: test_raw_write_rejected (tests.formal_phase_a_v2.test_runner.ProtocolTests.test_raw_write_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpkqgei5s2'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-push-chunks\tests\formal_phase_a_v2\test_runner.py", line 140, in test_raw_write_rejected
+    with tempfile.TemporaryDirectory() as temp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 950, in __exit__
+    self.cleanup()
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 954, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\v2_fixture_tmp\\tmpkqgei5s2'
+
+----------------------------------------------------------------------
+Ran 27 tests in 1.271s
+
+FAILED (errors=6)
