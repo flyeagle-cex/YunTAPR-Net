@@ -1,0 +1,82 @@
+{
+  "status": "COMPLETE",
+  "model": "B0_MATCHED_V2",
+  "termination_reason": "EARLY_STOP_PATIENCE_8",
+  "completed_epoch": 17,
+  "best_checkpoint_epoch": 9,
+  "best_es_epoch": 9,
+  "best_es_value": 0.0487596076193766,
+  "final_early_stop_counter": 8,
+  "patience": 8,
+  "min_delta": 0.0001,
+  "retained_trajectory_updates": 88876,
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 6541,
+    "TRAIN_FORWARDS": 5228,
+    "VALIDATION_FORWARDS": 1313,
+    "BACKWARD_CALLS": 5228,
+    "OPTIMIZER_STEP_ATTEMPTS": 5228,
+    "OPTIMIZER_STEPS": 5228,
+    "CHECKPOINT_WRITES": 1
+  },
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "io": {
+    "RAW_SOURCE_OPENS": 83824,
+    "NATIVE_DECODES": 62869,
+    "DENIED_ATTEMPTS": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "log_files": [
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_parent.jsonl",
+        "bytes": 272,
+        "sha256": "854dc6398b137ce95014e828acc96b784623c8a63af68ef26b50b2998878f7ce"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_19312.jsonl",
+        "bytes": 14229966,
+        "sha256": "52621feeb1383bf9cb918ec62e5a294900d51d32e10b9b5eb39115e137a54b1e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_33812.jsonl",
+        "bytes": 14298066,
+        "sha256": "ffbdedd86733eaee0b5f28ddd3cf0b268827ab47857d20e4b4faa574fd855fb1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_34524.jsonl",
+        "bytes": 14227242,
+        "sha256": "c3f6d0586d788f6dbbfbb8ca755abdd84e6f0351a34d3a1accdeb1edd14a55c8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_7388.jsonl",
+        "bytes": 14210974,
+        "sha256": "9bf4ac030d0fef5e1e10be18e14310d0ad90d4c56a690ab3647f5b67e9374a01"
+      }
+    ],
+    "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+  },
+  "all_attempt_reconciliation": {
+    "retained_trajectory_updates": 88876,
+    "all_attempt_updates_lower_bound": 89175,
+    "all_attempt_updates_upper_bound": 89176,
+    "discarded_updates_lower_bound": 299,
+    "discarded_updates_upper_bound": 300,
+    "attempts": [
+      {
+        "attempt": "run_20261007T070818_003523Z",
+        "updates_lower_bound": 83947,
+        "updates_upper_bound": 83948,
+        "certainty": "JOURNAL_BOUNDS_UNCLEAN_EXIT"
+      },
+      {
+        "attempt": "run_20261008T002823_025978Z",
+        "updates_lower_bound": 5228,
+        "updates_upper_bound": 5228,
+        "certainty": "EXACT_PROCESS_COUNTER"
+      }
+    ],
+    "half_epoch_state_reused": false
+  }
+}
