@@ -1,0 +1,148 @@
+{
+  "observed_utc": "2026-10-08T00:32:38.362854+00:00",
+  "status": "FORMAL_RESUME_OBSERVED",
+  "new_attempt": "run_20261008T002823_025978Z",
+  "progress_snapshot": {
+    "pid": 37112,
+    "updated_ns": 1791419558201610900,
+    "status": "RUNNING",
+    "phase": "TRAIN",
+    "model": "B0_MATCHED_V2",
+    "epoch": 17,
+    "step": 133,
+    "sample_ids": [
+      "2023-03-20T16:30:00+00:00",
+      "2023-07-10T07:30:00+00:00"
+    ],
+    "LR": 7.875351841486133e-05,
+    "train_loss": 0.036890755563203446,
+    "gradient_norm": 0.07685183733701706,
+    "post_clip_norm": 0.07685183685286681,
+    "BEST_epoch": 9,
+    "patience": 7,
+    "ETA_seconds": 3211.9186466165434,
+    "gpu_memory_allocated": 76671488,
+    "diagnostics": {
+      "phase": "TRAIN",
+      "forward_index": 133,
+      "sample_ids": [
+        "2023-03-20T16:30:00+00:00",
+        "2023-07-10T07:30:00+00:00"
+      ],
+      "batch_size": 2,
+      "YUNNAN_INSIDE": {
+        "max_qlog": 2.926832518775777,
+        "q32_max_qlog": 2.926832518775777,
+        "max_location": {
+          "sample_id": "2023-07-10T07:30:00+00:00",
+          "batch_index": 1,
+          "tau_index": 31,
+          "tau": 0.984375,
+          "row": 87,
+          "column": 18
+        },
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 219520,
+        "scene_pixel_any_tau_exposure": 6860,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 42,
+            "scene_pixel_any_tau_exposure": 31
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      },
+      "YUNNAN_OUTSIDE": {
+        "max_qlog": 4.912332582900356,
+        "q32_max_qlog": 4.912332582900356,
+        "max_location": {
+          "sample_id": "2023-07-10T07:30:00+00:00",
+          "batch_index": 1,
+          "tau_index": 31,
+          "tau": 0.984375,
+          "row": 96,
+          "column": 25
+        },
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 420480,
+        "scene_pixel_any_tau_exposure": 13140,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 1292,
+            "scene_pixel_any_tau_exposure": 411
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 26,
+            "scene_pixel_any_tau_exposure": 22
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 2,
+            "scene_pixel_any_tau_exposure": 2
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      }
+    },
+    "counters": {
+      "scope": "FORMAL",
+      "FORWARD_CALLS": 133,
+      "TRAIN_FORWARDS": 133,
+      "VALIDATION_FORWARDS": 0,
+      "BACKWARD_CALLS": 133,
+      "OPTIMIZER_STEP_ATTEMPTS": 133,
+      "OPTIMIZER_STEPS": 133,
+      "CHECKPOINT_WRITES": 0
+    },
+    "validation_core_loss": 0.05004557796216997,
+    "age_seconds": 0.2,
+    "process_alive": true
+  },
+  "replayed_prefix_comparison": {
+    "status": "PASS",
+    "compared_completed_updates": 133,
+    "first_update": 83649,
+    "last_update": 83781,
+    "fields": [
+      "sample_ids",
+      "indices",
+      "update",
+      "LR",
+      "loss",
+      "L_occ",
+      "L_qr",
+      "actual_denominator",
+      "pre_clip_norm",
+      "post_clip_norm",
+      "clipped"
+    ],
+    "tolerance": 0,
+    "scope": "Observed shared prefix only; not a claim about unobserved updates"
+  },
+  "V2_PHASE_B_AUTHORIZED": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}
