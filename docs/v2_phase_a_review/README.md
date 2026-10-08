@@ -11,3 +11,7 @@ CPU 合成测试 5/5 PASS，见 `synthetic_test_results.txt`。测试不构建�
 `run_review.py` 为独立执行入口，要求原授权 SHA。即使传入 `--execute`，两模型尚未完成时也会在导入 PyTorch、读取 checkpoint 或 raw 之前返回 `REVIEW_INFERENCE_ALLOWED=false`；当前拒绝证据见 `early_execution_rejected.json`。完成门另有 4 项纯元数据生命周期测试。真实评价尚未运行；语法/禁止更新调用检查不能替代未来真实全量核验。
 
 正式评价前重新核验所有完成 checkpoint 和逐 epoch 本地 artifact SHA；BEST provenance 核验后仅应用模型状态，不应用 optimizer/RNG。只允许 2024 源白名单，固定 batch8/顺序全量推理；逐项精确复核训练时保存的 BEST validation 指标，检查前后模型与 checkpoint 身份不变，再生成 `paired_comparison_packet.json`。最终仍需对训练、恢复计数、发布状态及人类可读决策包进行收尾审计，不因 JSON 生成而自动标记整个 Goal 完成。
+
+2026-10-08 恢复适配：研究者主动停止的原 `process_exit.json` 保持原样。后续评价应传入 `docs/v2_phase_a_authorized/pair_20261007T070503_825794Z/resume_20261008T001111_821825Z/authorization.json`，SHA256 为 `321a768205efc3116ab4e1185d9c7d54dc6a2c4b27e21f605bb7e27c26dffc93`。完成门读取该恢复 attempt 的退出凭证，并核验恢复授权与原授权的冻结科学、代码、运行及样本身份一致；checkpoint provenance 仍绑定原始授权 SHA，不将恢复授权冒充 fresh 初始化授权。
+
+纯元数据完成门测试现为 8/8 PASS（原 4 项及新增恢复身份 4 项），见 `recovery_completion_gate_tests.txt`。两次沙箱临时目录权限失败分别保存在独立日志；正常权限下测试通过，不修改正式训练环境或 runner。实际未完成门见 `recovery_early_execution_rejected.json`，仍在导入 PyTorch、读取 checkpoint 二进制和 raw 之前拒绝评价。

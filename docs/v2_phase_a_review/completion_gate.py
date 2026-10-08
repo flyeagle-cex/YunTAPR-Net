@@ -1,5 +1,6 @@
 """Read-only metadata gate. Does not load a model, checkpoint binary or raw data."""
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -32,8 +33,42 @@ def reconcile_selection(rows):
 def load(path): return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
+def resolve_authority(auth_path):
+    """Bind recovery completion to its immutable original scientific/run authority."""
+    auth_path = Path(auth_path)
+    auth = load(auth_path)
+    origin_sha = hashlib.sha256(auth_path.read_bytes()).hexdigest()
+    if auth.get('resume_authorized'):
+        origin_path = Path(auth['origin_authorization_path'])
+        repo = Path(auth['publication_repository']).resolve()
+        if not origin_path.resolve().is_relative_to(repo):
+            raise ValueError('Resume origin outside publication repository')
+        origin_sha = hashlib.sha256(origin_path.read_bytes()).hexdigest()
+        if origin_sha != auth['origin_authorization_sha256']:
+            raise ValueError('Resume origin SHA mismatch')
+        origin = load(origin_path)
+        for key in ('scope', 'FORMAL_TRAINING_AUTHORIZED', 'V2_PHASE_A_AUTHORIZED',
+                    'V2_PHASE_B_AUTHORIZED', '2025_RAW_ACCESS', '2025_PIXELS_READ',
+                    'pair_id', 'run_ids', 'models', 'checkpoint_roots', 'publication_root',
+                    'publication_repository', 'execution_checkout', 'execution_commit',
+                    'scientific_commit', 'protocol_sha256', 'head_sha256', 'normalization_sha256',
+                    'code_sha256', 'initial_state_sha256', 'preflight_path', 'preflight_sha256',
+                    'test_summary_path', 'test_summary_sha256'):
+            if auth[key] != origin[key]:
+                raise ValueError('Resume changed frozen authority: ' + key)
+        if auth['resume_model'] not in auth['models']:
+            raise ValueError('Unknown resume model')
+        precheck_path = Path(auth['resume_precheck_path'])
+        if hashlib.sha256(precheck_path.read_bytes()).hexdigest() != auth['resume_precheck_sha256']:
+            raise ValueError('Resume precheck SHA mismatch')
+        precheck = load(precheck_path)
+        if precheck['status'] != 'PASS' or precheck['checkpoint']['sha256'] != auth['resume_LAST_sha256']:
+            raise ValueError('Resume LAST/precheck mismatch')
+    return auth, origin_sha
+
+
 def check_pair(auth_path):
-    auth_path=Path(auth_path);auth=load(auth_path);public=Path(auth['publication_root'])
+    auth_path=Path(auth_path);auth,origin_sha=resolve_authority(auth_path);public=Path(auth['publication_root'])
     required=[auth_path.parent/'process_exit.json',public/'pair_training_completed.json']
     required += [public/k/'final_report.json' for k in auth['models']]
     missing=[str(p) for p in required if not p.is_file()]
@@ -69,6 +104,8 @@ def check_pair(auth_path):
                 raise ValueError('Source firewall violated')
         proof[kind]={**expected,'BEST':registry['BEST'],'LAST':registry['LAST']}
     return {'status':'METADATA_COMPLETION_GATE_PASS','REVIEW_INFERENCE_ALLOWED':False,
+            'origin_authorization_sha256':origin_sha,
+            'completion_authorization_path':str(auth_path.resolve()),
             'next_gate':'Rehash code/config/data identities, all local epoch artifacts and checkpoint bytes; provenance before model state application',
             'models':proof,'V2_PHASE_B_AUTHORIZED':False,'2025_RAW_ACCESS':0}
 

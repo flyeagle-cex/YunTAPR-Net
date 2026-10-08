@@ -73,7 +73,7 @@ def main():
             prov=read(local/'audit'/attempt/'provenance.json')
             for key in ('pair_id','protocol_sha256','head_sha256','normalization_sha256','execution_commit','code_sha256'):
                 if prov[key]!=auth[key]:raise ValueError('Checkpoint provenance disagrees with authorization: '+key)
-            if prov['origin_authorization_sha256']!=args.authorization_sha256 or prov['run_id']!=auth['run_ids'][kind]:
+            if prov['origin_authorization_sha256']!=proof['origin_authorization_sha256'] or prov['run_id']!=auth['run_ids'][kind]:
                 raise ValueError('Checkpoint belongs to another authorization/run')
             if prov['initialization']['models']!=auth['initial_state_sha256'] or prov['identity']!=contract.protocol['identity']:
                 raise ValueError('Initialization/data identity mismatch')
