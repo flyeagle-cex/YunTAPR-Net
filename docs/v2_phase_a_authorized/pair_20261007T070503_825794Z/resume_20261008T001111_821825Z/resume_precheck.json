@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-08T00:11:11.821825+00:00",
+  "checkpoint": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_016.pt",
+    "bytes": 52086571,
+    "sha256": "46addfa8a76f7ba278a592d4a8781b06a3805a28a1a19f4200ccb6c7006f5cad",
+    "epoch": 16,
+    "model": "B0_MATCHED_V2",
+    "run_id": "run_20261007T070503_825794Z",
+    "global_update": 83648,
+    "scope": "FORMAL"
+  },
+  "verified_state_sha256": {
+    "model": "fb430bd7c63de159a2eb89362fa25b343ac3c06c2598a31bf05bdd4437c87920",
+    "optimizer": "ff9b06cb2156d4453ebfb89904b88a1b1c5bb703a2f8ee339b6f6fdc4c449534",
+    "rng": "cc48e68ea7506a6ad2187c4a3fe0998a6ce53e96af6646b85eacfbed81ac6598",
+    "scheduler": "f586fd8007f223942cf94ea9436fdd13553ef295d09fab9fd88b2a8fa0af2be2"
+  },
+  "scheduler": {
+    "W": 5228,
+    "U": 261400,
+    "last_update": 83648,
+    "last_lr": 7.88197746760474e-05,
+    "next_lr": 7.881927678955528e-05
+  },
+  "selection": {
+    "best_checkpoint_value": 0.0487596076193766,
+    "selected_checkpoint_epoch": 9,
+    "early_stop_best": 0.0487596076193766,
+    "non_improvement_count": 7,
+    "completed_epoch": 16
+  },
+  "completed_permutation_sha256": "a031525ecda20ca0f38b47d564faa141aa3936b7385000b99331fa907367edf1",
+  "next_permutation_sha256": "d8dfdcc827c92c397f1e87eb5fbb86c9e2a6f9ff2de01cc6b6ba5aef2d979851",
+  "frozen_manifest_identities": {
+    "scientific_contract_v1.1": {
+      "path": "config/science_contract_v1.1.yaml",
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    },
+    "engineering_v4": {
+      "path": "config/b0_engineering_v4.yaml",
+      "sha256": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7"
+    },
+    "SP04_mapping": {
+      "path": "config/spatial/sp04_target_cell_membership_v1.csv",
+      "sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+    },
+    "SP04_manifest": {
+      "path": "config/spatial/sp04_coordinate_manifest_v1.json",
+      "sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473"
+    },
+    "yunnan_mask": {
+      "path": "F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+      "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+    },
+    "prior_gpu_manifest": {
+      "path": "docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json",
+      "sha256": "c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8"
+    },
+    "normalization": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\normalization_b1_2023_shared_v1.json",
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+    },
+    "B1_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2023_formal_manifest.csv",
+      "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+    },
+    "B1_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2024_formal_manifest.csv",
+      "sha256": "eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c"
+    },
+    "B0_MATCHED_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv",
+      "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc"
+    },
+    "B0_MATCHED_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2024_formal_manifest.csv",
+      "sha256": "5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a"
+    }
+  },
+  "code_sha256_verified": true,
+  "paired_initialization_identity_verified": true,
+  "source_files_exist": 67006,
+  "source_size_checks": 66516,
+  "next_batch_source_sha_checks": [
+    {
+      "path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230827.nc",
+      "sha256": "0cbc12a6adae1afc9b72a8e554a637353415347c443d188f196102c2793e4ac3"
+    },
+    {
+      "path": "H:\\葵花202303_202510\\202308\\27\\NC_H09_20230827_2150_R21_FLDK.06001_06001.nc",
+      "sha256": "f1203076ef025501e79f3751caaf94a80f99f545f3ef2353d5e8ee79e8008c09"
+    },
+    {
+      "path": "F:\\云南极端降水数据\\raw\\IMERG\\2023\\imerg_20230515.nc",
+      "sha256": "bdb6079d86daf2876f1b2d19ec2917d7fe6f5bccf5d1b937f12b5274d7e2543c"
+    },
+    {
+      "path": "H:\\葵花202303_202510\\202305\\15\\NC_H09_20230515_0650_R21_FLDK.06001_06001.nc",
+      "sha256": "9f379f11dff00f2843747b1b1d5b8b1fe69ad7685c5ddcc22f09813a1bdb6fcc"
+    }
+  ],
+  "all_source_sha_repeated": false,
+  "source_sha_policy": "Original completed preflight retained; unchanged reader verifies every actual source read.",
+  "reconciliation": {
+    "retained_trajectory_updates": 83648,
+    "all_attempt_updates_lower_bound": 83947,
+    "all_attempt_updates_upper_bound": 83948,
+    "discarded_updates_lower_bound": 299,
+    "discarded_updates_upper_bound": 300,
+    "attempts": [
+      {
+        "attempt": "run_20261007T070818_003523Z",
+        "updates_lower_bound": 83947,
+        "updates_upper_bound": 83948,
+        "certainty": "JOURNAL_BOUNDS_UNCLEAN_EXIT"
+      }
+    ],
+    "half_epoch_state_reused": false
+  },
+  "state_application_performed": false,
+  "formal_optimizer_steps_added": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "resume_launched": false,
+  "unclean_exit_note": "Journal bounds retained. All uncheckpointed epoch 17 updates discarded. No original artifact changed."
+}

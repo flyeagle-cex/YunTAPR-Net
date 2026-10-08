@@ -1,0 +1,19 @@
+{
+  "status": "PAUSED_BY_RESEARCHER",
+  "requested_action": "先停止训练",
+  "observed_utc": "2026-10-07T15:49:38.6885444Z",
+  "pair_id": "pair_20261007T070503_825794Z",
+  "termination_method": "taskkill /PID 44100 /T /F after command-line identity verification",
+  "training_process_alive": false,
+  "B1_V2_STARTED": false,
+  "last_complete_epoch": 16,
+  "retained_checkpoint_updates": 83648,
+  "last_monitor_epoch": 17,
+  "last_monitor_step": 299,
+  "last_monitor_optimizer_steps": 83947,
+  "monitor_counts_are_last_observed_not_final_reconciled": true,
+  "resume_policy": "Only verified complete epoch 16 LAST; discard every uncheckpointed epoch 17 update; exact all-attempt counts require subsequent log reconciliation",
+  "automatic_resume_allowed": false,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "note": "Launcher exit code 1 was caused by researcher-requested process termination; it is not evidence of a numerical contract failure. Original process_exit.json preserved unchanged."
+}
