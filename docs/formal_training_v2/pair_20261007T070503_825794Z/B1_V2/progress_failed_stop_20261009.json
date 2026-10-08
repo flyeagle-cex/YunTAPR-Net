@@ -1,0 +1,134 @@
+{
+  "pid": 37112,
+  "updated_ns": 1791488272887705000,
+  "status": "FAILED_STOP",
+  "phase": "TRAIN",
+  "model": "B1_V2",
+  "epoch": 15,
+  "step": 3095,
+  "sample_ids": [
+    "2023-08-31T10:00:00+00:00",
+    "2023-10-31T05:00:00+00:00"
+  ],
+  "LR": 8.236487828575872e-05,
+  "train_loss": 0.03545535917937336,
+  "gradient_norm": 0.057641565799713135,
+  "post_clip_norm": 0.057641568887355325,
+  "BEST_epoch": 9,
+  "patience": 5,
+  "ETA_seconds": 1267.3642533936652,
+  "gpu_memory_allocated": 90571264,
+  "diagnostics": {
+    "phase": "TRAIN",
+    "forward_index": 3094,
+    "sample_ids": [
+      "2023-03-11T13:30:00+00:00",
+      "2023-06-30T01:00:00+00:00"
+    ],
+    "batch_size": 2,
+    "YUNNAN_INSIDE": {
+      "max_qlog": 3.91248861699925,
+      "q32_max_qlog": 3.91248861699925,
+      "max_location": {
+        "sample_id": "2023-06-30T01:00:00+00:00",
+        "batch_index": 1,
+        "tau_index": 31,
+        "tau": 0.984375,
+        "row": 74,
+        "column": 61
+      },
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 219520,
+      "scene_pixel_any_tau_exposure": 6860,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 184,
+          "scene_pixel_any_tau_exposure": 74
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        }
+      }
+    },
+    "YUNNAN_OUTSIDE": {
+      "max_qlog": 4.167298846149623,
+      "q32_max_qlog": 4.167298846149623,
+      "max_location": {
+        "sample_id": "2023-06-30T01:00:00+00:00",
+        "batch_index": 1,
+        "tau_index": 31,
+        "tau": 0.984375,
+        "row": 67,
+        "column": 98
+      },
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 420480,
+      "scene_pixel_any_tau_exposure": 13140,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 1188,
+          "scene_pixel_any_tau_exposure": 560
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 4,
+          "scene_pixel_any_tau_exposure": 4
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        }
+      }
+    }
+  },
+  "counters": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 94668,
+    "TRAIN_FORWARDS": 76286,
+    "VALIDATION_FORWARDS": 18382,
+    "BACKWARD_CALLS": 76286,
+    "OPTIMIZER_STEP_ATTEMPTS": 76286,
+    "OPTIMIZER_STEPS": 76286,
+    "CHECKPOINT_WRITES": 14
+  },
+  "validation_core_loss": 0.04858346668208074,
+  "error": "PermissionError(13, '拒绝访问。')",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 383, in train_one\n    progress(public, status='RUNNING', phase='TRAIN', model=kind, **current, LR=metrics['LR'],\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 303, in progress\n    atomic_json(path, {**prior, 'pid': os.getpid(), 'updated_ns': time.time_ns(), **values})\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_audit_v2.py\", line 48, in atomic_json\n    os.replace(tmp, p)\nPermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\chenerxiao\\\\Documents\\\\极端降水预测\\\\YunTAPR-Net-push-chunks\\\\docs\\\\formal_training_v2\\\\pair_20261007T070503_825794Z\\\\B1_V2\\\\progress.json.212796e4d37248449c45f9ff6a8f864d.tmp' -> 'C:\\\\Users\\\\chenerxiao\\\\Documents\\\\极端降水预测\\\\YunTAPR-Net-push-chunks\\\\docs\\\\formal_training_v2\\\\pair_20261007T070503_825794Z\\\\B1_V2\\\\progress.json'\n",
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 94669,
+    "TRAIN_FORWARDS": 76287,
+    "VALIDATION_FORWARDS": 18382,
+    "BACKWARD_CALLS": 76287,
+    "OPTIMIZER_STEP_ATTEMPTS": 76287,
+    "OPTIMIZER_STEPS": 76287,
+    "CHECKPOINT_WRITES": 14
+  },
+  "retained_completed_epoch": 14,
+  "uncheckpointed_updates_are_not_resumable": true,
+  "automatic_resume": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}
