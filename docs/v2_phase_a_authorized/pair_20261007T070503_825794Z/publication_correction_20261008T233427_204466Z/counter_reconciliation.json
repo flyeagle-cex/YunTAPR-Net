@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "retained_trajectory_updates": 73192,
+  "all_attempt_updates_lower_bound": 76287,
+  "all_attempt_updates_upper_bound": 76287,
+  "discarded_updates_lower_bound": 3095,
+  "discarded_updates_upper_bound": 3095,
+  "attempts": [
+    {
+      "attempt": "run_20261008T010824_279406Z",
+      "updates_lower_bound": 76287,
+      "updates_upper_bound": 76287,
+      "certainty": "EXACT_PROCESS_COUNTER"
+    }
+  ],
+  "half_epoch_state_reused": false,
+  "failing_epoch": 15,
+  "failing_step": 3095,
+  "failure_snapshot_completed_updates": 76286,
+  "authoritative_attempt_completed_updates": 76287,
+  "progress_snapshot_lags_successful_optimizer_step_by": 1,
+  "explanation": "The optimizer step completed before progress.json replacement failed. Retain only completed epoch 14; all 3095 epoch-15 updates must be discarded on any future approved resume.",
+  "formal_optimizer_steps_added_by_this_task": 0
+}

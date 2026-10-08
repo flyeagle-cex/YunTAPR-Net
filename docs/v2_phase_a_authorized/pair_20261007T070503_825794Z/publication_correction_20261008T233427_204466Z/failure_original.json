@@ -1,0 +1,26 @@
+{
+  "status": "FAILED_STOP",
+  "error": "PermissionError(13, '拒绝访问。')",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 383, in train_one\n    progress(public, status='RUNNING', phase='TRAIN', model=kind, **current, LR=metrics['LR'],\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 303, in progress\n    atomic_json(path, {**prior, 'pid': os.getpid(), 'updated_ns': time.time_ns(), **values})\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_audit_v2.py\", line 48, in atomic_json\n    os.replace(tmp, p)\nPermissionError: [WinError 5] 拒绝访问。: 'C:\\\\Users\\\\chenerxiao\\\\Documents\\\\极端降水预测\\\\YunTAPR-Net-push-chunks\\\\docs\\\\formal_training_v2\\\\pair_20261007T070503_825794Z\\\\B1_V2\\\\progress.json.212796e4d37248449c45f9ff6a8f864d.tmp' -> 'C:\\\\Users\\\\chenerxiao\\\\Documents\\\\极端降水预测\\\\YunTAPR-Net-push-chunks\\\\docs\\\\formal_training_v2\\\\pair_20261007T070503_825794Z\\\\B1_V2\\\\progress.json'\n",
+  "epoch": 15,
+  "step": 3095,
+  "sample_ids": [
+    "2023-08-31T10:00:00+00:00",
+    "2023-10-31T05:00:00+00:00"
+  ],
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 94669,
+    "TRAIN_FORWARDS": 76287,
+    "VALIDATION_FORWARDS": 18382,
+    "BACKWARD_CALLS": 76287,
+    "OPTIMIZER_STEP_ATTEMPTS": 76287,
+    "OPTIMIZER_STEPS": 76287,
+    "CHECKPOINT_WRITES": 14
+  },
+  "retained_completed_epoch": 14,
+  "uncheckpointed_updates_are_not_resumable": true,
+  "automatic_resume": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}

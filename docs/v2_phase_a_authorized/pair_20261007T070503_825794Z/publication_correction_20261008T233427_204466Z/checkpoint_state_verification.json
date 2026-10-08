@@ -1,0 +1,93 @@
+{
+  "schema": "READ_ONLY_B1_CHECKPOINT_STATE_VERIFICATION_v1",
+  "status": "PASS",
+  "verified_utc": "2026-10-08T23:34:27.204466+00:00",
+  "checkpoint": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_014.pt",
+    "bytes": 52115371,
+    "sha256": "40f7f1204aba52815e1c8c2f3d2a5ce5d73da6b7b0297e1d79dc843cb3390649",
+    "epoch": 14,
+    "model": "B1_V2",
+    "run_id": "run_20261007T070503_825795Z",
+    "global_update": 73192,
+    "scope": "FORMAL"
+  },
+  "verified_state_sha256": {
+    "model": "bdf63aea27584087335291af1a807e7342c009ca70aa7e575b301fe272b952b0",
+    "optimizer": "89b3d2a5affac194fd7ca8c0fb7b1d2586c96293793358dd53b995fc052d1c7c",
+    "rng": "8d35ad4c5c338fe8d543c6bfa496c7a928f5e0b7abe8d0f973a4f4a20f57a788",
+    "scheduler": "f976fdc008bdd1f08703de97f237a1ab7af6d36cdc15b1210292ae5742134112"
+  },
+  "scheduler": {
+    "W": 5228,
+    "U": 261400,
+    "last_update": 73192,
+    "last_lr": 8.377889406793519e-05,
+    "next_lr": 8.377844468076183e-05
+  },
+  "selection": {
+    "best_checkpoint_value": 0.047816404266642944,
+    "selected_checkpoint_epoch": 9,
+    "early_stop_best": 0.047816404266642944,
+    "non_improvement_count": 5,
+    "completed_epoch": 14
+  },
+  "completed_permutation_sha256": "aab8c61d36c00e7d4e028ce5450156aa8cec2ea4257e07b268f1a1caa77f760f",
+  "next_permutation_sha256": "70af946f8634754282cc9940e84569cf00c5fe3082e95cd73b4f0e11aa5629a8",
+  "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+  "manifest_identities": {
+    "scientific_contract_v1.1": {
+      "path": "config/science_contract_v1.1.yaml",
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    },
+    "engineering_v4": {
+      "path": "config/b0_engineering_v4.yaml",
+      "sha256": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7"
+    },
+    "SP04_mapping": {
+      "path": "config/spatial/sp04_target_cell_membership_v1.csv",
+      "sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+    },
+    "SP04_manifest": {
+      "path": "config/spatial/sp04_coordinate_manifest_v1.json",
+      "sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473"
+    },
+    "yunnan_mask": {
+      "path": "F:/pytorch/Research/outputs/stage0_spatial_decision_update/run_20260928T102636_513428Z/FROZEN/MASK/yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+      "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+    },
+    "prior_gpu_manifest": {
+      "path": "docs/gpu_training_feasibility/runs/run_20260930T154142Z/manifest.json",
+      "sha256": "c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8"
+    },
+    "normalization": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\normalization_b1_2023_shared_v1.json",
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+    },
+    "B1_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2023_formal_manifest.csv",
+      "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+    },
+    "B1_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2024_formal_manifest.csv",
+      "sha256": "eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c"
+    },
+    "B0_MATCHED_2023": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv",
+      "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc"
+    },
+    "B0_MATCHED_2024": {
+      "path": "docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2024_formal_manifest.csv",
+      "sha256": "5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a"
+    }
+  },
+  "code_sha256_verified": true,
+  "paired_initialization_provenance_verified": true,
+  "initialization_regenerated_this_task": false,
+  "state_application_performed": false,
+  "training_started_by_this_task": false,
+  "raw_sources_reopened": false,
+  "all_source_sha_repeated": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}
