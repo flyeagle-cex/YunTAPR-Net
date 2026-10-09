@@ -83,6 +83,17 @@ def verify_replay(proof):
     require(proof['V2_PHASE_B_AUTHORIZED'] is False, 'Phase-B forbidden')
 
 
+def verify_runtime_initialization(proof, expected_states):
+    require(proof['status'] == 'BOTH_FORMAL_FIRST_ATTEMPT_FRESH_PAIRED_INITIALIZATION_MATCH_PREFLIGHT',
+            'Formal runtime initialization receipt missing')
+    require(set(proof['sources']) == set(KINDS), 'Both fresh initialization receipts required')
+    for kind, ref in proof['sources'].items():
+        require(ref['initial_model_sha256'] == expected_states[kind] and ref['seed'] == 2026 and
+                ref['independent_reseed'] is True and ref['historical_checkpoint_loaded'] is False and
+                ref['initialization_matches_preflight_full_tensor_identity'] is True,
+                'Fresh paired initialization identity changed: ' + kind)
+
+
 def git(*args, root=REPO):
     return subprocess.check_output(['git', '-c', 'core.longpaths=true', *args], cwd=root)
 
@@ -98,7 +109,8 @@ def published(path, commit):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('authorization', 'packet-root', 'review-root', 'b0-audit', 'b1-audit',
-                 'pdf-audit', 'source-policy', 'replay-audit', 'closeout-root', 'output'):
+                 'pdf-audit', 'source-policy', 'replay-audit', 'runtime-initialization',
+                 'interruption-audit', 'closeout-root', 'output'):
         p.add_argument('--' + name, type=Path, required=True)
     p.add_argument('--artifact-commit', required=True)
     args = p.parse_args()
@@ -141,6 +153,7 @@ def main():
     review = load(args.review_root / 'paired_best_metrics.json')
     audits, early, counters, histories = {}, {}, {}, {}
     sources = [args.authorization, args.pdf_audit, args.source_policy, args.replay_audit,
+               args.runtime_initialization, args.interruption_audit,
                args.closeout_root / 'closeout_status.json', args.review_root / 'paired_best_metrics.json',
                args.review_root / 'pre_inference_identity.json', Path(__file__)]
     for kind, root in zip(KINDS, (args.b0_audit, args.b1_audit)):
@@ -182,6 +195,21 @@ def main():
     require(policy['status'] == 'FROZEN_SOURCE_POLICY_AND_PREFLIGHT_BINDING_PASS' and
             policy['paired_independent_reseed_2026_verified'] is True and
             policy['initial_model_states'] == auth['initial_state_sha256'], 'Fresh paired initialization proof missing')
+    runtime = load(args.runtime_initialization)
+    verify_runtime_initialization(runtime, auth['initial_state_sha256'])
+    for ref in runtime['sources'].values():
+        verify_ref(ref['formal_first_attempt_provenance'], allowed)
+    interruption = load(args.interruption_audit)
+    require(interruption['status'] == 'INTERRUPTED_READ_ONLY_REVIEW_PRESERVED' and
+            interruption['partial_metrics_not_used_for_paired_comparison'] is True and
+            args.review_root.resolve() != Path(interruption['original_review_root']).resolve(),
+            'Interrupted review must be preserved; partial metrics may not replace the new full review')
+    for ref in interruption['source_artifacts']:
+        verify_ref(ref, [REPO])
+    native_correction = args.interruption_audit.parent / 'native_event_label_reconciliation.json'
+    require(load(native_correction)['status'] == 'ACTUAL_SAVED_EVENT_LABEL_COUNTS',
+            'Interrupted native event-label correction missing')
+    sources.append(native_correction)
     require(digest(auth['preflight_path']) == auth['preflight_sha256'] and
             digest(auth['test_summary_path']) == auth['test_summary_sha256'], 'Preflight/test identity changed')
     require(policy['preflight_source_files_verified'] == 67006 and
@@ -199,6 +227,7 @@ def main():
         'all_epochs_exact_train_validation_samples_and_counters', 'immutable_complete_epoch_checkpoints',
         'frozen_science_code_configs_normalization_data_manifests', 'fresh_paired_initialization_preflight_binding',
         'separate_retained_all_attempt_engineering_review_counters', 'B1_complete_discarded_prefix_reconciliation',
+        'formal_runtime_fresh_initialization_receipts', 'interrupted_review_preserved_new_full_review',
         'full_2024_BEST_metrics_zero_tolerance_core_reconciliation', 'read_only_upper_tail_every_epoch_and_BEST',
         'full_model_optimizer_scheduler_RNG_permutation_identity_audit', 'all_registered_historical_bytes_unchanged',
         'real_editable_LaTeX_PDF_compile_and_all_page_visual_check', 'lightweight_artifacts_in_verified_GitHub_main',
@@ -214,11 +243,17 @@ def main():
                               'containing_completion_commit_verified_separately': True},
               'source_evidence': [identity(path) for path in sorted(set(sources + assets))],
               'FORMAL_TRAINING_COMPLETED': True, 'FORMAL_TRAINING_RUNNING': False,
+              'V2_SCIENTIFIC_FREEZE_APPROVED': True, 'FORMAL_TRAINING_AUTHORIZED': True,
+              'V2_PHASE_A_AUTHORIZED': True, 'V2_PHASE_A_STARTED': True,
               'FORMAL_OPTIMIZER_STEPS_RETAINED': {k: gate['models'][k]['completed_epoch'] * 5228 for k in KINDS},
               'CLOSEOUT_OPTIMIZER_STEPS': 0, 'CLOSEOUT_BACKWARD_CALLS': 0,
               'FINAL_AUDIT_FORWARD_CALLS': 0, 'FINAL_AUDIT_RAW_SOURCE_OPENS': 0,
               'FINAL_AUDIT_CHECKPOINT_DESERIALIZATIONS': 0,
-              'READ_ONLY_2024_REVIEW_FORWARDS': {k: 1313 for k in KINDS},
+              'READ_ONLY_FINAL_2024_REVIEW_FORWARDS': {k: 1313 for k in KINDS},
+              'READ_ONLY_ALL_ATTEMPT_COMPLETED_FORWARDS': {
+                  k: 1313 + interruption['completed_read_only_work'][k]['completed_forwards_journal_records']
+                  for k in KINDS},
+              'review_counter_scope': 'Completed final review and interrupted earlier review remain separate; neither contributes formal optimizer updates',
               'PDF_VISUALLY_VERIFIED': True, 'FINAL_GITHUB_ARTIFACT_PUBLICATION_VERIFIED': True,
               'V2_PHASE_B_AUTHORIZED': False, 'B1_PHASE_B_STARTED': False,
               'FORMAL_RESUME_AUTHORIZED': False, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0,

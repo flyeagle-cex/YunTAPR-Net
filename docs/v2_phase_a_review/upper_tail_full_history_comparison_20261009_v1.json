@@ -1,0 +1,346 @@
+{
+  "status": "COMPLETED_17_EPOCH_SAVED_DIAGNOSTIC_AGGREGATION_PASS",
+  "created_utc": "2026-10-09T06:10:06.130258+00:00",
+  "sources": [
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training_v2\\pair_20261007T070503_825794Z\\B0_MATCHED_V2\\training_validation_history.json",
+      "bytes": 351897,
+      "sha256": "712a9e0fbb12606047eb0a7cd93d80646c4c2f864a459d03bd8c4a5a43772aac"
+    },
+    {
+      "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training_v2\\pair_20261007T070503_825794Z\\B1_V2\\training_validation_history.json",
+      "bytes": 315574,
+      "sha256": "0e672de146b4df6443da2c58b5159a14bd0261f197b726384ccda5a85b091289"
+    }
+  ],
+  "models": {
+    "B0_MATCHED_V2": {
+      "TRAIN": {
+        "YUNNAN_INSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 177735,
+          "forwards": 88876,
+          "max_qlog_across_all_completed_epochs": 7.771951705394205,
+          "max_qlog_epoch": 2,
+          "q32_per_forward_max_p99_per_epoch_min": 4.346845240888567,
+          "q32_per_forward_max_p99_per_epoch_max": 4.812974868901275,
+          "q32_per_forward_max_p99_9_per_epoch_min": 5.156076191667694,
+          "q32_per_forward_max_p99_9_per_epoch_max": 5.814511762714651,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 21321406,
+              "scene_pixel_any_tau_exposure": 9062423
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 83309,
+              "scene_pixel_any_tau_exposure": 65697
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 6603,
+              "scene_pixel_any_tau_exposure": 5177
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 32,
+              "scene_pixel_any_tau_exposure": 20
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 3,
+              "scene_pixel_any_tau_exposure": 2
+            }
+          },
+          "total_scene_pixel_tau_exposure": 19508193600,
+          "total_scene_pixel_any_tau_exposure": 609631050
+        },
+        "YUNNAN_OUTSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 177735,
+          "forwards": 88876,
+          "max_qlog_across_all_completed_epochs": 11.059596992894065,
+          "max_qlog_epoch": 2,
+          "q32_per_forward_max_p99_per_epoch_min": 5.618154852026714,
+          "q32_per_forward_max_p99_per_epoch_max": 6.566885600766067,
+          "q32_per_forward_max_p99_9_per_epoch_min": 6.362488500440434,
+          "q32_per_forward_max_p99_9_per_epoch_max": 8.44466301399459,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 101522365,
+              "scene_pixel_any_tau_exposure": 35333942
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 1393057,
+              "scene_pixel_any_tau_exposure": 934052
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 220434,
+              "scene_pixel_any_tau_exposure": 159318
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 4368,
+              "scene_pixel_any_tau_exposure": 3297
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 1050,
+              "scene_pixel_any_tau_exposure": 764
+            }
+          },
+          "total_scene_pixel_tau_exposure": 37367006400,
+          "total_scene_pixel_any_tau_exposure": 1167718950
+        }
+      },
+      "VALIDATION": {
+        "YUNNAN_INSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 178517,
+          "forwards": 22321,
+          "max_qlog_across_all_completed_epochs": 6.803663447083617,
+          "max_qlog_epoch": 5,
+          "q32_per_forward_max_p99_per_epoch_min": 4.250040261166487,
+          "q32_per_forward_max_p99_per_epoch_max": 5.691727722438992,
+          "q32_per_forward_max_p99_9_per_epoch_min": 4.48909491364776,
+          "q32_per_forward_max_p99_9_per_epoch_max": 6.564365220269483,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 24132381,
+              "scene_pixel_any_tau_exposure": 10414651
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 89850,
+              "scene_pixel_any_tau_exposure": 72127
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 5829,
+              "scene_pixel_any_tau_exposure": 4717
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 18,
+              "scene_pixel_any_tau_exposure": 17
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 0,
+              "scene_pixel_any_tau_exposure": 0
+            }
+          },
+          "total_scene_pixel_tau_exposure": 19594025920,
+          "total_scene_pixel_any_tau_exposure": 612313310
+        },
+        "YUNNAN_OUTSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 178517,
+          "forwards": 22321,
+          "max_qlog_across_all_completed_epochs": 10.828024584254464,
+          "max_qlog_epoch": 5,
+          "q32_per_forward_max_p99_per_epoch_min": 5.046845308959591,
+          "q32_per_forward_max_p99_per_epoch_max": 7.670080363997798,
+          "q32_per_forward_max_p99_9_per_epoch_min": 5.476129124103893,
+          "q32_per_forward_max_p99_9_per_epoch_max": 9.627120632163926,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 124921078,
+              "scene_pixel_any_tau_exposure": 44373088
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 1664024,
+              "scene_pixel_any_tau_exposure": 1090824
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 270712,
+              "scene_pixel_any_tau_exposure": 192677
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 5453,
+              "scene_pixel_any_tau_exposure": 4033
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 1137,
+              "scene_pixel_any_tau_exposure": 868
+            }
+          },
+          "total_scene_pixel_tau_exposure": 37531414080,
+          "total_scene_pixel_any_tau_exposure": 1172856690
+        }
+      }
+    },
+    "B1_V2": {
+      "TRAIN": {
+        "YUNNAN_INSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 177735,
+          "forwards": 88876,
+          "max_qlog_across_all_completed_epochs": 8.893469046446821,
+          "max_qlog_epoch": 2,
+          "q32_per_forward_max_p99_per_epoch_min": 4.399991303116461,
+          "q32_per_forward_max_p99_per_epoch_max": 5.04439101068427,
+          "q32_per_forward_max_p99_9_per_epoch_min": 5.322353861171138,
+          "q32_per_forward_max_p99_9_per_epoch_max": 5.986166692671277,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 22150139,
+              "scene_pixel_any_tau_exposure": 9550131
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 103478,
+              "scene_pixel_any_tau_exposure": 93129
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 8408,
+              "scene_pixel_any_tau_exposure": 7909
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 53,
+              "scene_pixel_any_tau_exposure": 46
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 12,
+              "scene_pixel_any_tau_exposure": 11
+            }
+          },
+          "total_scene_pixel_tau_exposure": 19508193600,
+          "total_scene_pixel_any_tau_exposure": 609631050
+        },
+        "YUNNAN_OUTSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 177735,
+          "forwards": 88876,
+          "max_qlog_across_all_completed_epochs": 9.544114539068495,
+          "max_qlog_epoch": 16,
+          "q32_per_forward_max_p99_per_epoch_min": 5.610375052906041,
+          "q32_per_forward_max_p99_per_epoch_max": 6.7886409856788035,
+          "q32_per_forward_max_p99_9_per_epoch_min": 6.639421350394699,
+          "q32_per_forward_max_p99_9_per_epoch_max": 8.082193788383604,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 104553451,
+              "scene_pixel_any_tau_exposure": 37400216
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 1461072,
+              "scene_pixel_any_tau_exposure": 1193199
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 243514,
+              "scene_pixel_any_tau_exposure": 220007
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 4392,
+              "scene_pixel_any_tau_exposure": 4188
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 901,
+              "scene_pixel_any_tau_exposure": 856
+            }
+          },
+          "total_scene_pixel_tau_exposure": 37367006400,
+          "total_scene_pixel_any_tau_exposure": 1167718950
+        }
+      },
+      "VALIDATION": {
+        "YUNNAN_INSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 178517,
+          "forwards": 22321,
+          "max_qlog_across_all_completed_epochs": 6.940724903237828,
+          "max_qlog_epoch": 3,
+          "q32_per_forward_max_p99_per_epoch_min": 4.660913880444372,
+          "q32_per_forward_max_p99_per_epoch_max": 5.600453669582803,
+          "q32_per_forward_max_p99_9_per_epoch_min": 5.134699172417048,
+          "q32_per_forward_max_p99_9_per_epoch_max": 6.145655618334296,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 25502838,
+              "scene_pixel_any_tau_exposure": 10938438
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 108814,
+              "scene_pixel_any_tau_exposure": 97858
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 7274,
+              "scene_pixel_any_tau_exposure": 6914
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 9,
+              "scene_pixel_any_tau_exposure": 9
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 1,
+              "scene_pixel_any_tau_exposure": 1
+            }
+          },
+          "total_scene_pixel_tau_exposure": 19594025920,
+          "total_scene_pixel_any_tau_exposure": 612313310
+        },
+        "YUNNAN_OUTSIDE": {
+          "completed_epochs": 17,
+          "scene_exposures": 178517,
+          "forwards": 22321,
+          "max_qlog_across_all_completed_epochs": 9.821838770772999,
+          "max_qlog_epoch": 3,
+          "q32_per_forward_max_p99_per_epoch_min": 5.574066132258447,
+          "q32_per_forward_max_p99_per_epoch_max": 7.26645407325585,
+          "q32_per_forward_max_p99_9_per_epoch_min": 6.505169715417277,
+          "q32_per_forward_max_p99_9_per_epoch_max": 8.911444499677357,
+          "FP64_PHYSICAL_OVERFLOW_RISK_OBSERVED": false,
+          "FP64_boundary_exceedance_exposures": 0,
+          "threshold_exceedance_exposure_totals": {
+            "10": {
+              "scene_pixel_tau_exposure": 128545599,
+              "scene_pixel_any_tau_exposure": 45619653
+            },
+            "50": {
+              "scene_pixel_tau_exposure": 1681955,
+              "scene_pixel_any_tau_exposure": 1390140
+            },
+            "100": {
+              "scene_pixel_tau_exposure": 266041,
+              "scene_pixel_any_tau_exposure": 243364
+            },
+            "500": {
+              "scene_pixel_tau_exposure": 3977,
+              "scene_pixel_any_tau_exposure": 3908
+            },
+            "1000": {
+              "scene_pixel_tau_exposure": 632,
+              "scene_pixel_any_tau_exposure": 624
+            }
+          },
+          "total_scene_pixel_tau_exposure": 37531414080,
+          "total_scene_pixel_any_tau_exposure": 1172856690
+        }
+      }
+    }
+  },
+  "FP64_physical_boundary": 709.782712893384,
+  "thresholds_mm_h": [
+    10,
+    50,
+    100,
+    500,
+    1000
+  ],
+  "threshold_comparison": "qlog > log1p(threshold)",
+  "exposure_note": "Same scenes are evaluated again each epoch. Summed counts are repeated scene-pixel(-tau) exposures, not unique pixels or scenes. TRAIN and VALIDATION remain separate.",
+  "percentile_note": "Reported p99 / p99.9 bounds are min/max of the 17 recorded per-epoch per-forward q32 maximum distribution percentiles; they are not pooled 17-epoch percentiles.",
+  "descriptive_only": true,
+  "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+  "AUDIT_FORWARD_CALLS": 0,
+  "AUDIT_BACKWARD_CALLS": 0,
+  "AUDIT_OPTIMIZER_STEPS": 0,
+  "AUDIT_RAW_SOURCE_OPENS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false
+}

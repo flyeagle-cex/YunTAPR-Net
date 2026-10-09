@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from finalize_paired_closeout_v2 import identity, verify_pdf, verify_ref, verify_replay
+from finalize_paired_closeout_v2 import identity, verify_pdf, verify_ref, verify_replay, verify_runtime_initialization
 
 
 class FinalCompletionTests(unittest.TestCase):
@@ -56,6 +56,25 @@ class FinalCompletionTests(unittest.TestCase):
                  'half_epoch_state_reused': False, 'historical_sources_unchanged': True}
         with self.assertRaisesRegex(ValueError, 'zero-tolerance proof missing'):
             verify_replay(value)
+
+    def test_formal_initialization_receipts_must_match_frozen_states(self):
+        states = {'B0_MATCHED_V2': 'b0fixture', 'B1_V2': 'b1fixture'}
+        value = {'status': 'BOTH_FORMAL_FIRST_ATTEMPT_FRESH_PAIRED_INITIALIZATION_MATCH_PREFLIGHT',
+                 'sources': {k: {'initial_model_sha256': v, 'seed': 2026, 'independent_reseed': True,
+                                'historical_checkpoint_loaded': False,
+                                'initialization_matches_preflight_full_tensor_identity': True}
+                             for k, v in states.items()}}
+        verify_runtime_initialization(value, states)
+        for key, invalid in [('initial_model_sha256', 'old_weights'), ('seed', 123),
+                             ('historical_checkpoint_loaded', True), ('independent_reseed', False)]:
+            bad = copy.deepcopy(value); bad['sources']['B1_V2'][key] = invalid
+            with self.subTest(key=key), self.assertRaisesRegex(ValueError, 'initialization identity changed'):
+                verify_runtime_initialization(bad, states)
+
+    def test_single_receipt_cannot_prove_paired_initialization(self):
+        with self.assertRaisesRegex(ValueError, 'Both fresh initialization receipts'):
+            verify_runtime_initialization({'status': 'BOTH_FORMAL_FIRST_ATTEMPT_FRESH_PAIRED_INITIALIZATION_MATCH_PREFLIGHT',
+                                           'sources': {}}, {})
 
 
 if __name__ == '__main__':
