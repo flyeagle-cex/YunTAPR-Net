@@ -1,0 +1,123 @@
+{
+  "status": "TERMINAL_MODEL_AUDIT_PASS",
+  "model": "B0_MATCHED_V2",
+  "final": {
+    "status": "COMPLETE",
+    "model": "B0_MATCHED_V2",
+    "termination_reason": "EARLY_STOP_PATIENCE_8",
+    "completed_epoch": 17,
+    "best_checkpoint_epoch": 9,
+    "best_es_epoch": 9,
+    "best_es_value": 0.0487596076193766,
+    "final_early_stop_counter": 8,
+    "patience": 8,
+    "min_delta": 0.0001,
+    "retained_trajectory_updates": 88876,
+    "counters_this_attempt": {
+      "scope": "FORMAL",
+      "FORWARD_CALLS": 6541,
+      "TRAIN_FORWARDS": 5228,
+      "VALIDATION_FORWARDS": 1313,
+      "BACKWARD_CALLS": 5228,
+      "OPTIMIZER_STEP_ATTEMPTS": 5228,
+      "OPTIMIZER_STEPS": 5228,
+      "CHECKPOINT_WRITES": 1
+    },
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "io": {
+      "RAW_SOURCE_OPENS": 83824,
+      "NATIVE_DECODES": 62869,
+      "DENIED_ATTEMPTS": 0,
+      "2025_RAW_ACCESS": 0,
+      "2025_PIXELS_READ": 0,
+      "log_files": [
+        {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_parent.jsonl",
+          "bytes": 272,
+          "sha256": "854dc6398b137ce95014e828acc96b784623c8a63af68ef26b50b2998878f7ce"
+        },
+        {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_19312.jsonl",
+          "bytes": 14229966,
+          "sha256": "52621feeb1383bf9cb918ec62e5a294900d51d32e10b9b5eb39115e137a54b1e"
+        },
+        {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_33812.jsonl",
+          "bytes": 14298066,
+          "sha256": "ffbdedd86733eaee0b5f28ddd3cf0b268827ab47857d20e4b4faa574fd855fb1"
+        },
+        {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_34524.jsonl",
+          "bytes": 14227242,
+          "sha256": "c3f6d0586d788f6dbbfbb8ca755abdd84e6f0351a34d3a1accdeb1edd14a55c8"
+        },
+        {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\raw_access_worker_7388.jsonl",
+          "bytes": 14210974,
+          "sha256": "9bf4ac030d0fef5e1e10be18e14310d0ad90d4c56a690ab3647f5b67e9374a01"
+        }
+      ],
+      "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+    },
+    "all_attempt_reconciliation": {
+      "retained_trajectory_updates": 88876,
+      "all_attempt_updates_lower_bound": 89175,
+      "all_attempt_updates_upper_bound": 89176,
+      "discarded_updates_lower_bound": 299,
+      "discarded_updates_upper_bound": 300,
+      "attempts": [
+        {
+          "attempt": "run_20261007T070818_003523Z",
+          "updates_lower_bound": 83947,
+          "updates_upper_bound": 83948,
+          "certainty": "JOURNAL_BOUNDS_UNCLEAN_EXIT"
+        },
+        {
+          "attempt": "run_20261008T002823_025978Z",
+          "updates_lower_bound": 5228,
+          "updates_upper_bound": 5228,
+          "certainty": "EXACT_PROCESS_COUNTER"
+        }
+      ],
+      "half_epoch_state_reused": false
+    }
+  },
+  "BEST": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_009.pt",
+    "bytes": 52086571,
+    "sha256": "c9ea052522557df8eaf869a447ec8ae013e657004888a56b9d3944db9a1fd5c2",
+    "epoch": 9,
+    "model": "B0_MATCHED_V2",
+    "run_id": "run_20261007T070503_825794Z",
+    "global_update": 47052,
+    "scope": "FORMAL"
+  },
+  "LAST": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261008T002823_025978Z\\epoch_017.pt",
+    "bytes": 52086635,
+    "sha256": "3b7bfe2ea14e1065b122b89501b11fbad2e7d068824ebc902930bc1afde3c857",
+    "epoch": 17,
+    "model": "B0_MATCHED_V2",
+    "run_id": "run_20261007T070503_825794Z",
+    "global_update": 88876,
+    "scope": "FORMAL"
+  },
+  "origin_authorization_sha256": "e32404d0d397dd62e1763d3fb16b4a8d8c72fb79ba52bae3f40ac095f4492869",
+  "completion_authorization_sha256": "e32404d0d397dd62e1763d3fb16b4a8d8c72fb79ba52bae3f40ac095f4492869",
+  "execution_commit": "a1af0325b481202941c57e8fc94f3b20e441630a",
+  "protocol_sha256": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+  "head_sha256": "3a865a6e4ab180f61d7ab6e2f684ab6b814bfe6b2e59a34d127ddf1d772fc97e",
+  "normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+  "historical_artifacts_unchanged": true,
+  "audit_source_sha256": "e56de10934ffa75bab2e6c29991a69ebd9b54a667fb9f146c3113f5dcada01b1",
+  "MODEL_PARAMETERS_UPDATED": false,
+  "STATE_APPLICATION_PERFORMED": false,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "PAIR_PHASE_A_COMPLETE_CLAIMED": false,
+  "completed_utc": "2026-10-09T00:57:48.163328+00:00"
+}
