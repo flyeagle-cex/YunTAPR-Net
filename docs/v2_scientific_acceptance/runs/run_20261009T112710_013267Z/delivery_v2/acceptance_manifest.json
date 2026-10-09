@@ -1,0 +1,2458 @@
+{
+  "schema": "V2_PHASE_A_SCIENTIFIC_ACCEPTANCE_EVIDENCE_v1",
+  "created_utc": "2026-10-09T12:48:04.005102+00:00",
+  "execution_scientific_scope": {
+    "status": "SCIENTIFIC_ACCEPTANCE_EVIDENCE_READY_FOR_RESEARCHER_REVIEW",
+    "created_utc": "2026-10-09T12:48:03.979071+00:00",
+    "completion_baseline": "166b1f86291bbcde167dbec30d3ae43ac23bba4c",
+    "BEST_epoch": {
+      "B0_MATCHED_V2": 9,
+      "B1_V2": 9
+    },
+    "validation_scenes_per_model": 10501,
+    "READ_ONLY_2024_INFERENCE_FORWARDS_ADDED": 2626,
+    "READ_ONLY_2024_RAW_SOURCE_OPENS": 189018,
+    "MODEL_PARAMETERS_UPDATED": false,
+    "BACKWARD_CALLS": 0,
+    "OPTIMIZER_STEPS": 0,
+    "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "V2_SCIENTIFIC_FREEZE_APPROVED": true,
+    "V2_PHASE_B_AUTHORIZED": false,
+    "FINALFIT_STARTED": false,
+    "FORMAL_RESUME_STARTED": false,
+    "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+    "SCIENTIFIC_ACCEPTANCE_DECISION": "UNDECIDED",
+    "GOVERNANCE_DEVIATION_RESEARCHER_DISPOSITION": "UNDECIDED",
+    "terrain_stratification": "NOT_ESTIMABLE_NO_PREDEFINED_SUBREGION_MASK_AVAILABLE",
+    "independent_precipitation_events": "NOT_ESTIMABLE_NO_PREDEFINED_EVENT_CATALOGUE",
+    "verification_checks_passed": 28,
+    "PDF_VISUAL_VERIFICATION": "PASS",
+    "publication_status": "PENDING_COMMIT_AND_REMOTE_VERIFICATION",
+    "AUTOMATIC_NEXT_STAGE": false,
+    "STOP_AFTER_PUBLICATION": true
+  },
+  "artifacts": [
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\analysis_preregistration.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/analysis_preregistration.json",
+      "bytes": 2564,
+      "sha256": "677506e887b264331804cae66462d1daa7ea78265f46e232f87f8fcc0e2367f8"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\analysis_stderr.log",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/analysis_stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\analysis_stdout.log",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/analysis_stdout.log",
+      "bytes": 10828,
+      "sha256": "0fee5dcd9ffdc677d97703817ef600ec9415eddb66575c84b79e9620c6acbdde"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\analyze.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/analyze.py",
+      "bytes": 9427,
+      "sha256": "e36c1c3121b876e018f29b61e0d80b5bdc122eadbbecccaa3bf4567ac06db355"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\bootstrap_test_summary.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/bootstrap_test_summary.json",
+      "bytes": 337,
+      "sha256": "873f625fe7143d8d23bf9eb6585eb24036cdc3bb7dd8a03294612f644c1f8131"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\build_reports.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/build_reports.py",
+      "bytes": 16677,
+      "sha256": "2bf711ab541857c6ba2ca02482b25871fcac598b50324f2034590b5428dfa85b"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\call_path_audit_attempt_001.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/call_path_audit_attempt_001.json",
+      "bytes": 252,
+      "sha256": "e0773e755cb528766460037c9c472d9c71e130172a0169912c1283c97b75cd1f"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\closeout_dispatch.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/closeout_dispatch.json",
+      "bytes": 253,
+      "sha256": "8975f8fc1b73ed6a88fdc82f584f9b74747c47d0bdc7e9e11a7d2259ad64cd95"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\closeout_launch_attempt_reconciliation.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/closeout_launch_attempt_reconciliation.json",
+      "bytes": 506,
+      "sha256": "18a76b6136fb8459adfc4f7ee3d6f714bc36bc5f5ce5f56279bda5d1219d479d"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\closeout_stderr.log",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/closeout_stderr.log",
+      "bytes": 660,
+      "sha256": "d8acb9c4495a907ab5e3648738e61cdbc6d1e058c0fa58e6525ee09186194b34"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\closeout_stdout.log",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/closeout_stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\closeout_worker.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/closeout_worker.py",
+      "bytes": 3827,
+      "sha256": "2983ce59302695d633bdd27a6a5e01a9e20a737df5a783ea550a7917687e4dcd"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\current_run.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/current_run.json",
+      "bytes": 181,
+      "sha256": "4064a8a2b4f46add81324d2b5d15aa78d8833071a2d327be702a9db433a2df72"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\dispatch.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/dispatch.json",
+      "bytes": 258,
+      "sha256": "db45b03ed9d52b92059205881aad64ca3a142018b2abf09493d2d34008ad0006"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\first_model_bootstrap_execution_test.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/first_model_bootstrap_execution_test.json",
+      "bytes": 204,
+      "sha256": "7a98bcaa1090a29f189811d9f3ed06ca919f9af13198826d87895f276e06fc67"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\launch_closeout.ps1",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/launch_closeout.ps1",
+      "bytes": 1864,
+      "sha256": "d94abb103f864b0e579e826fb926c93e7fa65bd7e17620d546856252b82d7c1c"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\launch_read_only.ps1",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/launch_read_only.ps1",
+      "bytes": 2595,
+      "sha256": "06d5db129bcca4aa8e4747ac88902d66ff21e478de3f78fcf930509643eb5071"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\monitor.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/monitor.py",
+      "bytes": 2490,
+      "sha256": "36efdef34e875c178c4b1c0c2e6d9b95ce81c646d369fcd4f3fbf92fb79e6dab"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\monitor_handoff_verification.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/monitor_handoff_verification.json",
+      "bytes": 466,
+      "sha256": "7c48a10ca4d83c8d2e094bb364f80192202794a2158874966fac94978b266450"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\read_only_call_path_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/read_only_call_path_audit.json",
+      "bytes": 745,
+      "sha256": "5fcb5abf7f21acf9ebe37c80f4b476fd840fc9cc04c1226c37f17cd97b622ea2"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\run_read_only_2024.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/run_read_only_2024.py",
+      "bytes": 15347,
+      "sha256": "6446e2ddb503b0f75794f3e3149c416e3500c67b1e7dec3dfaf5c9312e24657a"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\sufficient_stats.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/sufficient_stats.py",
+      "bytes": 9333,
+      "sha256": "c206fb5ebd07cd16b764cb42fc98ae974ce32791a7e9eccf50c12f3032317395"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\test_attempt_001_failure.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/test_attempt_001_failure.json",
+      "bytes": 334,
+      "sha256": "e69fc84232d1b3aa0c5bead791fd03401ca7e520734963ffd2b70620704469b0"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\test_attempt_002_summary.json",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/test_attempt_002_summary.json",
+      "bytes": 1611,
+      "sha256": "bfb54c5679f23db3e4a765f7c2f56798735075352118dff7a306acb1ee0e0682"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v1\\test_statistics.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v1/test_statistics.py",
+      "bytes": 3989,
+      "sha256": "4318b331fc940e9650431059f333f95e4ba68f5addd4a99567e9df24a95e6b70"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\build_editable_report.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/build_editable_report.py",
+      "bytes": 21289,
+      "sha256": "a67822f9c4815b493a05e0a4c1d127c5ab4e42ce2c84a91246965b1a89ef23c0"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\build_editable_report_attempt_001.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/build_editable_report_attempt_001.py",
+      "bytes": 21202,
+      "sha256": "5e47a1557de253eef972cfd811a8d7ce73718dde15a8980c57d5bb5680102955"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\build_reports_corrected.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/build_reports_corrected.py",
+      "bytes": 16601,
+      "sha256": "52c1480a02cdb3c7aa500a832e00cb6bbb64599bbed5d4491d3ac640a53b0577"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\plot_figures.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/plot_figures.py",
+      "bytes": 7402,
+      "sha256": "9b52e467fac6e6847c3e003525fe7754fd3d5ff6ec1d35d75293e1e1e9ca17fc"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\prepare_delivery.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/prepare_delivery.py",
+      "bytes": 6023,
+      "sha256": "e4a1d9521ad7d53afb3c6ae706d57da52a49b9eaee12e014cd269a9cd44409a8"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\register_final.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/register_final.py",
+      "bytes": 6949,
+      "sha256": "c3bfaf998e659a6ab4634b0097f91d125addece006c0a279e143156dc893454f"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\verify_and_archive.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/verify_and_archive.py",
+      "bytes": 12939,
+      "sha256": "404b361abd45a7214b21bea2bddf387354e6ec7265050abb953a58734a188474"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\analysis_v2\\verify_and_archive_attempt_001.py",
+      "repository_path": "docs/v2_scientific_acceptance/analysis_v2/verify_and_archive_attempt_001.py",
+      "bytes": 12882,
+      "sha256": "4de5c25b08175b4e2c0cd2977c6d13f865d21477476c31db79aa0a9f330957fa"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\README.md",
+      "repository_path": "docs/v2_scientific_acceptance/README.md",
+      "bytes": 3546,
+      "sha256": "4c8f6104f5e2efbdcafa15c0b9e27fb9762b4d8cd72e71a06ca989356ceaf898"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\analysis_closeout_status.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/analysis_closeout_status.json",
+      "bytes": 692,
+      "sha256": "505d1c3543cb1e7d4efe8825bcc65ee1a1e96f6603eeb968949d91d0e3c71618"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\analysis_code_binding.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/analysis_code_binding.json",
+      "bytes": 725,
+      "sha256": "c12d5ba5ded96b094c6ee3b477bbdaec15fb797d6318ea75c9dc2c4b48b4733c"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\analysis_input_binding.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/analysis_input_binding.json",
+      "bytes": 946,
+      "sha256": "dee063f5b75276d7dbb94c3308419ce0ca8ea957974b471d34734642383a0389"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\ANALYSIS_SCOPE_AND_AUTHORIZATION.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/ANALYSIS_SCOPE_AND_AUTHORIZATION.json",
+      "bytes": 922,
+      "sha256": "d703440e9d5915f2654ca27feaa2ae4236db5d9a79a91cbe336b95c25b55abe9"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\analyze.py.stderr.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/analyze.py.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\analyze.py.stdout.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/analyze.py.stdout.log",
+      "bytes": 905,
+      "sha256": "fad2b41088edab876c357c0935a7c518439ed58c97fb29b0dd22da873d48e042"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\final_review.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/final_review.json",
+      "bytes": 377358,
+      "sha256": "846aed41958a2e1a3cffd9defa9a40c2dd2fe7249aa1f241a238811b66923adf"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\inference_scope.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/inference_scope.json",
+      "bytes": 11929,
+      "sha256": "d22ca19913d053c8989fc5c5aae23215a4159ed7d6868009405cea491d5f5192"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\observer_summary.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/observer_summary.json",
+      "bytes": 359469,
+      "sha256": "93296658dbb178352bc86bca571fcbffe0951e46bb1a27aed6e24fb2f1018127"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\raw_access_parent.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/raw_access_parent.jsonl.gz",
+      "bytes": 239,
+      "sha256": "cd9753cb0a4c1db4e7b5246ee3b18dd79fc0ac76f9b33689e19fd46d209a607f"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\raw_access_worker_42520.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/raw_access_worker_42520.jsonl.gz",
+      "bytes": 951787,
+      "sha256": "fc8b191de63317fb1e4490569029953112bcfc251039bd14cd79828dd63f32f4"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\raw_access_worker_5760.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/raw_access_worker_5760.jsonl.gz",
+      "bytes": 950754,
+      "sha256": "057db5d6685ebc9f688a88f7fae207adce4e552b48ad9417d2d482b26e0c2e12"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\review_forwards.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/review_forwards.jsonl",
+      "bytes": 593522,
+      "sha256": "8ba4387311458a6ac25e1c9fd8789407a8a401f64d04237f014c0c9d9f4cd9c8"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\sufficient_statistics.npz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/sufficient_statistics.npz",
+      "bytes": 1543380,
+      "sha256": "fe9e76cb033487f609a607df6088f6f465ba54e7852a7e5fe6b3f1ab40ecb24a"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\threshold_locations.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/threshold_locations.jsonl",
+      "bytes": 2906056,
+      "sha256": "ca34dca9de913c4fc342e0aa76186a98103c13aed6ee6f7301e4b9321c06edd3"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B0_MATCHED_V2\\validation_diagnostics.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/validation_diagnostics.jsonl",
+      "bytes": 2554901,
+      "sha256": "57bf49f162fa3e8c12f52af4c068ec515bae912997226182f18c600a07906cf4"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\final_review.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/final_review.json",
+      "bytes": 377319,
+      "sha256": "472981a91220e1407530c0cf07122ad2bc79311db1eab99d17af849cb5b87eb1"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\inference_scope.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/inference_scope.json",
+      "bytes": 11905,
+      "sha256": "731be77b5f6279936c663f69d41ed9685c427dca15a555aa3fac4340e23a3b8e"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\observer_summary.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/observer_summary.json",
+      "bytes": 359471,
+      "sha256": "9730d8a779ccc5f14c92b3f1de0a4ad031ac9bbaf8b6045f679145219af21486"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\raw_access_parent.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/raw_access_parent.jsonl.gz",
+      "bytes": 238,
+      "sha256": "c54a5f27556b69cace28035a57ae0dfa221cc5b9d952ee914045a27f3cd5c510"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\raw_access_worker_3316.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/raw_access_worker_3316.jsonl.gz",
+      "bytes": 3193385,
+      "sha256": "577340201fab2228c5443e2cda82663322b3c95ebcb725f12e81f7aad536e0ce"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\raw_access_worker_39188.jsonl.gz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/raw_access_worker_39188.jsonl.gz",
+      "bytes": 3206985,
+      "sha256": "d3f55b3fecf4550584615b10cc42c3a60d8f53b4a2733081a75be622f9d46a34"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\review_forwards.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/review_forwards.jsonl",
+      "bytes": 593522,
+      "sha256": "e3d8aa2c4f8a20e90cd61b82ae623e419ee1ce59a603879c87ce8749d86c5660"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\sufficient_statistics.npz",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/sufficient_statistics.npz",
+      "bytes": 1540531,
+      "sha256": "aa91e04800a7f8ff3a9d0e0329523023141439bd1d61301825247eef06fe8d20"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\threshold_locations.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/threshold_locations.jsonl",
+      "bytes": 7127076,
+      "sha256": "5d43eabb95d0a8046305fcea25be17a88d591499fd165e2bcb1dc2cd96fa42d4"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\B1_V2\\validation_diagnostics.jsonl",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/validation_diagnostics.jsonl",
+      "bytes": 2555372,
+      "sha256": "45a29f3811de02c6a0229eb7b92c9657328c37c6259ab1042307c2d507440cc7"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\build_reports.py.stderr.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/build_reports.py.stderr.log",
+      "bytes": 797,
+      "sha256": "ef0ee50ca23ecb72cfdd3cddc4bbee334f584557776e6bbbfc6613f86a03389c"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\build_reports.py.stdout.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/build_reports.py.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\closeout_failure.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/closeout_failure.json",
+      "bytes": 690,
+      "sha256": "2785732e650b382fd0ef85d0975c7d2218e032515acb48f691afa6799b189c9d"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\conditional_quantile_calibration.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/conditional_quantile_calibration.csv",
+      "bytes": 8229,
+      "sha256": "0be4b0d80c5bc3b2088ca9d73422338065714a0b584380db5758760ae3cb6404"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\compile_pass_001.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/compile_pass_001.log",
+      "bytes": 7019,
+      "sha256": "37a365aaebba6caf7cee734e296b1a984786244a826e08f53048fbdefb82a245"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\compile_pass_002.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/compile_pass_002.log",
+      "bytes": 6722,
+      "sha256": "46c866bbdd982fda6b4fb8f6656ba9b6fc7a7f8a552348d6dd8deda0b3f0eb28"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\compressed_io_evidence_registry.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/compressed_io_evidence_registry.json",
+      "bytes": 4783,
+      "sha256": "115caf78338d19a836094f739d46fa81afc03c632e71460b3f85165e87b8e237"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\conditional_quantile_calibration.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/conditional_quantile_calibration.csv",
+      "bytes": 8229,
+      "sha256": "0be4b0d80c5bc3b2088ca9d73422338065714a0b584380db5758760ae3cb6404"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figure_final_status.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figure_final_status.json",
+      "bytes": 269,
+      "sha256": "4f0da10671a66b37145829e01ea4462ad03e918811f12ed35e687b7b3924d2d1"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figure_provenance.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figure_provenance.json",
+      "bytes": 5661,
+      "sha256": "f0e35201579bb4473edae5bc05322b5d5a2b0ea3940f70e1fc08d235f52d58a6"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\conditional_quantile_calibration.png",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/conditional_quantile_calibration.png",
+      "bytes": 473026,
+      "sha256": "0596b5c07f2ebd5a391f26a56b0d529d715979ce830a0fb926a891c59d92f14c"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\conditional_quantile_calibration.svg",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/conditional_quantile_calibration.svg",
+      "bytes": 34815,
+      "sha256": "af2bdc9233b38e828b372a0a0e154bec84d56a2af84007ac462d33bd04ca2d5e"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\inside_q32_gt50_observations.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/inside_q32_gt50_observations.csv",
+      "bytes": 177179,
+      "sha256": "d5c7c059df5de05689fb33091027e8815618948bfdc88b8084e81aee60fd8ee3"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\inside_q32_vs_truth.png",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/inside_q32_vs_truth.png",
+      "bytes": 497922,
+      "sha256": "f8ff677b55e5103cd2409a197d5cadce6f47e06b7b4fdb3f2b92338800ff7ef4"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\inside_q32_vs_truth.svg",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/inside_q32_vs_truth.svg",
+      "bytes": 285106,
+      "sha256": "420366b4e1cedca26880b221a8311ff9678c51d20d413b9dd9b72b8648a22ecf"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\occurrence_reliability.png",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/occurrence_reliability.png",
+      "bytes": 291114,
+      "sha256": "a29dfeec3a45289de49d9b5772ce8e0e0aee02e5c6980b39c33cd7f66483efc0"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\occurrence_reliability.svg",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/occurrence_reliability.svg",
+      "bytes": 51003,
+      "sha256": "f9c7b6e00c9dca7f7aa156806594097a2d7ecbc63de986bc25c465f2d5a97e2a"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\rain_stratified_pinball.png",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/rain_stratified_pinball.png",
+      "bytes": 215798,
+      "sha256": "6565e8aa5bec865d2cfcad7773a4d9f43bfba61d54c1c23ebc1fa2e24a07b609"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\figures\\rain_stratified_pinball.svg",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/figures/rain_stratified_pinball.svg",
+      "bytes": 17545,
+      "sha256": "9944681f13f14ebbf438f7fa573f646223fb57df1585c4217216edd81c9c00e3"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\final_status.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/final_status.json",
+      "bytes": 1241,
+      "sha256": "0397857b697102c7b9466a867df8d59c3901f24159be37aaa3d21b43e7892e35"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\frozen_identity_closeout_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/frozen_identity_closeout_audit.json",
+      "bytes": 99130,
+      "sha256": "27c1ee599fc4943d0321c7114dbc2bb197e5842868c79fbd338543ab5acdd445"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\frozen_protocol_and_head_closeout.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/frozen_protocol_and_head_closeout.json",
+      "bytes": 676,
+      "sha256": "19523f3f68a66fa0d21918fdb7fecd58a13e97a5728883d347da64bddc415a1f"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\io_reconciliation.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/io_reconciliation.json",
+      "bytes": 3243,
+      "sha256": "947c9042d0b472dec8617857ccace08e10fd9ccae0f8365a1229ccae8c49bc24"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\latex_generator_attempt_001_failure.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/latex_generator_attempt_001_failure.json",
+      "bytes": 326,
+      "sha256": "11ad60bc5a35caf3233471d0854d2e8189f8da35504086b1e3b25b8280a23e21"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\LOCAL_SCIENTIFIC_PLOTTING_AUTHORIZATION.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/LOCAL_SCIENTIFIC_PLOTTING_AUTHORIZATION.json",
+      "bytes": 385,
+      "sha256": "569bcbddab03aac0c591702681fe6140c7ed8e24d9349346d40f6d4850bcb3c8"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\METHODS_AND_EVIDENCE_LIMITATIONS.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/METHODS_AND_EVIDENCE_LIMITATIONS.md",
+      "bytes": 2633,
+      "sha256": "3b9399ce941ebe3cf0c715dce8cefc6b1775aa0df1f220a67bfd21afdeccde58"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PAIRED_STRATIFIED_ANALYSIS.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PAIRED_STRATIFIED_ANALYSIS.csv",
+      "bytes": 18117,
+      "sha256": "d233f87570169900c8e5ed4be7e75dcce3ae1ab0341358907347167785b2a625"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PAIRED_STRATIFIED_COMPARISONS.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PAIRED_STRATIFIED_COMPARISONS.csv",
+      "bytes": 23189,
+      "sha256": "019a443637ef6612c1d7f630bf230c31efda90b522cd17c22be319e08f53766a"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\paired_uncertainty.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/paired_uncertainty.json",
+      "bytes": 80164,
+      "sha256": "c5517106d6834f470062a2927e33026af4df6bb3ed8f5c74f5bb6aecbf4e258d"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PHASE_A_SCIENTIFIC_ACCEPTANCE.log",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PHASE_A_SCIENTIFIC_ACCEPTANCE.log",
+      "bytes": 40351,
+      "sha256": "48619200f8ff5ca14a2619d735f8455416bab7c99cfee0cab5c14900a4dd2671"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PHASE_A_SCIENTIFIC_ACCEPTANCE.pdf",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PHASE_A_SCIENTIFIC_ACCEPTANCE.pdf",
+      "bytes": 1609085,
+      "sha256": "cee71c5db9cba19c69afff2c87ea57f2d9c39726c4979e6c32a4b39f35aadebe"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PHASE_A_SCIENTIFIC_ACCEPTANCE.tex",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PHASE_A_SCIENTIFIC_ACCEPTANCE.tex",
+      "bytes": 19784,
+      "sha256": "499cca8e2a532a9d7f834d9a58b1f615c6aae2adc905e30ff0acece51efdf0a3"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PHASE_A_SCIENTIFIC_ACCEPTANCE_PACKET.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PHASE_A_SCIENTIFIC_ACCEPTANCE_PACKET.md",
+      "bytes": 7850,
+      "sha256": "5cc3c7f4360262a63e211152082cc18a6efe0be3184a90291e48d0518f1f51c8"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\prior_closeout_preservation.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/prior_closeout_preservation.json",
+      "bytes": 9265,
+      "sha256": "2d46a7d8629c06a85e98991a72c35477ac5382962660a1505de0fd32731a59da"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\PROBABILITY_CALIBRATION_REPORT.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/PROBABILITY_CALIBRATION_REPORT.md",
+      "bytes": 4476,
+      "sha256": "3e071ffc548ff4f4f0b510ae7514b2e3979e361c2d0ef402ab876aece12c8f25"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\recovery_best_chronology_note.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/recovery_best_chronology_note.json",
+      "bytes": 573,
+      "sha256": "74a97d310a26c4126a84a8acf8aa843572b9de32495d689d4f9e4b8471cb7fe7"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\RECOVERY_GOVERNANCE_DEVIATION.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/RECOVERY_GOVERNANCE_DEVIATION.md",
+      "bytes": 3295,
+      "sha256": "1f61119f49f0c44089656e0f4ab730338d56bd8ca0769eb3b7c0ec83d8e20b27"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\recovery_governance_source_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/recovery_governance_source_audit.json",
+      "bytes": 3656,
+      "sha256": "b5943947bbd697c2799397beb481705507a7a54d8b66b531bcc856260d7f7437"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\reliability_fixed_bins.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/reliability_fixed_bins.csv",
+      "bytes": 2870,
+      "sha256": "9bf112bd15ce4b376702be3c3c21471e3bbb128c68c03403550cfcd45f3cec3b"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\report_code_binding.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/report_code_binding.json",
+      "bytes": 905,
+      "sha256": "44d0a8736be507eb36c77d40cb581fa60ccb7e1cbff6e93c131f49d807d4b9c2"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\RESEARCHER_SCIENTIFIC_DECISION_FORM.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/RESEARCHER_SCIENTIFIC_DECISION_FORM.md",
+      "bytes": 1510,
+      "sha256": "abe83e3c81aff26ae7999698541bbdf0609011c7b737c2009f4a8112bb067285"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\stratification_definition_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/stratification_definition_audit.json",
+      "bytes": 986,
+      "sha256": "22e8562ee8684191c798650809a985e73a5723217962abf410111642ce562cec"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\upper_tail_exposure_units.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/upper_tail_exposure_units.csv",
+      "bytes": 2006,
+      "sha256": "6ce37e15350d45fc430d398f303718af0606fdacde01fc466a42595cdcc9b2cb"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\UPPER_TAIL_PHYSICAL_REVIEW.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/UPPER_TAIL_PHYSICAL_REVIEW.md",
+      "bytes": 5244,
+      "sha256": "58c9597d5b395db7b9e3c189a4dd2e81b21425760b545cd939df8b9601a10fbf"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\verification_test_reconciliation.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/verification_test_reconciliation.json",
+      "bytes": 735,
+      "sha256": "aaf6ddff6ffab77b9b70de63ee6111e0723e52d0c56b819b221700faf783cc96"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\verification_tests.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/verification_tests.json",
+      "bytes": 6833,
+      "sha256": "7612ed62e1b98fa33736fb9d5a0c98e7efab98e74c1cac37a41ca9ccc4d48cc2"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\verification_tests_attempt_001.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/verification_tests_attempt_001.json",
+      "bytes": 6833,
+      "sha256": "7612ed62e1b98fa33736fb9d5a0c98e7efab98e74c1cac37a41ca9ccc4d48cc2"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\verification_tests_attempt_002.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/verification_tests_attempt_002.json",
+      "bytes": 1881,
+      "sha256": "27c9c07edf1591b206b3f3e487fcad80c171b8b22063d2babc64be9769ff68a4"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\delivery_v2\\visual_delivery_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/visual_delivery_audit.json",
+      "bytes": 8114,
+      "sha256": "e33e127cc30e05244c8b1d868b01a424f880570491692dbb4734eeb6ea17c85e"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\figure_provenance_pending.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/figure_provenance_pending.json",
+      "bytes": 915,
+      "sha256": "b0d41c36a98d4abb7fce39345b5014d80e618e695f2a3dc46518d29f2d846a55"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\paired_best_metrics.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/paired_best_metrics.json",
+      "bytes": 842079,
+      "sha256": "d596b0631045d0bf438954946402431be193f949740a5b885dc30d32eb3fb1eb"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\paired_bootstrap_block_multiplicities.npy",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/paired_bootstrap_block_multiplicities.npy",
+      "bytes": 560128,
+      "sha256": "583660ea67ca95a46f1d2444db9b8ff606c765ab9b6a413f0a0bd8f6c46c3d02"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\PAIRED_STRATIFIED_ANALYSIS.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/PAIRED_STRATIFIED_ANALYSIS.csv",
+      "bytes": 18117,
+      "sha256": "d233f87570169900c8e5ed4be7e75dcce3ae1ab0341358907347167785b2a625"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\paired_uncertainty.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/paired_uncertainty.json",
+      "bytes": 80164,
+      "sha256": "c5517106d6834f470062a2927e33026af4df6bb3ed8f5c74f5bb6aecbf4e258d"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\PHASE_A_SCIENTIFIC_ACCEPTANCE_PACKET.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/PHASE_A_SCIENTIFIC_ACCEPTANCE_PACKET.md",
+      "bytes": 6594,
+      "sha256": "834aa37d05866b795b27f43eaf07e4ef20bd9a12d50bb5e32eb0386a828aeb73"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\pre_inference_identity.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/pre_inference_identity.json",
+      "bytes": 83149,
+      "sha256": "bc642680c428c4c1197dc8bde61a7c4f3400d107183ab81e88f2ef96cd5c077e"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\PROBABILITY_CALIBRATION_REPORT.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/PROBABILITY_CALIBRATION_REPORT.md",
+      "bytes": 4186,
+      "sha256": "2f9469313d22b1f8ce02f21e7e4a84d5ec5fdb42266079668439fac8e48c5002"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\progress.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/progress.json",
+      "bytes": 204,
+      "sha256": "0f15dd91e9844b5fd69a0049395e3d39e4d72bf9486748cb3e9da271100341df"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\recovery_best_chronology_note.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/recovery_best_chronology_note.json",
+      "bytes": 573,
+      "sha256": "74a97d310a26c4126a84a8acf8aa843572b9de32495d689d4f9e4b8471cb7fe7"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\RECOVERY_GOVERNANCE_DEVIATION.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/RECOVERY_GOVERNANCE_DEVIATION.md",
+      "bytes": 3295,
+      "sha256": "1f61119f49f0c44089656e0f4ab730338d56bd8ca0769eb3b7c0ec83d8e20b27"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\recovery_governance_source_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/recovery_governance_source_audit.json",
+      "bytes": 3656,
+      "sha256": "b5943947bbd697c2799397beb481705507a7a54d8b66b531bcc856260d7f7437"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\reliability_fixed_bins.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/reliability_fixed_bins.csv",
+      "bytes": 2870,
+      "sha256": "9bf112bd15ce4b376702be3c3c21471e3bbb128c68c03403550cfcd45f3cec3b"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\RESEARCHER_SCIENTIFIC_DECISION_FORM.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/RESEARCHER_SCIENTIFIC_DECISION_FORM.md",
+      "bytes": 1510,
+      "sha256": "abe83e3c81aff26ae7999698541bbdf0609011c7b737c2009f4a8112bb067285"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\statistical_closeout_code_binding.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/statistical_closeout_code_binding.json",
+      "bytes": 945,
+      "sha256": "7e036b5b245155c6d32c554245b26fafb40d58836da735d566afde28e5c0ac40"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\stratification_definition_audit.json",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/stratification_definition_audit.json",
+      "bytes": 986,
+      "sha256": "22e8562ee8684191c798650809a985e73a5723217962abf410111642ce562cec"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\upper_tail_exposure_units.csv",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/upper_tail_exposure_units.csv",
+      "bytes": 2006,
+      "sha256": "6ce37e15350d45fc430d398f303718af0606fdacde01fc466a42595cdcc9b2cb"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\UPPER_TAIL_PHYSICAL_REVIEW.md",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/UPPER_TAIL_PHYSICAL_REVIEW.md",
+      "bytes": 4250,
+      "sha256": "8e33d57de25174ecfacc3f50e8182607f290de5292161a9c583a50e5fe4654fe"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\WEB_GPT_FIGURE_REQUEST.txt",
+      "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/WEB_GPT_FIGURE_REQUEST.txt",
+      "bytes": 1767,
+      "sha256": "2fd0c7416dc8641e86a714dc16c6ffbb4a08d4e3b9a1d71a7dac859ebcb6786c"
+    }
+  ],
+  "sources_and_frozen_evidence": {
+    "status": "PASS",
+    "created_utc": "2026-10-09T12:44:55.444629+00:00",
+    "execution_commit": "a1af0325b481202941c57e8fc94f3b20e441630a",
+    "publication_baseline": "166b1f86291bbcde167dbec30d3ae43ac23bba4c",
+    "source_code_files": [
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\__init__.py",
+        "bytes": 80,
+        "sha256": "6ad9c790a7da250abd16fdae10f2ba6a986977ebeddd48c229bd819ff4cc4f69"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\execution_ops.py",
+        "bytes": 444,
+        "sha256": "d3bf5e8ab6ffa7943a4567ca20c208cde59a0976048bbc0d6edc57abac53e42c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\historical_scope.py",
+        "bytes": 2147,
+        "sha256": "67c4605c45a71b8e5b071092a5eb11d04dec24eef2a3bed56409699525d3350e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\monitor.py",
+        "bytes": 4126,
+        "sha256": "94cddb14b2cfad61d47b32ebc10f5ba2ce6e39971d3554b06837a7e392e2d752"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\preflight.py",
+        "bytes": 14206,
+        "sha256": "e8ef0d76381b1b0f8a0310ad2b1caf9f56a2e8849a43703464af9e911c13c085"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\publication.py",
+        "bytes": 3451,
+        "sha256": "945b438c37762ab93fbaaa06cfa1d22ef1efe6ba51ad031ff5940d4efbfdac52"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\publisher_worker.py",
+        "bytes": 490,
+        "sha256": "630a022c3106f738cedf2978daf94a58d9231ed03c3405f62b9c6b59702a1387"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\paired_phase_a_v2\\test_gate.py",
+        "bytes": 3903,
+        "sha256": "abbd95faa935739402eb2d70d1313ff4a312e1ae8e5fbee0ebfdb8a93a415c22"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\scripts\\run_paired_phase_a_v2.py",
+        "bytes": 4186,
+        "sha256": "4021e7755bd87dff6499842f8bd13dbff992c2ddf55a2fdb13e48b8deaf21939"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\__init__.py",
+        "bytes": 68,
+        "sha256": "2d4dae85df531298acab4ae4da33907d968e57235429fc219ac04623d4de5bdd"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\contracts\\__init__.py",
+        "bytes": 65,
+        "sha256": "1ecb7fb4f558e7e8139a774374db54f98096871d9979b8fccee253b7dd28f645"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\contracts\\loader.py",
+        "bytes": 5021,
+        "sha256": "776d1aa774342e955eba9ff28809477e0f357a5d60eec7819ba55d3351b06964"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\__init__.py",
+        "bytes": 68,
+        "sha256": "ec826cc0faeb4a373ff65877fdc980032baad23e0a2525d006ffda2b2e0912a7"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\b1_scientific_freeze.py",
+        "bytes": 24956,
+        "sha256": "727d8da5c884b22893384f4f8e4eaf6b88cef7eb67abd76ba8fc4b950a2a79d7"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\b1_temporal_audit.py",
+        "bytes": 28210,
+        "sha256": "f1f7e45b00734e09122a2b299c2a76837d10ee1d9bbd71261a6831f02d77cabe"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\dataset_b0.py",
+        "bytes": 9004,
+        "sha256": "19e5ef7c16c2ce1fdd0df2a16acc44bf740b9d4b5400001c406136879c8762e3"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\dataset_b1.py",
+        "bytes": 11242,
+        "sha256": "b84f7d4dac9fc51c0de4cc23090410dd09ce5d910a63cc041df8d54c799fb1b7"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\development_audit.py",
+        "bytes": 3656,
+        "sha256": "ed65703ded7e6db6e14ebc5fcd9b772ebc76486e5e8b6a476b66dfba1dd7fe8b"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\formal_policy.py",
+        "bytes": 2853,
+        "sha256": "3c0a0b97dc25b3ae0f942ec2cef367217fc981c01d1f09501d9f957adab2f490"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\himawari_b13.py",
+        "bytes": 3405,
+        "sha256": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\imerg_v07.py",
+        "bytes": 3744,
+        "sha256": "eff89d4a2fb21473288b90f892799866ff839b7119901886e2ea358183b8d7b2"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\masks.py",
+        "bytes": 1113,
+        "sha256": "c397a5866af834098fd5f36e4acd23a26dfa607058ad298f8781a9766d5a8542"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\normalization.py",
+        "bytes": 2608,
+        "sha256": "cc10f0fc37e9fc2ac3e163025881c02ccbb805a35b884bc86702f6a72b7e6afb"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\sample_schema.py",
+        "bytes": 2980,
+        "sha256": "371a051b2aa7b5b2ac193df513a4ecc27850e923a371a4ec5cb3fe59a9d61b99"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\data\\staging.py",
+        "bytes": 5298,
+        "sha256": "f84c55bfba9b998b2ee3486ee08b5857a2a1f48f76c68245dc7a06f31adebbe4"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\__init__.py",
+        "bytes": 49,
+        "sha256": "129e5b9fc26dafd3b7c5e7d5b0bd676dced59e2cd6d2b134ee9742a56d19fddc"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\catalogue_backend_b0.py",
+        "bytes": 19861,
+        "sha256": "3fb2a6246aa8589f2a990f84e9547e04ab73f25816929999d19fe6d69efff375"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\catalogue_execution_v1_1.py",
+        "bytes": 17647,
+        "sha256": "fda661f07056da8276db97f7576b7b765c6514f98498fcf97ec9d4fb0d1035c6"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\catalogue_gate_b0.py",
+        "bytes": 30958,
+        "sha256": "881e587ba7ebcb217645d5906f623ce6c455c9c6479d0fc98d43f5c1d63dcd07"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\final_test_b0.py",
+        "bytes": 27176,
+        "sha256": "ac73a66d202964da465ca79abb3e24ad439febe37fec72f6c8ef83ae62bc4b8a"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\evaluation\\final_test_b0_v1_1.py",
+        "bytes": 10853,
+        "sha256": "0eb2f72feca6f568751dcf7a64319a9aadf8637bfa5061ba97fd77512487a045"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\losses\\__init__.py",
+        "bytes": 76,
+        "sha256": "40206e500ba1cb5df1a4858f754fcdf83e49a108d0ec73cab31dafc9152aac1e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\losses\\focal.py",
+        "bytes": 784,
+        "sha256": "7cd5042f88856c37889bee86f1f340e0e93373486620ee4a7a4d1f61df380e58"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\losses\\pinball.py",
+        "bytes": 982,
+        "sha256": "b3ebd505238fe881039f143fe9c73462735782ecfa0dee1e63b5463c3cb49b78"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\losses\\total_loss.py",
+        "bytes": 2648,
+        "sha256": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\metrics\\__init__.py",
+        "bytes": 65,
+        "sha256": "350f75bcc8be415c283773a339d442a62cc2192d0bb84b62576cc54f4f074cf2"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\metrics\\deterministic.py",
+        "bytes": 309,
+        "sha256": "43db58494627a6f83fee72241a394937fb144f481f580d40fe1018b5e1a91793"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\metrics\\probabilistic.py",
+        "bytes": 801,
+        "sha256": "310147262c0090e805d45bba36d7f992f157da8e52939a4361e18e4e4d8da110"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\__init__.py",
+        "bytes": 61,
+        "sha256": "1e98d33cb0665c9eb26b67921b8ef55ab1b76958f25240bf1ebd376e5218a26e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\b0.py",
+        "bytes": 2832,
+        "sha256": "6b9b8c28c8b12b7948d9658deedc68e0e54df42a956850d357d4f15d06c6227d"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\b1.py",
+        "bytes": 4887,
+        "sha256": "7b115b45831527c165a1bcb9ea22a4ad4dc2f42495d9a1e4b572be6f37eee46e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\backbone_b0.py",
+        "bytes": 2484,
+        "sha256": "79f35a29349eae9dcba705b7e127899972d0bcea723773043547f0d7f341819f"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\blocks.py",
+        "bytes": 944,
+        "sha256": "925ed0246258d4f709f4279f22e3829cf5aff89ce44dbe67f93ab1cb7c40bfd6"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\monotonic_quantiles.py",
+        "bytes": 1919,
+        "sha256": "d0b26433b986d5ce89a3eec92ee88cdf47d33d09809eba5a8bf11b5a2152c532"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\probability_heads.py",
+        "bytes": 2567,
+        "sha256": "6d807ff03c4a458b0406dd295df774c98e859d62125df9fc289176deb61eba50"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\__init__.py",
+        "bytes": 81,
+        "sha256": "d9514245bc9fb53c679d2e8396df8b6577aa49a35f1360b753991437943fc381"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\heads.py",
+        "bytes": 1076,
+        "sha256": "731b0e75743c066d4da12e996cfd5dcc9e600b8133a1e86f11e9b1db7038bff3"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\legacy_path.py",
+        "bytes": 2186,
+        "sha256": "b79a817d86a13b86446ebaa05b73f65faebac053fa8ad038f81922491b38d130"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\models.py",
+        "bytes": 2409,
+        "sha256": "aaddd22e08a58f45a034217d54489b0b13388b33dcdd5ddf83542176c8e35fe5"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\outputs.py",
+        "bytes": 2959,
+        "sha256": "2efc025e5202e380de0e06203c0701309649c0e4d982aaf49e66daff641b22c7"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\parameterization.py",
+        "bytes": 2208,
+        "sha256": "a4846983198636529ff4c4352756bccbcaa54103ec26cf64ad93eb2dddc46d8a"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\spatial\\__init__.py",
+        "bytes": 76,
+        "sha256": "811e5f8e967d25595aa30c5976ded23d1d9ed35334c34fb19fc06fe86376ae5c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\spatial\\projection.py",
+        "bytes": 1246,
+        "sha256": "88661698d642e1f2e350d819452bdedd075f42da17bfe18e0ab5efde0e34662c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\spatial\\sp04_mapping.py",
+        "bytes": 4557,
+        "sha256": "a4a4d0c8744acd6754588f01c7d1976ccd109b7c9224ba362a4bc474cdc35202"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\__init__.py",
+        "bytes": 81,
+        "sha256": "1d9d8338a97125e175d456f4260be66331a28f4949f62d1cacbade34089b8258"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\batch_contract.py",
+        "bytes": 3702,
+        "sha256": "e5089ce2a51a9ce0eb7e0b06b0ccf12f655a946b807443e7adcfb17fc336224e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\checkpoint_v2.py",
+        "bytes": 9662,
+        "sha256": "597d71aabb60bab972bf7df6c58750d1201824cc2595e65fa07c2a8dede09e52"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_b0_matched_phase_a.py",
+        "bytes": 184,
+        "sha256": "550e89cd5126da1357eace1014146192735e95c4261203748a255baa208b8efe"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_b1_phase_a.py",
+        "bytes": 155,
+        "sha256": "ff3ea86d36ade9d5016b018151cfe6e86c86931c289ab69aa2b158b7f1e27f54"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a.py",
+        "bytes": 21749,
+        "sha256": "61061d245f1f614211d1418eec7d01cd80039dd37e58fb9650d37b05887b3c99"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py",
+        "bytes": 31669,
+        "sha256": "94d10e041057c33ba4bdea9863cd83418d3e814ba141724e391613720cfe9790"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_b.py",
+        "bytes": 30796,
+        "sha256": "9f9e8fb203334a4195c982181553daa11fb95f327fccfa2f626cf1dab91a2b55"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\forward_step.py",
+        "bytes": 1391,
+        "sha256": "a0d3f52ece5d383c2f8016c1d0245f963fa637dbe253414a7907131381d7170c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\paired_phase_a.py",
+        "bytes": 17245,
+        "sha256": "a3fa22c048983727aebc66dbecbaf0ac6b49ad95b60102af2ec8ab809ed9338e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\paired_phase_a_audit.py",
+        "bytes": 20756,
+        "sha256": "0ef4f4589376b213e3fb5c8ea83efe3c94867fc3f69e33be35341ef2dca6eb09"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_audit_v2.py",
+        "bytes": 8088,
+        "sha256": "d9fb52f988e1bd3873fb0401de4551242f25ab66f05f4dfc6c9b024e8b9682dc"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_protocol.py",
+        "bytes": 12424,
+        "sha256": "95ed5a182590a8a84ee7659720a89ea7e36687800cb7e7441f60d30d795a8b19"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_validation.py",
+        "bytes": 6942,
+        "sha256": "9b654748879d22d10805728f6b25ef40f2042a0ef8121e588d4a3769995d7a1c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_validation_v2.py",
+        "bytes": 2599,
+        "sha256": "a029f9a9b421a79ecce871266fc3339dd631c558a383ce35e1eb534e8a696884"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_b_preparation.py",
+        "bytes": 5198,
+        "sha256": "789338ea040e4999fa2e420d14ef402e37a4f5208cb0dbbe7f5c89739ddc410e"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\scientific_review.py",
+        "bytes": 20274,
+        "sha256": "303bf6b6f181bb9147d22ed970dd3bc6c1b233052d1952ec2c9ac8d8531c3b01"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\upper_tail_v2.py",
+        "bytes": 6064,
+        "sha256": "04ef005aa5f7eb4bbb07cc26a3abe2e548350e7424cf6046bf0dcd0c83dd5933"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\tests\\formal_phase_a_v2\\__init__.py",
+        "bytes": 51,
+        "sha256": "f7d0025c5d6f999e672477f9008f99c3eef3830c07296ac327ba072c99ac3a27"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\tests\\formal_phase_a_v2\\test_runner.py",
+        "bytes": 16687,
+        "sha256": "113229f08a54dd95614263e77aaeb0b741578056b7e8b602a0cca4d17dc64c07"
+      }
+    ],
+    "data_config_files": [
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\science_contract_v1.1.yaml",
+        "bytes": 14085,
+        "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\b0_engineering_v4.yaml",
+        "bytes": 1882,
+        "sha256": "bfcabbc31a6124d596cba893fc19ded09078a27780c2de40fa2b21ddd6b924a7"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\spatial\\sp04_target_cell_membership_v1.csv",
+        "bytes": 529312,
+        "sha256": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\spatial\\sp04_coordinate_manifest_v1.json",
+        "bytes": 2673,
+        "sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\stage0_spatial_decision_update\\run_20260928T102636_513428Z\\FROZEN\\MASK\\yunnan_evaluation_mask_center_gadm41_imerg_v1.nc",
+        "bytes": 20916,
+        "sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\gpu_training_feasibility\\runs\\run_20260930T154142Z\\manifest.json",
+        "bytes": 11746,
+        "sha256": "c53cf3804c7f628951cd72d0134b0a4862b2e089d4141e06cf1ff5f420885eb8"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\normalization_b1_2023_shared_v1.json",
+        "bytes": 1918,
+        "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2023_formal_manifest.csv",
+        "bytes": 5277452,
+        "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b1_2024_formal_manifest.csv",
+        "bytes": 5353237,
+        "sha256": "eba8f8177ad113baaa0db015a2d2f34fd8b814e5cd5c698a6881e426c5f3d84c"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv",
+        "bytes": 6187048,
+        "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2024_formal_manifest.csv",
+        "bytes": 6266835,
+        "sha256": "5bd26743d7a9a135733553790ccca226433e7495c220f8df9aacfad628a9690a"
+      }
+    ],
+    "historical_checkpoint_and_epoch_artifacts": [
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_001.pt",
+        "bytes": 52086571,
+        "sha256": "17eef288e3b2143ff167967199b88710cdb9e8b77eb46aa7b93aa5b558047305"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\diagnostics.csv",
+        "bytes": 2588,
+        "sha256": "1fa94a9218199b4d50712a64097bafac12b89a1dbc2daeeb41923c7d8de22b82"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\diagnostics.json",
+        "bytes": 4735,
+        "sha256": "1e172efc5a9fc754de45a1ca535bb8a7a0d7c60c64f7d64dec8153fe6b19ccc4"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\steps.jsonl",
+        "bytes": 4125734,
+        "sha256": "a154cf459bd1409b44470ed65936f9a2863a1449b972ec75d45aedecd3a9b141"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\train_diagnostics.jsonl",
+        "bytes": 9216367,
+        "sha256": "c996b3efbca09d969d044f144870a72d11e6db9b7109b2526ec0e18517239be8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "882014d2b01da41036b0870a2f6c19d724445c38c864a11da5bcbfb677421736"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_001\\validation_diagnostics.jsonl",
+        "bytes": 2556589,
+        "sha256": "df2e25f492b03acaffd46ba49878a8bbc20f3fb78458a646ed565748eb919fb8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_002.pt",
+        "bytes": 52086571,
+        "sha256": "7286f74605b8ef7ed6e8ced790dff1e49c0ff4dc5a88e490196df877a52225cd"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\diagnostics.csv",
+        "bytes": 2579,
+        "sha256": "89de886688d74205c8f12cd03f2551d9f0021b23401d4f94f4e2b6ae3bafcd08"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\diagnostics.json",
+        "bytes": 4734,
+        "sha256": "c0e57eed20202e1a84cef1632f92c19f30d13aa014b570b02ff7b21daa3ad7a9"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\steps.jsonl",
+        "bytes": 4133622,
+        "sha256": "669190deefc71067e2c118c4bb10a4d3f057ca09abe0adbaf4eccf5c307020a5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\train_diagnostics.jsonl",
+        "bytes": 9223009,
+        "sha256": "94995f7833aca940bb071e2ee624d27a59de8ab5ba69dd18bce8d4befd109a17"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "a65d8f69864e9fd4b5e8f55688af3ca46569f0159a5f6d3af1699c2a4dfebbe2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_002\\validation_diagnostics.jsonl",
+        "bytes": 2555682,
+        "sha256": "ae863c06d0755f2fb3df55ceec5f117c9abea136709a84461151f6b8b386369a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_003.pt",
+        "bytes": 52086571,
+        "sha256": "25422d3bb9f1bf05bff7aa95a10fe8dc62a70893d88c6229dc210d7ccf0c3246"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\diagnostics.csv",
+        "bytes": 2592,
+        "sha256": "2a2d520fc7375a37687267259808983eab5eb25d9f1bc9d287817e5b61b8d393"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\diagnostics.json",
+        "bytes": 4735,
+        "sha256": "4130fa29f38c48a51de9db25c7de6e8d35d543b820f5d155ebd7bc927dc7f05a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\steps.jsonl",
+        "bytes": 4153580,
+        "sha256": "8bd938e2063b386203e6c420745ab50a0dca933d62146b9cc099316e9738e47c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\train_diagnostics.jsonl",
+        "bytes": 9223307,
+        "sha256": "14dda757ca23c133fd53bfa8809304730da2959e1ccac4f59d2d9eec750f9b8c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "1602aa152b4c0229411ae09c220c334626563f8a65cb1acfd23ae3a07e1d78c5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_003\\validation_diagnostics.jsonl",
+        "bytes": 2556681,
+        "sha256": "f9ed20b069b8013340532a0a38239800a3ff0f97cd72ec19dc302095508d69c2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_004.pt",
+        "bytes": 52086571,
+        "sha256": "aa8d6ceaca5beb1ab3b8ceae7c268d4b4237f37ef88f71a91a5b281713892b43"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\diagnostics.csv",
+        "bytes": 2571,
+        "sha256": "b9374c3d69595a02e714276ac3b47f91a6067ccbf08e94d6aeacbfee66ac4fb3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\diagnostics.json",
+        "bytes": 4734,
+        "sha256": "3f1f2f505691d69e49432b0f11d5cb50a2301e570236ef18c86b0d678d16db9b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\steps.jsonl",
+        "bytes": 4153795,
+        "sha256": "4b5e4e32b6e8b67dca146abbab3f06e287f51c08ef048bba7cbd5737e2debff2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\train_diagnostics.jsonl",
+        "bytes": 9224058,
+        "sha256": "aa55b4367720e9bbcad9f82b66c21f17b75d942e27455108d878172cf8c4908c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "3c480c629c6d49c2da3f2a3001e62626afaef678dffefad840967a57d8edeeab"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_004\\validation_diagnostics.jsonl",
+        "bytes": 2557114,
+        "sha256": "87ff53419ea968e7b971e1adaff4a7300aaa4d42e6e95b95b64621049e76b5d6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_005.pt",
+        "bytes": 52086571,
+        "sha256": "b554d77e2adaf44461e37e1a251812c4db7009cd3be25e97d38deb2bdf5405f2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\diagnostics.csv",
+        "bytes": 2595,
+        "sha256": "c7a52bf8e52b55053a80bf8b9e7d988e28ce276a635e94d59060596c0461eae1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\diagnostics.json",
+        "bytes": 4750,
+        "sha256": "ff9f0f3c592bd8951f48cf04a8842f74b0d0a43b78a727eebe28f73982fe30e8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\steps.jsonl",
+        "bytes": 4154250,
+        "sha256": "08df19b1c9c107d679c10d9b334c621c2b2d617c500375380b4fa4ebf8ea72a5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\train_diagnostics.jsonl",
+        "bytes": 9224023,
+        "sha256": "5ac02be6f3efd1ddb9bba664fa4f37f828004a7027e6f1d056c59facafbc0ce8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "2f93d1676f008fd57c79e66d0883f67e29cd239d711c672347c32415c5f1491b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_005\\validation_diagnostics.jsonl",
+        "bytes": 2562423,
+        "sha256": "f30bc3ded8b485091edcffe5e2b809054290b8df607c979a88f083803b1f1036"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_006.pt",
+        "bytes": 52086571,
+        "sha256": "c9d47fc656dd2c9120181c0e1bd25f966e297dc6874fcc37ba2b0e2579179ed5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\diagnostics.csv",
+        "bytes": 2555,
+        "sha256": "3ca5dc30cb1c09a5adeee85d7f8d22eab122eb976edd0d24ff7a7b84a79f0226"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\diagnostics.json",
+        "bytes": 4722,
+        "sha256": "eae9c53920d79cbdb171d35e8eddd5e03cf279a5a55145885f9ce11241465a42"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\steps.jsonl",
+        "bytes": 4154438,
+        "sha256": "a1d2131b489719a99442e44c9229dc36e2a7bc0e3fc6189af4b204f7910c6f2a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\train_diagnostics.jsonl",
+        "bytes": 9223914,
+        "sha256": "6c0ca8e1e206d31d3900be0f7cdb8803aef01bf9ebfe7b78d9deec2f6abe5466"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "a6a4180b41e6d60c2ebe7d83de7497affd58930fd4c63f09620f00bac9a79f86"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_006\\validation_diagnostics.jsonl",
+        "bytes": 2556787,
+        "sha256": "5f901d1aa3619723ab73682a86023c9bf8e176e03309e1b54aac0dd70b16152c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_007.pt",
+        "bytes": 52086571,
+        "sha256": "e8b9979ae07d66c4b899485cc1a6e55d2981d1954b8f1fadb6de10f4ed8ee055"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\diagnostics.csv",
+        "bytes": 2562,
+        "sha256": "9ddf68804b83929012e8fa383a271068bb9439d0506c49131df3ef1b1e47791a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\diagnostics.json",
+        "bytes": 4721,
+        "sha256": "a94512e2493e955c561e3b1cb97d6dbe297bbf81836ede95c87fb9eeceb9f38a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\steps.jsonl",
+        "bytes": 4154908,
+        "sha256": "76f3a87167e87ae971b0227fd0921c954b2b51bff614ef82efc4d36431799132"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\train_diagnostics.jsonl",
+        "bytes": 9223858,
+        "sha256": "d3000a171cf89c794ed37d0518d335cfc69b4f0305dfc8899975c1b8de8c295e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "5e65d82fc51919ce18330000decb935e8723f77545d3e511706667ef6e837eee"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_007\\validation_diagnostics.jsonl",
+        "bytes": 2556330,
+        "sha256": "fe9b7ec5daae7af34ea04f545862df688ce18e6dc1dbab3c0edbe7cec777a2e9"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_008.pt",
+        "bytes": 52086571,
+        "sha256": "0757e8200a936c635393fae7ae03003816976a8f384009c0c2fcce01bee03e0c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\diagnostics.csv",
+        "bytes": 2564,
+        "sha256": "257fdb83d3d12d4a1b3ba6c6bf32140226916666a607312350dc81ae96d7a684"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\diagnostics.json",
+        "bytes": 4723,
+        "sha256": "2fd6868077bf892401cc7ad1dafc8b9d21fb100633dbc6cadc0a937d0393416a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\steps.jsonl",
+        "bytes": 4155088,
+        "sha256": "bf7b7e466b54f4121e547e637223279005dc062cde9facb3b035dd11f0079058"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\train_diagnostics.jsonl",
+        "bytes": 9223251,
+        "sha256": "48b2ecc5f8dc0f0557fa33a38afb417cc77234c2e11af3f7554d09697911c505"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "192369725dff3f6cfedbe8057d4294fa204ecab42c003126bab187d3239bddc3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_008\\validation_diagnostics.jsonl",
+        "bytes": 2555518,
+        "sha256": "7c9f05904d2ed4937362771bd54c5fbd6bf591515fa585e7509d35a163140b4e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_009.pt",
+        "bytes": 52086571,
+        "sha256": "c9ea052522557df8eaf869a447ec8ae013e657004888a56b9d3944db9a1fd5c2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\diagnostics.csv",
+        "bytes": 2550,
+        "sha256": "3965b39d3915c1a51563ce950fec241bcf963e421d7811de366dce3e564af032"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\diagnostics.json",
+        "bytes": 4713,
+        "sha256": "3c372eeaf0563d59de9012dcbe1be579bc1ea37d923c475af57ec95c3fb25984"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\steps.jsonl",
+        "bytes": 4155136,
+        "sha256": "9e6dc765e2ed0b8a98ca3902646f203f7731473aa770cefebe281e924d8e72f8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\train_diagnostics.jsonl",
+        "bytes": 9223860,
+        "sha256": "d1520661ae7474da603a1f14925b788cf8e915bc9b856d6120c6ae1ba0fd8ac5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "ac893f584a10d1ae42f66f89a92eaad4570302badcbe9b4217843777bca2af2d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_009\\validation_diagnostics.jsonl",
+        "bytes": 2554901,
+        "sha256": "fc858681eed86248dfd1cdb9c1d00d510e1976844fab8d18c9d87d6ada69c342"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_010.pt",
+        "bytes": 52086571,
+        "sha256": "7848c47ef9a68fd9343535f4ddf65723018f3c406a04f0df18380ecc9ae31463"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\diagnostics.csv",
+        "bytes": 2583,
+        "sha256": "88b9e36af0f6d0e0528c2ca66943cecf4c4a31300807df9819e369bb00ddecbd"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\diagnostics.json",
+        "bytes": 4734,
+        "sha256": "257160aa36a69fa307975d9936cd6d3cadcf2e7d3c1a228b94732f5174bcf880"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\steps.jsonl",
+        "bytes": 4155455,
+        "sha256": "71e2e7d891de10194cd4f44f0b24c5ea9256cbdb6fb9fd5853d963d09080e0b1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\train_diagnostics.jsonl",
+        "bytes": 9223768,
+        "sha256": "2c3165e099b1bb3b21c3e7190b6db63b08f76b07d40c7c8bb743e7c45f5ba63d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "94b0ae14bd664e244919c1f5c3c7e11b22dbac3027787525aba43fc35e860ac5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_010\\validation_diagnostics.jsonl",
+        "bytes": 2556952,
+        "sha256": "e83ff177e50809c686cad7118ba6e0adbe21da46aca8bb84002c102a9a045702"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_011.pt",
+        "bytes": 52086571,
+        "sha256": "c647494fcff329e478d33a0b1fe1383da71c6b596e4a64e1842bd08640513f1c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\diagnostics.csv",
+        "bytes": 2573,
+        "sha256": "a243e5780a31c24c0775cbed5ce42f91de02fcc289c2e7fd958e4ceb19895354"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\diagnostics.json",
+        "bytes": 4732,
+        "sha256": "c9c8d3d232f6aea92b3ef609e540dca949957a5f43f660fcaae98074ac938f15"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\steps.jsonl",
+        "bytes": 4155790,
+        "sha256": "8b4dd2d7f7727916aa469d824b875b47a65beb872f9d73f382948eea2463f7d1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\train_diagnostics.jsonl",
+        "bytes": 9224183,
+        "sha256": "e40a27cebbbccee1540e16305e866af7da08070640a7e72f23c352a0626c8f52"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "1db6c18a2b1858b7207437ca03d1e5b1aff6acf8fe52cbc9cc27130f268a4cc0"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_011\\validation_diagnostics.jsonl",
+        "bytes": 2557575,
+        "sha256": "e0ff6f4c826b662d3e8a9f94fedefe2e592f3419ac7fc7d17c31c02941f98c72"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_012.pt",
+        "bytes": 52086571,
+        "sha256": "bde6c7a0985c368dc5a791eea488516f68893125e95088acf17c30946b45b719"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\diagnostics.csv",
+        "bytes": 2573,
+        "sha256": "1f35ff471041180d55b72c61bf84bc96850a5845a52c5cd75564d62a05f75c58"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\diagnostics.json",
+        "bytes": 4732,
+        "sha256": "9091d70c9460ef491f71fda928cf35f431f4739b5caf9e1fd1d58f1402681715"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\steps.jsonl",
+        "bytes": 4155771,
+        "sha256": "535a80092a16769dfc8590ecd36440c02f4ce4c78456ba3e1f0c4009acd235ac"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\train_diagnostics.jsonl",
+        "bytes": 9224147,
+        "sha256": "1784614deffe7b9a4af30a3a559b561ef81a67fa6624fb9a01d09bffe481500f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "556047141c945167176523a06c1bd98227de0b401ece8cda00a6c4270f8e0182"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_012\\validation_diagnostics.jsonl",
+        "bytes": 2556279,
+        "sha256": "8e120188d62dbcf988f541e5570487cb79b3ee2b9349e813a3f61335d75c7045"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_013.pt",
+        "bytes": 52086571,
+        "sha256": "552e906314fb592f83a57f2b39aa3bdbf628f1b616411709ae83dbc5cb8caafd"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\diagnostics.csv",
+        "bytes": 2567,
+        "sha256": "e1ba256734963b1f31c4f90ef667de26651741953bbc139951f2320b734d58e8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\diagnostics.json",
+        "bytes": 4730,
+        "sha256": "7d2fbbd85a81c91d6f4fb7a44f0cd7d4cf4926c07546eb042086456ddbb52ab0"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\steps.jsonl",
+        "bytes": 4155723,
+        "sha256": "324fb0079a3fffd8764a078397f3b653ec0eca74089a39169bdf38ce3aa12b28"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\train_diagnostics.jsonl",
+        "bytes": 9223899,
+        "sha256": "5da1478ca8d9a21e0cd540e84ce5382cc69957d40a2a8b4b47380813508a4b63"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "41becdd5e09f77348c5bb494bd3875a6f247549719224efd5a70c4465a69c5ad"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_013\\validation_diagnostics.jsonl",
+        "bytes": 2557308,
+        "sha256": "3f492eeb7c6338a772675539e252a04a8a6e83bfe20fbad1b473afe7b41db69a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_014.pt",
+        "bytes": 52086571,
+        "sha256": "80a523322c8f0ffe441a15ef112aa8b41e2a822534bec024d0ba3df8c48cc628"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\diagnostics.csv",
+        "bytes": 2568,
+        "sha256": "1d257c1c5f04223cd5885cb5af68b07aaba6dc7a6875c0d356fc75a1a770f402"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\diagnostics.json",
+        "bytes": 4727,
+        "sha256": "1170422bdeb26c729b042de75c9687fa1fc980861e0b5d02a72f446d1ca3a3ce"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\steps.jsonl",
+        "bytes": 4155881,
+        "sha256": "dc26e3d83012701130fee3d00cf7572cac829d790d4f5467b47158817d18903b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\train_diagnostics.jsonl",
+        "bytes": 9224158,
+        "sha256": "ec349c7451ce846c4c08468758a1fe38d214769f668a6133401f27c20b8ec895"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "16f3dc7f2eef2776264822d246ee7c42d36d62002212b908f425d569b56b6d73"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_014\\validation_diagnostics.jsonl",
+        "bytes": 2556798,
+        "sha256": "25ccba61e3ecdd720560f1ae83963ea55289085728bd5883bbde99059255a480"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_015.pt",
+        "bytes": 52086571,
+        "sha256": "fb568e07e26cd77c34392dbdcfaebfb01b4266ea64d646341391ef004cf6b44e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\diagnostics.csv",
+        "bytes": 2573,
+        "sha256": "39e0aed24fbc568e4ef0fd0bdad0913b695852b609ce986bb2fa8e0349febd33"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\diagnostics.json",
+        "bytes": 4728,
+        "sha256": "4291a7ee2067fcd7e30720e3602a0e73f596ae63471e3edd99790d1009533a0c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\steps.jsonl",
+        "bytes": 4156208,
+        "sha256": "57bb535d109c635f542ae042dbcdae104006515cc420ff6c0e13af4ad714537f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\train_diagnostics.jsonl",
+        "bytes": 9224137,
+        "sha256": "49f181e62565deeaafc66c260993bd720eab702a2e6e94150132926853e25243"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "34a6ad95714b067b25a213f9129c7e62a7f24738752cb8b8a978f7af3eedc462"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_015\\validation_diagnostics.jsonl",
+        "bytes": 2555654,
+        "sha256": "2dc2362c2ef10c4c81d5f479b866473d985baa3a2f72454442b32c52309c59e3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_016.pt",
+        "bytes": 52086571,
+        "sha256": "46addfa8a76f7ba278a592d4a8781b06a3805a28a1a19f4200ccb6c7006f5cad"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\diagnostics.csv",
+        "bytes": 2584,
+        "sha256": "876f50a5150abe40b0ffa2a2562a86d2838eaff0b5cb624ea0c6aab083762dc5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\diagnostics.json",
+        "bytes": 4735,
+        "sha256": "513a8b629e659a97d3e4774941954a3db1f343f7a8044e07c5c3c313ec7b5b0e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\steps.jsonl",
+        "bytes": 4156303,
+        "sha256": "da798bb64a3e4e41f475e970307dccb5afb7d3081ee188a985eaddb6bee87cf6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\train_diagnostics.jsonl",
+        "bytes": 9223844,
+        "sha256": "d35e29f22ca64bbf4d8ad8028685567b11ed7974de1b5067c3d57ccff4b02d96"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "d0a40a57fdf8980f1d9cfba1d9750c5fdcb7c688306c4e5512aa7b6e4148de5f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261007T070818_003523Z\\epoch_016\\validation_diagnostics.jsonl",
+        "bytes": 2556919,
+        "sha256": "0ba538e82efb814d236e572597e9f377d9bf45abe2b4f12e2254205c3f8c3df9"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261008T002823_025978Z\\epoch_017.pt",
+        "bytes": 52086635,
+        "sha256": "3b7bfe2ea14e1065b122b89501b11fbad2e7d068824ebc902930bc1afde3c857"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\diagnostics.csv",
+        "bytes": 2572,
+        "sha256": "2f9f65e8c23781dc14f06ff02ebd790187eda0cf97e9a6bfbadb488f82e60ca0"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\diagnostics.json",
+        "bytes": 4735,
+        "sha256": "da9058d437807a77967d5e655985ad3dcf029c95a91abf77078e9c1b120e4442"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\steps.jsonl",
+        "bytes": 4156181,
+        "sha256": "c6f2220467868bab14981ddb6c0079e52bcf4ed676f5087ca7be7569733b8354"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\train_diagnostics.jsonl",
+        "bytes": 9223644,
+        "sha256": "3fd4157e81a60d45a1d2c505b5d70ad851e4f0117e068f9474490d0fc7b897b5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "1489e90b3a165e79af2bc22a81977d4b7abc0314e50946e9522a50c332354219"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\audit\\run_20261008T002823_025978Z\\epoch_017\\validation_diagnostics.jsonl",
+        "bytes": 2558084,
+        "sha256": "597d5e20287ca030589cfda7aab65d2e2aec5b05b857658cfe4f3b90f2dccefb"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_001.pt",
+        "bytes": 52115371,
+        "sha256": "cf97d82386df12ba73f88c3612d4ddae681cc20caee603ce2deecb70d8cff19a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\diagnostics.csv",
+        "bytes": 2564,
+        "sha256": "8620ee04e9755fb606beedf5ef3c9c60e49cc910ef2766a36715131e6dddf0f1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\diagnostics.json",
+        "bytes": 4723,
+        "sha256": "0f01113f991194e9cd37956b473924d1337bc50b749bcb7c2bb64112779560fb"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\steps.jsonl",
+        "bytes": 4125395,
+        "sha256": "1f2a60ddb6b0c334932f6ccb2094314b79a2a33a4aa311656a400a3da749931b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\train_diagnostics.jsonl",
+        "bytes": 9215904,
+        "sha256": "a280bee3a8fc84291b1b61eadbe5c3ddc7ab678e69ea027f27e45fa5aeddb985"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "66705cc91d13b9281bea89900311e450c878dd36e8c28b851d90830860454910"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_001\\validation_diagnostics.jsonl",
+        "bytes": 2554341,
+        "sha256": "5d46914d3e8c1f32ebbf64a263cbf9f9a61e29e0722d0e00b9ed4a2c9b820baa"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_002.pt",
+        "bytes": 52115371,
+        "sha256": "04f8dd0e9b0c153db0fb6a3190848a138a72802f30e51c33dd4b21d134b68432"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\diagnostics.csv",
+        "bytes": 2579,
+        "sha256": "e677dc73cdf3f684347b20ae9e0fd6c892fe993dbf285c113963bfc6d86028ca"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\diagnostics.json",
+        "bytes": 4734,
+        "sha256": "f04fa8d4131299c2b2ecd00c915dde6c217eb17fa1e2ba8915aea855130219d1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\steps.jsonl",
+        "bytes": 4133611,
+        "sha256": "e4e9aa5b9d9630dc4525df81407eaf0b1c8379d70a673db777cb08829aea476f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\train_diagnostics.jsonl",
+        "bytes": 9222594,
+        "sha256": "93420943c6ffe16d30e364df45efb55be5d9958d5716501beb804c1c43d7bcf7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "ce93da69009765eb3a5c0fc1d0e6cf9624f891d682d37f62262e01934c809cf5"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_002\\validation_diagnostics.jsonl",
+        "bytes": 2555845,
+        "sha256": "84421856bdc2f6d1aa99bd59fd1e1ca668bbe2fa67e3a49d1e89bf0840733526"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_003.pt",
+        "bytes": 52115371,
+        "sha256": "b23d3d548b632027ecb5f6eb1098ad599ca272012b4719104557f0668fd9aad1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\diagnostics.csv",
+        "bytes": 2577,
+        "sha256": "d56f137d3f04befe52b818f8123179367691863d3963acfdab0850a77c75b088"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\diagnostics.json",
+        "bytes": 4736,
+        "sha256": "f2ac11b28bad5eff1eeec6a6bb9df7adad84ac0f02e89d781a9a5d7e20f4a05d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\steps.jsonl",
+        "bytes": 4153365,
+        "sha256": "b4a42bedef3d33e4b6f68096aa0c61a957ad3c08d77b14b198f1cd3792b3d69d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\train_diagnostics.jsonl",
+        "bytes": 9223647,
+        "sha256": "dd9b95d03a17e6357f2f1762e31ec03bf2ef394ed46861436700c1d2efe793d3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "ee4f99d904cb057a758779a748b06b08ed8fa83eb50bc78cf692d6faa8211c18"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_003\\validation_diagnostics.jsonl",
+        "bytes": 2558280,
+        "sha256": "761259c9441fc4a32a9d4f2292684e55c1ea4d048b5fca5f65ef6d6d0c5860c7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_004.pt",
+        "bytes": 52115371,
+        "sha256": "fe7f8b6e307ff37928d5f675f81fac4fbba9e5bbce84b928c52a1c3b538175aa"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\diagnostics.csv",
+        "bytes": 2568,
+        "sha256": "daf71d8c657c43252d93fac4a8addae944d79109069cf8e832f72f7778364be9"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\diagnostics.json",
+        "bytes": 4731,
+        "sha256": "37f14fe31d95edc995a2ead848ceb13bd0c2a23b717492fb8e020c8796c4ee28"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\steps.jsonl",
+        "bytes": 4153576,
+        "sha256": "e7a9ac12b47ca5dde7945620b3ca670483815f1ab43c31b67c6d4ffa69dafdbd"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\train_diagnostics.jsonl",
+        "bytes": 9223446,
+        "sha256": "7fb0b61d11c609a613545c94893866ec7ba8f4d1bacb0243b3847847ffd35948"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "5e6e27e0933fdf4d5a7d3476d54cf5e51fb4505b0de738bc0434f5940ebeeee8"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_004\\validation_diagnostics.jsonl",
+        "bytes": 2557122,
+        "sha256": "c992b6f2303288cb54ed17b1c3b5761b1b6f09469c16e0b842fca272ed6b9e58"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_005.pt",
+        "bytes": 52115371,
+        "sha256": "abbea07df8c8d7c83c76502437da131d99032d9ab9cd339dbdbadf8b626f9ef7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\diagnostics.csv",
+        "bytes": 2580,
+        "sha256": "dbfe805572a554bfd3db58808f3a2ed5bd7cf4454bf9f379ded2dfa8763c6601"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\diagnostics.json",
+        "bytes": 4739,
+        "sha256": "005cfeae9e85641720ed6214d77aab111f94a6d88cf5732c0a54dd93b0af0916"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\steps.jsonl",
+        "bytes": 4153997,
+        "sha256": "c341041c021b1c4e70c42c54b7685c79a70e1c7240e694b12c8811ef6ab2b369"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\train_diagnostics.jsonl",
+        "bytes": 9223999,
+        "sha256": "5e0a38c573c7feaf80346388e96f52480513db0b7175bc3e060c16ac98419b62"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "d084e086213a9107e35bf1977ea173fb8d35596a1f1091cb9d40e270721d8ed7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_005\\validation_diagnostics.jsonl",
+        "bytes": 2561229,
+        "sha256": "3aabc60a1c125ce49a72a4f1179f6a0e665e7d047c99ef7ea059a6faa6d18b5b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_006.pt",
+        "bytes": 52115371,
+        "sha256": "6b10dd7e994f3c0b87abd4ec6f2de8ca90749bab9e55c1f6718a55b51363cc5e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\diagnostics.csv",
+        "bytes": 2565,
+        "sha256": "6a5c94c2f9f47b2f380e9ca9a194dcb81d3bb324e19bcab3e438c5a98959a07d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\diagnostics.json",
+        "bytes": 4728,
+        "sha256": "6c259bcbdfb9e4289b1a190a18acc69e1b81877035cfe0455b7cec01976bda9c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\steps.jsonl",
+        "bytes": 4154291,
+        "sha256": "c361a837a63cabe2e319bf05219f8b1885540a75a4e6a2c9adc2dd17270ca435"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\train_diagnostics.jsonl",
+        "bytes": 9224280,
+        "sha256": "4d78df0c2a6a0c2587c71e59e79955de0e15db61d346a2cd7ea979cb0e03df77"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "b6a1d6cd60573e47326385bfc3ead1943926a4511568f32ea5cf4266d784e188"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_006\\validation_diagnostics.jsonl",
+        "bytes": 2557671,
+        "sha256": "c39cfa776ac6073c1bb3357d31a8559c0fbc979e11bcac249989e4ad56222263"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_007.pt",
+        "bytes": 52115371,
+        "sha256": "2d406fab0b663fae0217f46c8a9a46e1877f9285b66588ad3c0aaa496fac8b34"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\diagnostics.csv",
+        "bytes": 2576,
+        "sha256": "647b4b0bed0c10efbc7a6f74759c8abbecdb7e2eb90fda17b9b0fe98dbbb0a12"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\diagnostics.json",
+        "bytes": 4727,
+        "sha256": "ae8d178a18ede7caaf64a269df1b36f435d7db72ed861a706648370fe7784e5c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\steps.jsonl",
+        "bytes": 4154422,
+        "sha256": "44178212fe0f66c899850c8d5b0cc6f140ddd3cca8a9199c32a7b8a63cebcfcb"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\train_diagnostics.jsonl",
+        "bytes": 9225151,
+        "sha256": "fa35a056710beeb411fddff6c3850056ad78898b2339f582e6ffcb31f23ff374"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "85f8d117ce30de9417aaa75dafb40914d2e051dd1aa25b9bfd702d895da3b4cc"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_007\\validation_diagnostics.jsonl",
+        "bytes": 2555646,
+        "sha256": "dd5e37ea38207a07ce3efdcc063a0891d5fe1dae610e8ff2291f1b55492f3274"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_008.pt",
+        "bytes": 52115371,
+        "sha256": "0fc346fe886e0ab033e40b0f7a1be6d2c654680d11f4f0ccfcb63b28bf39c1b4"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\diagnostics.csv",
+        "bytes": 2560,
+        "sha256": "55e3d22dc082370fe7ccbb815a5fad87b4c8b2df7b64130932553547f0e4c46f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\diagnostics.json",
+        "bytes": 4727,
+        "sha256": "67b7797fc91bfac654030e18cb6aa85bd84e1490fa69a79f559278e971ee5453"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\steps.jsonl",
+        "bytes": 4154597,
+        "sha256": "af3cae1211bb86e70c10396f0f4f828f833e25ffb3a185e772fa86dd37e49077"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\train_diagnostics.jsonl",
+        "bytes": 9224716,
+        "sha256": "52c976c58b3a4ee2923fd78bcbcb74f9d4efffef45b497d32ffd39a0cef2d274"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "f1a2f3c8c697323e2bbd3de5eb7a1ae6f39d27e2ec1c16ef6aec2e7d9ea935d7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_008\\validation_diagnostics.jsonl",
+        "bytes": 2556153,
+        "sha256": "3c4d067cf2f356045cd8bc1fe1532c9113ef0a2a1d608a22012294e1791e9f93"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_009.pt",
+        "bytes": 52115371,
+        "sha256": "d5a45f9ac0f89a7870caff08eed6b5b209dbc0a62ad593ba2ba68271e570fc4a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\diagnostics.csv",
+        "bytes": 2560,
+        "sha256": "f015a17ccb225b31adaa896f742c11211f53c81495a2b7bba0eef028d381df6d"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\diagnostics.json",
+        "bytes": 4723,
+        "sha256": "a8075f8ce6f8e0033722dbd6387c10c0325414789175c099b6d17db95e6b6aac"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\steps.jsonl",
+        "bytes": 4154827,
+        "sha256": "d96a2373d1760447ccbadc5f4f6cb3079fb1561c1376b07579f7210d92fdc1d0"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\train_diagnostics.jsonl",
+        "bytes": 9225176,
+        "sha256": "8933c4917018157636b1025a7da3ea3952a05dd6f08d99428f21a77a432ad93e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "d286ddf53828937ef761521cb31b57b417f75a7c0d306ceef6a94919fb638478"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_009\\validation_diagnostics.jsonl",
+        "bytes": 2555372,
+        "sha256": "83b66edb580a0a09e2da95c29653fb66945896af176c8e89924d6c5dac67a276"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_010.pt",
+        "bytes": 52115371,
+        "sha256": "387a8a72bfc89a4ff9528495015965a677a9e80deee1edd1471bbfe1fd5d2a7a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\diagnostics.csv",
+        "bytes": 2565,
+        "sha256": "5ce90abdaf43d8426321cf3dde0acf102d30c5b2ceb0bb5facf8b611ba738486"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\diagnostics.json",
+        "bytes": 4728,
+        "sha256": "637e9cb5aa1f0743ad86763424fb83a1d415d47f00b31a127012bd61bab9c3f2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\steps.jsonl",
+        "bytes": 4154910,
+        "sha256": "cb6b896309fa57cb59805c0ee067685ed8cb1671959af89004977f111e5beaca"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\train_diagnostics.jsonl",
+        "bytes": 9225597,
+        "sha256": "45a890bbcb702b9a991ebdb540c6bad20dee22ad4539ee569af464e9c4fdbada"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "487dffb068cc8a73293452f838d958f77c46aa887c5c46324b5f9b7cad6822fa"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_010\\validation_diagnostics.jsonl",
+        "bytes": 2556884,
+        "sha256": "43a63fc6b594929c85b21d66d6f3030f2229b048048adbd5def8236527f8a3ca"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_011.pt",
+        "bytes": 52115371,
+        "sha256": "9a2b86293c9539230ba7c12fee43fa6b648ec9a6e26e4d8c366e5d01a23c0aa2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\diagnostics.csv",
+        "bytes": 2577,
+        "sha256": "13f5d43e1cf2aa3f1edb7e0608dd107127639c720c35f00fa4272896736b6909"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\diagnostics.json",
+        "bytes": 4740,
+        "sha256": "6f3119908a0ef00656cc3092b407ba1d75f6e541da01b16c1fb60822a532add6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\steps.jsonl",
+        "bytes": 4155242,
+        "sha256": "d873ec04e0e74cb71e57937ce56a984fdeac6b8e4df21a08c36d54b14eb2b1be"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\train_diagnostics.jsonl",
+        "bytes": 9225857,
+        "sha256": "47812e694c2f7646707ada5f0fa2c75b00e5e1c0574901ed97a9029b6545a707"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "c1b09bc827941b37eea97f9c188fcf90f45d6618db8019a9694a229d55fb23ef"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_011\\validation_diagnostics.jsonl",
+        "bytes": 2559309,
+        "sha256": "8f3e5ce52eab1122cd02f8b1ed9604ece4206a63fc8b983dc87128fbe01cb663"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_012.pt",
+        "bytes": 52115371,
+        "sha256": "347bb36474e3315cdc9e757bfd3615e0e7b28f85b83029faffc34a56c285455c"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\diagnostics.csv",
+        "bytes": 2564,
+        "sha256": "4ea6d98e9dff3c7ae4c588e45322f7fc21242a1973142b079e5deadb7a4adee3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\diagnostics.json",
+        "bytes": 4735,
+        "sha256": "f7204009dbe019ad793a96832264211355376057968ece1718eef6cdee534d39"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\steps.jsonl",
+        "bytes": 4155334,
+        "sha256": "06127cb798ac104b9845f558e923e49f70ea94acf946e5d37e25f6e329d8c2e3"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\train_diagnostics.jsonl",
+        "bytes": 9225868,
+        "sha256": "1692914ac2596bc34404c5e960e13c024204d7010f17326fd3eef6c14adce037"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "dd8e73a31ea21a41a1478fc2427f572a6802a3687dc742c1c45a7bfedcee19ba"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_012\\validation_diagnostics.jsonl",
+        "bytes": 2557830,
+        "sha256": "12c37c93315132b948e3ce3590c06dd4020df007a9aa59ec281363afc5e33498"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_013.pt",
+        "bytes": 52115371,
+        "sha256": "58230798b85d80d3bc3f2b9ceac626d6fddca57352dde9edd02783d09aebbd8a"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\diagnostics.csv",
+        "bytes": 2568,
+        "sha256": "3a12dce1e780f10c3f266d9ef3633fb7e819c26d489fc852c958fd82385d7a67"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\diagnostics.json",
+        "bytes": 4731,
+        "sha256": "598eb1a3ae947fc9aba4bbe87e905dad3f297c30e3fc3316e41840e82033985f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\steps.jsonl",
+        "bytes": 4155295,
+        "sha256": "0f178aa9048ae4755e1bc89c185592ede537cf2e5cf4d2d6a17480966625f3bb"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\train_diagnostics.jsonl",
+        "bytes": 9225798,
+        "sha256": "18506d7bb9b92641a7c3682a8ead514a11de49b880fd2b3b9d201cd122ffe841"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "80b8ea629e573832e3d3da81d3def01211da398ada87781c46f9ea7831a7e729"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_013\\validation_diagnostics.jsonl",
+        "bytes": 2557575,
+        "sha256": "b2493f10e6c39478e0b2a760b0ca5ea905269ea75aee490968a99991b431a637"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_014.pt",
+        "bytes": 52115371,
+        "sha256": "40f7f1204aba52815e1c8c2f3d2a5ce5d73da6b7b0297e1d79dc843cb3390649"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\diagnostics.csv",
+        "bytes": 2577,
+        "sha256": "6bbd401b077bb9d45a38c8cb2a4194293c9c3a01313ccfa5e8a742180660ae81"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\diagnostics.json",
+        "bytes": 4736,
+        "sha256": "8b5a4cc91c9c79efe81a13bd711bdfb53f4f1dd672b46f28be127ccfda8eeff1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\steps.jsonl",
+        "bytes": 4155186,
+        "sha256": "499fb978318c537c6e2d15d9ab85e40638c2153ba9afa976a0b0889ef80d4a13"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\train_diagnostics.jsonl",
+        "bytes": 9225746,
+        "sha256": "f0e790c9765bfcd96ae27cda94878d401ee514b60fe8c5c9f9fd943f28d34f80"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "c07cb396cf72398c1ed297e4578af310232c931793ddfdd7ba59551edaca0f00"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_014\\validation_diagnostics.jsonl",
+        "bytes": 2557950,
+        "sha256": "1b5104ca457980b4f57c2611cb8cb5e48d0c13c318f1dec56dd88987b93b21bd"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261009T004140_659958Z\\epoch_015.pt",
+        "bytes": 52115435,
+        "sha256": "c782af208561c07695993535270d738dc225628d662d8f69c66829900ab12ba1"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\diagnostics.csv",
+        "bytes": 2583,
+        "sha256": "ec5c21196f2e6b2f05d867e7a24fb21692d1113e502213e3b491ecbed32da250"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\diagnostics.json",
+        "bytes": 4742,
+        "sha256": "f7015b6b7ab38e74ad851ba6bac82de60346ade8b31071c41417e99aee363ac6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\steps.jsonl",
+        "bytes": 4155583,
+        "sha256": "5195b959e4e03c8f34b154807e6c16e34f24e34b9e78ddc59764d22c7c58f775"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\train_diagnostics.jsonl",
+        "bytes": 9226339,
+        "sha256": "4db1d8fc956913a8ae7ccb54451ab991279acbc0b0b11bbd741bb5f8af5819ea"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "4086a0b8d724221f58982e6aff27cb324eda035d00d2155f306628cae51cb2f2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\validation_diagnostics.jsonl",
+        "bytes": 2558385,
+        "sha256": "869fd75d6288fe56fbf6aba0d53401b0d4bac4f4f44b9d23d152f09f2b7776d4"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261009T004140_659958Z\\epoch_016.pt",
+        "bytes": 52115435,
+        "sha256": "f6091df861b473c0c342d65d0fdaf78ed5bef3658410e37d52d28923e64c339b"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\diagnostics.csv",
+        "bytes": 2566,
+        "sha256": "7a3d561dc7ffac5a0eff4ace19682ef92fdfafc44c6088b687a166a12331ca88"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\diagnostics.json",
+        "bytes": 4733,
+        "sha256": "93994cf6ef8f0c08b78cd1dce3323223d65d2e04ce81219192e64179bc2eb5d6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\steps.jsonl",
+        "bytes": 4155815,
+        "sha256": "6bd39896d0708b1e51c5f1ece392c7a62ec84bc1cbb8be218bed56fa0010d2b7"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\train_diagnostics.jsonl",
+        "bytes": 9226656,
+        "sha256": "908c1a6b0fd64a1231ecc31dcd99d594a9d86665deffc6560886a21e723b36f2"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "ffee8a42563c4fec5bc0e38e493020fa5c5d2b3235e1d1297da00f84b5dfed34"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_016\\validation_diagnostics.jsonl",
+        "bytes": 2557606,
+        "sha256": "58ee60eda09d172e0ba4fddce426e1c44b76f007252f0e54b51564a44e89abc6"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261009T004140_659958Z\\epoch_017.pt",
+        "bytes": 52115435,
+        "sha256": "8f00d60ccfb31530f98dbd3b86c919cda6dbc75add970033f023db3f41bc0d5f"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\diagnostics.csv",
+        "bytes": 2586,
+        "sha256": "8d4fd97a3a422411db3a00e0ed71aa8be511c70340d53408d687e75c9ad72066"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\diagnostics.json",
+        "bytes": 4741,
+        "sha256": "acd4739fe9825b312fd122e7fc678b52759c23c0c07fe2ccc7de212a8aa4bb96"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\steps.jsonl",
+        "bytes": 4155571,
+        "sha256": "0f884c1f4d0c1abcb34c1b266327109fa3d46014d129c577170e663b68c5fc46"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\train_diagnostics.jsonl",
+        "bytes": 9225893,
+        "sha256": "3f3d98e14fca15ce79c09b31f6a99608840799f9bb17f85e8d67b227fc6ed5ee"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\validation_calls.jsonl",
+        "bytes": 453104,
+        "sha256": "464ee4346e77ea8516bb140661ae345363e7f75f407bd79131aeb799daa7d59e"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_017\\validation_diagnostics.jsonl",
+        "bytes": 2558418,
+        "sha256": "ce3015f44bb425ccd43c4b8f3b886b2b1d6810a4f2ecc02acbef1377e7961a6d"
+      }
+    ],
+    "checkpoint_deserializations": 0,
+    "raw_source_opens": 0,
+    "proof_scope": "Current closeout byte hashes; inference before/after state receipts registered separately. No claim that unrelated unregistered drive files were enumerated."
+  },
+  "protocol_and_head": [
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\science_v2\\phase_a_protocol_frozen_v1.json",
+      "repository_path": null,
+      "bytes": 9107,
+      "sha256": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be"
+    },
+    {
+      "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\config\\science_v2\\quantile_head_v2_frozen_v1.json",
+      "repository_path": null,
+      "bytes": 2901,
+      "sha256": "3a865a6e4ab180f61d7ab6e2f684ab6b814bfe6b2e59a34d127ddf1d772fc97e"
+    }
+  ],
+  "manifest_self_hash": "Excluded to avoid recursive self-hashing; git blob SHA/commit binds this manifest",
+  "publication_allowlist_policy": "Only this independent scientific acceptance directory; raw access log originals local, lossless gzip published; no model/optimizer/checkpoint binaries or raw pixels",
+  "old_run_closeout_failure_preserved": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_scientific_acceptance\\runs\\run_20261009T112710_013267Z\\closeout_failure.json",
+    "repository_path": "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/closeout_failure.json",
+    "bytes": 690,
+    "sha256": "2785732e650b382fd0ef85d0975c7d2218e032515acb48f691afa6799b189c9d"
+  }
+}

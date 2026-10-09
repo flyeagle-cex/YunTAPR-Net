@@ -1,0 +1,62 @@
+{
+  "status": "PREREGISTERED_BEFORE_SUPPLEMENTAL_2024_INFERENCE",
+  "baseline": "166b1f86291bbcde167dbec30d3ae43ac23bba4c",
+  "models": [
+    "B0_MATCHED_V2",
+    "B1_V2"
+  ],
+  "BEST_epoch": 9,
+  "target_windows": "2024 March-October frozen common 10501; window_start UTC date",
+  "bootstrap": {
+    "unit": "35 fixed nonoverlapping 7-calendar-day UTC blocks from 2024-03-01 to 2024-10-31 inclusive",
+    "resample_blocks": 35,
+    "replicates": 2000,
+    "seed": 2026,
+    "interval": "2.5/97.5 percentile; paired identical multiplicities; pointwise exploratory development intervals",
+    "assumptions": "Approximate week-block independence; preserves all within-block temporal and spatial dependence. Seasonal nonstationarity, cross-block storm dependence and one-year BEST selection limit validity; no future generalization or seed uncertainty claim",
+    "length_not_outcome_selected": true
+  },
+  "rain_bins": [
+    "dry <= float32(0.1)",
+    "(0.1,1]",
+    "(1,5]",
+    "(5,10]",
+    "(10,20]",
+    "(20,30]",
+    "(30,50]",
+    "(50,inf)"
+  ],
+  "inherited_definitions": "src/yuntapr/training/scientific_review.py diagnostic_rules; reliability edges 0,.1,...,1, last includes1; rain intervals unchanged",
+  "seasons": [
+    "MAM",
+    "JJA",
+    "SO_PARTIAL_AUTUMN"
+  ],
+  "day_night": "latest frozen B13 nominal UTC+8 civil clock [06:00,18:00) proxy only; not astronomical daylight; predeclared before supplemental outputs",
+  "terrain": "NOT_ESTIMABLE_NO_PREDEFINED_SUBREGION_MASK_AVAILABLE; no DEM resampling or new regions",
+  "independent_events": "NOT_ESTIMABLE_NO_PREDEFINED_EVENT_CATALOGUE",
+  "probability_cutoff": "THRESHOLD_NOT_FROZEN; POD/FAR/CSI not estimated",
+  "conditional_quantile_set": "IMERG float32 > float32(0.1), valid Yunnan cells; log1p(y)<=qlog, frozen32tau",
+  "upper_tail_thresholds": [
+    10,
+    50,
+    100,
+    500,
+    1000
+  ],
+  "upper_tail_units": [
+    "scene-pixel-tau exposure",
+    "scene-pixel any-tau exposure",
+    "unique target grid cells",
+    "scenes"
+  ],
+  "ranking": "Exact BF16 score counts and original tied-rank conventions; reject non-BF16 scores rather than round",
+  "proxy": "p_rain * mean(expm1(32 conditional qlog)); diagnostic only, not true expectation; physical conversion only in detached read-only observer",
+  "MODEL_PARAMETERS_UPDATED": false,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true
+}
