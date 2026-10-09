@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "tests_run": 13,
+  "failures": 0,
+  "errors": 0,
+  "TEST_FIXTURE_ONLY": true,
+  "test_scope": "metadata evidence guards and mocked child failure; no real model or subprocess",
+  "initial_fixture_failures_preserved_in_record": [
+    {
+      "suite": "packet 9 tests",
+      "result": "8 pass, 1 failure",
+      "reason": "synthetic fixtures accidentally shared BEST object; independent copies fixed"
+    },
+    {
+      "suite": "packet + closeout 13 tests",
+      "result": "12 pass, 1 error",
+      "reason": "sandbox temp directory denied write/cleanup; rerun with owned repository fixture root under pinned CUDA interpreter"
+    }
+  ],
+  "fixture_roots_cleaned": true,
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+  "ENGINEERING_OPTIMIZER_STEPS": 0,
+  "MODEL_FORWARD_CALLS": 0,
+  "RAW_SOURCE_OPENS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "original_770_test_evidence_preserved_not_rerun": true,
+  "source_sha256": {
+    "build_paired_decision_packet_v2.py": "0dd3525aaa4eef5d381ce708011e927c74a874474c978592f6c074be5f9194d1",
+    "test_paired_decision_packet_v2.py": "2abc39ccfbc018a1205e32b3ac068ccfe6420b9e7a482f2824f7e12d7baec2a9",
+    "run_read_only_closeout_v2.py": "05b2bb674bff6da1d9e44df2d705a3e8dcdbefe39367bcd1849fa4241c766d5c",
+    "test_read_only_closeout_v2.py": "011e9b5875620e6be75d79fd2921c164eb3914b232d8df5b057758e735f7b6f3"
+  },
+  "completed_utc": "2026-10-09T05:16:57.532945+00:00"
+}
