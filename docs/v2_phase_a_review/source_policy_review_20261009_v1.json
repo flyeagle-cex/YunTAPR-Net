@@ -1,0 +1,132 @@
+{
+  "status": "FROZEN_SOURCE_POLICY_AND_PREFLIGHT_BINDING_PASS",
+  "audit_type": "STATIC_SOURCE_REVIEW_NO_MODEL_OR_RAW_READS",
+  "source_authority_sha256": "e32404d0d397dd62e1763d3fb16b4a8d8c72fb79ba52bae3f40ac095f4492869",
+  "source_references": {
+    "src/yuntapr/models/quantile_v2/parameterization.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\parameterization.py",
+      "sha256": "a4846983198636529ff4c4352756bccbcaa54103ec26cf64ad93eb2dddc46d8a"
+    },
+    "src/yuntapr/models/quantile_v2/outputs.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\outputs.py",
+      "sha256": "2efc025e5202e380de0e06203c0701309649c0e4d982aaf49e66daff641b22c7"
+    },
+    "src/yuntapr/models/quantile_v2/heads.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\heads.py",
+      "sha256": "731b0e75743c066d4da12e996cfd5dcc9e600b8133a1e86f11e9b1db7038bff3"
+    },
+    "src/yuntapr/models/quantile_v2/models.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\models\\quantile_v2\\models.py",
+      "sha256": "aaddd22e08a58f45a034217d54489b0b13388b33dcdd5ddf83542176c8e35fe5"
+    },
+    "src/yuntapr/training/formal_phase_a_v2.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py",
+      "sha256": "94d10e041057c33ba4bdea9863cd83418d3e814ba141724e391613720cfe9790"
+    },
+    "src/yuntapr/training/checkpoint_v2.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\checkpoint_v2.py",
+      "sha256": "597d71aabb60bab972bf7df6c58750d1201824cc2595e65fa07c2a8dede09e52"
+    },
+    "src/yuntapr/losses/total_loss.py": {
+      "absolute_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\losses\\total_loss.py",
+      "sha256": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0"
+    }
+  },
+  "active_functions_checked": [
+    {
+      "path": "src/yuntapr/models/quantile_v2/parameterization.py",
+      "function": "normalized_monotonic_quantiles",
+      "line": 20,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/models/quantile_v2/outputs.py",
+      "function": "validate_log_quantiles",
+      "line": 26,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/models/quantile_v2/heads.py",
+      "function": "forward",
+      "line": 15,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/models/quantile_v2/models.py",
+      "function": "forward",
+      "line": 23,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/training/formal_phase_a_v2.py",
+      "function": "forward_loss",
+      "line": 157,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/training/formal_phase_a_v2.py",
+      "function": "update",
+      "line": 173,
+      "forbidden_repair_or_physical_calls": []
+    },
+    {
+      "path": "src/yuntapr/losses/total_loss.py",
+      "function": "b0_core_loss",
+      "line": 24,
+      "forbidden_repair_or_physical_calls": []
+    }
+  ],
+  "strict_numerical_failure_messages_verified": [
+    "V2_QLOG_NONFINITE",
+    "V2_SUPPORT_LOST_AT_TENSOR_PRECISION",
+    "V2_STRICT_ORDER_LOST_AT_TENSOR_PRECISION",
+    "V2_GRADIENT_NONFINITE_OR_MISSING",
+    "V2_POST_STEP_NONFINITE"
+  ],
+  "provenance_verified_before_state_application": true,
+  "complete_train_validation_required_by_checkpoint_guard": true,
+  "existing_checkpoint_or_incomplete_artifact_never_overwritten": true,
+  "failure_evidence_immutable_and_automatic_resume_false": true,
+  "initial_model_states": {
+    "B0_MATCHED_V2": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+    "B1_V2": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331"
+  },
+  "paired_independent_reseed_2026_verified": true,
+  "preflight_manifest_sha256": "d17bff69c08fce473c161965e0853868dd1cfd149573982e56b07fc509ca45b7",
+  "preflight_source_files_verified": 67006,
+  "engineering_optimizer_steps": 4,
+  "preflight_formal_optimizer_steps": 0,
+  "full_test_summary_sha256": "42dda3065426c441ace057f740c6784545466f1babd5f68bf23fca243d75a16f",
+  "full_test_counts": {
+    "NEW_RUNNER": {
+      "run": 34,
+      "passed": 34,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "V2_NUMERICAL": {
+      "run": 39,
+      "passed": 39,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "V1_REGRESSION": {
+      "run": 697,
+      "passed": 697,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "counter_scope_note": "4 engineering steps are historical preflight; this source audit adds zero operations",
+  "scope_limit": "Static active-path source check plus pinned existing preflight evidence; does not claim universal floating-point representability or replace full run/inference audits",
+  "AUDIT_FORWARD_CALLS": 0,
+  "AUDIT_BACKWARD_CALLS": 0,
+  "AUDIT_OPTIMIZER_STEPS": 0,
+  "AUDIT_RAW_SOURCE_OPENS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "created_utc": "2026-10-09T05:55:06.854154+00:00"
+}
