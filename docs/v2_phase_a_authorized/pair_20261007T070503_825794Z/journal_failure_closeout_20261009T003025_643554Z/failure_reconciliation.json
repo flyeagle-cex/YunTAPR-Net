@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "retained_trajectory_updates": 73192,
+  "all_attempt_updates_lower_bound": 76669,
+  "all_attempt_updates_upper_bound": 76669,
+  "discarded_updates_lower_bound": 3477,
+  "discarded_updates_upper_bound": 3477,
+  "attempts": [
+    {
+      "attempt": "run_20261008T010824_279406Z",
+      "updates_lower_bound": 76287,
+      "updates_upper_bound": 76287,
+      "certainty": "EXACT_PROCESS_COUNTER"
+    },
+    {
+      "attempt": "run_20261009T001234_525667Z",
+      "updates_lower_bound": 382,
+      "updates_upper_bound": 382,
+      "certainty": "EXACT_PROCESS_COUNTER"
+    }
+  ],
+  "half_epoch_state_reused": false,
+  "failure_counters": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 383,
+    "TRAIN_FORWARDS": 383,
+    "VALIDATION_FORWARDS": 0,
+    "BACKWARD_CALLS": 383,
+    "OPTIMIZER_STEP_ATTEMPTS": 383,
+    "OPTIMIZER_STEPS": 382,
+    "CHECKPOINT_WRITES": 0
+  },
+  "io": {
+    "RAW_SOURCE_OPENS": 10780,
+    "NATIVE_DECODES": 6161,
+    "DENIED_ATTEMPTS": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "log_files": [
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T001234_525667Z\\raw_access_parent.jsonl",
+        "bytes": 272,
+        "sha256": "2ecb7870e2df9a4a3f44af7838493abde9faa094036b218f00fc096cb5685140"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T001234_525667Z\\raw_access_worker_43600.jsonl",
+        "bytes": 3399553,
+        "sha256": "ba7d0592c26e806bfe87707bae8a95fee6bd1392bf014c2f17080743fdd6df29"
+      },
+      {
+        "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T001234_525667Z\\raw_access_worker_46992.jsonl",
+        "bytes": 3381933,
+        "sha256": "609c1fa47a941ed448e7eeda44f1fab03ed33ebeaf91edcdb275360caa99b615"
+      }
+    ],
+    "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+  },
+  "formal_optimizer_steps_added_by_this_audit": 0,
+  "next_resume_epoch": 15,
+  "only_permitted_start": "Verified completed epoch 14 LAST",
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false
+}

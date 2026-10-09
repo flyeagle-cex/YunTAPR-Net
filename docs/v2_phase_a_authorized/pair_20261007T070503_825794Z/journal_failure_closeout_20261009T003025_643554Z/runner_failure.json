@@ -1,0 +1,26 @@
+{
+  "status": "FAILED_STOP",
+  "error": "PermissionError(13, 'Permission denied')",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 380, in train_one\n    metrics, observation = update(model, optimizer, batch, (ep-1)*STEPS+step, counters, train_diag, ep_dir / 'steps.jsonl')\n                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\formal_phase_a_v2.py\", line 189, in update\n    if journal: append_event(journal, 'OPTIMIZER_STEP_ATTEMPT', update=u)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_audit_v2.py\", line 53, in append_event\n    with p.open('a', encoding='utf-8', newline='\\n') as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\AppData\\Roaming\\uv\\python\\cpython-3.12.14-windows-x86_64-none\\Lib\\pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-v2-phase-a-execution\\src\\yuntapr\\training\\phase_a_audit_v2.py\", line 138, in opened\n    handle = original(file, *args, **kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 13] Permission denied: 'F:\\\\pytorch\\\\Research\\\\outputs\\\\formal_training\\\\b1_v2_phase_a\\\\run_20261007T070503_825795Z\\\\audit\\\\run_20261009T001234_525667Z\\\\epoch_015\\\\steps.jsonl'\n",
+  "epoch": 15,
+  "step": 383,
+  "sample_ids": [
+    "2023-08-27T23:00:00+00:00",
+    "2023-05-08T21:00:00+00:00"
+  ],
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 383,
+    "TRAIN_FORWARDS": 383,
+    "VALIDATION_FORWARDS": 0,
+    "BACKWARD_CALLS": 383,
+    "OPTIMIZER_STEP_ATTEMPTS": 383,
+    "OPTIMIZER_STEPS": 382,
+    "CHECKPOINT_WRITES": 0
+  },
+  "retained_completed_epoch": 14,
+  "uncheckpointed_updates_are_not_resumable": true,
+  "automatic_resume": false,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "TEST_FIXTURE_ONLY": true,
+  "default_dotnet_readlines_blocks_pinned_append_event": true,
+  "reproduced_error": {
+    "errno": 13,
+    "winerror": null,
+    "error": "PermissionError(13, 'Permission denied')"
+  },
+  "explicit_readwrite_delete_reader_concurrent_appends_pass": 1000,
+  "approved_audit_reader_policy": "No default .NET File.ReadLines/Get-Content on live journals; use explicit FileShare.ReadWrite|Delete or tested Python reader.",
+  "mutable_atomic_json_policy": "Never open live atomic-replacement targets.",
+  "fixtures_cleaned": true,
+  "formal_optimizer_steps_added": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "completed_utc": "2026-10-09T00:26:04.698788+00:00"
+}

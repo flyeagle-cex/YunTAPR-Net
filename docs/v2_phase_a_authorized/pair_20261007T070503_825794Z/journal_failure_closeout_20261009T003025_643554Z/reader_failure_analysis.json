@@ -1,0 +1,17 @@
+{
+  "status": "ENGINEERING_IO_FAILURE",
+  "observed_error": "PermissionError(13, 'Permission denied')",
+  "failed_operation": "Append OPTIMIZER_STEP_ATTEMPT before optimizer.step",
+  "auditor_action": "Default .NET File.ReadLines used by Codex for live prefix reconciliation at failure time",
+  "causal_assessment": "The auditor reader denies write sharing; isolated fixture reproduces the same PermissionError. The contemporaneous handle was not captured, so exact OS handle ownership is not independently logged.",
+  "scientific_numerical_failure_observed": false,
+  "responsibility": "Codex external audit reader; not a frozen protocol or model change",
+  "corrective_policy": "No default .NET File.ReadLines/Get-Content on live journals; use explicit FileShare.ReadWrite|Delete or tested Python reader.",
+  "mutable_atomic_json_policy": "Never open live atomic-replacement targets.",
+  "reproduction_test": {
+    "path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_authorized\\journal_reader_sharing_test_20261009_v1.json",
+    "sha256": "17aeb4b09cb23abbccebc743a6f5734c97dd80740e65519af393ea43c4ab0479"
+  },
+  "no_training_code_change": true,
+  "no_automatic_retry": true
+}
