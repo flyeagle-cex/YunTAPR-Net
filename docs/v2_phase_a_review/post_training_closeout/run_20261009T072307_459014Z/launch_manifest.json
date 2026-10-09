@@ -1,0 +1,87 @@
+{
+  "status": "READ_ONLY_CLOSEOUT_LAUNCHED",
+  "publication_commit": "5854f17040f71ab3a0f2c7601b7c2a81c0281812",
+  "verified_remote_main": "5584fae8aaa374222734ef30da96e3fb96a55b00",
+  "code_sha256": {
+    "docs/v2_phase_a_review/run_read_only_closeout_v2.py": "05b2bb674bff6da1d9e44df2d705a3e8dcdbefe39367bcd1849fa4241c766d5c",
+    "docs/v2_phase_a_review/completion_gate.py": "70a9331e12e439ea737623fddfeb2fafc85a2d052e1b94041fa818e723a995f7",
+    "docs/v2_phase_a_review/closeout_audit_v2.py": "e56de10934ffa75bab2e6c29991a69ebd9b54a667fb9f146c3113f5dcada01b1",
+    "docs/v2_phase_a_review/build_paired_decision_packet_v2.py": "0dd3525aaa4eef5d381ce708011e927c74a874474c978592f6c074be5f9194d1",
+    "docs/v2_phase_a_authorized/review_paired_best_v2.py": "70ef5df88d74b73a6988497eebf8da885aa02a11bf6faf84fc8151dbe6034e21",
+    "docs/v2_phase_a_authorized/review_v2_helpers.py": "bc52164e49904f7213fd3a307cd5c0cbd2b343a5454619e3b7553ef488c1dcf9"
+  },
+  "completion_authorization_sha256": "73d8e76649ac1310ff1a541cb7f0e7518c4ad527c8571113726b56312c7115a2",
+  "metadata_gate": {
+    "status": "METADATA_COMPLETION_GATE_PASS",
+    "REVIEW_INFERENCE_ALLOWED": false,
+    "origin_authorization_sha256": "e32404d0d397dd62e1763d3fb16b4a8d8c72fb79ba52bae3f40ac095f4492869",
+    "completion_authorization_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_authorized\\pair_20261007T070503_825794Z\\resume_20261009T003216_479921Z\\authorization.json",
+    "next_gate": "Rehash code/config/data identities, all local epoch artifacts and checkpoint bytes; provenance before model state application",
+    "models": {
+      "B0_MATCHED_V2": {
+        "completed_epoch": 17,
+        "best_checkpoint_epoch": 9,
+        "best_es_epoch": 9,
+        "best_es_value": 0.0487596076193766,
+        "final_early_stop_counter": 8,
+        "termination_reason": "EARLY_STOP_PATIENCE_8",
+        "BEST": {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261007T070818_003523Z\\epoch_009.pt",
+          "bytes": 52086571,
+          "sha256": "c9ea052522557df8eaf869a447ec8ae013e657004888a56b9d3944db9a1fd5c2",
+          "epoch": 9,
+          "model": "B0_MATCHED_V2",
+          "run_id": "run_20261007T070503_825794Z",
+          "global_update": 47052,
+          "scope": "FORMAL"
+        },
+        "LAST": {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b0_matched_v2_phase_a\\run_20261007T070503_825794Z\\checkpoints\\run_20261008T002823_025978Z\\epoch_017.pt",
+          "bytes": 52086635,
+          "sha256": "3b7bfe2ea14e1065b122b89501b11fbad2e7d068824ebc902930bc1afde3c857",
+          "epoch": 17,
+          "model": "B0_MATCHED_V2",
+          "run_id": "run_20261007T070503_825794Z",
+          "global_update": 88876,
+          "scope": "FORMAL"
+        }
+      },
+      "B1_V2": {
+        "completed_epoch": 17,
+        "best_checkpoint_epoch": 9,
+        "best_es_epoch": 9,
+        "best_es_value": 0.047816404266642944,
+        "final_early_stop_counter": 8,
+        "termination_reason": "EARLY_STOP_PATIENCE_8",
+        "BEST": {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_009.pt",
+          "bytes": 52115371,
+          "sha256": "d5a45f9ac0f89a7870caff08eed6b5b209dbc0a62ad593ba2ba68271e570fc4a",
+          "epoch": 9,
+          "model": "B1_V2",
+          "run_id": "run_20261007T070503_825795Z",
+          "global_update": 47052,
+          "scope": "FORMAL"
+        },
+        "LAST": {
+          "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261009T004140_659958Z\\epoch_017.pt",
+          "bytes": 52115435,
+          "sha256": "8f00d60ccfb31530f98dbd3b86c919cda6dbc75add970033f023db3f41bc0d5f",
+          "epoch": 17,
+          "model": "B1_V2",
+          "run_id": "run_20261007T070503_825795Z",
+          "global_update": 88876,
+          "scope": "FORMAL"
+        }
+      }
+    },
+    "V2_PHASE_B_AUTHORIZED": false,
+    "2025_RAW_ACCESS": 0
+  },
+  "b0_terminal_audit_sha256": "f948265c8c5412777cbe94c94ebb37f095c472134ec4b92947b63c50e9a3b0a7",
+  "monitor_url": "http://127.0.0.1:8771/",
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}

@@ -1,0 +1,105 @@
+% Layout-only copy; original SHA256=d1689647e10f83e589f4fde269247b7f377764a3c40e5c9e71c325487900e82a
+\documentclass[UTF8,a4paper,11pt,fontset=windows]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{booktabs,longtable,array,hyperref}
+\hypersetup{hidelinks}\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}\setlength{\emergencystretch}{2em}\renewcommand{\arraystretch}{1.15}
+\title{YunTAPR-Net v2 配对 Phase-A\\开发实验决策包}
+\author{工程审计记录}\date{2026-10-09T08:19:21.920144+00:00}
+\begin{document}\maketitle
+\section{执行范围与完成边界}
+两个模型均按冻结规则完成 Phase-A。BEST 仅由 global validation core loss 选择；上尾诊断不影响损失、BEST、早停、学习率、参数或 batch。
+本报告使用共同的 2023 训练样本集合（10,455 场景）与 2024 验证样本集合（10,501 场景）。2024 指标属于开发阶段验证，不构成 2025 泛化评价。
+\textbf{2025 raw access=0；2025 pixels read=0；Phase-B 未授权。}
+研究者仍需审查本决策包。PDF 排版核验和最终 GitHub 发布由独立收尾记录证明。
+\section{冻结协议与配对输入}
+B0-Matched-v2 使用最新 B13 单帧；B1-v2 使用六个因果历史 B13 时相。其余 backbone、SP04、输出头、损失、优化器和评价合同一致。
+Seed=2026；全新同名同形配对初始化；共享 normalization：mean=271.60515414265217 K，std=19.93959597783802 K。
+AdamW；训练 batch=2、尾部 singleton 保留；每 epoch 5,228 updates；最多 50 epochs；base LR=$10^{-4}$，cosine min LR=$10^{-6}$；warmup=5,228，固定 horizon=261,400；gradient clip=5；validation batch=8，尾部 5 场景。
+32 条件分位数，$\tau_i=(i-0.5)/32$；$z_0=\log(1+0.1)$；$\epsilon_w=\epsilon_{span}=10^{-4}$；FP64 归一化单调变换。
+训练与验证核心路径不实例化物理降水。严格有限性、单调性、支持域和梯度保护保持冻结；无 clamp、sort、静默修复或自动跳 batch。
+\section{BEST、早停与正式计数}
+\par\noindent\begin{tabular}{lrr}\toprule 项目 & B0-Matched-v2 & B1-v2\\\midrule
+完整 epoch & 17 & 17\\
+BEST epoch & 9 & 9\\
+early-stop best epoch & 9 & 9\\
+early-stop best value & 0.0487596076194 & 0.0478164042666\\
+最终 patience counter & 8 & 8\\
+保留轨迹 optimizer steps & 88876 & 88876\\
+\bottomrule\end{tabular}\par
+早停固定 patience=8、min\_delta=$10^{-4}$；BEST 严格最小值选择与 early-stop 最小改善量分别重算，不能互相替代。
+B0-Matched-v2：终止原因：固定早停（patience=8）；all-attempt updates=89175 至 89176；discarded updates=299 至 300。
+B1-v2：终止原因：固定早停（patience=8）；all-attempt updates=92353 至 92353；discarded updates=3477 至 3477。
+中断尝试完整保留。已知区间不补造精确值；半 epoch 状态没有进入保留轨迹。正式、工程测试、审计与只读推理计数分别登记。
+\section{全量 2024 只读 BEST 比较}
+两模型按共同固定顺序完成各 1,313 次只读 forward。每模型有效云南 scene-pixel exposure 为 36,018,430；固定 mask 含 3,430 格点。核心损失逐项零容差对账通过，模型参数 SHA 前后一致。
+\par\noindent\begin{tabular}{lrr}\toprule 指标 & B0-Matched-v2 & B1-v2\\\midrule
+全局验证核心损失 & 0.0487596076194 & 0.0478164042666\\
+Brier & 0.0968676263395 & 0.0952534705091\\
+AUROC & 0.886357037272 & 0.893468821807\\
+AP & 0.567232691216 & 0.585904924452\\
+条件平均 pinball & 0.124885458292 & 0.124113222868\\
+\bottomrule\end{tabular}\par
+核心损失按全体有效格点的原始分子全局累计；Brier 使用发生概率；AUROC/AP 使用固定事件标签和并列分数组；conditional mean pinball 的分母为雨像元数，单位为 log1p(mm/h)。不定义 POD/FAR/CSI 新阈值，不做校准、阈值调优、checkpoint 或 epoch 重选。
+\section{只读上尾诊断}
+下面为各 BEST 的全量 2024 验证诊断。全部完整 epoch 的 TRAIN/VALIDATION 诊断另存 upper-tail history。p99/p99.9 是每次 forward 的 q32 最大值分布，采用 FP64 linear quantile；每次 forward 等权，不是全部像元池的分位数。
+\begin{longtable}{llrrr}\toprule 模型/区域 & max qlog & p99 & p99.9 & FP64风险\\\midrule\endhead
+B0-Matched-v2/云南内 & 4.54600608548 & 4.25004026117 & 4.48909491365 & False\\
+B0-Matched-v2/云南外 & 6.66720781648 & 5.04684530896 & 5.4761291241 & False\\
+B1-v2/云南内 & 5.86386614966 & 4.81713982394 & 5.47389451288 & False\\
+B1-v2/云南外 & 8.48617442129 & 5.98370239391 & 6.85393999165 & False\\
+\bottomrule\end{longtable}
+FP64 物理边界为 log1p(float64 max)=709.782712893384。风险标记仅针对观察到的轨迹，不保证未来不存在风险；它不是训练停止或修复条件。
+\begin{longtable}{llrrr}\toprule 模型 & 区域 & mm/h阈值 & pixel-tau & pixel-any-tau\\\midrule\endhead
+B0-Matched-v2 & 云南内 & 10 & 977619 & 502578\\
+B0-Matched-v2 & 云南内 & 50 & 677 & 653\\
+B0-Matched-v2 & 云南内 & 100 & 0 & 0\\
+B0-Matched-v2 & 云南内 & 500 & 0 & 0\\
+B0-Matched-v2 & 云南内 & 1000 & 0 & 0\\
+B0-Matched-v2 & 云南外 & 10 & 4621128 & 2091173\\
+B0-Matched-v2 & 云南外 & 50 & 13783 & 12394\\
+B0-Matched-v2 & 云南外 & 100 & 460 & 444\\
+B0-Matched-v2 & 云南外 & 500 & 1 & 1\\
+B0-Matched-v2 & 云南外 & 1000 & 0 & 0\\
+B1-v2 & 云南内 & 10 & 777649 & 419821\\
+B1-v2 & 云南内 & 50 & 994 & 957\\
+B1-v2 & 云南内 & 100 & 58 & 58\\
+B1-v2 & 云南内 & 500 & 0 & 0\\
+B1-v2 & 云南内 & 1000 & 0 & 0\\
+B1-v2 & 云南外 & 10 & 4462628 & 2085876\\
+B1-v2 & 云南外 & 50 & 33149 & 31217\\
+B1-v2 & 云南外 & 100 & 3750 & 3713\\
+B1-v2 & 云南外 & 500 & 25 & 25\\
+B1-v2 & 云南外 & 1000 & 4 & 4\\
+\bottomrule\end{longtable}
+仅比较 qlog > log1p(阈值)，不执行 expm1。pixel-tau 按每个 scene、像元、tau 计数；pixel-any-tau 按该 scene-pixel 至少一个 tau 超过阈值计数。所有阈值仅作描述，不形成训练规则或新 QC。
+\clearpage\section{冻结来源与检查点登记}
+\begin{longtable}{p{36mm}p{116mm}}\toprule 身份 & SHA / commit\\\midrule\endhead
+科学协议 SHA256 & {\footnotesize\ttfamily a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be}\\
+分位数头 SHA256 & {\footnotesize\ttfamily 3a865a6e4ab180f61d7ab6e2f684ab6b814bfe6b2e59a34d127ddf1d772fc97e}\\
+归一化 SHA256 & {\footnotesize\ttfamily 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31}\\
+科学冻结 commit & {\footnotesize\ttfamily d049f7ab7b8a382f47a5fe54384ea9416a22cde9}\\
+实现 commit & {\footnotesize\ttfamily a1af0325b481202941c57e8fc94f3b20e441630a}\\
+完成授权 SHA256 & {\footnotesize\ttfamily 73d8e76649ac1310ff1a541cb7f0e7518c4ad527c8571113726b56312c7115a2}\\
+决策包脚本 SHA256 & {\footnotesize\ttfamily 0dd3525aaa4eef5d381ce708011e927c74a874474c978592f6c074be5f9194d1}\\
+B0 初始状态 SHA256 & {\footnotesize\ttfamily a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719}\\
+B1 初始状态 SHA256 & {\footnotesize\ttfamily f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331}\\
+\bottomrule\end{longtable}
+B0-Matched-v2 BEST：epoch=9，bytes=52086571，SHA256=\par
+{\footnotesize\ttfamily c9ea052522557df8eaf869a447ec8ae013e657004888a56b9d3944db9a1fd5c2}\par
+{\footnotesize\raggedright\path{F:/pytorch/Research/outputs/formal_training/b0_matched_v2_phase_a/run_20261007T070503_825794Z/checkpoints/run_20261007T070818_003523Z/epoch_009.pt}\par}
+B0-Matched-v2 LAST：epoch=17，bytes=52086635，SHA256=\par
+{\footnotesize\ttfamily 3b7bfe2ea14e1065b122b89501b11fbad2e7d068824ebc902930bc1afde3c857}\par
+{\footnotesize\raggedright\path{F:/pytorch/Research/outputs/formal_training/b0_matched_v2_phase_a/run_20261007T070503_825794Z/checkpoints/run_20261008T002823_025978Z/epoch_017.pt}\par}
+B1-v2 BEST：epoch=9，bytes=52115371，SHA256=\par
+{\footnotesize\ttfamily d5a45f9ac0f89a7870caff08eed6b5b209dbc0a62ad593ba2ba68271e570fc4a}\par
+{\footnotesize\raggedright\path{F:/pytorch/Research/outputs/formal_training/b1_v2_phase_a/run_20261007T070503_825795Z/checkpoints/run_20261008T010824_279406Z/epoch_009.pt}\par}
+B1-v2 LAST：epoch=17，bytes=52115435，SHA256=\par
+{\footnotesize\ttfamily 8f00d60ccfb31530f98dbd3b86c919cda6dbc75add970033f023db3f41bc0d5f}\par
+{\footnotesize\raggedright\path{F:/pytorch/Research/outputs/formal_training/b1_v2_phase_a/run_20261007T070503_825795Z/checkpoints/run_20261009T004140_659958Z/epoch_017.pt}\par}
+所有 checkpoint 文件和内部 model、optimizer、scheduler、RNG 与 permutation 身份经完整审计。GitHub 仅保存身份、SHA、大小、本地路径与轻量证据，不上传模型或优化器二进制。
+可机器核验的来源路径、SHA、完整历史、counter scopes 和 per-epoch audit 见本包 JSON/CSV 及其 source evidence 索引。
+\section{研究者审查事项}
+本包不自动接受实验，不转移 epoch budget，不启动 FinalFit、Phase-B 或 2025 推理。请研究者基于已冻结比较规则审查开发阶段结果，再单独决定后续授权。
+\par\textbf{需要研究者审查配对 Phase-A；Phase-B 未授权。}\par
+\end{document}

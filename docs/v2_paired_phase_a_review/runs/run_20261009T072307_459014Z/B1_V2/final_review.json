@@ -1,0 +1,204 @@
+{
+  "status": "FULL_2024_BEST_REVIEW_PASS",
+  "model": "B1_V2",
+  "BEST": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_009.pt",
+    "bytes": 52115371,
+    "sha256": "d5a45f9ac0f89a7870caff08eed6b5b209dbc0a62ad593ba2ba68271e570fc4a",
+    "epoch": 9,
+    "model": "B1_V2",
+    "run_id": "run_20261007T070503_825795Z",
+    "global_update": 47052,
+    "scope": "FORMAL"
+  },
+  "metrics": {
+    "S_occ": 1164184.2919823646,
+    "S_qr": 558087.5179474156,
+    "N_valid": 36018430,
+    "N_rain": 4496600,
+    "scenes": 10501,
+    "forwards": 1313,
+    "global_val_core_loss": 0.047816404266642944,
+    "global_L_occ": 0.032321905535093134,
+    "global_core_L_qr": 0.01549449873154981,
+    "numerator_dtype": "float64",
+    "physical_materialization": false,
+    "strict_crossing_count": 0,
+    "support_violation_count": 0,
+    "nonfinite_count": 0,
+    "Brier_Score": 0.09525347050913102,
+    "AUROC": 0.893468821807229,
+    "Average_Precision": 0.5859049244520397,
+    "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+    "AUROC_convention": "TRAPEZOID_GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+    "undefined_reason": null,
+    "probability_cutoff_status": "THRESHOLD_NOT_FROZEN",
+    "conditional_mean_pinball": 0.1241132228678147,
+    "conditional_pinball_units": "log1p(mm/h)",
+    "conditional_pinball_denominator": "N_rain; tau mean over 32 frozen conditional quantiles",
+    "per_tau_pinball": [
+      0.009159331014861867,
+      0.026800835342827147,
+      0.043345177236326596,
+      0.05880853405676898,
+      0.07362418814877514,
+      0.08760480890282686,
+      0.10023542619871596,
+      0.11234522325211083,
+      0.12347982826067727,
+      0.13375228878509554,
+      0.14293201474436315,
+      0.15129100931200218,
+      0.1586337564753248,
+      0.16502249776253378,
+      0.17025702330226555,
+      0.17452595875992935,
+      0.17763930234316186,
+      0.17967766062009957,
+      0.1804456114058857,
+      0.1800284033417849,
+      0.17832246585213832,
+      0.17514319748228696,
+      0.1705296928030342,
+      0.16447594074331748,
+      0.15655695913801312,
+      0.14682557681410102,
+      0.13515818583726047,
+      0.12096612059939814,
+      0.10342101016978894,
+      0.08299480456344774,
+      0.058199335636038685,
+      0.02942096286491251
+    ],
+    "POD": "THRESHOLD_NOT_FROZEN",
+    "FAR": "THRESHOLD_NOT_FROZEN",
+    "CSI": "THRESHOLD_NOT_FROZEN",
+    "checkpoint_selection_performed": false
+  },
+  "upper_tail_diagnostics": {
+    "phase": "VALIDATION",
+    "forwards": 1313,
+    "scenes": 10501,
+    "qlog_unit": "log1p(mm/h)",
+    "FP64_physical_boundary": 709.782712893384,
+    "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+    "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+    "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+    "YUNNAN_INSIDE": {
+      "max_qlog": 5.8638661496646645,
+      "q32_per_forward_max_p99": 4.817139823937392,
+      "q32_per_forward_max_p99_9": 5.473894512881441,
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 1152589760,
+      "scene_pixel_any_tau_exposure": 36018430,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 777649,
+          "scene_pixel_any_tau_exposure": 419821
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 994,
+          "scene_pixel_any_tau_exposure": 957
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 58,
+          "scene_pixel_any_tau_exposure": 58
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 0,
+          "scene_pixel_any_tau_exposure": 0
+        }
+      }
+    },
+    "YUNNAN_OUTSIDE": {
+      "max_qlog": 8.4861744212897,
+      "q32_per_forward_max_p99": 5.983702393913676,
+      "q32_per_forward_max_p99_9": 6.853939991651565,
+      "FP64_PHYSICAL_OVERFLOW_RISK": false,
+      "fp64_boundary_exceedance_count": 0,
+      "scene_pixel_tau_exposure": 2207730240,
+      "scene_pixel_any_tau_exposure": 68991570,
+      "threshold_exceedances": {
+        "10": {
+          "scene_pixel_tau_exposure": 4462628,
+          "scene_pixel_any_tau_exposure": 2085876
+        },
+        "50": {
+          "scene_pixel_tau_exposure": 33149,
+          "scene_pixel_any_tau_exposure": 31217
+        },
+        "100": {
+          "scene_pixel_tau_exposure": 3750,
+          "scene_pixel_any_tau_exposure": 3713
+        },
+        "500": {
+          "scene_pixel_tau_exposure": 25,
+          "scene_pixel_any_tau_exposure": 25
+        },
+        "1000": {
+          "scene_pixel_tau_exposure": 4,
+          "scene_pixel_any_tau_exposure": 4
+        }
+      }
+    }
+  },
+  "io": {
+    "RAW_SOURCE_OPENS": 147014,
+    "NATIVE_DECODES": 84009,
+    "DENIED_ATTEMPTS": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "log_files": [
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_paired_phase_a_review\\runs\\run_20261009T072307_459014Z\\B1_V2\\raw_access_parent.jsonl",
+        "bytes": 272,
+        "sha256": "9a112eae20ca40fe305a3ee6e23b8d4fa712eab143a0656ff3e169f1f337237a"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_paired_phase_a_review\\runs\\run_20261009T072307_459014Z\\B1_V2\\raw_access_worker_28488.jsonl",
+        "bytes": 45116446,
+        "sha256": "cd92f6ef86e2f15e7851c7e9cc87e6b03287b3b427ae3ab8ae8101eb4e199c56"
+      },
+      {
+        "absolute_local_path": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_paired_phase_a_review\\runs\\run_20261009T072307_459014Z\\B1_V2\\raw_access_worker_47488.jsonl",
+        "bytes": 45159441,
+        "sha256": "26a2d913db183dad5541bc736794354b0993bed46c918b2e02cfb5e30716a4ec"
+      }
+    ],
+    "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+  },
+  "training_best_metric_reconciliation": {
+    "tolerance": 0,
+    "mismatches": {},
+    "keys": [
+      "S_occ",
+      "S_qr",
+      "N_valid",
+      "N_rain",
+      "scenes",
+      "forwards",
+      "global_val_core_loss",
+      "global_L_occ",
+      "global_core_L_qr",
+      "strict_crossing_count",
+      "support_violation_count",
+      "nonfinite_count"
+    ]
+  },
+  "model_state_sha256_before": "12179a450b6bd155212651bb447bd5aa424745dd25784becf2c60f6d909f1206",
+  "model_state_sha256_after": "12179a450b6bd155212651bb447bd5aa424745dd25784becf2c60f6d909f1206",
+  "validation_sample_ids_sha256": "f5e8c39644312850c17f1578c776ac90febd5c5b4a5702f6c739f53256984db2",
+  "MODEL_PARAMETERS_UPDATED": false,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "REVIEW_FORWARD_CALLS": 1313,
+  "staging_temporary_files_remaining": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false
+}
