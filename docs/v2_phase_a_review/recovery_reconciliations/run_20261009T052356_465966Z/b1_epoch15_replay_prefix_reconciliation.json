@@ -1,0 +1,108 @@
+{
+  "status": "B1_RETAINED_EPOCH_15_REPLAY_PREFIX_PASS",
+  "source_sha256": {
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training_v2\\pair_20261007T070503_825794Z\\B1_V2\\final_report.json": "02c910b8c8ce620d58884b7fbdc62c2b56ffdc0b4d849fa51492caf5afceae4f",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\formal_training_v2\\pair_20261007T070503_825794Z\\B1_V2\\training_validation_history.json": "0e672de146b4df6443da2c58b5159a14bd0261f197b726384ccda5a85b091289",
+    "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\epoch_015\\steps.jsonl": "5195b959e4e03c8f34b154807e6c16e34f24e34b9e78ddc59764d22c7c58f775",
+    "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T004140_659958Z\\resume_identity.json": "52669402671d151910ac166200c958a7d2b9c934bdb7d37a8e81d5225c07730f",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_authorized\\pair_20261007T070503_825794Z\\resume_20261009T003216_479921Z\\applied_resume_identity_snapshot.json": "52669402671d151910ac166200c958a7d2b9c934bdb7d37a8e81d5225c07730f",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_authorized\\pair_20261007T070503_825794Z\\resume_20261009T003216_479921Z\\applied_resume_identity_verification.json": "8ad0c29b34f664d5aecad89eb934a7960f2e4876dbd75110f6e3f8415ba025b6",
+    "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\v2_phase_a_authorized\\pair_20261007T070503_825794Z\\resume_20261009T003216_479921Z\\resume_precheck.json": "0e8f1522bc7b1fd098af41efbdbc59c581b653a2dfdbf5bca8c5208f1ae52f6c",
+    "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261008T010824_279406Z\\epoch_015\\steps.jsonl": "adb1ee81258edcedf7b1b8f1d470975398ad7d32e604d0fced9dd1519fa0dfd5",
+    "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\audit\\run_20261009T001234_525667Z\\epoch_015\\steps.jsonl": "7a90db4ca43b78a34cc063330241cb33b2ffb738fdeb868f104ac3432e279072"
+  },
+  "audit_code_sha256": "5492af3a4c2968675e53f8ec901b5d87393e22d7e87d66ffb12aec28f649a57c",
+  "verified_resume_LAST": {
+    "absolute_local_path": "F:\\pytorch\\Research\\outputs\\formal_training\\b1_v2_phase_a\\run_20261007T070503_825795Z\\checkpoints\\run_20261008T010824_279406Z\\epoch_014.pt",
+    "bytes": 52115371,
+    "sha256": "40f7f1204aba52815e1c8c2f3d2a5ce5d73da6b7b0297e1d79dc843cb3390649",
+    "epoch": 14,
+    "model": "B1_V2",
+    "run_id": "run_20261007T070503_825795Z",
+    "global_update": 73192,
+    "scope": "FORMAL"
+  },
+  "restored_state_sha256": {
+    "model": "bdf63aea27584087335291af1a807e7342c009ca70aa7e575b301fe272b952b0",
+    "optimizer": "89b3d2a5affac194fd7ca8c0fb7b1d2586c96293793358dd53b995fc052d1c7c",
+    "rng": "8d35ad4c5c338fe8d543c6bfa496c7a928f5e0b7abe8d0f973a4f4a20f57a788",
+    "scheduler": "f976fdc008bdd1f08703de97f237a1ab7af6d36cdc15b1210292ae5742134112"
+  },
+  "restore_identity_scope": "Actual applied model/optimizer/scheduler/RNG receipt; terminal audit verifies completed checkpoint selection and permutation against history",
+  "resume_completed_epoch": 14,
+  "resume_retained_updates": 73192,
+  "early_stop_state_at_resume": {
+    "best_checkpoint_value": 0.047816404266642944,
+    "selected_checkpoint_epoch": 9,
+    "early_stop_best": 0.047816404266642944,
+    "non_improvement_count": 5,
+    "completed_epoch": 14
+  },
+  "early_stop_counters_after_completed_epochs_15_16_17": [
+    6,
+    7,
+    8
+  ],
+  "terminal_early_stopping_reconciliation": {
+    "completed_epoch": 17,
+    "best_checkpoint_epoch": 9,
+    "best_es_epoch": 9,
+    "best_es_value": 0.047816404266642944,
+    "final_early_stop_counter": 8,
+    "termination_reason": "EARLY_STOP_PATIENCE_8"
+  },
+  "comparisons": [
+    {
+      "discarded_attempt": "run_20261008T010824_279406Z",
+      "completed_updates_compared": 3095,
+      "tolerance": 0,
+      "mismatches": [],
+      "fields": [
+        "update",
+        "sample_ids",
+        "indices",
+        "LR",
+        "loss",
+        "L_occ",
+        "L_qr",
+        "pre_clip_norm",
+        "post_clip_norm",
+        "actual_denominator",
+        "clipped"
+      ]
+    },
+    {
+      "discarded_attempt": "run_20261009T001234_525667Z",
+      "completed_updates_compared": 382,
+      "tolerance": 0,
+      "mismatches": [],
+      "fields": [
+        "update",
+        "sample_ids",
+        "indices",
+        "LR",
+        "loss",
+        "L_occ",
+        "L_qr",
+        "pre_clip_norm",
+        "post_clip_norm",
+        "actual_denominator",
+        "clipped"
+      ]
+    }
+  ],
+  "retained_epoch_15_complete_updates": 5228,
+  "retained_trajectory_updates": 88876,
+  "all_attempt_updates": 92353,
+  "discarded_uncheckpointed_updates": 3477,
+  "half_epoch_state_reused": false,
+  "historical_sources_unchanged": true,
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+  "AUDIT_FORWARD_CALLS": 0,
+  "AUDIT_BACKWARD_CALLS": 0,
+  "AUDIT_RAW_SOURCE_OPENS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "completed_utc": "2026-10-09T05:23:56.465966+00:00"
+}
