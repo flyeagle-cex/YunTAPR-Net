@@ -1,0 +1,182 @@
+"""External read-only Windows monitor; pinned training code is never modified.
+
+All status reads explicitly allow FILE_SHARE_DELETE. This prevents this monitor
+from holding a reader handle that blocks the runner's existing os.replace.
+It does not repair or suppress any runner failure, and has no control endpoint.
+"""
+import argparse
+import ctypes
+from ctypes import wintypes
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+import threading
+import time
+
+REPO = Path(__file__).resolve().parents[2]
+EXECUTION = REPO.parent / 'YunTAPR-Net-v2-phase-a-execution'
+PAIR = REPO / 'docs/formal_training_v2/pair_20261007T070503_825794Z'
+sys.path[:0] = [str(EXECUTION / 'src'), str(EXECUTION / 'scripts')]
+
+KERNEL = ctypes.WinDLL('kernel32', use_last_error=True)
+KERNEL.CreateFileW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                             wintypes.LPVOID, wintypes.DWORD, wintypes.DWORD, wintypes.HANDLE]
+KERNEL.CreateFileW.restype = wintypes.HANDLE
+KERNEL.ReadFile.argtypes = [wintypes.HANDLE, wintypes.LPVOID, wintypes.DWORD,
+                           ctypes.POINTER(wintypes.DWORD), wintypes.LPVOID]
+KERNEL.ReadFile.restype = wintypes.BOOL
+KERNEL.CloseHandle.argtypes = [wintypes.HANDLE]
+KERNEL.CloseHandle.restype = wintypes.BOOL
+
+
+def shared_handle(path):
+    handle = KERNEL.CreateFileW(str(Path(path)), 0x80000000, 7, None, 3, 0x80, None)
+    if handle == ctypes.c_void_p(-1).value:
+        raise ctypes.WinError(ctypes.get_last_error())
+    return handle
+
+
+def shared_bytes(path):
+    handle = shared_handle(path)
+    try:
+        output = []
+        while True:
+            buffer = ctypes.create_string_buffer(65536)
+            count = wintypes.DWORD()
+            if not KERNEL.ReadFile(handle, buffer, len(buffer), ctypes.byref(count), None):
+                raise ctypes.WinError(ctypes.get_last_error())
+            if not count.value:
+                break
+            output.append(buffer.raw[:count.value])
+            if sum(map(len, output)) > 4 * 1024**2:
+                raise ValueError('Status metadata exceeds monitor limit')
+        return b''.join(output)
+    finally:
+        KERNEL.CloseHandle(handle)
+
+
+def shared_json(path):
+    return json.loads(shared_bytes(path).decode('utf-8-sig'))
+
+
+def status(run):
+    from quantile_autopsy_v1.monitor import alive
+    file = run / 'progress.json'
+    try:
+        value = shared_json(file)
+        value['age_seconds'] = round(time.time() - file.stat().st_mtime, 1)
+    except FileNotFoundError:
+        # Do not invent live training when a failed snapshot was archived.
+        value = {'status': 'NO_LIVE_PROGRESS', 'age_seconds': 0}
+        if (run / 'progress_failed_stop_20261009.json').exists():
+            value.update(shared_json(run / 'progress_failed_stop_20261009.json'))
+            value['status'] = 'FAILED_STOP_NO_LIVE_PROGRESS'
+            value['age_seconds'] = round(time.time() - (run / 'progress_failed_stop_20261009.json').stat().st_mtime, 1)
+    value['process_alive'] = alive(value.get('pid'))
+    if value.get('status') == 'RUNNING' and value['process_alive'] is False:
+        value['status'] = 'INTERRUPTED_NO_COMPLETION'
+    final = run / 'final_report.json'
+    if final.exists():
+        value['completed_run_report'] = shared_json(final)
+        if value['completed_run_report'].get('status') == 'COMPLETE':
+            value['status'] = 'COMPLETE'
+    value['monitor_reader_sharing'] = 'FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE'
+    value['training_code_modified'] = False
+    return value
+
+
+def self_test(output):
+    from yuntapr.training.phase_a_audit_v2 import atomic_json
+    failures = []
+    observations = []
+    root = REPO / 'docs/v2_phase_a_authorized'
+    with tempfile.TemporaryDirectory(prefix='monitor_fixture_', dir=root) as name:
+        fixture = Path(name).resolve()
+        assert fixture.is_relative_to(root.resolve())
+        file = fixture / 'progress.json'
+        atomic_json(file, {'counter': 0})
+        with file.open('rb'):
+            try:
+                atomic_json(file, {'counter': 1})
+            except PermissionError as exc:
+                assert exc.winerror == 5
+                blocking_reader_reproduced = True
+            else:
+                raise AssertionError('Expected Windows reader replacement conflict')
+        handle = shared_handle(file)
+        try:
+            atomic_json(file, {'counter': 2})
+            assert shared_json(file)['counter'] == 2
+        finally:
+            KERNEL.CloseHandle(handle)
+        stop = threading.Event()
+        def reader():
+            while not stop.is_set():
+                try:
+                    observations.append(shared_json(file)['counter'])
+                except BaseException as exc:
+                    failures.append(repr(exc)); stop.set()
+        thread = threading.Thread(target=reader)
+        thread.start()
+        try:
+            for counter in range(3, 1003):
+                atomic_json(file, {'counter': counter})
+            assert shared_json(file)['counter'] == 1002
+        finally:
+            stop.set(); thread.join()
+        assert not failures and observations
+        assert all(2 <= n <= 1002 for n in observations)
+        assert fixture.is_relative_to(root.resolve())  # cleanup only owned fixture
+    proof = {'status': 'PASS', 'TEST_FIXTURE_ONLY': True,
+             'default_python_reader_winerror5_reproduced': blocking_reader_reproduced,
+             'share_delete_reader_held_during_replacement_pass': True,
+             'concurrent_atomic_writes': 1000, 'concurrent_valid_json_reads': len(observations),
+             'reader_or_writer_failures': failures, 'fixtures_cleaned': not fixture.exists(),
+             'historical_lock_holder_identified': False,
+             'claim_scope': 'Reproduces a compatible failure mechanism; does not prove the original lock holder.',
+             'training_code_modified': False, 'formal_optimizer_steps_added': 0,
+             '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0}
+    with output.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(proof, stream, ensure_ascii=False, indent=2); stream.write('\n')
+    print(json.dumps(proof), flush=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run', type=Path)
+    parser.add_argument('--port', type=int, default=8771)
+    parser.add_argument('--self-test-output', type=Path)
+    args = parser.parse_args()
+    if args.self_test_output:
+        return self_test(args.self_test_output)
+    run = args.run.resolve()
+    if run not in [PAIR / 'B0_MATCHED_V2', PAIR / 'B1_V2']:
+        raise PermissionError('Exact authorized pair metadata directory required')
+    from paired_phase_a_v2.monitor import PAGE
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *_): pass
+        def do_POST(self): self.send_error(405, 'Read only')
+        def do_GET(self):
+            route = self.path.split('?', 1)[0]
+            if route == '/':
+                body, mime = PAGE.encode(), 'text/html; charset=utf-8'
+            elif route == '/api/status':
+                try:
+                    body = json.dumps(status(run), ensure_ascii=False, allow_nan=False).encode()
+                except Exception as exc:
+                    body = json.dumps({'status': 'MONITOR_READ_ERROR', 'error': repr(exc)}).encode()
+                mime = 'application/json; charset=utf-8'
+            else:
+                self.send_error(404); return
+            self.send_response(200); self.send_header('Content-Type', mime)
+            self.send_header('Cache-Control', 'no-store'); self.send_header('Content-Length', str(len(body)))
+            self.end_headers(); self.wfile.write(body)
+    print(json.dumps({'url': f'http://127.0.0.1:{args.port}/', 'run': str(run)}), flush=True)
+    ThreadingHTTPServer(('127.0.0.1', args.port), Handler).serve_forever()
+
+
+if __name__ == '__main__':
+    main()

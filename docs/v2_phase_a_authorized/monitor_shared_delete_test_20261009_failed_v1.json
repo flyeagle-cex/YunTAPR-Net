@@ -1,0 +1,12 @@
+{
+  "status": "FAILED_NOT_APPROVED_FOR_USE",
+  "TEST_FIXTURE_ONLY": true,
+  "default_python_reader_winerror5_reproduced": true,
+  "share_delete_reader_held_during_replacement_pass": false,
+  "error": "Pinned atomic_json os.replace still raised WinError 5 with a FILE_SHARE_DELETE reader handle held on the destination",
+  "historical_lock_holder_identified": false,
+  "formal_optimizer_steps_added": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "next_action": "Do not use sharing flags as a replacement-safety claim. Use a monitor restricted to append-only logs and immutable epoch evidence; never read mutable runner JSON while training."
+}
