@@ -1,0 +1,2789 @@
+{
+  "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+  "forwards": [
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:33.965960+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 0,
+      "scene_keys": [
+        "9787c8f9fe80c77da07ad5c89897692ec9690c7da72c1a12943007a748253367",
+        "94d5ca1cdb0e0e128d7c651f18b0cf5c64f2828dc8a802514d5e2da688c92429"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "eeaa910c31f008b7f2710a2acdd56859e6a5a4eb421f612c9b7f748b75277aa6",
+      "supervision_sha256": "45b5fb13c01cb26477dcc14280eedc4df2d17aad47f208e03b776050b0e44326",
+      "host_to_device_and_sync_seconds": 0.0008239000017056242,
+      "forward_and_checks_seconds": 0.3353285000048345,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1639657472,
+        "peak_working_set_bytes": 1642700800,
+        "private_bytes": 4239556608,
+        "peak_pagefile_bytes": 4242718720
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:34.120053+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 0,
+      "scene_keys": [
+        "9787c8f9fe80c77da07ad5c89897692ec9690c7da72c1a12943007a748253367",
+        "94d5ca1cdb0e0e128d7c651f18b0cf5c64f2828dc8a802514d5e2da688c92429"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "78cdbcb2b541b5625588d41583d8131c5b299c74626acd32758cc64c6e85a84d",
+      "supervision_sha256": "45b5fb13c01cb26477dcc14280eedc4df2d17aad47f208e03b776050b0e44326",
+      "host_to_device_and_sync_seconds": 0.0018822000056388788,
+      "forward_and_checks_seconds": 0.0754806999975699,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640841216,
+        "peak_working_set_bytes": 1651716096,
+        "private_bytes": 4240560128,
+        "peak_pagefile_bytes": 4251639808
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:34.607144+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 1,
+      "scene_keys": [
+        "eb140e7250e0434d91d1a778a15812bb31bd9a546b0d3e063be1cd6b961c14bc",
+        "4907297e6afc8ea9ccecaca35a19da35d54e963683f1078764cd070f3b05398a"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "8a1f7f249204df00e44db66650b3a7f008e064826cd852feb392942bd65b8a25",
+      "supervision_sha256": "aabfef2bddc2eb989176be0219986a48aceb9dc9b6a79986066873b4372b40d7",
+      "host_to_device_and_sync_seconds": 0.0006670000002486631,
+      "forward_and_checks_seconds": 0.07257980000576936,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640796160,
+        "peak_working_set_bytes": 1663913984,
+        "private_bytes": 4239929344,
+        "peak_pagefile_bytes": 4263665664
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:34.753053+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 1,
+      "scene_keys": [
+        "eb140e7250e0434d91d1a778a15812bb31bd9a546b0d3e063be1cd6b961c14bc",
+        "4907297e6afc8ea9ccecaca35a19da35d54e963683f1078764cd070f3b05398a"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "83e53e8635cd6977cc94b3afae9dfef818ed76d0c8f0ced57a8110ecb1a00bd5",
+      "supervision_sha256": "aabfef2bddc2eb989176be0219986a48aceb9dc9b6a79986066873b4372b40d7",
+      "host_to_device_and_sync_seconds": 0.001429900003131479,
+      "forward_and_checks_seconds": 0.07385020000219811,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640796160,
+        "peak_working_set_bytes": 1663913984,
+        "private_bytes": 4239929344,
+        "peak_pagefile_bytes": 4263665664
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:35.301699+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 2,
+      "scene_keys": [
+        "2c233489623c8ad8d91e943b90135aae569b170b097ed80e85c2072ea19e48d7",
+        "dfbb11cac9f26dcacc1180316ed0fd97453d61ca081b378d55143400b3e0836e"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "09254c2e43ab33fe996a7ee486560c9e0092ae41ad4d19dadcb01a3a5018ec93",
+      "supervision_sha256": "e9dcabba22b41aa96a04a161befd68d190592171c75913aad3727051b7861fa9",
+      "host_to_device_and_sync_seconds": 0.0005724000002373941,
+      "forward_and_checks_seconds": 0.07258229999570176,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640898560,
+        "peak_working_set_bytes": 1664802816,
+        "private_bytes": 4240060416,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:35.451205+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 2,
+      "scene_keys": [
+        "2c233489623c8ad8d91e943b90135aae569b170b097ed80e85c2072ea19e48d7",
+        "dfbb11cac9f26dcacc1180316ed0fd97453d61ca081b378d55143400b3e0836e"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "0f174d64ca62e431afa3a4373a57fa281a1c59398982bac1a30ee6f95570410b",
+      "supervision_sha256": "e9dcabba22b41aa96a04a161befd68d190592171c75913aad3727051b7861fa9",
+      "host_to_device_and_sync_seconds": 0.002258399996208027,
+      "forward_and_checks_seconds": 0.0735008999981801,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640898560,
+        "peak_working_set_bytes": 1664802816,
+        "private_bytes": 4240060416,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:35.982062+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 3,
+      "scene_keys": [
+        "84514bc21abdd3818961ad1b1c16bb599415a085d11467760cb5ff5b6aced271",
+        "00bb777f2d88912d99c4a819a501bc9096a8096f5a0f74e988be1718b7f15e18"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "8c0c5863fa6d3bf2b417342b9c4b8cbf15173804da7beed64a85d6ec6b76314c",
+      "supervision_sha256": "1ca7d15f883ca42d4009a339b83e677556c531f3dd88c5f97dc32a238863d89f",
+      "host_to_device_and_sync_seconds": 0.0005156000042916276,
+      "forward_and_checks_seconds": 0.07224950000090757,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640808448,
+        "peak_working_set_bytes": 1664802816,
+        "private_bytes": 4239929344,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:36.124568+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 3,
+      "scene_keys": [
+        "84514bc21abdd3818961ad1b1c16bb599415a085d11467760cb5ff5b6aced271",
+        "00bb777f2d88912d99c4a819a501bc9096a8096f5a0f74e988be1718b7f15e18"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "006b3f9957884f92509202815bdbf719e1ae6fae9a34124c02f862cc49a57144",
+      "supervision_sha256": "1ca7d15f883ca42d4009a339b83e677556c531f3dd88c5f97dc32a238863d89f",
+      "host_to_device_and_sync_seconds": 0.0014423000029637478,
+      "forward_and_checks_seconds": 0.07336529999884078,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1640808448,
+        "peak_working_set_bytes": 1664802816,
+        "private_bytes": 4239929344,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:36.678769+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 4,
+      "scene_keys": [
+        "658a1ffe80a41e1ba075f7de89acf6a4a3cab241bdb6a339030b75522c8e8a77",
+        "523dc0378acb584117fc06946de215f651178bd1df308a3bd8064f8193e22797"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "142aac090ba62ee2d7c4f886b01b4e7bd7d39155105a355b0bdd5f72c16e76c5",
+      "supervision_sha256": "7f78179d108f5f9c15408ccf71c165336a407e1ce035c88fdcc7d382850ecb82",
+      "host_to_device_and_sync_seconds": 0.0008126000029733405,
+      "forward_and_checks_seconds": 0.0735084000043571,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641840640,
+        "peak_working_set_bytes": 1665744896,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:36.833403+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 4,
+      "scene_keys": [
+        "658a1ffe80a41e1ba075f7de89acf6a4a3cab241bdb6a339030b75522c8e8a77",
+        "523dc0378acb584117fc06946de215f651178bd1df308a3bd8064f8193e22797"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "cc00b34455b7ed8bd4dd1623f5e4c752f10226dfd6d7a5f6839a4027e36b55d9",
+      "supervision_sha256": "7f78179d108f5f9c15408ccf71c165336a407e1ce035c88fdcc7d382850ecb82",
+      "host_to_device_and_sync_seconds": 0.0017406000042683445,
+      "forward_and_checks_seconds": 0.07367879999947036,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641840640,
+        "peak_working_set_bytes": 1665744896,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264153088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:37.428835+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 5,
+      "scene_keys": [
+        "20ef35a9aa6bf2555a9ca76ed2a82b92a3b4fc68e02375620a9ea2553bb3c915",
+        "c13cb463c743d0270c69aa1a860a77f4f74b0fef9c531b243055f731701c4f5a"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "8022d12bb5365a02c44b3c54a7b37782931742081253b8ef5a93379d3302c64c",
+      "supervision_sha256": "d4186a5d1104f8410927a29710b63c78725676cfc49401af52e6c4962e5056de",
+      "host_to_device_and_sync_seconds": 0.0005065000004833564,
+      "forward_and_checks_seconds": 0.0729289000009885,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641902080,
+        "peak_working_set_bytes": 1665806336,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:37.587322+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 5,
+      "scene_keys": [
+        "20ef35a9aa6bf2555a9ca76ed2a82b92a3b4fc68e02375620a9ea2553bb3c915",
+        "c13cb463c743d0270c69aa1a860a77f4f74b0fef9c531b243055f731701c4f5a"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "845e99fab186e09c3758e51eb89fa6f2a67faab74c6381c2887b41efe0c00a82",
+      "supervision_sha256": "d4186a5d1104f8410927a29710b63c78725676cfc49401af52e6c4962e5056de",
+      "host_to_device_and_sync_seconds": 0.00141789999906905,
+      "forward_and_checks_seconds": 0.0742406999997911,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641902080,
+        "peak_working_set_bytes": 1665806336,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:38.130302+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 6,
+      "scene_keys": [
+        "12a7f63aa98536ec320111da6472ab879aa573bc60bba7702a26cdc4bf84235e",
+        "f8845ed9fd462909000883977886abb03512f07aa43d280e84b2ecbf5942d77d"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "6877f26b6bd201f7db0884e0c0dde564d16466b00e94e9d3ef264b9770396d0c",
+      "supervision_sha256": "e57f49d3490006cb7270c9a2466dd578e4331b6e075cc840a599a4149a308768",
+      "host_to_device_and_sync_seconds": 0.0004954000032739714,
+      "forward_and_checks_seconds": 0.0732064999974682,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641938944,
+        "peak_working_set_bytes": 1665843200,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:38.289309+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 6,
+      "scene_keys": [
+        "12a7f63aa98536ec320111da6472ab879aa573bc60bba7702a26cdc4bf84235e",
+        "f8845ed9fd462909000883977886abb03512f07aa43d280e84b2ecbf5942d77d"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b05ab9a766b87c29cc308d2a4ac96570c0441f2cea821b781f390392e44b38f8",
+      "supervision_sha256": "e57f49d3490006cb7270c9a2466dd578e4331b6e075cc840a599a4149a308768",
+      "host_to_device_and_sync_seconds": 0.0017703999983496033,
+      "forward_and_checks_seconds": 0.07419860000663903,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641938944,
+        "peak_working_set_bytes": 1665843200,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:38.826045+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 7,
+      "scene_keys": [
+        "0c68170cf29f5759e0a888f003742cb6ccc1ad1d798b9b2793ff5b068255b912",
+        "aa074760b3ec1c6d36572dc0b1a70da181011b8242908fae208d26af769486f9"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "3ee3f9177a1bb8ca7430c4d6401151d59d17ac2633b8588bdaa3cf1f4967da88",
+      "supervision_sha256": "6942c0d26cd72f3c12a5c53293262631a029f41094546b7ffefaaf4ac3158bdb",
+      "host_to_device_and_sync_seconds": 0.00047220000124070793,
+      "forward_and_checks_seconds": 0.07295929999963846,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641955328,
+        "peak_working_set_bytes": 1665859584,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:38.971435+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 7,
+      "scene_keys": [
+        "0c68170cf29f5759e0a888f003742cb6ccc1ad1d798b9b2793ff5b068255b912",
+        "aa074760b3ec1c6d36572dc0b1a70da181011b8242908fae208d26af769486f9"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "aa972491257fb2b31580a248f49dfcd1e97684bdfa063cc31692e98b7781f0bd",
+      "supervision_sha256": "6942c0d26cd72f3c12a5c53293262631a029f41094546b7ffefaaf4ac3158bdb",
+      "host_to_device_and_sync_seconds": 0.0014556999958585948,
+      "forward_and_checks_seconds": 0.07440320000023348,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641955328,
+        "peak_working_set_bytes": 1665859584,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:39.500987+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 8,
+      "scene_keys": [
+        "6dfdcd9d4648884235a329fbf1b5ccf5c5ee57a1b8e516722c357b9e7555f60d",
+        "3f428f5d01c10c4b658d6f566fddc2be6c68d7d1e0c19d8b976254f7dba53b2a"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "da3e964cf01a1a805453e38c627eefa536e6eb498c6d6565c56fc3d285a9d27c",
+      "supervision_sha256": "63867e340ff7d07c40385e7ac7b712fc91ba25f054846fb08e8e42b3dc6770ec",
+      "host_to_device_and_sync_seconds": 0.0005315000016707927,
+      "forward_and_checks_seconds": 0.07304660000227159,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641979904,
+        "peak_working_set_bytes": 1665884160,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:39.653768+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 8,
+      "scene_keys": [
+        "6dfdcd9d4648884235a329fbf1b5ccf5c5ee57a1b8e516722c357b9e7555f60d",
+        "3f428f5d01c10c4b658d6f566fddc2be6c68d7d1e0c19d8b976254f7dba53b2a"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "ebe97cbdb031e084a395ed704b3882468e642f35714cbd7aa2e39c08d1e67fcb",
+      "supervision_sha256": "63867e340ff7d07c40385e7ac7b712fc91ba25f054846fb08e8e42b3dc6770ec",
+      "host_to_device_and_sync_seconds": 0.001607400001375936,
+      "forward_and_checks_seconds": 0.07400049999705516,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641979904,
+        "peak_working_set_bytes": 1665884160,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:40.169780+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 9,
+      "scene_keys": [
+        "f656677ffad579415ca14642e08a5fac31d9ead7972abe5d275e4964f922aa87",
+        "330f56f0a1a3251ef9a534bd871f88bf8b7fd7d7608cc35426fadef56078a72b"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "bc38b146671c65b9516469a4d2502b292f42df65f77b0ff0d19d12d89729b952",
+      "supervision_sha256": "9b76f4239b52361f4b7ff86076b10dc8f54e4df5ffa4495f10f48cb43c14daea",
+      "host_to_device_and_sync_seconds": 0.000796600004832726,
+      "forward_and_checks_seconds": 0.0738340000025346,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641984000,
+        "peak_working_set_bytes": 1665888256,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:40.322777+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 9,
+      "scene_keys": [
+        "f656677ffad579415ca14642e08a5fac31d9ead7972abe5d275e4964f922aa87",
+        "330f56f0a1a3251ef9a534bd871f88bf8b7fd7d7608cc35426fadef56078a72b"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "61ab62a6f3d6312a516e2e1f9f2b8e5d633af4f3e0272e2c1eb7ceb7a4660f2c",
+      "supervision_sha256": "9b76f4239b52361f4b7ff86076b10dc8f54e4df5ffa4495f10f48cb43c14daea",
+      "host_to_device_and_sync_seconds": 0.0013546000045607798,
+      "forward_and_checks_seconds": 0.07372670000040671,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641984000,
+        "peak_working_set_bytes": 1665888256,
+        "private_bytes": 4240019456,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:40.840983+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 10,
+      "scene_keys": [
+        "57407711b8a2896bfc22d53883496585d65dcb52203a94577bf96a27f93de366",
+        "e3bdae031c439f405e35437d999ab280859c6d6c7e8265cdf0da7807df529cd9"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "02a05884be242828ac523df249e2fa5a4fbed2a2f3145c16e4aeae271bc35ba8",
+      "supervision_sha256": "ebd229e7f808143f64be5be6a06a4f2f1037ffe4528dd1d3abba934fec460d8e",
+      "host_to_device_and_sync_seconds": 0.0005373000021791086,
+      "forward_and_checks_seconds": 0.07237149999855319,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641906176,
+        "peak_working_set_bytes": 1665888256,
+        "private_bytes": 4239888384,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:41.001083+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 10,
+      "scene_keys": [
+        "57407711b8a2896bfc22d53883496585d65dcb52203a94577bf96a27f93de366",
+        "e3bdae031c439f405e35437d999ab280859c6d6c7e8265cdf0da7807df529cd9"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b18cdc35bfe4baa64a3b30c9c42930e1419018a954fa2609e2b711892dd4dc4c",
+      "supervision_sha256": "ebd229e7f808143f64be5be6a06a4f2f1037ffe4528dd1d3abba934fec460d8e",
+      "host_to_device_and_sync_seconds": 0.0018232000002171844,
+      "forward_and_checks_seconds": 0.07407050000620075,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1641906176,
+        "peak_working_set_bytes": 1665888256,
+        "private_bytes": 4239888384,
+        "peak_pagefile_bytes": 4264169472
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:41.535703+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 11,
+      "scene_keys": [
+        "133d63704b0023255e877fc8c8e217420e19cab51b64cb68e0570fca11086d6e",
+        "9ad377a6b39e918dadb9710efc9a2ed9cefae3d0cd812e332ffa3c43988f4436"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "457bd6eb718cbc1bce082fd99a689646fc9b69e3b57d03b05d7eb2a5cdfc8b80",
+      "supervision_sha256": "6f97944c1d6607382f0e02fbb9b81471e617f7e0d9cf0c69936de54ee3895b4b",
+      "host_to_device_and_sync_seconds": 0.0006208999984664842,
+      "forward_and_checks_seconds": 0.0727102000018931,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1642917888,
+        "peak_working_set_bytes": 1666035712,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4264632320
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:41.680210+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 11,
+      "scene_keys": [
+        "133d63704b0023255e877fc8c8e217420e19cab51b64cb68e0570fca11086d6e",
+        "9ad377a6b39e918dadb9710efc9a2ed9cefae3d0cd812e332ffa3c43988f4436"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "9e4bfebca60702524206a1ab490cb1c4e3769b67b236028fb99c3aa79939022a",
+      "supervision_sha256": "6f97944c1d6607382f0e02fbb9b81471e617f7e0d9cf0c69936de54ee3895b4b",
+      "host_to_device_and_sync_seconds": 0.002006399998208508,
+      "forward_and_checks_seconds": 0.0737029000010807,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1642917888,
+        "peak_working_set_bytes": 1666035712,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4264632320
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:42.213422+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 12,
+      "scene_keys": [
+        "f5877a976f83c93a0522ed4c2e06938c3cf2e2e145e1de166809b4df5779c6bf",
+        "5b0159c37680f99fd8ef8a642372a5c589951bc40bc75b70198518fd628e0014"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "eef6a1f3d9b2ed0a5d1284d794760872cc6708f1b84f26055314e06849bf6561",
+      "supervision_sha256": "6e05302c330dc3941d7500bf83b9c32e01d3f7e484505b24a670cbf71393741f",
+      "host_to_device_and_sync_seconds": 0.00047110000014072284,
+      "forward_and_checks_seconds": 0.07245149999653222,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643012096,
+        "peak_working_set_bytes": 1666916352,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:42.360997+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 12,
+      "scene_keys": [
+        "f5877a976f83c93a0522ed4c2e06938c3cf2e2e145e1de166809b4df5779c6bf",
+        "5b0159c37680f99fd8ef8a642372a5c589951bc40bc75b70198518fd628e0014"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b7d91e8d96afba1c3a048d2c3b35bc8a6dfc769df0b79ee93d5ef7f5069d98f6",
+      "supervision_sha256": "6e05302c330dc3941d7500bf83b9c32e01d3f7e484505b24a670cbf71393741f",
+      "host_to_device_and_sync_seconds": 0.001950300000316929,
+      "forward_and_checks_seconds": 0.07437609999760753,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643012096,
+        "peak_working_set_bytes": 1666916352,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:42.878856+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 13,
+      "scene_keys": [
+        "18f06865c6183a0a1d8e82271924354b27a6385baa7b547726530da56ae2c3e5",
+        "0353a58e1dfb300a6dc403a5eaa9ffb80875c891eb4f550a95a7bbdb7c93e0b6"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "bea9b843850f2b23cf620e68e5a00b73c15aa909c22b4d9e9d4b8c2201e189b8",
+      "supervision_sha256": "d4e07c41d0d1b37e67e1e632b16bebb559f70b3e6ab1f3ce78e4350a4b03c985",
+      "host_to_device_and_sync_seconds": 0.0004916999969282188,
+      "forward_and_checks_seconds": 0.07230490000074496,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643036672,
+        "peak_working_set_bytes": 1666940928,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:43.035890+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 13,
+      "scene_keys": [
+        "18f06865c6183a0a1d8e82271924354b27a6385baa7b547726530da56ae2c3e5",
+        "0353a58e1dfb300a6dc403a5eaa9ffb80875c891eb4f550a95a7bbdb7c93e0b6"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "0d8daf958d227f55573c6862a1e562acdc945dee61aebff40253c9433c283077",
+      "supervision_sha256": "d4e07c41d0d1b37e67e1e632b16bebb559f70b3e6ab1f3ce78e4350a4b03c985",
+      "host_to_device_and_sync_seconds": 0.0022777000049245544,
+      "forward_and_checks_seconds": 0.07427650000317954,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643036672,
+        "peak_working_set_bytes": 1666940928,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:43.575288+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 14,
+      "scene_keys": [
+        "f91b0e80d25a51cfe0baf0b83c34ea0651e49864645ebfbf2b5d207ba8d63309",
+        "23f32c0e18c0c902cb56472c4f506606aa2ac4552980a3e30c8862d5ae05758c"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "1f52b4ff6f893ffa6a3296ed523f068de4485d962e61a6398b485cd64ed86535",
+      "supervision_sha256": "ecb80c1dec507f7d2a392d4cb3603240c8d2c706f8b87437a5d554f51a17f932",
+      "host_to_device_and_sync_seconds": 0.00048750000132713467,
+      "forward_and_checks_seconds": 0.07280610000452725,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643036672,
+        "peak_working_set_bytes": 1666940928,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:43.731800+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 14,
+      "scene_keys": [
+        "f91b0e80d25a51cfe0baf0b83c34ea0651e49864645ebfbf2b5d207ba8d63309",
+        "23f32c0e18c0c902cb56472c4f506606aa2ac4552980a3e30c8862d5ae05758c"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "779e73a371308763885f0359ac884250a06ec18511e88689f5340a087a73a3c5",
+      "supervision_sha256": "ecb80c1dec507f7d2a392d4cb3603240c8d2c706f8b87437a5d554f51a17f932",
+      "host_to_device_and_sync_seconds": 0.0014557000031345524,
+      "forward_and_checks_seconds": 0.07435989999794401,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643036672,
+        "peak_working_set_bytes": 1666940928,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:44.259983+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 15,
+      "scene_keys": [
+        "bb7ef0471206bdffa32202e3d31a6100be2cdc401396dd12695e04facdf066d5",
+        "ffecf3c926a0aff50a4663ce76a69e98657242de835d1dba954ee19e375dc76c"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "4c43d60de420a33e2e7fd0afd1594f11f92fd12c12171596cbd2754d2e45443f",
+      "supervision_sha256": "95caf8db79f16f65a9f0f9ee51aed5312ea5af7fd1feec63be848226066753f9",
+      "host_to_device_and_sync_seconds": 0.0005320999989635311,
+      "forward_and_checks_seconds": 0.07313050000084331,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643048960,
+        "peak_working_set_bytes": 1666953216,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:44.404695+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 15,
+      "scene_keys": [
+        "bb7ef0471206bdffa32202e3d31a6100be2cdc401396dd12695e04facdf066d5",
+        "ffecf3c926a0aff50a4663ce76a69e98657242de835d1dba954ee19e375dc76c"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "f8dbc4e877393abc23bf214559a3657494a61c20909f12ecc3311cc41d2e7480",
+      "supervision_sha256": "95caf8db79f16f65a9f0f9ee51aed5312ea5af7fd1feec63be848226066753f9",
+      "host_to_device_and_sync_seconds": 0.0014386999973794445,
+      "forward_and_checks_seconds": 0.07407770000281744,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643048960,
+        "peak_working_set_bytes": 1666953216,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:44.930329+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 16,
+      "scene_keys": [
+        "97903dd326ff0146c8d2c163626101eec311464738ecbe909f17388f19db691b",
+        "3c3fcb974973360a7cabff91978c07919fa1d07c907622100baa9e782b48e991"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "990e191f003d3a5d80dfbea455576f80316075702028bd1f6fc3dc3e9b54357f",
+      "supervision_sha256": "32e7b8d923b18ddf06b010ef446cf458767ea586c231733368889a2a957da341",
+      "host_to_device_and_sync_seconds": 0.0007133000035537407,
+      "forward_and_checks_seconds": 0.07312329999695066,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643089920,
+        "peak_working_set_bytes": 1666994176,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:45.084016+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 16,
+      "scene_keys": [
+        "97903dd326ff0146c8d2c163626101eec311464738ecbe909f17388f19db691b",
+        "3c3fcb974973360a7cabff91978c07919fa1d07c907622100baa9e782b48e991"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "d5bbdc098e2677574c3cadefaa1ac824fb570934da209ab394786c51db865431",
+      "supervision_sha256": "32e7b8d923b18ddf06b010ef446cf458767ea586c231733368889a2a957da341",
+      "host_to_device_and_sync_seconds": 0.0016807000065455213,
+      "forward_and_checks_seconds": 0.07370249999803491,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643089920,
+        "peak_working_set_bytes": 1666994176,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265168896
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:45.662563+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 17,
+      "scene_keys": [
+        "c6c20fea0fc3919d0c9f92900e9118795ccb30e8ea94878867d0a25c16d40b64",
+        "b0925bd87b457723a861874b87aaaaad0d7bfa2fe2622bc6ec8e88c7b8148841"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "5d4a8a21289560e63c6ea21e4dc6aa063b40a10b39914d09c1fccc1a910010f8",
+      "supervision_sha256": "3c73293e992463d649bb09c41b853276e95940f5dd0729d00b2cd2babd760775",
+      "host_to_device_and_sync_seconds": 0.0005145999966771342,
+      "forward_and_checks_seconds": 0.07262540000374429,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643094016,
+        "peak_working_set_bytes": 1666998272,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:45.820387+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 17,
+      "scene_keys": [
+        "c6c20fea0fc3919d0c9f92900e9118795ccb30e8ea94878867d0a25c16d40b64",
+        "b0925bd87b457723a861874b87aaaaad0d7bfa2fe2622bc6ec8e88c7b8148841"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "df4f2bd2e783fa7b02787b51ba9505466d931495345a6510c6bdd402fd8b59ec",
+      "supervision_sha256": "3c73293e992463d649bb09c41b853276e95940f5dd0729d00b2cd2babd760775",
+      "host_to_device_and_sync_seconds": 0.001408700001775287,
+      "forward_and_checks_seconds": 0.07410520000121323,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643094016,
+        "peak_working_set_bytes": 1666998272,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:46.336685+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 18,
+      "scene_keys": [
+        "022ca2a0ed16ab8eac7175c5a1e38f3fb5545091b4751a01b3b681e302aa8d40",
+        "2387a881e42cb37a980852cf0ba9cecf5672ec5d13877f79561769ffff44d005"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b413c882b4d62618b77eb10450e089bef27b2359b86c1a9bac0a679aafe19167",
+      "supervision_sha256": "fda1fbd36d00500aa03a52aced1bbdc697a090ae63754c5a553301813d28f1e6",
+      "host_to_device_and_sync_seconds": 0.0006540000031236559,
+      "forward_and_checks_seconds": 0.07298589999845717,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643016192,
+        "peak_working_set_bytes": 1666998272,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:46.486193+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 18,
+      "scene_keys": [
+        "022ca2a0ed16ab8eac7175c5a1e38f3fb5545091b4751a01b3b681e302aa8d40",
+        "2387a881e42cb37a980852cf0ba9cecf5672ec5d13877f79561769ffff44d005"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "7e866c47092d6971c634ea3fc35875837d2266f60df815a1e98f3af40c125ab6",
+      "supervision_sha256": "fda1fbd36d00500aa03a52aced1bbdc697a090ae63754c5a553301813d28f1e6",
+      "host_to_device_and_sync_seconds": 0.002017400001932401,
+      "forward_and_checks_seconds": 0.07414650000282563,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643016192,
+        "peak_working_set_bytes": 1666998272,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:46.996208+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 19,
+      "scene_keys": [
+        "44d3ab8335e472269828ae2e1ce9c01b61e44503568d430c616c27de048de499",
+        "a30b8117f8af6833e698daac668d38e2ce2a2085bbfdc549506967240b274ea2"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "06ce42c5b570182c5ddaf78d2e5501552923b060f4559b06c8ad74f9cb177cdf",
+      "supervision_sha256": "8a4625809bced8bccd195fa06eeef2d05ba5f6226b02006715ae073c51ba100c",
+      "host_to_device_and_sync_seconds": 0.0005210000017541461,
+      "forward_and_checks_seconds": 0.07286690000182716,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:47.153483+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 19,
+      "scene_keys": [
+        "44d3ab8335e472269828ae2e1ce9c01b61e44503568d430c616c27de048de499",
+        "a30b8117f8af6833e698daac668d38e2ce2a2085bbfdc549506967240b274ea2"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "30da1a20a0658d2cd96bd0a74c5cabb9853ace29162819b7015559e416e30322",
+      "supervision_sha256": "8a4625809bced8bccd195fa06eeef2d05ba5f6226b02006715ae073c51ba100c",
+      "host_to_device_and_sync_seconds": 0.0014646999989054166,
+      "forward_and_checks_seconds": 0.07372980000218377,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:47.694963+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 20,
+      "scene_keys": [
+        "008141e70508ecb39ac3d36c60e37ddf8c3f2e8b23934c147deee3735205fc69",
+        "a084bfc35910a62815e3e17827320535f184822a154b4fc14d51fc1923f69256"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "86fa5f46dd606e9398e2024e4122cacc29e5c875e4ddb8aa2cf8a5508d2de225",
+      "supervision_sha256": "444425df7dabd64fc4b1afa2cf9d88149fdaad7b4c6155c1188739528bd879d0",
+      "host_to_device_and_sync_seconds": 0.0009920000011334196,
+      "forward_and_checks_seconds": 0.07272139999986393,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:47.845943+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 20,
+      "scene_keys": [
+        "008141e70508ecb39ac3d36c60e37ddf8c3f2e8b23934c147deee3735205fc69",
+        "a084bfc35910a62815e3e17827320535f184822a154b4fc14d51fc1923f69256"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b397ec466952617837bd5707f9128c1e8ef93baca3687d00306480d8b89f5b7c",
+      "supervision_sha256": "444425df7dabd64fc4b1afa2cf9d88149fdaad7b4c6155c1188739528bd879d0",
+      "host_to_device_and_sync_seconds": 0.001834300004702527,
+      "forward_and_checks_seconds": 0.07419660000596195,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:48.402582+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 21,
+      "scene_keys": [
+        "15d95c9e3f38d17bc62e2cac857fc55c3c04194f4f5ef2cd8cc7c60d57a1ee98",
+        "aa0f0a5a6807527181336932bf12c84a22e721a70965a92542ea35608ddda452"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "d3b75c90002b452da90f9b9c8f15b336da485208c78a2bc71d1af69d26868b88",
+      "supervision_sha256": "f3cbdacff4a25d90f7fa9aec9631ad975efae46831df6c3e4c16f09f57122825",
+      "host_to_device_and_sync_seconds": 0.0007309000066015869,
+      "forward_and_checks_seconds": 0.07292690000031143,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:48.559091+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 21,
+      "scene_keys": [
+        "15d95c9e3f38d17bc62e2cac857fc55c3c04194f4f5ef2cd8cc7c60d57a1ee98",
+        "aa0f0a5a6807527181336932bf12c84a22e721a70965a92542ea35608ddda452"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "0f010f9bbc361eea6d786fa3b531662b2e504dda9f9c2c1f281ee4f87e4a1708",
+      "supervision_sha256": "f3cbdacff4a25d90f7fa9aec9631ad975efae46831df6c3e4c16f09f57122825",
+      "host_to_device_and_sync_seconds": 0.0015471000006073155,
+      "forward_and_checks_seconds": 0.07423659999767551,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643106304,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4241031168,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:49.087355+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 22,
+      "scene_keys": [
+        "0fcf3ecc4d57ed23bf6a54ea4cc724176986dae3408006ea65387cc5846f638f",
+        "e43671e7a426c95f01d1844438aabdfd7ef810e4e0f57dc8c6fbb8a0b33cf01e"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b47d703beb6392c8b5cfda593505e482e87c272875fd46fdbe40931411f37c20",
+      "supervision_sha256": "752df77dfc77cda38b58a6ac69648afad518ba3bd05e4829055e5091cd5d8d96",
+      "host_to_device_and_sync_seconds": 0.0005402000024332665,
+      "forward_and_checks_seconds": 0.07365040000149747,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643020288,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:49.242920+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 22,
+      "scene_keys": [
+        "0fcf3ecc4d57ed23bf6a54ea4cc724176986dae3408006ea65387cc5846f638f",
+        "e43671e7a426c95f01d1844438aabdfd7ef810e4e0f57dc8c6fbb8a0b33cf01e"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "f479f3ea4e84ef7ad6932b31fdf4c6e8ed8122e386b2d06a074d15b27891052e",
+      "supervision_sha256": "752df77dfc77cda38b58a6ac69648afad518ba3bd05e4829055e5091cd5d8d96",
+      "host_to_device_and_sync_seconds": 0.0018122000037692487,
+      "forward_and_checks_seconds": 0.07408960000611842,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1643020288,
+        "peak_working_set_bytes": 1667010560,
+        "private_bytes": 4240900096,
+        "peak_pagefile_bytes": 4265177088
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:49.750882+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B0_MATCHED_V2",
+      "pair": 23,
+      "scene_keys": [
+        "c0b53fa59ea9a659c87fb749a7424992a809b3537f617774f99d134fddfafe69",
+        "71f51f801df5853bec7000b3bca1a5ea3b0bbe04bfbb456bc6059a2f62e09807"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "4da7989ee338fede0daa39dc5d05a6227de1ae2a7bbfa680bb989f175f454577",
+      "supervision_sha256": "37e42a33d29c1484609abb9f035d6c467f0df90ab84ea5cf500688309aee432f",
+      "host_to_device_and_sync_seconds": 0.0006872000012663193,
+      "forward_and_checks_seconds": 0.07321930000034627,
+      "cuda_peak_allocated_bytes": 894932480,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1644113920,
+        "peak_working_set_bytes": 1668018176,
+        "private_bytes": 4242034688,
+        "peak_pagefile_bytes": 4266172416
+      },
+      "state_sha256_after": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    },
+    {
+      "event": "FORWARD_COMPLETED",
+      "utc": "2026-10-10T14:57:49.908902+00:00",
+      "scope": "BOUNDED_REAL_FORWARD_ENGINEERING_ONLY",
+      "model": "B1_V2",
+      "pair": 23,
+      "scene_keys": [
+        "c0b53fa59ea9a659c87fb749a7424992a809b3537f617774f99d134fddfafe69",
+        "71f51f801df5853bec7000b3bca1a5ea3b0bbe04bfbb456bc6059a2f62e09807"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "c442c106568a068b06064f446f986e210694410f0e6183fbf709923decabfc92",
+      "supervision_sha256": "37e42a33d29c1484609abb9f035d6c467f0df90ab84ea5cf500688309aee432f",
+      "host_to_device_and_sync_seconds": 0.0014074999999138527,
+      "forward_and_checks_seconds": 0.07392930000060005,
+      "cuda_peak_allocated_bytes": 907440640,
+      "cuda_peak_reserved_bytes": 1218445312,
+      "cpu": {
+        "working_set_bytes": 1644113920,
+        "peak_working_set_bytes": 1668018176,
+        "private_bytes": 4242034688,
+        "peak_pagefile_bytes": 4266172416
+      },
+      "state_sha256_after": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "state_unchanged": true,
+      "checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false,
+        "inference_mode_enabled": true
+      }
+    }
+  ]
+}
