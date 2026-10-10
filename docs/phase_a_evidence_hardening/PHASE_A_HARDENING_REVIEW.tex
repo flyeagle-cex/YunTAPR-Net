@@ -1,0 +1,257 @@
+\documentclass[UTF8,a4paper,10pt,fontset=fandol]{ctexart}
+\usepackage[margin=20mm]{geometry}
+\usepackage{booktabs,longtable,array,hyperref,amsmath}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\parindent}{0pt}\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.12}\sloppy
+\ctexset{subsection={beforeskip=8pt,afterskip=5pt}}
+\begin{document}
+\begin{center}{\LARGE YunTAPR-Net}\par{\Large Phase-A 科学证据补强与 Phase-B 工程准备}\par 2026-10-10\end{center}
+\textbf{审查结论：授权工程范围完成；科学验收、恢复追认、Phase-B 训练与 2025 解封均未批准。}
+\par 基线 HEAD：\texttt{92687641e59c256a9443b8bfb420b6c947fdcb3a}。
+\par 独立审计 25 项通过；合成测试 48 项通过。完整旧证据保留。
+\section*{指标定义}
+令 $V$ 为有效云南暴露，$R=\{j\in V:y_j>\mathrm{float32}(0.1)\}$，$N=|V|$。
+\[
+\rho_\tau(e)=\max(\tau e,(\tau-1)e),\quad
+S_{qr}=\sum_{j\in R}\frac1{32}\sum_{i=1}^{32}\rho_{\tau_i}(\log(1+y_j)-q_{ji}).
+\]
+\[
+L_{core}=\frac{S_{occ}+S_{qr}}N,\qquad
+L_{qr,train}=\frac{S_{qr}}N,\qquad
+L_{qr,conditional}=\frac{S_{qr}}{|R|}.
+\]
+\par 分母区别保持冻结；Pinball 单位是 log1p(mm/h)。tau=(i-0.5)/32。
+\clearpage
+\section*{Phase-A 科学证据一致性审计}
+
+独立核验结果为 25 项通过、0 项失败。机器结果：audit\_\allowbreak{}results.json。128 个历史 acceptance manifest 条目的字节数和 SHA256 一致；历史报告、源代码、图表和失败记录未修改。该结论是证据一致性核验，不构成科学验收。\par
+
+\subsection*{身份和适用范围}
+
+基线及本次读取时 GitHub main：92687641\allowbreak{}e59c256a\allowbreak{}9443b8bf\allowbreak{}b420b6c9\allowbreak{}47fdcb3a。主仓库为 YunTAPR-Net-push-chunks；另有旧 upload 和 v2 execution checkout，不同步、不清理。主仓库原已跟踪文件无改动；大量旧未跟踪文件仍保留。最初 cwd 是项目容器目录而非 Git 根目录。使用 Get-Process 未见训练 Python；CIM 详细命令行查询因系统权限失败，不宣称查清全部进程命令行。未停止任何进程。\par
+
+Phase-A 配对训练与科学审查材料已完成，本轮目录在检查时尚不存在。历史 final\_\allowbreak{}status 的 publication pending 是提交前快照，后续 publication\_\allowbreak{}verification 收据确认 bb7c25a8 已发布；不能将旧快照字段误判为推理未完成，更不能改写快照。\par
+
+2023 训练场景 10,455；2024 共同验证场景 10,501。两模型 scene\_\allowbreak{}ids 全序列逐项相等且唯一，全部为 2024 年 3–10 月。云南有效暴露 N=36,018,430，参考有雨暴露 R=4,496,600；标签在源 float32 上取 IMERG>0.1 mm/h。两个 BEST 均为 Epoch 9/update 47,052，未重新选择。B0 最新卫星槽为分析时刻 T−10 分钟；B1 为 T−60 至 T−10 的六个因果槽，不能写成含 T 时刻未来观测。\par
+
+\subsection*{指标及分母}
+
+S\_\allowbreak{}occ 为 alpha=0.5、gamma=2 的 focal BCE 分子；S\_\allowbreak{}qr 为真实有雨且有效云南像元的 32 tau 平均 Pinball 之和。Core=(S\_\allowbreak{}occ+S\_\allowbreak{}qr)/N。训练量化损失分量和科学 global\_\allowbreak{}core\_\allowbreak{}L\_\allowbreak{}qr 使用 S\_\allowbreak{}qr/N；科学 Conditional Pinball 使用 S\_\allowbreak{}qr/R，单位为 log1p(mm/h)。二者不可直接互换，也不能把 minibatch 平均损失平均当作全局量。\par
+
+Brier=有效云南像元上 (p−标签)\textasciicircum{}2 的平均，包含真实干像元。AUROC 使用精确 BF16 概率同分组排序、并列半分；AP 使用同分组末端非插值 precision 增量加权。固定概率分箱只用于可靠性诊断，不用于近似 AUROC/AP。单类别分层 AUROC 保持缺失，真实雨分层 AP=1 是条件化后的平凡值，不能作为发生识别证据。POD/FAR/CSI 因概率决策阈值未冻结保持不可估计。\par
+
+\begin{center}\scriptsize\begin{longtable}{@{}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}@{}}\toprule
+指标 & B0 & B1 & B1−B0 & 95\% 配对探索区间\\
+\midrule\endhead
+Core\_\allowbreak{}loss & 0.048759608 & 0.047816404 & -0.000943203 & [-0.001439666, -0.000484232]\\
+Brier & 0.096867626 & 0.095253471 & -0.001614156 & [-0.002899451, -0.000368153]\\
+AUROC & 0.886357037 & 0.893468822 & 0.007111785 & [0.003879209, 0.010605683]\\
+AP & 0.567232691 & 0.585904924 & 0.018672233 & [0.010226829, 0.028673455]\\
+conditional\_\allowbreak{}pinball & 0.124885458 & 0.124113223 & -0.000772235 & [-0.001698889, 0.000235028]\\
+\bottomrule\end{longtable}\end{center}\normalsize
+
+\subsection*{重建与对照}
+
+全部 22 分层点指标由 daily 分子/分母及精确 score counts 重建；月、季节、民用昼夜、真实雨强四种分区均守恒。对全部 110 个比较逐项核对 CSV/JSON 点值、绝对/相对差异、区间和有效重采样次数。32 tau 覆盖率、每 tau Pinball 及其探索区间逐项重建。可靠性所有分箱的计数、平均概率、雨频率及区间重建。旧 Markdown、LaTeX、PDF、SVG/PNG 与 manifest 字节身份一致；其中科学定义人工对照实际 loss/head 源码。文件哈希证明身份，不能单独证明文稿中每一句科学解释正确。\par
+
+35 个非重叠七日 UTC 块覆盖 2024-03-01 至 2024-10-31，seed=2026，2,000 次，每次抽 35 块，B0/B1 共用次数矩阵。完整矩阵零差异重建；66 个 Core/Brier/Conditional Pinball 差异区间独立按池化分子分母重建。排名指标仅对固定 5 个重采样索引执行精确池化 smoke；全量排名 CI 复用已发表结果和绑定，未重复全部分析。训练相关性、跨周天气过程、季节非平稳、单一年份、单一种子和 BEST 选择偏差仍在。\par
+
+\subsection*{未执行与异常}
+
+未读取卫星或 IMERG 原始像元、未打开模型 checkpoint、未新增模型推理。外部冻结静态 mask 仅引用已发表 SHA，未重新读文件；10 项其余冻结协议输入 SHA 已核对。本轮未运行旧训练全套或含 optimizer/backward 的 fixture。初次审计 24 pass/1 fail 保留：将文稿四舍五入的 20.24 错当源 float32 精确值；第二次改为严格对照 float32(20.24)，没有放宽其他指标容差。\par
+
+本轮仅诊断与工程准备；RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true；V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false；2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=0；2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0。\par
+
+\clearpage
+\section*{概率校准与条件上尾诊断}
+
+来源：2024 共同验证集、冻结 Epoch 9 BEST 的已发表可靠性和分位数 CSV。本文没有拟合或应用温度、Isotonic、Platt 校准，也未改阈值或归一化。\par
+
+\subsection*{发生概率}
+
+\begin{center}\scriptsize\begin{longtable}{@{}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}p{\dimexpr(\linewidth-8\tabcolsep)/5\relax}@{}}\toprule
+模型/概率箱 & 暴露数 & 平均概率 & 参考雨频率 & 有效重采样次数\\
+\midrule\endhead
+B0 / 0.0–0.1 & 6337696 & 0.068405 & 0.002501 & 2000\\
+B0 / 0.1–0.2 & 9115715 & 0.151081 & 0.015736 & 2000\\
+B0 / 0.2–0.3 & 8704483 & 0.246331 & 0.052757 & 2000\\
+B0 / 0.3–0.4 & 5726396 & 0.346133 & 0.164820 & 2000\\
+B0 / 0.4–0.5 & 3546596 & 0.444362 & 0.353111 & 2000\\
+B0 / 0.5–0.6 & 1815418 & 0.543056 & 0.581142 & 2000\\
+B0 / 0.6–0.7 & 733466 & 0.638794 & 0.805938 & 2000\\
+B0 / 0.7–0.8 & 38648 & 0.718447 & 0.925300 & 2000\\
+B0 / 0.8–0.9 & 12 & 0.803385 & 1.000000 & 1988\\
+B0 / 0.9–1.0 & 0 & 不可估计 & 不可估计 & 0\\
+B1 / 0.0–0.1 & 5722641 & 0.072449 & 0.001676 & 2000\\
+B1 / 0.1–0.2 & 10337117 & 0.151263 & 0.014491 & 2000\\
+B1 / 0.2–0.3 & 8402652 & 0.245059 & 0.052435 & 2000\\
+B1 / 0.3–0.4 & 5133061 & 0.346318 & 0.157634 & 2000\\
+B1 / 0.4–0.5 & 3443070 & 0.445758 & 0.338899 & 2000\\
+B1 / 0.5–0.6 & 1984432 & 0.543257 & 0.567591 & 2000\\
+B1 / 0.6–0.7 & 888630 & 0.641816 & 0.783517 & 2000\\
+B1 / 0.7–0.8 & 106673 & 0.720870 & 0.917477 & 2000\\
+B1 / 0.8–0.9 & 154 & 0.808594 & 0.948052 & 2000\\
+B1 / 0.9–1.0 & 0 & 不可估计 & 不可估计 & 0\\
+\bottomrule\end{longtable}\end{center}\normalsize
+
+分箱为 [k/10,(k+1)/10)，最后一箱含 1。两模型 0–0.5 箱均为平均概率高于参考雨频率，0.5–0.9 非空箱方向相反。空箱不填零预测/雨频率；B0 0.8–0.9 箱只有 12 个暴露且 1,988 个有效重采样，B1 该箱 154 个暴露。置信区间退化或接近端点不代表尾部已可靠校准；这些暴露高度相关，缺少事件级有效样本数。\par
+
+AUROC/AP 描述排序区分；Brier 是整体概率误差；可靠性比较条件预测概率与参考频率。Brier 改善不能代替校准通过。本轮不新增分箱选择或数据驱动合箱，不把分箱平方误差当作完整 Brier 分解。所有区间来自配对周块探索分析，未校正多重比较和 BEST 选择。\par
+
+\subsection*{条件分位数}
+
+tau\_\allowbreak{}i=(i−0.5)/32，qlog 单位 log1p(mm/h)，覆盖集合仅为参考真实有雨且有效云南像元；coverage\_\allowbreak{}i=mean[log1p(y)\(\le\)qlog\_\allowbreak{}i]。全部 32 个点和区间已核对，原 CSV 继续作为逐 tau 权威表，不按结果选择分位数。\par
+
+B0 q32 覆盖 0.95744184495，目标 0.984375，偏差 −2.693315505 个百分点；B1 0.95076991505，偏差 −3.360508495 个百分点。32 tau 平均绝对覆盖误差 B0=0.0141067991、B1=0.0165553088。总体条件 Pinball 配对差异区间跨零；下列强雨分层 B1 点值均更高。\par
+
+\begin{center}\scriptsize\begin{longtable}{@{}p{\dimexpr(\linewidth-6\tabcolsep)/4\relax}p{\dimexpr(\linewidth-6\tabcolsep)/4\relax}p{\dimexpr(\linewidth-6\tabcolsep)/4\relax}p{\dimexpr(\linewidth-6\tabcolsep)/4\relax}@{}}\toprule
+真实雨强 mm/h & 雨暴露数 & B0 条件 Pinball & B1 条件 Pinball\\
+\midrule\endhead
+(5,10] & 207616 & 0.361769507 & 0.363274722\\
+(10,20] & 46735 & 0.556364308 & 0.562434475\\
+(20,30] & 6053 & 0.795179444 & 0.802547983\\
+(30,50] & 1366 & 0.969106964 & 0.985515238\\
+(50,inf) & 69 & 1.141017210 & 1.172284804\\
+\bottomrule\end{longtable}\end{center}\normalsize
+
+最强雨层仅 69 个相关场景像元暴露，不能当成 69 次独立极端事件。分层在真实雨强条件下进行，描述监督集合上的损失差异，不是从预测中筛出表现最好的样本。\par
+
+\subsection*{上尾、发生概率及数值边界}
+
+B1 云南最大 q32=351.08272 mm/h，对应参考 y=0、p\_\allowbreak{}rain=0.56640625；其 q32>100 mm/h 集合为 58 个暴露、44 格点、28 场景，30 暴露参考有雨，参考最大为源 float32 20.2399997711 mm/h（文稿约 20.24），p\_\allowbreak{}rain 范围 0.1328125–0.84765625。这不是确定性暴雨预测或独立事件数量，且不代表完整概率校准集合。\par
+
+现有 v2 head 为 32 allocation raw 通道和 1 span raw 通道，经正权重归一化累计生成 32 条件 qlog；不是直接输出 32 raw 通道。严格单调和支撑下界有实际 guard。BEST 聚合 crossing/support/nonfinite 均为零；tiny CPU fixture 对实际 API 验证正常单调、非有限 raw 拒绝、精度丢失拒绝、FP32 与 FP64 转换风险区别及实际 FP64 overflow 停止。浮点边界约 log(float64\_\allowbreak{}max)=709.782712893384；边界比较只是筛查，最终转换还必须检查有限性。数值有限不等于物理可信。\par
+
+待检验假设 H1：真实干像元缺少直接条件 quantile 监督可能关联巨大尾部。H2：最高条件 quantile 的尾部配置与发生 head 的联合一致性不足。H3：IMERG 参考误差、过程时空错位、季节及地形差异可能参与异常。当前证据未建立上述因果关系；不自动 clamp、换 loss 或结构。独立雨量站/雷达、审批后的事件和地形目录及独立年份才能进一步检验。\par
+
+原可靠性与全部分位数报告；原上尾报告。本轮仅诊断与工程准备；RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true；V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false；2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=0；2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0。\par
+
+\clearpage
+\section*{独立降水事件目录候选方法}
+
+状态：RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED。只完成数学规则和合成测试，未读取真实降水场、未建立真实目录。候选连通对象的数量不自动等于统计独立事件数。阈值、连接半径、时距、最低面积和持续时间均需先冻结，再读取模型表现。\par
+
+\subsection*{数学对象与单位}
+
+令 y(t,r,c) 为参考降水率 mm/h，v 为独立有效性掩膜，阈值 \(\theta\)>0；active=v 且 y>\(\theta\)。\(\theta\) 与 occurrence 的 0.1 标签阈值目的不同，也不同于 q32 描述阈值。IMERG 半小时产品的 mm/h 是该时段平均率，不能等同瞬时峰值；积累量用 y×\(\Delta\)t\_\allowbreak{}hours，不把 mm/h 阈值冒充日累计气象等级。NASA 产品文档说明半小时和 0.1° 网格性质，正式协议应绑定实际产品版本和误差：NASA IMERG V07 数据集。\par
+
+同一时刻用四邻域或八邻域，必须明确选择。相邻观测时槽只有在时间差恰好等于声明 cadence 时才可连边；跨槽连边条件为 Chebyshev 网格距离\(\le\)声明半径。图的连通分量为候选事件族。输入只有真值和有效性，接口无 B0/B1 预测或误差字段。合成 fixture \(\theta\)=10 只是测试数字，不是科学极端定义。\par
+
+\subsection*{合并、分割与缺测}
+
+同一图连通分量内的分裂和再合并保留一个事件族，并记录分支拓扑需求；两个相隔事件不因发生在同一日期而合并。默认接口无缺测时间桥接能力，缺测时段分割且标记 censored。像元缺测不是无雨；边界、缺测邻居、观测序列首尾均标记可能截断。合并有时会通过窄桥把多个天气过程组成长事件族，需先注册最大持续时间、物理移动半径及过长族人工审查规则，不能按模型得分再拆分。\par
+
+原 frozen common intersection 是筛选后的场景集合，可能缺少连续时槽；仅用该集合会分割真实过程。未来需批准参考完整时间覆盖及缺测元数据权限，不为了连通补读 2025。当前聚合 daily NPZ 不能恢复时空对象，无法生成真实事件数量。\par
+
+\subsection*{研究者选择槽位}
+
+\noindent\textbullet\quad 强度定义：固定物理 \(\theta\)、预先规定积累窗，或仅由 2023 参考气候分布定义的百分位；不得以 B0/B1 误差优劣选择。\par
+\noindent\textbullet\quad 空间连接：4/8 邻域、允许移动距离需从目标 cell footprint 与过程速度依据转换，云南外边界截断需单独标识。\par
+\noindent\textbullet\quad 时间连接：cadence、是否允许缺测桥接、连续干间隔及事件分离时间；当前实现只允许相邻完整槽。\par
+\noindent\textbullet\quad 纳入资格：最小完整面积、观测持续时间、缺测比例、边界对象处理。代码当前只输出未筛选组件，不擅自过滤。\par
+\noindent\textbullet\quad 事件级指标：参考峰值、面积、时间和体积（须面积权重），B0/B1 使用完全相同对象与有效性；事件等权与暴露等权结果分别说明。\par
+\noindent\textbullet\quad 独立性：气旋/雨带可跨连通分量或七日块；候选分量不证明独立，应按天气过程聚类或保留时间区块不确定性，预注册敏感性比较，不挑最佳定义。\par
+
+\subsection*{已实现与测试范围}
+
+src/yuntapr/diagnostics/candidates.py 的 EventRule/event\_\allowbreak{}components 无 I/O；返回暴露数、唯一格点、时槽、参考峰值、截断状态和未审批标记。验证严格阈值、持久过程、移动半径、4/8 邻域、缺时槽、缺像元、分裂合并、确定性和非法输入。尚未实现真实对象追踪、面积积分、天气过程命名或完整生产目录；这些属于审批后的阶段，不以测试通过代替独立性证明。\par
+
+\clearpage
+\section*{云南地形分层候选方案}
+
+状态：RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED。本轮无 DEM 下载、无真实地形分区、无 frozen mask 替换或真实分层模型评价。分区必须在模型表现评价前凭地理物理依据与无模型的地形资料确定。\par
+
+\subsection*{数据与配准方案}
+
+候选 DEM 需登记产品版本、获取日期、SHA256、水平 CRS、垂直基准、填补来源、nodata、分辨率及覆盖范围。SRTM 全球 1 arc-second 产品是候选来源之一，不能把角秒直接视作固定米数，也不能忽略 void filling 来源：USGS SRTM 用户指南。实际选择与采购/下载本轮均未执行。\par
+
+以现有 SP04/IMERG cell-center 和 cell bounds 为目标；先在合适米制坐标下求地形导数，再按真实目标 footprint 做面积加权 mean/median 与地形分布汇总。不同区域的重投影畸变与纬度 cell 面积要登记。坡度/坡向先在高分辨率 DEM 求出，再聚合，不把平滑后的 0.1° 高程坡度等同真实坡度。坡向用 sin/cos 圆周汇总，不平均 359° 与 1° 得 180°。本轮只实现 synthetic 网格中心身份拒绝检查，无 GIS 重采样。\par
+
+\subsection*{变量与候选分层}
+
+高程 z（m）；坡度 arctan(sqrt(g\_\allowbreak{}east²+g\_\allowbreak{}north²))（degree）；坡向为最陡下坡方向，自北顺时针，平地定义缺失；起伏度为事先声明物理邻域内 max(z)−min(z)（m）。分层界限可以使用领域物理边界或只据 DEM 的预声明分位数，研究者需决定边界和尺度；不得由模型误差反推有利边界。演示分层 1000/2000 m 只用于边界合成测试，不是已批准云南分区。\par
+
+迎风/背风必须有明确时刻、气压层或高度的风场；静态坡向不能独立给出迎风判断。候选代理 w\_\allowbreak{}orog=u\_\allowbreak{}east*g\_\allowbreak{}east+v\_\allowbreak{}north*g\_\allowbreak{}north（m/s），正值表示流向上坡的几何分量，负值相反；不等于实际垂直速度。风资料的可用时间须因果，不得把事后再分析当作业务实时输入；气压层被山体遮挡、弱风和缺测保持不可估计。真实风资料与审批均未提供。\par
+
+\subsection*{掩膜与不确定性}
+
+分层掩膜只能与冻结云南 mask 相交，并保留独立 DEM 完整性 mask。缺失 DEM 像元单独报告，不自动补平、不排除后重定义主评价集合。应记录每层格点、场景、有效暴露、有雨暴露、日期块和未来候选事件数；暴露数不是独立样本量。层内 B0/B1 必须共享同一样本条件，保留时间区块不确定性和样本稀少层。邻接地形层空间相关，应避免独立像元区间与过多层结果挑选。\par
+
+\subsection*{合成实现范围}
+
+terrain\_\allowbreak{}fields 接受北向上、行向南、列向东的米制规则网格，仅使用完整中央差分 stencil；边界和缺 stencil 输出 NaN。relief 使用声明方窗半径，完整窗口才给值。fixed\_\allowbreak{}strata 使用左闭右开预声明边界，invalid=-1；require\_\allowbreak{}same\_\allowbreak{}grid 拒绝半格错位、翻转、形状不合和重复坐标，不静默修复。解析平面测试明确坡向约 206.565°、坡度和起伏度；平地/缺测/非法尺度/风向反转均验证。\par
+
+研究者仍需选择 DEM、投影、垂直基准、聚合方式、窗口公里数、高程坡度起伏度分箱、圆周坡向规则、风来源及缺测政策。没有真实 DEM 和风场时，无法报告真实地形层样本数或误差。\par
+
+\clearpage
+\section*{历史 B1 恢复治理偏差复核}
+
+原 治理偏差报告、9 个 source 文件和逻辑 chronology SHA 已核验；本轮没有新独立研究者 LAST-bound 恢复审批记录，状态仍为 NOT\_\allowbreak{}EVIDENCED\_\allowbreak{}IN\_\allowbreak{}REGISTERED\_\allowbreak{}RESUME\_\allowbreak{}RECORDS。工程签名、JSON、远端发布或预检均不等同人类审批，本轮也不补签或追认。\par
+
+冻结恢复规范要求“必须另有绑定具体 LAST SHA 和原授权祖先的研究者恢复批准。”实际恢复绑定使用原 Phase-A 授权和持续目标。绑定提交 f269272c\allowbreak{}821b49c5\allowbreak{}226ddf6d\allowbreak{}75eeb710\allowbreak{}8522cd34，LAST SHA=40f7f120\allowbreak{}4aba5281\allowbreak{}5e1c8c2f\allowbreak{}3d2a5ce5\allowbreak{}d73da6b7\allowbreak{}b0297e1d\allowbreak{}79dc843c\allowbreak{}b3390649。上述身份有证据，缺失独立批准仍须研究者处置。\par
+
+BEST Epoch 9/update 47,052 早于 LAST Epoch 14/update 73,192 和恢复 Epoch 15。BEST 参数未由受影响恢复段得到；后续完整训练历史、早停和无更好 checkpoint 的确认仍经历该恢复段。两个丢弃更新前缀 3,095/382 重放零差异；保留 88,876，全部尝试 92,353。技术可追溯性不能消除治理问题，也不能自行判定科研结果必然有效或无效。\par
+
+研究者应独立决定偏差记录的处置、后续补救要求、BEST 科学审查是否可继续，以及正式验收。新增 synthetic 恢复检查器要求独立 LAST 批准、完成 epoch marker、原授权 SHA 和恢复状态核验，并永远返回 can\_\allowbreak{}launch\_\allowbreak{}formal\_\allowbreak{}training=false；它不修补历史授权，也未接入正式 runner。\par
+
+本轮仅诊断与工程准备；RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true；V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false；2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=0；2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0。\par
+
+\clearpage
+\section*{Phase-B 工程入口准备清单}
+
+结果：允许范围内的只读核验和合成准备完成；正式 v2 Phase-B 入口尚不具备启动资格。v1 训练路径存在不能代表 v2 已就绪。\par
+
+\begin{center}\scriptsize\begin{longtable}{@{}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}@{}}\toprule
+项目 & 本轮证据 & 状态/下一步\\
+\midrule\endhead
+v2 模型入口 & B0MatchedV2/B1V2，1/6 帧、32+1 raw head & 静态源码核对；全模型 synthetic 推理未重复\\
+checkpoint & 两个 Epoch 9 BEST SHA、状态未改收据与历史指标身份 & 元数据核对；私有 checkpoint 字节未重读\\
+冻结输入 & 协议内 10 个仓库输入 SHA & 通过；外部静态 mask 未重新打开\\
+数据年限 & 本轮只访问发表的 2024 聚合统计 & 2025 raw/pixels=0\\
+随机性 & seed=2026、2,000×35 配对重采样矩阵零差异 & 通过；不估计训练种子变异\\
+数值保护 & 实际 v2 CPU tiny fixtures 无梯度更新 & 单调、有限性、支撑、物理溢出拒绝通过\\
+恢复安全 & checkpoint\_\allowbreak{}v2 的身份先校验、完成 epoch marker、原授权链 & 静态核对；历史独立恢复审批缺口保留\\
+批准检查 & prepare-only assess\_\allowbreak{}entry，严格 bool/身份/年份/恢复字段 & 合成通过；永远不能启动训练\\
+正式 v2 Phase-B 协议及 runner & 未发现已授权入口 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED\\
+\bottomrule\end{longtable}\end{center}\normalsize
+
+现有 src/yuntapr/training/phase\_\allowbreak{}b\_\allowbreak{}preparation.py 是旧 v1 单时相 FinalFit 规则：SCENES=23,447、2023=11,720、2024=11,727、EPOCHS=11；不能默认为 v2 的匹配训练集合或训练长度。v2 冻结 Phase-A 集合为 10,455/10,501，但不据此擅自定义 Phase-B 合并集合。数据资格、重新拟合 normalization、fresh/resume 初始化、训练预算、checkpoint 选择和评价策略均需研究者独立决定。\par
+
+新 src/yuntapr/diagnostics/readiness.py 是待审核的检查表模拟器，不是 authorization 颁发器。即使 synthetic 字段全部满足仍不启动；JSON 中 true 不证明实际人类身份。未来正式入口需从独立研究者批准的不可变文档验证范围、SHA、代码版本、数据年限和 provenance，随后才可准备真实 preflight。本轮没有修改任何正式训练入口、冻结配置或权重。\par
+
+停止条件：缺独立批准、SHA 不符、非完成 epoch、原授权链变化、2025 请求、格网不合、非有限值、支持/严格序丢失、源文件锁或清理失败。实际正式 run 的停止/恢复策略仍需由审批协议确定；不得自动跳过 batch、降级数据或修改 loss。\par
+
+未执行：正式配置实例化、真实数据 preflight、checkpoint 反序列化、正式恢复、训练更新。后续测试若涉及合成 optimizer step，也必须与正式更新分别计数且取得该范围授权。本轮 48 个合成测试无 backward/optimizer step，历史 770 项不是本轮执行数。\par
+
+本轮仅诊断与工程准备；RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true；V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false；2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=0；2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0。\par
+
+\clearpage
+\section*{研究者必须独立决定的事项}
+
+以下全部仍为 RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED；本轮工程完成不自动选择任何选项。\par
+
+\begin{center}\scriptsize\begin{longtable}{@{}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}p{\dimexpr(\linewidth-4\tabcolsep)/3\relax}@{}}\toprule
+事项 & 可审查材料 & 依赖\\
+\midrule\endhead
+Phase-A 正式科学验收 & 原验收包与本轮一致性/校准审计 & 研究者独立结论\\
+B1 Epoch 14 LAST 恢复偏差处置 & 原治理源链和本轮复核 & 独立处置记录，不能以工程 pass 追认\\
+Phase-B 目的、模型及范围 & 入口准备清单、v1/v2 不匹配项 & 新正式协议与执行授权\\
+训练集合、normalization、初始化与训练预算 & 冻结 v2 输入及现有 v1 规则 & 科学设计；本轮不改配置\\
+独立事件定义 & 事件候选图规则、合成测试 & 阈值/空间/时间/缺测/独立性预注册\\
+地形分层 & 地形候选方案、配准合成测试 & DEM/风来源、投影、尺度、分箱和掩膜批准\\
+发生校准研究或上尾干预 & 全部 32 覆盖、可靠性和上尾诊断 & 新校准/结构/loss 实验审批\\
+独立物理验证 & 58 暴露联合参考诊断 & 站点/雷达访问权限及资料\\
+最终 2025 测试 & 目前封存 & 单独解封审批，不可借 Phase-B 自动获得\\
+\bottomrule\end{longtable}\end{center}\normalsize
+
+可以安全接续的第一步是研究者审阅文档并登记明确批准/拒绝范围和证据身份。审批之后需再次核对远端 HEAD、dirty workspace、活动进程、冻结 SHA 与新授权 scope，按新授权实现 v2 专用 runner/preflight。事件及地形真实评价需要新的参考连续场、DEM/风或独立观测；正式训练需要额外计算资源。本轮未申请或消耗正式训练资源。批准前在此停止。\par\clearpage\section*{公开方法参考与源码路径}
+NASA IMERG V07 产品与算法：\url{https://gpm.nasa.gov/resources/documents}。
+本轮只用于了解参考资料性质，不替换冻结产品。
+\par USGS SRTM 用户指南：\url{https://lpdaac.usgs.gov/documents/179/SRTM_User_Guide_V3.pdf}。
+\par 时间区块背景：K\"unsch (1989)，\url{https://doi.org/10.1214/aos/1176347265}。
+本项目为固定非重叠周块，非重叠对象也不证明事件独立。
+\par 概率评分背景：Brier (1950)，Verification of Forecasts Expressed in Terms of Probability；定义以当前源代码和冻结协议为准。
+\par 代码入口：\texttt{src/yuntapr/diagnostics/}；新测试：\texttt{tests/phase\_a\_evidence\_hardening/}；只读审计：\texttt{scripts/phase\_a\_evidence\_hardening/audit.py}。
+\par 逐 tau、完整可靠性区间和已发表 SVG/PNG 通过主目录 README 链接访问；本报告不生成新图。
+\end{document}

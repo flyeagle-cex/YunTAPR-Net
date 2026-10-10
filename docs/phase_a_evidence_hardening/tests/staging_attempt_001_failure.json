@@ -1,0 +1,7 @@
+{
+  "status": "STAGING_CHECK_STOPPED_NO_COMMIT",
+  "cause": "Default Git whitespace checks treated byte-preserved CRLF and original diagnostic-log whitespace as trailing whitespace.",
+  "full_unredacted_output_local": ".local/staging_attempt_001_whitespace.log",
+  "correction": "Recognize CR at end of line; check authored code, reports and metadata; exclude complete diagnostic logs from whitespace checks. All staged bytes still compared with working files by SHA256.",
+  "historical_files_modified": false
+}

@@ -1,0 +1,7 @@
+{
+  "status": "STAGING_RESUME_GUARD_STOPPED_NO_COMMIT",
+  "cause": "The new-file guard used ls-files, which includes newly staged additions, during a safe staging retry.",
+  "correction": "Check the existing HEAD tree with ls-tree to distinguish historical tracked files from this task's staged additions; retain the separate rejection of foreign staged paths/status.",
+  "message": "Publication must contain only new allowlisted files: docs/phase_a_evidence_hardening/EVENT_CATALOGUE_CANDIDATES.md",
+  "historical_files_modified": false
+}

@@ -1,0 +1,341 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-10T03:51:23.682677+00:00",
+  "baseline_HEAD": "92687641e59c256a9443b8bfb420b6c947fdcb3a",
+  "checks_passed": 25,
+  "checks_failed": 0,
+  "checks": [
+    {
+      "name": "historical_acceptance_manifest_bytes",
+      "status": "PASS",
+      "detail": {
+        "verified_files": 128,
+        "manifest_sha256": "679742d6577fd50e6cdd46c1df19370b2118c0c8fbde2c9b9e481c25fe94b581"
+      }
+    },
+    {
+      "name": "published_global_json_exact",
+      "status": "PASS",
+      "detail": "Both models match published original metrics exactly"
+    },
+    {
+      "name": "paired_validation_identities",
+      "status": "PASS",
+      "detail": "10501 identical unique 2024 March-October scenes"
+    },
+    {
+      "name": "frozen_protocol_input_sha",
+      "status": "PASS",
+      "detail": {
+        "verified": [
+          "scientific_contract_v1.1",
+          "engineering_v4",
+          "SP04_mapping",
+          "SP04_manifest",
+          "prior_gpu_manifest",
+          "normalization",
+          "B1_2023",
+          "B1_2024",
+          "B0_MATCHED_2023",
+          "B0_MATCHED_2024"
+        ],
+        "deferred": [
+          {
+            "name": "yunnan_mask",
+            "reason": "External static mask; published SHA only, not reopened"
+          }
+        ]
+      }
+    },
+    {
+      "name": "bootstrap_seed_exact_matrix",
+      "status": "PASS",
+      "detail": "Entire stored matrix reproduced from seed=2026; 35 draws each"
+    },
+    {
+      "name": "bootstrap_declaration",
+      "status": "PASS",
+      "detail": "Pointwise exploratory intervals; no independent-pixel assumption"
+    },
+    {
+      "name": "B0_MATCHED_V2:exposure_and_score_counts",
+      "status": "PASS",
+      "detail": "Global denominators and exact-score class counts agree"
+    },
+    {
+      "name": "B0_MATCHED_V2:global_metric_reconstruction",
+      "status": "PASS",
+      "detail": {
+        "metrics": {
+          "Core_loss": 0.0487596076193766,
+          "Brier": 0.09686762633953126,
+          "AUROC": 0.8863570372722711,
+          "AP": 0.5672326912158888,
+          "conditional_pinball": 0.12488545829163177
+        },
+        "S_qr_over_Nvalid": 0.01559090587108187
+      }
+    },
+    {
+      "name": "B0_MATCHED_V2:stratified_points_and_partitions",
+      "status": "PASS",
+      "detail": "All 22 strata recomputed; all four partitions conserve counts"
+    },
+    {
+      "name": "B0_MATCHED_V2:all_probability_bins_and_intervals",
+      "status": "PASS",
+      "detail": [
+        {
+          "bin": 0,
+          "count": 6337696,
+          "predicted_minus_observed": 0.06590352777303098,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 1,
+          "count": 9115715,
+          "predicted_minus_observed": 0.13534498715568047,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 2,
+          "count": 8704483,
+          "predicted_minus_observed": 0.19357368233684155,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 3,
+          "count": 5726396,
+          "predicted_minus_observed": 0.1813136069653365,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 4,
+          "count": 3546596,
+          "predicted_minus_observed": 0.0912507764267131,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 5,
+          "count": 1815418,
+          "predicted_minus_observed": -0.03808653890247315,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 6,
+          "count": 733466,
+          "predicted_minus_observed": -0.1671441175783881,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 7,
+          "count": 38648,
+          "predicted_minus_observed": -0.20685316025408818,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 8,
+          "count": 12,
+          "predicted_minus_observed": -0.19661458333333334,
+          "effective_replicates": 1988
+        },
+        {
+          "bin": 9,
+          "count": 0,
+          "status": "EMPTY"
+        }
+      ]
+    },
+    {
+      "name": "B0_MATCHED_V2:32_quantile_points_and_intervals",
+      "status": "PASS",
+      "detail": {
+        "q32": 0.9574418449495175,
+        "target": 0.984375,
+        "mean_absolute_coverage_error": 0.01410679909542765
+      }
+    },
+    {
+      "name": "B0_MATCHED_V2:checkpoint_and_unchanged_state_metadata",
+      "status": "PASS",
+      "detail": "Published checkpoint receipt and read-only counters; private bytes not reopened"
+    },
+    {
+      "name": "B1_V2:exposure_and_score_counts",
+      "status": "PASS",
+      "detail": "Global denominators and exact-score class counts agree"
+    },
+    {
+      "name": "B1_V2:global_metric_reconstruction",
+      "status": "PASS",
+      "detail": {
+        "metrics": {
+          "Core_loss": 0.047816404266642985,
+          "Brier": 0.09525347050913102,
+          "AUROC": 0.893468821807229,
+          "AP": 0.5859049244520397,
+          "conditional_pinball": 0.12411322286781486
+        },
+        "S_qr_over_Nvalid": 0.015494498731549828
+      }
+    },
+    {
+      "name": "B1_V2:stratified_points_and_partitions",
+      "status": "PASS",
+      "detail": "All 22 strata recomputed; all four partitions conserve counts"
+    },
+    {
+      "name": "B1_V2:all_probability_bins_and_intervals",
+      "status": "PASS",
+      "detail": [
+        {
+          "bin": 0,
+          "count": 5722641,
+          "predicted_minus_observed": 0.0707723318567806,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 1,
+          "count": 10337117,
+          "predicted_minus_observed": 0.13677202623323312,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 2,
+          "count": 8402652,
+          "predicted_minus_observed": 0.19262443799179413,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 3,
+          "count": 5133061,
+          "predicted_minus_observed": 0.18868408118226143,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 4,
+          "count": 3443070,
+          "predicted_minus_observed": 0.10685957249816298,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 5,
+          "count": 1984432,
+          "predicted_minus_observed": -0.024333523474853257,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 6,
+          "count": 888630,
+          "predicted_minus_observed": -0.1417016968887501,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 7,
+          "count": 106673,
+          "predicted_minus_observed": -0.19660650275842997,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 8,
+          "count": 154,
+          "predicted_minus_observed": -0.13945819805194806,
+          "effective_replicates": 2000
+        },
+        {
+          "bin": 9,
+          "count": 0,
+          "status": "EMPTY"
+        }
+      ]
+    },
+    {
+      "name": "B1_V2:32_quantile_points_and_intervals",
+      "status": "PASS",
+      "detail": {
+        "q32": 0.9507699150469243,
+        "target": 0.984375,
+        "mean_absolute_coverage_error": 0.01655530880276209
+      }
+    },
+    {
+      "name": "B1_V2:checkpoint_and_unchanged_state_metadata",
+      "status": "PASS",
+      "detail": "Published checkpoint receipt and read-only counters; private bytes not reopened"
+    },
+    {
+      "name": "all_comparison_csv_json_fields",
+      "status": "PASS",
+      "detail": "CSV/JSON point and interval fields agree for all 110 comparisons"
+    },
+    {
+      "name": "all_strata_loss_bootstrap_intervals",
+      "status": "PASS",
+      "detail": "66 paired pooled-loss difference intervals independently reconstructed"
+    },
+    {
+      "name": "pooled_ranking_replicate_smoke",
+      "status": "PASS",
+      "detail": "Exact-score pooled ranking executable on 5 preselected paired draws; full historical ranking CI not rerun"
+    },
+    {
+      "name": "tail_units_and_joint_probability_reference",
+      "status": "PASS",
+      "detail": {
+        "exposures": 58,
+        "unique_cells": 44,
+        "scenes": 28,
+        "rainy_exposures": 30,
+        "p_range": [
+          0.1328125,
+          0.84765625
+        ],
+        "independent_events": null
+      }
+    },
+    {
+      "name": "historical_recovery_governance_sources",
+      "status": "PASS",
+      "detail": "9 governance source identities preserved; approval still not evidenced"
+    },
+    {
+      "name": "scientific_limits_still_in_force",
+      "status": "PASS",
+      "detail": "No new stage authority"
+    },
+    {
+      "name": "actual_source_static_identity_and_syntax",
+      "status": "PASS",
+      "detail": {
+        "src/yuntapr/losses/total_loss.py": "8e52d3422ec2e8b727c696d470a3d21910c7f1137f901cd5afc1201b9dd9e2d0",
+        "src/yuntapr/losses/pinball.py": "b3ebd505238fe881039f143fe9c73462735782ecfa0dee1e63b5463c3cb49b78",
+        "src/yuntapr/training/checkpoint_v2.py": "597d71aabb60bab972bf7df6c58750d1201824cc2595e65fa07c2a8dede09e52",
+        "src/yuntapr/training/formal_phase_a_v2.py": "94d10e041057c33ba4bdea9863cd83418d3e814ba141724e391613720cfe9790",
+        "src/yuntapr/models/quantile_v2/parameterization.py": "a4846983198636529ff4c4352756bccbcaa54103ec26cf64ad93eb2dddc46d8a",
+        "src/yuntapr/models/quantile_v2/outputs.py": "2efc025e5202e380de0e06203c0701309649c0e4d982aaf49e66daff641b22c7"
+      }
+    }
+  ],
+  "source_sha256": {
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/paired_best_metrics.json": "d596b0631045d0bf438954946402431be193f949740a5b885dc30d32eb3fb1eb",
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/acceptance_manifest.json": "679742d6577fd50e6cdd46c1df19370b2118c0c8fbde2c9b9e481c25fe94b581",
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/paired_bootstrap_block_multiplicities.npy": "583660ea67ca95a46f1d2444db9b8ff606c765ab9b6a413f0a0bd8f6c46c3d02",
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/delivery_v2/paired_uncertainty.json": "c5517106d6834f470062a2927e33026af4df6bb3ed8f5c74f5bb6aecbf4e258d",
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B0_MATCHED_V2/sufficient_statistics.npz": "fe9e76cb033487f609a607df6088f6f465ba54e7852a7e5fe6b3f1ab40ecb24a",
+    "docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/B1_V2/sufficient_statistics.npz": "aa91e04800a7f8ff3a9d0e0329523023141439bd1d61301825247eef06fe8d20"
+  },
+  "MODEL_FORWARDS_ADDED": 0,
+  "BACKWARD_CALLS": 0,
+  "FORMAL_OPTIMIZER_STEPS_ADDED": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "not_executed": [
+    "Raw satellite/IMERG reads",
+    "Private checkpoint reopen/deserialization",
+    "New model inference",
+    "Full 2000-draw ranking CI reanalysis",
+    "Independent gauge/radar validation",
+    "Formal event/terrain evaluation"
+  ]
+}
