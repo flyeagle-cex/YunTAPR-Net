@@ -1,0 +1,201 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "model": "B0_MATCHED_V2",
+  "arm": "E2",
+  "seed": 2026,
+  "status": "PASS",
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "formal_runs_executed": 0,
+  "source_pins_verified": 402,
+  "initial_sha": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+  "identity": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "run": {
+      "experiment_id": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026
+    },
+    "arm_parameters": {
+      "experiment_id": "E2",
+      "alpha": 0.5,
+      "gamma": 2.0,
+      "lambda_q": 2.0
+    },
+    "namespace": "SYNTHETIC_EPOCH_ENGINE_v1__E2__B0_MATCHED_V2__s2026",
+    "source_commit": "435f303a1bdebb30a687f8e02dd8576d0d28cb55",
+    "source_sha": "d3daf9803a766648afe1cbdfc7c4add72018afeb1e921967e4a77bdf9cad6927",
+    "code_sha": "901c09e022a1631bd81f15bedc9dce07b3972250d32da116febfcb06c217e279",
+    "protocol_sha": "66cddf4483ecd18208b5913c7a231e92eecce7a05a320cf76d5ee04db6859c17",
+    "synthetic_registry_sha": "631a6ba5b764ddb34773557ef3931280258436f3815ef13790ea04e675a97601",
+    "synthetic_data_years": [],
+    "synthetic_terminal_epoch": 2,
+    "formal_epochs": 9,
+    "formal_endpoint": "V0_EPOCH9",
+    "formal_train_year": 2023,
+    "formal_report_role": "2024_DEVELOPMENT_NOT_INDEPENDENT_TEST",
+    "train_batch": 2,
+    "validation_batch": 8,
+    "accumulation": 1,
+    "drop_last": false,
+    "warm_start": false,
+    "flags": {
+      "V2_PHASE_B_AUTHORIZED": false,
+      "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+      "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+      "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+      "2025_RAW_ACCESS": 0,
+      "2025_PIXELS_READ": 0
+    }
+  },
+  "resource_admission": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "host_available_bytes": 17244381184,
+    "workspace_free_bytes": 43671322624,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7256145920,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8"
+  },
+  "source_code_sha": "901c09e022a1631bd81f15bedc9dce07b3972250d32da116febfcb06c217e279",
+  "epoch1": {
+    "epoch": 1,
+    "update": 3,
+    "train": {
+      "coverage": {
+        "expected_ids": [
+          "SYNTHETIC_ENGINEERING_ONLY/order_00000",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00001",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00002",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00003",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00004"
+        ],
+        "visited_ids": [
+          "SYNTHETIC_ENGINEERING_ONLY/order_00000",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00003",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00004",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00001",
+          "SYNTHETIC_ENGINEERING_ONLY/order_00002"
+        ],
+        "exactly_once": true
+      },
+      "batches": 3,
+      "batch_records": [
+        {
+          "synthetic_epoch": 1,
+          "synthetic_update": 1,
+          "scene_ids": [
+            "SYNTHETIC_ENGINEERING_ONLY/order_00000",
+            "SYNTHETIC_ENGINEERING_ONLY/order_00003"
+          ],
+          "lr": 1.9127773527161438e-08,
+          "batch": 2,
+          "N_valid": 6860,
+          "N_rain": 0,
+          "S_occ_unweighted_training": 599.8123779296875,
+          "S_qr_unweighted": 0.0,
+          "training_objective_synthetic": 0.08743620669528972,
+          "empty_rain_connected_zero": true,
+          "pre_clip_norm": 5.049376487731934,
+          "post_clip_norm": 4.99999876814816,
+          "limit": 5.0,
+          "missing_gradients": []
+        },
+        {
+          "synthetic_epoch": 1,
+          "synthetic_update": 2,
+          "scene_ids": [
+            "SYNTHETIC_ENGINEERING_ONLY/order_00004",
+            "SYNTHETIC_ENGINEERING_ONLY/order_00001"
+          ],
+          "lr": 3.8255547054322876e-08,
+          "batch": 2,
+          "N_valid": 6860,
+          "N_rain": 0,
+          "S_occ_unweighted_training": 566.544921875,
+          "S_qr_unweighted": 0.0,
+          "training_objective_synthetic": 0.08258672330539359,
+          "empty_rain_connected_zero": true,
+          "pre_clip_norm": 4.905223369598389,
+          "post_clip_norm": 4.905223647830765,
+          "limit": 5.0,
+          "missing_gradients": []
+        },
+        {
+          "synthetic_epoch": 1,
+          "synthetic_update": 3,
+          "scene_ids": [
+            "SYNTHETIC_ENGINEERING_ONLY/order_00002"
+          ],
+          "lr": 5.738332058148432e-08,
+          "batch": 1,
+          "N_valid": 3430,
+          "N_rain": 2450,
+          "S_occ_unweighted_training": 311.9888610839844,
+          "S_qr_unweighted": 1058.7822995810666,
+          "training_objective_synthetic": 0.70832462397846,
+          "empty_rain_connected_zero": false,
+          "pre_clip_norm": 5.201112270355225,
+          "post_clip_norm": 4.999999550863583,
+          "limit": 5.0,
+          "missing_gradients": []
+        }
+      ],
+      "N_valid": 17150,
+      "N_rain": 2450,
+      "S_occ_unweighted_training": 1478.3461608886719,
+      "S_qr_unweighted": 1058.7822995810666
+    },
+    "validation": {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "scientific_performance_evidence": false,
+      "coverage": {
+        "expected_ids": [
+          "SYNTHETIC_ENGINEERING_ONLY/order_10000",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10001",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10002",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10003",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10004"
+        ],
+        "visited_ids": [
+          "SYNTHETIC_ENGINEERING_ONLY/order_10000",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10001",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10002",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10003",
+          "SYNTHETIC_ENGINEERING_ONLY/order_10004"
+        ],
+        "exactly_once": true
+      },
+      "S_occ": 1561.5245574320898,
+      "S_qr": 5309.749131615523,
+      "N_valid": 17150,
+      "N_rain": 12250,
+      "scenes": 5,
+      "forwards": 1,
+      "global_val_core_loss": 0.4006573579619599,
+      "global_L_occ": 0.09105099460245421,
+      "global_core_L_qr": 0.3096063633595057,
+      "numerator_dtype": "float64",
+      "physical_materialization": false,
+      "strict_crossing_count": 0,
+      "support_violation_count": 0,
+      "nonfinite_count": 0,
+      "conditional_pinball_synthetic": 0.433448908703308,
+      "common_occurrence_gamma": 2,
+      "lambda_in_common_metric": false
+    },
+    "formal_epoch": 0,
+    "FORMAL_OPTIMIZER_STEPS": 0
+  },
+  "last1_bytes": 52060649,
+  "SYNTHETIC_OPTIMIZER_STEPS": 3,
+  "peak_cuda_allocated_bytes": 2866935296,
+  "peak_cuda_reserved_bytes": 4001366016,
+  "elapsed_seconds": 2.58365490000142,
+  "task_reserved_steps": 15,
+  "task_completed_steps": 15
+}

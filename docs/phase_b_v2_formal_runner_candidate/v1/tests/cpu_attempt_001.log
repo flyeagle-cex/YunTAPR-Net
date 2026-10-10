@@ -1,0 +1,20 @@
+.............................................F
+================================== FAILURES ===================================
+______________ test_streaming_global_denominator_not_batch_mean _______________
+tests\phase_b_v2_formal_runner_candidate\test_cpu.py:165: in test_streaming_global_denominator_not_batch_mean
+    out, batch = output_and_batch(group, rate); accumulator.add(out, batch)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_formal_runner_candidate\metrics.py:17: in add
+    self.accumulator.add(output, batch.rate, batch.reference_valid, batch.region_mask)
+F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\utils\_contextlib.py:124: in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\training\phase_a_validation_v2.py:15: in add
+    validate_log_quantiles(output.conditional_quantiles_log)
+src\yuntapr\models\quantile_v2\outputs.py:32: in validate_log_quantiles
+    raise FloatingPointError("V2_SUPPORT_LOST_AT_TENSOR_PRECISION")
+E   FloatingPointError: V2_SUPPORT_LOST_AT_TENSOR_PRECISION
+=========================== short test summary info ===========================
+FAILED tests/phase_b_v2_formal_runner_candidate/test_cpu.py::test_streaming_global_denominator_not_batch_mean
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 45 passed in 4.27s
