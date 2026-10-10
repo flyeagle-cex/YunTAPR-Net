@@ -1,0 +1,33 @@
+{
+  "scope": "STATIC_DOCUMENT_AND_CONFIG_ONLY",
+  "final_attempt": "static_attempt_003.json",
+  "final_unique_checks_pass": 28,
+  "final_failures": 0,
+  "negative_config_cases": 20,
+  "public_sources_SHA_verified": 58,
+  "prior_public_preflight_manifest_members_SHA_verified": 27,
+  "required_markdown_documents": 7,
+  "local_links_verified": 24,
+  "previous_model_data_training_tests_rerun": 0,
+  "initial_attempts": [
+    {
+      "file": "static_attempt_001.json",
+      "pass": 27,
+      "fail": 1,
+      "reason": "README linked summary before it was produced",
+      "repair": "Created truthful failure-bearing summary before next check"
+    },
+    {
+      "file": "static_attempt_002.json",
+      "pass": 27,
+      "fail": 1,
+      "reason": "Private-path regex misclassified the final s:/ in an https URL as a drive",
+      "repair": "Require non-alphanumeric boundary before drive letter; retain absolute path detection"
+    }
+  ],
+  "all_attempt_case_executions": 84,
+  "final_unique_checks_not_84": true,
+  "negative_tests_are_JSON_mutations_not_models": true,
+  "confers_execution_authority": false,
+  "other_repair": "A document patch context did not match; no file changed. DG1-DG5 labels then updated narrowly without changing protocol D1."
+}

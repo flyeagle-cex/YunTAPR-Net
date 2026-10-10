@@ -1,0 +1,15 @@
+{
+  "scope": "PUBLICATION_STATIC_AUDIT",
+  "initial_failures": 2,
+  "initial_reason": "An overly broad publication scanner matched generic /home/ or /Users/ detection literals in the checker source itself, not a personal path",
+  "repair": "Match complete personal path segments; final --check-only must require manifest existence",
+  "pre_manifest_probe": "pre_manifest_probe.json is preliminary 28 checks, NOT a manifest verification",
+  "core_static_attempts_preserved": [
+    "static_attempt_001.json",
+    "static_attempt_002.json",
+    "static_attempt_003.json"
+  ],
+  "new_real_data_reads": 0,
+  "formatting_failure": "git diff --cached --check detected CRLF as trailing whitespace under repository core.autocrlf=false and redundant blank EOF lines",
+  "formatting_repair": "Normalize only new package to UTF-8/LF with one terminal newline; recompute manifest; frozen source bytes left unchanged"
+}

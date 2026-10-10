@@ -1,0 +1,393 @@
+{
+  "schema": "PHASE_B_V2_SCIENTIFIC_DECISION_CANDIDATE_v1",
+  "baseline_commit": "090ad2e3a912e214976b4236f90f99f41df7cd2e",
+  "status": "PROPOSED_FOR_RESEARCHER_APPROVAL",
+  "decision_status": "RESEARCHER_DECISION_REQUIRED",
+  "execution_status": "NOT_AUTHORIZED",
+  "scope": "PUBLIC_EVIDENCE_AND_STATIC_DOCUMENTS_ONLY",
+  "governance": {
+    "V2_PHASE_B_AUTHORIZED": false,
+    "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+    "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+    "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+    "FORMAL_OPTIMIZER_STEPS": 0,
+    "2025_PIXELS_READ": 0,
+    "2025_RAW_ACCESS": 0,
+    "can_launch_formal_training": false
+  },
+  "protocol": {
+    "route": "D1",
+    "qualification": "Q1_M1_PAIRED_FROZEN",
+    "normalization": "N0_FROZEN_2023_SHARED",
+    "initialization": "I3_PAIRED_FRESH",
+    "train_year": 2023,
+    "development_year": 2024,
+    "sealed_years": [
+      2025
+    ],
+    "months": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "train_scenes": 10455,
+    "development_scenes": 10501,
+    "seeds": [
+      2026,
+      2027,
+      2028
+    ],
+    "models": [
+      "B0_MATCHED_V2",
+      "B1_V2"
+    ],
+    "arms": {
+      "E0": {
+        "alpha": 0.5,
+        "gamma": 2,
+        "lambda_q": 1
+      },
+      "E1": {
+        "alpha": 0.5,
+        "gamma": 0,
+        "lambda_q": 1
+      },
+      "E2": {
+        "alpha": 0.5,
+        "gamma": 2,
+        "lambda_q": 2
+      }
+    },
+    "epochs": 9,
+    "budget": "B9",
+    "scheduler": "S0_ORIGINAL_50_EPOCH_PREFIX",
+    "scheduler_horizon": 50,
+    "selection": "V0_FIXED_EPOCH9",
+    "train_batch": 2,
+    "validation_batch": 8,
+    "accumulation": 1,
+    "drop_last": false,
+    "warm_start": false,
+    "quantiles": 32,
+    "tau32": 0.984375,
+    "rain_label": "FLOAT32_Y_GT_FLOAT32_0.1_BEFORE_PROMOTION",
+    "quantile_dtype": "FP64",
+    "common_evaluation_dtype": "FP64",
+    "yunnan_cells": 3430,
+    "target_shape": [
+      100,
+      100
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2026",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E0__B1_V2__s2026",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2026",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B1_V2__s2026",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2026",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B1_V2__s2026",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2026,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2027",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E0__B1_V2__s2027",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2027",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B1_V2__s2027",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2027",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B1_V2__s2027",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2027,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2028",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E0__B1_V2__s2028",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2028",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E1__B1_V2__s2028",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2028",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    },
+    {
+      "run_id": "E2__B1_V2__s2028",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2028,
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "budget": {
+    "runs": 18,
+    "formal_runs_executed": 0,
+    "updates_per_epoch": 5228,
+    "updates_per_run": 47052,
+    "updates_total": 846936,
+    "validation_batches_per_epoch": 1313,
+    "validation_batches_per_run": 11817,
+    "validation_batches_total": 212706,
+    "stage1_runs": 6,
+    "stage1_updates": 282312,
+    "stage1_validation_passes": 54,
+    "stage1_validation_batches": 70902,
+    "stage2_runs": 12,
+    "stage2_updates": 564624,
+    "stage2_validation_batches": 141804
+  },
+  "metrics": {
+    "primary_HO": "BRIER_E1_MINUS_E0_BY_MODEL_SEED",
+    "primary_HQ": "ABS_Q32_COVERAGE_ERROR_E2_MINUS_E0_BY_MODEL_SEED",
+    "training": "(S_occ_gamma_arm+lambda_q*S_qr)/N_valid",
+    "common_core": "(S_occ_gamma2_FP64+S_qr_unweighted_FP64)/N_valid",
+    "conditional_pinball": "S_qr_unweighted_FP64/N_rain",
+    "quantile_coverage": "RAIN_VALID_LOG1P_Y_LE_Q_FP64",
+    "rain_strata_mm_h": [
+      "(0.1,1]",
+      "(1,5]",
+      "(5,10]",
+      "(10,20]",
+      "(20,30]",
+      "(30,50]",
+      "(50,inf)"
+    ],
+    "tail_thresholds_mm_h": [
+      10,
+      50,
+      100,
+      500,
+      1000
+    ],
+    "probability_bins": 10,
+    "empty_metric": "NA_WITH_REASON_NO_REDRAW",
+    "report_all_32": true
+  },
+  "statistics": {
+    "recommended_method": "M-C_FULL_EFFECTS_POINTWISE_EXPLORATORY_INTERVALS",
+    "recommendation_status": "NOT_APPROVED",
+    "confirmatory_significance_claim": false,
+    "fwer_control_claim": false,
+    "bootstrap": {
+      "status": "PROPOSED_NOT_EXECUTED",
+      "utc_start": "2024-03-01",
+      "utc_end": "2024-10-31",
+      "blocks": 35,
+      "block_days": 7,
+      "replicates": 2000,
+      "seed": 2026,
+      "paired_all_runs": true,
+      "ratio_after_pool": true,
+      "percentiles": [
+        2.5,
+        97.5
+      ]
+    },
+    "primary_comparisons": 4,
+    "seed_summary": "PER_SEED_EFFECT_THEN_EQUAL_MEAN_RANGE_DESCRIPTIVE_SD",
+    "threshold_policy": "DESCRIPTIVE_NO_AUTOMATIC_SUCCESS_OR_ADOPTION",
+    "statistical_power": "NOT_YET_ESTABLISHED",
+    "independent_event_count": "NOT_YET_ESTABLISHED",
+    "raw_p_construction": "NOT_YET_ESTABLISHED"
+  },
+  "positioning": {
+    "recommended": "A_RETROSPECTIVE_CAUSAL_IR_WITH_DEPLOYMENT_POTENTIAL",
+    "recommendation_status": "NOT_APPROVED",
+    "strict_operational_B": "NOT_ESTABLISHED",
+    "latency_deadline_seconds": null
+  },
+  "integrity": {
+    "prior_preflight_overall": "NOT_VERIFIED",
+    "frozen_scenes": 20956,
+    "referenced_unique_files": 67006,
+    "payload_sha_unique_files": 294,
+    "payload_sha_not_verified_files": 66712,
+    "decoded_scenes": 48,
+    "late_created_scene_slot_references": 27880,
+    "initial_2025_path_attribute_queries": "NOT_INSTRUMENTED",
+    "historical_2025_payload_binary_reads": 0,
+    "historical_2025_pixels_read": 0,
+    "kernel_wide_zero_access_claim": false,
+    "real_preflight_rerun_after_guard_fix": false,
+    "recommended_completion": "I-C_APPROVED_SWEEP_AND_SAME_BYTES_OR_IMMUTABLE_CONSUMPTION",
+    "recommendation_status": "NOT_APPROVED"
+  },
+  "approval_events": [],
+  "decision_groups": [
+    {
+      "id": "DG1_SCIENTIFIC_SCOPE_AND_INDEPENDENT_HISTORY_DISPOSITION",
+      "status": "NOT_APPROVED",
+      "researcher_event_reference": null
+    },
+    {
+      "id": "DG2_PROTOCOL_STATISTICS_THRESHOLDS",
+      "status": "NOT_APPROVED",
+      "researcher_event_reference": null
+    },
+    {
+      "id": "DG3_INTEGRITY_AND_FUTURE_READONLY_SCOPE",
+      "status": "NOT_APPROVED",
+      "researcher_event_reference": null
+    },
+    {
+      "id": "DG4_FORMAL_INTEGRATION_AUTHORITY_RESOURCES",
+      "status": "NOT_APPROVED",
+      "researcher_event_reference": null
+    },
+    {
+      "id": "DG5_SEPARATE_STAGE1_EXECUTION",
+      "status": "NOT_APPROVED",
+      "researcher_event_reference": null
+    }
+  ],
+  "thresholds": {
+    "minimum_brier_improvement": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "ABSOLUTE_DIMENSIONLESS"
+    },
+    "minimum_abs_q32_error_reduction": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "COVERAGE_PROPORTION"
+    },
+    "maximum_cpb_degradation": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "LOG1P_DOMAIN_PINBALL"
+    },
+    "maximum_strong_rain_cpb_degradation_by_bin": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "LOG1P_DOMAIN_PINBALL_BY_FROZEN_BIN"
+    },
+    "maximum_brier_degradation_HQ": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "ABSOLUTE_DIMENSIONLESS"
+    },
+    "maximum_auroc_drop": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "ABSOLUTE_DIMENSIONLESS"
+    },
+    "maximum_ap_drop": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "ABSOLUTE_DIMENSIONLESS"
+    },
+    "tail_distribution_acceptance_rule": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "EXPOSURE_FRACTION_AND_LOG_SPAN_RULE"
+    },
+    "seed_guardrail_aggregation_rule": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "LOGICAL_RULE"
+    },
+    "minimum_eligible_blocks": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "BLOCK_COUNT"
+    },
+    "minimum_available_replicate_fraction": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null,
+      "unit": "FRACTION"
+    }
+  }
+}
