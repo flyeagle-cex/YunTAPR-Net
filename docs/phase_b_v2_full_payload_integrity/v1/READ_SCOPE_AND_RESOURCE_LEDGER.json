@@ -1,0 +1,59 @@
+{
+  "scope": "FROZEN_2023_2024_READ_ONLY_SHA256_ONLY",
+  "limits": {
+    "max_total_content_bytes": 536870912000,
+    "max_elapsed_seconds": 21600,
+    "chunk_bytes": 8388608,
+    "max_working_set_bytes": 2147483648,
+    "min_audit_disk_free_bytes": 268435456
+  },
+  "inventory_counts": {
+    "B13": 66516,
+    "IMERG": 490
+  },
+  "order": "2023 then 2024; original B1 rows; IMERG then slots0..5; first occurrence dedup",
+  "payload_open_attempts": 67006,
+  "payload_open_successes": 67006,
+  "metadata_handle_attempts": 67006,
+  "metadata_handle_successes": 67006,
+  "directory_metadata_handles": 510,
+  "payload_application_bytes": 294841651602,
+  "public_metadata_bytes": 43083272,
+  "total_content_bytes_accounted": 294884734874,
+  "public_metadata_counter_scope": "Pinned Audit.public reads only; excludes interpreter imports, git, source-identity lookup, repository review and the local journal",
+  "actual_physical_storage_bytes": "NOT_MEASURED_OS_CACHE_MAY_APPLY",
+  "raw_resolve_calls": 0,
+  "raw_stat_calls": 0,
+  "raw_stat_counter_scope": "Python Path.resolve/os.stat only; native metadata handles counted separately",
+  "controlled_2025_file_metadata_handle_attempts": 0,
+  "controlled_2025_payload_opens": 0,
+  "measurement_scope": "Exact application handle entrypoints; not system-wide monitoring",
+  "handle_policy": "OPEN_EXISTING, read-only access, FILE_SHARE_READ only, OPEN_REPARSE_POINT, parent directory locks; no write/delete sharing",
+  "supervisor": {
+    "supervisor_started_at_utc": "2026-10-10T12:30:24.882946+00:00",
+    "supervisor_finished_at_utc": "2026-10-10T14:19:05.856571+00:00",
+    "elapsed_seconds": 6520.968000000001,
+    "worker_exit_code": 0,
+    "hard_time_stop": false,
+    "watchdog_seconds": 21595
+  },
+  "audit_started_at_utc": "2026-10-10T12:30:25.032345+00:00",
+  "audit_finished_at_utc": "2026-10-10T14:19:00.659676+00:00",
+  "resources": {
+    "working_set_bytes": 1682829312,
+    "peak_working_set_bytes": 1693114368,
+    "private_bytes": 1689346048,
+    "peak_pagefile_bytes": 1700933632
+  },
+  "interrupted_read_byte_uncertainty_upper": 0,
+  "failed_files": [],
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_PIXELS_READ": 0,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED",
+  "model_forwards": 0,
+  "historical_checkpoint_reads": 0
+}

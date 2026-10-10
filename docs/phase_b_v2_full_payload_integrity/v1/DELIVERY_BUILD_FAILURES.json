@@ -1,0 +1,10 @@
+{
+  "stage": "POST_AUDIT_PUBLIC_DELIVERY_CHECK",
+  "initial_failure": "AssertionError: source hash changed after README resource summary edit, before manifest refresh",
+  "file": "docs/phase_b_v2_full_payload_integrity/v1/build_delivery.py",
+  "expected_old_sha256": "337907f03f798e345b58487e0f8e20a97d82c47a77a65fffd996efbe5ac707b8",
+  "actual_edited_sha256": "7ac7c87b14e0dbe8d3af9969efb4d89cab231bdf796685bf67f911b2533dad52",
+  "repair": "Regenerate reports and manifest from the existing local journal, then verify the public package",
+  "new_raw_file_opens": 0,
+  "raw_audit_status_changed": false
+}
