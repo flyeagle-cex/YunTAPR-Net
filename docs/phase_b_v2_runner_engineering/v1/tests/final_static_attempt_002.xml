@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="1.950" timestamp="2026-10-10T16:35:40.788088+08:00" hostname="LAPTOP-0KNAHACI"><testcase classname="" name="tests.phase_b_v2_runner_candidate.test_final_static" time="0.000"><error message="collection failure">docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\python.py:508: in importtestmodule
+    mod = import_path(
+docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\pathlib.py:596: in import_path
+    importlib.import_module(module_name)
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\assertion\rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests\phase_b_v2_runner_candidate\test_final_static.py:6: in &lt;module&gt;
+    from yuntapr.experimental.phase_b_v2_runner_candidate.checkpoint import validate_payload
+src\yuntapr\experimental\phase_b_v2_runner_candidate\checkpoint.py:18: in &lt;module&gt;
+    from .safety import TEMP_ROOT, checkpoint_io
+E     File "REPOSITORY\src\yuntapr\experimental\phase_b_v2_runner_candidate\safety.py", line 130
+E       with temporary.open("w", encoding="utf-8") as stream:
+E   IndentationError: unexpected indent</error></testcase></testsuite></testsuites>

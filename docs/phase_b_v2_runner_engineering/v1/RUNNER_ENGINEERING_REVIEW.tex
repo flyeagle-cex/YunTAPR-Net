@@ -1,0 +1,83 @@
+\documentclass[UTF8,11pt,a4paper]{ctexart}
+\usepackage[margin=21mm]{geometry}
+\usepackage{amsmath,booktabs,array,longtable,hyperref,fancyhdr}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{YunTAPR-Net 工程候选审查}\fancyhead[R]{合成工程专用}\fancyfoot[C]{\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[L]{YunTAPR-Net 工程候选审查}\fancyhead[R]{合成工程专用}\fancyfoot[C]{\thepage}}
+\setlength{\headheight}{16pt}\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\begin{document}
+\begin{center}{\Large Phase-B v2 独立 Runner 工程审查}\par
+{\small 2026-10-10 · 候选 v1 · 未批准正式科学执行}\end{center}
+\textbf{本轮结果：}75 CPU、8 CUDA 唯一检查通过；12 次真实合成 AdamW 更新；正式更新 0。旧 91 CPU、6 CUDA 检查未重跑。两次工程错误已修复并保留：Windows 锁释放顺序导致 1 个失败；追加 fsync 时缩进错误导致 1 个测试收集错误。
+
+新代码只在 \path{src/yuntapr/experimental/phase_b_v2_runner_candidate/}。没有真实数据入口或正式 epoch 循环；checkpoint 全部留在本轮专用临时目录，没有发布任何模型权重。
+\section*{更新及共同评价的区别}
+\[
+L_{train}=\frac{S_{occ,\gamma}^{FP32}+\lambda_qS_{qr}^{FP64}}{N_{valid}},\qquad
+L_{common}=\frac{S_{occ,2}^{FP64}+S_{qr}^{FP64}}{N_{valid}},\qquad
+L_{CPB}=\frac{S_{qr}^{FP64}}{N_{rain}}.
+\]
+E0：$(\gamma,\lambda_q)=(2,1)$；E1：$(0,1)$；E2：$(2,2)$；$\alpha=0.5$。
+参考有雨标签先在原 FP32 域比较 $r>0.1$ mm/h；$\tau_i=(i-0.5)/32$。32 个 Pinball 先平均，再只对有雨有效格点求和。共同评价重新以 FP64、gamma=2 计算发生分子，不复用训练发生分子，不引入 $\lambda_q$。
+
+人工 batch=2：B0输入 $[2,1,501,501]$，B1输入 $[2,6,501,501]$。\par 监督 $[2,1,100,100]$，分位数 $[2,32,100,100]$。人工掩膜每场景3430格点，不代表云南地理。AdamW沿用冻结分组衰减 $10^{-4}/0$、betas $(0.9,0.999)$、eps $10^{-8}$、clip=5。LR在更新前赋值，沿原50epoch轨迹前缀，首次为 $10^{-4}/5228$。
+
+\textbf{兼容范围：}6 个完整模型事务证实双头和骨干参与更新、参数/状态有限、同初态重放及 LAST 恢复完全一致。无雨批次验证了条件头连接的零梯度，但没有对无雨批次 step。本轮没有新的真实科学性能结果，也没有证明校准、q32或上尾问题已解决。
+\newpage
+\section*{Checkpoint 与故障边界}
+schema为 \path{SYNTHETIC_B9_V0_CANDIDATE_v1}。包含模型、AdamW、S0调度、所有RNG、seed/arm、源commit、冻结来源SHA、候选源码SHA、protocol SHA、fresh祖先及人工完成边界。正式epoch、正式更新均固定为0；候选终点9仅为元数据。
+
+保存：独占锁、临时序列化、flush/fsync、SHA、rename blob、提交 receipt；只有 receipt 完成才可恢复。读取先核对SHA，再 weights\_only=True。恢复在任何状态应用前验证全部字段；apply异常后runner停用，不自动重试。回滚模型/RNG不回滚本轮更新账本。
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.43\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}}\toprule
+测试故障&实际结果\\\midrule
+保存中断、blob后中断&没有receipt，不可恢复；保留临时/orphan证据\\
+锁异常、外部预存锁&拒绝保存；不删除外部锁\\
+截断、byte修改、错误SHA&反序列化前拒绝\\
+缺失模型/optimizer、错误seed/arm/epoch/来源&校验拒绝；真实B0/B1 live状态保持不变\\
+AdamW moments/shape/dtype/非有限/step/LR异常&人工元数据边界测试拒绝\\
+apply异常&runner poisoned，后续更新拒绝\\
+FRESH0重放及LAST1恢复&6组model、optimizer、scheduler、RNG摘要一致\\\bottomrule
+\end{longtable}
+LAST1只表示一个人工微循环完成，不是正式完整epoch。Windows rename/fsync与故障注入不证明断电目录持久性，正式集成仍需专门验证。
+
+首次完成12次更新后补强源码身份、dtype、quota落盘和guard。原始更新代码摘要与最终代码摘要分别保留；追加CPU及2个无更新CUDA检查通过。受12次硬上限约束，最终收尾版本没有再完整重复optimizer更新，不能伪称一次同版本全套运行。
+
+\newpage
+\section*{本人审查顺序与实际资源}
+先看 \path{FINAL_CODE_REVIEW_HANDOFF.md}，再按 identity、optimizer、safety、rng、checkpoint、runner 的顺序阅读。核心损失仍位于已有 ablations命名空间；评价来源是 \path{training/phase_a_validation_v2.py} 的 LogDomainValidation；来源SHA见 manifest与source\_identity。333个冻结/历史来源未改变；正式训练源码没有导入候选模块。
+
+\begin{center}\small
+\begin{tabular}{lrrr}\toprule 模型/臂&allocated MiB&reserved MiB&更新+评价秒\\\midrule
+B0MATCHEDV2/E0&2702.91&3262&0.453\\
+B0MATCHEDV2/E1&2702.91&3262&0.434\\
+B0MATCHEDV2/E2&2702.91&3262&0.416\\
+B1V2/E0&2726.53&3280&0.407\\
+B1V2/E1&2726.53&3280&0.413\\
+B1V2/E2&2726.53&3280&0.420\\
+\bottomrule\end{tabular}\end{center}
+RTX5060 Laptop；固定完整架构和精度。峰值包含初始化、无雨backward、两次step、评价及保存恢复。计时使用CUDA synchronize。这些短程人工数据测量不包括真实I/O、长期缓存、完整验证或热降频，不能直接外推正式耗时。
+
+未完成正式工程事项：真实数据资格/preflight、完整epoch与验证完成证明、正式审批审计服务、恢复授权祖先链、真实资源与存储测量、长期中断/断电耐久性、多步正式训练回归。当前所有科学效应仍待独立研究者决定。
+
+18个候选运行：两个模型、三个臂、seeds2026/2027/2028，固定9epoch、第9epoch终点。每epoch5228更新；每运行47052，计划总846936；首批seed2026六组282312。上述数值全部是计划，实际正式更新0。
+\newpage
+\section*{独立研究者决策清单}
+\begin{enumerate}
+\item 独立接受Phase-A证据的范围；H-O/H-Q及E0/E1/E2科学协议。
+\item Brier最小有意义改善：绝对差或相对改善的标准；数值尚未建立。
+\item q32覆盖误差标准：相对 $0.984375$ 的绝对误差（百分点）；不得只因覆盖提高宣称更好。
+\item Conditional Pinball、AUROC、AP副作用容忍界限：原单位/相对增幅及绝对下降，分别预定。
+\item 多重比较：有效p值基础上的Holm、适用假设成立的配对max-stat，或保持探索性效应与区间；检验家族及功效尚未建立。
+\item 历史B1恢复治理偏差的独立处置；不得以本轮测试追认。
+\item 正式Runner集成许可；须另建真实数据接入版本。
+\item 2023/2024真实数据preflight许可；2025封存。
+\item GPU/磁盘/时间窗口、停止与恢复策略及正式预算。
+\item seed2026六组的单独执行许可；其他seed以后按独立许可补齐，不能按首批表现修改规则。
+\end{enumerate}
+数值效应界限、统计功效均为 \path{NOT_YET_ESTABLISHED}；全部项目 \path{RESEARCHER_DECISION_REQUIRED}。D01/D02初步讨论不等于签署。
+
+真实LAST恢复必须另行绑定具体SHA及授权祖先，并由本人独立批准。本轮合成checkpoint恢复不授予正式恢复权。固定保持：Phase-B未授权，正式执行未授权，科学审批必需，历史恢复未追认，2025原始访问和像元读取均为0。
+
+\textbf{审批边界停止：}没有正式训练入口；批准字符串、JSON、Git提交或合成测试通过都不能启动正式训练。保护是候选Python进程的防误用机制，不是恶意代码安全沙箱。
+\end{document}

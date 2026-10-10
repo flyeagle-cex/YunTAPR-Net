@@ -1,0 +1,32 @@
+
+=================================== ERRORS ====================================
+___ ERROR collecting tests/phase_b_v2_runner_candidate/test_final_static.py ___
+docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\python.py:508: in importtestmodule
+    mod = import_path(
+docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\pathlib.py:596: in import_path
+    importlib.import_module(module_name)
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1331: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:935: in _load_unlocked
+    ???
+docs\phase_b_v2_ablation_implementation\v1\.local\test_dependencies\_pytest\assertion\rewrite.py:188: in exec_module
+    exec(co, module.__dict__)
+tests\phase_b_v2_runner_candidate\test_final_static.py:6: in <module>
+    from yuntapr.experimental.phase_b_v2_runner_candidate.checkpoint import validate_payload
+src\yuntapr\experimental\phase_b_v2_runner_candidate\checkpoint.py:18: in <module>
+    from .safety import TEMP_ROOT, checkpoint_io
+E     File "<REPOSITORY>\src\yuntapr\experimental\phase_b_v2_runner_candidate\safety.py", line 130
+E       with temporary.open("w", encoding="utf-8") as stream:
+E   IndentationError: unexpected indent
+=========================== short test summary info ===========================
+ERROR tests/phase_b_v2_runner_candidate/test_final_static.py
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 1.96s
