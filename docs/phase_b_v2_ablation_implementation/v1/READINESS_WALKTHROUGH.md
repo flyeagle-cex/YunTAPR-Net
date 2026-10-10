@@ -1,0 +1,17 @@
+# 元数据审核与阻断runner逐段解读
+
+readiness.py不import torch、模型、数据、optimizer，也不打开文件。其参数是Python dataclass/dict/Sequence；通过包公开入口导入仍会先执行包__init__并加载loss依赖，不能将整个包称为零torch依赖。static_review.py才是标准库独立入口。
+
+require_sha(value,name)用re.fullmatch要求完整64位小写十六进制字符串，而非只检查某个子串。它验证格式，不证明SHA对应真实文件、更不证明人类授权。TensorIdentity(shape,dtype,sha256)的shape必须tuple且每维正整数，dtype精确float32；__post_init__在构造时运行。
+
+state_metadata_digest(tensors)要求非空dict，key是非空参数名，value是TensorIdentity；sorted按名字稳定排序，asdict递归把dataclass转dict，json.dumps(sort_keys=True,separators=...)固定表示，然后hashlib.sha256(body.encode()).hexdigest()生成64位digest。该digest是声明JSON的身份，不能等同真实tensor bytes hash或加载后的全model SHA。
+
+FreshRecord字段及validate见集成提案；validate再次检查RunSpec、四个SHA、historical_checkpoint_loaded严格False以及声明digest。audit_fresh_metadata用run_id建查找dict，再核对完整18集合，避免重复项被dict静默覆盖。不同seed的hash没有自动相等约束；同seed跨臂和跨模型按照冻结匹配规则检查，共享shape权重须一致。
+
+集合运算different={name:shape不同的名字}在实际代码用set推导式；必须恰好两个冻结输入权重名，不允许新增第三个架构差异。其他权重比较的是TensorIdentity全字段而非只shape。这里未检查真实参数量、native skip zero或RNG来源，因为没有实际模型；输出明确actual_initialization_proven=false。
+
+review_checkpoint_binding(metadata,expected,*,resume_approval_reference=None)只检查封闭字段、SHA格式、完成epoch预算与原事件reference、具体六项expected绑定。expected必须完整，不接受遗漏字段。即使reference有字符串也只是“存在待核验引用”，不会设置approval_authenticity_verified=true或can_apply_checkpoint_state=true。epoch9无剩余更新，next_epoch为None。
+
+FormalExecutionBlocked继承RuntimeError。BlockedRunner.describe返回设计信息；run(*args,**kwargs)->NoReturn可以接任意伪flag，但函数唯一行为是raise。NoReturn是类型提示，不是安全机制；真正阻断来自无条件raise和没有执行分支。测试传入False/True/APPROVED/AUTHORIZED_TO_EXECUTE四种值都确认抛错。
+
+练习：在合成metadata副本中改一个共享tensor SHA，预测哪个比较拒绝；删一个run或重复一项，解释为何集合检查仍能发现；把completed_epoch改9，手算remaining=0；解释hash一致、metadata一致、真实初始化证据与独立批准为什么是四件不同事。

@@ -1,0 +1,30 @@
+........................................................................ [ 40%]
+.............................................F.......................... [ 81%]
+.................................                                        [100%]
+================================== FAILURES ===================================
+_______ test_combine_device_mismatch_rejected_before_finite_operations ________
+
+    def test_combine_device_mismatch_rejected_before_finite_operations():
+        with pytest.raises(ValueError, match="device"):
+>           combine_numerators(torch.tensor(1.), torch.empty((), dtype=torch.float64, device="meta"), 1, lambda_q=1.)
+
+tests\phase_b_v2_ablation_implementation\test_losses.py:303: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\yuntapr\experimental\phase_b_v2_ablations\total.py:19: in combine_numerators
+    finite_tensor(name, value)
+src\yuntapr\experimental\phase_b_v2_ablations\validation.py:33: in finite_tensor
+    if not bool(torch.isfinite(value).all()):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = tensor(..., device='meta', size=(), dtype=torch.bool)
+
+    @register_meta(aten._local_scalar_dense)
+    def meta_local_scalar_dense(self: Tensor):
+>       raise RuntimeError("Tensor.item() cannot be called on meta tensors")
+E       RuntimeError: Tensor.item() cannot be called on meta tensors
+
+F:\pytorch\Research\.venv-cuda\Lib\site-packages\torch\_meta_registrations.py:8086: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/phase_b_v2_ablation_implementation/test_losses.py::test_combine_device_mismatch_rejected_before_finite_operations
+1 failed, 176 passed in 2.04s

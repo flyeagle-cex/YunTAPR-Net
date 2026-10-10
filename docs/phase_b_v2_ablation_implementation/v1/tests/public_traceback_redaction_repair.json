@@ -1,0 +1,11 @@
+{
+  "closure_attempt_001": "FAILED_BEFORE_MANIFEST_OR_RELEASE",
+  "cause": "Old collection-error XML exposed dependency user-profile path",
+  "affected_public_file": "tests/synthetic_attempt_002.xml",
+  "original_private_sha256": "d55964dd0fe081fae201cf40111333a83d6ea1b127b6f607cd1ccfbeefe36312",
+  "public_redacted_sha256": "aded2d4887c56bbf944c62e3fffcd19e32d985420f0e76f3de974b8c6209060a",
+  "repair": "Redact user-profile prefix in public XML; retain original bytes privately; extend helper to redact both console and XML traces",
+  "test_counts_and_failure_messages_changed": false,
+  "scientific_sources_or_parameters_changed": false,
+  "incomplete_closure_records": "Preserved privately before explicit unpublished retry"
+}

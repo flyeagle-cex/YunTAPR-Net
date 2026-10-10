@@ -1,0 +1,1016 @@
+\documentclass[UTF8,fontset=fandol,10pt]{ctexart}
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,array,longtable,booktabs,url,listings,xcolor,fancyhdr}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{YunTAPR-Net / candidate loss implementation}
+\fancyhead[R]{2026-10-10 / v1}\fancyfoot[C]{\thepage}\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\setlength{\emergencystretch}{3em}
+\lstset{language=Python,basicstyle=\ttfamily\scriptsize,columns=fullflexible,breaklines=true,
+breakatwhitespace=false,numbers=left,numberstyle=\tiny,numbersep=5pt,xleftmargin=8pt,
+frame=single,keepspaces=true,showstringspaces=false,tabsize=4}
+\title{YunTAPR-Net\\Phase-B v2 消融候选实现\\合成验证与研究者代码学习材料}
+\author{工程候选 / 独立科学审查仍待研究者}\date{2026年10月10日 / v1}
+\begin{document}\maketitle
+\textbf{实际实现与合成验证已完成；正式科学协议和训练仍未批准。}
+
+CPU 177 / CUDA 3 合成测试通过，静态检查11项；没有模型forward、optimizer step、原始观测或checkpoint读取。
+本轮开发委托替代上轮候选阶段的练习先行顺序，但不接受Phase-A科学结果或追认历史B1恢复。
+\setcounter{tocdepth}{1}\begingroup\small\setlength{\parskip}{0pt}\tableofcontents\endgroup
+\clearpage\section{候选实现架构与责任边界}
+
+科学定义来自冻结 Focal、Pinball、total\_\allowbreak{}loss、v2 quantile 输出守卫及上轮 E0/\allowbreak{}E1/\allowbreak{}E2 提案；工程保护在隔离目录内补齐。当前委托允许候选代码和合成 autograd，未批准冻结合同修改、数据 preflight、真实模型推理或 optimizer 更新。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+模块 & 输入/\allowbreak{}输出 & 责任 \\
+\midrule\endfirsthead
+模块 & 输入/\allowbreak{}输出 & 责任 \\
+\midrule\endhead
+config.py & E0/\allowbreak{}E1/\allowbreak{}E2 → 不可变参数；model/\allowbreak{}seed → RunSpec & 闭合集合、18 身份、纯数学预算与 LR 前缀 \\
+validation.py & logit/\allowbreak{}qlog/\allowbreak{}rate/\allowbreak{}独立 bool masks → Supervision & 形状、设备、dtype、finite、支撑/\allowbreak{}严格序、float32 标签与计数 \\
+focal.py & logit、硬标签、valid、显式 alpha/\allowbreak{}gamma → S\_\allowbreak{}occ & 稳定 BCE、类别权重、focusing、有效位置 sum \\
+pinball.py & FP64 qlog/\allowbreak{}log\_\allowbreak{}target/\allowbreak{}rainy\_\allowbreak{}valid → S\_\allowbreak{}qr & 固定 32 tau、mean 后 sum，不转换物理域 \\
+total.py & 两头合成张量与固定 config → CandidateLossResult & 唯一权重、N\_\allowbreak{}valid 分母、零监督停止 \\
+metrics.py & 候选 result /\allowbreak{} 同输入张量 → ReportingSums & unweighted CPB、全局 pool、固定 E0 FP64 common core \\
+readiness.py & 合成或声明的 SHA 元数据 → 审查结果 & fresh/\allowbreak{}恢复绑定保护；BlockedRunner 永远抛错 \\
+\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.py & 公开接口导入 & 没有数据或训练启动行为；导入损失 API 会加载 torch \\
+\bottomrule\end{longtable}\endgroup
+
+调用顺序：candidate\_\allowbreak{}loss → supervision → occurrence\_\allowbreak{}numerator 与 conditional\_\allowbreak{}pinball\_\allowbreak{}numerator → combine\_\allowbreak{}numerators → result。Pinball 的 \_\allowbreak{}pinball\_\allowbreak{}from\_\allowbreak{}errors 是私有算术内核，专供已经定义的 signed errors；不是绕过 qlog 资格的正式入口。P1–P4 用内核核对手算，不把常数 qlog 伪装成 v2 单调输出。
+
+模型输出仍为 occurrence logit 与 FP64 32 条件分位数，本轮没有实现或修改 head、allocation/\allowbreak{}span 参数化、tau、epsilon、SP04 和 causal slots。validate\_\allowbreak{}log\_\allowbreak{}quantiles 是唯一正式输出守卫复用；没有调用模型构造器、Contract.load、torch.load、数据模块或旧训练入口。该复用保持冻结的 finite、q1>log1p(.1)、严格递增定义。
+
+supervision 拒绝零有效像元而非返回 batch\_\allowbreak{}skipped；这与旧正式 runner 对 skipped batch 的最终拒绝一致，但错误提前到候选 loss 入口。有效但全无雨仍保留 occurrence 与 q 的零梯度连接。输入 rate 必须是原 float32 参考，拒绝 requires\_\allowbreak{}grad；输出全域 finite，即使像元无效也不能掩盖坏模型输出。仅 invalid reference 的临时计算副本置零，源张量不改写。
+
+FP16/\allowbreak{}BF16 logits 显式提升为 FP32 做 BCE；FP64 logits 保持 FP64用于梯度差分。qlog/\allowbreak{}log\_\allowbreak{}target/\allowbreak{}tau 固定 FP64。autocast(enabled=False) 防止外层混合精度改写关键路径，转换的反向链仍会将梯度送回原 logits。该输入张量层测试不宣称真实 BF16 模型已通过。
+
+静态工具不 import 候选模块，仅读源码 AST、提案和发表的元数据 SHA。readiness.py 自身只用标准库，但通过公开包导入时 \_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{} 会加载 torch；这仍没有实例化模型。真正只需标准库的入口为 scripts/\allowbreak{}.../\allowbreak{}static\_\allowbreak{}review.py。
+\clearpage\section{闭合消融配置与运行身份合同}
+
+config.py定义私有\_\allowbreak{}PARAMETERS字典：E0=(.5,2,1)，E1=(.5,0,1)，E2=(.5,2,2)。get\_\allowbreak{}config(experiment\_\allowbreak{}id)只接收精确字符串E0/\allowbreak{}E1/\allowbreak{}E2；大小写错误、未知ID、E3/\allowbreak{}E4/\allowbreak{}FinalFit、None或dict全部拒绝。它不读取外部配置文件、不选择最优条件。
+
+AblationConfig是@dataclass(frozen=True)：自动生成构造、比较等方法，字段是experiment\_\allowbreak{}id、alpha、gamma、lambda\_\allowbreak{}q。\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}在构造后检查类型、finite和ID对应精确数值，禁止E0名下悄悄使用gamma0。frozen禁止普通属性赋值；候选调用前仍重验，不能把Python级防篡改当人类授权。
+
+finite\_\allowbreak{}number(name,value)返回Python float但不盲目把字符串或bool转数；判断type不是isinstance用于排除bool。无默认alpha/\allowbreak{}gamma，裸loss显式传参；科学臂只使用get\_\allowbreak{}config返回值。科学状态PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL是常量说明，不存在升级APPROVED的setter。
+
+RunSpec(experiment\_\allowbreak{}id,model,seed)要求模型精确B0\_\allowbreak{}MATCHED\_\allowbreak{}V2/\allowbreak{}B1\_\allowbreak{}V2，seed为真正int且属于2026/\allowbreak{}2027/\allowbreak{}2028。run\_\allowbreak{}id property动态构造条件、模型与seed身份；stage property将2026归阶段1、另两seed归阶段2，只是划分，不是执行批准。proposed\_\allowbreak{}runs依seed→arm→model顺序生成tuple18项，tuple不可追加；同一seed内条件必须共享样本、初始化和排列。
+
+workload()只做整数ceil预算：10455/\allowbreak{}physicalbatch2→5228更新每epoch，尾batch1；9epoch47052；全18→846936。10501/\allowbreak{}valbatch8→1313，尾batch5；每epoch验证，共212706。阶段1六run282312，阶段2十二run564624。没有运行这些更新。新预算测试与旧budget\_\allowbreak{}summary核对，不重跑旧科学验收。
+
+learning\_\allowbreak{}rate\_\allowbreak{}prefix(update)只接收1..47052的真正int；W5228、U261400，不把9epoch压缩成cosine全周期。前W步线性warmup低于1e-6可以合法；minLR只作用于后续cosine段。测试逐一核对全部47052位置与原lr\_\allowbreak{}for\_\allowbreak{}update(steps\_\allowbreak{}per\_\allowbreak{}epoch=5228)的相同返回值，原函数通过AST提取纯数学节点调用，未加载其数据/\allowbreak{}授权模块。
+
+候选配置仍依赖D1/\allowbreak{}Q1/\allowbreak{}N0/\allowbreak{}I3/\allowbreak{}B9/\allowbreak{}S0/\allowbreak{}V0的独立正式批准。数据产品、M1配对、原float32>.1标签、32tau、epsilon1e-4、FP64守卫、batch2/\allowbreak{}accum1/\allowbreak{}no\_\allowbreak{}drop、AdamW与clip、逐epoch验证及epoch9终点不能因为代码PASS而改变。未来runner须验证机读提案、代码SHA及真实授权，而不是只检查实验ID存在。
+\clearpage\section{张量契约与工程保护解读}
+
+validation.py集中拒绝错误输入，不负责改变tau、epsilon或数学损失。ZeroValidPixelsError继承ValueError：调用者可精确捕获无监督异常，但正式runner应停止，不能catch后静默继续。Supervision为frozen dataclass，字段valid/\allowbreak{}rainy/\allowbreak{}rainy\_\allowbreak{}valid/\allowbreak{}clean\_\allowbreak{}rate都是张量，n\_\allowbreak{}valid/\allowbreak{}n\_\allowbreak{}rain是Python整数；frozen防止字段重新赋值，不会把内部Tensor变成真正只读。
+
+image\_\allowbreak{}tensor(name,value,channels)检查torch.Tensor、torch.strided、四维[B,C,H,W]及全部维度>0。channels只接受调用方固定1或32。strided是普通dense张量布局，区别于sparse；不要求contiguous，因此合法非连续切片仍可运算。该函数不检查浮点dtype，具体入口随后检查，职责不要混淆。
+
+same\_\allowbreak{}shape\_\allowbreak{}device(name,value,reference)要求精确同shape和device，返回None代表通过，失败抛ValueError。boolean\_\allowbreak{}mask再要求bool/\allowbreak{}dense。mask不能用float0/\allowbreak{}1替代，也不能把[H,W]悄悄扩成[B,1,H,W]；未来调用者若需构造batch掩膜必须明确产生合合同形张量。
+
+finite\_\allowbreak{}tensor(name,value)调用torch.isfinite(value).all()再转Python bool；CUDA会同步。NaN和±Inf都拒绝。occurrence\_\allowbreak{}logits要求实浮点FP16/\allowbreak{}BF16/\allowbreak{}32/\allowbreak{}64、CPU或CUDA、单通道及全域finite；quantiles要求32通道CPU/\allowbreak{}CUDA，并复用原validate\_\allowbreak{}log\_\allowbreak{}quantiles的FP64/\allowbreak{}支撑/\allowbreak{}严格序，不自己发明epsilon或clamp。
+
+graph\_\allowbreak{}zero(value,dtype=None)的reshape(-1)把元素拉平，[:0]取零元素切片，sum(dtype=...)产生零维0。它不先把所有值加起来，所以即使总和会溢出也能生成连接原图的0；梯度是全零。这里的零不是把非法输入修好，前置守卫仍先拒绝NaN/\allowbreak{}Inf。
+
+supervision(logit,qlog,rate,imerg\_\allowbreak{}valid,yunnan\_\allowbreak{}mask)先检查两头与空间/\allowbreak{}device，再检查原float32非梯度rate和独立bool masks，构造交集并计数。计数0停止；有效参考负/\allowbreak{}非有限停止；invalid参考临时where成0。rainy在原精度与torch.tensor(.1,float32)比较，再与valid相交。返回的clean\_\allowbreak{}rate稍后才double()/\allowbreak{}log1p。
+
+具体边界：float32(.1)提升后数值略高于十进制.1，所以先double再比较会错误地把边界值标有雨；测试B1保存三个nextafter相邻值。invalid参考NaN允许进入临时clean副本，但原值不改；invalid模型qlog的NaN仍拒绝，因为模型输出守卫覆盖全域。零batch、32→31通道、非boolmask、meta/\allowbreak{}CPU设备不一致都不靠广播或fallback继续。
+
+本模块的shape/\allowbreak{}dtype/\allowbreak{}finite/\allowbreak{}异常类属于工程保护；监督交集、严格float32雨标签、q支撑/\allowbreak{}单调是冻结科学语义。未来正式网格[100,100]、3430格点及样本资格必须由另外获授权的runner检查，本loss保护不单独证明地理配准正确。
+\clearpage\section{Focal 候选实现逐段解读}
+
+阅读 config.py、validation.py 后，再打开 focal.py。occurrence\_\allowbreak{}numerator(logit,rainy,valid,*,alpha,gamma) 返回零维 S\_\allowbreak{}occ 张量，不除以 batch、有效像元数或有雨数。星号 * 表示 alpha/\allowbreak{}gamma 只能用关键字传递，减少把两参数顺序写反的风险。类型注解用于阅读；真正拒绝错误输入的是函数中的运行时检查。
+
+logit=[B,1,H,W] 是未 sigmoid 的实数分数；rainy/\allowbreak{}valid 必须为同形、同设备的 bool。rainy 来自 rate 原 float32 严格大于 float32(.1)；Focal 裸函数不自行根据概率产生标签。valid 是 IMERG 有效性与云南掩膜交集，与 rainy 是两个不同概念。
+
+设 b=BCEWithLogits(l,z)，pt=exp(-b)，alpha\_\allowbreak{}t=alpha*z+(1-alpha)*(1-z)，则 S\_\allowbreak{}occ=sum\_\allowbreak{}valid alpha\_\allowbreak{}t*(1-pt)\textasciicircum{}gamma*b。BCE 用 reduction='none' 保留逐元素值，再执行 focusing 和求和；不能先求 mean 再拿 scalar 计算 pt。稳定 BCE 直接吃 logits，不能先 sigmoid 再传给 BCEWithLogits。\href{https://docs.pytorch.org/docs/2.7/generated/torch.nn.functional.binary_cross_entropy_with_logits.html}{PyTorch 2.7 BCE API} 给出了输入与 reduction 的定义；项目真实数学来自 src/\allowbreak{}yuntapr/\allowbreak{}losses/\allowbreak{}focal.py。
+
+第一个代码段调用 finite\_\allowbreak{}number：Python 中 bool 是 int 的子类，所以用 type(value) 精确排除 True/\allowbreak{}False；NaN 与 Inf 也拒绝。裸算术允许 alpha 属于 [0,1]、gamma>=0；正式候选配置只允许三个预声明组合，不开放参数搜索。随后检查 logit 与两个 masks，拒绝隐式广播。
+
+第二段选择运算 dtype。logit.float() 的等价 .to(torch.float32) 转换不是 detach：例如原 BF16 叶子仍连接 BCE 的计算图，backward 后 grad 保留原叶子的 dtype。with torch.autocast(...,enabled=False) 只在本块内固定运算精度，退出后恢复外层上下文。
+
+logit[valid] 是 bool 索引，将有效位置收集为 [N\_\allowbreak{}valid]；rainy[valid] 同顺序收集标签。这样 invalid 像元不进入分子，避免先做乘 mask 再指望 NaN*0 消失。这里仍先检查全域 logit finite，不能用索引隐藏坏输出。无 valid 的裸函数返回 graph\_\allowbreak{}zero；总损失入口则提前拒绝零监督。
+
+torch.full\_\allowbreak{}like(logits,alpha) 产生同 dtype/\allowbreak{}device 的类别权重；torch.where 根据每个 hard label 选择 alpha 或 1-alpha。alpha=.5 时两类权重都为 .5，正负类别不能在 E1 改为权重 1。gamma==0 使用 alpha\_\allowbreak{}t*bce，避开不必要的 focusing 运算并保留系数；gamma2 使用 exp、pow 和 sum，与原 E0 定义一致。
+
+F1/\allowbreak{}F3 的 l=0、gamma2 单像元期望 ln2/\allowbreak{}8；F2 的 gamma0 为 ln2/\allowbreak{}2；F4 两个相同有效元素为 ln2。103 项初轮套件包含这些手算检查；最终套件还覆盖不平衡 100 干/\allowbreak{}1 湿、±1000 和 ±1e30 logits、FP32/\allowbreak{}64及低精度输入。所有数值属于合成教学，不是科研评价结果。
+
+gamma0 的单元素梯度为 alpha\_\allowbreak{}t*(sigmoid(l)-z)。gamma2 还需要对 focusing 权重求导，不能把 pt.detach()；测试用完整解析式和 FP64 gradcheck/\allowbreak{}gradgradcheck 对照。valid=false 的位置梯度为0。finite 检查是工程保护；alpha/\allowbreak{}gamma、BCE及 focusing 是科学定义。
+
+小练习：独立手算 l=0,z=false,gamma0 的值和梯度；解释为什么两类 l=0 损失相同而梯度符号相反；观察 sum 与 mean 的二倍关系；找出哪些行若删掉 .5 会改变 E1。学习练习不要求重新实现才能开展本轮候选开发，但正式接入前研究者仍需理解和审查。
+\clearpage\section{Conditional Pinball 逐段解读}
+
+pinball.py 的 frozen\_\allowbreak{}taus(device=None) 永远返回 FP64 的32个值：(i-.5)/\allowbreak{}32，i=1..32，最后为 .984375。torch.arange(1,33) 的右端不包含33；先减.5再除32，不是从0到1的等间距端点集合。device 参数仅决定 CPU/\allowbreak{}CUDA位置，不改变 tau 或科学定义。
+
+conditional\_\allowbreak{}pinball\_\allowbreak{}numerator(qlog, log\_\allowbreak{}target, rainy\_\allowbreak{}valid) 是公开入口。
+
+qlog=[B,32,H,W]，log\_\allowbreak{}target=[B,1,H,W]，rainy\_\allowbreak{}valid=[B,1,H,W] bool；全为同设备，浮点路径必须FP64。qlog单位是 log1p(mm/\allowbreak{}h)，不是 mm/\allowbreak{}h。公开入口复用冻结 qlog finite、最低支撑和严格序检查，不允许 sort、clamp、nan\_\allowbreak{}to\_\allowbreak{}num 或 expm1。
+
+log\_\allowbreak{}target 必须有限非负；被 rainy\_\allowbreak{}valid 选中的 log\_\allowbreak{}target 必须严格高于 log1p(float32(.1)提升至FP64)。该检查防止调用者错误地把干像元标成条件有雨。完整接口先在原 float32 构造雨标签，再提升 clean\_\allowbreak{}rate.double() 做 log1p；不允许先提升再与十进制 .1 比较。rainy\_\allowbreak{}valid=false 的高参考值可能只是被独立有效性或云南掩膜排除，不要求反向等价。
+
+error=log\_\allowbreak{}target-qlog 的广播仅沿明确的32tau轴；不是允许 mask、batch 或空间维随意广播。e>0 表示模型分位数低于参考，惩罚 tau*e；e<0 使用(tau-1)*e，两者均非负。rho=max(tau*e,(tau-1)*e)，每个有雨像元先 mean32，再把像元损失 sum，得到未加权 S\_\allowbreak{}qr。
+
+\_\allowbreak{}pinball\_\allowbreak{}from\_\allowbreak{}errors 是私有内核。error.movedim(1,-1) 把 [B,32,H,W] 变为 [B,H,W,32]；rainy\_\allowbreak{}valid.squeeze(1) 去掉单例通道，然后 bool 索引取出 [N\_\allowbreak{}rain,32]。tau=[32] 的乘法对应最后一轴；mean(dim=-1) 只平均tau，不平均雨像元。最后的 .sum() 不含任何 N\_\allowbreak{}valid/\allowbreak{}N\_\allowbreak{}rain 分母。
+
+P1–P4 的常数 e=+1/\allowbreak{}-1/\allowbreak{}0 和空mask只测试内核算术：前两者 mean(tau)=mean(1-tau)=.5，第三0，第四返回连接计算图的0。这些常数 signed errors 不是常数 qlog。常数 qlog 会在公开入口被严格序守卫拒绝，不通过“关闭守卫”来运行手算测试。
+
+无雨返回 error.reshape(-1)[:0].sum()。[:0] 是空切片，sum得到0且仍连接输入图；backward产生实际零梯度，而不是None。与 qlog.sum()*0 的数学零相同，但避免很大有限 qlog 先求和溢出后形成Inf*0。该路径属于工程实现保护，没有新增科学损失。
+
+对e>0，dS\_\allowbreak{}qr/\allowbreak{}dq\_\allowbreak{}i=-tau\_\allowbreak{}i/\allowbreak{}32；e<0则为(1-tau\_\allowbreak{}i)/\allowbreak{}32。e=0是折点，不能用中央差分要求唯一经典导数。torch.maximum给出可用的子梯度，但确认性梯度测试刻意远离折点。\href{https://docs.pytorch.org/docs/2.7/notes/autograd.html}{PyTorch autograd说明} 可辅助理解反向图；本项目分段梯度来自实际 Pinball 定义。
+
+本轮测试包括全部32tau解析梯度、合法严格序q、非有限输出、FP32q拒绝、干目标误选、shape/\allowbreak{}device错误、超出物理 FP64 expm1 边界的有限qlog。后者只证明 log域算术没有偷偷 materialize物理值；不证明巨大条件雨强物理可信。
+
+小练习：对tau=.984375分别手算e=1/\allowbreak{}-1的惩罚；解释为何高tau更惩罚低估；将mean32误改sum32会使哪个量变32倍；解释覆盖率可因过宽分布提高，却不能单独证明质量改善。
+\clearpage\section{总损失、监督张量与指标分母}
+
+candidate\_\allowbreak{}loss(logit,qlog,rate,imerg\_\allowbreak{}valid,yunnan\_\allowbreak{}mask,*,config) 是候选聚合入口；config必须为闭合 AblationConfig，不能用未验证dict或临时gamma/\allowbreak{}lambda代替实验ID。再次 \_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{} 校验防止外部代码绕过 frozen赋值保护后传入不匹配参数。该验证不是人类审批。
+
+第一段 supervision：输出两头先通过形状、设备及finite/\allowbreak{}qlog守卫；参考rate必须原 float32、不参与autograd；两个mask必须独立bool且精确同形。valid=imerg\_\allowbreak{}valid \& yunnan\_\allowbreak{}mask，N\_\allowbreak{}valid=int(valid.sum().item())，rainy=clean\_\allowbreak{}rate>float32(.1)，N\_\allowbreak{}rain=sum(rainy\&valid)。.item()把零维张量转为Python计数，也会在CUDA同步，属于安全检查成本而非正式性能测量。
+
+clean\_\allowbreak{}rate=torch.where(valid,rate,zeros\_\allowbreak{}like(rate))仅创建计算副本。有效参考NaN/\allowbreak{}Inf/\allowbreak{}负值拒绝；invalid参考允许NaN并临时置0，与原总损失一致，测试检查输入未修改。模型输出全域的NaN/\allowbreak{}Inf都拒绝，不能因invalidmask而修补。N\_\allowbreak{}valid=0抛 ZeroValidPixelsError；正常batch不静默skip，也不假称发生了更新。
+
+第二段调用Focal得到S\_\allowbreak{}occ，再将clean\_\allowbreak{}rate提升FP64并log1p，调用Pinball得到S\_\allowbreak{}qr。发生分子已包含alpha/\allowbreak{}gamma，但“unweighted”表示没有lambda\_\allowbreak{}q；条件分子始终无lambda。第三段 combine\_\allowbreak{}numerators(S\_\allowbreak{}occ,S\_\allowbreak{}qr,N\_\allowbreak{}valid,*,lambda\_\allowbreak{}q)要求有限非负FP32/\allowbreak{}64标量、同设备、正整数N\_\allowbreak{}valid及正有限lambda，计算(S\_\allowbreak{}occ+lambda*S\_\allowbreak{}qr)/\allowbreak{}N\_\allowbreak{}valid。
+
+示例T1：S\_\allowbreak{}occ=2,S\_\allowbreak{}qr=3,N\_\allowbreak{}valid=10，lambda1得到.5，lambda2得到.8。不是把所有loss乘2，也不是两处都乘lambda导致平方权重。T2科学CPB=3/\allowbreak{}2=1.5；N\_\allowbreak{}rain只用于科学条件评价，不用于训练分母。这些都是纯合成手算与单元测试值。
+
+CandidateLossResult保留experiment\_\allowbreak{}id、s\_\allowbreak{}occ、s\_\allowbreak{}qr、training\_\allowbreak{}objective、weighted\_\allowbreak{}quantile\_\allowbreak{}per\_\allowbreak{}valid、n\_\allowbreak{}valid、n\_\allowbreak{}rain、conditional\_\allowbreak{}skipped、status及execution\_\allowbreak{}authorization=false。科学CPB属性只返回s\_\allowbreak{}qr/\allowbreak{}n\_\allowbreak{}rain；无雨返回None，表示不可估计，不是模型完美。weighted\_\allowbreak{}quantile\_\allowbreak{}per\_\allowbreak{}valid是辅助训练分解，不可拿它冒充unweighted CPB。
+
+metrics.py 的 ReportingSums.from\_\allowbreak{}candidate 用detach再float生成只读汇总，停止构建梯度图但不修改训练张量。conditional\_\allowbreak{}pinball按有雨数除；pooled(other)累加分子和计数，再计算比值，不能把不等batch的CPB直接平均。common\_\allowbreak{}validation\_\allowbreak{}sums在no\_\allowbreak{}grad上下文显式使用FP64 logits及E0，固定gamma2/\allowbreak{}lambda1；训练臂的gamma或lambda不会改变共同core口径。
+
+发生梯度和分位数梯度都通过total标量相连。gamma0时logit梯度=.5*(p-z)/\allowbreak{}N\_\allowbreak{}valid；q梯度为分段Pinball梯度再乘lambda/\allowbreak{}N\_\allowbreak{}valid。E2的q梯度为E0的2倍，而同一输入的发生梯度保持不变。这个合成张量性质不保证共享骨干真实训练后的发生输出不变。
+
+当前candidate\_\allowbreak{}loss可以被Python调用，但没有数据读取或执行授权能力；真正runner必须在外层验证科学审批、身份、资源及执行范围。学习时只使用测试文件里的小型合成输入。本轮不生成新的真实Brier、AUROC、AP、Pinball或上尾验证结果。
+\clearpage\section{未加权评价接口解读}
+
+metrics.py没有Brier/\allowbreak{}AUROC/\allowbreak{}AP实现、没有模型推理，也没有读取样本。它只把调用者已经提供的分子与计数按冻结口径整理。正式数据是否允许传入由未来执行gate控制；本轮所有调用都是合成张量。
+
+ReportingSums(s\_\allowbreak{}occ,s\_\allowbreak{}qr,n\_\allowbreak{}valid,n\_\allowbreak{}rain)是frozen dataclass。\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}检查两个分子为真正Python数且finite/\allowbreak{}非负，计数是真正int、N\_\allowbreak{}valid>0、0<=N\_\allowbreak{}rain<=N\_\allowbreak{}valid；bool不接受。对象保存的是unweighted sums，不能放lambda*S\_\allowbreak{}qr进去冒充原S\_\allowbreak{}qr。接口语义由from\_\allowbreak{}candidate与测试确保，任意外部人手输入float则仍需来源审查。
+
+from\_\allowbreak{}candidate(result)是@classmethod，首参cls代表当前类，不是对象self；它用float(result.s\_\allowbreak{}occ.detach())和s\_\allowbreak{}qr生成汇总。detach不改变数值，而是切断本报告分支的梯度图。GPU到Python scalar会同步，因此不能把汇总接口时间当纯训练吞吐。
+
+conditional\_\allowbreak{}pinball是@property，使用者写report.conditional\_\allowbreak{}pinball而不是函数括号；返回S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain，N\_\allowbreak{}rain=0返回None。pooled(other)先加分子及计数，再创建经过同样检查的新对象，避免平均两个batch比例。它不合并seed模型预测，也不把seed\(\times\)像元当独立重复。
+
+common\_\allowbreak{}validation\_\allowbreak{}sums(logit,qlog,rate,imerg\_\allowbreak{}valid,yunnan\_\allowbreak{}mask)被@torch.no\_\allowbreak{}grad()修饰，这些运算不建训练梯度图。它将logit.double()，显式get\_\allowbreak{}config('E0')后调用同一受保护算术入口，得到gamma2/\allowbreak{}lambda1的FP64 common core分子。训练E1的gamma0或E2的lambda2绝不能从训练result直接替换共同core。
+
+例T2：S\_\allowbreak{}qr3、N\_\allowbreak{}rain2，CPB1.5；把这个对象与自己pooled后6/\allowbreak{}4仍1.5。若两个batch雨数不等，则应使用总S\_\allowbreak{}qr/\allowbreak{}总N\_\allowbreak{}rain，不是两个CPB简单平均。所有示例均为合成教学数值。未来指标还须绑定年份、域、样本身份、missingness及原科学审查规则，当前接口不是完整科学observer。
+\clearpage\section{E0 冻结数学兼容性：实际合成验证}
+
+证据：tests/\allowbreak{}synthetic\_\allowbreak{}attempt\_\allowbreak{}008.json与XML、tests/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablation\_\allowbreak{}implementation/\allowbreak{}test\_\allowbreak{}losses.py及test\_\allowbreak{}gradients.py。最终项目环境CPU177/\allowbreak{}0、CUDA3/\allowbreak{}0；数字是检查数量，不是模型评价样本或天气事件。没有真实数据或模型推理。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+核验 & 实际范围 & 预先固定判据 & 结果 \\
+\midrule\endfirsthead
+核验 & 实际范围 & 预先固定判据 & 结果 \\
+\midrule\endhead
+Focal手算F1–F4 & 单/\allowbreak{}双元素，正负标签，gamma0/\allowbreak{}2 & FP64 rel1e-12、abs1e-14 & PASS \\
+原focal函数 & FP32/\allowbreak{}FP64/\allowbreak{}BF16/\allowbreak{}FP16输入，gamma0/\allowbreak{}2 & FP32路径rtol8e-7、atol1e-8；FP64 1e-12/\allowbreak{}1e-14 & PASS \\
+冻结autocast语义 & CPU BF16 logits，BCE FP32，gamma0/\allowbreak{}2 & 8e-7/\allowbreak{}1e-8 & PASS \\
+原total函数与两头梯度 & B=1/\allowbreak{}2/\allowbreak{}3/\allowbreak{}5，H2/\allowbreak{}W3，独立invalid与云南mask & 8e-7/\allowbreak{}1e-8，不调宽容差 & PASS \\
+未加权原Pinball & 合法严格序FP64q，雨valid交集 & 1e-12/\allowbreak{}1e-14 & PASS \\
+共同validation core & 原FP64 E0分子/\allowbreak{}共同分母 & rel1e-12 & PASS \\
+GPU loss与两头梯度 & 三臂，同一小型FP64合成输入 & CPU/\allowbreak{}CUDA 1e-10/\allowbreak{}1e-12 & PASS \\
+标签边界 & float32(.1)及两侧nextafter & 只上邻有雨 & PASS \\
+\bottomrule\end{longtable}\endgroup
+
+相容表示合法受测输入下的数学值和梯度达到这些容差，不声明所有硬件、输入或逐位bitwise一致。候选先收集valid再sum，原函数乘mask后sum，归约顺序可能造成正常舍入差异。裸FP16/\allowbreak{}BF16在没有autocast时，原函数可能保持低精度；候选显式FP32 BCE，比较的是冻结正式autocast预期算术，而不是宣称裸低精度逐位一致。
+
+原b0\_\allowbreak{}core\_\allowbreak{}loss没有lambda参数，E0只对应gamma2/\allowbreak{}lambda1。E1唯一改变gamma，E2唯一改变lambda；同输入科学CPB在三臂完全相同，因为q与标签不变、S\_\allowbreak{}qr无权重。未来真实训练改变共享参数后，科学结果仍未知。
+
+有意加强的工程拒绝行为：参数NaN/\allowbreak{}Inf/\allowbreak{}bool、mask/\allowbreak{}dtype/\allowbreak{}device/\allowbreak{}shape错误、非单调或失去支撑的qlog明确拒绝；零有效监督提前抛错，旧loss先返回batch\_\allowbreak{}skipped再被正式runner拒绝。无雨仍连接q的零梯度；用空切片sum避免sum*q0的中间溢出。invalid参考沿用临时clean副本；invalid输出仍严格finite。
+
+引用原文件字节SHA与重要函数行号见source\_\allowbreak{}identity.json；原loss、quantile参数化、正式Phase-A入口和冻结合同未修改。E0工程兼容不等于Phase-A科学验收，不追认B1历史恢复，也不能证明Brier、q32欠覆盖或极端上尾已解决。
+
+最终边界复核的CPU007为176通过/\allowbreak{}1失败：标量设备错配应在finite算术前拒绝。代码将device检查前移并保留同形dtype合同，容差未改；CPU008=177通过/\allowbreak{}0失败，CUDA004=3通过/\allowbreak{}0失败。详见tests/\allowbreak{}scalar\_\allowbreak{}device\_\allowbreak{}repair.json与原失败日志。
+\clearpage\section{合成梯度与环境验证报告}
+
+最终项目运行时：Python3.12.14、PyTorch2.11.0+cu128、pytest9.1.1，RTX5060Laptop、CUDA12.8，构建包含sm\_\allowbreak{}120。来源tests/\allowbreak{}project\_\allowbreak{}cuda\_\allowbreak{}environment.json。测试依赖安装在本任务.local/\allowbreak{}test\_\allowbreak{}dependencies，未修改项目CUDA运行时依赖。没有测量正式训练GPU耗时、模型吞吐或显存预算。
+
+CPU suite attempt008：177 passed、0 failures、0 errors、0 skipped；CUDA attempt004：3 passed、0 failures、0 errors、0 skipped。11项静态检查通过。当前独立测试用例180，历史attempt不相加。CPU用的是同一项目CUDA Python解释器但输入留在CPU；CUDA另开限时60秒进程。
+
+13个CPU梯度测试：gamma0/\allowbreak{}2解析Focal梯度；gamma0/\allowbreak{}2各一次gradcheck与gradgradcheck；全部32tau的正/\allowbreak{}负分段解析梯度；E0/\allowbreak{}E1/\allowbreak{}E2的总损失双头gradcheck；三臂q梯度权重及单坐标中央差分；invalid像元零梯度。计数按pytest实例为13，gradgradcheck等多个断言仍属于其所在一个实例。
+
+gradcheck固定FP64、eps1e-6、atol1e-6、rtol1e-5；单坐标差分eps1e-6、rel2e-8、abs1e-9。测试点远离Pinball折点和q支撑/\allowbreak{}相邻序边界。不是通过增加容差或给q排序来制造通过。Focal解析导数是alpha\_\allowbreak{}t*(p-z)*[m\textasciicircum{}gamma+gamma*b*pt*m\textasciicircum{}(gamma-1)]，m=1-pt；gamma0单独为alpha\_\allowbreak{}t*(p-z)。Pinball对q的导数在欠预测处为-tau/\allowbreak{}32，在过预测处为(1-tau)/\allowbreak{}32，再乘lambda/\allowbreak{}N\_\allowbreak{}valid。
+
+无雨检查中q.grad是实际零张量，不是None；有效发生梯度保留。无效像元两头梯度0。P3折点仅检查值、finite与可反传，不断言唯一数学梯度。backward只求合成叶子的梯度；测试没有Optimizer实例或step，禁止torch.load/\allowbreak{}save和expm1的自动fixture会在误调用时抛错。
+
+保留的实际尝试：attempt001的103项初轮通过；CPU002因导入冻结协议工具而缺yaml，出现1个collection error；改为只AST提取原lr\_\allowbreak{}for\_\allowbreak{}update纯函数，不import其模块。CPU003=162、004=174通过。旧torch2.7.1+cu118最小CUDA张量探测虽成功，但完整CUDA001在60秒超时，未形成测试完成数。找到历史工程记录的cu128环境后，CPU005/\allowbreak{}CUDA002因缺pytest启动失败；pytest安装到任务私有target后CPU006/\allowbreak{}CUDA003完成。相关完整输出均保留，不把未启动/\allowbreak{}超时记为通过。
+
+这些结果仅证明受测候选数学与保护逻辑。没有真实2023/\allowbreak{}2024样本、封存2025、私有checkpoint、新模型forward或正式验证推理。核心科学假设、效应界限、多重比较和资源执行授权仍未批准。
+
+最终边界复核的CPU007为176通过/\allowbreak{}1失败：标量设备错配应在finite算术前拒绝。代码将device检查前移并保留同形dtype合同，容差未改；CPU008=177通过/\allowbreak{}0失败，CUDA004=3通过/\allowbreak{}0失败。详见tests/\allowbreak{}scalar\_\allowbreak{}device\_\allowbreak{}repair.json与原失败日志。
+\clearpage\section{独立 v2 runner 的非执行型集成提案}
+
+当前只有readiness.BlockedRunner：describe()返回18身份、预算、阻塞事项，run(*args,**kwargs)无条件抛FormalExecutionBlocked。传入approved=true或字符串AUTHORIZED\_\allowbreak{}TO\_\allowbreak{}EXECUTE也不能运行。没有训练loop、DataLoader、模型实例、Optimizer、checkpoint应用或旧FinalFit引用。
+
+未来建议新增隔离v2 runner，而非修改Phase-A原入口；因此本轮没有需要应用到正式路径的diff补丁。建议模块责任：审定协议/\allowbreak{}执行授权读取与独立真实性验证；数据防火墙与2023/\allowbreak{}24配对资格；可复核fresh initializer；seed和固定样本排列；训练objective适配本候选；固定E0 FP64科学汇总；逐epoch验证与immutable LAST事务；异常停止与具体LAST独立恢复；日志和资源审计。这里不实现实际训练启动。
+
+Fresh一致性接口readiness.py逐项解释：TensorIdentity(shape,dtype,sha256)要求正整数tuple、float32、64位小写十六进制SHA。state\_\allowbreak{}metadata\_\allowbreak{}digest(tensors)将按参数名排序的声明serialize为JSON再hash，是声明层digest，不能替代真实tensor bytes哈希。FreshRecord包含RunSpec、张量映射、state/\allowbreak{}RNG/\allowbreak{}order/\allowbreak{}initializer\_\allowbreak{}code SHA及historical\_\allowbreak{}checkpoint\_\allowbreak{}loaded=false；validate重验字段与digest。
+
+audit\_\allowbreak{}fresh\_\allowbreak{}metadata(records)要求完整18项、不重复；同模型/\allowbreak{}seed跨三臂full state digest一致；同seed六run的post\_\allowbreak{}pair RNG与样本order SHA一致；initializer代码身份一致；B0/\allowbreak{}B1名字集合相同，只允许backbone.enc0.conv1.weight和backbone.enc0.skip.weight的shape不同，其他声明完全相同。函数只检查输入metadata，不打开模型、权重或原始样本，所以actual\_\allowbreak{}initialization\_\allowbreak{}proven=false，即使metadata\_\allowbreak{}consistent=true。
+
+后续实际initializer仍要证明参数总数、同名同形拷贝、B1两个不同形状权重保留native初始化及zero skip、独立reseed、没有historical optimizer/\allowbreak{}RNG转移、完整初态真实SHA。正式shape必须冻结501输入/\allowbreak{}100输出与模型参数量；本轮tiny metadata fixture不证明真实模型满足这些条件，也不构造这18个模型。
+
+review\_\allowbreak{}checkpoint\_\allowbreak{}binding(metadata,expected,resume\_\allowbreak{}approval\_\allowbreak{}reference=None)要求封闭字段：run/\allowbreak{}LAST/\allowbreak{}model/\allowbreak{}optimizer/\allowbreak{}RNG/\allowbreak{}scheduler/\allowbreak{}code/\allowbreak{}protocol/\allowbreak{}data/\allowbreak{}init SHA、完成epoch、retained updates、完成train+validation边界、原执行事件reference。epoch1..9，updates=epoch*5228，expected明确绑定六项run/\allowbreak{}LAST/\allowbreak{}code/\allowbreak{}protocol/\allowbreak{}data/\allowbreak{}init。epoch9 remaining=0，不能继续训练。函数不加载或应用状态；即使给reference字符串，approval\_\allowbreak{}authenticity\_\allowbreak{}verified=false、can\_\allowbreak{}apply\_\allowbreak{}checkpoint\_\allowbreak{}state=false。
+
+这些字符串只是合成fixture或待独立核验的来源引用，不是生成审批。未来恢复须真实研究者独立决定并绑定具体LAST SHA、原运行祖先、剩余预算、额外重放成本，再由经审查的正式gate处理；每次独立批准，禁止自动retry/\allowbreak{}resume。原B1 LAST14恢复偏差继续NOT\_\allowbreak{}GRANTED。
+
+训练和评价必须分离：candidate\_\allowbreak{}loss按各臂gamma/\allowbreak{}lambda优化；metrics.common\_\allowbreak{}validation\_\allowbreak{}sums固定E0 FP64共同core，CPB始终unweighted S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain。18run固定epoch9，不使用新成绩选择BEST或改阈值/\allowbreak{}样本。阶段1 seed2026完整六run和阶段2另两seed十二run各有独立执行批准；阶段1成绩不能修改已批准规则或自动启动阶段2。
+
+安全接续顺序：核对本版Git/\allowbreak{}SHA与失败记录→研究者学习并审查代码、处理科学待决字段→独立批准候选数学及正式集成范围→另版工程化新runner与获授权的模型/\allowbreak{}数据preflight→绑定真实初始化、数据、资源身份→另行批准具体阶段执行。当前开发委托已覆盖候选loss合成forward/\allowbreak{}backward，但不覆盖这些后续正式步骤。
+\clearpage\section{元数据审核与阻断runner逐段解读}
+
+readiness.py不import torch、模型、数据、optimizer，也不打开文件。其参数是Python dataclass/\allowbreak{}dict/\allowbreak{}Sequence；通过包公开入口导入仍会先执行包\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}并加载loss依赖，不能将整个包称为零torch依赖。static\_\allowbreak{}review.py才是标准库独立入口。
+
+require\_\allowbreak{}sha(value,name)用re.fullmatch要求完整64位小写十六进制字符串，而非只检查某个子串。它验证格式，不证明SHA对应真实文件、更不证明人类授权。TensorIdentity(shape,dtype,sha256)的shape必须tuple且每维正整数，dtype精确float32；\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}在构造时运行。
+
+state\_\allowbreak{}metadata\_\allowbreak{}digest(tensors)要求非空dict，key是非空参数名，value是TensorIdentity；sorted按名字稳定排序，asdict递归把dataclass转dict，json.dumps(sort\_\allowbreak{}keys=True,separators=...)固定表示，然后hashlib.sha256(body.encode()).hexdigest()生成64位digest。该digest是声明JSON的身份，不能等同真实tensor bytes hash或加载后的全model SHA。
+
+FreshRecord字段及validate见集成提案；validate再次检查RunSpec、四个SHA、historical\_\allowbreak{}checkpoint\_\allowbreak{}loaded严格False以及声明digest。audit\_\allowbreak{}fresh\_\allowbreak{}metadata用run\_\allowbreak{}id建查找dict，再核对完整18集合，避免重复项被dict静默覆盖。不同seed的hash没有自动相等约束；同seed跨臂和跨模型按照冻结匹配规则检查，共享shape权重须一致。
+
+集合运算different=\{name:shape不同的名字\}在实际代码用set推导式；必须恰好两个冻结输入权重名，不允许新增第三个架构差异。其他权重比较的是TensorIdentity全字段而非只shape。这里未检查真实参数量、native skip zero或RNG来源，因为没有实际模型；输出明确actual\_\allowbreak{}initialization\_\allowbreak{}proven=false。
+
+review\_\allowbreak{}checkpoint\_\allowbreak{}binding(metadata,expected,*,resume\_\allowbreak{}approval\_\allowbreak{}reference=None)只检查封闭字段、SHA格式、完成epoch预算与原事件reference、具体六项expected绑定。expected必须完整，不接受遗漏字段。即使reference有字符串也只是“存在待核验引用”，不会设置approval\_\allowbreak{}authenticity\_\allowbreak{}verified=true或can\_\allowbreak{}apply\_\allowbreak{}checkpoint\_\allowbreak{}state=true。epoch9无剩余更新，next\_\allowbreak{}epoch为None。
+
+FormalExecutionBlocked继承RuntimeError。BlockedRunner.describe返回设计信息；run(*args,**kwargs)->NoReturn可以接任意伪flag，但函数唯一行为是raise。NoReturn是类型提示，不是安全机制；真正阻断来自无条件raise和没有执行分支。测试传入False/\allowbreak{}True/\allowbreak{}APPROVED/\allowbreak{}AUTHORIZED\_\allowbreak{}TO\_\allowbreak{}EXECUTE四种值都确认抛错。
+
+练习：在合成metadata副本中改一个共享tensor SHA，预测哪个比较拒绝；删一个run或重复一项，解释为何集合检查仍能发现；把completed\_\allowbreak{}epoch改9，手算remaining=0；解释hash一致、metadata一致、真实初始化证据与独立批准为什么是四件不同事。
+\clearpage\section{研究者代码与科学审查清单（未批准）}
+
+这是待审事项，不是审批记录；没有签名、批准token或已批准勾选。当前研究者已委托候选开发与合成验证，以下真实独立审查仍需后续发生。
+
+\noindent\textbullet\quad 阅读闭合config，确认E0/\allowbreak{}E1/\allowbreak{}E2科学假设与唯一因素；代码PASS不能替代效应界限、副作用容忍、多重比较和功效判断。\par
+\noindent\textbullet\quad 解释Focal为何用logit及BCEWithLogits；gamma0为何仍是.5BCE；理解focusing梯度不是只对BCE求导。\par
+\noindent\textbullet\quad 解释FP32雨标签提升前比较、独立bool masks、N\_\allowbreak{}valid/\allowbreak{}N\_\allowbreak{}rain两个分母、invalid参考临时清理与输出NaN拒绝。\par
+\noindent\textbullet\quad 解释32tau、FP64 log域、mean32后sum、q支撑与严格序；区分私有signed-error手算内核和公开qlog接口。\par
+\noindent\textbullet\quad 核对total仅乘一次lambda、unweighted分子保留、无雨q梯度连接、零有效明确停止；接受或提出独立候选修订，不能直接改冻结定义。\par
+\noindent\textbullet\quad 阅读E0对原函数及两头梯度的实际兼容证据、固定容差、gradcheck远离折点的原因；理解合成PASS不证明真实模型或物理性能。\par
+\noindent\textbullet\quad 阅读全部失败attempt，尤其旧CUDA timeout、缺yaml/\allowbreak{}pytest及任务私有依赖路径；正式GPU资源与正式依赖锁定仍未测量或批准。\par
+\noindent\textbullet\quad 理解metadata fresh/\allowbreak{}恢复检查不能证明真实权重来源，也不能验证人类批准真实性；BlockedRunner无启动能力。\par
+\noindent\textbullet\quad 独立决定Phase-A接受范围与B1历史恢复治理处置，保留NOT\_\allowbreak{}GRANTED；本候选不自动追认。\par
+\noindent\textbullet\quad 独立批准正式集成范围后，在新版本工程化runner，开展另获授权的真实数据/\allowbreak{}模型preflight；再批准阶段1/\allowbreak{}2具体执行scope、SHA、资源和恢复规则。\par
+
+现有2024开发验证已经用于BEST与反复诊断，不是全新确认集；q32欠覆盖、上尾异常与CPB改善未稳健确认的限制继续保留。2025、FinalFit、新架构、校准器均不纳入本候选开发的正式执行范围。
+\clearpage\section{研究者代码学习手册与注释源码副本}
+
+本轮研究者已委托Codex先实现候选，再由研究者学习与独立审查。以下副本与实际候选源码按SHA绑定，不是另一份可导入模块；修改学习副本不会修改真实实现。所有代码属于候选，最终科学决定仍由研究者作出。
+
+\subsection{建议学习顺序与小练习}
+
+\noindent\textbullet\quad config.py：先理解函数/\allowbreak{}关键字参数、dataclass、tuple和type检查。练习写出三臂的唯一不同项，手算18身份和每run47052更新。\par
+\noindent\textbullet\quad validation.py：理解[B,C,H,W]、bool索引、shape/\allowbreak{}device/\allowbreak{}dtype与交集。练习画出两个mask交集，并解释invalid reference临时clean不等于修改源数据。\par
+\noindent\textbullet\quad focal.py：对照F1–F4，先手算gamma0值/\allowbreak{}梯度，再理解gamma2对权重也求导。练习指出误删alpha会如何改变E1。\par
+\noindent\textbullet\quad pinball.py：先看signed errors内核，再看公开严格q入口。练习手算高tau欠/\allowbreak{}过预测惩罚，解释mean32与sum像元的顺序。\par
+\noindent\textbullet\quad total.py和metrics.py：用T1/\allowbreak{}T2核对两个分母、lambda一次与无雨None。练习合并两个不同雨数batch的CPB。\par
+\noindent\textbullet\quad test\_\allowbreak{}gradients.py：认识requires\_\allowbreak{}grad、叶子、grad\_\allowbreak{}fn、backward、autograd.grad及finite difference。练习从链式法则推导q梯度的lambda/\allowbreak{}N\_\allowbreak{}valid因子。\par
+\noindent\textbullet\quad readiness.py：阅读metadata而非真实state，尝试仅在个人合成副本中更改一个SHA，理解BLOCKED与数学PASS的区别。\par
+
+\subsection{共同语法与计算图}
+
+from .config是包内相对导入，\_\allowbreak{}\_\allowbreak{}all\_\allowbreak{}\_\allowbreak{}只定义公开名称，不授予权限。->Tensor、tuple[int,...]等是类型提示，不能替代if/\allowbreak{}raise检查。@dataclass自动生成构造与比较，frozen阻止普通字段重赋值但不冻结内部dict/\allowbreak{}Tensor。@property允许以属性形式读派生值；@classmethod的cls代表类。
+
+Python中的and/\allowbreak{}or短路有助在错误dtype之前停止；type(x)is int排除bool。with上下文离开后恢复autocast设置。torch.where返回新Tensor；bool索引选择元素，.movedim重新安排轴，.squeeze(1)只删单例通道。reshape不等于detach，类型转换也保留可微路径。
+
+forward是由输入算出loss并构图；backward按链式法则累加叶子.grad。autograd.grad直接返回梯度，默认不会像backward一样累加到.grad。detach/\allowbreak{}no\_\allowbreak{}grad用于报告分支，不能放到训练loss中截断梯度。gradcheck把自动微分与FP64中央差分比较；在折点不适用唯一经典导数。当前仅合成叶子参与图，没有模型参数更新或Optimizer。
+
+工程保护包括finite/\allowbreak{}shape/\allowbreak{}device/\allowbreak{}type拒绝、SHA检查和BlockedRunner；科学定义包括alpha/\allowbreak{}gamma、32tau、log域、雨阈值和分母。两者都重要，但工程PASS不能自动批准科学假设。\href{https://docs.pytorch.org/docs/2.7/notes/autograd.html}{PyTorch autograd}及\href{https://docs.pytorch.org/docs/2.7/amp.html}{混合精度说明}提供API背景；项目公式与来源定位见对应walkthrough/\allowbreak{}source\_\allowbreak{}identity。
+
+\subsection{测试和交付工具也应理解}
+
+conftest.py的autouse fixture在每个测试前禁止step、torch.load/\allowbreak{}save和expm1，结束后由monkeypatch恢复原方法。synthetic\_\allowbreak{}case只用linspace/\allowbreak{}arange/\allowbreak{}tensor构造小张量，clone().requires\_\allowbreak{}grad\_\allowbreak{}()建立可观察梯度的叶子。rate/\allowbreak{}masks没有梯度。test\_\allowbreak{}losses用手算和冻结函数，不与新实现自己互证；test\_\allowbreak{}gradients用解析式/\allowbreak{}差分；test\_\allowbreak{}readiness只改内存metadata；test\_\allowbreak{}cuda是可选独立进程的三臂CPU/\allowbreak{}GPU对照。
+
+run\_\allowbreak{}checks.py调用pytest子进程而不是模型runner，60秒timeout会终止自己启动的测试进程，保存完整输出与XML，不中断别人的任务。static\_\allowbreak{}review.py只AST与SHA，无torch import；author\_\allowbreak{}delivery.py/\allowbreak{}后续export/\allowbreak{}close工具处理文档和元数据，不读观测或权重。若修改真实候选源码，必须重新测试并用新版本身份归档，不能只改副本或覆盖已发表结果。
+
+\subsection{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.py。
+
+SHA256：55207122a41d\allowbreak{}d3112f393375\allowbreak{}0f78a1e23182\allowbreak{}49a38b01f37f\allowbreak{}4d00badec3de\allowbreak{}418b。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Candidate loss APIs only: no model, data loader, optimizer or training loop."""
+from .config import AblationConfig, RunSpec, get_config, proposed_runs
+from .focal import occurrence_numerator
+from .pinball import conditional_pinball_numerator
+from .total import CandidateLossResult, candidate_loss, combine_numerators
+
+__all__ = ["AblationConfig", "RunSpec", "get_config", "proposed_runs",
+           "occurrence_numerator", "conditional_pinball_numerator",
+           "CandidateLossResult", "candidate_loss", "combine_numerators"]
+\end{lstlisting}
+
+
+\subsection{config.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}config.py。
+
+SHA256：5ae850c28417\allowbreak{}b555dc7825bd\allowbreak{}204f95f8275b\allowbreak{}c3ddc5b64cbf\allowbreak{}a230a2517d4d\allowbreak{}5e3a。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+finite\_\allowbreak{}number(name, value) & 12 & 完整type/\allowbreak{}default见下面源码 \\
+get\_\allowbreak{}config(experiment\_\allowbreak{}id) & 34 & 完整type/\allowbreak{}default见下面源码 \\
+proposed\_\allowbreak{}runs() & 62 & 完整type/\allowbreak{}default见下面源码 \\
+workload() & 66 & 完整type/\allowbreak{}default见下面源码 \\
+learning\_\allowbreak{}rate\_\allowbreak{}prefix(update) & 75 & 完整type/\allowbreak{}default见下面源码 \\
+\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}(self) & 26 & 完整type/\allowbreak{}default见下面源码 \\
+\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}(self) & 46 & 完整type/\allowbreak{}default见下面源码 \\
+run\_\allowbreak{}id(self) & 54 & 完整type/\allowbreak{}default见下面源码 \\
+stage(self) & 58 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Three closed, unapproved loss conditions and 18 candidate run identities."""
+from __future__ import annotations
+from dataclasses import dataclass
+import math
+
+_PARAMETERS = {"E0": (.5, 2., 1.), "E1": (.5, 0., 1.), "E2": (.5, 2., 2.)}
+MODELS = ("B0_MATCHED_V2", "B1_V2")
+SEEDS = (2026, 2027, 2028)
+PROTOCOL_STATUS = "PROPOSED_FOR_RESEARCHER_APPROVAL"
+
+
+def finite_number(name: str, value: object) -> float:
+    """Reject booleans, strings, NaN and infinity rather than silently coerce."""
+    if type(value) not in (int, float) or not math.isfinite(value):
+        raise ValueError(f"{name}: finite Python int/float required, excluding bool")
+    return float(value)
+
+
+@dataclass(frozen=True)
+class AblationConfig:
+    experiment_id: str
+    alpha: float
+    gamma: float
+    lambda_q: float
+
+    def __post_init__(self) -> None:
+        if type(self.experiment_id) is not str or self.experiment_id not in _PARAMETERS:
+            raise ValueError("Unknown experiment ID; only E0/E1/E2 are candidates")
+        values = tuple(finite_number(k, getattr(self, k)) for k in ("alpha", "gamma", "lambda_q"))
+        if values != _PARAMETERS[self.experiment_id]:
+            raise ValueError("Experiment parameters do not match the closed candidate condition")
+
+
+def get_config(experiment_id: str) -> AblationConfig:
+    if type(experiment_id) is not str or experiment_id not in _PARAMETERS:
+        raise ValueError("Unknown experiment ID; no parameter search or automatic selection")
+    return AblationConfig(experiment_id, *_PARAMETERS[experiment_id])
+
+
+@dataclass(frozen=True)
+class RunSpec:
+    experiment_id: str
+    model: str
+    seed: int
+
+    def __post_init__(self) -> None:
+        get_config(self.experiment_id)
+        if type(self.model) is not str or self.model not in MODELS:
+            raise ValueError("Unknown candidate model identity")
+        if type(self.seed) is not int or self.seed not in SEEDS:
+            raise ValueError("Candidate seeds are exactly 2026/2027/2028")
+
+    @property
+    def run_id(self) -> str:
+        return f"{self.experiment_id}__{self.model}__s{self.seed}"
+
+    @property
+    def stage(self) -> int:
+        return 1 if self.seed == 2026 else 2
+
+
+def proposed_runs() -> tuple[RunSpec, ...]:
+    return tuple(RunSpec(arm, model, seed) for seed in SEEDS for arm in _PARAMETERS for model in MODELS)
+
+
+def workload() -> dict[str, int]:
+    """Pure arithmetic; these counts do not mean that any updates took place."""
+    train_batches, val_batches = (10455 + 1) // 2, (10501 + 7) // 8
+    return {"runs": 18, "epochs": 9, "updates_per_epoch": train_batches,
+            "updates_per_run": 9 * train_batches, "updates_total": 18 * 9 * train_batches,
+            "validation_batches_per_epoch": val_batches, "validation_batches_total": 18 * 9 * val_batches,
+            "stage1_updates": 6 * 9 * train_batches, "stage2_updates": 12 * 9 * train_batches}
+
+
+def learning_rate_prefix(update: int) -> float:
+    """First nine epochs of the original 50-epoch trajectory, no optimizer."""
+    if type(update) is not int or not 1 <= update <= 47052:
+        raise ValueError("Candidate one-based update must be in [1,47052]")
+    if update <= 5228:
+        return 1e-4 * (update / 5228)  # warmup is not clamped to the cosine floor
+    progress = (update - 5228) / (261400 - 5228)
+    return 1e-6 + (1e-4 - 1e-6) * (1 + math.cos(math.pi * progress)) / 2
+\end{lstlisting}
+
+
+\subsection{validation.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}validation.py。
+
+SHA256：05885c309b6c\allowbreak{}f930a57f30b2\allowbreak{}5438c8664be2\allowbreak{}ddc5a36eb9f8\allowbreak{}6de82654e886\allowbreak{}beb0。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+image\_\allowbreak{}tensor(name, value, channels) & 12 & 完整type/\allowbreak{}default见下面源码 \\
+same\_\allowbreak{}shape\_\allowbreak{}device(name, value, reference) & 19 & 完整type/\allowbreak{}default见下面源码 \\
+boolean\_\allowbreak{}mask(name, value, reference) & 26 & 完整type/\allowbreak{}default见下面源码 \\
+finite\_\allowbreak{}tensor(name, value) & 32 & 完整type/\allowbreak{}default见下面源码 \\
+occurrence\_\allowbreak{}logits(logit) & 37 & 完整type/\allowbreak{}default见下面源码 \\
+quantiles(qlog) & 46 & 完整type/\allowbreak{}default见下面源码 \\
+graph\_\allowbreak{}zero(value, *, dtype) & 54 & 完整type/\allowbreak{}default见下面源码 \\
+supervision(logit, qlog, rate, imerg\_\allowbreak{}valid, yunnan\_\allowbreak{}mask) & 69 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Explicit tensor contracts; no output repair and no physical conversion."""
+from __future__ import annotations
+from dataclasses import dataclass
+import torch
+from yuntapr.models.quantile_v2.outputs import validate_log_quantiles
+
+
+class ZeroValidPixelsError(ValueError):
+    """Stop a loss call with zero supervision; never imply a skipped update."""
+
+
+def image_tensor(name: str, value: torch.Tensor, channels: int) -> None:
+    if not isinstance(value, torch.Tensor) or value.layout != torch.strided:
+        raise ValueError(f"{name}: dense strided Tensor required")
+    if value.ndim != 4 or value.shape[1] != channels or any(n <= 0 for n in value.shape):
+        raise ValueError(f"{name}: nonempty [B,{channels},H,W] required")
+
+
+def same_shape_device(name: str, value: torch.Tensor, reference: torch.Tensor) -> None:
+    if not isinstance(value, torch.Tensor) or value.shape != reference.shape:
+        raise ValueError(f"{name}: exact shape required; mask broadcasting is forbidden")
+    if value.device != reference.device:
+        raise ValueError(f"{name}: device mismatch")
+
+
+def boolean_mask(name: str, value: torch.Tensor, reference: torch.Tensor) -> None:
+    same_shape_device(name, value, reference)
+    if value.dtype != torch.bool or value.layout != torch.strided:
+        raise ValueError(f"{name}: dense bool Tensor required")
+
+
+def finite_tensor(name: str, value: torch.Tensor) -> None:
+    if not bool(torch.isfinite(value).all()):
+        raise FloatingPointError(f"{name}: NaN/Inf forbidden, including masked output pixels")
+
+
+def occurrence_logits(logit: torch.Tensor) -> None:
+    image_tensor("logit", logit, 1)
+    if logit.dtype not in (torch.float16, torch.bfloat16, torch.float32, torch.float64):
+        raise ValueError("logit: real floating dtype required")
+    if logit.device.type not in ("cpu", "cuda"):
+        raise ValueError("logit: this candidate supports CPU/CUDA only")
+    finite_tensor("logit", logit)
+
+
+def quantiles(qlog: torch.Tensor) -> None:
+    image_tensor("qlog", qlog, 32)
+    if qlog.device.type not in ("cpu", "cuda"):
+        raise ValueError("qlog: this candidate supports CPU/CUDA only")
+    # Reuse the frozen FP64, finite, support and strict-order guards unchanged.
+    validate_log_quantiles(qlog)
+
+
+def graph_zero(value: torch.Tensor, *, dtype: torch.dtype | None = None) -> torch.Tensor:
+    """Empty-view sum gives connected zero without overflowing sum(value)*0."""
+    return value.reshape(-1)[:0].sum(dtype=dtype)
+
+
+@dataclass(frozen=True)
+class Supervision:
+    valid: torch.Tensor
+    rainy: torch.Tensor
+    rainy_valid: torch.Tensor
+    clean_rate: torch.Tensor
+    n_valid: int
+    n_rain: int
+
+
+def supervision(logit: torch.Tensor, qlog: torch.Tensor, rate: torch.Tensor,
+                imerg_valid: torch.Tensor, yunnan_mask: torch.Tensor) -> Supervision:
+    occurrence_logits(logit)
+    same_shape_device("qlog spatial slice", qlog[:, :1] if isinstance(qlog, torch.Tensor) and qlog.ndim == 4 else qlog, logit)
+    quantiles(qlog)
+    same_shape_device("rate", rate, logit)
+    if rate.dtype != torch.float32 or rate.layout != torch.strided or rate.requires_grad:
+        raise ValueError("rate: nondifferentiable dense float32 IMERG reference required")
+    boolean_mask("imerg_valid", imerg_valid, logit)
+    boolean_mask("yunnan_mask", yunnan_mask, logit)
+    valid = imerg_valid & yunnan_mask
+    n_valid = int(valid.sum().item())
+    if n_valid == 0:
+        raise ZeroValidPixelsError("ZERO_VALID_SUPERVISED_YUNNAN_PIXELS; no silent skip")
+    if not bool(torch.isfinite(rate[valid]).all()) or bool((rate[valid] < 0).any()):
+        raise ValueError("Supervised valid precipitation must be finite nonnegative")
+    # Only an ephemeral arithmetic target is cleaned, exactly as in the old loss.
+    clean = torch.where(valid, rate, torch.zeros_like(rate))
+    rainy = clean > torch.tensor(.1, dtype=torch.float32, device=rate.device)
+    rainy_valid = rainy & valid  # compare BEFORE converting rate to FP64
+    return Supervision(valid, rainy, rainy_valid, clean, n_valid, int(rainy_valid.sum().item()))
+\end{lstlisting}
+
+
+\subsection{focal.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}focal.py。
+
+SHA256：828189dfac57\allowbreak{}fdaf0520ffc8\allowbreak{}a37fb4b7608e\allowbreak{}ccbd6154f3c0\allowbreak{}4538049fc531\allowbreak{}3f94。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+occurrence\_\allowbreak{}numerator(logit, rainy, valid, *, alpha, gamma) & 9 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Stable candidate focal numerator, explicitly separate from normalization."""
+from __future__ import annotations
+import torch
+from torch.nn import functional as F
+from .config import finite_number
+from .validation import boolean_mask, finite_tensor, graph_zero, occurrence_logits
+
+
+def occurrence_numerator(logit: torch.Tensor, rainy: torch.Tensor, valid: torch.Tensor,
+                         *, alpha: float, gamma: float) -> torch.Tensor:
+    alpha, gamma = finite_number("alpha", alpha), finite_number("gamma", gamma)
+    if not 0 <= alpha <= 1 or gamma < 0:
+        raise ValueError("alpha in [0,1] and gamma>=0 required")
+    occurrence_logits(logit)
+    boolean_mask("rainy hard labels", rainy, logit)
+    boolean_mask("valid", valid, logit)
+    dtype = torch.float64 if logit.dtype == torch.float64 else torch.float32
+    with torch.autocast(logit.device.type, enabled=False):
+        if not bool(valid.any()):
+            return graph_zero(logit, dtype=dtype)
+        # FP16/BF16 inputs retain gradients through this cast; BCE computes FP32.
+        logits, labels = logit[valid].to(dtype), rainy[valid]
+        bce = F.binary_cross_entropy_with_logits(logits, labels.to(dtype), reduction="none")
+        alpha_t = torch.where(labels, torch.full_like(logits, alpha), torch.full_like(logits, 1 - alpha))
+        if gamma == 0:
+            terms = alpha_t * bce  # deliberately .5*BCE for E1, not plain BCE
+        else:
+            pt = torch.exp(-bce)
+            terms = alpha_t * (1 - pt).pow(gamma) * bce
+        result = terms.sum()
+    finite_tensor("occurrence numerator", result)
+    return result
+\end{lstlisting}
+
+
+\subsection{pinball.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}pinball.py。
+
+SHA256：cc4c4c742a2c\allowbreak{}e5c465dc8c2e\allowbreak{}ee786b85378d\allowbreak{}4d8845d7e065\allowbreak{}783f986bc264\allowbreak{}e25f。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+frozen\_\allowbreak{}taus(device) & 7 & 完整type/\allowbreak{}default见下面源码 \\
+\_\allowbreak{}pinball\_\allowbreak{}from\_\allowbreak{}errors(error, rainy\_\allowbreak{}valid) & 11 & 完整type/\allowbreak{}default见下面源码 \\
+conditional\_\allowbreak{}pinball\_\allowbreak{}numerator(qlog, log\_\allowbreak{}target, rainy\_\allowbreak{}valid) & 32 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""FP64 conditional pinball in log1p(mm/h), fixed 32-tau mean then sum."""
+from __future__ import annotations
+import torch
+from .validation import boolean_mask, finite_tensor, graph_zero, image_tensor, quantiles, same_shape_device
+
+
+def frozen_taus(device: torch.device | str | None = None) -> torch.Tensor:
+    return (torch.arange(1, 33, device=device, dtype=torch.float64) - .5) / 32
+
+
+def _pinball_from_errors(error: torch.Tensor, rainy_valid: torch.Tensor) -> torch.Tensor:
+    """Private arithmetic kernel: signed errors are NOT model quantiles.
+
+    This permits the P1-P4 hand-calculated constant-error fixtures without
+    pretending that constant qlog is a legal strictly ordered v2 prediction.
+    """
+    image_tensor("error", error, 32)
+    if error.dtype != torch.float64:
+        raise ValueError("Pinball signed errors require FP64")
+    boolean_mask("rainy_valid", rainy_valid, error[:, :1])
+    finite_tensor("pinball errors", error)
+    if not bool(rainy_valid.any()):
+        return graph_zero(error)
+    selected = error.movedim(1, -1)[rainy_valid.squeeze(1)]  # [N_rain,32]
+    tau = frozen_taus(error.device)
+    per_pixel = torch.maximum(tau * selected, (tau - 1) * selected).mean(dim=-1)
+    result = per_pixel.sum()
+    finite_tensor("quantile numerator", result)
+    return result
+
+
+def conditional_pinball_numerator(qlog: torch.Tensor, log_target: torch.Tensor,
+                                  rainy_valid: torch.Tensor) -> torch.Tensor:
+    quantiles(qlog)
+    same_shape_device("log_target", log_target, qlog[:, :1])
+    image_tensor("log_target", log_target, 1)
+    if log_target.dtype != torch.float64:
+        raise ValueError("log_target requires FP64")
+    boolean_mask("rainy_valid", rainy_valid, log_target)
+    finite_tensor("log_target", log_target)
+    if bool((log_target < 0).any()):
+        raise ValueError("log_target must be nonnegative log1p(mm/h)")
+    threshold_log = torch.log1p(torch.tensor(.1, dtype=torch.float32, device=qlog.device).double())
+    if bool((log_target[rainy_valid] <= threshold_log).any()):
+        raise ValueError("rainy_valid cannot select a dry or threshold-equal reference target")
+    with torch.autocast(qlog.device.type, enabled=False):
+        # Only the explicitly declared singleton tau axis is expanded.
+        error = log_target - qlog
+        return _pinball_from_errors(error, rainy_valid)
+\end{lstlisting}
+
+
+\subsection{total.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}total.py。
+
+SHA256：9ce37393d2af\allowbreak{}2fbc762d198b\allowbreak{}2088cb4645d1\allowbreak{}04d35f81b507\allowbreak{}c236bc3b39cf\allowbreak{}1ec1。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+combine\_\allowbreak{}numerators(s\_\allowbreak{}occ, s\_\allowbreak{}qr, n\_\allowbreak{}valid, *, lambda\_\allowbreak{}q) & 11 & 完整type/\allowbreak{}default见下面源码 \\
+candidate\_\allowbreak{}loss(logit, qlog, rate, imerg\_\allowbreak{}valid, yunnan\_\allowbreak{}mask, *, config) & 51 & 完整type/\allowbreak{}default见下面源码 \\
+scientific\_\allowbreak{}conditional\_\allowbreak{}pinball(self) & 46 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Candidate training objective and unweighted components, no optimizer."""
+from __future__ import annotations
+from dataclasses import dataclass
+import torch
+from .config import AblationConfig, finite_number
+from .focal import occurrence_numerator
+from .pinball import conditional_pinball_numerator
+from .validation import finite_tensor, supervision
+
+
+def combine_numerators(s_occ: torch.Tensor, s_qr: torch.Tensor, n_valid: int,
+                       *, lambda_q: float) -> torch.Tensor:
+    weight = finite_number("lambda_q", lambda_q)
+    if weight <= 0 or type(n_valid) is not int or n_valid <= 0:
+        raise ValueError("Positive lambda_q and positive integer N_valid required")
+    for name, value in (("S_occ", s_occ), ("S_qr", s_qr)):
+        if not isinstance(value, torch.Tensor) or value.ndim != 0 or value.layout != torch.strided or value.dtype not in (torch.float32, torch.float64):
+            raise ValueError(f"{name}: FP32/FP64 scalar Tensor required")
+    if s_occ.device != s_qr.device:
+        raise ValueError("Numerator device mismatch")
+    if s_occ.device.type not in ("cpu", "cuda"):
+        raise ValueError("Numerator device must be CPU/CUDA")
+    for name, value in (("S_occ", s_occ), ("S_qr", s_qr)):
+        finite_tensor(name, value)
+        if bool(value < 0):
+            raise ValueError(f"{name}: loss numerator must be nonnegative")
+    result = (s_occ + weight * s_qr) / n_valid  # weight exactly once
+    finite_tensor("weighted training objective", result)
+    return result
+
+
+@dataclass(frozen=True)
+class CandidateLossResult:
+    experiment_id: str
+    s_occ: torch.Tensor
+    s_qr: torch.Tensor
+    training_objective: torch.Tensor
+    weighted_quantile_per_valid: torch.Tensor
+    n_valid: int
+    n_rain: int
+    conditional_skipped: bool
+    status: str = "VALID_SYNTHETIC_OR_CANDIDATE_LOSS_CALL"
+    execution_authorization: bool = False
+
+    @property
+    def scientific_conditional_pinball(self) -> torch.Tensor | None:
+        # No lambda here. None explicitly means not estimable, not zero skill.
+        return self.s_qr / self.n_rain if self.n_rain else None
+
+
+def candidate_loss(logit: torch.Tensor, qlog: torch.Tensor, rate: torch.Tensor,
+                   imerg_valid: torch.Tensor, yunnan_mask: torch.Tensor,
+                   *, config: AblationConfig) -> CandidateLossResult:
+    if type(config) is not AblationConfig:
+        raise ValueError("Explicit closed AblationConfig required")
+    config.__post_init__()  # revalidate even if external code bypassed frozen setattr
+    target = supervision(logit, qlog, rate, imerg_valid, yunnan_mask)
+    s_occ = occurrence_numerator(logit, target.rainy, target.valid, alpha=config.alpha, gamma=config.gamma)
+    with torch.autocast(logit.device.type, enabled=False):
+        s_qr = conditional_pinball_numerator(qlog, torch.log1p(target.clean_rate.double()), target.rainy_valid)
+        total = combine_numerators(s_occ, s_qr, target.n_valid, lambda_q=config.lambda_q)
+        weighted = config.lambda_q * s_qr / target.n_valid
+    return CandidateLossResult(config.experiment_id, s_occ, s_qr, total, weighted,
+                               target.n_valid, target.n_rain, target.n_rain == 0)
+\end{lstlisting}
+
+
+\subsection{metrics.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}metrics.py。
+
+SHA256：3450edb27553\allowbreak{}39801a5fd558\allowbreak{}64091b1c22e0\allowbreak{}628fa49fce71\allowbreak{}bc5bff72811f\allowbreak{}9021。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+common\_\allowbreak{}validation\_\allowbreak{}sums(logit, qlog, rate, imerg\_\allowbreak{}valid, yunnan\_\allowbreak{}mask) & 38 & 完整type/\allowbreak{}default见下面源码 \\
+\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}(self) & 17 & 完整type/\allowbreak{}default见下面源码 \\
+from\_\allowbreak{}candidate(cls, result) & 24 & 完整type/\allowbreak{}default见下面源码 \\
+conditional\_\allowbreak{}pinball(self) & 28 & 完整type/\allowbreak{}default见下面源码 \\
+pooled(self, other) & 31 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Unweighted reporting interface; common core always uses E0 in FP64."""
+from __future__ import annotations
+from dataclasses import dataclass
+import math
+import torch
+from .config import get_config
+from .total import CandidateLossResult, candidate_loss
+
+
+@dataclass(frozen=True)
+class ReportingSums:
+    s_occ: float
+    s_qr: float
+    n_valid: int
+    n_rain: int
+
+    def __post_init__(self) -> None:
+        if not all(type(x) in (float, int) and math.isfinite(x) and x >= 0 for x in (self.s_occ, self.s_qr)):
+            raise ValueError("Finite nonnegative unweighted reporting sums required")
+        if type(self.n_valid) is not int or type(self.n_rain) is not int or not 0 <= self.n_rain <= self.n_valid or self.n_valid <= 0:
+            raise ValueError("Positive N_valid and integer 0<=N_rain<=N_valid required")
+
+    @classmethod
+    def from_candidate(cls, result: CandidateLossResult) -> ReportingSums:
+        return cls(float(result.s_occ.detach()), float(result.s_qr.detach()), result.n_valid, result.n_rain)
+
+    @property
+    def conditional_pinball(self) -> float | None:
+        return self.s_qr / self.n_rain if self.n_rain else None
+
+    def pooled(self, other: ReportingSums) -> ReportingSums:
+        # Pool sums/counts rather than averaging unequal-batch metric values.
+        return ReportingSums(self.s_occ + other.s_occ, self.s_qr + other.s_qr,
+                             self.n_valid + other.n_valid, self.n_rain + other.n_rain)
+
+
+@torch.no_grad()
+def common_validation_sums(logit: torch.Tensor, qlog: torch.Tensor, rate: torch.Tensor,
+                           imerg_valid: torch.Tensor, yunnan_mask: torch.Tensor) -> ReportingSums:
+    """Fixed gamma2/lambda1 arithmetic, not an arm's weighted train objective.
+
+    Caller-supplied tensors only. This function does not run a model or read data.
+    The current tests call it exclusively with explicitly synthetic tensors.
+    """
+    result = candidate_loss(logit.double(), qlog, rate, imerg_valid, yunnan_mask, config=get_config("E0"))
+    return ReportingSums.from_candidate(result)
+\end{lstlisting}
+
+
+\subsection{readiness.py：实际源码、函数位置与副本}
+
+来源 src/\allowbreak{}yuntapr/\allowbreak{}experimental/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}ablations/\allowbreak{}readiness.py。
+
+SHA256：2f6ca9f1f5cf\allowbreak{}0da458cc008e\allowbreak{}05bb24d4c1ec\allowbreak{}d776172f35bf\allowbreak{}1b8cef81f234\allowbreak{}92e3。参数语义见对应walkthrough；下面是实际完整注释源码副本。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endfirsthead
+函数或方法（参数名） & 源码行 & 阅读入口 \\
+\midrule\endhead
+require\_\allowbreak{}sha(value, name) & 17 & 完整type/\allowbreak{}default见下面源码 \\
+state\_\allowbreak{}metadata\_\allowbreak{}digest(tensors) & 36 & 完整type/\allowbreak{}default见下面源码 \\
+audit\_\allowbreak{}fresh\_\allowbreak{}metadata(records) & 68 & 完整type/\allowbreak{}default见下面源码 \\
+review\_\allowbreak{}checkpoint\_\allowbreak{}binding(metadata, expected, *, resume\_\allowbreak{}approval\_\allowbreak{}reference) & 99 & 完整type/\allowbreak{}default见下面源码 \\
+\_\allowbreak{}\_\allowbreak{}post\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}(self) & 28 & 完整type/\allowbreak{}default见下面源码 \\
+validate(self) & 56 & 完整type/\allowbreak{}default见下面源码 \\
+describe(self) & 140 & 完整type/\allowbreak{}default见下面源码 \\
+run(self, *args, **kwargs) & 147 & 完整type/\allowbreak{}default见下面源码 \\
+\bottomrule\end{longtable}\endgroup
+
+\begin{lstlisting}
+"""Metadata-only identity checks and an unconditionally blocked runner stub.
+
+No torch import, tensor state loading, dataset access or approval issuance.
+Synthetically valid metadata never implies that real initial states exist.
+"""
+from __future__ import annotations
+from dataclasses import asdict, dataclass
+import hashlib
+import json
+import re
+from typing import NoReturn, Sequence
+from .config import RunSpec, proposed_runs, workload
+
+INPUT_DIFFERENCES = {"backbone.enc0.conv1.weight", "backbone.enc0.skip.weight"}
+
+
+def require_sha(value: object, name: str) -> None:
+    if type(value) is not str or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+        raise ValueError(f"{name}: lowercase SHA256 required, never a path or credential")
+
+
+@dataclass(frozen=True)
+class TensorIdentity:
+    shape: tuple[int, ...]
+    dtype: str
+    sha256: str
+
+    def __post_init__(self) -> None:
+        if type(self.shape) is not tuple or not self.shape or not all(type(n) is int and n > 0 for n in self.shape):
+            raise ValueError("Nonempty positive integer shape required")
+        if self.dtype != "float32":
+            raise ValueError("Frozen candidate parameter dtype is float32")
+        require_sha(self.sha256, "tensor identity")
+
+
+def state_metadata_digest(tensors: dict[str, TensorIdentity]) -> str:
+    if type(tensors) is not dict or not tensors or not all(type(k) is str and k and
+            type(v) is TensorIdentity for k, v in tensors.items()):
+        raise ValueError("Named tensor identity metadata required")
+    for value in tensors.values():
+        value.__post_init__()
+    body = json.dumps({k: asdict(v) for k, v in sorted(tensors.items())}, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(body.encode()).hexdigest()
+
+
+@dataclass(frozen=True)
+class FreshRecord:
+    run: RunSpec
+    tensors: dict[str, TensorIdentity]
+    state_sha256: str
+    post_pair_rng_sha256: str
+    epoch_order_sha256: str
+    initializer_code_sha256: str
+    historical_checkpoint_loaded: bool = False
+
+    def validate(self) -> None:
+        if type(self.run) is not RunSpec:
+            raise ValueError("Closed candidate RunSpec required")
+        self.run.__post_init__()
+        for name in ("state_sha256", "post_pair_rng_sha256", "epoch_order_sha256", "initializer_code_sha256"):
+            require_sha(getattr(self, name), name)
+        if self.historical_checkpoint_loaded is not False:
+            raise ValueError("Historical model/optimizer/RNG state transfer forbidden")
+        if state_metadata_digest(self.tensors) != self.state_sha256:
+            raise ValueError("Declared state digest differs from supplied tensor metadata")
+
+
+def audit_fresh_metadata(records: Sequence[FreshRecord]) -> dict:
+    """Review declarations only; cannot prove origins or instantiate a model."""
+    if len(records) != 18 or not all(type(r) is FreshRecord for r in records):
+        raise ValueError("Exactly 18 fresh metadata records required")
+    for r in records:
+        r.validate()
+    table = {r.run.run_id: r for r in records}
+    if set(table) != {r.run_id for r in proposed_runs()}:
+        raise ValueError("Missing, duplicate or unregistered run identity")
+    if len({r.initializer_code_sha256 for r in records}) != 1:
+        raise ValueError("Initializer code identity differs across arms")
+    for seed in (2026, 2027, 2028):
+        subset = [r for r in records if r.run.seed == seed]
+        if len({r.post_pair_rng_sha256 for r in subset}) != 1 or len({r.epoch_order_sha256 for r in subset}) != 1:
+            raise ValueError("Same-seed RNG/order metadata differs")
+        for model in ("B0_MATCHED_V2", "B1_V2"):
+            arms = [r for r in subset if r.run.model == model]
+            if len({r.state_sha256 for r in arms}) != 1:
+                raise ValueError("Same-model same-seed full fresh states differ across arms")
+        a = table[RunSpec("E0", "B0_MATCHED_V2", seed).run_id].tensors
+        b = table[RunSpec("E0", "B1_V2", seed).run_id].tensors
+        if a.keys() != b.keys():
+            raise ValueError("B0/B1 parameter names differ")
+        different = {k for k in a if a[k].shape != b[k].shape}
+        if different != INPUT_DIFFERENCES or any(a[k] != b[k] for k in a if k not in different):
+            raise ValueError("Only two frozen input-shape differences permitted; shared tensors must match")
+    return {"metadata_consistent": True, "actual_model_instantiated": False,
+            "actual_initialization_proven": False, "scope": "DECLARED_OR_SYNTHETIC_METADATA_ONLY",
+            "can_launch_formal_training": False}
+
+
+def review_checkpoint_binding(metadata: dict, expected: dict, *, resume_approval_reference: str | None = None) -> dict:
+    """No files are opened and no state can be applied by this review.
+
+    A supplied reference is not authenticated here and cannot authorize resume.
+    Future formal integration must bind a real independent event to LAST SHA.
+    """
+    fields = {"run_id", "last_sha256", "model_sha256", "optimizer_sha256", "rng_sha256",
+              "scheduler_sha256", "code_sha256", "protocol_sha256", "data_sha256", "init_sha256",
+              "completed_epoch", "retained_updates", "boundary", "original_execution_reference"}
+    if type(metadata) is not dict or set(metadata) != fields or type(expected) is not dict:
+        raise ValueError("Closed checkpoint metadata required")
+    if metadata["run_id"] not in {r.run_id for r in proposed_runs()}:
+        raise ValueError("Checkpoint run identity is not in candidate matrix")
+    for key in fields:
+        if key.endswith("sha256"):
+            require_sha(metadata[key], key)
+    epoch, updates = metadata["completed_epoch"], metadata["retained_updates"]
+    if type(epoch) is not int or not 1 <= epoch <= 9 or type(updates) is not int or updates != epoch * 5228:
+        raise ValueError("Complete-epoch retained budget mismatch")
+    if metadata["boundary"] != "COMPLETED_TRAIN_AND_VALIDATION_EPOCH_ONLY":
+        raise ValueError("Partial epoch is not a legal LAST")
+    if type(metadata["original_execution_reference"]) is not str or not metadata["original_execution_reference"]:
+        raise ValueError("Original execution provenance reference missing")
+    binding = {"run_id", "last_sha256", "code_sha256", "protocol_sha256", "data_sha256", "init_sha256"}
+    if set(expected) != binding or any(metadata[k] != expected[k] for k in binding):
+        raise ValueError("Expected LAST/code/protocol/data/init/run binding differs")
+    if resume_approval_reference is not None and (type(resume_approval_reference) is not str or not resume_approval_reference):
+        raise ValueError("Nonempty independent-event reference or None required")
+    return {"metadata_consistent": True, "remaining_retained_updates": 47052 - updates,
+            "next_epoch": epoch + 1 if epoch < 9 else None, "approval_authenticity_verified": False,
+            "resume_approval_reference_present": resume_approval_reference is not None,
+            "can_apply_checkpoint_state": False, "can_launch_formal_training": False}
+
+
+class FormalExecutionBlocked(RuntimeError):
+    pass
+
+
+class BlockedRunner:
+    """Design skeleton with no execution implementation, even after flag edits."""
+
+    def describe(self) -> dict:
+        return {"runs": [r.run_id for r in proposed_runs()], "budget": workload(),
+                "runner_implemented": False, "can_launch_formal_training": False,
+                "required": ["Independent scientific approval", "Researcher code review",
+                             "Explicit formal integration approval", "Data and compute permissions",
+                             "Real fresh/data/code identities", "Separately bound stage execution authorization"]}
+
+    def run(self, *args: object, **kwargs: object) -> NoReturn:
+        raise FormalExecutionBlocked("Candidate skeleton has NO TRAINING CAPABILITY; new reviewed runner and independent approvals required")
+\end{lstlisting}
+\clearpage\section{关键数学、解析梯度与源码对应}
+\(v=m_{\rm IMERG}\land m_{\rm Yunnan}\)，\(z=\mathbf1\{y_{32}>\operatorname{float32}(0.1)\}\)，
+\(N_v=\sum v\)，\(N_r=\sum vz\)；比较在提升精度前完成。
+\begin{align*}
+b(l,z)&=\max(l,0)-lz+\log(1+e^{-|l|}),&p_t&=e^{-b},\\
+\alpha_z&=\alpha z+(1-\alpha)(1-z),&S_o&=\sum v\alpha_z(1-p_t)^\gamma b,\\
+\tau_i&=(i-0.5)/32,&e_i&=\log(1+y)-q_i,\\
+\rho_{\tau_i}(e_i)&=\max(\tau_i e_i,(\tau_i-1)e_i),&S_q&=\sum vz\,\frac1{32}\sum_i\rho_{\tau_i}(e_i),\\
+L_{\rm train}&=(S_o+\lambda_q S_q)/N_v,&\operatorname{CPB}&=S_q/N_r.
+\end{align*}
+Focal对应focal.py中的BCEWithLogits、exp、pow、sum；Pinball对应pinball.py中的固定tau、maximum、mean、sum；total.py只乘一次lambda。\(\gamma=0,\alpha=.5\)仍为\(.5\,\mathrm{BCE}\)。CPB不带权重，无雨不可估计。
+\[
+\frac{\partial S_o}{\partial l}=\alpha_z(p-z)\{m^\gamma+\gamma b p_t m^{\gamma-1}\},\quad m=1-p_t,\quad\gamma>0;
+\qquad\gamma=0:\ \alpha_z(p-z).
+\]
+\[
+\frac{\partial L}{\partial q_i}=\frac{\lambda_q}{32N_v}\begin{cases}-\tau_i,&e_i>0,\\1-\tau_i,&e_i<0.\end{cases}
+\]
+以上梯度仅在有效位置并按相应雨标签生效；\(e=0\)为折点。test\_gradients.py独立核对解析式、FP64差分和全部32tau；不是实际模型性能结论。
+\[
+\eta(u)=\begin{cases}10^{-4}u/5228,&1\le u\le5228,\\
+10^{-6}+(10^{-4}-10^{-6})\dfrac{1+\cos(\pi(u-5228)/(261400-5228))}{2},&5228<u\le47052.\end{cases}
+\]
+config.py的learning\_rate\_prefix逐位置与冻结纯数学函数对照；没有optimizer或正式更新。BlockedRunner只抛错。V2\_PHASE\_B\_AUTHORIZED=false，历史恢复NOT\_GRANTED，2025访问0。工程交付到此停止。
+\end{document}

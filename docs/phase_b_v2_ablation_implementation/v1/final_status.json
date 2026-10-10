@@ -1,0 +1,74 @@
+{
+  "status": "COMPLETE_WITHIN_AUTHORIZED_CANDIDATE_DEVELOPMENT_AND_SYNTHETIC_SCOPE",
+  "recorded_utc": "2026-10-10T06:33:06.800415+00:00",
+  "baseline_commit": "c6d938f4afc7780b29caf3ae84cfc2ef8ff70ed9",
+  "scientific_status": "PROPOSED_FOR_RESEARCHER_APPROVAL",
+  "researcher_decision": "RESEARCHER_DECISION_REQUIRED",
+  "V2_PHASE_B_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "current_tests": {
+    "cpu_passed": 177,
+    "cuda_passed": 3,
+    "unique_pytest_instances": 180,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "static_passed": 11
+  },
+  "historical_attempts_retained": {
+    "assertion_failures": 1,
+    "collection_errors": 1,
+    "pytest_dependency_start_failures": 2,
+    "cuda_timeouts": 1
+  },
+  "historical_failure_records": [
+    "tests/failure_and_repair_history.json",
+    "tests/scalar_device_repair.json"
+  ],
+  "historical_history_role": "First history JSON preserves pre-final-refinement 176-test state, not final count",
+  "e0_math_and_two_head_gradient_compatibility": "PASS_WITH_DECLARED_TOLERANCES",
+  "synthetic_gradcheck_gradgradcheck_analytic_and_finite_difference": "PASS",
+  "synthetic_loss_forward_and_autograd": "EXECUTED_NOT_EXACTLY_COUNTED",
+  "formal_model_forward": 0,
+  "optimizer_steps": 0,
+  "formal_parameters_updated": 0,
+  "raw_2023_2024_files_opened": 0,
+  "private_checkpoint_files_opened": 0,
+  "formal_or_historical_tracked_files_modified": 0,
+  "runner_can_launch_formal_training": false,
+  "budget_candidate_only": {
+    "runs": 18,
+    "epochs": 9,
+    "updates_per_epoch": 5228,
+    "updates_per_run": 47052,
+    "updates_total": 846936,
+    "validation_batches_per_epoch": 1313,
+    "validation_batches_total": 212706,
+    "stage1_updates": 282312,
+    "stage2_updates": 564624
+  },
+  "learning_order": [
+    "config",
+    "validation",
+    "focal",
+    "pinball",
+    "total",
+    "metrics",
+    "gradient_tests",
+    "readiness"
+  ],
+  "formal_integration_not_performed": true,
+  "remaining_decisions": [
+    "Independent researcher review of candidate loss and controls",
+    "Scientific protocol, effect limits, side-effect tolerances and multiplicity approval",
+    "Phase-A evidence acceptance scope and separate historical recovery disposition",
+    "New independent v2 runner integration approval",
+    "Data/compute permission and separately authorized real preflight",
+    "Actual fresh tensor/RNG/order identity evidence, not declared SHA metadata",
+    "Separate stage-bound execution authorization; LAST-bound independent approval for any recovery"
+  ],
+  "publication": "Actual evidence commit will be recorded in append-only publication_receipt.json; receipt commit identity is in Git history"
+}

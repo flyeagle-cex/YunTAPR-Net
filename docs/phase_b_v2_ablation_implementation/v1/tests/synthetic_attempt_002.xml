@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.236" timestamp="2026-10-10T13:59:34.674060+08:00" hostname="REDACTED_HOST"><testcase classname="" name="tests.phase_b_v2_ablation_implementation.test_readiness" time="0.000"><error message="collection failure">ImportError while importing test module '<WORKSPACE>\tests\phase_b_v2_ablation_implementation\test_readiness.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+F:\devtools\miniconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\phase_b_v2_ablation_implementation\test_readiness.py:8: in &lt;module&gt;
+    from yuntapr.training.phase_a_protocol import lr_for_update
+src\yuntapr\training\phase_a_protocol.py:14: in &lt;module&gt;
+    import yaml
+E   ModuleNotFoundError: No module named 'yaml'</error></testcase></testsuite></testsuites>

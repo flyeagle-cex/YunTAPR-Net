@@ -1,0 +1,28 @@
+{
+  "scope": "CUDA_SYNTHETIC_LOSS_ONLY",
+  "status": "TIMEOUT",
+  "exit_code": null,
+  "timeout": true,
+  "timeout_seconds": 60,
+  "counts": {
+    "tests": 0,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 0
+  },
+  "wall_seconds": 60.109,
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=<WORKSPACE>\\docs\\phase_b_v2_ablation_implementation\\v1\\.local\\cuda_attempt_001.xml",
+    "tests/phase_b_v2_ablation_implementation/test_cuda.py"
+  ],
+  "optimizer_steps": 0,
+  "model_forward": 0,
+  "raw_data_reads": 0
+}

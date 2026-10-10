@@ -1,0 +1,25 @@
+{
+  "scope": "ACTUAL_ENVIRONMENT_AND_COLLECTION_FAILURES_NOT_SCIENTIFIC_PERFORMANCE",
+  "events": [
+    {
+      "attempt": "synthetic_attempt_002",
+      "outcome": "COLLECTION_ERROR_yaml_missing",
+      "repair": "Extract only the unchanged pure mathematical LR function AST, no frozen module import"
+    },
+    {
+      "attempt": "cuda_attempt_001",
+      "outcome": "TIMEOUT_60_SECONDS_0_COMPLETED_TESTS",
+      "context": "Old torch2.7.1+cu118 emitted unsupported sm_120 warning in initial probe",
+      "repair": "Use the existing project cu128 environment located through published engineering metadata"
+    },
+    {
+      "attempt": "synthetic_attempt_005_and_cuda_attempt_002",
+      "outcome": "pytest_missing_NO_TEST_STARTED",
+      "repair": "Install pytest9.1.1 only in task-local target; do not modify project runtime"
+    }
+  ],
+  "test_tolerances_loosened": false,
+  "final_cpu_passed": 176,
+  "final_cuda_passed": 3,
+  "formal_parameters_updated": 0
+}
