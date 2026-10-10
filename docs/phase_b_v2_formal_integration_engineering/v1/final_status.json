@@ -1,0 +1,68 @@
+{
+  "status": "SYNTHETIC_INTEGRATION_PASS",
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "baseline_commit": "c92eb1910c4bb94a27b250917f86ba82f6e16406",
+  "candidate_code_sha256": "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7",
+  "delivery_commit": "SEE_GIT_COMMIT_CONTAINING_THIS_VERSION",
+  "utc": "2026-10-10T12:07:03.129281+00:00",
+  "cpu_tests_passed": 55,
+  "cpu_tests_failed_final": 0,
+  "cuda_tests_passed": 2,
+  "cuda_tests_failed_final": 0,
+  "initial_cuda_failures": 1,
+  "failure_repaired": true,
+  "SYNTHETIC_OPTIMIZER_STEPS": 4,
+  "logical_b9_updates_simulated": 47052,
+  "planned_formal_matrix_updates_not_executed": 846936,
+  "formal_runs_executed": 0,
+  "logical_b9_epochs_passed": 9,
+  "actual_synthetic_epoch_transactions_successful": 3,
+  "failed_after_update_before_last_commit": 1,
+  "replay_model_optimizer_scheduler_rng_identical": true,
+  "real_raw_data_reads_this_turn": 0,
+  "historical_private_checkpoint_reads_this_turn": 0,
+  "real_permission_verifier": "UNAVAILABLE_ALWAYS_DENY",
+  "scientific_success": "NOT_AUTHORIZED_OR_ESTABLISHED",
+  "M_C": "RECOMMENDED_NOT_APPROVED",
+  "minimum_effect_and_power": "NOT_YET_ESTABLISHED",
+  "real_data_preflight_overall": "NOT_VERIFIED_UNCHANGED",
+  "actual_resources": [
+    {
+      "model": "B0_MATCHED_V2",
+      "replay": 1,
+      "seconds": 1.9913405000042985,
+      "peak_allocated_bytes": 2834127872,
+      "peak_reserved_bytes": 3418357760
+    },
+    {
+      "model": "B1_V2",
+      "replay": 0,
+      "seconds": 1.3111882000011974,
+      "peak_allocated_bytes": 2858972672,
+      "peak_reserved_bytes": 3439329280
+    },
+    {
+      "model": "B1_V2",
+      "replay": 1,
+      "seconds": 1.3208928999956697,
+      "peak_allocated_bytes": 2858972672,
+      "peak_reserved_bytes": 3439329280
+    }
+  ],
+  "not_verified": [
+    "real full-data loader and payload hashes",
+    "real 9-epoch or E1/E2 optimizer execution",
+    "live model cross-process continuation after process kill",
+    "power-loss durability and external authorization/resource service",
+    "operational real-time latency"
+  ],
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "2025_PIXELS_READ": 0,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED",
+  "initial_static_check_failures": 1,
+  "static_check_repair": "self-scan token construction"
+}

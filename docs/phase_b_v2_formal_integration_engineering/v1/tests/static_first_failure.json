@@ -1,0 +1,8 @@
+{
+  "scope": "PUBLIC_DELIVERY_STATIC_CHECK",
+  "failure": "AssertionError: validate_delivery.py",
+  "cause": "Credential-prefix detector matched its own literal constants",
+  "repair": "Construct detection tokens from fragments, retain self-scan",
+  "optimizer_steps": 0,
+  "actual_credentials_detected": false
+}

@@ -1,0 +1,713 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "records": [
+    {
+      "replay": 0,
+      "state": {
+        "model": "996f66d1c16f1b25bdd8ce2ca8488be4f8579371e1dd2797105cc5b872b6ceac",
+        "optimizer": "93c94167f587474fb177503b17feab9dd92338e08edd5dc41c4f838fc5f1adcb",
+        "scheduler": "92bb2e0d77134576cf88f8da7006d5d4c13430280d9b809a34def7cd1a7673f1",
+        "rng": "bc942077400a9dbed6b01f0e0e7e0da88452d53523ef1845a40b1e2a2742c66f"
+      },
+      "initial_sha": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "train": [
+        {
+          "lr": 1.9127773527161438e-08,
+          "N_valid": 6860,
+          "N_rain": 4900,
+          "s_occ": 568.35546875,
+          "s_qr": 2132.710797264024,
+          "training_objective": 0.39374143819446417,
+          "pre_clip_norm": 2.3858609199523926,
+          "post_clip_norm": 2.385860984484609,
+          "limit": 5.0,
+          "missing_gradients": []
+        }
+      ],
+      "seconds": 1.3111882000011974,
+      "peak_allocated_bytes": 2858972672,
+      "peak_reserved_bytes": 3439329280,
+      "resources": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "host_available_bytes": 17286897664,
+        "workspace_free_bytes": 42872340480,
+        "minimum_host_bytes": 8589934592,
+        "minimum_workspace_bytes": 1073741824,
+        "full_backward": true,
+        "cuda_free_bytes": 7258243072,
+        "cuda_total_bytes": 8546484224,
+        "minimum_cuda_free_bytes": 5368709120,
+        "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "torch_version": "2.11.0+cu128",
+        "cuda_build": "12.8"
+      },
+      "last_sha": "2b567ca276e66fe2fc843a35e5b2f84cc4ac4abd5c759e98137979de65719e89",
+      "validation_receipt": "667371d130d8c2da050ed8b48f966b37ed9d73105e990bac6420dbda21cdd5ea",
+      "synthetic_summary": {
+        "scenes": 2,
+        "n_valid": 6860,
+        "n_rain": 4900,
+        "s_occ": 568.1862613799722,
+        "s_qr": 2132.503730572469,
+        "brier_sum": 1618.444004058838,
+        "q32_log_min": 0.4047601934130274,
+        "q32_log_max": 1.0673035585104709,
+        "span_log_max": 0.9395616723493236,
+        "core_fp64": 0.3936865877481693,
+        "conditional_pinball": 0.43520484297397327,
+        "brier": 0.2359247819327752,
+        "auroc": 0.5003091420241566,
+        "average_precision": 0.7149645555257773,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          987,
+          1009,
+          1064,
+          1153,
+          1297,
+          1384,
+          1502,
+          1627,
+          1743,
+          1801,
+          1883,
+          1936,
+          1953,
+          1974,
+          1986,
+          2007,
+          2047,
+          2089,
+          2130,
+          2172,
+          2245
+        ],
+        "coverage": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.20142857142857143,
+          0.20591836734693877,
+          0.21714285714285714,
+          0.23530612244897958,
+          0.2646938775510204,
+          0.28244897959183674,
+          0.30653061224489797,
+          0.3320408163265306,
+          0.3557142857142857,
+          0.3675510204081633,
+          0.3842857142857143,
+          0.39510204081632655,
+          0.3985714285714286,
+          0.40285714285714286,
+          0.40530612244897957,
+          0.4095918367346939,
+          0.41775510204081634,
+          0.4263265306122449,
+          0.4346938775510204,
+          0.44326530612244897,
+          0.45816326530612245
+        ],
+        "q32_signed_bias": -0.5262117346938775,
+        "q32_absolute_error": 0.5262117346938775,
+        "reliability": [
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 1511,
+            "rain": 1082,
+            "probability_sum": 726.634765625,
+            "mean_probability": 0.4808966020019854,
+            "frequency": 0.7160820648577101
+          },
+          {
+            "n": 4183,
+            "rain": 2986,
+            "probability_sum": 2261.5078125,
+            "mean_probability": 0.5406425561797753,
+            "frequency": 0.7138417403777193
+          },
+          {
+            "n": 1158,
+            "rain": 828,
+            "probability_sum": 740.15625,
+            "mean_probability": 0.6391677461139896,
+            "frequency": 0.7150259067357513
+          },
+          {
+            "n": 8,
+            "rain": 4,
+            "probability_sum": 5.7265625,
+            "mean_probability": 0.7158203125,
+            "frequency": 0.5
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 2940,
+            "pinball_sum": 230.90669238771252,
+            "conditional_pinball": 0.0785396912883376
+          },
+          {
+            "upper": 5,
+            "n": 980,
+            "pinball_sum": 643.7152623337049,
+            "conditional_pinball": 0.6568523085037805
+          },
+          {
+            "upper": 10,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": 20,
+            "n": 980,
+            "pinball_sum": 1257.8817758510518,
+            "conditional_pinball": 1.2835528325010732
+          },
+          {
+            "upper": 30,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": 50,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": null,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "quota": {
+        "hard_limit": 4,
+        "reserved": 3,
+        "SYNTHETIC_OPTIMIZER_STEPS": 3,
+        "FORMAL_OPTIMIZER_STEPS": 0,
+        "events": [
+          [
+            "B0_MATCHED_V2",
+            "COMPLETED",
+            "7d94f702b2a9b7d0397f1c5151569e0131b6f1b58b48c39c717461aab903e9e4"
+          ],
+          [
+            "B0_MATCHED_V2",
+            "COMPLETED",
+            "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7"
+          ],
+          [
+            "B1_V2",
+            "COMPLETED",
+            "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7"
+          ]
+        ]
+      }
+    },
+    {
+      "replay": 1,
+      "state": {
+        "model": "996f66d1c16f1b25bdd8ce2ca8488be4f8579371e1dd2797105cc5b872b6ceac",
+        "optimizer": "93c94167f587474fb177503b17feab9dd92338e08edd5dc41c4f838fc5f1adcb",
+        "scheduler": "92bb2e0d77134576cf88f8da7006d5d4c13430280d9b809a34def7cd1a7673f1",
+        "rng": "bc942077400a9dbed6b01f0e0e7e0da88452d53523ef1845a40b1e2a2742c66f"
+      },
+      "initial_sha": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "train": [
+        {
+          "lr": 1.9127773527161438e-08,
+          "N_valid": 6860,
+          "N_rain": 4900,
+          "s_occ": 568.35546875,
+          "s_qr": 2132.710797264024,
+          "training_objective": 0.39374143819446417,
+          "pre_clip_norm": 2.3858609199523926,
+          "post_clip_norm": 2.385860984484609,
+          "limit": 5.0,
+          "missing_gradients": []
+        }
+      ],
+      "seconds": 1.3208928999956697,
+      "peak_allocated_bytes": 2858972672,
+      "peak_reserved_bytes": 3439329280,
+      "resources": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "host_available_bytes": 17266049024,
+        "workspace_free_bytes": 42819928064,
+        "minimum_host_bytes": 8589934592,
+        "minimum_workspace_bytes": 1073741824,
+        "full_backward": true,
+        "cuda_free_bytes": 7258243072,
+        "cuda_total_bytes": 8546484224,
+        "minimum_cuda_free_bytes": 5368709120,
+        "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "torch_version": "2.11.0+cu128",
+        "cuda_build": "12.8"
+      },
+      "last_sha": "b3c4c772a5d043ac6041612ae120be7b147b6d50f6ef2a23f98ca8b1729edcc2",
+      "validation_receipt": "667371d130d8c2da050ed8b48f966b37ed9d73105e990bac6420dbda21cdd5ea",
+      "synthetic_summary": {
+        "scenes": 2,
+        "n_valid": 6860,
+        "n_rain": 4900,
+        "s_occ": 568.1862613799722,
+        "s_qr": 2132.503730572469,
+        "brier_sum": 1618.444004058838,
+        "q32_log_min": 0.4047601934130274,
+        "q32_log_max": 1.0673035585104709,
+        "span_log_max": 0.9395616723493236,
+        "core_fp64": 0.3936865877481693,
+        "conditional_pinball": 0.43520484297397327,
+        "brier": 0.2359247819327752,
+        "auroc": 0.5003091420241566,
+        "average_precision": 0.7149645555257773,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          980,
+          987,
+          1009,
+          1064,
+          1153,
+          1297,
+          1384,
+          1502,
+          1627,
+          1743,
+          1801,
+          1883,
+          1936,
+          1953,
+          1974,
+          1986,
+          2007,
+          2047,
+          2089,
+          2130,
+          2172,
+          2245
+        ],
+        "coverage": [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.20142857142857143,
+          0.20591836734693877,
+          0.21714285714285714,
+          0.23530612244897958,
+          0.2646938775510204,
+          0.28244897959183674,
+          0.30653061224489797,
+          0.3320408163265306,
+          0.3557142857142857,
+          0.3675510204081633,
+          0.3842857142857143,
+          0.39510204081632655,
+          0.3985714285714286,
+          0.40285714285714286,
+          0.40530612244897957,
+          0.4095918367346939,
+          0.41775510204081634,
+          0.4263265306122449,
+          0.4346938775510204,
+          0.44326530612244897,
+          0.45816326530612245
+        ],
+        "q32_signed_bias": -0.5262117346938775,
+        "q32_absolute_error": 0.5262117346938775,
+        "reliability": [
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 1511,
+            "rain": 1082,
+            "probability_sum": 726.634765625,
+            "mean_probability": 0.4808966020019854,
+            "frequency": 0.7160820648577101
+          },
+          {
+            "n": 4183,
+            "rain": 2986,
+            "probability_sum": 2261.5078125,
+            "mean_probability": 0.5406425561797753,
+            "frequency": 0.7138417403777193
+          },
+          {
+            "n": 1158,
+            "rain": 828,
+            "probability_sum": 740.15625,
+            "mean_probability": 0.6391677461139896,
+            "frequency": 0.7150259067357513
+          },
+          {
+            "n": 8,
+            "rain": 4,
+            "probability_sum": 5.7265625,
+            "mean_probability": 0.7158203125,
+            "frequency": 0.5
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 2940,
+            "pinball_sum": 230.90669238771252,
+            "conditional_pinball": 0.0785396912883376
+          },
+          {
+            "upper": 5,
+            "n": 980,
+            "pinball_sum": 643.7152623337049,
+            "conditional_pinball": 0.6568523085037805
+          },
+          {
+            "upper": 10,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": 20,
+            "n": 980,
+            "pinball_sum": 1257.8817758510518,
+            "conditional_pinball": 1.2835528325010732
+          },
+          {
+            "upper": 30,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": 50,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          },
+          {
+            "upper": null,
+            "n": 0,
+            "pinball_sum": 0.0,
+            "conditional_pinball": null
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "quota": {
+        "hard_limit": 4,
+        "reserved": 4,
+        "SYNTHETIC_OPTIMIZER_STEPS": 4,
+        "FORMAL_OPTIMIZER_STEPS": 0,
+        "events": [
+          [
+            "B0_MATCHED_V2",
+            "COMPLETED",
+            "7d94f702b2a9b7d0397f1c5151569e0131b6f1b58b48c39c717461aab903e9e4"
+          ],
+          [
+            "B0_MATCHED_V2",
+            "COMPLETED",
+            "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7"
+          ],
+          [
+            "B1_V2",
+            "COMPLETED",
+            "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7"
+          ],
+          [
+            "B1_V2",
+            "COMPLETED",
+            "30f6067473c9280c50fe9c7a8f19d39f5194769f2d3be342c564b7159cfc08c7"
+          ]
+        ]
+      }
+    }
+  ],
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "2025_PIXELS_READ": 0,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED"
+}
