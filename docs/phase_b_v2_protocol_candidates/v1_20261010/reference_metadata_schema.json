@@ -1,0 +1,18 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Candidate reference metadata - no actual observation records",
+  "type":"object",
+  "required":["reference_id","provider","product_version","instrument_id","period","spatial_support","time_support","licence","independence_status","source_lineage"],
+  "properties":{
+    "reference_id":{"type":"string"},"provider":{"type":"string"},"product_version":{"type":"string"},"instrument_id":{"type":"string"},
+    "shared_id_aliases":{"type":"array","items":{"type":"string"}},
+    "period":{"type":"object","required":["start","end","completeness_known"],"properties":{"start":{"type":["string","null"]},"end":{"type":["string","null"]},"completeness_known":{"type":"boolean"}}},
+    "spatial_support":{"type":"object","required":["kind","CRS"],"properties":{"kind":{"enum":["POINT","BEAM_GATE","FOOTPRINT","GRID"]},"CRS":{"type":"string"},"longitude":{"type":["number","null"]},"latitude":{"type":["number","null"]},"height_m":{"type":["number","null"]}}},
+    "time_support":{"type":"object","required":["timezone","interval_semantics","cadence_minutes"],"properties":{"timezone":{"type":"string"},"interval_semantics":{"type":"string"},"cadence_minutes":{"type":["number","null"]},"resolution_mm":{"type":["number","null"]}}},
+    "licence":{"type":"object","required":["access_status","project_scope","redistribution"],"properties":{"access_status":{"enum":["UNKNOWN","PUBLIC_METADATA_ONLY","APPLICATION_REQUIRED","PERMISSION_CONFIRMED_SEPARATELY"]},"project_scope":{"type":"string"},"redistribution":{"type":"string"}}},
+    "independence_status":{"enum":["INDEPENDENCE_UNVERIFIED","OBSERVATION_SHARED","ALGORITHM_LINKED","AUXILIARY","VERIFIED_INDEPENDENT_WITH_EVIDENCE"]},
+    "source_lineage":{"type":"object","required":["GPCC_GTS_submission","QPE_gauge_inputs","label_overlap_evidence"],"properties":{"GPCC_GTS_submission":{"type":"string"},"QPE_gauge_inputs":{"type":"array","items":{"type":"string"}},"label_overlap_evidence":{"type":"string"}}},
+    "QC_codes":{"type":"array","items":{"type":"string"}},"missing_policy":{"type":"string"},"relocation_calibration_history":{"type":"string"},"beam_geometry_blockage":{"type":"string"},"metadata_sha256":{"type":["string","null"]},"role":{"enum":["METADATA","CASE_CANDIDATE","REPORT_CANDIDATE"]}
+  },
+  "$comment":"This schema is an acquisition planning aid, not a grant of permission or proof of physical independence. No provider request has been sent."
+}

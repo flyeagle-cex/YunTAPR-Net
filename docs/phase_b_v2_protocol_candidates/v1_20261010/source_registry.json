@@ -1,0 +1,28 @@
+{
+  "retrieved_date": "2026-10-10",
+  "scope": "PUBLIC_METADATA_AND_ACCESS_CONDITIONS_ONLY",
+  "raw_observation_downloads": 0,
+  "sources": [
+    {"id":"S01","title":"中国气象局基本气象数据开放共享目录（第一批，2023年2月）","publisher":"CMA","url":"https://www.cma.gov.cn/zfxxgk/gknr/wjgk/qtwj/202302/P020230224377864419023.pdf","evidence_depth":"PUBLIC_DOCUMENT_TEXT","supports":"国家站基本观测及雷达产品/QPE列入目录；目录更新频率不是采样频率"},
+    {"id":"S02","title":"中国地面气候资料日值数据集（V3.0）","publisher":"NMIC","url":"https://m.data.cma.cn/data/detail/dataCode/SURF_CLI_CHN_MUL_DAY_V3.0.html","evidence_depth":"OFFICIAL_SEARCH_INDEX_ONLY_DIRECT_OPEN_FAILED","supports":"日值自1951起、滞后3个月、教育科研实名注册；云南实际站期未核实"},
+    {"id":"S03","title":"需要市气象台提供气象数据或开具气象证明的流程是什么？","publisher":"楚雄市人民政府/气象局","url":"https://www.cxs.gov.cn/info/14045/363408.htm","evidence_depth":"PUBLIC_PAGE_TEXT","supports":"单位函、使用协议和云南监管平台审批；不证明本项目已获许可"},
+    {"id":"S04","title":"气象雷达数据共享服务","publisher":"NMIC","url":"https://k.data.cma.cn/mekb/?r=radar%2Fdata","evidence_depth":"PUBLIC_PAGE_AND_SEARCH_INDEX","supports":"基数据/图像类别及服务入口；未确认逐部云南档案或QPE分辨率"},
+    {"id":"S05","title":"云南省水利厅2025年新闻发布会","publisher":"云南省水利厅","url":"https://wcb.yn.gov.cn/html/2025/xinwenfabuhui_0710/3061514.html","evidence_depth":"OFFICIAL_SEARCH_INDEX_ONLY_DIRECT_OPEN_FAILED","supports":"整合气象/水文/山洪雨量站、X波段测雨系统存在；不证明2024连续档案或独立性"},
+    {"id":"S06","title":"西双版纳生态站数据资源申请指南","publisher":"西双版纳森林生态系统国家野外站/CERN","url":"https://bnf.cern.ac.cn/content?id=54395","evidence_depth":"PUBLIC_PAGE_TEXT","supports":"2025-04-07指南，指标/时间/用途申请及签字盖章；高频降水可供性待确认"},
+    {"id":"S07","title":"Global Historical Climatology Network hourly","publisher":"NOAA NCEI","url":"https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly","evidence_depth":"PUBLIC_PAGE_TEXT","supports":"GHCNh替代ISD、多来源、hourly/synoptic、不同累计期降水及公开入口；云南完整性未知"},
+    {"id":"S08","title":"Global Historical Climatology Network daily","publisher":"NOAA NCEI","url":"https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"daily资料、GTS/政府交换来源和日界差异；不能验证半小时quantile"},
+    {"id":"S09","title":"Dual-frequency Precipitation Radar (DPR)","publisher":"NASA GPM","url":"https://gpm.nasa.gov/missions/GPM/DPR","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"约5km nadir足迹、轨道条带；不是连续地面真值"},
+    {"id":"S10","title":"2A DPR GES DISC","publisher":"NASA GPM","url":"https://gpm.nasa.gov/data/directory/2a-dpr-ges-disc","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"2ADPR V07产品与GES DISC入口、mm/hr单位"},
+    {"id":"S11","title":"Earthdata Login Documentation","publisher":"NASA ESDIS","url":"https://urs.earthdata.nasa.gov/documentation","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"用户级账号获取Earthdata资料的条件；本轮没有注册或登录"},
+    {"id":"S12","title":"FY-3G官方数据概览","publisher":"NSMC","url":"https://satellite.nsmc.org.cn/DataPortal/cn/data/dataset.html?satelliteCode=FY3G","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"PMR L1目录起始2023-10-23、5000M；不证明L2可用性"},
+    {"id":"S13","title":"风云卫星遥感数据服务网注册提示","publisher":"NSMC","url":"https://satellite.nsmc.org.cn/","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"实名注册审核要求；未下载"},
+    {"id":"S14","title":"气象科学专业知识服务系统数据资源","publisher":"NMIC","url":"https://k.data.cma.cn/mekb/?r=site%2Findexdata","evidence_depth":"PUBLIC_PAGE_TEXT","supports":"CLDAS实时/近实时目录存在；细节页面读取失败，具体时间/许可未确认"},
+    {"id":"S15","title":"全球-区域-局地一体化实况分析产品","publisher":"NMIC","url":"https://k.data.cma.cn/mekb/?id=42617&r=site%2Farticle","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"观测融合产品及区域产品族最高尺度；不套用某降水产品分辨率"},
+    {"id":"S16","title":"ERA5 hourly data on single levels from 1940 to present","publisher":"Copernicus C3S/ECMWF","url":"https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"1940至今/hourly/大气0.25度、当前CC-BY目录；辅助资料非独立真值"},
+    {"id":"S17","title":"IMERG: Integrated Multi-satellitE Retrievals for GPM","publisher":"NASA GPM","url":"https://gpm.nasa.gov/data/imerg","evidence_depth":"PUBLIC_PAGE_TEXT","supports":"多源/GPCC月尺度调整/ERA5关联及GPM源链；独立性需核实"},
+    {"id":"S18","title":"On Focal Loss for Class-Posterior Probability Estimation: A Theoretical Perspective","publisher":"CVPR 2021 / 作者","url":"https://openaccess.thecvf.com/content/CVPR2021/papers/Charoenphakdee_On_Focal_Loss_for_Class-Posterior_Probability_Estimation_A_Theoretical_Perspective_CVPR_2021_paper.pdf","evidence_depth":"PRIMARY_PAPER_SEARCH_TEXT_ABSTRACT_INTRO_ONLY_DIRECT_OPEN_FAILED","supports":"一般focal概率估计研究动机；没有完整论文综合或项目因果结论"},
+    {"id":"S19","title":"中国气象局科技项目揭榜挂帅榜单（第三批）","publisher":"CMA 2024","url":"https://www.cma.gov.cn/kjrh/lmdt/xxfb/202407/P020240704341544390758.pdf","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"云南C/S/X多波段雷达应用需求；榜单目标非已实现效果"},
+    {"id":"S20","title":"师宗：双偏振云雷达建成 弥补监测盲区","publisher":"CMA","url":"https://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xjctz/202501/t20250102_6771347.html","evidence_depth":"OFFICIAL_SEARCH_INDEX","supports":"2024-12-29建成晚于研究验证窗口；云结构非地面雨强真值"}
+  ],
+  "lookup_limitations": ["部分动态详情或PDF直接打开失败，只引用官方索引可见说明并保留此限制", "没有访问受限原始CLDAS文档/数据，没有下载站点、雷达、卫星或再分析观测文件", "没有核实站号、逐站2024完整性、GPCC提交或雷达QPE订正源链", "网页访问不等于许可申请或研究者批准" ]
+}

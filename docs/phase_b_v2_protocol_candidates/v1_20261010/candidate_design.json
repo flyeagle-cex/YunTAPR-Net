@@ -1,0 +1,28 @@
+{
+  "version":"PHASE_B_V2_CANDIDATES_v1_20261010",
+  "status":"RESEARCHER_DECISION_REQUIRED",
+  "execution_status":"NOT_EXECUTED",
+  "baseline_commit":"6e692625ebdd9bdaeff65e22d0ce59af349d98c5",
+  "V2_PHASE_B_AUTHORIZED":false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED":true,
+  "can_launch_formal_training":false,
+  "historical_recovery_ratification":"NOT_GRANTED",
+  "permitted_candidate_training_years":[2023,2024],
+  "sealed_years":[2025],
+  "model_contract":{"occurrence_raw_channels":1,"quantile_raw_channels":33,"allocation_channels":32,"span_channels":1,"conditional_quantiles":32,"tau32":0.984375,"physical_units":"mm/h","quantile_domain":"log1p(mm/h)","posthoc_clamp":false,"offset_minutes_before_analysis":[60,50,40,30,20,10]},
+  "published_scene_counts":{"train_2023":10455,"validation_2024":10501,"union_arithmetic_only":20956},
+  "routes":[
+    {"id":"D1","status":"RESEARCHER_DECISION_REQUIRED","train_years":[2023],"report_years":[2024],"calibration_fit":false,"interpretation":"DEVELOPMENT_EXPLORATORY_ONLY","qualified_scene_count":10455},
+    {"id":"D2","status":"RESEARCHER_DECISION_REQUIRED","train_years":[2023],"selection_years":[2023],"calibration_years":[2023],"report_years":[2024],"partition":"PREAPPROVED_DATE_BLOCKS_AND_PURGED_SUPPORT","qualified_scene_count":null,"normalization":"TRAIN_PARTITION_ONLY_SHARED","interpretation":"DEVELOPMENT_EXPLORATORY_ONLY"},
+    {"id":"F1","status":"RESEARCHER_DECISION_REQUIRED","train_years":[2023,2024],"report_years":[],"calibration_fit":false,"qualified_scene_count":20956,"count_status":"ARITHMETIC_ONLY_NO_NEW_MANIFEST","interpretation":"FINAL_FIT_CANDIDATE_WITHOUT_INDEPENDENT_REPORT"}
+  ],
+  "minimal_recipe_candidate":{"route":"D1","initialization":"I1_OR_I3_PAIRED_FRESH","normalization":"N0_FROZEN_SHARED_2023","physical_batch":2,"accumulation":1,"drop_last":false,"epochs":9,"scheduler":"S0_50_EPOCH_HORIZON","checkpoint_selection":"FIXED_ENDPOINT_V0","candidate_seeds":[2026,2027,2028],"seed_list_selected":false},
+  "minimal_ablations":[
+    {"id":"E0","status":"RESEARCHER_DECISION_REQUIRED","factor":"BASELINE","gamma":2.0,"alpha":0.5,"lambda_q":1.0,"lambda_d":0.0,"models":["B0_MATCHED_V2","B1_V2"],"execution":"NOT_EXECUTED"},
+    {"id":"E1","status":"RESEARCHER_DECISION_REQUIRED","factor":"OCCURRENCE_GAMMA","gamma":0.0,"alpha":0.5,"lambda_q":1.0,"lambda_d":0.0,"models":["B0_MATCHED_V2","B1_V2"],"execution":"NOT_EXECUTED"},
+    {"id":"E2","status":"RESEARCHER_DECISION_REQUIRED","factor":"QUANTILE_WEIGHT","gamma":2.0,"alpha":0.5,"lambda_q":2.0,"lambda_d":0.0,"models":["B0_MATCHED_V2","B1_V2"],"execution":"NOT_EXECUTED"}
+  ],
+  "extensions_not_selected":["E3_DRY_SPAN_PENALTY","E4_INTERACTION","C1_TEMPERATURE_FIT","C2_ISOTONIC_OR_PLATT","P1_REFERENCE_CASES","P2_FULL_REFERENCE_REPORT"],
+  "decision_ids":["D01","D02","D03","D04","D05","D06","D07","D08","D09","D10","D11","D12","D13"],
+  "unresolved":["primary_effect_and_guardrail_tolerances","multiplicity_plan","event_independence_and_power","reference_licences_and_lineage","D2_partition_counts","v2_runner_and_execution_approval","finalfit_and_test_release_separate"]
+}

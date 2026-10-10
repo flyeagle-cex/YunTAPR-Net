@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<WORKSPACE>/scripts/phase_b_v2_candidates/close_delivery.py", line 242, in <module>
+    main()
+    ~~~~^^
+  File "<WORKSPACE>/scripts/phase_b_v2_candidates/close_delivery.py", line 225, in main
+    require(not re.search(r"[A-Za-z]:\\+Users\\+", text) and not re.search(r'hostname="(?!REDACTED_HOST)[^"]+', text),
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            "Private machine identity in " + path.name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<WORKSPACE>/scripts/phase_b_v2_candidates/close_delivery.py", line 35, in require
+    raise ValueError(reason)
+ValueError: Private machine identity in close_delivery.py
+
+Original exit code: 1. Workstation paths redacted; complete console otherwise retained.

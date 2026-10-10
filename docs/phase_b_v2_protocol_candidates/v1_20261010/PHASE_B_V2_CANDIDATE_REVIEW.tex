@@ -1,0 +1,465 @@
+\documentclass[UTF8,fontset=fandol,10pt]{ctexart}
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,array,longtable,booktabs,url}
+\def\UrlBreaks{\do\/\do-\do\.\do\_\do\?\do\&\do\=\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w\do\x\do\y\do\z\do\0\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{YunTAPR-Net / v2 candidate design}
+\fancyhead[R]{2026-10-10 / v1}\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\title{YunTAPR-Net\\Phase-B v2 科学协议候选\\与独立物理验证资料准备}
+\author{研究者审阅材料 / 尚未批准}
+\date{2026年10月10日 / v1}
+\begin{document}\maketitle
+\textbf{RESEARCHER\_DECISION\_REQUIRED。}所有新方案未执行；Phase-B、FinalFit、校准拟合及数据获取均未授权。
+
+基线为\texttt{6e692625ebdd\allowbreak{}9bdaeff65e22\allowbreak{}d0ce59af349d98c5}。
+本报告引用已发表2024开发验证；2025测试封存，正式参数更新为零。Markdown、机器候选、来源和预算与本LaTeX共同交付。
+
+\setcounter{tocdepth}{1}\tableofcontents
+\clearpage\section{Phase-B v2 协议候选}
+
+全部选项均为 RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED，NOT\_\allowbreak{}EXECUTED。以下比较不会改变 Phase-A 既有实验角色或冻结文件。
+
+\subsection{1. 必须继承的科学语义}
+
+记 T 为 IMERG 原生半小时窗口起点，监督支撑为 [T,T+30min)，分析时刻 A=T+30min。B1 六帧 nominal 时隙为 A\(-\)60、\(-\)50、\(-\)40、\(-\)30、\(-\)20、\(-\)10min，按旧到新排列；实际观测结束时间必须不晚于 A。B0 使用同一场景最新合资格帧。nominal 时间和文件创建时间本身不证明历史业务可用性；当前实验是因果观测反演，尚未证明实时业务回放延迟。
+
+共用 M1 严格完整六时隙交集；不缺帧回退、不插值补帧、不因 B0 可以单帧工作而扩大对照集合。保留 SP04 坐标映射、100\(\times\)100 目标和云南中心入界 3,430 格点掩膜。不得依据误差或尾部表现重画边界。监督保留 IMERG V07 Final，不混 V08、Early 或 Late。2023/\allowbreak{}2024 三月至十月资格身份沿冻结 manifest；2025 封存。原 2023 Train=10,455，2024 Validation=10,501，只是现有开发集合，不是未来独立事件数量。
+
+骨干和双头保持 v2：发生 logit 经 sigmoid；另一头 33 raw 通道（32 allocation + 1 span）产生 32 条件 qlog。设 w\_\allowbreak{}i=softplus(a\_\allowbreak{}i)+epsilon\_\allowbreak{}w，c\_\allowbreak{}i=\(\Sigma\)\_\allowbreak{}\{j\(\le\)i\}w\_\allowbreak{}j/\allowbreak{}\(\Sigma\)\_\allowbreak{}jw\_\allowbreak{}j，s=softplus(b)+epsilon\_\allowbreak{}span；q\_\allowbreak{}i=log1p(0.1)+s c\_\allowbreak{}i，tau\_\allowbreak{}i=(i\(-\)0.5)/\allowbreak{}32。epsilon、精度与守卫继承冻结 head，FP64 参数化，不新增 clamp、排序修补或通道。q32=log1p(0.1)+s；其物理值是 expm1(q32)，不是确定性雨强。
+
+\subsection{2. 科学目的与可兼容组合}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+路线 & 候选目的与数据角色 & 可以回答 & 主要风险与成本 \\
+\midrule\endfirsthead
+路线 & 候选目的与数据角色 & 可以回答 & 主要风险与成本 \\
+\midrule\endhead
+D1 固定开发集合 & 2023 全部合资格场景训练；2024 保留开发诊断；固定预算 checkpoint & 同一集合、初始化和预算下单因素干预是否改变发生校准或条件上尾 & 2024 已多次审查，任何新结果仍是探索性；每设置每 seed 训练一次 \\
+D2 开发内分离 & 在 2023 合资格身份中预先按完整日期块分 Train/\allowbreak{}Selection/\allowbreak{}Calibration；2024 仅报告 & 在拟合与校准角色分离后评估校准干预 & 2023 训练样本减少、需 train-only scaler；2024 也不是全新独立集；计数待批准分区后从 manifest 取得 \\
+F1 最终拟合准备 & 冻结资格规则下 2023\(\cup\)2024 合并作为训练，理论上 20,956 场景 & 固定方法使用更多开发数据后的最终模型准备 & 2024 不能再独立选择或报告泛化；未来独立验证另批；此时没有可启动的 FinalFit \\
+\bottomrule\end{longtable}\endgroup
+
+D1 是机制消融的较简路线候选；D2 是拟合任何校准器前必要的角色分离候选；F1 应在设计锁定、科学验收与恢复偏差处置之后另行决定。选择其中之一不会自动批准其他路线。F1 的 20,956 是整数相加，尚未生成或批准新的合并 manifest。
+
+\subsection{3. Fresh initialization}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+编号 & 候选 & 科学意义 & 风险/\allowbreak{}代价 \\
+\midrule\endfirsthead
+编号 & 候选 & 科学意义 & 风险/\allowbreak{}代价 \\
+\midrule\endhead
+I1 & 单 seed=2026；独立 reseed，B0/\allowbreak{}B1 同名同形状参数配对拷贝；历史参数与 optimizer/\allowbreak{}RNG 不迁移 & 复用 Phase-A 初始化语义，尽量隔离时相因素 & 一个 seed 不能表征训练随机性；是新 run，仍需批准 \\
+I2 & 同一预定 seed，两个模型各自完整 fresh，取消同形状配对拷贝 & 检查初始化耦合的敏感性 & 初始化成为额外因素，不能只归因于时相；只作独立敏感性臂 \\
+I3 & 预定 seeds=\{2026,2027,2028\}，每 seed 按 I1 配对 fresh & 在 seed 与日期块两个层面报告不确定性 & 训练成本为 I1 的 3 倍；三种子仍不足精确估计极端尾部方差 \\
+\bottomrule\end{longtable}\endgroup
+
+I3 中三个整数是候选预注册值，未执行、未由表现挑选。fresh 不是仅换 run 名；需以后证明初始化前无历史权重、optimizer、scheduler 或 RNG 状态应用。历史 BEST warm-start 会混入 Phase-A 选择历史，LAST 恢复还涉及审批缺口；不纳入本轮最小矩阵，也不把新 fresh 作为追认历史的手段。
+
+\subsection{4. 数据资格和 normalization}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+编号 & 候选 & 适用与优点 & 泄漏/\allowbreak{}依赖/\allowbreak{}成本 \\
+\midrule\endfirsthead
+编号 & 候选 & 适用与优点 & 泄漏/\allowbreak{}依赖/\allowbreak{}成本 \\
+\midrule\endhead
+Q1 & 保留整个 2023/\allowbreak{}2024 M1 配对集合及既有角色 & D1；与 Phase-A 对照最直接 & 2024 已用于 BEST 与诊断，不是独立确认集；无新资格算法 \\
+Q2 & 对 M1 身份作按日期块的角色分区和边界 purge & D2；减小相邻帧、标签窗口共享 & 新 partition 本身需批准；不得改变 M1 基础资格或原 manifest；场景数未知 \\
+Q3 & 合并合资格 2023/\allowbreak{}2024，角色统一 Train & F1；开发资料使用增加 & 失去原 2024 验证角色；不能一边全量训练一边据其成绩调参 \\
+N0 & 复用 frozen 2023 shared scaler，mean=271.60515414265217 K，std=19.93959597783802 K & D1 最易解释；B0/\allowbreak{}B1 使用同一 scaler & 如果改用 Q2，原 scaler 含 2023 保留分区输入，是无标签的跨角色预处理，不可称严格 train-only \\
+N1 & 仅获批 Train 角色拟合一个 shared B1 scaler，B0 同用；六帧/\allowbreak{}像元计权规则显式登记 & D2；杜绝 Selection/\allowbreak{}Calibration/\allowbreak{}Report 输入参与拟合 & 需真实 2023 读取的新授权；重叠时隙多重计数与按场景/\allowbreak{}去重帧权重必须先定；新数值尚不存在 \\
+N2 & F1 合并训练角色重新拟合 shared scaler & 最终合并训练的分布适配 & 不得使用封存 2025；2024 一旦参与 scaler 和训练便不是独立验证；须新 SHA 与数据角色记录 \\
+\bottomrule\end{longtable}\endgroup
+
+每模型分别拟合自己的 scaler 会同时改变输入统计和时相，不能用于最小时间信息对照。不同 normalization 可另设单因素敏感性实验，但不能和 loss、预算、数据角色一起变化后声称因果归因。任何重新拟合都只影响新候选实验，绝不覆盖 frozen scaler（SHA=656fe7a929cb\allowbreak{}d8617b08427e\allowbreak{}8d1fa7029b26\allowbreak{}512253efb44f\allowbreak{}aa576796137d\allowbreak{}4a31）。
+
+Q2 的候选日历例：2023 三月至八月 Train、九月 Selection、十月 Calibration；边界两侧各移除预定 1 日或 7 日，不靠预测挑选。1 日超过输入一小时/\allowbreak{}标签半小时的共享支撑，但不保证不同天气过程独立；7 日更保守且更少样本。需检查全部实际帧区间与标签区间，保证角色支撑不相交；同一过程不得跨角色。上述日历/\allowbreak{}间隔尚未选择，不能把原全量计数用于分区后的预算。
+
+\subsection{5. 训练预算与 scheduler}
+
+物理 batch=2、accumulation=1、no-drop/\allowbreak{}no-duplicate 候选继续沿 Phase-A；每 epoch updates=ceil(N/\allowbreak{}2)。仅从已发表计数计算下表，未测新 GPU 吞吐。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}}
+\toprule
+训练集合 & 9 epoch updates & 17 epoch updates & 50 epoch updates & 每 epoch 场景 \\
+\midrule\endfirsthead
+训练集合 & 9 epoch updates & 17 epoch updates & 50 epoch updates & 每 epoch 场景 \\
+\midrule\endhead
+2023 M1 & 47,052 & 88,876 & 261,400 & 10,455（末 batch 单例） \\
+2023\(\cup\)2024 M1 算术候选 & 94,302 & 178,126 & 523,900 & 20,956 \\
+\bottomrule\end{longtable}\endgroup
+
+B9 固定 9 epoch：成本较低、便于固定 checkpoint 消融；9 来自已知 BEST 的候选预算，带开发选择历史，不证明新 loss 最优。B17 固定 17 epoch：与历史保留训练长度有参照，但需要约 1.89 倍 B9 更新。B50 每 epoch 验证、最多 50 epoch：可延续原 patience=8/\allowbreak{}min\_\allowbreak{}delta=1e\(-\)4 和原 core BEST 规则，但增加模型选择偏差；不能用新 loss 数值作为跨臂 BEST 标准。
+
+等 epoch 与等 updates 回答不同问题。合并集合按 B9 约两倍更新；若匹配 47,052 updates，则为 4 个完整 epoch + 5,140 updates（不是 9 epoch），需要部分 epoch、检查点和公平曝光的新规则，故仅登记预算敏感性候选，不默认允许突破现有 completed-epoch checkpoint 边界。最低成本消融优先保持同一 N，不混这两种预算。
+
+S0 候选继承 50-epoch cosine 形状，以候选 Train N 的 steps/\allowbreak{}epoch 定义一个 epoch warmup 和 50-epoch 总 horizon；B9/\allowbreak{}B17 提前固定终止，不会自然到 min LR。S1 改为 B9/\allowbreak{}B17 对应的短 horizon，会同时改变 LR 历程，须单独 scheduler 对照；禁止把 S1 暗称沿用 Phase-A。等 update 比较需固定同一 W/\allowbreak{}U 与 LR 序列，合并训练的 epoch 含义则不同。
+
+每 epoch 全 2024 验证需 ceil(10,501/\allowbreak{}8)=1,313 forwards；B9/\allowbreak{}B17 若每 epoch 验证分别为 11,817/\allowbreak{}22,321，而只在终点报告为 1,313。新增完整模型 forward 均需批准。六帧输入 tensor 数据量约单帧 6 倍，但骨干主体相同，不能推断 GPU 小时为 6 倍；实际工时需以后获批测量。预算报告采用 updates、validation forwards、run 数及 I/\allowbreak{}O 规模，不伪造 GPU-hour 或报价。
+
+\subsection{6. 验证、选择与复现}
+
+V0 固定终点 checkpoint、同一历史评价 observer：有利于 loss 消融，避免以不同训练目标挑 BEST。V1 原 global core BEST/\allowbreak{}early-stop：与 Phase-A 历史接近，但已知 2024 多次使用，只能开发探索。V2 D2 中 Selection 选择、Calibration 拟合、2024 Report：角色隔离改善，但全部已知开发时期无法重新变成未经探索的确认集。V3 F1 无内置验证：固定获批预算，封存最终测试保持单独审批。
+
+core、Brier、AUROC、AP、rain-only conditional Pinball、全部 32 coverage 沿历史口径报告。新增实验训练 loss 变化时仍报告原 core 作为共同辅助指标；主终点与容忍界限在批准前锁定，不能在看到结果后改为最有利指标。对 AUROC/\allowbreak{}AP 单类分层报告不可估计；不引入未批准的 POD/\allowbreak{}FAR/\allowbreak{}CSI 阈值。
+
+未来每臂配对同一场景/\allowbreak{}seed、同一批次排列、精度、optimizer、clip、mask、target、LR 与终点；只改变预定单因素。日期区块与 seed 分层分别呈现；沿用 35 个七日区块可作 2024 开发探索，但不当作独立风暴。新实验仍须控制多重比较、最低有雨区块数与效应阈值；这些参数未决定。出现非有限值、顺序/\allowbreak{}支撑丢失、SHA/\allowbreak{}角色不符即停止，不自动 skip、clamp、延长预算。恢复必须另有绑定具体 LAST SHA、原授权链和代码身份的独立批准。
+
+\subsection{7. 不可自动选择的事项}
+
+研究者需先选择科学目的 D1/\allowbreak{}D2/\allowbreak{}F1，再选择兼容的 I/\allowbreak{}Q/\allowbreak{}N/\allowbreak{}B/\allowbreak{}S/\allowbreak{}V；批准预注册的主终点、seed、预算和边界后才可另行编写/\allowbreak{}批准 v2 runner。旧 src/\allowbreak{}yuntapr/\allowbreak{}training/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}preparation.py 的 23,447/\allowbreak{}11 epoch 是 v1，不能搬作本协议。
+
+来源：冻结 config/\allowbreak{}science\_\allowbreak{}contract\_\allowbreak{}v1.1.yaml、config/\allowbreak{}science\_\allowbreak{}v2/\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}protocol\_\allowbreak{}frozen\_\allowbreak{}v1.json、v2 head 源码；上轮入口检查。所有方案未执行。
+\clearpage\section{最小可检验假设与控制变量矩阵}
+
+RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED；所有 E/\allowbreak{}C/\allowbreak{}P 编号为 NOT\_\allowbreak{}EXECUTED。数字是提案参数或已发表结果，不是新实验指标。
+
+\subsection{1. 起点与最小假设}
+
+2024 BEST 配对证据表明 B1 的 Brier/\allowbreak{}AUROC/\allowbreak{}AP 点估计较优，但不代表校准通过。0–0.5 概率箱整体高估雨频率，0.5–0.9 非空箱低估；最高箱为空、次高箱稀疏。B1 q32 rainy coverage=0.95076991505，对应 tau=0.984375；B0=0.95744184495。总体 conditional Pinball 差异区间跨零；真实雨强 >5 mm/\allowbreak{}h 的各层 B1 点值更高。58 个 q32>100 mm/\allowbreak{}h 暴露不是独立暴雨事件；最大约 351.08 mm/\allowbreak{}h 位置 IMERG=0，无站点/\allowbreak{}雷达核实。来源为 历史诊断。
+
+H-O：在配对 fresh、固定集合/\allowbreak{}预算下，将 occurrence focal gamma 从 2 改为 0，可能改变概率可靠性和 Brier，同时保留或损害排序能力。可否证：预定主指标不改善、或 guardrail 的排序能力/\allowbreak{}雨强损失越界。文献只给一般 focal 概率估计动机，不能证明 YunTAPR 的误校准由 focal 导致；本项目含有限模型、共享骨干、权重衰减与相关资料。\href{https://openaccess.thecvf.com/content/CVPR2021/papers/Charoenphakdee_On_Focal_Loss_for_Class-Posterior_Probability_Estimation_A_Theoretical_Perspective_CVPR_2021_paper.pdf}{CVPR 作者公开论文}
+
+H-Q：固定所有其它条件，增加 conditional Pinball 项的固定权重，可能改变 rainy q32 欠覆盖；代价可能是发生能力或强雨层 Pinball。可否证：欠覆盖未减少，或只通过普遍扩宽分位数导致损失恶化。现有训练 quantile 项 /\allowbreak{}N\_\allowbreak{}valid、科学 conditional 指标 /\allowbreak{}N\_\allowbreak{}rain 的区别是设计动机，不是已证明的因果机制。
+
+H-D：真实干样本没有直接 conditional Pinball 监督，可能与部分输入上的巨大 span 有关。干位置条件分布仍有定义；绝不把“该次参考干”解释为“条件分位数应该为零”。需要既有输出的预注册干/\allowbreak{}湿诊断、独立参考及单独正则化臂共同检验；任何干位约束可能错误缩窄少见降雨的条件分布。
+
+H-R：部分 IMERG=0 的异常可能来自参考漏检、空间支撑或时间错位，而非确定的模型物理失效。可否证：满足质量与独立性条件的同步地面/\allowbreak{}雷达仍显示无雨；单个案例只能核实案例，不证明整体 q32 校准。上尾极值与欠覆盖可以同时存在，不构成数学矛盾。
+
+\subsection{2. 最小训练矩阵与扩展顺序}
+
+最小机制矩阵候选为 D1+I1（或同样规则的 I3）+Q1+N0+B9+S0+V0。这只是便于审查的完整兼容组合，不是选择或授权。每臂均 B0/\allowbreak{}B1 配对，末端以同一原评价规则测量；每个 seed 先生成配对初始化，再让 E0/\allowbreak{}E1/\allowbreak{}E2 从相同 fresh 状态副本开始，各臂 optimizer 均 fresh。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}}
+\toprule
+臂 & 唯一变化 & 固定条件 & 主要回答/\allowbreak{}评价 & 批准类别 \\
+\midrule\endfirsthead
+臂 & 唯一变化 & 固定条件 & 主要回答/\allowbreak{}评价 & 批准类别 \\
+\midrule\endhead
+E0 & 无干预；冻结 v2 baseline 重新 fresh 训练 & 全矩阵控制项 & 提供与新臂同预算、同 seed 对照；不能拿历史 BEST 直接代替 & 新正式训练与推理 \\
+E1 & occurrence gamma=0 替代 2；alpha=.5 不变 & 量化头、quantile loss、所有控制项 & H-O；Brier/\allowbreak{}固定可靠性箱主候选，AUROC/\allowbreak{}AP 与雨强损失 guardrail & 新 loss 实验 \\
+E2 & lambda\_\allowbreak{}q=2 替代 1，量化项仍 /\allowbreak{}N\_\allowbreak{}valid & occurrence gamma=2、所有控制项 & H-Q；q32 覆盖偏差、32 点覆盖、conditional Pinball/\allowbreak{}强雨分层与 span 分布 & 新 loss 权重实验 \\
+E3 扩展 & 加干位置 span 平方 penalty；lambda\_\allowbreak{}d=0.001 为提案值 & E0 其它条件 & H-D；干尾暴露、rainy coverage/\allowbreak{}Pinball 及发生指标同时检查 & 新正则项，非最小首轮 \\
+E4 扩展 & gamma=0 与 lambda\_\allowbreak{}q=2 同时变化 & E0 其它条件 & 仅在 E1/\allowbreak{}E2 后独立批准，用差中差检验交互；不作单因素归因 & 新组合实验 \\
+\bottomrule\end{longtable}\endgroup
+
+E1 的 gamma=0 是 .5\(\times\)BCE，不是另改 alpha 的加权 BCE；移除 focusing 因子是唯一预定 loss 变化，其梯度尺度影响属于此干预的一部分，不另调 LR 配合成绩。E2 权重=2 未从 2024 反算、未声称最优；若研究者不接受该对照值，需在执行前另行锁定，不做网格自动搜索。
+
+E3 的候选数学项为 L\_\allowbreak{}d=lambda\_\allowbreak{}d \(\times\) \(\Sigma\)\_\allowbreak{}valid(1\(-\)z)s²/\allowbreak{}N\_\allowbreak{}valid，z=1[y>0.1]、s 为 log 域 span；不修改 q 下界，不设物理硬上限，不在推理中 clamp。它会影响同一共享骨干，可能损害 rainy conditional 分布；缩小干位置输出不足以判定科学成功。当前不实现此项、无 backward。
+
+如果选 B50/\allowbreak{}V1，应以原 core 共同规则选择所有臂，而不是以变动后的训练 loss 选择 BEST；同时报告固定终点敏感性，避免选择机制混入主对照。改变数据分区、scaler、预算、scheduler、初始化、head 架构的试验必须在另一个编号中单因素开展，不与 E1/\allowbreak{}E2 首轮捆绑。
+
+\subsection{3. 校准与物理诊断独立支路}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+编号 & 候选最小操作 & 必需角色/\allowbreak{}依赖 & 可检验范围 \\
+\midrule\endfirsthead
+编号 & 候选最小操作 & 必需角色/\allowbreak{}依赖 & 可检验范围 \\
+\midrule\endhead
+C1 & 一个 scalar temperature 对 occurrence logit 拟合；qlog 完全保留 & D2 Train/\allowbreak{}Selection/\allowbreak{}Calibration 分离；拟合目标与 T 正值范围预先批准 & H-O 的 score 修正可行性，不回答共享编码器训练原因 \\
+C2 & Isotonic 或 Platt 作为后续比较 & 额外批准、足够独立雨/\allowbreak{}干过程；与 C1 相同 calibration/\allowbreak{}report 集 & 稀疏高概率箱有过拟合风险；不能在 2024 全量拟合后称独立评价 \\
+P1 & 站点/\allowbreak{}雷达同步核实预注册异常与对照样本 & 数据许可、独立性、配准、质量规则另批 & H-R 与个案物理一致性；不自动更换 IMERG 标签 \\
+P2 & 全部合资格同步样本统计 rainy coverage 与 p 可靠性 & 更完整参考与预注册评价域，2025 不包含 & 防止只看异常案例造成选择偏差；结果仍取决于代表性 \\
+\bottomrule\end{longtable}\endgroup
+
+本轮没有拟合任何校准器、获取资料或执行 P1/\allowbreak{}P2。C1 也属于新科学实验，不因“不更新 backbone”而免审批。已有 aggregate reliability 没有足够样本级 logits 用于直接拟合；不得用分箱均值代替原 logits。对 C1 再训练 D2 模型是额外成本，不能偷偷复用 D1 的全量 2023 模型并称 calibration 分区独立。
+
+\subsection{4. 终点、否证与分析限制}
+
+建议主终点分别限定 H-O 的 Brier（及固定箱校准偏差描述）、H-Q 的 q32 coverage 偏差；全部 32 tau、conditional Pinball、>5 mm/\allowbreak{}h 层及发生排序是 guardrails/\allowbreak{}次级终点。q32 coverage 可被无限宽尾“改善”，所以必须联合损失和宽度/\allowbreak{}超限分布；没有批准 guardrail 的容忍差值，不能判定实验“成功”。
+
+固定 bins、tau、真实雨强层、mask 与 pair 集合；不看结果改箱/\allowbreak{}合层/\allowbreak{}阈值。开发主比较 E1\(-\)E0、E2\(-\)E0 \(\times\) B0/\allowbreak{}B1；新多重比较方案（例如预定家庭 Holm）需批准。日期块 bootstrap 是相关资料的探索推断，不替代 seed 重复；多 seed 先报告每 seed 配对效果和跨 seed 概况，不能把 seed\(\times\)pixel 展平为独立样本。事件级有效样本数、最小效应及 power 仍未知，申请参考资料之后再预注册，不能伪造功效保证。
+
+每 seed 的首轮 E0/\allowbreak{}E1/\allowbreak{}E2\(\times\)2模型共 6 runs；B9 为 282,312 train updates。I3 共 18 runs、846,936 updates；每 run 终点全 2024 诊断为 1,313 forwards，分别合计 7,878 /\allowbreak{} 23,634。这里只计算候选工作量，没有调度或占用训练资源。扩展 E3/\allowbreak{}E4/\allowbreak{}C/\allowbreak{}P 不含在上述最小预算内。
+\clearpage\section{云南独立降水参考资料清单}
+
+调查日期 2026-10-10；RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED。只浏览公开产品说明和获取条件，没有登录、下单、发送申请、下载观测文件或读取本地原始资料。访问级别与独立性是两件事；“公开可申请”不等于“已获许可”或“独立真值”。本轮未确认任一站点的 2023/\allowbreak{}2024 实际完整性，站号、迁站史、QC、分辨率和源链必须以后由提供方元数据证实。
+
+\subsection{1. 地面与雷达优先资料}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-10\tabcolsep)/5\relax}}
+\toprule
+ID /\allowbreak{} 提供方 & 时间覆盖与时间支撑 & 空间支撑 & 获取/\allowbreak{}许可 & 独立性及预期限制 \\
+\midrule\endfirsthead
+ID /\allowbreak{} 提供方 & 时间覆盖与时间支撑 & 空间支撑 & 获取/\allowbreak{}许可 & 独立性及预期限制 \\
+\midrule\endhead
+R1 CMA/\allowbreak{}国家气象信息中心国家地面站与云南加密自动站 & 基本观测目录动态更新；2023/\allowbreak{}2024 分钟/\allowbreak{}小时档案需询问；日值 V3.0 说明自1951起、滞后3月 & 站点；云南实际站表、海拔/\allowbreak{}代表范围未知 & 基本目录从中国气象数据网获取；日值教育科研实名用户；云南地方服务需单位函、协议和平台审批 & 优先直接雨量观测；部分国家交换站可能进入 GPCC/\allowbreak{}IMERG；站点不是0.1°面积平均，仪器分辨率/\allowbreak{}漏测/\allowbreak{}迁站影响 \\
+R2 CMA 雷达共享服务与云南雷达应用单位 & 公开目录含 radar/\allowbreak{}QPE 产品；各雷达上线、2023/\allowbreak{}2024 volume 连续性需查；新增系统不能倒推历史可用 & 基数据极坐标 beam/\allowbreak{}gate；QPE 网格/\allowbreak{}cadence 以实际产品说明为准，本轮未确认 & 官方共享页面列基数据/\allowbreak{}图像产品；目录可见不代表云南全部基数据与 QPE 已获批，需实名/\allowbreak{}定向服务和使用条款 & 优先未使用待验证站校正的 QPE；山地遮挡、衰减、亮带、Z-R 与地面降水差异；图片 dBZ 不能直接作 mm/\allowbreak{}h 真值 \\
+R3 云南省水利厅/\allowbreak{}水文机构/\allowbreak{}山洪监测雨量站 & 2025官方介绍证明平台存在；拟询问2023/\allowbreak{}2024时段和最小累计间隔，不取得2025数值 & 雨量站点；平台融合气象/\allowbreak{}水文/\allowbreak{}山洪站，站ID及去重未知 & 与持有单位确认科研申请、费用、共享范围及再分发；公开新闻不是历史API许可 & 水文独立雨量器可能增强地面验证；平台含气象站，不能按部门不同认定独立；网络建设与运维缺测造成抽样偏差 \\
+R4 中科院西双版纳森林生态系统国家野外站/\allowbreak{}CERN & 指南有气象/\allowbreak{}水分长期监测类别；具体降水时间范围与分钟/\allowbreak{}小时/\allowbreak{}日频需元数据确认 & 勐仑站点/\allowbreak{}站内观测地；不能代表全省地形 & 注册按指标和时间申请，线下需签字盖章；是否可提供高频2024降水未确认 & 不同观测链有潜力，但是否提交交换/\allowbreak{}GPCC未知；局地生态环境、设备高度和林冠代表性需核查 \\
+\bottomrule\end{longtable}\endgroup
+
+R1 来源：\href{https://www.cma.gov.cn/zfxxgk/gknr/wjgk/qtwj/202302/P020230224377864419023.pdf}{CMA 基本共享目录}、\href{https://m.data.cma.cn/data/detail/dataCode/SURF_CLI_CHN_MUL_DAY_V3.0.html}{日值 V3.0 产品说明}、\href{https://www.cxs.gov.cn/info/14045/363408.htm}{楚雄市气象数据提供流程}。目录的“每日更新”不等于“一日观测分辨率”；日值不能检验半小时 q32。
+
+R2 来源：\href{https://k.data.cma.cn/mekb/?r=radar\%2Fdata}{国家气象信息中心雷达共享服务}及上述基本共享目录，目录包含定量估测降水；本轮没有找到公开证据证明所有云南雷达在研究时间都有可下载的定量档案。因此不写统一250m/\allowbreak{}6min等未经验证的数值。
+
+云南适用性另由\href{https://www.cma.gov.cn/kjrh/lmdt/xxfb/202407/P020240704341544390758.pdf}{CMA 2024科研榜单}确认存在云南C/\allowbreak{}S/\allowbreak{}X多波段资料应用需求；榜单中的预报提升是项目目标，不能当作已实现效果。\href{https://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xjctz/202501/t20250102_6771347.html}{师宗双偏振云雷达建设公告}记载2024-12-29建成，晚于本项目2024三月至十月窗口，不适用该期异常复核；云雷达结构参数也不等同定量地面雨强。故后续必须索取逐部雷达上线与档案元数据。
+
+R3 来源：\href{https://wcb.yn.gov.cn/html/2025/xinwenfabuhui_0710/3061514.html}{云南省水利厅2025年新闻发布会}。其公开说明涉及整合站网与X波段测雨系统；网络规模是当时系统能力，不能当作2024独立站点数量。该页直接打开失败、搜索索引可读，来源可达性限制记录在 source\_\allowbreak{}registry.json。R4 来源：\href{https://bnf.cern.ac.cn/content?id=54395}{西双版纳站申请指南}，指南更新时间2025-04-07；本轮没有填写/\allowbreak{}发送申请。
+
+\subsection{2. 公开全球资料与辅助交叉检查}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+ID /\allowbreak{} 提供方 & 时间/\allowbreak{}空间尺度 & 访问许可 & 独立性/\allowbreak{}适用范围 \\
+\midrule\endfirsthead
+ID /\allowbreak{} 提供方 & 时间/\allowbreak{}空间尺度 & 访问许可 & 独立性/\allowbreak{}适用范围 \\
+\midrule\endhead
+R5 NOAA NCEI GHCNh /\allowbreak{} GHCNd & 全球站点记录长度不一；GHCNh hourly/\allowbreak{}synoptic 含不同累计期降水，GHCNd daily；云南站点2023/\allowbreak{}2024重合待检索元数据 & 官方地图/\allowbreak{}搜索与公开下载入口；按具体数据条目引用和使用条件，本站未下载 & GHCNh 已替代 ISD；GTS/\allowbreak{}CMA交换观测可能同站，不是新独立仪器；日累计用于背景核对，非半小时分位数验证 \\
+R6 NASA/\allowbreak{}JAXA GPM DPR L2 2ADPR & GPM时期2014起；约5km nadir足迹、轨道瞬时采样，云南过境日期/\allowbreak{}雨样本量未知 & GES DISC公开目录，Earthdata用户账号获取；本轮只查看metadata & 主动雷达提供垂直结构交叉检查，但DPR/\allowbreak{}GMI与IMERG算法源链有联系；不称完全算法独立，不是连续地面真值 \\
+R7 NSMC FY-3G PMR & 公开L1目录2023-10-23起、标称5000M；2024云南轨道重合未知；L2地表雨强产品版本/\allowbreak{}许可另查 & 风云数据网需中国气象数据网实名注册审核；尚未取得数据 & 另一主动传感器有独立性潜力，不能仅凭卫星不同断言与标签无共享校准；L1不是可直接比较的地面mm/\allowbreak{}h，需受审查L2算法与地杂波处理 \\
+R8 CMA CLDAS-V2.0 /\allowbreak{} 区域融合实况降水 & 官方资源目录列实时/\allowbreak{}近实时产品；公开介绍区域实况最高1km/\allowbreak{}10min，但具体降水产品、历史范围待确认 & 资源详情可访问性不稳定；应询问具体版本和使用协议，未获取 & 站点/\allowbreak{}雷达/\allowbreak{}卫星融合，不可充当完全独立真值；用于支撑敏感性或过程背景；不可把全产品族最高分辨率套给CLDAS或某一降水场 \\
+R9 Copernicus/\allowbreak{}ECMWF ERA5 & 1940至今，hourly，常用CDS大气格网0.25°；非原始观测 & CDS目录当前CC-BY，需登录接受条款后获取；未获取 & 模式再分析、IMERG检索存在ERA5辅助关联；只作环流/\allowbreak{}风和背景，不作独立降水真值；回溯再分析风不能证明业务实时可获得 \\
+\bottomrule\end{longtable}\endgroup
+
+R5 来源：\href{https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly}{GHCNh官方说明}、\href{https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily}{GHCNd官方说明}。R6：\href{https://gpm.nasa.gov/missions/GPM/DPR}{DPR规格}、\href{https://gpm.nasa.gov/data/directory/2a-dpr-ges-disc}{2ADPR产品入口}、\href{https://urs.earthdata.nasa.gov/documentation}{Earthdata登录说明}。轨道周期不是某站连续采样周期。
+
+R7 来源：\href{https://satellite.nsmc.org.cn/DataPortal/cn/data/dataset.html?satelliteCode=FY3G}{FY-3G官方产品目录}、\href{https://satellite.nsmc.org.cn/}{实名注册提示}；L1目录覆盖不是L2可用性证明。R8：\href{https://k.data.cma.cn/mekb/?r=site\%2Findexdata}{CMA资源目录}、\href{https://k.data.cma.cn/mekb/?id=42617&r=site\%2Farticle}{信息中心实况产品说明}。R9：\href{https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview}{ERA5 CDS目录}，2026-10-10调查；许可与目录可能更新。
+
+\subsection{3. 独立性分级与获取优先级}
+
+建议先询问 R1/\allowbreak{}R2/\allowbreak{}R3 的 2024 连续合资格记录和源链；R4 用局地交叉验证补充；R5 是可获得性备选但不得重复计同站；R6/\allowbreak{}R7作主动传感器支撑；R8/\allowbreak{}R9仅辅助。该顺序是资料准备建议，不是正式评价目录。只能先申请元数据，不能先看 B1 错误再挑有利站点。
+
+INDEPENDENCE\_\allowbreak{}UNVERIFIED 为全部候选默认状态。未来分类：直接观测且证实未进入标签/\allowbreak{}订正/\allowbreak{}模型输入者可标验证独立；已共享仪器/\allowbreak{}交换资料者标 OBSERVATION\_\allowbreak{}SHARED；不同传感器但共享算法校准者标 ALGORITHM\_\allowbreak{}LINKED；融合/\allowbreak{}再分析标 AUXILIARY。IMERG Final 使用 GPCC 月尺度地面分析，半小时场受月度比例调整；因此“本站未参与训练”还不足以证明与训练标签独立。\href{https://gpm.nasa.gov/data/imerg}{NASA IMERG说明}
+
+未能公开确认的时间、空间、费用、许可、站号或源链统一写待确认，不填虚构值。未证明独立的参考仍可用于一致性研究，但结果须用“参考一致性”措辞；不得宣称已通过独立物理验证。
+\clearpage\section{独立物理验证准备方案}
+
+RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED；只准备定义、字段和未发送的询问提纲。P1/\allowbreak{}P2 不执行；不读取任何年份原始站点/\allowbreak{}雷达数据，尤其不得用公共API绕过本项目2025封存。
+
+\subsection{1. 验证对象与数据依赖}
+
+目标首先是2024开发验证期内的参考一致性，三月至十月、冻结云南mask与时间窗；并非取得新的独立年份确认。站点的物理独立性也不能消除研究者已经知道2024模型表现的选择偏差。P1核实已发表异常案例并配对参考雨强层/\allowbreak{}季节/\allowbreak{}地形控制案例；P2应覆盖全部预先合资格同步观测，避免只有高q32个案的统计。两者目录均需事前批准，病例目录不能当主泛化评价集。
+
+先锁定资料资格（位置、时间支撑、仪器/\allowbreak{}QC、源链、雷达可见性），再与模型表现配对；不得因为参考值或预测误差不利而删站/\allowbreak{}移动容差。q32>100的58暴露可以作为已知诊断索引，却不构成正式独立事件定义。事件、地形分区继续引用上轮候选，仍未批准。
+
+\subsection{2. 时间、单位与空间配准}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+问题 & 候选处理 & 必须确认 \\
+\midrule\endfirsthead
+问题 & 候选处理 & 必须确认 \\
+\midrule\endhead
+站点UTC/\allowbreak{}北京时间与累计结尾 & 所有时标显式转换为UTC；记录区间闭开约定 & 原时区、观测末端/\allowbreak{}起点、闰秒/\allowbreak{}缺测、累积复位 \\
+半小时雨量R mm & 若支撑准确为[T,T+30min)，平均雨强=2R mm/\allowbreak{}h & 量器分辨率与0.1mm/\allowbreak{}h阈值相容性：对应雨量0.05mm可能低于仪器分辨率，须报告可辨识范围 \\
+只有小时/\allowbreak{}日雨量 & 只作相应尺度一致性，不能当单半小时真值 & 不得线性拆成两半或24h均匀雨；新的尺度估计量另批 \\
+雷达反射率与QPE & 反射率需正式QPE算法与单位；保留beam/\allowbreak{}blockage/\allowbreak{}QC & 地杂波、衰减、亮带、测高、距离、双偏振校正与站点订正清单 \\
+站点点测与0.1°格点 & 按冻结格点坐标/\allowbreak{}成员规则绑定，保留点-面积代表性误差 & station坐标精度、海拔差、多个量器同格点；不替换冻结mask \\
+DPR/\allowbreak{}PMR轨道足迹 & 使用产品原 geolocation/\allowbreak{}time 与预定重合条件 & footprint、地杂波、检出下限；瞬时测量与半小时平均不等价 \\
+\bottomrule\end{longtable}\endgroup
+
+半小时雨量乘2仅是单位/\allowbreak{}时间支撑变换。单个小时内两个条件 quantile 的均值不是小时累计的条件 quantile；q32不能简单相加，也不能用p\(\times\)q32当均值。小时分布需要联合时序分布/\allowbreak{}依赖假设，新定义另批。原 v2只给 y>0.1 的条件分位数和发生概率，不能完整重建0\(\le\)y\(\le\)0.1的小雨分布；任何无雨点质量近似与混合CDF插值都需明确新假设。本轮不生成混合预测。
+
+\subsection{3. 独立性、质量与分析计划}
+
+逐站/\allowbreak{}雷达记录“谁观测、谁交换、谁订正、谁进入标签”。申请 GPCC 提交情况、CMA/\allowbreak{}GTS交换ID映射、雷达QPE gauge calibration名单和当前产品谱系；同时核实IMERG版本、相关PMW/\allowbreak{}IR/\allowbreak{}主动雷达校准链。所有源链不明字段保留UNKNOWN；多个数据库的同一仪器只算一个参考源。
+
+采用提供方QC和预注册代表性/\allowbreak{}可见性规则，不用模型误差作QC。原数据missing、trace、undercatch/\allowbreak{}维护/\allowbreak{}迁站需分别编码，不把缺测作0。雷达山地遮挡与近地检测空白即便QPE为0也不能判“无雨”；不同参考有分歧时报告三方数值和支撑差异，不能选更有利者。
+
+P1案例只报告经过许可核实的时间-位置-仪器链和雨量，给出匹配不确定性。P2发生指标与rain-only conditional coverage的分母以新参考质量合格、同支撑集合定义，不冒充原IMERG分母；其发生阈值可因量器检出限需新批准。报告全32tau、季节/\allowbreak{}地形/\allowbreak{}真实雨强覆盖数、独立站/\allowbreak{}过程数和缺测比例；不把站\(\times\)时刻当独立暴雨。相关不确定性需按时块/\allowbreak{}过程与站点群考虑；具体block长度/\allowbreak{}事件合并与有效样本量尚不能定量保证。
+
+\subsection{4. 元数据登记字段（没有真实观测）}
+
+reference\_\allowbreak{}id、provider、product\_\allowbreak{}version、station\_\allowbreak{}or\_\allowbreak{}radar\_\allowbreak{}id、shared\_\allowbreak{}id\_\allowbreak{}aliases、longitude/\allowbreak{}latitude/\allowbreak{}CRS/\allowbreak{}height、instrument\_\allowbreak{}type、resolution\_\allowbreak{}mm、interval\_\allowbreak{}start/\allowbreak{}end、timezone、cadence、available\_\allowbreak{}start/\allowbreak{}end、QC\_\allowbreak{}codes、missing\_\allowbreak{}policy、relocation/\allowbreak{}calibration\_\allowbreak{}history、beam\_\allowbreak{}geometry/\allowbreak{}blockage、QPE\_\allowbreak{}gauge\_\allowbreak{}inputs、GPCC\_\allowbreak{}GTS\_\allowbreak{}submission、retrieval\_\allowbreak{}source\_\allowbreak{}lineage、licence\_\allowbreak{}scope/\allowbreak{}expiry/\allowbreak{}redistribution、approved\_\allowbreak{}project\_\allowbreak{}scope、metadata\_\allowbreak{}sha256、independence\_\allowbreak{}status、role（metadata/\allowbreak{}case/\allowbreak{}report）。字段 schema 见 reference\_\allowbreak{}metadata\_\allowbreak{}schema.json；不写空的假站点记录。
+
+\subsection{5. 提供方询问提纲（草稿，未发送）}
+
+请求先确认2023/\allowbreak{}2024三月至十月云南雨量站或雷达产品的元数据：可提供站/\allowbreak{}雷达ID、坐标/\allowbreak{}海拔、仪器与累计间隔、档案起止/\allowbreak{}完整性、质量码和迁站维护记录；能否提供分钟或恰当半小时降水量；雷达是否有volume/\allowbreak{}QPE及beam遮挡、订正站清单。请说明资料是否进入GPCC/\allowbreak{}GTS、IMERG相关订正或其他融合产品，以及科研访问、费用、许可、保存期限、衍生成果公开和原始资料再分发条件。
+
+该提纲不包含申请人签名、单位授权、对外承诺或数据用途批准记录。研究者决定联系人、项目函与许可范围后才能申请；本轮不使用邮件/\allowbreak{}消息工具，不提交表单。即使拿到产品账号也不能自动获取2025，项目封存边界优先。
+\clearpage\section{Methods 与 Experimental Design 初稿框架}
+
+中文可编辑初稿；目标期刊与英文投稿稿尚未决定。标记规则：COMPLETED 只引用已发表 Phase-A 事实；PROPOSED/\allowbreak{}NOT\_\allowbreak{}EXECUTED 为候选；HYPOTHESIS 为待检验解释；EXPECTED\_\allowbreak{}PATTERN 表示用于否证的可能方向，不是已测结果。没有新 Results、没有新增指标数值。
+
+\subsection{Methods 1：研究域、目标与时间语义（COMPLETED）}
+
+本研究以云南复杂地形的近实时降水反演为目标，使用静止卫星B13亮温观测预测降雨发生概率及有雨条件下降水强度分位数。输入原生501\(\times\)501格网映射至100\(\times\)100目标格网，研究评价限制在冻结云南中心入界mask的3,430个格点。模型卷积保留周边上下文；区域外输出不用于云南主评价。SP04映射和mask版本身份来自冻结科学合同，不能按预测误差重选。
+
+IMERG V07 Final提供半小时窗口[T,T+30min)参考平均雨强，单位mm/\allowbreak{}h；分析时刻A=T+30min。B1使用A之前六个十分钟nominal时隙，A\(-\)60至A\(-\)10min，按旧到新输入；实际obs\_\allowbreak{}end须\(\le\)A。B0使用相同场景的最新合资格时隙。这一观测因果约束并不证明历史业务传输可用性；因此文稿将“近实时”作为研究目标，避免声称已完成业务延迟验证。IMERG是多源融合参考，且Final带GPCC月尺度调整，不是独立地面真值。\href{https://gpm.nasa.gov/data/imerg}{NASA IMERG说明}
+
+\subsection{Methods 2：资格、分割和归一化（COMPLETED）}
+
+Phase-A按冻结M1严格六帧完整交集配对，2023三月至十月Train共10,455场景，2024同期Validation共10,501场景；2025最终测试仍封存。两模型使用同一目标、资格和scaler。亮温归一化使用2023 shared统计mean=271.60515414265217K、std=19.93959597783802K，不在2024拟合；normalization SHA见协议候选。场景是时空采样单位，36,018,430有效场景像元暴露及4,496,600参考有雨暴露不是同等数量独立事件。
+
+\subsection{Methods 3：配对v2模型与双头（COMPLETED）}
+
+B0-Matched-v2和B1-v2沿用48/\allowbreak{}96/\allowbreak{}192/\allowbreak{}256通道主要骨干与SP04输出网格；只有1帧与6帧输入形状不同，参数数分别4,329,410与4,331,810。发生头输出一个logit与sigmoid概率。条件头先输出33 raw通道，由32个正allocation和一个正span形成32个严格递增qlog，定义在log1p(mm/\allowbreak{}h)域，tau\_\allowbreak{}i=(i\(-\)0.5)/\allowbreak{}32。参数化公式及finite/\allowbreak{}支撑/\allowbreak{}次序守卫见冻结head；没有输出排序或推理clamp。q32的tau=.984375是条件覆盖目标，不是单次极端降水概率或确定性预报。
+
+\subsection{Methods 4：损失与优化（COMPLETED）}
+
+设z=1[y>float32(0.1)]，u=log1p(y)。发生focal alpha=.5、gamma=2；pinball rho\_\allowbreak{}tau(e)=e\(\times\)(tau\(-\)1[e<0])。S\_\allowbreak{}occ为所有有效云南暴露的发生loss之和，S\_\allowbreak{}qr为参考有雨暴露上32tau平均pinball之和。训练core=(S\_\allowbreak{}occ+S\_\allowbreak{}qr)/\allowbreak{}N\_\allowbreak{}valid；科学报告conditional Pinball=S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain，两者分母不同。条件分位数只在参考有雨位置直接监督，干位tail风险解释仍属假设。
+
+Phase-A使用AdamW，基础LR=1e\(-\)4、最低LR=1e\(-\)6，Conv2d.weight decay=1e\(-\)4，gradient clip=5；物理batch=2，每epoch5,228updates，seed2026配对fresh，同形状参数拷贝。一个epoch warmup之后使用固定50epoch cosine horizon，max50epoch，原core早停patience8、min\_\allowbreak{}delta=1e\(-\)4。BF16 forward、FP32参数/\allowbreak{}raw头、FP64量化参数化与pinball；TF32关闭。未来投稿的精确硬件、包版本与run identity应引用历史环境文件，不填猜测设备。checkpoint只能在完成训练与验证epoch边界形成；恢复需独立审批。
+
+\subsection{Methods 5：评价与不确定性（COMPLETED）}
+
+报告global core、Brier、AUROC、Average Precision、参考有雨conditional Pinball和所有32分位数覆盖。Brier衡量整体概率误差，AUROC/\allowbreak{}AP衡量排序区分，可靠性箱比较平均预测概率与参考雨频率；三类不能互换。覆盖分母是参考有雨暴露，指标均基于2024开发验证。原paired bootstrap采用35个不重叠七日UTC块、2,000抽样、seed2026，同一配对场景和block权重；按分子/\allowbreak{}分母pooling，AUROC/\allowbreak{}AP按合并分数分布处理ties。点态百分位区间未修正多重比较、BEST选择和训练seed方差；天气系统跨块和季节性相关仍可能存在。
+
+\subsection{Experimental Design 1：已完成配对实验（COMPLETED）}
+
+两模型BEST均为epoch9。已发表2024指标如下，仅用于叙述实验背景。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+指标 & B0-Matched-v2 & B1-v2 & 口径 \\
+\midrule\endfirsthead
+指标 & B0-Matched-v2 & B1-v2 & 口径 \\
+\midrule\endhead
+Core Loss & 0.048759608 & 0.047816404 & log域loss，每有效暴露 \\
+Brier Score & 0.096867626 & 0.095253471 & 发生概率误差，全部有效暴露 \\
+AUROC & 0.886357037 & 0.893468822 & 发生排序，全部有效暴露 \\
+Average Precision & 0.567232691 & 0.585904924 & 发生排序，全部有效暴露 \\
+Conditional Pinball & 0.124885458 & 0.124113223 & log域，参考有雨暴露 \\
+\bottomrule\end{longtable}\endgroup
+
+该结果支持六时相在开发集合上的部分发生指标改善；不支持全部雨强、季节或未来年份全面优越。conditional Pinball配对探索区间跨零，强雨层B1点值更高。q32的欠覆盖与干参考位置巨大尾部为下一阶段待检验问题，尚未经独立量器或雷达证实。
+
+\subsection{Experimental Design 2：拟议机制消融（PROPOSED /\allowbreak{} NOT\_\allowbreak{}EXECUTED）}
+
+候选固定D1配对集合、fresh初始化、同一scaler/\allowbreak{}预算/\allowbreak{}scheduler/\allowbreak{}评价，只在E1改变focal gamma，在E2改变conditional loss固定权重；E0为同预算重新训练对照。多seed、干span正则化、交互臂与post-hoc校准属于另行批准的扩展。Methods原文不能随候选讨论偷偷改成“采用了gamma=0”或“进行了温度缩放”。
+
+HYPOTHESIS：loss形态可能影响发生校准；量化项相对权重可能影响上尾覆盖；缺少干位直接量化监督与reference错配可能参与异常。EXPECTED\_\allowbreak{}PATTERN：若假设成立，特定主终点可能改善，但排序、conditional Pinball或其它覆盖可能恶化；失败方向同样可报告。没有任何预期提升数字、显著性声明或最优参数。
+
+\subsection{Experimental Design 3：拟议独立物理验证与最终拟合（PROPOSED /\allowbreak{} NOT\_\allowbreak{}EXECUTED）}
+
+计划先确认雨量站、雷达QPE和其它主动观测的时间支撑、QC、许可及共享源链，再按预注册资格和冻结格网配对。点站、雷达足迹、半小时平均的支撑差异需单列，不能将小时量均分或相加quantile。独立性不明的融合场仅作辅助；已知2024个案与完整参考集合的用途分开。
+
+如未来选择F1，以合资格2023/\allowbreak{}2024合并训练后，2024不再用作独立验证；最终2025测试必须另行解封批准。本轮尚无新的v2 Phase-B正式协议、runner、参数更新、reference数据或FinalFit结果。
+
+\subsection{Reproducibility /\allowbreak{} Governance 文稿保留段}
+
+Phase-A结果与源文件有Git/\allowbreak{}SHA证据；B1从epoch14 LAST的历史恢复存在独立研究者恢复审批不足，BEST9早于该恢复段，但技术可追溯性不等同研究者批准。正式科学验收与历史偏差处置仍待决定；本稿不得声称恢复已经追认。公开仓库仅包括允许公开的代码、聚合证据和候选文档，不含原始卫星/\allowbreak{}站点资料、权重、optimizer或访问凭据。
+
+证据导航：原验收材料、已完成补强、本版本manifest与Git发布收据。候选报告构建和合成计划测试不作为正式模型实验通过记录。
+\clearpage\section{研究者决策材料}
+
+所有事项RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED，尚无选择、签署或授权。本文件不是审批表的代填记录。工程交付完成后停止；研究者可批准、拒绝或要求修改任何候选。
+
+\subsection{决策顺序与取舍}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+决策ID & 候选与优点 & 缺点/\allowbreak{}风险 & 依赖与必须批准范围 \\
+\midrule\endfirsthead
+决策ID & 候选与优点 & 缺点/\allowbreak{}风险 & 依赖与必须批准范围 \\
+\midrule\endhead
+D01 Phase-A处置 & 审阅既有科学验收与恢复偏差证据 & 技术pass不能代科学验收；BEST9早于恢复不消除后续历史影响 & 独立科学验收、B1恢复偏差处置分别决定；不自动追认 \\
+D02 下一阶段目的 & D1机制消融成本较低；D2分离校准角色；F1增加开发训练样本 & D1/\allowbreak{}D2的2024均已探索；F1失去2024验证 & 选择目的及可公开结论范围；不同路线不得默默混用 \\
+D03 数据角色 & Q1固定集合；Q2日期块/\allowbreak{}过程purge；Q3合并训练 & Q2减少样本、计数未知；Q3有重复评价泄漏风险 & 新manifest身份、日期/\allowbreak{}时空支撑、purge/\allowbreak{}完整性与2025防火墙 \\
+D04 fresh与seed & I1便于对照；I3估计seed敏感性 & I1单seed；I3三倍训练；I2取消配对是另一因素 & 初始化算法、seed列表、fresh证明，不迁移历史optimizer/\allowbreak{}weights \\
+D05 scaler & N0历史可比；N1严格train-only；N2合并适配 & N0不适合声称Q2严格角色隔离；refit增加I/\allowbreak{}O并改变输入尺度 & 拟合角色、B1时隙计权/\allowbreak{}去重策略、B0共用、新SHA，不改旧scaler \\
+D06 预算/\allowbreak{}选择 & B9固定终点简洁；B17更长；B50验证early-stop & epoch9是已知开发结果启发；等epoch\(\ne\)等updates；选择偏差 & maxupdates/\allowbreak{}epochs、S0/\allowbreak{}S1、BEST或固定终点、resume边界与计算资源 \\
+D07 最小假设矩阵 & E0/\allowbreak{}E1/\allowbreak{}E2单因素，保留双头 & gamma/\allowbreak{}权重不是已证实原因；共享encoder会影响两头 & 每个loss实验、权重和主终点单独批准；E3/\allowbreak{}E4另批 \\
+D08 校准支路 & C1单参数较易审查 & 需角色分离；高概率箱稀疏；分箱均值无法拟合 & 拟合目标、校准集与report集、参数域、器件固定与评价另批 \\
+D09 推断/\allowbreak{}成功标准 & 主終点少、guardrails完整；配对日期/\allowbreak{}seed & 有效过程样本量未知；多重比较和选择历史 & 最小有意义效应、容忍差值、多重比较、区块/\allowbreak{}事件定义和停止规则 \\
+D10 独立资料 & R1/\allowbreak{}R2/\allowbreak{}R3地面/\allowbreak{}雷达优先；R4局地；R5备选 & 许可、档案与GPCC/\allowbreak{}QPE共享链未知 & 先申请metadata，再批准获取/\allowbreak{}存储/\allowbreak{}QC/\allowbreak{}共享；联系人/\allowbreak{}单位函由研究者决定 \\
+D11 物理验证 & P1案例+P2预注册完整匹配集合 & 案例选择偏差、点-面积/\allowbreak{}时段差异 & 阈值/\allowbreak{}仪器检出限/\allowbreak{}配准容差/\allowbreak{}独立性标准；事件地形正式目录另批 \\
+D12 最终拟合/\allowbreak{}测试 & 设计锁定后F1可作最终模型准备 & 2024合并后无独立验证；2025仍封存 & FinalFit执行与2025解封分别批准，不能由本候选文件代替 \\
+D13 论文范围 & Methods已完成事实与拟议设计分开 & 目标期刊/\allowbreak{}英语稿/\allowbreak{}硬件信息未补全；无新结果 & 确认投稿范围、治理披露措辞与新实验后Results，不填预期数字 \\
+\bottomrule\end{longtable}\endgroup
+
+\subsection{建议的最小审查组合（仍未选定）}
+
+若目的为机制解释，可先审D1+I1/\allowbreak{}I3+Q1+N0+B9+S0+V0+E0/\allowbreak{}E1/\allowbreak{}E2，避免同时改动数据分割和scaler。一个seed共6runs、282,312updates；三个seed18runs、846,936updates，均未执行。若目的是拟合概率校准器，先审D2+Q2+N1并批准角色，不能直接把D1模型的训练内分区当独立校准集。若目标是最终模型，先锁定方法并处置D01，再审F1，不根据全量2024成绩选择合并模型。
+
+公开资料优先级R1/\allowbreak{}R2/\allowbreak{}R3仅是获取建议。最低可检验条件是时间支撑相容且源链可追溯的足够参考，不能预定“站点一定独立”或“必须证明B1更好”。理论动机与文献不是新损失审批依据；研究者需要明确是否接受假设、比较和判据。
+
+\subsection{阻塞与安全接续}
+
+本轮允许的设计、公开资料调查、论文框架、可编辑PDF、计划合成检查及公开Git归档可完整完成，不受上述选择阻塞。真实reference验证缺少许可/\allowbreak{}数据/\allowbreak{}预注册规则，正式训练缺少独立批准/\allowbreak{}新v2协议及runner/\allowbreak{}计算预算；未进入其中任何一步。没有失败隐藏或假通过。
+
+以后安全接续：先核对当前远端与dirty workspace，在独立版本追加研究者真实决定及其身份，验证授权scope与sha；按批准内容实现新v2 runner/\allowbreak{}preflight，先做获批synthetic检查，再取得训练或数据执行的单独授权。恢复独立LAST批准不得省略。不得覆盖本版本和历史Phase-A；2025解封必须单独明确决定。
+
+RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true；V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false；2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=0；2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0；HISTORICAL\_\allowbreak{}RECOVERY\_\allowbreak{}RATIFICATION=NOT\_\allowbreak{}GRANTED；AUTOMATIC\_\allowbreak{}NEXT\_\allowbreak{}STAGE=false。
+\clearpage\section{引用来源与证据深度}
+
+检索日2026-10-10；仅公开metadata/\allowbreak{}服务条件。搜索索引可见不等于完整文档阅读、原始数据获取或许可。网页变化与直接读取失败如实记录。
+
+S1. CMA：中国气象局基本气象数据开放共享目录（第一批，2023年2月）\par\url{https://www.cma.gov.cn/zfxxgk/gknr/wjgk/qtwj/202302/P020230224377864419023.pdf}\par PUBLIC\_\allowbreak{}DOCUMENT\_\allowbreak{}TEXT。支持范围：国家站基本观测及雷达产品/\allowbreak{}QPE列入目录；目录更新频率不是采样频率。\par\medskip
+
+S2. NMIC：中国地面气候资料日值数据集（V3.0）\par\url{https://m.data.cma.cn/data/detail/dataCode/SURF_CLI_CHN_MUL_DAY_V3.0.html}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX\_\allowbreak{}ONLY\_\allowbreak{}DIRECT\_\allowbreak{}OPEN\_\allowbreak{}FAILED。支持范围：日值自1951起、滞后3个月、教育科研实名注册；云南实际站期未核实。\par\medskip
+
+S3. 楚雄市人民政府/\allowbreak{}气象局：需要市气象台提供气象数据或开具气象证明的流程是什么？\par\url{https://www.cxs.gov.cn/info/14045/363408.htm}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}TEXT。支持范围：单位函、使用协议和云南监管平台审批；不证明本项目已获许可。\par\medskip
+
+S4. NMIC：气象雷达数据共享服务\par\url{https://k.data.cma.cn/mekb/?r=radar\%2Fdata}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}AND\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：基数据/\allowbreak{}图像类别及服务入口；未确认逐部云南档案或QPE分辨率。\par\medskip
+
+S5. 云南省水利厅：云南省水利厅2025年新闻发布会\par\url{https://wcb.yn.gov.cn/html/2025/xinwenfabuhui_0710/3061514.html}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX\_\allowbreak{}ONLY\_\allowbreak{}DIRECT\_\allowbreak{}OPEN\_\allowbreak{}FAILED。支持范围：整合气象/\allowbreak{}水文/\allowbreak{}山洪雨量站、X波段测雨系统存在；不证明2024连续档案或独立性。\par\medskip
+
+S6. 西双版纳森林生态系统国家野外站/\allowbreak{}CERN：西双版纳生态站数据资源申请指南\par\url{https://bnf.cern.ac.cn/content?id=54395}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}TEXT。支持范围：2025-04-07指南，指标/\allowbreak{}时间/\allowbreak{}用途申请及签字盖章；高频降水可供性待确认。\par\medskip
+
+S7. NOAA NCEI：Global Historical Climatology Network hourly\par\url{https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}TEXT。支持范围：GHCNh替代ISD、多来源、hourly/\allowbreak{}synoptic、不同累计期降水及公开入口；云南完整性未知。\par\medskip
+
+S8. NOAA NCEI：Global Historical Climatology Network daily\par\url{https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：daily资料、GTS/\allowbreak{}政府交换来源和日界差异；不能验证半小时quantile。\par\medskip
+
+S9. NASA GPM：Dual-frequency Precipitation Radar (DPR)\par\url{https://gpm.nasa.gov/missions/GPM/DPR}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：约5km nadir足迹、轨道条带；不是连续地面真值。\par\medskip
+
+S10. NASA GPM：2A DPR GES DISC\par\url{https://gpm.nasa.gov/data/directory/2a-dpr-ges-disc}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：2ADPR V07产品与GES DISC入口、mm/\allowbreak{}hr单位。\par\medskip
+
+S11. NASA ESDIS：Earthdata Login Documentation\par\url{https://urs.earthdata.nasa.gov/documentation}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：用户级账号获取Earthdata资料的条件；本轮没有注册或登录。\par\medskip
+
+S12. NSMC：FY-3G官方数据概览\par\url{https://satellite.nsmc.org.cn/DataPortal/cn/data/dataset.html?satelliteCode=FY3G}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：PMR L1目录起始2023-10-23、5000M；不证明L2可用性。\par\medskip
+
+S13. NSMC：风云卫星遥感数据服务网注册提示\par\url{https://satellite.nsmc.org.cn/}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：实名注册审核要求；未下载。\par\medskip
+
+S14. NMIC：气象科学专业知识服务系统数据资源\par\url{https://k.data.cma.cn/mekb/?r=site\%2Findexdata}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}TEXT。支持范围：CLDAS实时/\allowbreak{}近实时目录存在；细节页面读取失败，具体时间/\allowbreak{}许可未确认。\par\medskip
+
+S15. NMIC：全球-区域-局地一体化实况分析产品\par\url{https://k.data.cma.cn/mekb/?id=42617&r=site\%2Farticle}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：观测融合产品及区域产品族最高尺度；不套用某降水产品分辨率。\par\medskip
+
+S16. Copernicus C3S/\allowbreak{}ECMWF：ERA5 hourly data on single levels from 1940 to present\par\url{https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=overview}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：1940至今/\allowbreak{}hourly/\allowbreak{}大气0.25度、当前CC-BY目录；辅助资料非独立真值。\par\medskip
+
+S17. NASA GPM：IMERG: Integrated Multi-satellitE Retrievals for GPM\par\url{https://gpm.nasa.gov/data/imerg}\par PUBLIC\_\allowbreak{}PAGE\_\allowbreak{}TEXT。支持范围：多源/\allowbreak{}GPCC月尺度调整/\allowbreak{}ERA5关联及GPM源链；独立性需核实。\par\medskip
+
+S18. CVPR 2021 /\allowbreak{} 作者：On Focal Loss for Class-Posterior Probability Estimation: A Theoretical Perspective\par\url{https://openaccess.thecvf.com/content/CVPR2021/papers/Charoenphakdee_On_Focal_Loss_for_Class-Posterior_Probability_Estimation_A_Theoretical_Perspective_CVPR_2021_paper.pdf}\par PRIMARY\_\allowbreak{}PAPER\_\allowbreak{}SEARCH\_\allowbreak{}TEXT\_\allowbreak{}ABSTRACT\_\allowbreak{}INTRO\_\allowbreak{}ONLY\_\allowbreak{}DIRECT\_\allowbreak{}OPEN\_\allowbreak{}FAILED。支持范围：一般focal概率估计研究动机；没有完整论文综合或项目因果结论。\par\medskip
+
+S19. CMA 2024：中国气象局科技项目揭榜挂帅榜单（第三批）\par\url{https://www.cma.gov.cn/kjrh/lmdt/xxfb/202407/P020240704341544390758.pdf}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：云南C/\allowbreak{}S/\allowbreak{}X多波段雷达应用需求；榜单目标非已实现效果。\par\medskip
+
+S20. CMA：师宗：双偏振云雷达建成 弥补监测盲区\par\url{https://www.cma.gov.cn/2011xwzx/2011xqxxw/2011xjctz/202501/t20250102_6771347.html}\par OFFICIAL\_\allowbreak{}SEARCH\_\allowbreak{}INDEX。支持范围：2024-12-29建成晚于研究验证窗口；云结构非地面雨强真值。\par\medskip
+
+\subsection{本地权威证据}
+
+冻结协议：config/\allowbreak{}science\_\allowbreak{}contract\_\allowbreak{}v1.1.yaml、config/\allowbreak{}science\_\allowbreak{}v2/\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}protocol\_\allowbreak{}frozen\_\allowbreak{}v1.json；模型：src/\allowbreak{}yuntapr/\allowbreak{}models/\allowbreak{}quantile\_\allowbreak{}v2/\allowbreak{}；训练与评价：src/\allowbreak{}yuntapr/\allowbreak{}training/\allowbreak{}formal\_\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}v2.py、scientific\_\allowbreak{}review.py。
+
+科学证据：docs/\allowbreak{}v2\_\allowbreak{}scientific\_\allowbreak{}acceptance/\allowbreak{}README.md及run\_\allowbreak{}20261009T112710\_\allowbreak{}013267Z/\allowbreak{}delivery\_\allowbreak{}v2/\allowbreak{}；本轮引用现有聚合材料，不重跑推理或87项检查。
+
+补强：docs/\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}evidence\_\allowbreak{}hardening/\allowbreak{}README.md、诊断、入口准备、治理复核、final\_\allowbreak{}status与publication\_\allowbreak{}receipt。证据commit=d9db4fad6244\allowbreak{}c18c45d6a5fa\allowbreak{}417eab824822\allowbreak{}8650，接续commit=6e692625ebdd\allowbreak{}9bdaeff65e22\allowbreak{}d0ce59af349d\allowbreak{}98c5。
+
+本轮引用不是对历史偏差的追认；新Git交付身份在追加publication\_\allowbreak{}receipt中记录。\clearpage\section{数学定义补充（既有 v2 与候选量）}
+\[
+z=\mathbf{1}\{y>0.1\},\quad u=\log(1+y),\quad
+\tau_i=\frac{i-0.5}{32},\quad i=1,\ldots,32.
+\]
+\[
+w_i=\operatorname{softplus}(a_i)+\epsilon_w,\quad
+c_i=\frac{\sum_{j=1}^{i}w_j}{\sum_{j=1}^{32}w_j},\quad
+s=\operatorname{softplus}(b)+\epsilon_s,\quad q_i=\log(1.1)+s c_i.
+\]
+\[
+\rho_\tau(e)=e(\tau-\mathbf{1}\{e<0\}),\quad
+L_{\mathrm{core}}=\frac{S_{\mathrm{occ}}+S_{\mathrm{qr}}}{N_{\mathrm{valid}}},\quad
+\mathrm{CPB}=\frac{S_{\mathrm{qr}}}{N_{\mathrm{rain}}}.
+\]
+量化输出为log域条件分位数；物理单位为mm/h。候选E2改变固定\(\lambda_q\)，E3增添干位span惩罚，均非现有冻结loss：
+\[
+L_{\mathrm{candidate}}=\frac{S_{\mathrm{occ}}+\lambda_q S_{\mathrm{qr}}}{N_{\mathrm{valid}}}
++\lambda_d\frac{\sum_{\mathrm{valid}}(1-z)s^2}{N_{\mathrm{valid}}}.
+\]
+这里仅列公式，没有实现、优化或选择新参数。q32目标coverage为\(0.984375\)，不是\(p\times q_{32}\)意义上的均值。
+\end{document}
