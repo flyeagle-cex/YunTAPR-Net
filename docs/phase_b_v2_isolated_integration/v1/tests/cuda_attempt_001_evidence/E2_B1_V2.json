@@ -1,0 +1,183 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "status": "SYNTHETIC_INTEGRATION_PASS",
+  "model": "B1_V2",
+  "arm": "E2",
+  "seed": 2026,
+  "batch_size": 2,
+  "input_shape": [
+    2,
+    6,
+    501,
+    501
+  ],
+  "target_shape": [
+    2,
+    1,
+    100,
+    100
+  ],
+  "qlog_shape": [
+    2,
+    32,
+    100,
+    100
+  ],
+  "raw_quantile_head": {
+    "shape": [
+      2,
+      33,
+      100,
+      100
+    ],
+    "dtype": "torch.float32"
+  },
+  "precision": {
+    "parameters": "float32",
+    "occurrence": "torch.bfloat16",
+    "qlog_and_pinball": "torch.float64",
+    "TF32": false
+  },
+  "synthetic_arithmetic_not_performance": {
+    "S_occ": 568.35546875,
+    "S_qr_unweighted": 2132.7107972640247,
+    "weighted_objective": 0.7046322249676457,
+    "N_valid": 6860,
+    "N_rain": 4900,
+    "unweighted_conditional_mean": 0.43524710148245405
+  },
+  "same_output_arm_adjoint_norms": {
+    "E0": {
+      "occurrence_norm": 0.0017973417301049564,
+      "quantile_norm": 0.0009543104477303599
+    },
+    "E1": {
+      "occurrence_norm": 0.0029322697586443305,
+      "quantile_norm": 0.0009543104477303599
+    },
+    "E2": {
+      "occurrence_norm": 0.0017973417301049564,
+      "quantile_norm": 0.0019086208954607199
+    }
+  },
+  "gradients": {
+    "parameter_tensors": 74,
+    "missing_gradients": 0,
+    "nonfinite_gradients": 0,
+    "all_shapes_and_dtypes_match": true,
+    "norms": {
+      "backbone.enc0.conv1.weight": 0.27961042062334196,
+      "backbone.enc0.conv1.bias": 0.0701156699191245,
+      "backbone.enc0.norm1.weight": 0.02699057523885963,
+      "backbone.enc0.norm1.bias": 0.021394877661898445,
+      "backbone.enc0.conv2.weight": 0.7265099210471887,
+      "backbone.enc0.conv2.bias": 0.05374002624688352,
+      "backbone.enc0.norm2.weight": 0.02142579982729698,
+      "backbone.enc0.norm2.bias": 0.022892039368272922,
+      "backbone.enc0.skip.weight": 0.022288926179488463,
+      "backbone.enc0.skip.bias": 0.022923834652164726,
+      "backbone.down1.weight": 0.5788301918522227,
+      "backbone.down1.bias": 0.048752769151879406,
+      "backbone.enc1.conv1.weight": 0.8136876685563587,
+      "backbone.enc1.conv1.bias": 0.083563376723636,
+      "backbone.enc1.norm1.weight": 0.018137480901704656,
+      "backbone.enc1.norm1.bias": 0.017624292078167403,
+      "backbone.enc1.conv2.weight": 0.7806968067850771,
+      "backbone.enc1.conv2.bias": 0.04363532822230052,
+      "backbone.enc1.norm2.weight": 0.01892795568569962,
+      "backbone.enc1.norm2.bias": 0.01791690577792711,
+      "backbone.down2.weight": 0.6493201193001771,
+      "backbone.down2.bias": 0.030450753067015685,
+      "backbone.enc2.conv1.weight": 0.8037833341151304,
+      "backbone.enc2.conv1.bias": 0.045901369611366476,
+      "backbone.enc2.norm1.weight": 0.011424426246473017,
+      "backbone.enc2.norm1.bias": 0.01078743601794288,
+      "backbone.enc2.conv2.weight": 0.9561156189351255,
+      "backbone.enc2.conv2.bias": 0.03832739210526276,
+      "backbone.enc2.norm2.weight": 0.015007099769886978,
+      "backbone.enc2.norm2.bias": 0.014703253790581267,
+      "backbone.down3.weight": 0.7514834405475731,
+      "backbone.down3.bias": 0.026890506002631646,
+      "backbone.enc3.conv1.weight": 0.7666312689842824,
+      "backbone.enc3.conv1.bias": 0.04350285055045101,
+      "backbone.enc3.norm1.weight": 0.012119992265724333,
+      "backbone.enc3.norm1.bias": 0.01022024414774774,
+      "backbone.enc3.conv2.weight": 0.826106956093931,
+      "backbone.enc3.conv2.bias": 0.029495701903203803,
+      "backbone.enc3.norm2.weight": 0.012511235335764937,
+      "backbone.enc3.norm2.bias": 0.011626358457890631,
+      "backbone.dec2.conv1.weight": 1.6752388341530466,
+      "backbone.dec2.conv1.bias": 0.04043316705544478,
+      "backbone.dec2.norm1.weight": 0.017541185742375863,
+      "backbone.dec2.norm1.bias": 0.017117091777680178,
+      "backbone.dec2.conv2.weight": 1.0399510224697284,
+      "backbone.dec2.conv2.bias": 0.045229170588637305,
+      "backbone.dec2.norm2.weight": 0.01760516047070692,
+      "backbone.dec2.norm2.bias": 0.017037646510580762,
+      "backbone.dec2.skip.weight": 0.23552624840456896,
+      "backbone.dec2.skip.bias": 0.01703752901902089,
+      "backbone.dec1.conv1.weight": 1.7165055658048927,
+      "backbone.dec1.conv1.bias": 0.05452396635400157,
+      "backbone.dec1.norm1.weight": 0.0245688360031368,
+      "backbone.dec1.norm1.bias": 0.022115645391475994,
+      "backbone.dec1.conv2.weight": 1.1330620498694517,
+      "backbone.dec1.conv2.bias": 0.07169903867466997,
+      "backbone.dec1.norm2.weight": 0.024161379111899976,
+      "backbone.dec1.norm2.bias": 0.026389469498283705,
+      "backbone.dec1.skip.weight": 0.2689083585591031,
+      "backbone.dec1.skip.bias": 0.02639514833279688,
+      "backbone.dec0.conv1.weight": 1.5876146075408417,
+      "backbone.dec0.conv1.bias": 0.07909521564420932,
+      "backbone.dec0.norm1.weight": 0.03945395627679027,
+      "backbone.dec0.norm1.bias": 0.03892987191764789,
+      "backbone.dec0.conv2.weight": 0.8278406537233522,
+      "backbone.dec0.conv2.bias": 0.08381019438487693,
+      "backbone.dec0.norm2.weight": 0.030848846051128805,
+      "backbone.dec0.norm2.bias": 0.03347552947445907,
+      "backbone.dec0.skip.weight": 0.2198252471247374,
+      "backbone.dec0.skip.bias": 0.03349657087668681,
+      "heads.occurrence.weight": 0.09342065976175708,
+      "heads.occurrence.bias": 0.03125,
+      "heads.quantile.weight": 0.321296541435539,
+      "heads.quantile.bias": 0.09641720395137308
+    },
+    "zero_gradient_tensors": []
+  },
+  "E0_original_loss_compatibility": {
+    "performed": false,
+    "reason": "Full original-loss comparison is assigned to E0 only"
+  },
+  "resource_admission": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "host_available_bytes": 17297641472,
+    "workspace_free_bytes": 45018415104,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7256145920,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8"
+  },
+  "synthetic_measurement": {
+    "forward_and_loss_seconds": 0.09031379999942146,
+    "selected_loss_backward_seconds": 0.13907150000159163,
+    "primary_peak_allocated_bytes": 2858972672,
+    "primary_peak_reserved_bytes": 3428843520,
+    "complete_case_peak_allocated_bytes": 2858972672,
+    "complete_case_peak_reserved_bytes": 3428843520,
+    "includes_same_output_adjoint_checks": true,
+    "cold_one_batch_not_training_throughput": true
+  },
+  "fresh_initial_state_sha256": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+  "after_backward_state_sha256": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+  "parameters_unchanged_after_backward": true,
+  "full_model_forward_calls": 1,
+  "full_model_backward_calls": 1,
+  "optimizer_steps": 0,
+  "checkpoint_reads_or_writes": 0,
+  "actual_data_reads": 0,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false
+}

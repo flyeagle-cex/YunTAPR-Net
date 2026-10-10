@@ -1,0 +1,411 @@
+\documentclass[UTF8,fontset=fandol,10pt]{ctexart}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{amsmath,amssymb,array,longtable,booktabs,url,listings,xcolor,fancyhdr}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{YunTAPR-Net / synthetic integration}
+\fancyhead[R]{2026-10-10 / v1}\fancyfoot[C]{\thepage}\setlength{\headheight}{14pt}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\setlength{\emergencystretch}{4em}
+\lstset{language=Python,basicstyle=\ttfamily\scriptsize,columns=fullflexible,breaklines=true,
+breakatwhitespace=false,numbers=left,numberstyle=\tiny,numbersep=5pt,xleftmargin=8pt,
+frame=single,keepspaces=true,showstringspaces=false,tabsize=4}
+\title{YunTAPR-Net\\Phase-B v2 隔离集成\\合成端到端验证与研究者学习材料}
+\author{SYNTHETIC\_ENGINEERING\_ONLY}\date{2026年10月10日 / v1}
+\begin{document}\maketitle
+\textbf{真实模型架构的合成工程集成通过；正式科学执行未授权。}
+
+当前CPU91 / CUDA6 / 静态15项通过；完整双模型batch2、501×501、BF16/FP32/FP64。
+没有optimizer更新、真实观测或私有checkpoint访问。人工mask不是云南地理掩膜。
+\setcounter{tocdepth}{1}\begingroup\small\setlength{\parskip}{0pt}\tableofcontents\endgroup
+\clearpage\section{隔离集成架构与边界}
+
+范围为 SYNTHETIC\_\allowbreak{}ENGINEERING\_\allowbreak{}ONLY。独立命名空间没有优化器、epoch训练循环、数据集加载器、checkpoint应用器或正式启动能力。模型构造会读取原公开科学合同和SP04静态资料，全部SHA已绑定。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+模块 & 职责 & 边界 \\
+\midrule\endfirsthead
+模块 & 职责 & 边界 \\
+\midrule\endhead
+pins.py & 核验66个已有源码/\allowbreak{}协议/\allowbreak{}公开元数据SHA & 外部mask仅声明，不打开 \\
+resources.py & 构造前资源准入 & 不足停止，不改batch/\allowbreak{}精度/\allowbreak{}结构 \\
+synthetic.py & 两场景、六槽及末槽、人工参考与mask & 无路径和真实年份 \\
+initialization.py & 真实fresh模型、同形复制和字节摘要 & 不读/\allowbreak{}存权重 \\
+adapter.py & 原v2模型接到已有候选loss & 固定B2、501到100网格 \\
+controls.py & 候选规则、排列、终点、恢复拒绝 & 不能授权执行 \\
+safety.py & 文件和操作进程守卫 & 禁止raw/\allowbreak{}checkpoint/\allowbreak{}2025、step和expm1 \\
+\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.py & scope常量 & 包本身不构造模型 \\
+\bottomrule\end{longtable}\endgroup
+
+调用顺序：资源准入→来源SHA→fresh B0/\allowbreak{}B1→人工张量→原backbone/\allowbreak{}SP04/\allowbreak{}双头→既有candidate\_\allowbreak{}loss→合成backward→参数SHA复核。仅测试代码引用原b0\_\allowbreak{}core\_\allowbreak{}loss作E0对照；未调用正式forward\_\allowbreak{}loss/\allowbreak{}update。
+
+train()只设置模块模式，backward只计算梯度，没有optimizer实例或step。fresh构造及B0到B1的同形初值复制属于本轮授权范围，不读取历史状态。
+
+scope字符串、frozen dataclass、JSON和SHA都不是认证机制。隔离依据内部人工fixture、调用图、进程守卫和无训练能力的BlockedRunner；这不是操作系统安全沙箱。工程PASS始终不能转成独立人类授权。
+\clearpage\section{B0/\allowbreak{}B1 接口兼容性}
+
+实际来源为quantile\_\allowbreak{}v2/\allowbreak{}models.py、heads.py、parameterization.py、outputs.py；backbone\_\allowbreak{}b0.py、b1.py、blocks.py及spatial/\allowbreak{}projection.py、sp04\_\allowbreak{}mapping.py。来源字节见source\_\allowbreak{}identity.json。正式forward\_\allowbreak{}loss仅只读核对，未调用。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep)/2\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep)/2\relax}}
+\toprule
+控制 & 实际检查 \\
+\midrule\endfirsthead
+控制 & 实际检查 \\
+\midrule\endhead
+B0输入 & [2,1,501,501]，取B1人工输入最后一槽 \\
+B1输入 & [2,6,501,501]，60/\allowbreak{}50/\allowbreak{}40/\allowbreak{}30/\allowbreak{}20/\allowbreak{}10分钟、最旧到最新 \\
+M1 & 独立bool native mask全有效，缺测拒绝 \\
+中间特征 & [2,48,501,501]→冻结SP04→[2,48,100,100] \\
+双头 & 发生raw1；quantile raw33（allocation32+span1）→q32 \\
+目标/\allowbreak{}分位数 & 原FP32[2,1,100,100]；FP64[2,32,100,100] \\
+精度 & 参数FP32、backbone/\allowbreak{}发生头BF16、raw quantile FP32、变换/\allowbreak{}Pinball FP64 \\
+阈值和分母 & 先float32>float32(0.1)再升精度；训练N\_\allowbreak{}valid、科学CPB N\_\allowbreak{}rain \\
+support & SP04全1；原生invalid0；严格q顺序/\allowbreak{}支撑沿用原守卫 \\
+候选参数 & E0=(.5,2,1)、E1=(.5,0,1)、E2=(.5,2,2)，来自既有get\_\allowbreak{}config \\
+\bottomrule\end{longtable}\endgroup
+
+人工参考包含0、float32阈值、阈值向上相邻数及正雨强。当前N\_\allowbreak{}valid=6860、N\_\allowbreak{}rain=4900只是fixture属性。人工mask在每场景平铺前3430格点为True，不能检验真实云南地理配准。
+
+SP04仍用原公开坐标轴和成员映射，每个目标单元25个原生中心取算术均值；没有重建或替换。shared scaler的身份与N0角色被核验；人工输入直接处于归一化数值空间，没有拟合scaler或对真实Kelvin观测应用它。实际解码、normalization和真实mask对应尚未验证。
+
+CPU用例验证完整目标网格接口与负面条件，不运行CPU完整backbone backward；完整双模型forward/\allowbreak{}backward在CUDA执行，无CPU或精度降级。
+\clearpage\section{合成数值与梯度结果}
+
+全部数值为 SYNTHETIC\_\allowbreak{}ENGINEERING\_\allowbreak{}ONLY 工程算术，不是降水性能证据。没有真实Brier/\allowbreak{}AUROC/\allowbreak{}AP、校准、覆盖率或物理上尾新结果。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}}
+\toprule
+候选 & 模型 & S\_\allowbreak{}occ & 未加权S\_\allowbreak{}qr & 训练objective & 未加权S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain \\
+\midrule\endfirsthead
+候选 & 模型 & S\_\allowbreak{}occ & 未加权S\_\allowbreak{}qr & 训练objective & 未加权S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain \\
+\midrule\endhead
+E0 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 603.909607 & 2121.74121 & 0.397325192 & 0.43300841 \\
+E0 & B1\_\allowbreak{}V2 & 568.355469 & 2132.7108 & 0.393741438 & 0.435247101 \\
+E1 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 2377.68555 & 2121.74121 & 0.655893113 & 0.43300841 \\
+E1 & B1\_\allowbreak{}V2 & 2279.86816 & 2132.7108 & 0.643233085 & 0.435247101 \\
+E2 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 603.909607 & 2121.74121 & 0.706616914 & 0.43300841 \\
+E2 & B1\_\allowbreak{}V2 & 568.355469 & 2132.7108 & 0.704632225 & 0.435247101 \\
+\bottomrule\end{longtable}\endgroup
+
+同一初态和输入下，三个条件的未加权分位数分子及CPB完全相同。lambda改变训练objective，不改变同一输出的科学指标定义；这不预测正式训练后的性能。
+
+每个完整case检查74个参数张量：梯度全部存在、shape/\allowbreak{}dtype一致、全部有限；未裁剪或优化。输出处梯度检查：E2的qlog梯度为E0的2倍、发生logit梯度相同；E1的qlog梯度与E0相同。不能据此要求共享backbone的总梯度整体乘2。
+
+E0复用实际模型输出，在冻结BF16 autocast下计算原b0\_\allowbreak{}core\_\allowbreak{}loss；分别做候选/\allowbreak{}原loss完整backward，比较全部参数梯度。预定容差rtol=8e-7、atol=1e-8；条件分位数项1e-12/\allowbreak{}1e-14，未放宽。
+
+B0\_\allowbreak{}MATCHED\_\allowbreak{}V2：总loss绝对差4.58330173814e-09，全部参数梯度最大绝对差0，PASS。
+
+B1\_\allowbreak{}V2：总loss绝对差8.91897489197e-09，全部参数梯度最大绝对差0，PASS。
+
+每个case前后state SHA相同。最终矩阵6次完整forward、8次完整backward（两个E0各多一次原loss对照）；连同日志修复前复测，本轮累计12/\allowbreak{}16。CPU输出张量backward与完整模型计数分开，复测不是新增独立科学证据。
+
+当前唯一pytest用例97=CPU91+CUDA6，0失败/\allowbreak{}错误/\allowbreak{}跳过。CPU首轮87通过/\allowbreak{}4失败，修复后91通过；CUDA首轮6通过/\allowbreak{}1日志warning，修复后6通过/\allowbreak{}0warning。全部attempt共194次pytest实例，唯一覆盖仍97；旧177/\allowbreak{}3未重跑。
+
+这些测试不能证明泛化、校准或q32问题改善，不构成Phase-A验收或历史恢复追认。
+\clearpage\section{GPU 实测与限制}
+
+RTX5060 Laptop GPU，PyTorch2.11.0+cu128、CUDA build12.8。完整case构造前要求主机可用\(\ge\)8GiB、工作盘剩余\(\ge\)1GiB、CUDA BF16可用、CUDA API free\(\ge\)5GiB；单独初始化要求主机\(\ge\)2GiB。门槛是预设工程准入，不是用量预测。实际快照附各evidence JSON。本轮没有OOM或资源降级。
+
+固定batch2、501\(\times\)501、原结构和BF16/\allowbreak{}FP32/\allowbreak{}FP64。cuda synchronize与perf\_\allowbreak{}counter计时；reset\_\allowbreak{}peak\_\allowbreak{}memory\_\allowbreak{}stats后记录PyTorch峰值。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}}
+\toprule
+候选 & 模型 & forward+loss ms & 主backward ms & allocated MiB & reserved MiB \\
+\midrule\endfirsthead
+候选 & 模型 & forward+loss ms & 主backward ms & allocated MiB & reserved MiB \\
+\midrule\endhead
+E0 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 440.77 & 218.68 & 2839.51 & 3258.00 \\
+E0 & B1\_\allowbreak{}V2 & 90.94 & 138.66 & 2862.76 & 3274.00 \\
+E1 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 89.09 & 138.07 & 2702.83 & 3254.00 \\
+E1 & B1\_\allowbreak{}V2 & 90.65 & 137.68 & 2726.53 & 3270.00 \\
+E2 & B0\_\allowbreak{}MATCHED\_\allowbreak{}V2 & 87.22 & 138.19 & 2702.83 & 3254.00 \\
+E2 & B1\_\allowbreak{}V2 & 88.41 & 137.89 & 2726.53 & 3270.00 \\
+\bottomrule\end{longtable}\endgroup
+
+每项只有一批。首项含冷启动，后续可能复用库缓存，不能据此排名模型速度。forward+loss含适配检查和同步；峰值包含同输出三臂梯度检查，E0为原loss对照保留图。JSON还记录完整case额外对照峰值。
+
+allocated/\allowbreak{}reserved不含完整驱动或其他应用显存。没有AdamW状态、真实I/\allowbreak{}O、DataLoader staging、batch8验证、checkpoint或长时运行。不能把本表直接乘846936估计正式总时长，也不能批准验证batch8的显存。
+
+正式前另需获准测量：真实数据防火墙；两worker各734003200字节staging上限；训练batch2/\allowbreak{}验证batch8峰值；AdamW状态与checkpoint临时空间；设备共用、电源温度、驱动和余量；真实吞吐及恢复时间。
+
+FP32模型加两份FP32 AdamW矩的张量存储下界为12\(\times\)参数数：B0 51952920字节，B1 51981720字节。若保留18run各9epoch共162份，下界约8.42GB（十进制），不含容器、step/\allowbreak{}RNG、元数据、日志、原子临时副本。这不是实测checkpoint大小或已批准保留策略；正式runner必须另定磁盘预算并在不足时停止。
+\clearpage\section{Fresh 初始化、排列与固定终点}
+
+CPU对三个seed各为E0/\allowbreak{}E1/\allowbreak{}E2独立构造一对真实模型，共18实例。不同seed的state SHA不同；同模型同seed跨三臂state、buffer和post-pair RNG摘要一致。CUDA的seed2026初态与CPU证据一致。没有保存正式初始化权重。
+
+依据原paired\_\allowbreak{}initialization规则分别重置Python/\allowbreak{}NumPy/\allowbreak{}Torch/\allowbreak{}CUDA，构造B0与B1，然后只复制同名同形状张量。唯一不同形状为backbone.enc0.conv1.weight和backbone.enc0.skip.weight；B1二者原生SHA保持，skip为0。参数总数4329410/\allowbreak{}4331810。使用原state\_\allowbreak{}digest和parameter\_\allowbreak{}groups分类，没有构造optimizer。
+
+PYTHONHASHSEED在进程启动时固定2026，CUBLAS\_\allowbreak{}WORKSPACE\_\allowbreak{}CONFIG=:4096:8；逐run的Python/\allowbreak{}NumPy/\allowbreak{}Torch/\allowbreak{}CUDA seed取2026/\allowbreak{}2027/\allowbreak{}2028。context退出恢复调用者状态。SHA证明当前初始化字节，不证明批准；正式全程随机性和环境仍需绑定。
+
+仅用10455个人工order\_\allowbreak{}ID，独立Generator(seed+epoch\_\allowbreak{}index)做randperm。每seed的9个epoch无丢失/\allowbreak{}重复，重复调用一致；seed2026与原epoch\_\allowbreak{}permutation纯数学规则对照。未读取真实样本内容。
+
+S0复用上一轮全部47052个LR位置通过证据，并核对源码字节未变；不重跑旧套件。新增epoch0/\allowbreak{}1/\allowbreak{}8/\allowbreak{}9边界检查，epoch9剩余0、next\_\allowbreak{}epoch/\allowbreak{}next\_\allowbreak{}lr为None。没有压缩50epoch cosine、按表现选BEST或自动换seed。
+
+18候选run每个47052潜在更新，共846936；验证每epoch1313批，共212706。实际更新0。新命名空间以SYNTHETIC\_\allowbreak{}ENGINEERING\_\allowbreak{}ONLY\_\allowbreak{}\_\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}integration\_\allowbreak{}v1\_\allowbreak{}\_\allowbreak{}开头，与历史正式run隔离。
+\clearpage\section{执行与恢复负面检查}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep)/2\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-4\tabcolsep)/2\relax}}
+\toprule
+尝试 & 处理 \\
+\midrule\endfirsthead
+尝试 & 处理 \\
+\midrule\endhead
+无独立批准 & BlockedRunner无条件抛错 \\
+True、APPROVED、AUTHORIZED\_\allowbreak{}TO\_\allowbreak{}EXECUTE、自报JSON & 不能获得启动能力 \\
+gamma/\allowbreak{}lambda/\allowbreak{}alpha、seed、样本资格越界 & 闭合配置重验后拒绝 \\
+2025、错误年份、样本数或normalization改变 & 候选计划拒绝，文件守卫另禁2025 \\
+epoch>9、batch/\allowbreak{}accum/\allowbreak{}drop\_\allowbreak{}last/\allowbreak{}LR horizon变化 & 拒绝，不自动修正 \\
+LAST/\allowbreak{}run/\allowbreak{}code/\allowbreak{}protocol/\allowbreak{}data/\allowbreak{}init身份错配 & 先绑定核验再拒绝 \\
+BEST、partial/\allowbreak{}train-only、更新数不完整 & 不能恢复 \\
+缺少独立LAST批准 & FormalExecutionBlocked \\
+只有批准reference字符串 & 未认证，仍拒绝；无state应用器 \\
+资源不足或完整GPU case失败 & 停止该测试/\allowbreak{}套件，不自动重试或降级 \\
+\bottomrule\end{longtable}\endgroup
+
+复用既有review\_\allowbreak{}checkpoint\_\allowbreak{}binding，SHA字符串匹配不证明真实文件和批准事件。本轮未调用checkpoint\_\allowbreak{}v2.verify\_\allowbreak{}file/\allowbreak{}apply\_\allowbreak{}verified，未打开BEST/\allowbreak{}LAST，未生成审批记录。
+
+文件守卫拒绝raw、checkpoint、2025及非白名单CSV；白名单只含SHA绑定的精确公开元数据路径。操作守卫阻断step、torch.load/\allowbreak{}save、Module.load\_\allowbreak{}state\_\allowbreak{}dict和expm1。负面用例只检查人工路径，没有打开真实禁用文件。守卫属于独立测试进程，不能替代正式授权。
+
+历史B1恢复仍NOT\_\allowbreak{}GRANTED。SYNTHETIC\_\allowbreak{}INTEGRATION\_\allowbreak{}PASS与FORMAL\_\allowbreak{}SCIENTIFIC\_\allowbreak{}EXECUTION\_\allowbreak{}AUTHORIZED明确分开，后者始终false。后续需要真实独立事件、验真及run/\allowbreak{}LAST绑定，不能将自报元数据升级为批准器。
+\clearpage\section{正式集成差异与缺口}
+
+本轮只新增独立候选源码/\allowbreak{}测试/\allowbreak{}文档，没有应用正式路径补丁。后续应另建v2消融runner，旧v1 FinalFit不能冒充本入口。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+正式源码参考 & 当前隔离对应 & 获准集成还需实现 \\
+\midrule\endfirsthead
+正式源码参考 & 当前隔离对应 & 获准集成还需实现 \\
+\midrule\endhead
+Contract.load & 公开SHA检查 & 真实样本、年份/\allowbreak{}路径防火墙、scaler/\allowbreak{}mask/\allowbreak{}data身份 \\
+paired\_\allowbreak{}initialization & 三seed真实fresh摘要 & 正式run初态与源码/\allowbreak{}环境/\allowbreak{}RNG绑定、保留策略 \\
+forward\_\allowbreak{}loss & 合成适配器+既有candidate\_\allowbreak{}loss & 正式Batch接口与资格；不能用人工mask \\
+update & 仅backward诊断 & 另审optimizer、clip、scheduler、事务计数 \\
+epoch loop & 纯endpoint\_\allowbreak{}boundary & 9epoch及逐epoch验证，无BEST替代终点 \\
+checkpoint\_\allowbreak{}v2 & 声明身份负面检查 & 独立schema、完整epoch事务、immutable LAST和孤儿文件处置 \\
+authorization & 永远阻断的BlockedRunner & 独立批准验真及具体阶段绑定 \\
+\bottomrule\end{longtable}\endgroup
+
+SyntheticBatch固定两个人工ID、人工mask和归一化数值，不能直接成为正式数据入口。真实尾batch1、验证batch8/\allowbreak{}尾batch5尚未验证；本轮未通过改batch制造完整矩阵通过。
+
+另获授权的真实preflight：2023/\allowbreak{}2024读取、冻结真实mask/\allowbreak{}SP04配准、scaler应用、完整ID与时间因果性、staging及异常停止。2025继续封存。checkpoint耐久性、原子写入、中断故障注入、独立LAST恢复及长时资源需另审；非有限、缺监督、丢样本、源码/\allowbreak{}SHA漂移必须停止，不自动跳batch或历史恢复。
+
+已有：闭合loss接口、双模型合成路径、真实fresh跨臂身份、数学预算和边界、负面证据。未有：正式runner、真实preflight、optimizer事务、checkpoint耐久性、长时稳定性、批准验真。缺口需要独立数据/\allowbreak{}资源和执行授权，不能填入合成结果。
+
+科学待决：H-O/\allowbreak{}H-Q及E0/\allowbreak{}E1/\allowbreak{}E2最终接受、效应界限/\allowbreak{}副作用容忍、多重比较、2024开发验证解释范围、Phase-A接受及B1历史恢复独立处置。均为RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED。
+\clearpage\section{研究者审查清单（未批准）}
+
+本清单无签名、批准勾选或token。研究者已委托先实现后学习，最终科学决定仍独立发生。
+
+\noindent\textbullet\quad 核对来源SHA与Git新增范围，确认正式模型/\allowbreak{}损失/\allowbreak{}入口及旧候选未改。\par
+\noindent\textbullet\quad 理解B0末槽与B1时序、独立masks、float32阈值；人工3430布局不是真实地理资格。\par
+\noindent\textbullet\quad 审查raw33到q32、三种精度、闭合get\_\allowbreak{}config和两种评价分母。\par
+\noindent\textbullet\quad 审查独立reseed、同名同形复制及两个B1原生张量；理解state与非持久SP04 buffer分别摘要。\par
+\noindent\textbullet\quad 理解backward不等于更新、输出处lambda加倍不等于共享backbone总梯度加倍。\par
+\noindent\textbullet\quad 审查E0容差与全参数梯度结果；不能据此接受校准、q32覆盖或物理性能。\par
+\noindent\textbullet\quad 理解GPU冷启动、allocator和无optimizer限制；实际batch8、I/\allowbreak{}O、checkpoint未测。\par
+\noindent\textbullet\quad 阅读4项首轮失败修复及旧XML格式限制；字符串和SHA不产生审批。\par
+\noindent\textbullet\quad 独立决定候选科学协议、正式集成范围、真实preflight许可与阶段执行授权。\par
+\noindent\textbullet\quad 独立处置Phase-A接受范围及B1历史恢复；2024仍为开发验证，2025封存。\par
+
+安全接续：核对commit/\allowbreak{}SHA→研究者学习与代码审查→正式集成范围审批→独立v2 runner与获准preflight→绑定真实数据/\allowbreak{}初态/\allowbreak{}资源→再批准具体阶段执行。本轮在审批边界停止。
+\clearpage\section{新增源码逐文件学习}
+
+先阅读上一轮损失手册。本轮顺序：synthetic→adapter→initialization→controls→resources/\allowbreak{}pins/\allowbreak{}safety→测试与工具。
+
+\subsection{synthetic.py：人工张量与资格}
+
+SyntheticBatch是frozen dataclass，但Tensor内容仍可变，因此每次validate。x为FP32[2,1或6,501,501]；native\_\allowbreak{}valid同形bool；rate为原FP32[2,1,100,100]，reference\_\allowbreak{}valid/\allowbreak{}region\_\allowbreak{}mask独立同形bool。输入/\allowbreak{}参考不要求梯度，模型参数需要梯度。
+
+validate(kind)先核验scope、空data\_\allowbreak{}years、两个人工ID、槽顺序，再检查shape/\allowbreak{}device/\allowbreak{}dtype/\allowbreak{}finite及3430有效监督。计数不能证明地理资格。to(device)用dataclasses.replace返回新batch，元数据保留。
+
+make\_\allowbreak{}synthetic\_\allowbreak{}pair没有外部路径。arange/\allowbreak{}reshape/\allowbreak{}广播生成有限sin模式，clone使末槽成为独立Tensor。mask用<3430造人工布局；nextafter生成阈值上侧相邻值。练习：解释先double后比较0.1为什么可能改变边界，缺native像元为什么整场景拒绝。
+
+\subsection{adapter.py：原输出到既有loss}
+
+forward\_\allowbreak{}synthetic先验证batch/\allowbreak{}实验ID，检查exact模型类型、train模式、FP32参数与epsilon；autocast以BF16执行模型，原quantile头内部保留FP32 raw/\allowbreak{}FP64 q。函数返回output与loss，没有backward/\allowbreak{}optimizer。
+
+loss\_\allowbreak{}from\_\allowbreak{}output检查LogDomainOutput、三个输出shape/\allowbreak{}device/\allowbreak{}finite、q守卫、概率support和sigmoid一致性，再调用已有candidate\_\allowbreak{}loss。get\_\allowbreak{}config决定唯一候选参数，科学CPB不乘lambda。练习：为何99\(\times\)100不能自动resize为100\(\times\)100。
+
+\subsection{initialization.py：真实fresh与同形复制}
+
+seeded\_\allowbreak{}environment是contextmanager：yield前固定随机源和确定性，finally恢复调用者；torch.random.fork\_\allowbreak{}rng恢复Torch状态，Python/\allowbreak{}NumPy另存另还。进程hashseed保持2026，不伪称运行中修改环境变量可改变hash。
+
+fresh\_\allowbreak{}paired\_\allowbreak{}models先过资源/\allowbreak{}SHA，再构造B0、重新seed构造B1。state\_\allowbreak{}dict中的Tensor引用实际新参数，b[name].copy\_\allowbreak{}(a[name])在no\_\allowbreak{}grad中写入新初态，不是梯度优化。不同shape的两个输入权重before/\allowbreak{}after SHA必须相同，零skip保留。parameter\_\allowbreak{}groups只分类计数，不构造AdamW。
+
+state\_\allowbreak{}digest包含dtype/\allowbreak{}shape/\allowbreak{}字节；state\_\allowbreak{}dict不含非持久projection.indices，所以另摘要named\_\allowbreak{}buffers。proof保存SHA和事实，不保存权重或批准。练习：同seed为何不能让不同输入通道的两模型天然拥有相同后续参数。
+
+\subsection{controls.py：规则不是执行权}
+
+isolated\_\allowbreak{}run\_\allowbreak{}id重验RunSpec并加合成前缀。candidate\_\allowbreak{}plan生成设计元数据；audit\_\allowbreak{}plan比字段集合/\allowbreak{}类型/\allowbreak{}值，额外自报批准字段拒绝，合法仍can\_\allowbreak{}launch=false。
+
+synthetic\_\allowbreak{}epoch\_\allowbreak{}order用独立Generator(seed+epoch\_\allowbreak{}index)，randperm不消耗全局模型随机流。endpoint\_\allowbreak{}boundary是假想预算，不证明epoch实际完成；9之后next为None。
+
+reject\_\allowbreak{}resume复用旧身份检查后继续拒绝未认证批准；reject\_\allowbreak{}formal\_\allowbreak{}start调用永远抛错的BlockedRunner。练习：分别传True、APPROVED和dict观察为什么都不能启动。
+
+\subsection{resources.py：构造前的资源检查}
+
+host\_\allowbreak{}available\_\allowbreak{}bytes读取Windows系统资源。resource\_\allowbreak{}snapshot(full\_\allowbreak{}backward)记录主机/\allowbreak{}磁盘，完整backward额外检查CUDA BF16和free/\allowbreak{}total；require\_\allowbreak{}resources不足即抛ResourceLimit，不替调用者改参数。门槛不保证绝无OOM，其他进程可能改变资源。
+
+\subsection{pins.py：来源身份}
+
+verify\_\allowbreak{}frozen\_\allowbreak{}sources先核验身份清单自身SHA，再读66个仓库公开文件字节；resolve/\allowbreak{}is\_\allowbreak{}relative\_\allowbreak{}to禁止外部路径。私有mask只声明未打开。SHA证明相同字节，不证明科学结论。
+
+\subsection{safety.py：独立进程保护}
+
+reject\_\allowbreak{}restricted\_\allowbreak{}path拒绝raw/\allowbreak{}checkpoint/\allowbreak{}2025，CSV必须为绑定的精确仓库路径。install\_\allowbreak{}process\_\allowbreak{}file\_\allowbreak{}guard安装sys.addaudithook监听open，先核验清单SHA再建立允许集。守卫不能在该测试进程撤销，退出进程即释放。
+
+synthetic\_\allowbreak{}operation\_\allowbreak{}guards用ExitStack和patch临时把step、load/\allowbreak{}save/\allowbreak{}load\_\allowbreak{}state\_\allowbreak{}dict/\allowbreak{}expm1替为抛错函数，退出恢复。未构造optimizer来试step。Python仍可被外部代码改变，因此不是OS沙箱；正式权限须另行独立批准。
+
+\subsection{\_\allowbreak{}\_\allowbreak{}init\_\allowbreak{}\_\allowbreak{}.py：scope标记}
+
+只有包说明与SCOPE常量；改变字符串不能让BlockedRunner获得训练循环。
+
+\subsection{测试与计算图}
+
+test\_\allowbreak{}adapter\_\allowbreak{}controls有86个CPU实例，覆盖完整目标接口、身份/\allowbreak{}shape/\allowbreak{}dtype/\allowbreak{}mask、候选越界、恢复/\allowbreak{}文件/\allowbreak{}资源拒绝。test\_\allowbreak{}initialization有5例：3seed真实跨臂初态、顺序对照、SHA。test\_\allowbreak{}cuda\_\allowbreak{}e2e有6例完整模型，E0额外比较原loss全参数梯度。conftest限定CPU线程、安装守卫并独立写JSON。
+
+autograd.grad(loss,(logit,qlog))检查输出处梯度；loss.backward沿完整图累积parameter.grad。retain\_\allowbreak{}graph只用于E0二次反向对照，不是训练策略；zero\_\allowbreak{}grad清梯度，不更新参数；detach只用于日志，objective保留计算图。
+
+\subsection{执行与交付脚本}
+
+run\_\allowbreak{}checks启动有上限的子进程，append-only记录XML/\allowbreak{}log/\allowbreak{}JSON，无自动重试；test\_\allowbreak{}process先过文件/\allowbreak{}资源门，CUDA首次失败停止。static\_\allowbreak{}audit只读AST/\allowbreak{}SHA/\allowbreak{}结果，不import torch。build\_\allowbreak{}delivery及export/\allowbreak{}close工具只处理文档和身份。
+
+复现：项目CUDA Python运行scripts/\allowbreak{}phase\_\allowbreak{}b\_\allowbreak{}v2\_\allowbreak{}isolated\_\allowbreak{}integration/\allowbreak{}run\_\allowbreak{}checks.py，指定--phase cpu或cuda、--attempt新编号。pytest复用上一轮私有依赖，不改项目环境。更换源码或依赖必须新测，旧PASS不自动继承。
+
+\subsection{实际代码摘录}
+
+下列函数按实际AST完整提取，不是第二份可导入实现。
+
+\subsubsection{adapter.py：forward\_\allowbreak{}synthetic，第36行起}
+
+SHA256：a056e32ca2a9\allowbreak{}7c32bb045e3b\allowbreak{}5e5c4e05b6ca\allowbreak{}0288316f906a\allowbreak{}f0d47d9e7842\allowbreak{}2116。
+
+\begin{lstlisting}
+def forward_synthetic(model: torch.nn.Module, batch: SyntheticBatch, kind: str,
+                      experiment_id: str) -> tuple[LogDomainOutput, CandidateLossResult]:
+    """One full synthetic forward/loss; no backward, loop, optimizer or file I/O."""
+    batch.validate(kind)
+    get_config(experiment_id)  # reject invalid arm before model execution
+    expected = {"B0_MATCHED_V2": B0MatchedV2, "B1_V2": B1V2}[kind]
+    if type(model) is not expected or not model.training:
+        raise ValueError("Exact frozen v2 architecture in train mode required")
+    if any(p.dtype != torch.float32 or p.device != batch.x.device for p in model.parameters()):
+        raise ValueError("Frozen FP32 parameter/device contract required")
+    if model.heads.numerics.epsilon_w != 1e-4 or model.heads.numerics.epsilon_span != 1e-4:
+        raise ValueError("Frozen v2 epsilon changed")
+    with torch.autocast(batch.x.device.type, dtype=torch.bfloat16, enabled=True):
+        output = model(batch.x, batch.native_valid)
+        result = loss_from_output(output, batch, kind, experiment_id)
+    if output.native_feature_shape != (2, 48, 501, 501) or output.target_feature_shape != (2, 48, 100, 100):
+        raise ValueError("Native/SP04 feature shape mismatch")
+    if output.rain_logit.dtype != torch.bfloat16:
+        raise ValueError("Frozen BF16 occurrence path required, no precision fallback")
+    if output.target_support_fraction.shape != (2, 1, 100, 100) or not bool((output.target_support_fraction == 1).all()):
+        raise ValueError("Full SP04 support required")
+    if not bool((output.b13_invalid_count == 0).all()) or not bool((output.b13_valid_fraction == 1).all()):
+        raise ValueError("Native complete-support diagnostics mismatch")
+    return output, result
+\end{lstlisting}
+
+
+\subsubsection{initialization.py：fresh\_\allowbreak{}paired\_\allowbreak{}models，第48行起}
+
+SHA256：2a232472d550\allowbreak{}06aa44d7129d\allowbreak{}10a01d073570\allowbreak{}37ae2d4bb42a\allowbreak{}43da287f3c4d\allowbreak{}0774。
+
+\begin{lstlisting}
+def fresh_paired_models(seed: int) -> tuple[dict[str, torch.nn.Module], dict]:
+    admission = resource_snapshot(full_backward=False)
+    require_resources(admission)  # before either full model constructor
+    pins = verify_frozen_sources()
+    numerics = CandidateNumerics(epsilon_w=1e-4, epsilon_span=1e-4)
+    with seeded_environment(seed):
+        anchor = B0MatchedV2(numerics=numerics, root=REPO)
+        # Reset every proposed RNG source independently before B1 construction.
+        random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); torch.cuda.manual_seed_all(seed)
+        temporal = B1V2(numerics=numerics, root=REPO)
+        a, b = anchor.state_dict(), temporal.state_dict()
+        if a.keys() != b.keys():
+            raise ValueError("Frozen paired tensor names differ")
+        different = {name for name in a if a[name].shape != b[name].shape}
+        if different != INPUT_DIFFERENCES:
+            raise ValueError("Unexpected model input shape differences")
+        native = {name: state_digest(b[name]) for name in sorted(different)}
+        with torch.no_grad():
+            for name in a:
+                if name not in different:
+                    if a[name].dtype != b[name].dtype:
+                        raise ValueError("Paired state dtype differs")
+                    b[name].copy_(a[name])
+        if native != {name: state_digest(b[name]) for name in sorted(different)}:
+            raise ValueError("Native B1 input initialization changed")
+        if not all(torch.equal(a[name], b[name]) for name in a if name not in different):
+            raise ValueError("Shared initialization not identical")
+        models = {"B0_MATCHED_V2": anchor, "B1_V2": temporal}
+        counts = {kind: parameter_groups(model, check_counts=False)[1]["counts"] for kind, model in models.items()}
+        expected_totals = {"B0_MATCHED_V2": 4329410, "B1_V2": 4331810}
+        if any(counts[k]["total"] != expected_totals[k] for k in models):
+            raise ValueError("Frozen parameter count changed")
+        proof = {"scope": SCOPE, "seed": seed, "actual_fresh_models_constructed": True,
+                 "historical_checkpoint_loaded": False, "optimizer_created": False,
+                 "state_sha256": {k: state_digest(m.state_dict()) for k, m in models.items()},
+                 "buffers_sha256": {k: state_digest(dict(m.named_buffers())) for k, m in models.items()},
+                 "shared_tensor_sha256": {n: state_digest(a[n]) for n in a if n not in different},
+                 "native_B1_input_sha256": native, "same_shape_shared_bit_identical": True,
+                 "native_zero_skip_preserved": bool((b["backbone.enc0.skip.weight"] == 0).all()),
+                 "post_pair_rng_sha256": state_digest(capture_rng()), "parameter_counts": counts,
+                 "source_pins_verified": pins, "resource_admission": admission,
+                 "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": False}
+    return models, proof
+\end{lstlisting}
+
+
+\subsubsection{controls.py：reject\_\allowbreak{}resume，第62行起}
+
+SHA256：33c211f96b80\allowbreak{}ea500b65b0ee\allowbreak{}21e56e8557a6\allowbreak{}2ddf5aa9d633\allowbreak{}d4f670e69a89\allowbreak{}ce74。
+
+\begin{lstlisting}
+def reject_resume(metadata: dict, expected: dict, *, checkpoint_kind: str,
+                  resume_approval_reference: str | None = None) -> None:
+    if checkpoint_kind != "LAST":
+        raise ValueError("Only complete LAST can be proposed for independent review")
+    # Existing candidate checker binds run/LAST/code/protocol/data/init and epoch.
+    review_checkpoint_binding(metadata, expected, resume_approval_reference=resume_approval_reference)
+    if resume_approval_reference is None:
+        raise FormalExecutionBlocked("Independent LAST-bound resume approval is absent")
+    raise FormalExecutionBlocked("A reference string is not authenticated human approval; no state loader exists")
+\end{lstlisting}
+\clearpage\section{接口中的关键数学}
+\[
+ x_{\rm B0}=x_{\rm B1}[:,5:6,:,:],\quad
+ x_{\rm B1}\in\mathbb R^{2\times6\times501\times501},\quad
+ q_{\log}\in\mathbb R^{2\times32\times100\times100}.
+\]
+\[
+ v=m_{\rm reference}\land m_{\rm artificial},\quad
+ z=\mathbf1\{y_{32}>\mathrm{float32}(0.1)\},\quad N_v=\sum v,\quad N_r=\sum vz.
+\]
+\[
+ L=\frac{S_{\rm occ}+\lambda_q S_{\rm qr}}{N_v},\qquad
+ \mathrm{CPB}_{\rm synthetic}=\frac{S_{\rm qr}}{N_r}.
+\]
+\[
+ \frac{\partial L_{\rm E2}}{\partial q_{\log}}=2\frac{\partial L_{\rm E0}}{\partial q_{\log}},
+ \qquad \frac{\partial L_{\rm E2}}{\partial l}=\frac{\partial L_{\rm E0}}{\partial l}.
+\]
+这些关系针对同一输出与参考，不能把共享backbone总梯度整体乘2。输出处梯度与完整参数梯度分别检查。
+\[
+ \pi_{s,e}=\operatorname{randperm}(n;\operatorname{Generator}(s+e)),\quad e=0,\ldots,8.
+\]
+\[
+ U_{\rm run}=9\lceil10455/2\rceil=47052,\qquad U_{\rm all}=18U_{\rm run}=846936.
+\]
+以上是候选预算，原50epoch学习率轨迹不变；epoch9后不产生下一个候选epoch，实际正式更新为0。
+
+模型分位数参数化来自冻结quantile\_v2源码；loss数学复用上一轮，均由本版source\_identity与源码索引绑定。
+\end{document}

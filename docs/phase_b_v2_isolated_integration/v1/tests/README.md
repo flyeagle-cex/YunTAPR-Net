@@ -1,0 +1,11 @@
+# 实际测试记录
+
+当前cpu_attempt_002为91通过、cuda_attempt_002为6通过，均0失败/错误/跳过/warning；static_audit_001为15通过。唯一覆盖97，不加旧177/3或重复attempt。
+
+cpu_attempt_001为87通过/4失败：公开CSV身份核验被过严守卫阻止，完整模型尚未构造；repair_001改为SHA清单绑定的精确路径白名单。cuda_attempt_001为6通过/1标量日志warning；repair_002使用detach并启用CUDA失败即停止；第二次6通过无warning。全部原始console私存.local，公开XML/log已脱敏，失败原因保留。
+
+legacy_record_format_review记录上一轮失败XML既有未转义占位符问题，未重写历史；本轮在解析节点中脱敏并回读XML。
+
+CPU最终初始化18个真实fresh模型实例，CUDA两次各构造6对模型，共24实例；合计42实例，无权重保存。完整模型累计12forward/16backward，最终矩阵6/8。CPU输出张量backward另计。没有OOM、超时或降级，没有真实数据、checkpoint或step。
+
+资源与原始完整日志保留。raw/2025/step为0描述本轮受控调用图，不能把Python守卫当操作系统安全沙箱。

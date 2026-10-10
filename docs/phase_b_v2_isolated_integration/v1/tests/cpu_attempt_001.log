@@ -1,0 +1,173 @@
+........................................................................ [ 79%]
+..............FFF.F                                                      [100%]
+================================== FAILURES ===================================
+______________ test_actual_fresh_states_match_across_arms[2026] _______________
+
+seed = 2026, record = <function record.<locals>.write at 0x000001EEA1E2D760>
+
+    @pytest.mark.parametrize("seed", [2026, 2027, 2028])
+    def test_actual_fresh_states_match_across_arms(seed, record):
+        proofs = []
+        for arm in ("E0", "E1", "E2"):
+>           models, proof = fresh_paired_models(seed)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase_b_v2_isolated_integration\test_initialization.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\yuntapr\experimental\phase_b_v2_integration\initialization.py:51: in fresh_paired_models
+    pins = verify_frozen_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\pins.py:16: in verify_frozen_sources
+    if not source.is_relative_to(REPO.resolve()) or hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                                                                   ^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:30: in audit
+    reject_restricted_path(args[0])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = '<USER_PROFILE>\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv'
+
+    def reject_restricted_path(value: object) -> None:
+        if not isinstance(value, (str, bytes, Path)):
+            return  # integer file descriptor, not a new named scientific file
+        name = str(value).replace("\\", "/").lower()
+        suffix = Path(name).suffix
+        if suffix in RAW_SUFFIXES or re.search(r"(^|[/_.-])2025([/_.-]|$)", name):
+            raise PermissionError("Synthetic guard forbids raw, checkpoint or sealed-year file access")
+        if suffix == ".csv" and Path(name).name not in ALLOWED_CSV:
+>           raise PermissionError("Only frozen public SP04 coordinate CSVs are allowed")
+E           PermissionError: Only frozen public SP04 coordinate CSVs are allowed
+
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:23: PermissionError
+______________ test_actual_fresh_states_match_across_arms[2027] _______________
+
+seed = 2027, record = <function record.<locals>.write at 0x000001EEA1E2F2E0>
+
+    @pytest.mark.parametrize("seed", [2026, 2027, 2028])
+    def test_actual_fresh_states_match_across_arms(seed, record):
+        proofs = []
+        for arm in ("E0", "E1", "E2"):
+>           models, proof = fresh_paired_models(seed)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase_b_v2_isolated_integration\test_initialization.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\yuntapr\experimental\phase_b_v2_integration\initialization.py:51: in fresh_paired_models
+    pins = verify_frozen_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\pins.py:16: in verify_frozen_sources
+    if not source.is_relative_to(REPO.resolve()) or hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                                                                   ^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:30: in audit
+    reject_restricted_path(args[0])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = '<USER_PROFILE>\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv'
+
+    def reject_restricted_path(value: object) -> None:
+        if not isinstance(value, (str, bytes, Path)):
+            return  # integer file descriptor, not a new named scientific file
+        name = str(value).replace("\\", "/").lower()
+        suffix = Path(name).suffix
+        if suffix in RAW_SUFFIXES or re.search(r"(^|[/_.-])2025([/_.-]|$)", name):
+            raise PermissionError("Synthetic guard forbids raw, checkpoint or sealed-year file access")
+        if suffix == ".csv" and Path(name).name not in ALLOWED_CSV:
+>           raise PermissionError("Only frozen public SP04 coordinate CSVs are allowed")
+E           PermissionError: Only frozen public SP04 coordinate CSVs are allowed
+
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:23: PermissionError
+______________ test_actual_fresh_states_match_across_arms[2028] _______________
+
+seed = 2028, record = <function record.<locals>.write at 0x000001EEA1E2EE80>
+
+    @pytest.mark.parametrize("seed", [2026, 2027, 2028])
+    def test_actual_fresh_states_match_across_arms(seed, record):
+        proofs = []
+        for arm in ("E0", "E1", "E2"):
+>           models, proof = fresh_paired_models(seed)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase_b_v2_isolated_integration\test_initialization.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\yuntapr\experimental\phase_b_v2_integration\initialization.py:51: in fresh_paired_models
+    pins = verify_frozen_sources()
+           ^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\pins.py:16: in verify_frozen_sources
+    if not source.is_relative_to(REPO.resolve()) or hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                                                                   ^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:30: in audit
+    reject_restricted_path(args[0])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = '<USER_PROFILE>\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv'
+
+    def reject_restricted_path(value: object) -> None:
+        if not isinstance(value, (str, bytes, Path)):
+            return  # integer file descriptor, not a new named scientific file
+        name = str(value).replace("\\", "/").lower()
+        suffix = Path(name).suffix
+        if suffix in RAW_SUFFIXES or re.search(r"(^|[/_.-])2025([/_.-]|$)", name):
+            raise PermissionError("Synthetic guard forbids raw, checkpoint or sealed-year file access")
+        if suffix == ".csv" and Path(name).name not in ALLOWED_CSV:
+>           raise PermissionError("Only frozen public SP04 coordinate CSVs are allowed")
+E           PermissionError: Only frozen public SP04 coordinate CSVs are allowed
+
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:23: PermissionError
+_____________________ test_source_identities_still_pinned _____________________
+
+    def test_source_identities_still_pinned():
+>       assert verify_frozen_sources() == 66
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase_b_v2_isolated_integration\test_initialization.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\yuntapr\experimental\phase_b_v2_integration\pins.py:16: in verify_frozen_sources
+    if not source.is_relative_to(REPO.resolve()) or hashlib.sha256(source.read_bytes()).hexdigest() != item["sha256"]:
+                                                                   ^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+..\..\..\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\Lib\pathlib.py:1013: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:30: in audit
+    reject_restricted_path(args[0])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = '<USER_PROFILE>\\Documents\\极端降水预测\\YunTAPR-Net-push-chunks\\docs\\b1_scientific_freeze\\runs\\run_20261003T045139_110133Z\\b0_matched_control_2023_formal_manifest.csv'
+
+    def reject_restricted_path(value: object) -> None:
+        if not isinstance(value, (str, bytes, Path)):
+            return  # integer file descriptor, not a new named scientific file
+        name = str(value).replace("\\", "/").lower()
+        suffix = Path(name).suffix
+        if suffix in RAW_SUFFIXES or re.search(r"(^|[/_.-])2025([/_.-]|$)", name):
+            raise PermissionError("Synthetic guard forbids raw, checkpoint or sealed-year file access")
+        if suffix == ".csv" and Path(name).name not in ALLOWED_CSV:
+>           raise PermissionError("Only frozen public SP04 coordinate CSVs are allowed")
+E           PermissionError: Only frozen public SP04 coordinate CSVs are allowed
+
+src\yuntapr\experimental\phase_b_v2_integration\safety.py:23: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/phase_b_v2_isolated_integration/test_initialization.py::test_actual_fresh_states_match_across_arms[2026]
+FAILED tests/phase_b_v2_isolated_integration/test_initialization.py::test_actual_fresh_states_match_across_arms[2027]
+FAILED tests/phase_b_v2_isolated_integration/test_initialization.py::test_actual_fresh_states_match_across_arms[2028]
+FAILED tests/phase_b_v2_isolated_integration/test_initialization.py::test_source_identities_still_pinned
+4 failed, 87 passed in 1.55s

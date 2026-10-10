@@ -1,0 +1,107 @@
+{
+  "status": "COMPLETE_WITHIN_ALLOWED_SYNTHETIC_SCOPE",
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "integration_status": "SYNTHETIC_INTEGRATION_PASS",
+  "baseline_commit": "ca524b1accdcb30524cf106bf40d533d698e61e7",
+  "current_tests": {
+    "CPU": 91,
+    "CUDA": 6,
+    "unique_total": 97,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 0,
+    "static_checks": 15,
+    "closure_checks": 18
+  },
+  "retained_attempt_history": {
+    "pytest_instances": 194,
+    "initial_CPU_failures_fixed": 4,
+    "initial_CUDA_logging_warning_fixed": 1,
+    "previous_XML_not_modified": true
+  },
+  "full_model_execution": {
+    "final_forwards": 6,
+    "final_backwards": 8,
+    "cumulative_forwards": 12,
+    "cumulative_backwards": 16,
+    "batch_size": 2,
+    "input_grid": [
+      501,
+      501
+    ],
+    "precision": [
+      "BF16",
+      "FP32",
+      "FP64"
+    ],
+    "OOM": false,
+    "fallback": false
+  },
+  "initialization": {
+    "CPU_seeds": [
+      2026,
+      2027,
+      2028
+    ],
+    "arms": [
+      "E0",
+      "E1",
+      "E2"
+    ],
+    "fresh_instances_total": 42
+  },
+  "E0_compatibility": {
+    "B0_MATCHED_V2": {
+      "performed": true,
+      "status": "PASS",
+      "loss_abs_difference": 4.5833017381369245e-09,
+      "maximum_parameter_gradient_abs_difference": 0.0,
+      "parameter_gradient_rtol": 8e-07,
+      "parameter_gradient_atol": 1e-08,
+      "reference_backward_seconds": 0.13864319999993313,
+      "scope": "Same actual output graph, original loss under frozen BF16 autocast; no optimizer"
+    },
+    "B1_V2": {
+      "performed": true,
+      "status": "PASS",
+      "loss_abs_difference": 8.918974891969356e-09,
+      "maximum_parameter_gradient_abs_difference": 0.0,
+      "parameter_gradient_rtol": 8e-07,
+      "parameter_gradient_atol": 1e-08,
+      "reference_backward_seconds": 0.13896369999929448,
+      "scope": "Same actual output graph, original loss under frozen BF16 autocast; no optimizer"
+    }
+  },
+  "optimizer_steps": 0,
+  "actual_observational_data_reads": 0,
+  "private_checkpoint_reads": 0,
+  "source_integrity": {
+    "inherited_pins": 66,
+    "previous_manifest_members": 91,
+    "historical_changes": 0
+  },
+  "not_executed": [
+    "CPU full-backbone forward/backward (CUDA selected before admission)",
+    "true tail batch1 and validation batch8/tail5",
+    "real mask/scaler/data preflight",
+    "optimizer or checkpoint transactions",
+    "formal runner and scientific experiments"
+  ],
+  "remaining_work_requires_independent_authorization": [
+    "researcher source and scientific protocol review",
+    "effect limits and multiplicity decisions",
+    "new v2 runner integration",
+    "real 2023/2024 data and resource preflight",
+    "stage-specific execution and LAST-bound resume approval"
+  ],
+  "publication_identity": "publication_receipt.json and Git history; no self-referential commit claim",
+  "pdf_pages": 14,
+  "pdf_sha256": "4f7cfc1d93a2434aea481326231d4a310d80f5f162be499ad064f0786e26427c",
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}

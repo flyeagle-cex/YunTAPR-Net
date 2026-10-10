@@ -1,0 +1,13 @@
+{
+  "attempt": "cpu_attempt_001",
+  "result": {
+    "passed": 87,
+    "failed": 4
+  },
+  "cause": "Resource admission passed, but the file guard rejected inherited public sample-manifest CSVs during SHA verification, before any model constructor",
+  "repair": "Allow only exact repository CSV paths listed by the SHA-bound published-source identity manifest; continue rejecting raw suffixes, checkpoints, 2025 and other CSVs",
+  "scientific_data_opened": false,
+  "frozen_files_changed": false,
+  "batch_precision_architecture_or_tolerances_changed": false,
+  "automatic_retry": false
+}

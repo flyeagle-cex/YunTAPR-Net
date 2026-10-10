@@ -1,0 +1,11 @@
+{
+  "stage": "publication_closure",
+  "attempt": 1,
+  "status": "FAILED_BEFORE_STATUS_OR_MANIFEST_WRITE",
+  "cause": "Privacy scanner matched its own hard-coded profile name in close_delivery.py.",
+  "repair": "Derive the profile name at runtime from Path.home().name; keep the privacy assertion unchanged in strength.",
+  "full_private_log": ".local/closure_attempt_001.log",
+  "model_or_test_source_changed": false,
+  "scientific_definition_changed": false,
+  "rerun": "Closure only; no model or synthetic test rerun required."
+}

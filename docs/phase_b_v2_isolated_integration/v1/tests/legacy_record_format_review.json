@@ -1,0 +1,9 @@
+{
+  "status": "PRE_EXISTING_PUBLIC_XML_FORMAT_LIMITATION",
+  "source": "docs/phase_b_v2_ablation_implementation/v1/tests/synthetic_attempt_002.xml",
+  "error": "mismatched tag: line 12, column 49",
+  "cause": "Earlier profile redaction placeholder was written into serialized XML text without escaping",
+  "old_evidence_modified": false,
+  "available_original_failure_evidence": "Published sibling JSON/log plus original private XML",
+  "new_output_policy": "Redact parsed attributes/text, serialize with escaping, and parse exported XML again"
+}
