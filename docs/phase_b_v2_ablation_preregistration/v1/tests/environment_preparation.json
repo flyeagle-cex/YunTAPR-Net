@@ -1,0 +1,14 @@
+{
+  "scope": "READ_ONLY_ENVIRONMENT_PROBES_NOT_SCIENTIFIC_TESTS",
+  "failures": [
+    {"probe":"sandbox git ls-remote", "error":"Failed to connect to github.com port 443 via loopback proxy", "resolution":"Approved external-sandbox read-only call returned 8fbc06ba341aeee43136c18f20ebd6acd3463efd"},
+    {"probe":"sandbox Win32_Process names query", "error":"Access denied", "resolution":"Approved external-sandbox read-only names query returned no matching processes"},
+    {"probe":"repository-wide rg", "error":"Preexisting tmp fixture access denied", "resolution":"Limited search to source/config/docs/scripts/tests; no AGENTS.md found; fixture untouched"},
+    {"probe":"working Python dependency", "error":"ModuleNotFoundError: No module named 'jsonschema'", "resolution":"No dependency installed; closed documented standard-library schema subset used"},
+    {"probe":"bundled Python dependency", "error":"ModuleNotFoundError: No module named 'jsonschema'", "resolution":"Same as working Python"},
+    {"probe":"document marker initial guessed path", "error":"MODULE_NOT_FOUND: container_tools/mark_artifact_operation_started.mjs", "resolution":"Located exact marker under installed PDF skill; marker succeeded once before authoring"},
+    {"probe":"guessed v2 validation filename", "error":"Path not found: log_domain_validation.py", "resolution":"Read actual phase_a_validation_v2.py from formal runner import"}
+  ],
+  "formal_model_calls":0,
+  "2025_RAW_ACCESS":0
+}

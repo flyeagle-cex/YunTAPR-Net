@@ -1,0 +1,535 @@
+{
+  "version": "PHASE_B_V2_CORE_ABLATION_PREREGISTRATION_v1",
+  "status": "PROPOSED_FOR_RESEARCHER_APPROVAL",
+  "decision_status": "RESEARCHER_DECISION_REQUIRED",
+  "execution_status": "NOT_EXECUTED",
+  "baseline_commit": "8fbc06ba341aeee43136c18f20ebd6acd3463efd",
+  "source_identity_sha256": "1564a75f73261883933aae267baffa3f9d21366a8602c44579a8c76ada3db3fc",
+  "governance": {
+    "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+    "V2_PHASE_B_AUTHORIZED": false,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+    "can_launch_formal_training": false
+  },
+  "controls": {
+    "route": "D1",
+    "qualification": "Q1",
+    "normalization": "N0",
+    "initialization": "I3_PAIRED_FRESH",
+    "train": {
+      "year": 2023,
+      "months": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "scenes": 10455
+    },
+    "validation": {
+      "year": 2024,
+      "months": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "scenes": 10501,
+      "batch": 8,
+      "fixed_order": true
+    },
+    "sealed_years": [
+      2025
+    ],
+    "input": {
+      "B0_frames": 1,
+      "B1_frames": 6,
+      "shape": [
+        501,
+        501
+      ],
+      "channel": "B13",
+      "offset_minutes_before_analysis": [
+        60,
+        50,
+        40,
+        30,
+        20,
+        10
+      ],
+      "ordering": "OLDEST_TO_LATEST",
+      "missing_policy": "M1_STRICT_COMPLETE_REJECT_NO_FALLBACK"
+    },
+    "time": {
+      "target_window": "[T,T+30min)",
+      "analysis": "T+30min",
+      "causal_rule": "obs_end<=analysis"
+    },
+    "target": {
+      "product": "IMERG_V07_Final",
+      "shape": [
+        100,
+        100
+      ],
+      "yunnan_cells": 3430,
+      "rain_label": "float32_y>float32(0.1)_BEFORE_PROMOTION",
+      "SP04": "UNCHANGED"
+    },
+    "normalizer": {
+      "mean_K": 271.60515414265217,
+      "std_K": 19.93959597783802,
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+      "refit": false
+    },
+    "head": {
+      "occurrence_raw_channels": 1,
+      "quantile_raw_channels": 33,
+      "quantiles": 32,
+      "tau": "(i-0.5)/32",
+      "tau32": 0.984375,
+      "epsilon_w": 0.0001,
+      "epsilon_span": 0.0001,
+      "parameterization": "FROZEN_NORMALIZED_PREFIX_SHARED_ENDPOINT",
+      "strict_guards": "UNCHANGED",
+      "implicit_physical": false
+    },
+    "precision": {
+      "forward": "BF16",
+      "parameters": "FP32",
+      "raw_quantiles": "FP32",
+      "GradScaler": false,
+      "TF32": false,
+      "transform_and_pinball": "FP64",
+      "physical_materialization": "EXPLICIT_ONLY_FP64"
+    },
+    "optimizer": {
+      "name": "AdamW",
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.0001,
+      "decay": "Conv2d.weight_only",
+      "amsgrad": false,
+      "maximize": false,
+      "capturable": false,
+      "differentiable": false,
+      "foreach": false,
+      "fused": false
+    },
+    "gradient": {
+      "global_clip_norm": 5.0,
+      "error_if_nonfinite": true
+    },
+    "training": {
+      "epochs": 9,
+      "physical_batch": 2,
+      "accumulation": 1,
+      "drop_last": false,
+      "steps_per_epoch": 5228,
+      "total_updates": 47052,
+      "augmentation": "NONE",
+      "every_scene_once": true,
+      "performance_early_stop": false
+    },
+    "scheduler": {
+      "base_lr": 0.0001,
+      "min_lr": 1e-06,
+      "W": 5228,
+      "U": 261400,
+      "fixed_horizon_epochs": 50,
+      "rule": "ONE_BASED_LINEAR_WARMUP_THEN_FIXED_50_EPOCH_COSINE",
+      "apply_before_optimizer_step": true,
+      "min_lr_lower_bound": "COSINE_ONLY"
+    },
+    "seeds": [
+      2026,
+      2027,
+      2028
+    ],
+    "epoch_order_rule": "seed+zero_based_epoch_index",
+    "fresh": {
+      "same_model_across_arms": "IDENTICAL_FULL_INITIAL_STATE",
+      "same_name_same_shape_B0_B1_copy": true,
+      "historical_state_transfer": false
+    },
+    "validation_cadence": "EVERY_COMPLETED_TRAIN_EPOCH",
+    "endpoint_epoch": 9,
+    "checkpoint_boundary": "COMPLETED_TRAIN_AND_VALIDATION_EPOCH_ONLY",
+    "checkpoint_selection": "FIXED_ENDPOINT_NO_BEST_SELECTION",
+    "loader": {
+      "num_workers": 2,
+      "pin_memory": false,
+      "persistent_workers": false,
+      "prefetch_factor": 1,
+      "per_worker_staging": true,
+      "max_temporary_bytes_per_worker": 734003200,
+      "verify_sha256_before_decode": true
+    },
+    "loss_reduction": {
+      "quantile_axis": "mean",
+      "train_denominator": "N_valid",
+      "scientific_CPB_denominator": "N_rain",
+      "common_core_gamma": 2,
+      "common_core_lambda_q": 1
+    },
+    "probability_edges": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "last_probability_bin_includes_one": true,
+    "rain_bins": [
+      "(0.1,1]",
+      "(1,5]",
+      "(5,10]",
+      "(10,20]",
+      "(20,30]",
+      "(30,50]",
+      "(50,inf)"
+    ],
+    "tail_thresholds_mm_h": [
+      10,
+      50,
+      100,
+      500,
+      1000
+    ],
+    "distribution_summary": {
+      "high_indices": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "percentiles": [
+        0.5,
+        0.9,
+        0.99,
+        0.999
+      ],
+      "method": "TYPE7_EXACT_CANDIDATE",
+      "span": "q32_log-log1p(0.1)_DERIVED"
+    },
+    "bootstrap": {
+      "blocks": 35,
+      "days_per_block": 7,
+      "replicates": 2000,
+      "seed": 2026,
+      "paired_all_arms_and_seeds": true,
+      "scope": "DEVELOPMENT_EXPLORATORY_ONLY"
+    },
+    "auto_retry": false,
+    "auto_resume": false,
+    "resume": "INDEPENDENT_APPROVAL_BOUND_TO_SPECIFIC_LAST_SHA_REQUIRED"
+  },
+  "arms": [
+    {
+      "id": "E0",
+      "alpha": 0.5,
+      "gamma": 2,
+      "lambda_q": 1
+    },
+    {
+      "id": "E1",
+      "alpha": 0.5,
+      "gamma": 0,
+      "lambda_q": 1
+    },
+    {
+      "id": "E2",
+      "alpha": 0.5,
+      "gamma": 2,
+      "lambda_q": 2
+    }
+  ],
+  "models": [
+    "B0_MATCHED_V2",
+    "B1_V2"
+  ],
+  "runs": [
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2026",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E0__B1_V2__s2026",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2026",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E1__B1_V2__s2026",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2026",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E2__B1_V2__s2026",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2026,
+      "stage": 1
+    },
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2027",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E0__B1_V2__s2027",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2027",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E1__B1_V2__s2027",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2027",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E2__B1_V2__s2027",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2027,
+      "stage": 2
+    },
+    {
+      "run_id": "E0__B0_MATCHED_V2__s2028",
+      "arm": "E0",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "stage": 2
+    },
+    {
+      "run_id": "E0__B1_V2__s2028",
+      "arm": "E0",
+      "model": "B1_V2",
+      "seed": 2028,
+      "stage": 2
+    },
+    {
+      "run_id": "E1__B0_MATCHED_V2__s2028",
+      "arm": "E1",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "stage": 2
+    },
+    {
+      "run_id": "E1__B1_V2__s2028",
+      "arm": "E1",
+      "model": "B1_V2",
+      "seed": 2028,
+      "stage": 2
+    },
+    {
+      "run_id": "E2__B0_MATCHED_V2__s2028",
+      "arm": "E2",
+      "model": "B0_MATCHED_V2",
+      "seed": 2028,
+      "stage": 2
+    },
+    {
+      "run_id": "E2__B1_V2__s2028",
+      "arm": "E2",
+      "model": "B1_V2",
+      "seed": 2028,
+      "stage": 2
+    }
+  ],
+  "primary_effects": {
+    "H-O": "Brier_E1-Brier_E0_PER_MODEL_PER_SEED",
+    "H-Q": "abs(C32_E2-tau32)-abs(C32_E0-tau32)_PER_MODEL_PER_SEED",
+    "family_size_proposed": 4
+  },
+  "stages": [
+    {
+      "id": 1,
+      "seed_scope": [
+        2026
+      ],
+      "runs": 6,
+      "updates": 282312,
+      "execution_authorization": null
+    },
+    {
+      "id": 2,
+      "seed_scope": [
+        2027,
+        2028
+      ],
+      "runs": 12,
+      "updates": 564624,
+      "execution_authorization": null
+    }
+  ],
+  "approvals": {
+    "scientific_approval": null,
+    "researcher_loss_implementation_sha256": null,
+    "researcher_code_review": null,
+    "integration_permission": null,
+    "execution_authorization": null,
+    "resume_authorization": null
+  },
+  "decision_fields": {
+    "minimum_brier_improvement": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "minimum_abs_q32_error_reduction": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "maximum_cpb_degradation": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "maximum_strong_rain_cpb_degradation_by_bin": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "maximum_brier_degradation_HQ": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "maximum_AUROC_AP_drop": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "tail_distribution_acceptance_rule": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "multiple_comparison_method": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "raw_p_construction": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "interval_family": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "minimum_effective_blocks": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "minimum_valid_bootstrap_fraction": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "event_effective_sample_size": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "statistical_power": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "gpu_resources": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "elapsed_time_estimate": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "actual_checkpoint_bytes": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "sort_workspace_and_algorithm": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "data_permissions": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "execution_roots": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "manual_retry_and_replay_budget": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    },
+    "phase_a_acceptance_scope": {
+      "status": "NOT_YET_ESTABLISHED",
+      "value": null
+    }
+  },
+  "excluded": [
+    "E3",
+    "E4",
+    "TEMPERATURE_SCALING",
+    "OTHER_CALIBRATORS",
+    "NEW_ARCHITECTURE",
+    "GFS",
+    "DEM",
+    "FINALFIT",
+    "2025_TEST"
+  ],
+  "runner_implemented": false
+}

@@ -1,0 +1,19 @@
+..............................................................           [100%]
+62 passed in 0.19s
+Traceback (most recent call last):
+  File "<WORKSPACE>/scripts/phase_b_v2_preregistration/review.py", line 175, in <module>
+    main()
+    ~~~~^^
+  File "<WORKSPACE>/scripts/phase_b_v2_preregistration/review.py", line 165, in main
+    refs, observed = static_identity_inputs()
+                     ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "<WORKSPACE>/scripts/phase_b_v2_preregistration/review.py", line 156, in static_identity_inputs
+    raise ValueError("Unsafe metadata/source reference")
+ValueError: Unsafe metadata/source reference
+Exception:
+Line |
+   6 |  … TCODE -ne 0) { throw 'Static candidate review rejected the package' }
+     |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Static candidate review rejected the package
+
+Original exit code: 1. Absolute workstation paths redacted.

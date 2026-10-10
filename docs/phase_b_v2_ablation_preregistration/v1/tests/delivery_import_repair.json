@@ -1,0 +1,9 @@
+{
+  "status": "REPAIRED_BEFORE_ARTIFACT_FINALIZATION",
+  "failed_command": "python scripts/phase_b_v2_preregistration/close_delivery.py",
+  "cause": "The published markdown helper uses an absolute import from its own planning module",
+  "repair": "Add exactly the existing helper directory to sys.path in the new closing script, matching the existing authoring script",
+  "historical_code_changed": false,
+  "scientific_tests_failed": 0,
+  "full_console": "delivery_import_failure_attempt_001.log"
+}

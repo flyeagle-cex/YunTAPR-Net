@@ -1,0 +1,548 @@
+\documentclass[UTF8,fontset=fandol,10pt]{ctexart}
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,array,longtable,booktabs,url}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{YunTAPR-Net / v2 ablation proposal}
+\fancyhead[R]{2026-10-10 / v1}\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\title{YunTAPR-Net\\Phase-B v2 核心模型消融\\预注册候选与安全工程准备}
+\author{研究者独立审查材料 / 尚未批准}
+\date{2026年10月10日 / v1}
+\begin{document}\maketitle
+\textbf{PROPOSED\_FOR\_RESEARCHER\_APPROVAL。}不是科学批准、执行授权或历史恢复追认。
+
+基线\texttt{8fbc06ba341a\allowbreak{}eee43136c18f\allowbreak{}20ebd6acd3463efd}；本轮正式参数更新、模型forward和2025访问均为零。
+
+提案：18 runs、846,936 updates，保留逐epoch验证，共212,706 batches；仅工作量估计，未占用训练GPU。
+研究者需先独立实现并理解最小loss，再经审查和明确集成许可。所有效应界限、容忍值、多重比较与资源字段尚未批准。
+\setcounter{tocdepth}{1}\begingroup\small\setlength{\parskip}{0pt}\tableofcontents\endgroup
+\clearpage\section{科学目的与证据范围}
+
+PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL；不是 APPROVED 或 AUTHORIZED\_\allowbreak{}TO\_\allowbreak{}EXECUTE。本消息授权设计和工程准备，未授权新实验。研究者选择 A 路线，拟议值按其要求写入提案，仍待独立审批。
+
+\subsection{H-O：发生概率损失因素}
+
+在固定训练/\allowbreak{}验证集合、fresh 配对初始化、同 seed 样本顺序、优化器和训练预算下，比较 gamma=0 与 gamma=2 是否改变发生概率 Brier Score 及可靠性。主效应为各模型各 seed 的 Brier(E1)\(-\)Brier(E0)。负值表示 Brier 降低，达到多大差值才有科学意义尚未建立。可靠性分箱解释概率偏差，AUROC/\allowbreak{}AP 解释排序；低 Brier 本身不能证明每个概率箱校准。
+
+这是可检验干预假设，并不预先断言 Focal 是历史误校准的原因。gamma=0 保留 alpha=0.5，干预包含 focusing 改变产生的梯度尺度变化，不再同步调整学习率。共享骨干使发生头干预可能改变雨强头，因此必须联合报告 Conditional Pinball 和分位数诊断。
+
+\subsection{H-Q：条件分布损失因素}
+
+在同样控制下，比较 lambda\_\allowbreak{}q=2 与 lambda\_\allowbreak{}q=1 是否改变 q32 的有雨条件覆盖误差及分布质量。定义 C32 为有雨有效云南暴露中 log1p(y)\(\le\)q32\_\allowbreak{}log 的比例，主指标 M32=abs(C32\(-\)0.984375)，主效应为 M32(E2)\(-\)M32(E0)。同时报告带符号偏差 C32\(-\)tau32、覆盖差 C32(E2)\(-\)C32(E0)，避免越过目标后仍把提高覆盖当改善。
+
+覆盖目标接近不能单独判定模型更好。过宽尾部可能提高覆盖却恶化 Pinball、宽度和物理合理性。全32个 tau 的覆盖、强雨真值层 Pinball、q27–q32及派生 span 的分布、超阈值暴露和发生指标构成安全评价。成功判据的容忍范围目前 NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED。
+
+\subsection{历史动机与限制}
+
+已发表 2024 开发诊断：B0/\allowbreak{}B1 q32 覆盖约95.74\%/\allowbreak{}95.08\%，目标98.4375\%；B1 q32>100 mm/\allowbreak{}h 有58个场景-像元暴露，最大约351.08 mm/\allowbreak{}h位置 IMERG 为0。它们是条件分位数诊断，不是58次独立暴雨，也未通过独立站点/\allowbreak{}雷达验证。历史总体条件 Pinball 的配对探索区间跨零，>5 mm/\allowbreak{}h 各真值层 B1 点估计更高。来源为补强包 PROBABILITY\_\allowbreak{}AND\_\allowbreak{}TAIL\_\allowbreak{}DIAGNOSTICS.md，本轮不重新计算这些结果。
+
+2024 已用于历史 BEST 选择与多轮诊断；9 epoch 预算也受历史 epoch9启发。新实验仍是开发性探索，不能宣称在全新确认集验证假设、证明所有雨强/\allowbreak{}季节普遍优越或未来年份泛化。fresh 初始化不消除历史设计选择，也不追认 B1 恢复。
+
+\subsection{状态与范围}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+状态 & 含义 & 本轮允许 \\
+\midrule\endfirsthead
+状态 & 含义 & 本轮允许 \\
+\midrule\endhead
+CANDIDATE & 尚可讨论的候选 & 用于说明未纳入选项 \\
+PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL & 完整提案及未决字段供人审阅 & 本轮最高状态 \\
+APPROVED & 独立明确、可核验的人类科学批准 & 本轮没有 \\
+AUTHORIZED\_\allowbreak{}TO\_\allowbreak{}EXECUTE & 另有匹配具体执行范围的授权 & 本轮没有 \\
+\bottomrule\end{longtable}\endgroup
+
+排除 E3/\allowbreak{}E4、温度缩放及其他校准器、新架构、GFS/\allowbreak{}DEM/\allowbreak{}迎风背风模块、FinalFit 和2025测试。时相\(\times\)损失的差中差仅记录交互迹象，不是确认性主检验。论文 Results 在实际获批执行后另写，不能填预期方向或数值。
+\clearpage\section{拟冻结实验矩阵（尚未批准）}
+
+PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL；NOT\_\allowbreak{}EXECUTED。这里形成可审批、可计算、可审计的单一提案，并未改写 Phase-A frozen 文件。
+
+\subsection{主矩阵}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}}
+\toprule
+条件 & alpha & gamma & lambda\_\allowbreak{}q & 相对E0唯一损失因素 & 模型\(\times\)seed \\
+\midrule\endfirsthead
+条件 & alpha & gamma & lambda\_\allowbreak{}q & 相对E0唯一损失因素 & 模型\(\times\)seed \\
+\midrule\endhead
+E0 & 0.5 & 2 & 1 & 无，fresh v2 baseline & B0-Matched-v2/\allowbreak{}B1-v2 \(\times\)2026/\allowbreak{}2027/\allowbreak{}2028 \\
+E1 & 0.5 & 0 & 1 & gamma & 同上 \\
+E2 & 0.5 & 2 & 2 & 固定 Pinball 权重 & 同上 \\
+\bottomrule\end{longtable}\endgroup
+
+18个运行ID为 E\{0,1,2\}\_\allowbreak{}\_\allowbreak{}\{B0\_\allowbreak{}MATCHED\_\allowbreak{}V2,B1\_\allowbreak{}V2\}\_\allowbreak{}\_\allowbreak{}s\{2026,2027,2028\}，机器表逐行枚举，未创建 run 输出、参数或 optimizer。E0不直接复用历史 BEST；三个条件同 seed 同模型的完整 fresh state 必须相同。
+
+\subsection{配方与数据角色}
+
+D1：2023年3–10月冻结训练10,455场景，2024年3–10月冻结开发验证10,501场景；Q1：两模型相同M1配对资格与样本/\allowbreak{}标签身份；N0：同一冻结2023 shared scaler，不refit。I3：预声明seeds2026/\allowbreak{}2027/\allowbreak{}2028，每seed按原独立reseed、同名同形状拷贝策略建立一对fresh锚点。B9：每run固定9个完整epoch，47,052更新，无丢样本/\allowbreak{}重复补尾/\allowbreak{}accumulation。S0：W=5,228，U=261,400，保留50-epoch余弦轨迹的前47,052步。V0：统一选择完成epoch9，禁止根据任一loss、验证结果、seed或时相改终点。
+
+旧训练函数的seed2026与gamma2均硬编码；增加seed参数和损失参数以后需要研究者核心代码审查及工程集成批准。本轮JSON不能让旧runner自动支持18个运行。
+
+\subsection{Fresh、顺序与执行次序}
+
+每seed分别重新设定Python/\allowbreak{}NumPy/\allowbreak{}CPU/\allowbreak{}CUDA初始化随机状态，创建B0锚点及独立reseed的B1；只拷贝同名同shape张量，B1两处输入shape不同权重保持native初始化，零skip惯例不变。对每模型固定锚点逻辑SHA及序列化字节SHA，E0/\allowbreak{}E1/\allowbreak{}E2复现完全相同初态；不把历史BEST/\allowbreak{}LAST、optimizer、scheduler、RNG或恢复批准当fresh来源。初态身份本轮NOT\_\allowbreak{}YET\_\allowbreak{}MATERIALIZED，不能填假SHA。
+
+同seed跨三个条件及两个模型使用同一 sample-ID 排列。候选推广规则是 CPU Generator(seed+zero\_\allowbreak{}based\_\allowbreak{}epoch\_\allowbreak{}index)，train每样本每epoch恰好一次，validation冻结顺序；无增强。跨seed改变初始化及种子控制的排列，属于训练随机性重复，不是独立天气重复。相邻seeds加epoch可能出现相同随机种子，不能宣称各排列相互独立。实际种子环境及排列SHA未来逐epoch登记。
+
+候选串行队列：seed2026先E0/\allowbreak{}B0、E0/\allowbreak{}B1、E1/\allowbreak{}B0、E1/\allowbreak{}B1、E2/\allowbreak{}B0、E2/\allowbreak{}B1；另两seed同次序。固定顺序方便审计，但可能受机器负载/\allowbreak{}时间漂移影响；硬件及软件环境必须固定，负载变化登记，不能将耗时当loss科学效果。未来若随机化队列须执行前版本化批准。
+
+\subsection{验证与停止边界的提案选择}
+
+保留每epoch全2024只读验证和上尾诊断，checkpoint仅在TRAIN与VALIDATION均完成后保存。V0固定终点只改变选择规则：epoch1–8不是BEST候选，不按core early-stop；epoch9作为主终点。原Phase-A patience8/\allowbreak{}min\_\allowbreak{}delta1e-4不应用于本B9消融，9epoch是所有臂统一的预定停止预算，异常安全停止仍有效。这项新选择/\allowbreak{}停止规则需要科学批准，不称“原runner无需变更”。
+
+每run有9\(\times\)1,313=11,817验证batch，18runs共212,706。epoch9的一次forward可供core、全指标和只读observer共同使用，未来若实现无法复用，必须登记额外推理预算并另批。只验证终点会使checkpoint边界及逐epoch诊断变化，不作为本提案默认规则；上一候选23,634是18个终点的一次评价下界，本轮没有重写历史预算。
+
+\subsection{两阶段批准}
+
+阶段1单独执行批准才可运行seed2026完整6run矩阵，282,312更新；不能只跑有利臂。阶段2独立执行批准再补seed2027/\allowbreak{}2028共12runs、564,624更新。阶段间只审查安全、资源、完整性和批准范围，不根据阶段1模型表现调整矩阵、主指标或threshold。若决定停止扩展，公开报告为计划18但仅完成6及原因；单seed不构成完整I3证据。
+
+运行中断不替换seed、不自动增加epoch、试参数或无限重试。任何LAST恢复都需要具体LAST字节SHA、逻辑state身份、原授权祖先、下一完整epoch、剩余预算及独立人类恢复批准。详细审批与恢复方案见安全交接；本轮没有执行任何阶段。
+\clearpage\section{控制变量矩阵}
+
+冻结继承项的旧批准仅覆盖原科学定义；将其用于本实验及所有新增建议仍须批准。本轮协议整体PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL。各路径的观察SHA、关键行号和引用类型在source\_\allowbreak{}identity.json记录；外部原始文件不打开。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+控制项 & 拟定值或规则 & 分类 & 静态证据与待审批内容 \\
+\midrule\endfirsthead
+控制项 & 拟定值或规则 & 分类 & 静态证据与待审批内容 \\
+\midrule\endhead
+样本资格 & M1完整六时隙交集，Train10455/\allowbreak{}Validation10501，两模型完全配对 & 继承冻结 & 四份manifest SHA来自协议；元数据字节核对，不重新跑数据资格 \\
+时间 & 标签[T,T+30min)，A=T+30min；六帧A\(-\)60至A\(-\)10，obs\_\allowbreak{}end\(\le\)A & 继承冻结 & science\_\allowbreak{}contract\_\allowbreak{}v1.1/\allowbreak{}time与dataset\_\allowbreak{}b1/\allowbreak{}check\_\allowbreak{}frame；nominal/\allowbreak{}date\_\allowbreak{}created不证明业务延迟 \\
+产品/\allowbreak{}通道 & B13；IMERG V07 Final，3–10月2023/\allowbreak{}2024；2025拒绝 & 继承冻结 & 不可混V08/\allowbreak{}Early/\allowbreak{}Late、补帧或扩大B0集合 \\
+空间/\allowbreak{}有效性 & SP04原映射、100\(\times\)100、云南中心入界3430；B13全valid & 继承冻结 & 映射/\allowbreak{}掩膜SHA；外部mask仅继承声明身份，本轮不验证其payload \\
+标签 & float32 y > float32(0.1) mm/\allowbreak{}h，在FP64提升前判断 & 继承冻结 & total\_\allowbreak{}loss及phase\_\allowbreak{}a\_\allowbreak{}validation\_\allowbreak{}v2；相等边界是干，绝不按float64重判 \\
+scaler & mean271.60515414265217 K、std19.93959597783802 K、冻结SHA & 继承冻结 & B0/\allowbreak{}B1共用，normalize先FP64算再FP32；不refit \\
+双头 & 发生1通道；33 raw = 32 allocation + 1 span，输出32 qlog & 继承冻结 & quantile\_\allowbreak{}v2/\allowbreak{}heads与parameterization；不改骨干或SP04 \\
+quantile数学 & tau=(i\(-\)0.5)/\allowbreak{}32；epsilon\_\allowbreak{}w=epsilon\_\allowbreak{}span=1e-4；FP64累计归一化 & 继承冻结 & 相同prefix终点作分母，q32=z0+span；不clamp/\allowbreak{}sort/\allowbreak{}nan\_\allowbreak{}to\_\allowbreak{}num \\
+精度 & BF16 forward，参数/\allowbreak{}raw q FP32，q transform/\allowbreak{}pinball FP64，TF32关闭，无GradScaler & 继承冻结 & log-domain loss不隐式expm1，守卫失效即停 \\
+优化器 & AdamW betas(.9,.999)、eps1e-8、仅Conv2d.weight decay1e-4，其他0 & 继承冻结 & foreach/\allowbreak{}fused/\allowbreak{}amsgrad等均false，不调LR补偿loss变化 \\
+LR/\allowbreak{}梯度 & base1e-4/\allowbreak{}min1e-6，W5228/\allowbreak{}U261400，步前应用；全局clip5 & 继承冻结 & lr\_\allowbreak{}for\_\allowbreak{}update与formal\_\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}v2/\allowbreak{}update，非有限或剪裁失败即停 \\
+batch/\allowbreak{}尾部 & physical2、accumulation1、drop\_\allowbreak{}last=false；末batch1 & 继承冻结 & 每epoch5228更新，禁止补重复样本或OOM后自动减batch \\
+alpha/\allowbreak{}gamma & alpha恒0.5；E0/\allowbreak{}E2 gamma2，E1 gamma0 & 唯一实验因素之一 & gamma仅E1变化；gamma0=.5BCE，不改alpha \\
+lambda\_\allowbreak{}q & E0/\allowbreak{}E1=1、E2=2；仍S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}valid & 唯一实验因素之二 & 现total\_\allowbreak{}loss无lambda接口；未来由研究者实现再审查，不换分母 \\
+fresh身份 & 同seed同模型三条件完整初态相同；B0/\allowbreak{}B1共享同形状参数 & 继承策略+新增跨臂规则 & 锚点、原生B1shape不同张量、RNG/\allowbreak{}代码SHA；实物尚未生成 \\
+seeds/\allowbreak{}排列 & 2026/\allowbreak{}2027/\allowbreak{}2028；同seed全部臂相同seed+epoch排列 & 新增待审批 & 现reproducibility/\allowbreak{}permutation固定2026，未来参数化且环境seed对应 \\
+增强/\allowbreak{}缺测 & 无随机数据增强；M1缺测reject；无fallback/\allowbreak{}skip & 继承冻结 & 源码链未见增强；审批后执行审计再次核验实际调用与顺序 \\
+预算/\allowbreak{}终点 & 9完整epoch、47052更新；主checkpoint固定9，不按BEST/\allowbreak{}early-stop & 新增待审批 & 新固定预算替代旧max50+earlystop选择，LR50horizon不变 \\
+验证/\allowbreak{}保存 & 每epoch冻结顺序验证，epoch9全科学指标；完成训练与验证才能存LAST & 保留边界+新增选择规则 & 9验证循环，endpoint不重复forward的工程方案需审查 \\
+评价口径 & 十箱、32tau、原真值雨强层、原core；E1\(-\)E0/\allowbreak{}E2\(-\)E0 & 继承诊断+新增主效应 & 效果界限、guardrails、多重比较未批准，禁止事后选择 \\
+恢复 & 只认可完成epoch LAST，任何恢复另有独立LAST SHA绑定批准 & 治理要求 & 不迁移历史参数；当前B1偏差不追认，自动resume=false \\
+审计与权限 & 独立run roots、append-only日志，公开仅代码/\allowbreak{}聚合/\allowbreak{}报告 & 待审批工程资源 & 本轮未创建模型目录、未申请数据访问、未实例化模型 \\
+\bottomrule\end{longtable}\endgroup
+
+同seed、同模型的对照只有gamma或lambda\_\allowbreak{}q不同；时相是两模型之间原有差异，seed是预声明重复维度。未来比较同时改变其它项将成为协议偏离，先停止并登记，不把偏离run与主矩阵合并。
+\clearpage\section{损失数学、真实代码与研究者练习}
+
+本轮只写规格、映射和测试设计；正式Focal/\allowbreak{}Pinball/\allowbreak{}total\_\allowbreak{}loss文件不变，没有研究者新实现、模型forward或autograd调用。以下数学值是手算合成期望，不是运行PyTorch所得结果。公式的排版版见本报告数学附录。
+
+\subsection{真实Focal代码}
+
+src/\allowbreak{}yuntapr/\allowbreak{}losses/\allowbreak{}focal.py 的 focal\_\allowbreak{}bce\_\allowbreak{}sum(logit,rainy,valid,alpha,gamma) 要求显式alpha/\allowbreak{}gamma，使用 BCEWithLogits(reduction=none)，再算pt=exp(\(-\)BCE)、按标签选择alpha\_\allowbreak{}t，返回sum(alpha\_\allowbreak{}t(1\(-\)pt)\textasciicircum{}gamma BCE valid)。其中pt在二元硬标签下等于真实类别概率。输入logit不是已sigmoid概率；总损失模块决定标签与最终分母。
+
+alpha=0.5使两类权重均0.5；gamma=0时每个有效位置就是0.5BCE，不能除掉0.5或改alpha来制造另一对照。gamma影响focusing与梯度，并可能通过共享骨干影响q头。现函数检查alpha范围/\allowbreak{}gamma非负，但没有完整的finite、bool排除、shape、valid.dtype或同device前置校验；NaN gamma会穿过gamma<0判断。真实输出守卫承担部分安全责任，未来研究者接口应明确拒绝这些输入，不能把旧函数“支持参数”理解为已满足全部审核规格。
+
+\subsection{真实Pinball代码}
+
+src/\allowbreak{}yuntapr/\allowbreak{}losses/\allowbreak{}pinball.py 的 frozen\_\allowbreak{}taus给出32个(i\(-\).5)/\allowbreak{}32。pinball\_\allowbreak{}sum要求qlog=[B,32,H,W]，log\_\allowbreak{}rain=[B,1,H,W]且与qlog同dtype，quantile\_\allowbreak{}axis\_\allowbreak{}reduction必须显式为mean。误差e=log1p(y)\(-\)qlog；rho=max(tau*e,(tau\(-\)1)*e)，先沿32tau取mean，再乘rainy\_\allowbreak{}valid，最后sum，不对雨强做expm1。
+
+它本身不决定0.1阈值、不除以有雨数或有效数；支持/\allowbreak{}单调/\allowbreak{}finite检查由v2头及总损失链负责。裸函数未完整检查mask dtype/\allowbreak{}device/\allowbreak{}finite。任何新接口必须显式注明调用者与被调用者责任，不能静默广播mask、sort q或把非法值乘0后当安全。mask乘法不能一般消除NaN：NaN\(\times\)0仍是NaN。总损失仅在valid之外清理y的临时计算张量，不改原数据；输出有限性仍需独立守卫。
+
+\subsection{真实总损失与新权重的最小规格}
+
+src/\allowbreak{}yuntapr/\allowbreak{}losses/\allowbreak{}total\_\allowbreak{}loss.py 的 b0\_\allowbreak{}core\_\allowbreak{}loss构建valid=IMERG\_\allowbreak{}valid \& Yunnan\_\allowbreak{}mask，N\_\allowbreak{}valid=sum(valid)。有效目标必须有限非负；clean\_\allowbreak{}y仅在invalid处临时置0，rainy=clean\_\allowbreak{}y>0.1，在原float32上比较。occ=S\_\allowbreak{}occ/\allowbreak{}N\_\allowbreak{}valid；qr=S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}valid，有效但无雨时qr=qlog.sum()*0以保留图连接；现total=occ+qr。N\_\allowbreak{}valid=0返回batch\_\allowbreak{}skipped，正式runner随后拒绝，不能自动跳过。formal\_\allowbreak{}mode形参并未作为科学授权门槛；LossResult.execution\_\allowbreak{}scope默认ENGINEERING\_\allowbreak{}ONLY也不是审批证明。
+
+候选E2的唯一改变是 L\_\allowbreak{}train=(S\_\allowbreak{}occ+lambda\_\allowbreak{}q*S\_\allowbreak{}qr)/\allowbreak{}N\_\allowbreak{}valid，lambda\_\allowbreak{}q=2；E0/\allowbreak{}E1=1。科学审查CPB=S\_\allowbreak{}qr/\allowbreak{}N\_\allowbreak{}rain，始终不带lambda\_\allowbreak{}q。三臂共同core采用gamma2、alpha.5、lambda1，在FP64累计全数据分子后除N\_\allowbreak{}valid；与新的训练目标分开登记。未来工程最好返回unweighted S\_\allowbreak{}qr、qr\_\allowbreak{}unweighted、qr\_\allowbreak{}weighted、N\_\allowbreak{}valid/\allowbreak{}N\_\allowbreak{}rain和skip状态，杜绝把权重重复乘进科学指标。
+
+研究者最小接口规格（签名不是实现）：
+
+\noindent\textbullet\quad researcher\_\allowbreak{}occurrence\_\allowbreak{}numerator(logit,rainy,valid,*,alpha,gamma) -> scalar S\_\allowbreak{}occ；保持输入device，明示dtype与finite前提，检查硬标签及bool mask，sum而非mean。\par
+\noindent\textbullet\quad researcher\_\allowbreak{}pinball\_\allowbreak{}numerator(qlog,log\_\allowbreak{}target,rainy\_\allowbreak{}valid,*,quantile\_\allowbreak{}axis\_\allowbreak{}reduction) -> FP64 scalar S\_\allowbreak{}qr；32tau固定、axis mean、sum雨valid，不生成物理值。\par
+\noindent\textbullet\quad researcher\_\allowbreak{}combine\_\allowbreak{}numerators(S\_\allowbreak{}occ,S\_\allowbreak{}qr,N\_\allowbreak{}valid,*,lambda\_\allowbreak{}q) -> scalar L\_\allowbreak{}train；显式正有限lambda与正整数N\_\allowbreak{}valid，lambda只乘S\_\allowbreak{}qr一次。空valid由上层拒绝；不要隐藏fallback。\par
+
+研究者需独立写最小PyTorch版本，先说明自身shape/\allowbreak{}dtype/\allowbreak{}mask/\allowbreak{}非有限/\allowbreak{}空雨约定。可把Focal和Pinball理解练习放在个人scratch，不改正式文件。研究者提交代码后Codex只审阅数学和接口；只有随后明确允许集成与完整测试，才工程化。这个顺序不能由本协议、Git提交、自动测试或“已理解”代替。
+
+\subsection{手算合成输入与预期输出}
+
+表中qlog常数用于裸Pinball接口算术测试，不是合资格v2模型输出（严格单调头不允许所有q相同）；绝不以这些fixture执行模型。log\_\allowbreak{}target与qlog的差直接指定，避免把对数域单位误读为mm/\allowbreak{}h。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-8\tabcolsep)/4\relax}}
+\toprule
+用例 & 合成设置 & 预期标量/\allowbreak{}语义 & 目的 \\
+\midrule\endfirsthead
+用例 & 合成设置 & 预期标量/\allowbreak{}语义 & 目的 \\
+\midrule\endhead
+F1 & 1 valid，logit0、rainy=true、alpha.5、gamma2 & ln2/\allowbreak{}8=0.08664339756999316 & focusing与sum \\
+F2 & 同F1、gamma0 & ln2/\allowbreak{}2=0.34657359027997265 & .5BCE，非BCE \\
+F3 & logit0、rainy=false，其他同F1 & ln2/\allowbreak{}8 & alpha对两类一致 \\
+F4 & 2个相同valid元素、gamma0 & ln2=0.6931471805599453 & 不提前mean \\
+P1 & 1 rainy\_\allowbreak{}valid；所有32个e=+1 & mean(tau)=0.5 & axis mean与误差符号 \\
+P2 & 1 rainy\_\allowbreak{}valid；所有32个e=\(-\)1 & mean(1\(-\)tau)=0.5 & 过预测惩罚 \\
+P3 & e=0，各tau & 0；不可在kink强制唯一梯度 & 零误差与subgradient \\
+P4 & 同P1，rainy\_\allowbreak{}valid=false且所有数值有限 & 0 & 雨mask语义 \\
+T1 & S\_\allowbreak{}occ=2，S\_\allowbreak{}qr=3，N\_\allowbreak{}valid=10，lambda1/\allowbreak{}2 & E0=0.5；E2=0.8 & 权重与共同分母 \\
+T2 & S\_\allowbreak{}qr=3，N\_\allowbreak{}rain=2 & 科学CPB=1.5，与lambda无关 & 指标分母分离 \\
+B1 & float32恰等于float32(.1)，及相邻可表示上下值 & 等于及下邻为干、上邻为雨 & 提升前判断；不打印伪“精确0.1” \\
+Z1 & N\_\allowbreak{}valid>0，N\_\allowbreak{}rain=0 & occ保留，qr为graph-connected零；CPB/\allowbreak{}coverage不可估计 & 无雨非整batch跳过 \\
+Z2 & N\_\allowbreak{}valid=0或有效y负/\allowbreak{}NaN & 正式拒绝；无更新 & 异常停止 \\
+\bottomrule\end{longtable}\endgroup
+
+未来边界测试：gamma0在极端有限logit下仍是.5BCE；缺参数、bool/\allowbreak{}NaN/\allowbreak{}inf参数、shape/\allowbreak{}dtype/\allowbreak{}device错配应拒绝；非有效目标的处理必须与现临时clean策略一致；无雨q梯度为零但不缺失；雨处e>0梯度对q为\(-\)tau/\allowbreak{}32、e<0为(1\(-\)tau)/\allowbreak{}32，再乘lambda/\allowbreak{}N\_\allowbreak{}valid；gamma0单元素logit梯度为.5(p\(-\)z)/\allowbreak{}N\_\allowbreak{}valid。这些是预期性质，本轮未运行梯度检查。
+
+研究者必须能解释：为何裸sum、axis mean及两个不同分母不可混用；为什么float32阈值在提升前判断；为何coverage改善可能由宽尾造成；为何masked NaN不自动安全；为何训练中不expm1；为何新lambda只影响优化目标而不改报告CPB。数学映射及源码短定位在source\_\allowbreak{}identity，未来实现审查需绑定研究者真实代码SHA与独立集成许可。
+\clearpage\section{主指标与安全评价}
+
+PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL。所有新指标结果NOT\_\allowbreak{}EXECUTED；效应大小和副作用容忍值NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED。遵循已有source\_\allowbreak{}identity中的v2验证与科学observer口径，不按新成绩选择指标、分箱或集合。
+
+\subsection{固定评价域与分母}
+
+2024冻结10,501场景，云南有效暴露36,018,430、真实有雨暴露4,496,600来自历史发表统计，是复用集合的拟定核对值，未来身份/\allowbreak{}QC不符即停。发生指标针对全部valid云南暴露；conditional指标仅float32 y>float32(.1)的valid暴露。暴露不等于独立事件。季节/\allowbreak{}月/\allowbreak{}民用昼夜代理及真值分层若呈现，继承原定义并标明探索。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+量 & 定义与单位 & 角色 \\
+\midrule\endfirsthead
+量 & 定义与单位 & 角色 \\
+\midrule\endhead
+Brier & sum\_\allowbreak{}valid(p\(-\)z)\textasciicircum{}2/\allowbreak{}N\_\allowbreak{}valid，无量纲 & H-O主指标；H-Q发生安全评价 \\
+可靠性十箱 & [k/\allowbreak{}10,(k+1)/\allowbreak{}10)，最后含1；n、sum(p)/\allowbreak{}n、sum(z)/\allowbreak{}n & 发生校准描述；空箱为NA，不填0 \\
+AUROC & exact equal-score分组ROC，ties半计，无量纲 & 排序安全评价；单类NA \\
+AP & exact equal-score组末non-interpolated precision积分 & 排序安全评价；无正例NA \\
+共同Core & gamma2/\allowbreak{}alpha.5的FP64 focal分子加unweighted Pinball分子，再/\allowbreak{}N\_\allowbreak{}valid & 三臂可比辅助，不选BEST \\
+Conditional Pinball & sum\_\allowbreak{}rain\_\allowbreak{}valid mean\_\allowbreak{}32 rho\_\allowbreak{}tau(log1p(y)\(-\)qlog)/\allowbreak{}N\_\allowbreak{}rain & H-Q分布质量及H-O副作用；log1p(mm/\allowbreak{}h)域 \\
+C\_\allowbreak{}i & sum\_\allowbreak{}rain\_\allowbreak{}valid 1[log1p(y)\(\le\)q\_\allowbreak{}i]/\allowbreak{}N\_\allowbreak{}rain，全部32tau & 覆盖，等值计入；无雨NA \\
+M32 & abs(C32\(-\)0.984375) & H-Q主指标，比例；Δ<0方向改善 \\
+带符号偏差 & C\_\allowbreak{}i\(-\)tau\_\allowbreak{}i及C32(E2)\(-\)C32(E0) & 区分欠/\allowbreak{}过覆盖，不能仅看coverage上升 \\
+\bottomrule\end{longtable}\endgroup
+
+Brier混合了概率误差的多个方面，AUROC/\allowbreak{}AP只关乎排序，十箱也会受箱内异质性和稀疏性影响。不能用其中一个替代所有评价。概率阈值分类POD/\allowbreak{}FAR/\allowbreak{}CSI未冻结，本轮不引入。BF16发生分数沿历史exact-score约定，不能粗十箱近似AUROC/\allowbreak{}AP或遇到非BF16时静默round。
+
+\subsection{H-Q必须同时呈现的分布与真值层}
+
+真值层固定(0.1,1]、(1,5]、(5,10]、(10,20]、(20,30]、(30,50]、(50,inf)，以原float32标签和边界语义分层，各层报告N\_\allowbreak{}rain及Conditional Pinball。>5 mm/\allowbreak{}h四个以上强雨层不得因为样本少或表现不利而删除；无暴露为NA。全32覆盖同时报告，不能只挑q32。
+
+上尾阈值继承10、50、100、500、1000 mm/\allowbreak{}h，使用q32\_\allowbreak{}log>log1p(threshold)比较，避免不必要的物理expm1溢出。计数范围为全valid云南场景-像元，并分真值干/\allowbreak{}雨；另外给跨场景去重格点数、涉及场景数。阈值是已声明诊断阈值，不是独立极端事件定义，也不是确定性暴雨预测。N\_\allowbreak{}valid固定，比较原始计数及count/\allowbreak{}N\_\allowbreak{}valid。
+
+候选分布摘要：q27–q32（原高组tau>.8）与q32\(-\)q1宽度，以及span\_\allowbreak{}log\_\allowbreak{}derived=q32\_\allowbreak{}log\(-\)log1p(.1)，分别在全valid、dry、rainy域报告n/\allowbreak{}min/\allowbreak{}median/\allowbreak{}p90/\allowbreak{}p99/\allowbreak{}p99.9/\allowbreak{}max；empirical quantile用r=(n\(-\)1)p、相邻order statistics线性插值（Type7）。span是由输出反推的FP64对数跨度，受浮点回减舍入，不称未舍入raw span；不是物理mm/\allowbreak{}h。qlog摘要为主，只有在安全显式转换时附物理单位；转换不可用则NA加风险原因，禁止cap或修补。
+
+摘要方式是新增候选诊断规格，需要批准和以后工程化；确切统计需要临时排序/\allowbreak{}存储预算，不能宣称现observer已提供。原每forward最大值的p99/\allowbreak{}p99.9继续作为逐epoch工程诊断，必须标明它是“forward最大值分布”，与上述“像元暴露分布”不同。本轮不运行任何observer。
+
+\subsection{成功与副作用门槛}
+
+H-O建议联合：Brier配对改善达到最小意义差值，同时AUROC/\allowbreak{}AP下降不超过容忍值、CPB及强雨层变化不越界，完整箱暴露/\allowbreak{}QC未改变。H-Q建议联合：M32配对下降达到意义差值、CPB及强雨层不恶化超过容忍值、发生指标不越界，并检查宽度/\allowbreak{}span与尾计数；不能将极宽分布导致coverage接近目标判为成功。
+
+门槛字段全部未定：minimum\_\allowbreak{}brier\_\allowbreak{}improvement、minimum\_\allowbreak{}abs\_\allowbreak{}q32\_\allowbreak{}error\_\allowbreak{}reduction、maximum\_\allowbreak{}cpb\_\allowbreak{}degradation、maximum\_\allowbreak{}strong\_\allowbreak{}rain\_\allowbreak{}cpb\_\allowbreak{}degradation\_\allowbreak{}by\_\allowbreak{}bin、maximum\_\allowbreak{}brier\_\allowbreak{}degradation\_\allowbreak{}HQ、maximum\_\allowbreak{}AUROC\_\allowbreak{}AP\_\allowbreak{}drop、tail\_\allowbreak{}distribution\_\allowbreak{}acceptance\_\allowbreak{}rule。字段单位、各模型与seed汇总规则都须预先批准；未批准时只能报告方向、数值和探索区间，不出“成功/\allowbreak{}失败”的科学判决。数值安全守卫与这些科学容忍值不同：非有限、支持/\allowbreak{}严格序丢失等直接停止，不等待效果门槛。
+
+“物理可信”不能只凭IMERG内部比较判定；独立参考验证仍是另一路未批准工作。p\(\times\)q32不是均值，p\(\times\)mean(32physical q)只是历史诊断proxy，不纳入本轮主指标。
+\clearpage\section{统计分析预注册提案}
+
+这是2024开发性探索计划，PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL。未来完整数据身份、缺失性、每seed结果和协议偏离都要公开说明。单次Git留痕不等于独立确认性预注册已通过。
+
+\subsection{配对与主效应}
+
+对每模型m、每seed s分别计算以下两个效应（排版公式见数学附录）。
+
+H-O：D\_\allowbreak{}O(m,s)=Brier(E1,m,s)\(-\)Brier(E0,m,s)。
+
+H-Q：D\_\allowbreak{}Q(m,s)=M32(E2,m,s)\(-\)M32(E0,m,s)。
+
+两个主假设各在B0和B1报告，形成4个拟议主比较。发生和条件副作用同时呈现。先列3个seed的点值和效果，再给三个D的等权算术平均、范围和描述性标准差；n\_\allowbreak{}seed=3不足稳定估计随机性，不用3seed的分布作强确认结论。
+
+不要把各seed的预测平均成ensemble再替代单模型终点；M32为非线性量，须每seed先取abs(C\(-\)tau)再求等权效应平均，不先平均coverage后取abs。相同seed所有模型/\allowbreak{}条件共用配对样本和初始化身份。同条件B1\(-\)B0也报告；探索性差中差为D\_\allowbreak{}O(B1,s)\(-\)D\_\allowbreak{}O(B0,s)、D\_\allowbreak{}Q(B1,s)\(-\)D\_\allowbreak{}Q(B0,s)，仅交互迹象，不升为批准的确认主检验。
+
+seed\(\times\)像元不是独立重复，同样的天气/\allowbreak{}标签被多个seed观察。训练随机性与日期变异分别说明；不展平为数亿独立证据，不将同一周各像元独立bootstrap。
+
+\subsection{日期块Bootstrap}
+
+拟继承35个非重叠7日UTC日期块，自2024-03-01至10-31（245日，按标签window\_\allowbreak{}start归块），2,000次、bootstrap seed=2026、每次有放回抽35块。相同multiplicity向量同时作用于18个运行，保留所有臂/\allowbreak{}seed/\allowbreak{}时相的同一天气配对；本轮未生成新抽样文件或推理统计。
+
+每replicate先按重复次数pool各块损失分子与N\_\allowbreak{}valid/\allowbreak{}N\_\allowbreak{}rain，再求ratio；不能等权平均周metric。Coverage分子计整数，CPB用unweighted qr；AUROC/\allowbreak{}AP从合并exact score counts重算，不能平均各周AUC/\allowbreak{}AP。每replicate先求每seed的D，再等权汇总D；2.5/\allowbreak{}97.5百分位作为点对点95\%探索区间，不表示seed随机总体置信区间。
+
+某replicate无雨或缺某强雨层/\allowbreak{}某类别时相关指标为NA，报告有效replicate数及原因，不补0、不一直重抽直到满足条件、不隐藏稀疏层。主指标/\allowbreak{}guardrail最低有效块数和最低可用replicate比例为NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，批准前需决定；任何未达门槛项不可声称科学通过。
+
+七日近似独立仍可能被跨周天气过程打破；季节非平稳使混合季节重采样不代表稳定同分布。只有一年且2024已参与历史BEST和多轮诊断，日期块区间不能变成全新独立确认集，也不保证未来年份或极端天气表现。不同块长或季节分层bootstrap若增加，只能执行前另批敏感性计划，不能看区间是否有利后选择。
+
+\subsection{多重比较与功效待决}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+候选 & 作用与依赖 & 限制/\allowbreak{}待批准 \\
+\midrule\endfirsthead
+候选 & 作用与依赖 & 限制/\allowbreak{}待批准 \\
+\midrule\endhead
+M-A：4主比较Holm & 若未来批准了有效的raw p值构造，可控制该家庭的FWER & 原percentile区间不是p值；本轮不凭CI倒推p、不声称已控制错误率 \\
+M-B：配对最大统计量同时区间 & 共用块抽样可保留比较相关；需批准studentization、零方差及NA处理 & 近似块独立等前提仍不足确认；本轮未实现 \\
+M-C：仅效果/\allowbreak{}点对点探索区间 & 透明报告4主比较和全部guardrails，不作显著性或确认通过判决 & 多次选择风险仍在；主张范围严格限制 \\
+\bottomrule\end{longtable}\endgroup
+
+multiple\_\allowbreak{}comparison\_\allowbreak{}method及相应raw\_\allowbreak{}p\_\allowbreak{}construction/\allowbreak{}interval\_\allowbreak{}family均为NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，本轮不自动选择Holm。辅助32coverage、各层CPB、尾分布和交互属于完整安全描述，不按显著性选择展示；若需作为正式成功检验，必须预声明其家庭及联合判据。
+
+minimum\_\allowbreak{}effect、guardrail\_\allowbreak{}tolerances、event\_\allowbreak{}effective\_\allowbreak{}sample\_\allowbreak{}size、statistical\_\allowbreak{}power均NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED。既有大量暴露或3seed不证明足够功效，不能捏造detectable effect、p值或保证改善。科学界限应从用途/\allowbreak{}物理代价与测量误差决定，不以历史E0/\allowbreak{}E1/\allowbreak{}E2表现反算，因为新实验根本尚未执行。缺这些字段的提案可完整供审阅，却不能升级为批准协议或宣布科学成功。
+
+\subsection{分析锁定与报告}
+
+先由研究者批准版本和源码身份，再执行；分析只使用预声明epoch9及共同集合。每个seed包括所有臂、失败/\allowbreak{}恢复/\allowbreak{}未完成状态，不选择最好的seed。两阶段若只完成2026，则明确n\_\allowbreak{}seed=1；阶段2是否执行必须单独授权，若依据第一阶段模型表现决定不完成，披露该选择过程。任何变更形成新版本/\allowbreak{}偏离记录，旧版与旧结果不覆盖。未来正文严格区分新实测、探索解释与未验证机理假说。
+\clearpage\section{更新、验证、输入与存储预算}
+
+纯数学估计，NOT\_\allowbreak{}EXECUTED；GPU型号、可用显存、并发、耗时、功率和费用均NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，未创建/\allowbreak{}测量训练作业。本轮没有为了估时运行smoke forward。机器预算在run\_\allowbreak{}budget.csv及budget\_\allowbreak{}summary.json。
+
+\subsection{固定更新及验证}
+
+训练N=10455、physical batch2、accumulation1、drop\_\allowbreak{}last=false：每epoch ceil(N/\allowbreak{}2)=5228 updates，最后batch1；9epoch=47052，场景呈现94095。验证N=10501、batch8：每次1313 batches，最后batch5；9次共11817，验证场景呈现94509。一个batch的forward不是一次独立天气过程。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-12\tabcolsep)/6\relax}}
+\toprule
+范围 & runs & 训练updates & 训练场景呈现 & 验证batch（每epoch） & epoch9终点batch下界 \\
+\midrule\endfirsthead
+范围 & runs & 训练updates & 训练场景呈现 & 验证batch（每epoch） & epoch9终点batch下界 \\
+\midrule\endhead
+单模型/\allowbreak{}条件/\allowbreak{}seed & 1 & 47052 & 94095 & 11817 & 1313 \\
+一个seed完整三条件两模型 & 6 & 282312 & 564570 & 70902 & 7878 \\
+单条件跨两模型三seed & 6 & 282312 & 564570 & 70902 & 7878 \\
+阶段2两seed & 12 & 564624 & 1129140 & 141804 & 15756 \\
+全矩阵 & 18 & 846936 & 1693710 & 212706 & 23634 \\
+\bottomrule\end{longtable}\endgroup
+
+23634仅终点评价算术数，当前提案保留逐epoch验证；不能以低数申请资源后隐含执行9倍验证。epoch9完整科学observer应复用最后一次forward，若以后实现产生额外模型推理必须独立登记批准。B9不会走到50epoch的min LR；warmup第一步为1e-4/\allowbreak{}5228，不因“min1e-6”而clamp线性warmup。
+
+\subsection{输入数据规模的口径}
+
+每场景原生输入为float32的[1或6,501,501]：B0=1,004,004 bytes，B1=6,024,024 bytes；原生bool mask另计每元素1 byte。训练batch2原生输入分别约1.92/\allowbreak{}11.49 MiB，未含mask、目标、特征、autograd激活、缓存或CUDA工作区。单场景100\(\times\)100 float32标签40,000 bytes，两张目标bool mask合计20,000 bytes；不要把3430评价格点当原始卷积输入大小。
+
+run\_\allowbreak{}budget逐行列出9epoch输入tensor呈现字节、验证呈现字节；这只是内存表示的逻辑呈现量，不是唯一卫星文件大小或实际磁盘I/\allowbreak{}O。六帧有跨场景重叠，staging又可能重复复制/\allowbreak{}校验整文件，压缩NetCDF的I/\allowbreak{}O和唯一文件规模本轮不读取、不估伪数。模型主体共享，因此输入6倍不等于GPU耗时6倍。
+
+\subsection{检查点与诊断存储}
+
+冻结参数P\_\allowbreak{}B0=4,329,410，P\_\allowbreak{}B1=4,331,810。FP32参数及AdamW两个FP32moment仅tensor payload=12P，约49.55/\allowbreak{}49.57 MiB；fresh模型参数=4P，约16.52 MiB。这里未含buffer、optimizer step标量、RNG、scheduler、pickle/\allowbreak{}zip及日志，是下界而非实测checkpoint字节。未来须用获批代码量测实物，正式disk gate不能只用此下界。
+
+拟保留每run9个不可变完成epoch checkpoint：全矩阵162个，12P合计在budget\_\allowbreak{}summary中给出；初态每seed两模型共6份4P锚点本地只读，跨E0/\allowbreak{}E1/\allowbreak{}E2使用同一身份而不跨臂迁移训练后状态。LAST/\allowbreak{}endpoint可引用不可变文件，不再复制BEST二进制；是否去重/\allowbreak{}hardlink需审查文件系统和保存事务。本轮没有创建这些文件。
+
+假设单run串行，checkpoint事务需额外临时写入及验证空间，旧完整文件不得先删；至少记录2个实测checkpoint事务余量。每worker staging上限734,003,200 bytes，两worker合计1,468,006,400；沿旧loader不改变worker数，以实际磁盘/\allowbreak{}权限核实。日志总量、聚合统计、文件数量和source access日志另列未定值，资源管理员批准前不得声称空间足够。
+
+不要保存所有验证dense qlog：10501\(\times\)32\(\times\)100\(\times\)100\(\times\)8=26,882,560,000 bytes/\allowbreak{}run，仅18个终点就483,886,080,000 bytes，不含p/\allowbreak{}label或副本。优先保留分子/\allowbreak{}分母、score counts、32coverage、预定义异常计数与审计摘要。新增Type7分布需要获批私有临时排序：单变量36,018,430\(\times\)8=288,147,440 bytes；并行6高tau加宽度会放大，建议串行变量与有界外排序，工作区系数/\allowbreak{}算法/\allowbreak{}实际峰值仍待量测，不能假称已有可用精确实现。临时预测不公开上传。
+
+\subsection{正式执行前的资源量测方案}
+
+只有研究者代码审查和新的执行范围批准后，才能记录GPU型号/\allowbreak{}数量/\allowbreak{}UUID、driver/\allowbreak{}CUDA/\allowbreak{}cuDNN/\allowbreak{}PyTorch、CPU/\allowbreak{}RAM、磁盘free bytes、BF16支持、TF32/\allowbreak{}确定性、worker/\allowbreak{}缓存方案、协议/\allowbreak{}代码/\allowbreak{}SHA。提议在阶段1获批运行内记录冷启动、训练与验证各阶段wall time、每epoch及完整run耗时、峰值显存、staging/\allowbreak{}日志/\allowbreak{}checkpoint字节，不额外增加优化更新或改变样本顺序。外推其余runs须给时间范围/\allowbreak{}负载条件与不确定性，不宣称无偏GPU性能比较。
+
+若需单独smoke、真实数据preflight、初始化证明、loss梯度测试或校准量测，必须在之后另有明确批准的工程范围；本轮这些均未执行。预计总耗时字段留NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，不用历史最佳耗时伪装为本矩阵测量。
+
+\subsection{失败与恢复的拟定预算规则}
+
+非有限值、M1缺失、SHA/\allowbreak{}样本顺序/\allowbreak{}分母漂移、OOM、磁盘不足、文件锁、环境变化、checkpoint事务不完整即停止，不skip、降精度、减batch或补长epoch。OOM通过更小batch“继续”会改变控制变量，须新版本批准。
+
+候选max\_\allowbreak{}retries=0（自动重试为零）；人工重试/\allowbreak{}恢复数量及额外资源尚未批准。已完成更新保留，未完成epoch的尝试更新与重放分别审计；原47052是保留轨迹预算，重放会增加总尝试数，必须审批额外资源上限。恢复保持同一seed/\allowbreak{}arm/\allowbreak{}code/\allowbreak{}LR及下一完整epoch，不根据坏指标fresh重跑挑好seed。阶段1失败只提供失败与资源证据，不给阶段2自动授权。
+\clearpage\section{独立研究者审批清单（全部未批准）}
+
+这是待审事项清单，不是人类批准记录或代签表。没有“已批准”勾选、签名、approval token或执行授权。protocol\_\allowbreak{}proposed中approval fields均null；本轮最高PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+事项 & 研究者须独立决定并绑定的范围 & 当前状态 \\
+\midrule\endfirsthead
+事项 & 研究者须独立决定并绑定的范围 & 当前状态 \\
+\midrule\endhead
+Phase-A科学证据 & 接受哪些2024开发结论、哪些只作探索、BEST审查与限制 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+B1历史恢复偏差 & 技术对账与独立LAST批准缺口的处置、补救和论文披露 & NOT\_\allowbreak{}GRANTED；不由fresh追认 \\
+H-O/\allowbreak{}H-Q & 干预问题、可否证性、共同骨干副作用和研究用途 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+E0/\allowbreak{}E1/\allowbreak{}E2 & alpha.5；gamma2/\allowbreak{}0/\allowbreak{}2；lambda1/\allowbreak{}1/\allowbreak{}2；排除扩展 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+D1/\allowbreak{}Q1/\allowbreak{}N0 & 2023训练/\allowbreak{}2024开发、M1配对四manifest/\allowbreak{}scaler/\allowbreak{}mask/\allowbreak{}SP04身份 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+I3与fresh & 三seed、同seed跨臂锚点、B0/\allowbreak{}B1同形状copy、RNG及排列规则 & 实物初态NOT\_\allowbreak{}YET\_\allowbreak{}MATERIALIZED \\
+预算/\allowbreak{}S0/\allowbreak{}V0 & 9epoch47052/\allowbreak{}run、50epoch LR前缀、固定epoch9；取消性能early-stop & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+验证/\allowbreak{}保存 & 每epoch验证及诊断、完成train+validation边界、epoch9 observer复用 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+主指标/\allowbreak{}效应 & Brier及abs q32 coverage误差、四比较、minimum meaningful effects & 数值NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED \\
+安全评价 & CPB/\allowbreak{}强雨层/\allowbreak{}32coverage/\allowbreak{}发生/\allowbreak{}尾分布及容忍、NA规则 & 容忍范围NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED \\
+多重比较/\allowbreak{}功效 & M-A/\allowbreak{}M-B/\allowbreak{}M-C、p值/\allowbreak{}同时区间方法、有效块及功效限制 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED \\
+研究者核心代码 & 独立最小PyTorch实现、代码SHA、数学审查及随后集成许可 & 尚无实现、审查或许可 \\
+数据权限 & 2023/\allowbreak{}24实际读权限、仅批准集合、2025 firewall、公开限制 & 未由本轮授予数据执行权 \\
+GPU与存储 & 硬件、依赖、私有roots、时长/\allowbreak{}空间实测及并发、资源上限 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED \\
+异常停止 & 数值/\allowbreak{}缺测/\allowbreak{}身份/\allowbreak{}OOM/\allowbreak{}锁/\allowbreak{}日志缺失、no skip/\allowbreak{}no fallback & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+保存与审计 & 初态/\allowbreak{}代码/\allowbreak{}配置/\allowbreak{}数据/\allowbreak{}模型/\allowbreak{}optimizer/\allowbreak{}RNG/\allowbreak{}LR/\allowbreak{}epoch SHA、事务marker & 新scope尚未工程化 \\
+恢复 & 每次具体LAST SHA、原授权祖先、完整epoch、剩余预算和额外尝试资源 & 任何一次都须新的独立批准 \\
+阶段1执行 & 明确授权seed2026全部6臂、起止范围、资源、真实数据与推理 & NOT\_\allowbreak{}AUTHORIZED \\
+阶段2执行 & 另批seed2027/\allowbreak{}2028全部12臂，设计不按阶段1成绩改变 & NOT\_\allowbreak{}AUTHORIZED \\
+公开解释 & 仅2024开发探索；全seed/\allowbreak{}偏离/\allowbreak{}失败披露；不得声称独立物理确认 & RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED \\
+\bottomrule\end{longtable}\endgroup
+
+科学批准与执行授权必须分别是真实的人类事件。未来记录须绑定批准者可核验身份、原文/\allowbreak{}时间、提案版本及SHA、具体批准内容和未批准项；执行批准另绑定代码版本、运行ID/\allowbreak{}seed/\allowbreak{}数据年限/\allowbreak{}预算/\allowbreak{}资源。此处描述的是证据要求，不生成其内容。缺失/\allowbreak{}模糊范围一律拒绝执行，Git作者、commit、自动JSON true或测试PASS均不能替代。
+
+任何部分接受不自动接受其余事项。例如研究者接受H-O不等于接受lambda2、I3或阶段2；接受历史BEST技术身份不等于追认B1恢复；资源许可不等于科学批准；loss理解练习不等于集成许可。批准后如需改指标、seed、LR/\allowbreak{}预算、验证频率或失效处理，先建立新版本/\allowbreak{}偏离审查，不能覆盖本v1。
+\clearpage\section{安全工程交接与执行门槛}
+
+本轮只实现审查工具，无训练launcher、runner、模型实例、新loss实现或正式入口变更。检查器始终can\_\allowbreak{}launch\_\allowbreak{}formal\_\allowbreak{}training=false；valid proposal与execution readiness是两个概念，缺任何批准都BLOCKED。
+
+\subsection{必须遵守的实施次序}
+
+\noindent\textbullet\quad 研究者阅读真实Focal、Pinball、total\_\allowbreak{}loss及本数学映射，亲自独立写最小PyTorch实现，解释sum/\allowbreak{}mean/\allowbreak{}共同分母、float32标签、FP64与空雨约定。本轮没有替研究者编写答案代码。\par
+\noindent\textbullet\quad 研究者提供其实现，Codex做数学/\allowbreak{}shape/\allowbreak{}dtype/\allowbreak{}mask/\allowbreak{}异常审查，绑定真实文件与SHA，指出差异；无集成或训练。\par
+\noindent\textbullet\quad 研究者明确允许工程集成与完整测试之后，在新的隔离版本内集成lambda与seed接口，保留E0兼容证明。单独获得对应forward/\allowbreak{}backward/\allowbreak{}optimizer fixture范围许可；这次批准不自动授权真实数据或正式运行。\par
+\noindent\textbullet\quad 完成正式协议独立批准、数据/\allowbreak{}资源权限、身份审计和后续工程preflight授权。不要调用旧Contract.load/\allowbreak{}initialize来做本轮“检查”，它们会加载真实manifest/\allowbreak{}模型或外部文件。\par
+\noindent\textbullet\quad 再取得覆盖seed2026完整6run的阶段1执行批准。批准scope/\allowbreak{}代码SHA/\allowbreak{}矩阵/\allowbreak{}预算/\allowbreak{}roots都一致才执行；阶段2另批，不因阶段1PASS启动。\par
+
+\subsection{后续需要工程化的差异清单（本轮非执行提案）}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+入口/\allowbreak{}模块 & 真实现状 & 未来变更规格 \\
+\midrule\endfirsthead
+入口/\allowbreak{}模块 & 真实现状 & 未来变更规格 \\
+\midrule\endhead
+losses/\allowbreak{}focal.py & 已有显式gamma，训练调用仍hardcode2；参数finite/\allowbreak{}bool校验不全 & 研究者写/\allowbreak{}审最小接口；参数从批准臂传入，不改E0语义 \\
+losses/\allowbreak{}pinball.py & 32tau mean/\allowbreak{}sum，FP64由qlog决定 & 保留数学；研究者练习不引入新tau或分母 \\
+losses/\allowbreak{}total\_\allowbreak{}loss.py & 无lambda接口，返回occ+qr & 研究者实现后仅lambda乘qr；保留unweighted报告与空雨graph零 \\
+formal\_\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}v2.py & gamma2硬编码、旧训练授权、BEST/\allowbreak{}early-stop及旧roots & 不得复用作本矩阵launcher；未来新隔离runner审查 \\
+phase\_\allowbreak{}a\_\allowbreak{}protocol.py & seed、startup env及epoch\_\allowbreak{}permutation均固定2026 & 未来显式seed参数，同seed跨臂一致；LR前缀保持原值 \\
+phase\_\allowbreak{}a\_\allowbreak{}validation\_\allowbreak{}v2.py & 固定gamma2共同core、log域无物理转换 & 可复用数学；不能把训练gamma/\allowbreak{}lambda带入共同指标 \\
+checkpoint\_\allowbreak{}v2.py & 完成train+validation边界，selection含BEST/\allowbreak{}earlystop、旧schema/\allowbreak{}roots & 新run namespace、固定endpoint与独立恢复gate；不覆盖旧payload \\
+科学observer & 既有32coverage/\allowbreak{}分箱/\allowbreak{}上尾aggregate可引用，但有硬编码scope/\allowbreak{}模型身份 & 批准后适配18臂来源；新增Type7/\allowbreak{}span摘要单独审查，不能直接执行旧observer \\
+\bottomrule\end{longtable}\endgroup
+
+本轮工具仅校验封闭schema、18组合、整数预算和静态来源SHA，使用标准库；不会import torch/\allowbreak{}yuntapr，不反序列化checkpoint、不调用Contract.load。schema仅支持本包列明的简单JSON Schema关键字，遇到未支持关键字也拒绝；不是通用解释器或授权签发器。
+
+\subsection{Fail-closed与身份}
+
+缺schema/\allowbreak{}字段、未知状态、bool冒充int、arm参数不符、缺seed、重复run、source SHA不符、路径逃逸、年份2025、任何自报APPROVED/\allowbreak{}AUTHORIZED标志、缺approval或实现/\allowbreak{}审查/\allowbreak{}集成许可，一律不能启动。完整合法提案仍BLOCKED，因为审查工具不具备启动功能。工具输出审查理由与candidate\_\allowbreak{}valid，不生成授权文件；人工批准真实性将来由独立验证流程处理，本JSON永远不是它。
+
+静态来源核验只读取白名单仓库源码、配置、已发表metadata与manifest字节SHA，不解析真实样本记录、不触碰raw、weights或外部mask。外部mask只登记协议声明SHA，NOT\_\allowbreak{}REOPENED；不能把静态PASS称为真实数据preflight完成。旧源码AST审查也是静态，不import其模块。
+
+\subsection{恢复与异常}
+
+任何数据/\allowbreak{}数值/\allowbreak{}身份/\allowbreak{}资源异常先安全停止，保留异常栈、run/\allowbreak{}seed/\allowbreak{}arm/\allowbreak{}update、访问计数、已完成checkpoint和未完成前缀。本轮不实现会写实际训练状态的脚本。拟议恢复流程：验证不可变LAST字节SHA及逻辑model/\allowbreak{}optimizer/\allowbreak{}RNG/\allowbreak{}scheduler SHA、完成train+validation marker、原执行批准祖先、同code/\allowbreak{}protocol/\allowbreak{}data/\allowbreak{}init/\allowbreak{}seed、下一epoch和剩余预算；研究者独立明确批准此LAST及额外重放资源后才应用状态。
+
+原始文件锁/\allowbreak{}事务失败不先删checkpoint；半epoch不变成合法LAST；重放计入尝试更新并披露，不能声称没有新增计算。fresh重试、改batch/\allowbreak{}LR/\allowbreak{}精度、换seed或跳样本须新科学/\allowbreak{}执行决定，automatic\_\allowbreak{}retry/\allowbreak{}resume=false。历史B1 LAST14治理缺口继续NOT\_\allowbreak{}GRANTED；BEST9早于恢复只是技术chronology，不代替独立处置。
+
+未来接续先核对Git/\allowbreak{}进程和本版manifest，再收集研究者真实实现/\allowbreak{}决定；在独立新版本追加，不覆盖本v1及任何历史证据。2025解封、FinalFit、独立物理资料获取、新架构都不在本交接范围。当前所有formal training/\allowbreak{}forward/\allowbreak{}backward/\allowbreak{}optimizer/\allowbreak{}data preflight计数为0。
+\clearpage\section{测试范围与后续损失测试规格}
+
+本轮实际可执行的只有静态检查和纯合成元数据/\allowbreak{}整数预算测试，不import torch，不调用任何真实损失、模型、backward、optimizer或raw reader。tests/\allowbreak{}README与XML/\allowbreak{}JSON记录真实数量及失败，不把历史测试算入本轮。
+
+\subsection{本轮审查工具测试}
+
+完整合法proposed结构应candidate\_\allowbreak{}valid=true但can\_\allowbreak{}launch=false；缺审批理由仍列出。测试未知/\allowbreak{}自报批准状态、phaseB true、2025年份、错误阈值/\allowbreak{}epsilon/\allowbreak{}tau、整数bool、batch/\allowbreak{}accumulation、LR/\allowbreak{}epoch/\allowbreak{}factor混入、source身份缺失/\allowbreak{}变动、未知schema关键字、路径绝对/\allowbreak{}..逃逸、重复/\allowbreak{}缺臂或seed及错预算。用内存合成metadata，不写伪人类批准记录，不读取真实样本内容。
+
+整数预算覆盖单run/\allowbreak{}单seed/\allowbreak{}全18，train尾1/\allowbreak{}validation尾5，B0/\allowbreak{}B1形状字节、参数moment payload下界、9validation循环与1endpoint下界区别。对数学算例表只检查文件存在和声明“手算期望”；不通过另写一个新loss算法来替研究者做实现。
+
+静态审查：旧关键源码AST parse和明确函数/\allowbreak{}行号定位、旧配置及历史交付SHA、schema/\allowbreak{}机器矩阵一致、Markdown链接、LaTeX内容绑定、PDF编译诊断/\allowbreak{}文本/\allowbreak{}逐页图像、Git允许清单及 staged bytes。外部mask、GPU、raw/\allowbreak{}checkpoint和正式执行入口不检查/\allowbreak{}实例化；限定README列出的源码/\allowbreak{}metadata文件。
+
+\subsection{研究者实现后、得到新许可才可执行的测试}
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+类 & 计划用例 & 批准前状态 \\
+\midrule\endfirsthead
+类 & 计划用例 & 批准前状态 \\
+\midrule\endhead
+Focal数值 & 数学表F1–F4、gamma0=.5BCE、正负极端有限logit、不sigmoid两次 & NOT\_\allowbreak{}EXECUTED \\
+Pinball数值 & P1–P4、32tau mean、e符号/\allowbreak{}等值、FP64、不expm1 & NOT\_\allowbreak{}EXECUTED \\
+权重组合 & T1/\allowbreak{}T2、lambda仅一次、N\_\allowbreak{}valid/\allowbreak{}N\_\allowbreak{}rain分离、E0兼容 & NOT\_\allowbreak{}EXECUTED \\
+边界与拒绝 & float32 .1及nextafter、空valid/\allowbreak{}空雨、shape/\allowbreak{}dtype/\allowbreak{}device/\allowbreak{}mask、NaN/\allowbreak{}inf/\allowbreak{}负目标 & NOT\_\allowbreak{}EXECUTED \\
+autograd & 手算gamma0及pinball分段梯度、有限差分离kink、空雨graph连接 & 需明确梯度测试许可 \\
+集成 & 三臂输出结构不变、同seed初态/\allowbreak{}排列一致、共同core固定gamma2、epoch9终点 & 需研究者集成与synthetic model许可 \\
+恢复 & 同LAST/\allowbreak{}epoch/\allowbreak{}代码/\allowbreak{}预算批准验证、原始状态不先应用、事务与失败日志 & 需专门恢复fixture许可；正式恢复另批 \\
+实际preflight & 权限、2023/\allowbreak{}24读取/\allowbreak{}源SHA/\allowbreak{}QC、真实fresh及GPU资源测量 & 需数据与执行准备授权 \\
+\bottomrule\end{longtable}\endgroup
+
+未来回归比较不仅“新代码与自己输出相同”：用手算独立oracle、E0冻结数学、梯度符号及边界拒绝作证据。不要使用2025或新结果调接口参数。测试失败保留首轮日志，修复后append新attempt，注明当前通过与历史失败。测试PASS只能说明检查范围内实现行为，不替代人类科学决定或执行批准。
+\clearpage\section{尚待研究者独立决定的字段}
+
+PROPOSED\_\allowbreak{}FOR\_\allowbreak{}RESEARCHER\_\allowbreak{}APPROVAL。A路线及给定配方已收敛为提案，但本消息没有批准实验，所有下列事项仍RESEARCHER\_\allowbreak{}DECISION\_\allowbreak{}REQUIRED。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+ID & 字段/\allowbreak{}依赖 & 当前值 \\
+\midrule\endfirsthead
+ID & 字段/\allowbreak{}依赖 & 当前值 \\
+\midrule\endhead
+A01 & Phase-A接受范围与B1恢复偏差独立处置 & UNDECIDED /\allowbreak{} NOT\_\allowbreak{}GRANTED \\
+A02 & H-O/\allowbreak{}H-Q、四个主比较及18臂参数批准 & 建议矩阵已写入；NOT\_\allowbreak{}APPROVED \\
+A03 & I3种子、fresh匹配及seed+epoch排列推广 & 提案2026/\allowbreak{}2027/\allowbreak{}2028；实物SHA尚不存在 \\
+A04 & V0固定9与逐epoch验证/\allowbreak{}checkpoint；不按性能earlystop & 明确提案；NOT\_\allowbreak{}APPROVED \\
+A05 & 最小Brier改善、abs q32误差改善 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED；比例/\allowbreak{}无量纲 \\
+A06 & CPB/\allowbreak{}强雨层/\allowbreak{}Brier/\allowbreak{}AUC/\allowbreak{}AP及尾分布副作用容忍 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED；需单位/\allowbreak{}联合判据 \\
+A07 & M-A/\allowbreak{}M-B/\allowbreak{}M-C、有效块/\allowbreak{}replicate门槛、p构造/\allowbreak{}同时区间 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED \\
+A08 & 事件有效样本量与功效 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，不捏造保证 \\
+A09 & q27–q32/\allowbreak{}span/\allowbreak{}宽度Type7诊断定义及临时排序方案 & 候选定义已列；需批准并工程化 \\
+A10 & 研究者最小PyTorch实现、数学审查、集成与测试许可 & 尚未发生，相关身份字段null \\
+A11 & GPU/\allowbreak{}版本/\allowbreak{}roots/\allowbreak{}数据权限、时长与空间测量/\allowbreak{}上限 & NOT\_\allowbreak{}YET\_\allowbreak{}ESTABLISHED，无实际preflight \\
+A12 & 阶段1 seed2026六run与阶段2其余十二run执行范围 & 均NOT\_\allowbreak{}AUTHORIZED，另行独立批准 \\
+A13 & 异常停止、重试/\allowbreak{}恢复及具体LAST批准/\allowbreak{}重放资源 & auto retry0；任何人工恢复未批准 \\
+A14 & 公开解释、失败/\allowbreak{}偏离披露和论文使用 & 仅2024开发探索提案，真实新Results尚无 \\
+\bottomrule\end{longtable}\endgroup
+
+先完成A01/\allowbreak{}A02等科学审阅，研究者亲自实现A10核心代码，再审集成、工程准备与资源；最后另批A12具体执行。可要求改版/\allowbreak{}拒绝部分选项，不能用本清单“自动补空”。每个独立人类决定应在新的版本/\allowbreak{}记录中保留原文、身份、时间和批准scope，研究者自身发生的事件才可核验。
+
+科学资料、计算资源、真实代码均是不同依赖。效果数值与guardrail无合理依据时保持未定，报告提案完整但approval incomplete；不因为工期或Git推送成功而设置任意值。只完成一个seed时不获得完整三seed证据。任何扩展损失、温度缩放、FinalFit、2025、GFS/\allowbreak{}DEM模块需另案。
+
+本轮已授权工程交付不依赖这些决定，可完成文档、schema、元数据测试、静态来源核对和公开归档；正式训练仍不能启动。继续保持RESEARCHER\_\allowbreak{}SCIENTIFIC\_\allowbreak{}APPROVAL\_\allowbreak{}REQUIRED=true，V2\_\allowbreak{}PHASE\_\allowbreak{}B\_\allowbreak{}AUTHORIZED=false，2025\_\allowbreak{}RAW\_\allowbreak{}ACCESS=2025\_\allowbreak{}PIXELS\_\allowbreak{}READ=0，HISTORICAL\_\allowbreak{}RECOVERY\_\allowbreak{}RATIFICATION=NOT\_\allowbreak{}GRANTED；交付后自动下一阶段关闭。
+\clearpage\section{真实代码的静态审查与限制}
+
+本轮仅看源码文本/\allowbreak{}AST及仓库metadata字节SHA，未import yuntapr、torch或数据模块。函数行号与身份机器登记在source\_\allowbreak{}identity.json；源码已发表，没修改任何正式loss、model、runner、冻结配置或历史文档。
+
+\begingroup\small\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}>{\raggedright\arraybackslash}p{\dimexpr(\linewidth-6\tabcolsep)/3\relax}}
+\toprule
+审查发现 & 影响 & 本轮处理 \\
+\midrule\endfirsthead
+审查发现 & 影响 & 本轮处理 \\
+\midrule\endhead
+focal\_\allowbreak{}bce\_\allowbreak{}sum已有alpha/\allowbreak{}gamma形参 & gamma0数学可表示，但训练调用固定2 & 给研究者数学映射，未改函数或调用 \\
+focal参数finite/\allowbreak{}bool及mask前置校验不完整 & 裸函数不能视作全套安全接口 & 规格列明未来拒绝条件，不自行修正式代码 \\
+pinball\_\allowbreak{}sum没有最终分母、axis固定mean & 权重实验必须在总损失组合，不能误改为rain mean & 给组合接口与独立手算期望 \\
+b0\_\allowbreak{}core\_\allowbreak{}loss无lambda\_\allowbreak{}q；formal\_\allowbreak{}mode未执行授权gate & 旧调用不能直接执行E2，形参/\allowbreak{}默认scope不是授权 & 新runner必须独立批准；本轮只非执行提案 \\
+seed\_\allowbreak{}reproducibility、epoch\_\allowbreak{}permutation和初始化proof固定2026 & I3不能只改JSON seed就运行 & 建议以后显式参数化/\allowbreak{}匹配startup environment与排列SHA \\
+formal\_\allowbreak{}phase\_\allowbreak{}a\_\allowbreak{}v2的gamma2、旧scope/\allowbreak{}roots及BEST早停固定 & 不支持本18臂固定终点矩阵 & 不得调用/\allowbreak{}修改旧入口，本轮没有launcher \\
+phase\_\allowbreak{}a\_\allowbreak{}validation\_\allowbreak{}v2固定gamma2且全局FP64 & 适合作为三臂共同core，不能等同变动的训练目标 & 保持原报告数学；未运行验证 \\
+checkpoint\_\allowbreak{}v2仅完成train+validation epoch保存，选择状态带旧BEST/\allowbreak{}earlystop & 只做终点validation会改变恢复边界 & 本提案每epoch验证，epoch9固定主终点，未来新schema另审 \\
+v2 quantile transform FP64、相同prefix总和、epsilon1e-4与严格序守卫 & 不能放宽数值规则来减少失败 & 全继承；物理量仅显式只读转换，未模型forward \\
+源代码无本训练链随机增强 & 当前对照应保持无增强 & 未来实际调用/\allowbreak{}样本顺序要另有执行审计，不仅靠文本搜索 \\
+\bottomrule\end{longtable}\endgroup
+
+未检查原始数据完整性、外部mask字节、CUDA可用性、checkpoint反序列化、实际fresh/\allowbreak{}RNG或loss梯度。source\_\allowbreak{}identity的external pins属于继承声明，不是本轮重开验证。AST与SHA通过只表示代码/\allowbreak{}元数据身份与文档可追溯，不能说明本18臂已工程集成、能安全启动或科学有效。
+
+环境探测中两个Python环境未提供jsonschema库，本轮不安装依赖，使用标准库对本包声明的封闭JSON Schema子集做结构/\allowbreak{}常量检查，遇到未知关键字fail-closed。错误 marker路径首试失败，定位技能包内脚本后成功登记文档操作；这些是环境探测/\allowbreak{}路径故障，真实记录在tests/\allowbreak{}environment\_\allowbreak{}preparation.json，不伪装成损失或科学测试失败。\clearpage\section{重要公式与真实源码映射}
+\subsection{发生、Pinball与共同分母}
+标签在原FP32判断：\(z=\mathbf1\{y_{32}>\operatorname{float32}(0.1)\}\)。
+设\(v\)为IMERG有效mask与云南mask的交集，\(N_v=\sum v\)，\(N_r=\sum vz\)。
+\begin{align*}
+b(l,z)&=\max(l,0)-lz+\log(1+e^{-|l|}), &p_t&=e^{-b},\\
+\alpha_z&=\alpha z+(1-\alpha)(1-z), & S_o&=\sum v\alpha_z(1-p_t)^\gamma b,\\
+\tau_i&=(i-0.5)/32,&e_i&=\log(1+y)-q_i,\\
+\rho_{\tau_i}(e_i)&=\max(\tau_i e_i,(\tau_i-1)e_i), & S_q&=\sum vz\,\frac1{32}\sum_{i=1}^{32}\rho_{\tau_i}(e_i),\\
+L_{\rm proposed}&=(S_o+\lambda_q S_q)/N_v, &\operatorname{CPB}&=S_q/N_r.
+\end{align*}
+Focal numerator 对应 focal.py 的 BCEWithLogits/exp/weight/sum；Pinball对应pinball.py的maximum/mean/sum；总分母对应total\_loss.py。这里写的是提案公式，不是新PyTorch实现。\(\gamma=0,\alpha=.5\)时\(S_o=.5\sum vb\)，不是unweighted BCE。共同core固定\(\gamma=2,\lambda_q=1\)的FP64分子，而训练目标按各臂取参数。\(N_r=0\)时CPB/coverage不可估计。
+\subsection{v2单调分位数与覆盖}
+\begin{align*}
+w_i&=\operatorname{softplus}(a_i)+10^{-4}, & W&=\left(\operatorname{cumsum}(w)\right)_{32},\\
+c_i&=\left(\operatorname{cumsum}(w)\right)_i/W,&s&=\operatorname{softplus}(b)+10^{-4},\\
+q_i&=\log(1.1)+s c_i,&q_{32}&=\log(1.1)+s,\\
+C_i&=\frac{\sum vz\,\mathbf1\{\log(1+y)\le q_i\}}{N_r},&M_{32}&=|C_{32}-0.984375|.
+\end{align*}
+quantile\_v2/parameterization.py用相同FP64 prefix终点作分母，outputs.py守卫finite、支撑与严格序；不新增epsilon/clamp或head。span\_log\_derived由\(q_{32}-\log(1.1)\)反推，有FP64舍入。\(q\)在log1p(mm/h)域，物理输出需显式FP64 expm1与溢出检查。
+\subsection{学习率与主效应}
+\[
+\eta(u)=\begin{cases}
+10^{-4}u/5228,&1\le u\le5228,\\
+10^{-6}+(10^{-4}-10^{-6})\dfrac{1+\cos(\pi(u-5228)/(261400-5228))}{2},&5228<u\le261400.
+\end{cases}
+\]
+phase\_a\_protocol.py的lr\_for\_update；本提案仅用\(u\le47052\)，更新前应用；min LR下界只在cosine段，warmup不clamp。
+\[
+D_O(m,s)=\operatorname{Brier}_{E1,m,s}-\operatorname{Brier}_{E0,m,s},\quad
+D_Q(m,s)=M_{32,E2,m,s}-M_{32,E0,m,s}.
+\]
+每seed先算效应再平均；日期块bootstrap每次pool分子/分母、共用multiplicity；不把seed乘像元当独立重复。科学minimum effects与guardrails尚未建立，负效应方向也不能自动判定通过。
+\end{document}
