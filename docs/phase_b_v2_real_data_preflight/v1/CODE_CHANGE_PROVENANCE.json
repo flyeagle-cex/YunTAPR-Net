@@ -1,0 +1,30 @@
+{
+  "executed_limited_preflight_audit_source_sha256": "d0beba2124ce7c06185369c81028402030c223d93500f62f655dd4cacd63d937",
+  "delivered_hardened_audit_source_sha256": "c4d749c2190a0e23a44d86535a02a6ca0d51274f096418d935d2acd294507f35",
+  "change": "Raw year/root/date lexical rejection moved before Path.resolve; no frozen scientific or allowed-data preprocessing change",
+  "source_patch_sha256": "8370e341ed99402adb8299dd7c3ab0195ac05786f425889293c71dd10e709f29",
+  "real_raw_data_reads_after_hardening": 0,
+  "actual_decode_was_executed_before_hardening": true,
+  "initial_negative_test_path_attribute_queries": "NOT_INSTRUMENTED",
+  "initial_negative_test_2025_payload_binary_opens": 0,
+  "final_negative_tests_forbidden_resolution_calls": 0,
+  "final_unique_unit_tests_pass": 44,
+  "unit_assertion_executions": 88,
+  "test_attempts": [
+    {
+      "scope": "initial",
+      "pass": 36
+    },
+    {
+      "scope": "targeted_hardening",
+      "pass": 8
+    },
+    {
+      "scope": "final",
+      "pass": 44
+    }
+  ],
+  "formal_optimizer_steps": 0,
+  "model_forwards": 0,
+  "patch_format": "Unified diff with zero context; apply to archived source with --unidiff-zero if reconstructing"
+}

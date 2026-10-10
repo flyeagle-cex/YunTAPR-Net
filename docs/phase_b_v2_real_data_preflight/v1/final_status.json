@@ -1,0 +1,211 @@
+{
+  "scope": "REAL_DATA_READ_ONLY_PREFLIGHT",
+  "baseline_commit": "e0920d9375e1f351bc30933cd83b4e7ea41a68ae",
+  "started_at_utc": "2026-10-10T10:43:02.718704+00:00",
+  "finished_at_utc": "2026-10-10T10:48:32.092452+00:00",
+  "elapsed_seconds": 329.37256999999954,
+  "resources": {
+    "working_set_bytes": 1449922560,
+    "peak_working_set_bytes": 1459916800,
+    "private_bytes": 2651881472,
+    "peak_pagefile_bytes": 2662313984
+  },
+  "checks": {
+    "protected_sources": {
+      "status": "PASS",
+      "prior_public_inventory_files": 402,
+      "prior_delivery_manifest_members": 51,
+      "tracked_baseline": "e0920d9375e1f351bc30933cd83b4e7ea41a68ae"
+    },
+    "frozen_sample_identity": {
+      "status": "PASS",
+      "train_scenes": 10455,
+      "development_scenes": 10501,
+      "original_order_unique_disjoint": true,
+      "B0_B1_M1_paired": true
+    },
+    "temporal_metadata": {
+      "status": "PASS",
+      "scene_slot_checks": 125736,
+      "nominals_in_index": 70560,
+      "minimum_obs_end_slack_seconds": 20.387558,
+      "offset_minutes": [
+        60,
+        50,
+        40,
+        30,
+        20,
+        10
+      ],
+      "future_observation_count": 0,
+      "file_created_after_analysis_scene_slot_exposures": 27880,
+      "operational_realtime_availability": "NOT_VERIFIED_BY_OBSERVATION_CAUSALITY"
+    },
+    "source_reference_inventory": {
+      "unique_files": 67006,
+      "by_kind": {
+        "B13": 66516,
+        "IMERG": 490
+      },
+      "stat_checks": 67006,
+      "failures": 0,
+      "status": "PASS",
+      "unselected_payload_SHA": "NOT_VERIFIED_LIMITED_READ_SCOPE"
+    },
+    "scaler_mask_sp04": {
+      "status": "PASS",
+      "scaler_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+      "mean_K": 271.60515414265217,
+      "std_K": 19.93959597783802,
+      "scaler_storage": "JSON number, parsed Python binary64",
+      "normalization_calculation_dtype": "float64",
+      "normalization_output_dtype": "float32",
+      "B0_B1_shared_scaler": true,
+      "refit": false,
+      "mask_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+      "mask_native_shape": [
+        130,
+        140
+      ],
+      "mask_target_shape": [
+        100,
+        100
+      ],
+      "mask_native_dtype": "uint8",
+      "mask_dimensions": [
+        "lat",
+        "lon"
+      ],
+      "mask_true_count": 3430,
+      "mask_distinct_from_observation_validity": true,
+      "axes": {
+        "native_lat": {
+          "length": 501,
+          "dtype": "float32",
+          "direction": "DESCENDING",
+          "first": 30.0,
+          "last": 20.0,
+          "raw_bytes_sha256": "dc82ee6d54c12e796ec2b9751ef388441d22a877d4e73aa1ba4702cdada72c52"
+        },
+        "native_lon": {
+          "length": 501,
+          "dtype": "float32",
+          "direction": "ASCENDING",
+          "first": 97.0,
+          "last": 107.0,
+          "raw_bytes_sha256": "9303bfb46b0873cf35008ab1860445af9811f05a5b60f8eb9e30aaff95d2968b"
+        },
+        "target_lat": {
+          "length": 100,
+          "dtype": "float32",
+          "direction": "ASCENDING",
+          "first": 20.049999237060547,
+          "last": 29.94999885559082,
+          "raw_bytes_sha256": "2c12a5b12969ddc2625686eae7ca561286b467b72e56a06493fe34800fb5aa5e"
+        },
+        "target_lon": {
+          "length": 100,
+          "dtype": "float32",
+          "direction": "ASCENDING",
+          "first": 97.04999542236328,
+          "last": 106.94999694824219,
+          "raw_bytes_sha256": "07cc72b46ff87949b32c5c265af48211a28331055ed25166d499647a2b02ad07"
+        }
+      },
+      "sp04_indices_shape": [
+        10000,
+        25
+      ],
+      "sp04_unique_native_members": 250000
+    },
+    "limited_decode": {
+      "status": "PASS",
+      "selected_scenes": 48,
+      "decoded_scenes": 48,
+      "full_raw_dataset_decoded": false
+    }
+  },
+  "blockers": [
+    {
+      "stage": "FULL_UNSELECTED_PAYLOAD_IDENTITIES",
+      "status": "NOT_VERIFIED",
+      "reason": "All frozen paths checked by stat; only deterministic selected payloads byte-hashed. No full raw-file sweep in limited preflight."
+    },
+    {
+      "stage": "INITIAL_NEGATIVE_TEST_PATH_ATTRIBUTES",
+      "status": "NOT_VERIFIED",
+      "reason": "Initial 2025 rejection called Path.resolve first; possible Windows attribute queries were not instrumented. No payload read/decode. Delivered guard now rejects lexically before resolution; no real-data rerun."
+    }
+  ],
+  "overall_status": "NOT_VERIFIED",
+  "limits": {
+    "max_scenes": 72,
+    "max_payload_file_bytes": 734003200,
+    "max_total_data_bytes": 2147483648,
+    "max_working_set_bytes": 2147483648,
+    "max_elapsed_seconds": 900
+  },
+  "no_raw_pixels_published": true,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "FORMAL_OPTIMIZER_STEPS": 0,
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "HISTORICAL_CHECKPOINT_READS": 0,
+  "MODEL_FORWARDS": 0,
+  "MODEL_PARAMETER_UPDATES": 0,
+  "SCALER_FITS": 0,
+  "tool_tests": {
+    "unit_tests": 36,
+    "failures": 0,
+    "errors": 0,
+    "synthetic_training_tests_rerun": 0,
+    "model_forwards": 0,
+    "optimizer_steps": 0,
+    "initial_launch_failure": "Output directory missing; stopped before pytest or real data reads",
+    "repair": "Created only isolated .local log directory",
+    "environment_probe": "psutil unavailable; used Windows GetProcessMemoryInfo, no package installation",
+    "initial_unit_tests_pass": 36,
+    "targeted_hardening_tests_pass": 8,
+    "final_unit_tests_pass": 44,
+    "unique_tests_final_pass": 44,
+    "unit_assertion_executions": 88,
+    "initial_static_guard_gap": "Resolver called before forbidden-year rejection; possible path-attribute queries not instrumented",
+    "guard_gap_repaired": true
+  },
+  "engineering_delivery": "COMPLETE_WITH_EXPLICIT_NOT_VERIFIED_ITEMS",
+  "publication": "ACTUAL_PUSH_IDENTITY_RECORDED_SEPARATELY",
+  "code_provenance": {
+    "executed_limited_preflight_audit_source_sha256": "d0beba2124ce7c06185369c81028402030c223d93500f62f655dd4cacd63d937",
+    "delivered_hardened_audit_source_sha256": "c4d749c2190a0e23a44d86535a02a6ca0d51274f096418d935d2acd294507f35",
+    "change": "Raw year/root/date lexical rejection moved before Path.resolve; no frozen scientific or allowed-data preprocessing change",
+    "source_patch_sha256": "8370e341ed99402adb8299dd7c3ab0195ac05786f425889293c71dd10e709f29",
+    "real_raw_data_reads_after_hardening": 0,
+    "actual_decode_was_executed_before_hardening": true,
+    "initial_negative_test_path_attribute_queries": "NOT_INSTRUMENTED",
+    "initial_negative_test_2025_payload_binary_opens": 0,
+    "final_negative_tests_forbidden_resolution_calls": 0,
+    "final_unique_unit_tests_pass": 44,
+    "unit_assertion_executions": 88,
+    "test_attempts": [
+      {
+        "scope": "initial",
+        "pass": 36
+      },
+      {
+        "scope": "targeted_hardening",
+        "pass": 8
+      },
+      {
+        "scope": "final",
+        "pass": 44
+      }
+    ],
+    "formal_optimizer_steps": 0,
+    "model_forwards": 0,
+    "patch_format": "Unified diff with zero context; apply to archived source with --unidiff-zero if reconstructing"
+  },
+  "2025_counter_scope": "Controlled binary payload reads; pre-hardening negative-test path attribute queries NOT_INSTRUMENTED"
+}

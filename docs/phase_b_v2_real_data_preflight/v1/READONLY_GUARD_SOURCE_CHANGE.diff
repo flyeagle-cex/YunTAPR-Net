@@ -1,0 +1,27 @@
+--- executed_attempt_001/audit.py
++++ delivered/audit.py
+@@ -15,0 +16 @@
++import ntpath
+@@ -17,0 +19 @@
++import re
+@@ -114 +115,0 @@
+-        p = path.resolve()
+@@ -116,0 +118,15 @@
++        # Reject forbidden years BEFORE Path.resolve / any filesystem query.
++        # Windows realpath may query attributes; it is not a lexical operation.
++        if kind in ("B13", "IMERG"):
++            if year not in (2023, 2024):
++                raise PermissionError("Only frozen 2023/2024 inputs")
++            from yuntapr.data.dataset_b1 import H_ROOT, IMERG_ROOT
++            base = ntpath.normcase(ntpath.normpath(str(H_ROOT if kind == "B13" else IMERG_ROOT)))
++            text = ntpath.normcase(ntpath.normpath(str(path)))
++            if not text.startswith(base + "\\"):
++                raise PermissionError("Frozen lexical raw source root required")
++            relative = text[len(base)+1:]
++            match = re.search(r"(202[0-9])(\d{2})", relative if kind == "B13" else ntpath.basename(relative))
++            if not match or int(match[1]) != year or not 3 <= int(match[2]) <= 10:
++                raise PermissionError("Raw lexical date rejected before filesystem resolution")
++        p = path.resolve()
+@@ -122,2 +137,0 @@
+-            if year not in (2023, 2024):
+-                raise PermissionError("Only frozen 2023/2024 inputs")
