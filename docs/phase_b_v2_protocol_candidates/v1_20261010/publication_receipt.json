@@ -1,0 +1,58 @@
+{
+  "recorded_utc": "2026-10-10T04:50:37.574551+00:00",
+  "repository": "https://github.com/flyeagle-cex/YunTAPR-Net",
+  "branch": "main",
+  "baseline_commit": "6e692625ebdd9bdaeff65e22d0ce59af349d98c5",
+  "evidence_commit": "78fc2e77b4fd618276a8d8c87aaac03d8c4d1086",
+  "remote_main_verified_after_evidence_push": "78fc2e77b4fd618276a8d8c87aaac03d8c4d1086",
+  "evidence_push_result": "SUCCESS",
+  "remote_verification_method": "git ls-remote origin refs/heads/main",
+  "manifest_sha256": "6ab8fa376c4a359d0e81f5adb934d62800fae02f46e78d560606df2ab7b7a743",
+  "candidate_status": "RESEARCHER_DECISION_REQUIRED",
+  "V2_PHASE_B_AUTHORIZED": false,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "formal_training_runs": 0,
+  "optimizer_updates": 0,
+  "raw_reference_downloads": 0,
+  "previous_87_checks_reexecuted": 0,
+  "synthetic_tests": {
+    "passed": 23,
+    "failed": 0
+  },
+  "static_checks": {
+    "passed": 20,
+    "failed": 0
+  },
+  "publication_integrity": {
+    "manifest_file_hashes_verified": 39,
+    "staged_file_hashes_verified": 39,
+    "allowlisted_commit_files": 40,
+    "unexpected_staged_paths": 0,
+    "historical_config_source_and_phase_a_evidence_changes": 0,
+    "tracked_worktree_clean_after_evidence_commit": true,
+    "pdf_pages": 21,
+    "pdf_text_chars": 18910,
+    "pdf_metadata_private_identity": false,
+    "visual_pages_reviewed": 21
+  },
+  "retained_failures": {
+    "local_pdf_export_attempt_001": "Missing local xurl.sty; full redacted console retained; final export attempt004 passed",
+    "closure_attempt_001": "Privacy regex matched own source; retained; fixed XML-specific host validation; final20 checks passed",
+    "git_whitespace_attempt_001": {
+      "result": "FAIL_ON_PRESERVED_RAW_CONSOLE_ONLY",
+      "path": "tests/pdf_export_failure_attempt_001.log",
+      "lines": [
+        55,
+        57,
+        58
+      ],
+      "reason": "Original interactive XeLaTeX prompt spaces retained as failure evidence",
+      "resolution": "All other source/document paths passed git diff --cached --check; this one generated console excluded, bytes retained and hashed"
+    },
+    "sandbox_remote_check": "Sandbox network connection failed; approved external-sandbox git ls-remote succeeded"
+  },
+  "unexecuted_science": "All new training, calibration, physical observations, independent validation and final test remain unexecuted; data licence/lineage/archives and researcher scientific decisions required.",
+  "receipt_commit_policy": "This append-only receipt records the verified evidence commit. Its own commit identity is supplied by Git history and final remote verification; no circular self-hash."
+}
