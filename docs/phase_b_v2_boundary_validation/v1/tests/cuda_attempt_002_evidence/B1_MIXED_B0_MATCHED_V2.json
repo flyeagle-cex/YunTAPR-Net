@@ -1,0 +1,162 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "status": "SYNTHETIC_BOUNDARY_PASS",
+  "scientific_performance_evidence": false,
+  "model": "B0_MATCHED_V2",
+  "batch_size": 1,
+  "rain_case": "MIXED",
+  "phase": "TRAIN_TAIL",
+  "input_shape": [
+    1,
+    1,
+    501,
+    501
+  ],
+  "target_shape": [
+    1,
+    1,
+    100,
+    100
+  ],
+  "qlog_shape": [
+    1,
+    32,
+    100,
+    100
+  ],
+  "raw_quantile_head": {
+    "shape": [
+      1,
+      33,
+      100,
+      100
+    ],
+    "dtype": "torch.float32"
+  },
+  "precision": {
+    "parameters": "float32",
+    "occurrence": "bfloat16",
+    "raw_quantile": "float32",
+    "qlog": "float64",
+    "TF32": false
+  },
+  "N_valid": 3430,
+  "mask_role": "ARTIFICIAL_3430_CELLS_NOT_YUNNAN_GEOGRAPHY",
+  "arms": {
+    "E0": {
+      "S_occ_training_unweighted": 298.42132568359375,
+      "S_qr_unweighted": 1062.0372351940034,
+      "synthetic_weighted_training_objective": 0.3966351489439059,
+      "N_valid": 3430,
+      "N_rain": 2450,
+      "synthetic_conditional_pinball_unweighted": 0.4334845857934708,
+      "backward_seconds": 0.20669970000017202,
+      "gradients": {
+        "parameter_tensors": 74,
+        "missing": 0,
+        "nonfinite": 0,
+        "occurrence_head_norms": {
+          "heads.occurrence.weight": 0.1536206177236882,
+          "heads.occurrence.bias": 0.05810546875
+        },
+        "quantile_head_norms": {
+          "heads.quantile.weight": 0.15506829592898205,
+          "heads.quantile.bias": 0.047545968602156104
+        },
+        "zero_tensors": [],
+        "empty_rain_connected_zero": false,
+        "optimizer_steps": 0
+      }
+    },
+    "E1": {
+      "S_occ_training_unweighted": 1181.870849609375,
+      "S_qr_unweighted": 1062.0372351940034,
+      "synthetic_weighted_training_objective": 0.6542006078143959,
+      "N_valid": 3430,
+      "N_rain": 2450,
+      "synthetic_conditional_pinball_unweighted": 0.4334845857934708,
+      "backward_seconds": 0.06695630000103847,
+      "gradients": {
+        "parameter_tensors": 74,
+        "missing": 0,
+        "nonfinite": 0,
+        "occurrence_head_norms": {
+          "heads.occurrence.weight": 0.3134587023228373,
+          "heads.occurrence.bias": 0.10302734375
+        },
+        "quantile_head_norms": {
+          "heads.quantile.weight": 0.15506829592898205,
+          "heads.quantile.bias": 0.047545968602156104
+        },
+        "zero_tensors": [],
+        "empty_rain_connected_zero": false,
+        "optimizer_steps": 0
+      }
+    },
+    "E2": {
+      "S_occ_training_unweighted": 298.42132568359375,
+      "S_qr_unweighted": 1062.0372351940034,
+      "synthetic_weighted_training_objective": 0.7062669959392421,
+      "N_valid": 3430,
+      "N_rain": 2450,
+      "synthetic_conditional_pinball_unweighted": 0.4334845857934708,
+      "backward_seconds": 0.06793850000030943,
+      "gradients": {
+        "parameter_tensors": 74,
+        "missing": 0,
+        "nonfinite": 0,
+        "occurrence_head_norms": {
+          "heads.occurrence.weight": 0.1536206177236882,
+          "heads.occurrence.bias": 0.05810546875
+        },
+        "quantile_head_norms": {
+          "heads.quantile.weight": 0.3101365918579641,
+          "heads.quantile.bias": 0.09509193720431221
+        },
+        "zero_tensors": [],
+        "empty_rain_connected_zero": false,
+        "optimizer_steps": 0
+      }
+    }
+  },
+  "common_fixed_evaluation": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "synthetic_common_core": 0.39663514673360106,
+    "synthetic_conditional_pinball": 0.43348458579347077,
+    "N_valid": 3430,
+    "N_rain": 2450,
+    "scientific_performance_evidence": false
+  },
+  "common_evaluation_components": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "scientific_performance_evidence": false,
+    "occurrence_gamma_for_common_core": 2,
+    "S_occ_gamma2_unweighted": 298.4213181022482,
+    "S_qr_unweighted": 1062.0372351940034,
+    "N_valid": 3430,
+    "N_rain": 2450
+  },
+  "common_evaluation_numerator_dtype": "float64",
+  "E0_original_loss_abs_difference": 3.844760343429954e-09,
+  "E0_tolerance": {
+    "rtol": 8e-07,
+    "atol": 1e-08
+  },
+  "fresh_state_sha256": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+  "after_state_sha256": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+  "prior_seed2026_identity_matches": true,
+  "nonpersistent_buffers_sha256": "55f2ac1f12e1f601a7c7ee12aed0e37b6f7efe793a8ce1f8ee11dc3da89b4356",
+  "measurement": {
+    "forward_and_three_losses_seconds": 0.4327182000015455,
+    "peak_allocated_bytes": 1508524544,
+    "peak_reserved_bytes": 1910505472,
+    "one_batch_cold_cache_and_extra_checks_not_training_throughput": true,
+    "optimizer_or_checkpoint_memory_included": false
+  },
+  "full_model_forwards": 1,
+  "full_model_backwards": 3,
+  "optimizer_steps": 0,
+  "raw_data_reads": 0,
+  "checkpoint_reads_or_writes": 0,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false
+}

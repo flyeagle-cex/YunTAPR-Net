@@ -1,0 +1,12 @@
+{
+  "finding_type": "STATIC_SOURCE_REVIEW_FINDING_AFTER_FIRST_PASS",
+  "first_tests": {"CPU":49,"CUDA":12,"failures":0},
+  "issue": "Initial new common component helper reused E0 training S_occ, which computes in FP32. Frozen phase_a_validation_v2.LogDomainValidation recomputes common occurrence in FP64. Same gamma does not make the arithmetic identical.",
+  "repair": "Only new evaluation_components now invokes the unchanged frozen LogDomainValidation.add/report on synthetic outputs. No training loss changed.",
+  "first_static_audit_limitation": "static_review_001 checked gamma and weighting but did not assert frozen common evaluation precision.",
+  "first_records_preserved": true,
+  "tolerances_relaxed": false,
+  "scientific_performance_evidence": false,
+  "required_verification": "Repeat new CPU/CUDA boundary suites with exact frozen evaluation source checks; do not rerun prior 91 CPU / 6 CUDA.",
+  "formal_files_modified": []
+}

@@ -1,0 +1,47 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "risks": [
+    {
+      "risk": "FP32_LABEL_THRESHOLD",
+      "status": "REVIEW_POINT",
+      "source": "validation.py:supervision",
+      "finding": "Labels compare FP32 reference to FP32 0.1 before FP64 cast; CPU threshold edge counts passed for batch1/8/5."
+    },
+    {
+      "risk": "PRECISION_AND_SUPPORT",
+      "status": "REVIEW_POINT",
+      "source": "heads.py and parameterization.py",
+      "finding": "BF16 occurrence; FP32 raw33; FP64 transform/pinball. Strict order/support epsilon unchanged. No expm1 in tested path."
+    },
+    {
+      "risk": "EVALUATION_DENOMINATORS",
+      "status": "REVIEW_POINT",
+      "source": "total.py and boundary.py:evaluation_components",
+      "finding": "Train denominator N_valid; conditional report N_rain. E1 gamma and E2 lambda training objectives cannot be common Core. Common gamma2 FP64 numerators are recomputed by unchanged LogDomainValidation, then aggregated. Initial helper precision issue and correction retained."
+    },
+    {
+      "risk": "NO_RAIN_VS_NO_SUPERVISION",
+      "status": "REVIEW_POINT",
+      "source": "validation.py:graph_zero and total_loss.py:b0_core_loss",
+      "finding": "Empty rain gives connected zero and conditional report None. Candidate raises on zero valid; old loss returns skip marker, formal forward_loss raises. Integration must preserve stop rather than silently skip."
+    },
+    {
+      "risk": "FRESH_AND_ORDER",
+      "status": "REVIEW_POINT",
+      "source": "initialization.py and controls.py",
+      "finding": "New GPU cases match prior seed2026; seeds2027/2028 and 9 epoch synthetic permutations use unchanged prior evidence, not rerun. No real ID order has been validated."
+    },
+    {
+      "risk": "EPOCH9_VS_PHASE_A_SCHEMA",
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "source": "checkpoint_v2.py:validate_payload",
+      "finding": "Historical Phase-A schema allows epochs1..50, BEST/early-stop selection and next permutation at terminal. It is not a reviewed B9/V0 runner. New formal schema/terminal transaction must be independently approved."
+    },
+    {
+      "risk": "SHA_IS_NOT_APPROVAL",
+      "status": "RESEARCHER_DECISION_REQUIRED",
+      "source": "readiness.py and controls.py:reject_resume",
+      "finding": "Binding strings cannot authenticate approval. BlockedRunner remains unconditional. No LAST state loader invoked or durable checkpoint transaction tested."
+    }
+  ]
+}

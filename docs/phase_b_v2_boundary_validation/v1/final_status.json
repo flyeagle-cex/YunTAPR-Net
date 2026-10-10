@@ -1,0 +1,133 @@
+{
+  "status": "COMPLETE_WITHIN_SYNTHETIC_BOUNDARY_SCOPE_AT_RESEARCHER_REVIEW",
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "baseline_commit": "ccfa6869672c96634fede157b06984741cc71c1b",
+  "scientific_performance_evidence": false,
+  "current_tests": {
+    "CPU": 49,
+    "CUDA": 12,
+    "unique": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "warnings": 0,
+    "static_checks": 16,
+    "closure_checks": 18
+  },
+  "prior_91_CPU_6_CUDA_reexecuted": false,
+  "history": {
+    "pytest_instances": 122,
+    "numerical_test_failures": 0,
+    "static_precision_finding_fixed": 1,
+    "document_authoring_failure_fixed": 1,
+    "latex_compilation_failure_fixed": 1,
+    "attempt_records_retained": true
+  },
+  "model_calls": {
+    "current_full_forwards": 12,
+    "current_full_backwards": 12,
+    "cumulative_full_forwards": 24,
+    "cumulative_full_backwards": 24,
+    "fresh_model_instances_current": 24,
+    "fresh_model_instances_total": 48,
+    "optimizer_steps": 0,
+    "validation_backwards": 0
+  },
+  "matrix": {
+    "models": [
+      "B0_MATCHED_V2",
+      "B1_V2"
+    ],
+    "batch_sizes": [
+      1,
+      8,
+      5
+    ],
+    "rain_cases": [
+      "MIXED",
+      "EMPTY_RAIN"
+    ],
+    "loss_arms": [
+      "E0",
+      "E1",
+      "E2"
+    ],
+    "seed": 2026,
+    "all_complete": true
+  },
+  "resources": {
+    "1": {
+      "peak_allocated_bytes": [
+        1504727552,
+        1521946624
+      ],
+      "peak_reserved_bytes": [
+        1908408320,
+        1920991232
+      ],
+      "forward_and_three_losses_seconds": [
+        0.055445899997721426,
+        0.4327182000015455
+      ]
+    },
+    "8": {
+      "peak_allocated_bytes": [
+        3440071680,
+        3490858496
+      ],
+      "peak_reserved_bytes": [
+        4460642304,
+        4852809728
+      ],
+      "forward_and_three_losses_seconds": [
+        0.3096254999982193,
+        0.31791660000089905
+      ]
+    },
+    "5": {
+      "peak_allocated_bytes": [
+        2157620736,
+        2188620800
+      ],
+      "peak_reserved_bytes": [
+        3040870400,
+        3057647616
+      ],
+      "forward_and_three_losses_seconds": [
+        0.19774369999868213,
+        0.2110541000001831
+      ]
+    }
+  },
+  "OOM": false,
+  "timeout": false,
+  "fallback_or_automatic_retry": false,
+  "common_evaluation": "Unchanged LogDomainValidation FP64 gamma2 unweighted numerators; never an arm training objective",
+  "remaining_unexecuted": [
+    "Real frozen mask/scaler/2023-2024 data preflight and ID order",
+    "Formal optimizer/clip/scheduler and durable checkpoint transactions",
+    "New B9/V0 runner, long-duration resource and failure-injection tests",
+    "Independent approval authenticity, stage execution and LAST-bound restore",
+    "CPU full-model forward/backward; boundary seeds2027/2028 (prior identity evidence reused)"
+  ],
+  "researcher_decisions": [
+    "H-O/H-Q, E0/E1/E2, D1/Q1/N0/I3/B9/S0/V0 final acceptance",
+    "Minimum scientific effects, guardrail limits and multiplicity NOT_YET_ESTABLISHED",
+    "2024 development interpretation, Phase-A acceptance scope and historical recovery independent disposition",
+    "Formal integration, data/compute preflight, specific stage execution and recovery approvals"
+  ],
+  "inherited_files_verified": 226,
+  "historical_files_modified": 0,
+  "raw_2023_2024_data_reads": 0,
+  "private_checkpoint_reads": 0,
+  "pdf_pages": 5,
+  "pdf_sha256": "787d88ca94c7f35003cbca1177ed42c9246d441b24a63637156a13ed3e000e63",
+  "publication_identity": "Append-only publication_receipt.json and Git history",
+  "next_action": "Researcher code review and independent decisions; stop here without deriving new work packages",
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0
+}
