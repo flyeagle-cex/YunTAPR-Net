@@ -27,6 +27,7 @@ LIMITS = dict(max_seconds=7*24*3600, max_working_set_bytes=6*GiB,
               minimum_cuda_free_bytes=5*GiB, max_cuda_reserved_bytes=6*GiB,
               minimum_disk_free_bytes=12*GiB, max_read_bytes=32*1024*GiB,
               frame_cache_bytes=256*1024**2, target_cache_bytes=128*1024**2,
+              directory_handle_limit=518,
               max_checkpoint_bytes=128*1024**2, max_score_database_bytes=256*1024**2)
 
 def digest(value) -> str:

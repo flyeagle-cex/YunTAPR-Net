@@ -112,6 +112,28 @@ class Plan:
 
 class Reader(VerifiedReader):
     """P1 same-handle read algorithm with formal budgets and bounded retention."""
+    def lock_parents(self) -> None:
+        # The selected pilot has a 512-handle bound. Full frozen M1 requires
+        # exactly 510 raw ancestors + eight additional mask ancestors = 518.
+        # This new source version is NOT applied to the stopped execution's
+        # release or quota; restarting it requires a new human decision.
+        if self.handles or len(self.parents)!=LIMITS['directory_handle_limit']:
+            raise RuntimeError('FULL_FROZEN_DIRECTORY_REGISTRY_COUNT_OR_REENTRY')
+        parents=tuple(sorted(self.parents,key=lambda x:(x.count('\\'),x)))
+        for path in parents:
+            if path not in self.parents:
+                raise PermissionError('FROZEN_INDUCED_PARENT_ONLY')
+            # Frozen base directory names may describe a multi-year archive.
+            # The audited Scope rejects forbidden years in paths *below* the
+            # exact base. Only ancestors induced by its registered 2023/24 files
+            # are permitted here; no directory listing or 2025 child is opened.
+            if path in self.plan.scope.parents:self.plan.scope.directory(path)
+            self.budget.check()
+            handle=ReadHandle(path,directory=True)
+            try:self.plan.scope.authenticate_final(path,handle.final_path)
+            except BaseException:handle.close();raise
+            self.handles.append(handle)
+        self.budget.emit('FULL_FROZEN_PARENT_LOCKS',count=len(self.handles),parent_registry_sha=digest(parents))
     def read(self,path: str) -> bytes:
         text,expected,frozen_size,group=self.authenticate(path) # before any filesystem operation
         key=sha((group+'\0'+text).encode()); start=time.perf_counter()

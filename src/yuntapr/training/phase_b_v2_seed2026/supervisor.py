@@ -87,7 +87,7 @@ def main():
             if db.exists():
                 with sqlite3.connect(db,timeout=5) as con:
                     con.execute('PRAGMA synchronous=FULL')
-                    con.execute("UPDATE campaign SET status='FAILED_NO_RETRY',reason=?",('WATCHDOG_TERMINATED',))
+                    con.execute("UPDATE campaign SET status='FAILED_NO_RETRY',reason=? WHERE status='ACTIVE'",('WATCHDOG_TERMINATED',))
             atomic_json(OUT/'watchdog_failure.json',status)
     return 0 if success and clean else 1
 

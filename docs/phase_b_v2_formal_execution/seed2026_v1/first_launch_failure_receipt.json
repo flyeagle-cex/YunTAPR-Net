@@ -1,0 +1,46 @@
+{
+  "status": "FAILED_BEFORE_FORMAL_UPDATE_NO_RETRY",
+  "failed_source_commit": "926cbc09701443366f40faf2b4908c21ebadf7b4",
+  "error_code": "SELECTED_DIRECTORY_HANDLE_LIMIT",
+  "worker_identity": {
+    "pid": 35628,
+    "creation_filetime": 134361793718375982,
+    "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+  },
+  "job_empty_and_handles_signaled": true,
+  "elapsed_seconds": 6.016000000001441,
+  "peak_cpu_working_set_bytes": 879001600,
+  "peak_cpu_private_commit_bytes": 2095144960,
+  "cuda_admission": {
+    "free_bytes": 7283408896,
+    "total_bytes": 8546484224,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128"
+  },
+  "host_admission": {
+    "total_phys": 33752997888,
+    "available_phys": 17922469888,
+    "total_page": 49859125248,
+    "available_page": 28520112128,
+    "disk_free_bytes": 50810286080
+  },
+  "cuda_peak_allocated_bytes": 0,
+  "cuda_peak_reserved_bytes": 0,
+  "public_metadata_content_bytes": 55496249,
+  "raw_payload_open_attempts": 0,
+  "raw_payload_content_bytes": 0,
+  "raw_directory_handle_attempts": 0,
+  "formal_optimizer_attempts_reserved": 0,
+  "formal_optimizer_returns": 0,
+  "training_forwards": 0,
+  "validation_forwards": 0,
+  "native_watchdog_clean": true,
+  "restarts": 0,
+  "refunds": 0,
+  "private_evidence_sha256": {
+    "termination.json": "8257f72cc9d0299a560d4f7dcd98361b978e11f0fc8d1b167baa0d930a81445a",
+    "failure_private.txt": "d94f3c3d055c1d7f783d81bc4dfa3310d0d80de40eb6243d8943bfb992a92fef",
+    "bound_identity.json": "d97527162425e3eb9c7f0f758f07c40f2d7a673cbfc724110e2a0c95bf2ecb2f",
+    "access_and_events.jsonl": "0b43b79c9934821545f1c1f11899ac4613c3141f4b510e4627e5c4b9efb97e2a"
+  }
+}
