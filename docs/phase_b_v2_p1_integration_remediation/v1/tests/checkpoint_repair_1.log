@@ -1,0 +1,304 @@
+test_complete_validator_rejects_fields_and_no_mutation (__main__.CheckpointTests.test_complete_validator_rejects_fields_and_no_mutation) ... ERROR
+test_deserializer_receives_only_verified_bytesio (__main__.CheckpointTests.test_deserializer_receives_only_verified_bytesio) ... ERROR
+test_existing_write_handle_prevents_read (__main__.CheckpointTests.test_existing_write_handle_prevents_read) ... ERROR
+test_failed_store_cannot_retry (__main__.CheckpointTests.test_failed_store_cannot_retry) ... ERROR
+test_foreign_pathlike_not_invoked (__main__.CheckpointTests.test_foreign_pathlike_not_invoked) ... ERROR
+test_handle_blocks_writes_and_rename_during_read (__main__.CheckpointTests.test_handle_blocks_writes_and_rename_during_read) ... ERROR
+test_invalid_loaded_payload_cannot_mutate_fixture (__main__.CheckpointTests.test_invalid_loaded_payload_cannot_mutate_fixture) ... ERROR
+test_lexical_reject_before_file_api (__main__.CheckpointTests.test_lexical_reject_before_file_api) ... ERROR
+test_metadata_change_detected (__main__.CheckpointTests.test_metadata_change_detected) ... ERROR
+test_no_budget_rollback_or_wrong_last (__main__.CheckpointTests.test_no_budget_rollback_or_wrong_last) ... ERROR
+test_no_live_model_target (__main__.CheckpointTests.test_no_live_model_target) ... ERROR
+test_orphan_and_restart_registry_not_adopted (__main__.CheckpointTests.test_orphan_and_restart_registry_not_adopted) ... ERROR
+test_post_verification_replacement_uses_original_bytes (__main__.CheckpointTests.test_post_verification_replacement_uses_original_bytes) ... ERROR
+test_receipt_strict_parser (__main__.CheckpointTests.test_receipt_strict_parser) ... ERROR
+test_receipt_tamper_rejected (__main__.CheckpointTests.test_receipt_tamper_rejected) ... ERROR
+test_reject_year_on_save_before_serialize (__main__.CheckpointTests.test_reject_year_on_save_before_serialize) ... ERROR
+test_replacement_same_content_new_object_rejected (__main__.CheckpointTests.test_replacement_same_content_new_object_rejected) ... ERROR
+test_roundtrip_complete_state_and_fixture_restore (__main__.CheckpointTests.test_roundtrip_complete_state_and_fixture_restore) ... ERROR
+test_save_failure_orphan_not_adopted (__main__.CheckpointTests.test_save_failure_orphan_not_adopted) ... ERROR
+test_sha_detects_concurrent_mapped_write (__main__.CheckpointTests.test_sha_detects_concurrent_mapped_write) ... ERROR
+test_sha_mismatch_even_when_object_metadata_pinned (__main__.CheckpointTests.test_sha_mismatch_even_when_object_metadata_pinned) ... ERROR
+test_storage_admission_stop (__main__.CheckpointTests.test_storage_admission_stop) ... ERROR
+test_truncated_payload_stops_before_deserialize (__main__.CheckpointTests.test_truncated_payload_stops_before_deserialize) ... ERROR
+
+======================================================================
+ERROR: test_complete_validator_rejects_fields_and_no_mutation (__main__.CheckpointTests.test_complete_validator_rejects_fields_and_no_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_deserializer_receives_only_verified_bytesio (__main__.CheckpointTests.test_deserializer_receives_only_verified_bytesio)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_existing_write_handle_prevents_read (__main__.CheckpointTests.test_existing_write_handle_prevents_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_failed_store_cannot_retry (__main__.CheckpointTests.test_failed_store_cannot_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_foreign_pathlike_not_invoked (__main__.CheckpointTests.test_foreign_pathlike_not_invoked)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_handle_blocks_writes_and_rename_during_read (__main__.CheckpointTests.test_handle_blocks_writes_and_rename_during_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_invalid_loaded_payload_cannot_mutate_fixture (__main__.CheckpointTests.test_invalid_loaded_payload_cannot_mutate_fixture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_lexical_reject_before_file_api (__main__.CheckpointTests.test_lexical_reject_before_file_api)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_metadata_change_detected (__main__.CheckpointTests.test_metadata_change_detected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_no_budget_rollback_or_wrong_last (__main__.CheckpointTests.test_no_budget_rollback_or_wrong_last)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_no_live_model_target (__main__.CheckpointTests.test_no_live_model_target)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_orphan_and_restart_registry_not_adopted (__main__.CheckpointTests.test_orphan_and_restart_registry_not_adopted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_post_verification_replacement_uses_original_bytes (__main__.CheckpointTests.test_post_verification_replacement_uses_original_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_receipt_strict_parser (__main__.CheckpointTests.test_receipt_strict_parser)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_receipt_tamper_rejected (__main__.CheckpointTests.test_receipt_tamper_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_reject_year_on_save_before_serialize (__main__.CheckpointTests.test_reject_year_on_save_before_serialize)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_replacement_same_content_new_object_rejected (__main__.CheckpointTests.test_replacement_same_content_new_object_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_roundtrip_complete_state_and_fixture_restore (__main__.CheckpointTests.test_roundtrip_complete_state_and_fixture_restore)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_save_failure_orphan_not_adopted (__main__.CheckpointTests.test_save_failure_orphan_not_adopted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_sha_detects_concurrent_mapped_write (__main__.CheckpointTests.test_sha_detects_concurrent_mapped_write)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_sha_mismatch_even_when_object_metadata_pinned (__main__.CheckpointTests.test_sha_mismatch_even_when_object_metadata_pinned)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_storage_admission_stop (__main__.CheckpointTests.test_storage_admission_stop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+======================================================================
+ERROR: test_truncated_payload_stops_before_deserialize (__main__.CheckpointTests.test_truncated_payload_stops_before_deserialize)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 57, in setUp
+    self.payload, self.contract = fixture()
+                                  ^^^^^^^^^
+  File "[LOCAL_SOURCE]/test_checkpoint.py", line 26, in fixture
+    spec = RunSpec(experiment_id='E0', model_id='B0-Matched-v2', seed=2026)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: RunSpec.__init__() got an unexpected keyword argument 'model_id'
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.073s
+
+FAILED (errors=23)

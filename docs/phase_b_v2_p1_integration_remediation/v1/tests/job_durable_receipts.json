@@ -1,0 +1,1264 @@
+{
+  "hard_limit": 24,
+  "reserved": 15,
+  "refunds": 0,
+  "receipts": [
+    {
+      "attempt": 1,
+      "key": "f362918ff03dd7bf9cf268ba90cba6c9",
+      "case": "exit_before",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "exit_before",
+        "key": "f362918ff03dd7bf9cf268ba90cba6c9",
+        "attempt": 1,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:43.025798+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "exit_before",
+        "key": "f362918ff03dd7bf9cf268ba90cba6c9",
+        "attempt": 1,
+        "root_pid": 38612,
+        "worker_identity": null,
+        "root_exited_during_monitor": true,
+        "observed_native_identities": [
+          {
+            "pid": 38612,
+            "creation_filetime": 134361763030293663,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 38732,
+            "creation_filetime": 134361763030392777,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 13800,
+            "creation_filetime": 134361763030650313,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "EXIT_BEFORE_IDENTITY",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19329024,
+        "peak_process_private_commit_bytes": 10153984,
+        "cumulative_tree_cpu_seconds": 0.125,
+        "elapsed_seconds": 0.1720000000004802,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 2,
+      "key": "e9768d600fe7f3db9a6f4eeda2691381",
+      "case": "cpu",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "cpu",
+        "key": "e9768d600fe7f3db9a6f4eeda2691381",
+        "attempt": 2,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:43.221208+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 4004,
+          "creation_filetime": 134361763032591873,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "e9768d600fe7f3db9a6f4eeda2691381",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "cpu",
+        "key": "e9768d600fe7f3db9a6f4eeda2691381",
+        "attempt": 2,
+        "root_pid": 9012,
+        "worker_identity": {
+          "pid": 4004,
+          "creation_filetime": 134361763032591873,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 9012,
+            "creation_filetime": 134361763032247189,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 22372,
+            "creation_filetime": 134361763032346966,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 4004,
+            "creation_filetime": 134361763032591873,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "CPU_TIME_LIMIT",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19677184,
+        "peak_process_private_commit_bytes": 10428416,
+        "cumulative_tree_cpu_seconds": 0.140625,
+        "elapsed_seconds": 0.1720000000004802,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 3,
+      "key": "7aeb03ee44a16f7792d9a1e2f92a991d",
+      "case": "wrong_creation",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_creation",
+        "key": "7aeb03ee44a16f7792d9a1e2f92a991d",
+        "attempt": 3,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:43.405738+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_creation",
+        "key": "7aeb03ee44a16f7792d9a1e2f92a991d",
+        "attempt": 3,
+        "root_pid": 15464,
+        "worker_identity": {
+          "pid": 3964,
+          "creation_filetime": 134361763034414419,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 15464,
+            "creation_filetime": 134361763034086902,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 28376,
+            "creation_filetime": 134361763034174305,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 3964,
+            "creation_filetime": 134361763034414419,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "ValueError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19677184,
+        "peak_process_private_commit_bytes": 10555392,
+        "cumulative_tree_cpu_seconds": 0.15625,
+        "elapsed_seconds": 0.2029999999995198,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 4,
+      "key": "9549d86873745f422a43d64ee55eb8d7",
+      "case": "wrong_image",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_image",
+        "key": "9549d86873745f422a43d64ee55eb8d7",
+        "attempt": 4,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:43.620351+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_image",
+        "key": "9549d86873745f422a43d64ee55eb8d7",
+        "attempt": 4,
+        "root_pid": 12908,
+        "worker_identity": {
+          "pid": 36556,
+          "creation_filetime": 134361763036596697,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 12908,
+            "creation_filetime": 134361763036243865,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 11684,
+            "creation_filetime": 134361763036348627,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 36556,
+            "creation_filetime": 134361763036596697,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "ValueError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19681280,
+        "peak_process_private_commit_bytes": 10539008,
+        "cumulative_tree_cpu_seconds": 0.1875,
+        "elapsed_seconds": 0.23400000000037835,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 5,
+      "key": "32b95ea4eb0d99b1d8217a83a53ce5a6",
+      "case": "foreign_pid",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "foreign_pid",
+        "key": "32b95ea4eb0d99b1d8217a83a53ce5a6",
+        "attempt": 5,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:43.878040+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "foreign_pid",
+        "key": "32b95ea4eb0d99b1d8217a83a53ce5a6",
+        "attempt": 5,
+        "root_pid": 25456,
+        "worker_identity": null,
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 25456,
+            "creation_filetime": 134361763038811575,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 37184,
+            "creation_filetime": 134361763039013239,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 40756,
+            "creation_filetime": 134361763039488662,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "PermissionError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 17559552,
+        "peak_process_private_commit_bytes": 10072064,
+        "cumulative_tree_cpu_seconds": 0.15625,
+        "elapsed_seconds": 0.2650000000012369,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 6,
+      "key": "3c7e610de05b2299a426dcac42715e19",
+      "case": "invalid_handle",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "invalid_handle",
+        "key": "3c7e610de05b2299a426dcac42715e19",
+        "attempt": 6,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:44.147055+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 42224,
+          "creation_filetime": 134361763041828979,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "3c7e610de05b2299a426dcac42715e19",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "invalid_handle",
+        "key": "3c7e610de05b2299a426dcac42715e19",
+        "attempt": 6,
+        "root_pid": 41416,
+        "worker_identity": {
+          "pid": 42224,
+          "creation_filetime": 134361763041828979,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 41416,
+            "creation_filetime": 134361763041503750,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 40440,
+            "creation_filetime": 134361763041591134,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 42224,
+            "creation_filetime": 134361763041828979,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "OSError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19759104,
+        "peak_process_private_commit_bytes": 10518528,
+        "cumulative_tree_cpu_seconds": 0.125,
+        "elapsed_seconds": 0.18699999999989814,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 7,
+      "key": "862375c1c1dd3c3413b320ac1f715971",
+      "case": "memory",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "memory",
+        "key": "862375c1c1dd3c3413b320ac1f715971",
+        "attempt": 7,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:44.362563+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 34324,
+          "creation_filetime": 134361763043986149,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "862375c1c1dd3c3413b320ac1f715971",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "memory",
+        "key": "862375c1c1dd3c3413b320ac1f715971",
+        "attempt": 7,
+        "root_pid": 6612,
+        "worker_identity": {
+          "pid": 34324,
+          "creation_filetime": 134361763043986149,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 6612,
+            "creation_filetime": 134361763043659946,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 34408,
+            "creation_filetime": 134361763043748180,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 34324,
+            "creation_filetime": 134361763043986149,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "MEMORY_LIMIT",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 53350400,
+        "peak_process_private_commit_bytes": 44195840,
+        "cumulative_tree_cpu_seconds": 0.140625,
+        "elapsed_seconds": 0.18800000000010186,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 8,
+      "key": "8d0f35fa5a38b88cf48539d3ad73e8d1",
+      "case": "missing_pid",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "missing_pid",
+        "key": "8d0f35fa5a38b88cf48539d3ad73e8d1",
+        "attempt": 8,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:44.559144+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "missing_pid",
+        "key": "8d0f35fa5a38b88cf48539d3ad73e8d1",
+        "attempt": 8,
+        "root_pid": 9852,
+        "worker_identity": null,
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 9852,
+            "creation_filetime": 134361763045636657,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 11800,
+            "creation_filetime": 134361763045722798,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 36748,
+            "creation_filetime": 134361763045960086,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "OSError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19795968,
+        "peak_process_private_commit_bytes": 10592256,
+        "cumulative_tree_cpu_seconds": 0.125,
+        "elapsed_seconds": 0.18800000000010186,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 9,
+      "key": "58b7a5795fb005644a62fc4fbffd2c7a",
+      "case": "monitor_exit",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "monitor_exit",
+        "key": "58b7a5795fb005644a62fc4fbffd2c7a",
+        "attempt": 9,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:44.754777+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 42968,
+          "creation_filetime": 134361763047908859,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "58b7a5795fb005644a62fc4fbffd2c7a",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "monitor_exit",
+        "key": "58b7a5795fb005644a62fc4fbffd2c7a",
+        "attempt": 9,
+        "root_pid": 6644,
+        "worker_identity": {
+          "pid": 42968,
+          "creation_filetime": 134361763047908859,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 6644,
+            "creation_filetime": 134361763047588205,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 40828,
+            "creation_filetime": 134361763047669141,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 42968,
+            "creation_filetime": 134361763047908859,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          },
+          {
+            "pid": 37252,
+            "creation_filetime": 134361763049760700,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 35892,
+            "creation_filetime": 134361763049875270,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 21080,
+            "creation_filetime": 134361763050122557,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          },
+          {
+            "pid": 41452,
+            "creation_filetime": 134361763051779692,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 15600,
+            "creation_filetime": 134361763051938045,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "WORKER_UNEXPECTED_EXIT",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": true,
+        "peak_process_working_set_bytes": 22155264,
+        "peak_process_private_commit_bytes": 11243520,
+        "cumulative_tree_cpu_seconds": 0.625,
+        "elapsed_seconds": 0.7819999999992433,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 10,
+      "key": "faad0420a658299306a8de4784b47808",
+      "case": "crash_inner",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "crash_inner",
+        "key": "faad0420a658299306a8de4784b47808",
+        "attempt": 10,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:44.971198+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 21080,
+          "creation_filetime": 134361763050122557,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "faad0420a658299306a8de4784b47808",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "monitor_crash": {
+        "key": "faad0420a658299306a8de4784b47808",
+        "worker_identity": {
+          "pid": 21080,
+          "creation_filetime": 134361763050122557,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "leaf_identity": {
+          "pid": 15600,
+          "creation_filetime": 134361763051938045,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      }
+    },
+    {
+      "attempt": 11,
+      "key": "7f9c72294ec3ffe7ebe0d6a23a67a31a",
+      "case": "wrong_nonce",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_nonce",
+        "key": "7f9c72294ec3ffe7ebe0d6a23a67a31a",
+        "attempt": 11,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:45.551370+00:00"
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrong_nonce",
+        "key": "7f9c72294ec3ffe7ebe0d6a23a67a31a",
+        "attempt": 11,
+        "root_pid": 42188,
+        "worker_identity": null,
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 42188,
+            "creation_filetime": 134361763055546471,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 42488,
+            "creation_filetime": 134361763055638458,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 14408,
+            "creation_filetime": 134361763055872250,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "IDENTITY_OR_MONITOR_FAILURE",
+        "error_class": "ValueError",
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19763200,
+        "peak_process_private_commit_bytes": 10522624,
+        "cumulative_tree_cpu_seconds": 0.125,
+        "elapsed_seconds": 0.18699999999989814,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 12,
+      "key": "4b2bb833024b579e833d965d4f7c888a",
+      "case": "normal",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "normal",
+        "key": "4b2bb833024b579e833d965d4f7c888a",
+        "attempt": 12,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:45.748157+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 6348,
+          "creation_filetime": 134361763057826200,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "4b2bb833024b579e833d965d4f7c888a",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "normal",
+        "key": "4b2bb833024b579e833d965d4f7c888a",
+        "attempt": 12,
+        "root_pid": 13764,
+        "worker_identity": {
+          "pid": 6348,
+          "creation_filetime": 134361763057826200,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": true,
+        "observed_native_identities": [
+          {
+            "pid": 13764,
+            "creation_filetime": 134361763057519260,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 39172,
+            "creation_filetime": 134361763057601829,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 6348,
+            "creation_filetime": 134361763057826200,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": null,
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19603456,
+        "peak_process_private_commit_bytes": 10346496,
+        "cumulative_tree_cpu_seconds": 0.09375,
+        "elapsed_seconds": 0.4220000000004802,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 13,
+      "key": "a27f5ed1706688370abf603d9e126d35",
+      "case": "timeout_tree",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "timeout_tree",
+        "key": "a27f5ed1706688370abf603d9e126d35",
+        "attempt": 13,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:46.181431+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 41380,
+          "creation_filetime": 134361763062186923,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "a27f5ed1706688370abf603d9e126d35",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "timeout_tree",
+        "key": "a27f5ed1706688370abf603d9e126d35",
+        "attempt": 13,
+        "root_pid": 11392,
+        "worker_identity": {
+          "pid": 41380,
+          "creation_filetime": 134361763062186923,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": false,
+        "observed_native_identities": [
+          {
+            "pid": 11392,
+            "creation_filetime": 134361763061851391,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 16308,
+            "creation_filetime": 134361763061938710,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 41380,
+            "creation_filetime": 134361763062186923,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          },
+          {
+            "pid": 40236,
+            "creation_filetime": 134361763063473794,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 15316,
+            "creation_filetime": 134361763063640190,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "ELAPSED_LIMIT",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19931136,
+        "peak_process_private_commit_bytes": 10551296,
+        "cumulative_tree_cpu_seconds": 0.328125,
+        "elapsed_seconds": 1.8280000000013388,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 14,
+      "key": "c4fbb4b7f5463da2aae1cfb6dd7369cf",
+      "case": "unexpected_exit",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "unexpected_exit",
+        "key": "c4fbb4b7f5463da2aae1cfb6dd7369cf",
+        "attempt": 14,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:48.031987+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 4260,
+          "creation_filetime": 134361763080706349,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "c4fbb4b7f5463da2aae1cfb6dd7369cf",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "unexpected_exit",
+        "key": "c4fbb4b7f5463da2aae1cfb6dd7369cf",
+        "attempt": 14,
+        "root_pid": 4208,
+        "worker_identity": {
+          "pid": 4260,
+          "creation_filetime": 134361763080706349,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": true,
+        "observed_native_identities": [
+          {
+            "pid": 4208,
+            "creation_filetime": 134361763080361313,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 3368,
+            "creation_filetime": 134361763080469725,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 4260,
+            "creation_filetime": 134361763080706349,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": "WORKER_UNEXPECTED_EXIT",
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19755008,
+        "peak_process_private_commit_bytes": 10534912,
+        "cumulative_tree_cpu_seconds": 0.140625,
+        "elapsed_seconds": 0.39099999999962165,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    },
+    {
+      "attempt": 15,
+      "key": "d91615b7ad7c831acefd21fbc2d7da2a",
+      "case": "wrapper_exit",
+      "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+      "launch": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrapper_exit",
+        "key": "d91615b7ad7c831acefd21fbc2d7da2a",
+        "attempt": 15,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "max_seconds": 15,
+        "max_allocation_bytes": 33554432,
+        "utc": "2026-10-11T07:11:48.433602+00:00"
+      },
+      "bound": {
+        "worker_identity": {
+          "pid": 28368,
+          "creation_filetime": 134361763085811252,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "key": "d91615b7ad7c831acefd21fbc2d7da2a",
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        }
+      },
+      "termination": {
+        "scope": "SYNTHETIC_ENGINEERING_ONLY",
+        "campaign": "P1_ARTIFICIAL_JOB_INTEGRATION_v1",
+        "case": "wrapper_exit",
+        "key": "d91615b7ad7c831acefd21fbc2d7da2a",
+        "attempt": 15,
+        "root_pid": 13848,
+        "worker_identity": {
+          "pid": 28368,
+          "creation_filetime": 134361763085811252,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        "root_exited_during_monitor": true,
+        "observed_native_identities": [
+          {
+            "pid": 13848,
+            "creation_filetime": 134361763084356518,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 40208,
+            "creation_filetime": 134361763084424107,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 41180,
+            "creation_filetime": 134361763084617895,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          },
+          {
+            "pid": 42892,
+            "creation_filetime": 134361763085702814,
+            "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+          },
+          {
+            "pid": 28368,
+            "creation_filetime": 134361763085811252,
+            "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+          }
+        ],
+        "violation": null,
+        "error_class": null,
+        "job_empty_and_handles_signaled": true,
+        "inner_cleanup_before_outer_stop": null,
+        "peak_process_working_set_bytes": 19820544,
+        "peak_process_private_commit_bytes": 10584064,
+        "cumulative_tree_cpu_seconds": 0.28125,
+        "elapsed_seconds": 0.5310000000008586,
+        "source_sha": {
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/launcher.py": "c6dbdcfa42bd3a7514ecd08dadb9a1cc6b79082543b1dba22fed6a3da962160b",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/worker.py": "1b7d21de8d3db7497a692c71345c9b5a95cb91551bf5fe216737f82b7845db07",
+          "src/yuntapr/experimental/phase_b_v2_p1_integration_candidate/scope.py": "629a72f1f464062aa10604a7aeb0735ccfc011f87ed696f6223047b80152acf6",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/winjob.py": "524edd00d7e7185967c6e4458e940f7fc5c03c941e003910df01944086e9a750",
+          "src/yuntapr/experimental/phase_b_v2_execution_watchdog_candidate/watchdog.py": "bb2c28b5a72618d8e47051a66e2d6edd7f989cd308ef2c81854b53f84ae75155"
+        },
+        "restarts": 0,
+        "refunds": 0,
+        "optimizer_steps": 0,
+        "model_imports": 0,
+        "gpu_operations": 0,
+        "real_data_reads": 0
+      }
+    }
+  ]
+}

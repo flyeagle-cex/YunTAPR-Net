@@ -1,0 +1,73 @@
+\documentclass[UTF8,a4paper,10pt]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{amsmath,booktabs,url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\title{YunTAPR-Net：P1 隔离工程修复审查}
+\author{候选工程交付；科研批准由研究者独立决定}
+\date{2026年10月11日}
+\begin{document}
+\pagestyle{plain}
+\maketitle
+\vspace{-8mm}
+\textbf{结论：人工同字节 checkpoint 与 Job 集成通过；正式执行未授权。}
+来源基线：\texttt{ef74d94}。最终身份取包含本文的 Git 对象，不是批准事件。
+
+\section*{实际完成的检查}
+\begin{tabular}{p{97mm}p{30mm}}
+\toprule
+能力与范围 & 状态\\
+\midrule
+同句柄 SHA、BytesIO 解码及人工状态恢复（27测试） & PASS\\
+创建即入 Job、原生身份、超限与异常关闭（15测试） & PASS\\
+B9 非回退边界与正式入口拒绝（8测试） & PASS\\
+真实模型、AdamW、CUDA RNG 恢复 & 未验证\\
+长程训练、驱动挂起、掉电持久性 & 未验证\\
+\bottomrule
+\end{tabular}
+
+最终50个 unittest 方法通过，0未修复失败。最初两轮各23个 fixture 参数错误保留，不是科研训练失败。14次外层人工启动加1次内层 monitor，共15个非退款预留；固定上限24，无自动重试。全部Job清空，旧smoke额度未变。
+
+\section*{Checkpoint：关键不变式}
+词法年份、目录与注册拒绝先于路径API。目录句柄、payload只读句柄绑定实际对象；读前后元数据和完整SHA相符。收据最多16 KiB，payload最多1 MiB，人工tensor最多256 KiB。仅已验证不可变字节进入
+\[
+\texttt{torch.load(BytesIO(verified\_bytes), weights\_only=True)}.
+\]
+完整模型键、AdamW矩、scheduler、CPU RNG、epoch/update、验证收据和来源通过后才安装人工字典。旧reader不用；live model/optimizer拒绝。替换、截断、错误SHA、并发写/映射、校验后替换均有负面证据。重启后无可信注册即拒绝，不采用孤立LAST。
+
+\section*{Job：停止拥有的树}
+复用原子Job后端；PID、创建FILETIME、原生executable哈希与nonce绑定实际worker。venv包装进程提前退出仍被正确处理；内存、CPU time、时间、句柄异常终止拥有的Job，不用PID-only kill。monitor直接\texttt{os.\_exit}后，内层子进程在外层清理前已退出。
+
+\newpage
+\section*{资源与科研边界}
+单例最长1.828秒，受控分配32 MiB。采样工作集峰值53,350,400 bytes，private commit峰值44,195,840 bytes，两者不同。人工Job的256 MiB限额不能用于模型。进程不导入PyTorch、NumPy或GPU库；checkpoint只用微型CPU张量。
+
+本轮原始数据读取、私有checkpoint读取、模型实例化、GPU和optimizer.step均0。3,692个旧跟踪文件SHA与封存额度anchor/SQLite行不变。历史2025路径属性仍\texttt{NOT\_INSTRUMENTED}，不追溯宣称系统级零访问。
+
+\section*{正式版本仍缺什么}
+\begin{enumerate}
+\item 旧checkpoint仍有路径重开写法。本轮只新增隔离版本；正式替换transport与取消独立read\_text信任路径需批准。
+\item 真模型、AdamW、CUDA RNG安装和失败停止，跨进程可信LAST注册与独立LAST绑定恢复决定仍未真实验收。
+\item 独立审批验真、真实消费许可、正式额度及GPU/CPU/磁盘/长期资源许可仍缺。bool、JSON、commit、测试不能颁发权限。
+\item 科学协议、M-C仍待审议；无依据效应/副作用/功效仍未定。seed2026六组282,312更新必须另批。
+\end{enumerate}
+
+科学接口未改：
+\[
+L_{\rm train}=\frac{S_{\rm occ,\gamma}+\lambda_q S_{\rm qr}}{N_{\rm valid}},\quad
+C=\frac{S_{\rm occ,2}^{64}+S_{\rm qr}^{64}}{N_{\rm valid}},\quad
+P=\frac{S_{\rm qr}^{64}}{N_{\rm rain}}.
+\]
+E0/E1/E2及D1/Q1/N0/I3/B9/S0/V0未改，本式不是科研性能结果。
+
+\textbf{停止边界：}Phase-B与正式科研执行均未授权，正式更新0，历史恢复追认未授予，2025像元0。人工字节PASS、人工Job PASS、真实恢复未验证、长程未验证四项不互相替代。交付后停止。
+
+\section*{审查来源}
+证据见本目录manifest.json、tests/test\_summary.json和三份最终日志，源码位于独立P1 candidate。
+
+{\footnotesize
+Job：\url{https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects}\\
+Sharing：\url{https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea}\\
+序列化限制：\url{https://docs.pytorch.org/docs/stable/notes/serialization}
+}
+\end{document}
