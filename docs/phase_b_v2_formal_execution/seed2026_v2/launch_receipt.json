@@ -1,0 +1,152 @@
+{
+  "status": "REPUBLICATION_LAUNCH_AND_FIRST_UPDATE_PASS_TRAINING_IN_PROGRESS",
+  "snapshot_utc": "2026-10-11T08:51:59.832967+00:00",
+  "campaign": "RESEARCHER_PHASE_B_V2_SEED2026_ZERO_UPDATE_REPUBLISH_a1863dc_V2",
+  "source_commit": "db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3",
+  "release_commit": "a31b02d433bed3b3849ec46149c372fb29d8a761",
+  "source_sha256": "e8aa1f9cf2b5dae3648510b63f27ffd1ea27e68d968d1c8a6180ee2120ec85fe",
+  "old_ancestor_receipt_sha256": "d763ef7727bd2969a2646bcaa3c0388a595d1d38f3c98363169011e368c96d8c",
+  "old_reserved": 0,
+  "old_returned": 0,
+  "old_epoch": 0,
+  "old_last": null,
+  "old_evidence_sha_unchanged": true,
+  "not_checkpoint_resume": true,
+  "directory_registry": {
+    "event": "FULL_FROZEN_PARENT_LOCKS",
+    "utc": "2026-10-11T08:49:28.864090+00:00",
+    "count": 518,
+    "parent_registry_sha": "687bc105f7ed3db69cf853866e5e8c1108a1e2564b6b5e39abc176c37a0bb1b7"
+  },
+  "dependencies": {
+    "event": "ACTUAL_DEPENDENCIES_VERIFIED",
+    "utc": "2026-10-11T08:49:26.745622+00:00",
+    "file_count": 16919,
+    "hashed_software_bytes": 4561093795,
+    "files_sha256": "b83fb3d3daff78171e09584612e784a28ed965dc7c26cfe8c912d9cf39d8f6ed"
+  },
+  "data_metadata_gate": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "same_bytes_payload_sha_required_on_each_cache_miss": true,
+  "worker_identity": {
+    "pid": 34928,
+    "creation_filetime": 134361821488956216,
+    "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+  },
+  "worker_native_identity_alive": true,
+  "first_optimizer_step": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-11T08:49:42.336778+00:00",
+    "run_id": "B0_MATCHED_V2__E0__s2026",
+    "epoch": 1,
+    "update": 1,
+    "campaign_attempt": 1,
+    "lr": 1.9127773527161438e-08,
+    "n_valid": 6860,
+    "n_rain": 954,
+    "s_occ_unweighted": 678.265380859375,
+    "s_qr_unweighted": 89.06826393674311,
+    "training_objective": 0.1118562164425828,
+    "pre_clip_norm": 3.474308490753174,
+    "post_clip_norm": 3.4743083210891563,
+    "limit": 5.0,
+    "missing_gradients": []
+  },
+  "formal_optimizer_reserved_at_snapshot": 395,
+  "formal_optimizer_returned_at_snapshot": 395,
+  "combined_attempt_cap": 282312,
+  "runs_at_snapshot": [
+    {
+      "id": "B0_MATCHED_V2__E0__s2026",
+      "ordinal": 0,
+      "status": "RUNNING",
+      "epoch": 0,
+      "updates": 395,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E0__s2026",
+      "ordinal": 1,
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B0_MATCHED_V2__E1__s2026",
+      "ordinal": 2,
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E1__s2026",
+      "ordinal": 3,
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B0_MATCHED_V2__E2__s2026",
+      "ordinal": 4,
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E2__s2026",
+      "ordinal": 5,
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    }
+  ],
+  "epochs_at_snapshot": [
+    {
+      "run": "B0_MATCHED_V2__E0__s2026",
+      "epoch": 1,
+      "phase": "TRAINING"
+    }
+  ],
+  "resources_heartbeat": {
+    "utc": "2026-10-11T08:51:59.340517+00:00",
+    "elapsed_seconds": 167.64100000000326,
+    "content_bytes": 3953696681,
+    "cpu": {
+      "working_set_bytes": 2750455808,
+      "peak_working_set_bytes": 2767745024,
+      "private_bytes": 7685201920,
+      "peak_pagefile_bytes": 7702523904
+    },
+    "cuda_peak_allocated": 2867387904,
+    "cuda_peak_reserved": 3422552064
+  },
+  "current_native_process_memory": {
+    "working_set_bytes": 2753757184,
+    "peak_working_set_bytes": 2767745024,
+    "private_commit_bytes": 7688511488,
+    "peak_pagefile_bytes": 7702523904
+  },
+  "no_error_receipt_at_snapshot": true,
+  "all_nine_epochs_and_validation": "NOT_YET_COMPLETE",
+  "remaining_five_runs": "PENDING_FIXED_ORDER",
+  "no_automatic_retry_or_recovery": true,
+  "other_seeds_authorized": false,
+  "test_2025_authorized": false,
+  "historical_b1_ratification": "NOT_GRANTED",
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED",
+  "raw_content_and_weights_public": false
+}

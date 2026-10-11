@@ -9,3 +9,7 @@
 2023 Train 10,455、2024 Development 10,501 场景，D1/Q1/N0/I3/B9/S0/V0、M-C 探索性解释不变。2025、其他 seeds、FinalFit、历史 B1 恢复不在授权内。历史 2025 属性访问仍 NOT_INSTRUMENTED。
 
 `release.json` 固定源码 commit、源码/冻结配置 SHA、软件依赖清单 SHA 和失败祖先。`execution_status.json` 记录真实进度；完整 epoch 及 LAST 未完成时不宣称通过。训练权重、精确分数和完整日志只保存在 `.local/`，不公开。
+
+启动源码 commit：`db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3`；启动前发布 commit：`a31b02d433bed3b3849ec46149c372fb29d8a761`。`launch_receipt.json` 是带 UTC 时间的静态启动快照：518 个目录句柄与 67,006 个引用的元数据检查通过，实际软件依赖 SHA 通过，第一个 B0/E0 正式更新返回并完成有限性核验；快照时共预留/核验返回 395 次，完整 epoch 为零。该收据不代表九轮或六组完成。
+
+后台控制器已运行，按固定顺序继续；其即时状态以本地 `execution_status.json`、永久 SQLite 和 `.local/` 审计为准。公开 Git 中的进度只是提交时快照。启动前的软件清单构建遇到缺少 `packaging` 的错误，保留于 `build_failure_001.json`；修复使用标准库且未安装/升级依赖，未消耗启动或优化器额度。新版实际启动未出现失败收据（截至启动快照）。
