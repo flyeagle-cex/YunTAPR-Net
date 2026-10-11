@@ -1,0 +1,206 @@
+"""Exactly two fixed-data, single-step transactions; failure seals the campaign."""
+from __future__ import annotations
+from dataclasses import replace
+import gc
+import hashlib
+import json
+from pathlib import Path
+import time
+import torch
+from yuntapr.training.phase_a_protocol import state_digest
+from yuntapr.experimental.phase_b_v2_integration.initialization import fresh_paired_models,seeded_environment
+from yuntapr.experimental.phase_b_v2_ablations.config import get_config
+from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
+from yuntapr.experimental.phase_b_v2_real_forward_pilot.pilot import validate_output
+from yuntapr.experimental.phase_b_v2_runner_candidate.optimizer import new_adamw,PrefixSchedule,clip_and_check,check_finite
+from yuntapr.experimental.phase_b_v2_runner_candidate import rng
+from . import ROOT,OUT,BASELINE,LIMITS,FLAGS,SCOPE,MODELS,AUTHORIZATION_ID
+from .data import SmokePlan,SmokeAdapter
+from .quota import SmokeQuota
+from .resources import Budget,cuda_admission,memory,utcnow
+from .checkpoint import SmokeStore,SCHEMA,validate_roundtrip
+from .operations import guarded_operations,step_permit,backward_permit
+
+def source_identity():
+    """Repository source/config bytes only; never enumerate a data directory."""
+    paths=sorted((ROOT/'src/yuntapr').rglob('*.py'))
+    paths+=sorted((ROOT/'config/science_v2').glob('*.json'))
+    records={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+    digest=hashlib.sha256(json.dumps(records,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    return records,digest
+
+def cpu_tree(value):
+    if isinstance(value,torch.Tensor): return value.detach().cpu().clone()
+    if isinstance(value,dict): return {k:cpu_tree(v) for k,v in value.items()}
+    if isinstance(value,list): return [cpu_tree(v) for v in value]
+    if isinstance(value,tuple): return tuple(cpu_tree(v) for v in value)
+    return value
+
+def group(name):
+    if name.startswith('heads.occurrence.'): return 'occurrence_head'
+    if name.startswith('heads.quantile.'): return 'quantile_head'
+    return 'backbone'
+
+def gradients(model,n_rain):
+    records={key:dict(parameter_tensors=0,missing=0,nonzero_tensors=0,squared_norm=0.)
+             for key in ('backbone','occurrence_head','quantile_head')}
+    for name,p in model.named_parameters():
+        record=records[group(name)]; record['parameter_tensors']+=1
+        if p.grad is None: record['missing']+=1; continue
+        if not bool(torch.isfinite(p.grad).all()): raise FloatingPointError('SMOKE_NONFINITE_GRADIENT')
+        record['nonzero_tensors']+=int(bool((p.grad!=0).any()))
+        record['squared_norm']+=float(p.grad.double().square().sum())
+    if any(r['missing'] for r in records.values()): raise ValueError('SMOKE_GRAPH_DISCONNECTED')
+    if not records['occurrence_head']['nonzero_tensors'] or not records['backbone']['nonzero_tensors']:
+        raise ValueError('SMOKE_OCCURRENCE_OR_BACKBONE_GRADIENT_MISSING')
+    if n_rain==0 and records['quantile_head']['nonzero_tensors']:
+        raise ValueError('DRY_BATCH_QUANTILE_GRADIENT_NOT_ZERO')
+    if n_rain>0 and not records['quantile_head']['nonzero_tensors']:
+        raise ValueError('RAINY_BATCH_QUANTILE_GRAPH_MISSING')
+    for r in records.values(): r['l2_norm']=r.pop('squared_norm')**.5
+    return records
+
+def optimizer_check(model,optimizer):
+    check_finite(model.state_dict()); check_finite(optimizer.state_dict())
+    parameters=list(model.parameters())
+    if len(optimizer.state)!=len(parameters): raise ValueError('SMOKE_ADAMW_STATE_COVERAGE')
+    for p in parameters:
+        state=optimizer.state[p]
+        if (set(state)!={'step','exp_avg','exp_avg_sq'} or float(state['step'])!=1
+            or state['exp_avg'].shape!=p.shape or state['exp_avg'].dtype!=torch.float32
+            or state['exp_avg_sq'].shape!=p.shape or state['exp_avg_sq'].dtype!=torch.float32
+            or bool((state['exp_avg_sq']<0).any())):
+            raise ValueError('SMOKE_ADAMW_MOMENT_OR_UPDATE_IDENTITY')
+    return dict(parameter_state_count=len(parameters),all_steps_equal_one=True,
+                moments_dtype='float32',all_finite=True,second_moment_nonnegative=True)
+
+def transaction(model,batch,kind,owner,proof,plan,budget,quota,folder,stores,code_sha):
+    budget.check(); admission=cuda_admission()
+    model.train().requires_grad_(True).to('cuda:0')
+    initial=state_digest(model.state_dict())
+    if initial!=proof['state_sha256'][kind]: raise ValueError('FRESH_DEVICE_TRANSFER_IDENTITY')
+    before={n:state_digest(p) for n,p in model.named_parameters()}
+    buffer_sha=state_digest(dict(model.named_buffers()))
+    optimizer,grouping=new_adamw(model); schedule=PrefixSchedule(); lr=schedule.prepare(optimizer)
+    optimizer.zero_grad(set_to_none=True)
+    if optimizer.state: raise ValueError('FRESH_OPTIMIZER_MUST_BE_EMPTY')
+    batch=batch.cuda(); batch.validate(kind,owner)
+    torch.cuda.reset_peak_memory_stats(); torch.cuda.synchronize(); start=time.perf_counter()
+    quota.reserve(kind,'forward'); budget.emit('TRAIN_FORWARD_RESERVED',model=kind)
+    with torch.autocast('cuda',dtype=torch.bfloat16):
+        output=model(batch.x,batch.native_valid)
+        numeric=validate_output(replace(output,rain_logit=output.rain_logit.detach(),rain_prob=output.rain_prob.detach(),
+                                       conditional_quantiles_log=output.conditional_quantiles_log.detach()),2,batch.x.device)
+        loss=candidate_loss(output.rain_logit,output.conditional_quantiles_log,batch.rate,
+                            batch.reference_valid,batch.region,config=get_config('E0'))
+    if (loss.n_valid!=6860 or not loss.training_objective.requires_grad or
+        loss.training_objective.grad_fn is None or not bool(torch.isfinite(loss.training_objective))):
+        raise FloatingPointError('SMOKE_LOSS_OR_DENOMINATOR_INVARIANT')
+    budget.check(); forward_seconds=time.perf_counter()-start
+    loss_record=dict(s_occ_unweighted=float(loss.s_occ.detach()),s_qr_unweighted=float(loss.s_qr.detach()),
+        training_objective=float(loss.training_objective.detach()),n_valid=loss.n_valid,n_rain=loss.n_rain,
+        conditional_skipped=loss.conditional_skipped,scientific_performance_evidence=False)
+    budget.emit('TRAIN_LOSS_READY',model=kind,loss=loss_record,output_checks=numeric)
+    quota.reserve(kind,'backward'); budget.emit('BACKWARD_RESERVED',model=kind)
+    start=time.perf_counter()
+    with backward_permit(): loss.training_objective.backward()
+    torch.cuda.synchronize(); backward_seconds=time.perf_counter()-start
+    grad=gradients(model,loss.n_rain); clipped=clip_and_check(model); budget.check()
+    budget.emit('GRADIENTS_CLIPPED',model=kind,gradients=grad,clipping=clipped)
+    if state_digest(model.state_dict())!=initial: raise ValueError('STATE_CHANGED_BEFORE_OPTIMIZER')
+    quota.reserve(kind,'step')  # FULL SQLite commit before calling any optimizer
+    budget.emit('OPTIMIZER_STEP_RESERVED',model=kind,quota=quota.snapshot())
+    start=time.perf_counter()
+    with step_permit(optimizer,kind,quota): optimizer.step()
+    schedule.commit(); torch.cuda.synchronize(); step_seconds=time.perf_counter()-start
+    opt_checks=optimizer_check(model,optimizer); grad_after=gradients(model,loss.n_rain)
+    after=state_digest(model.state_dict()); changed={key:0 for key in grad}
+    for n,p in model.named_parameters(): changed[group(n)]+=int(before[n]!=state_digest(p))
+    if after==initial or not sum(changed.values()): raise ValueError('NO_ACTUAL_PARAMETER_CHANGE')
+    if state_digest(dict(model.named_buffers()))!=buffer_sha: raise ValueError('SMOKE_FROZEN_BUFFER_CHANGED')
+    budget.emit('OPTIMIZER_RETURNED_AND_VERIFIED',model=kind,parameter_sha256_before=initial,
+                parameter_sha256_after=after,changed_parameter_tensors=changed,optimizer=opt_checks)
+    budget.check(); stores.append(SmokeStore(folder/(kind+'_checkpoint'))); store=stores[-1]
+    start=time.perf_counter()
+    payload=dict(schema=SCHEMA,scope=SCOPE,model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),
+        scheduler=schedule.state_dict(),rng=cpu_tree(rng.capture()),
+        identity=dict(model=kind,arm='E0',alpha=.5,gamma=2,lambda_q=1,seed=2026,baseline=BASELINE,
+            code_sha256=code_sha,protocol_sha256=plan.public.pins['config/science_v2/phase_a_protocol_frozen_v1.json']['sha256'],
+            frozen_scene_ids=[r[0]['sample_id'] for r in plan.rows],
+            public_pins=list(plan.public.pins.values()),
+            consumed_payload_receipts=list(budget.raw_reads),
+            scaler_sha256=plan.protocol['identity']['normalization']['sha256'],
+            mask_sha256=plan.mask_ref['sha256'],sp04_sha256=plan.protocol['identity']['SP04_mapping']['sha256'],
+            initial_model_sha256=initial,updated_model_sha256=after,
+            authorization_id=AUTHORIZATION_ID,authorization_basis='Latest direct human instruction: bounded smoke only',
+            limits=LIMITS,quota=quota.snapshot()),
+        progress=dict(formal_epoch=0,complete_epoch=False,validation_complete=False,
+            FORMAL_PHASE_B_OPTIMIZER_STEPS=0,model_real_smoke_updates=1),
+        forbidden_future_use='NO_WARMSTART_NO_FORMAL_PHASE_B_RESUME')
+    ref=store.save(kind,payload); loaded,receipt=store.read(ref); validate_roundtrip(loaded,payload)
+    checkpoint_seconds=time.perf_counter()-start; budget.check(); quota.completed(kind)
+    record=dict(model=kind,arm='E0',seed=2026,scene_keys=list(batch.scene_keys),input_shape=list(batch.x.shape),
+        input_dtype='float32',input_sha256=batch.tensor_sha256,supervision_sha256=batch.supervision_sha256,
+        output_checks=numeric,training_outputs_require_grad=True,loss=loss_record,gradients_before_clip=grad,
+        gradients_after_step=grad_after,clipping=clipped,optimizer=opt_checks,lr_used=lr,scheduler=schedule.state_dict(),
+        parameter_sha256_before=initial,parameter_sha256_after=after,changed_parameter_tensors=changed,
+        parameter_change_observed=True,buffers_unchanged=True,real_optimizer_calls=1,
+        checkpoint=dict(**receipt,weights_only=True,same_verified_bytes_deserialized=True,
+            all_payload_state_digests_match=True,no_live_state_restore=True,forbidden_future_use=True),
+        forward_and_loss_seconds=forward_seconds,backward_seconds=backward_seconds,
+        optimizer_step_seconds=step_seconds,checkpoint_seconds=checkpoint_seconds,
+        cuda_admission=admission,cuda_peak_allocated_bytes=torch.cuda.max_memory_allocated(),
+        cuda_peak_reserved_bytes=torch.cuda.max_memory_reserved(),cpu=memory())
+    budget.emit('MODEL_TRANSACTION_COMPLETE',**record)
+    return record
+
+def run(folder: Path):
+    pins,code_sha=source_identity()
+    quota=SmokeQuota(code_sha)  # fixed witnesses make every subsequent worker invocation refuse
+    budget=Budget(folder); adapter=None; records=[]; stores=[]
+    status=dict(scope=SCOPE,baseline_commit=BASELINE,started_at_utc=utcnow(),limits=LIMITS,
+        source_sha256=code_sha,source_pins=pins,overall_status='NOT_VERIFIED',failure=None,**FLAGS)
+    try:
+        budget.emit('SMOKE_STARTED',authorization=AUTHORIZATION_ID,limits=LIMITS)
+        status['cuda_admission']=cuda_admission()
+        # Allocator admission cap is a resource guard, not a precision/batch/model change.
+        torch.cuda.set_per_process_memory_fraction(LIMITS['MAX_TORCH_CUDA_RESERVED_BYTES']/status['cuda_admission']['total_bytes'],0)
+        with seeded_environment(2026),guarded_operations(stores):
+            plan=SmokePlan(budget); models,proof=fresh_paired_models(2026)
+            status['initialization']=proof; status['public_source_pins']=list(plan.public.pins.values())
+            status['frozen_scene_ids']=[r[0]['sample_id'] for r in plan.rows]
+            adapter=SmokeAdapter(plan,budget); adapter.initialize_geometry(); batches,scenes=adapter.pair(0)
+            budget.raw_reads=adapter.reader.reads; status['decoded_scene_receipts']=scenes
+            for kind in MODELS:
+                records.append(transaction(models[kind],batches[kind],kind,adapter.owner,proof,plan,
+                                           budget,quota,folder,stores,code_sha))
+                del models[kind]; gc.collect(); torch.cuda.empty_cache(); budget.check()
+                print(json.dumps(dict(stage='SMOKE_MODEL_COMPLETED',model=kind,quota=quota.snapshot())),flush=True)
+            if source_identity()!=(pins,code_sha): raise ValueError('SOURCE_CHANGED_DURING_SMOKE')
+            quota.seal(False); status['overall_status']='BOUNDED_REAL_TRAIN_SMOKE_PASS'
+    except BaseException as error:
+        # Full exception/traceback is private; public evidence keeps type and safe code.
+        import traceback
+        (folder/'private_failure.txt').write_text(traceback.format_exc(),encoding='utf-8')
+        status['failure']=dict(type=type(error).__name__,code=str(error) if str(error).isupper() and '/' not in str(error) and '\\' not in str(error) else 'DETAILS_RETAINED_PRIVATELY')
+        budget.stopped=True; quota.seal(True); status['overall_status']='NOT_VERIFIED_STOPPED_NO_RETRY'
+        budget.emit('SMOKE_STOPPED',failure=status['failure'])
+    finally:
+        if adapter is not None: adapter.reader.close()
+        status.update(finished_at_utc=utcnow(),elapsed_seconds=time.monotonic()-budget.start,quota=quota.snapshot(),
+            models=records,decoded_scenes=adapter.next_scene if adapter else 0,accounted_content_bytes=budget.bytes,
+            raw_reads=adapter.reader.reads if adapter else [],memory_netcdf_views=adapter.reader.views if adapter else 0,
+            cpu_resources=memory(),application_scope_access_audit_only=True,
+            no_raw_pixel_or_weight_arrays_published=True,no_2024_raw_reads=True,no_new_2025_path_queries=True,
+            extra_inference_forwards=0,formal_epoch_runs=0,formal_runs=0,
+            approval_boundary_unchanged=True,operational_near_realtime='NOT_VERIFIED')
+        (folder/'worker_status.json').write_text(json.dumps(status,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+        budget.close(); quota.close()
+    return status
+
+if __name__=='__main__':
+    folder=OUT/'.local/attempt_001'
+    folder.mkdir(parents=True,exist_ok=False)  # no CLI rename/new attempt option
+    result=run(folder)
+    print(json.dumps(dict(overall_status=result['overall_status'],quota=result['quota'],failure=result['failure'])),flush=True)
+    raise SystemExit(0 if result['overall_status']=='BOUNDED_REAL_TRAIN_SMOKE_PASS' else 1)

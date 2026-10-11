@@ -1,0 +1,828 @@
+{
+  "scope": "BOUNDED_REAL_TRAIN_ENGINEERING_SMOKE_ONLY",
+  "baseline_commit": "86cf8ea0ab8410542997ced6e3689880f6e2e0e0",
+  "started_at_utc": "2026-10-10T15:52:46.218195+00:00",
+  "limits": {
+    "MAX_REAL_SMOKE_OPTIMIZER_STEP_ATTEMPTS": 2,
+    "MAX_STEPS_PER_MODEL": 1,
+    "MAX_TRAIN_SCENES": 2,
+    "MAX_BATCH_SIZE": 2,
+    "MAX_REAL_CONTENT_BYTES": 1073741824,
+    "MAX_ELAPSED_SECONDS": 1800,
+    "MAX_CPU_WORKING_SET_BYTES": 4294967296,
+    "MIN_CUDA_FREE_BYTES": 5368709120,
+    "MAX_TORCH_CUDA_RESERVED_BYTES": 6442450944
+  },
+  "source_sha256": "9717c1a0fe0e7898e5101b6fd87382e07a481ebbb9ae869c1c7e58d99f228695",
+  "overall_status": "BOUNDED_REAL_TRAIN_SMOKE_PASS",
+  "failure": null,
+  "V2_PHASE_B_AUTHORIZED": false,
+  "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": false,
+  "RESEARCHER_SCIENTIFIC_APPROVAL_REQUIRED": true,
+  "FORMAL_PHASE_B_OPTIMIZER_STEPS": 0,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "2025_PIXELS_READ": 0,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED",
+  "historical_checkpoint_reads": 0,
+  "cuda_admission": {
+    "free_bytes": 7283408896,
+    "total_bytes": 8546484224,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8"
+  },
+  "public_source_pins": [
+    {
+      "path": "docs/phase_b_v2_full_payload_integrity/v1/final_status.json",
+      "sha256": "8aac905afe7f0a4d49fa03acbf6f6634c34f8ac07a30d670b2f6270694d81b3a",
+      "bytes": 1357
+    },
+    {
+      "path": "docs/phase_b_v2_full_payload_integrity/v1/source_identity.json",
+      "sha256": "67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143",
+      "bytes": 5490
+    },
+    {
+      "path": "src/yuntapr/data/dataset_b1.py",
+      "sha256": "b84f7d4dac9fc51c0de4cc23090410dd09ce5d910a63cc041df8d54c799fb1b7",
+      "bytes": 11242
+    },
+    {
+      "path": "config/science_v2/phase_a_protocol_frozen_v1.json",
+      "sha256": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+      "bytes": 9107
+    },
+    {
+      "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/b1_2023_formal_manifest.csv",
+      "sha256": "f2e84d15496dc0cace72647124323a060a94bebf5ceba3718024a00240f71219",
+      "bytes": 5277452
+    },
+    {
+      "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/b0_matched_control_2023_formal_manifest.csv",
+      "sha256": "05e760529a77fd141e68655308a00fa8f30d8db2591a8e22652de5c3b64432bc",
+      "bytes": 6187048
+    },
+    {
+      "path": "docs/b1_temporal_audit/runs/run_20261003T035724_142784Z/frame_identity_index.json",
+      "sha256": "a5054200d6bde11f2342c292ca72428d0558d5b5c5c640017844f0b4ed8c540e",
+      "bytes": 2478
+    },
+    {
+      "path": "docs/b1_temporal_audit/runs/run_20261003T035724_142784Z/native_frames/202303.csv",
+      "sha256": "ac223696357c3b93e7f04d5115086ed2b28a7ffc718ce24241f88afc8614f592",
+      "bytes": 1260235
+    },
+    {
+      "path": "docs/b1_scientific_freeze/runs/run_20261003T045139_110133Z/normalization_b1_2023_shared_v1.json",
+      "sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+      "bytes": 1918
+    }
+  ],
+  "frozen_scene_ids": [
+    "2023-03-01T00:30:00+00:00",
+    "2023-03-01T01:00:00+00:00"
+  ],
+  "decoded_scene_receipts": [
+    {
+      "position": 0,
+      "scene_key": "9787c8f9fe80c77da07ad5c89897692ec9690c7da72c1a12943007a748253367",
+      "year": 2023,
+      "role": "Train",
+      "manifest_index": 0,
+      "frames": [
+        {
+          "slot": 0,
+          "offset_minutes": 60,
+          "source_sha256": "f8ab655c5d94d5b63772a77735d97d323263e6d693eb6dd14708af62d939b414",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 1,
+          "offset_minutes": 50,
+          "source_sha256": "8ddaf91a8eed3689fd8874bf9e6efab632d83b6b2021e94a695e6aea5edec22d",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 2,
+          "offset_minutes": 40,
+          "source_sha256": "06adbbe5b18b04a15d060873f70c9082fc10c327dd7316f514d960dc94b21109",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 3,
+          "offset_minutes": 30,
+          "source_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 4,
+          "offset_minutes": 20,
+          "source_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 5,
+          "offset_minutes": 10,
+          "source_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+          "observation_causal": true,
+          "file_created_after_analysis": true
+        }
+      ],
+      "target_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "seconds": 10.192576500005089,
+      "input_dtype": "float32",
+      "target_dtype": "float32",
+      "target_units": "mm hr-1",
+      "yunnan_valid_cells": 3430,
+      "FP32_threshold_semantics": "reference_float32 > float32(0.1)"
+    },
+    {
+      "position": 1,
+      "scene_key": "cc3f44e0a0aab49d903b644e66ce2d1cf707baadd25d612d527678a46c5ea70a",
+      "year": 2023,
+      "role": "Train",
+      "manifest_index": 1,
+      "frames": [
+        {
+          "slot": 0,
+          "offset_minutes": 60,
+          "source_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 1,
+          "offset_minutes": 50,
+          "source_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 2,
+          "offset_minutes": 40,
+          "source_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 3,
+          "offset_minutes": 30,
+          "source_sha256": "1659e248a6196c566274b403070268de1dfbab002cf82248bc9975793e150e84",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 4,
+          "offset_minutes": 20,
+          "source_sha256": "ca7099a64bd3b4c506138f38864856982a3ee3d0456d773fb812f06afa22d79a",
+          "observation_causal": true,
+          "file_created_after_analysis": false
+        },
+        {
+          "slot": 5,
+          "offset_minutes": 10,
+          "source_sha256": "ff8a511199f8c76a97ac7ba9b89beaa27c661c335431800bee7df60c7ec334cb",
+          "observation_causal": true,
+          "file_created_after_analysis": true
+        }
+      ],
+      "target_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "seconds": 0.14113359999464592,
+      "input_dtype": "float32",
+      "target_dtype": "float32",
+      "target_units": "mm hr-1",
+      "yunnan_valid_cells": 3430,
+      "FP32_threshold_semantics": "reference_float32 > float32(0.1)"
+    }
+  ],
+  "finished_at_utc": "2026-10-10T15:53:01.162848+00:00",
+  "elapsed_seconds": 14.953000000001339,
+  "quota": {
+    "campaign": "RESEARCHER_REAL_SMOKE_20261010_BASELINE_86cf8ea_V1",
+    "state": "COMPLETE_SEALED",
+    "models": {
+      "B0_MATCHED_V2": {
+        "forward_reserved": 1,
+        "backward_reserved": 1,
+        "step_reserved": 1,
+        "step_entered": 1,
+        "step_returned": 1,
+        "transaction_complete": 1
+      },
+      "B1_V2": {
+        "forward_reserved": 1,
+        "backward_reserved": 1,
+        "step_reserved": 1,
+        "step_entered": 1,
+        "step_returned": 1,
+        "transaction_complete": 1
+      }
+    },
+    "reserved_step_attempts": 2,
+    "entered_optimizer_calls": 2,
+    "returned_optimizer_calls": 2,
+    "FORMAL_PHASE_B_OPTIMIZER_STEPS": 0
+  },
+  "models": [
+    {
+      "model": "B0_MATCHED_V2",
+      "arm": "E0",
+      "seed": 2026,
+      "scene_keys": [
+        "9787c8f9fe80c77da07ad5c89897692ec9690c7da72c1a12943007a748253367",
+        "cc3f44e0a0aab49d903b644e66ce2d1cf707baadd25d612d527678a46c5ea70a"
+      ],
+      "input_shape": [
+        2,
+        1,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "b6601dc2c570700d6670267c012f0518d6f8780849d8e26fc880d51265056268",
+      "supervision_sha256": "f33d8ab8eaedb1f66c20f08d084d183d8dd0dbab5200285a0c4280ec6f8e9b54",
+      "output_checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false
+      },
+      "training_outputs_require_grad": true,
+      "loss": {
+        "s_occ_unweighted": 694.3959350585938,
+        "s_qr_unweighted": 2.7112420976845386,
+        "training_objective": 0.1016191220344429,
+        "n_valid": 6860,
+        "n_rain": 45,
+        "conditional_skipped": false,
+        "scientific_performance_evidence": false
+      },
+      "gradients_before_clip": {
+        "backbone": {
+          "parameter_tensors": 70,
+          "missing": 0,
+          "nonzero_tensors": 70,
+          "l2_norm": 6.352520148420411
+        },
+        "occurrence_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.43099796998690454
+        },
+        "quantile_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.0004747384465391138
+        }
+      },
+      "gradients_after_step": {
+        "backbone": {
+          "parameter_tensors": 70,
+          "missing": 0,
+          "nonzero_tensors": 70,
+          "l2_norm": 4.988530806359549
+        },
+        "occurrence_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.338455698725207
+        },
+        "quantile_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.0003728043832627344
+        }
+      },
+      "clipping": {
+        "pre_clip_norm": 6.367124080657959,
+        "post_clip_norm": 4.999999200498028,
+        "limit": 5.0,
+        "missing_gradients": []
+      },
+      "optimizer": {
+        "parameter_state_count": 74,
+        "all_steps_equal_one": true,
+        "moments_dtype": "float32",
+        "all_finite": true,
+        "second_moment_nonnegative": true
+      },
+      "lr_used": 1.9127773527161438e-08,
+      "scheduler": {
+        "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+        "steps_per_epoch": 5228,
+        "original_horizon": 261400,
+        "proposed_stop": 47052,
+        "completed": 1
+      },
+      "parameter_sha256_before": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "parameter_sha256_after": "ec816c49b860662b5924bf5da265503d890db9929b9438a2649dd6d1d0d71115",
+      "changed_parameter_tensors": {
+        "backbone": 56,
+        "occurrence_head": 2,
+        "quantile_head": 2
+      },
+      "parameter_change_observed": true,
+      "buffers_unchanged": true,
+      "real_optimizer_calls": 1,
+      "checkpoint": {
+        "bytes": 52060521,
+        "filename": "B0_MATCHED_V2.pt",
+        "schema": "REAL_TRAIN_SMOKE_ENGINEERING_v1",
+        "sha256": "3b1860653bbe37a71e35af6cf80a6cdfb1fd4f83cd20bbfcf10822644ebf608e",
+        "weights_only": true,
+        "same_verified_bytes_deserialized": true,
+        "all_payload_state_digests_match": true,
+        "no_live_state_restore": true,
+        "forbidden_future_use": true
+      },
+      "forward_and_loss_seconds": 0.4316391999964253,
+      "backward_seconds": 0.30331650000152877,
+      "optimizer_step_seconds": 0.04010980000020936,
+      "checkpoint_seconds": 0.3901694000014686,
+      "cuda_admission": {
+        "free_bytes": 7283408896,
+        "total_bytes": 8546484224,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "torch_version": "2.11.0+cu128",
+        "cuda_build": "12.8"
+      },
+      "cuda_peak_allocated_bytes": 2834127872,
+      "cuda_peak_reserved_bytes": 3416260608,
+      "cpu": {
+        "working_set_bytes": 2356731904,
+        "peak_working_set_bytes": 2453544960,
+        "private_bytes": 7310684160,
+        "peak_pagefile_bytes": 7414018048
+      }
+    },
+    {
+      "model": "B1_V2",
+      "arm": "E0",
+      "seed": 2026,
+      "scene_keys": [
+        "9787c8f9fe80c77da07ad5c89897692ec9690c7da72c1a12943007a748253367",
+        "cc3f44e0a0aab49d903b644e66ce2d1cf707baadd25d612d527678a46c5ea70a"
+      ],
+      "input_shape": [
+        2,
+        6,
+        501,
+        501
+      ],
+      "input_dtype": "float32",
+      "input_sha256": "cd980a4c065f13f62e6dd119ccd39b264537c72146e926f24027f6380d08c7b0",
+      "supervision_sha256": "f33d8ab8eaedb1f66c20f08d084d183d8dd0dbab5200285a0c4280ec6f8e9b54",
+      "output_checks": {
+        "probability_shape": [
+          2,
+          1,
+          100,
+          100
+        ],
+        "probability_dtype": "bfloat16",
+        "quantile_shape": [
+          2,
+          32,
+          100,
+          100
+        ],
+        "quantile_dtype": "float64",
+        "quantile_space": "log1p(mm/h)",
+        "finite": true,
+        "strictly_monotone": true,
+        "support_above_log1p_0_1": true,
+        "outputs_require_grad": false,
+        "FP32_physical_conversion_overflow_risk": false,
+        "FP64_physical_conversion_overflow_risk": false,
+        "physical_conversion_performed": false,
+        "scientific_performance_evidence": false
+      },
+      "training_outputs_require_grad": true,
+      "loss": {
+        "s_occ_unweighted": 770.977783203125,
+        "s_qr_unweighted": 2.7857289341466998,
+        "training_objective": 0.11279351488881512,
+        "n_valid": 6860,
+        "n_rain": 45,
+        "conditional_skipped": false,
+        "scientific_performance_evidence": false
+      },
+      "gradients_before_clip": {
+        "backbone": {
+          "parameter_tensors": 70,
+          "missing": 0,
+          "nonzero_tensors": 70,
+          "l2_norm": 7.982741389854618
+        },
+        "occurrence_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.622370439781849
+        },
+        "quantile_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.0005094164094999076
+        }
+      },
+      "gradients_after_step": {
+        "backbone": {
+          "parameter_tensors": 70,
+          "missing": 0,
+          "nonzero_tensors": 70,
+          "l2_norm": 4.984872570330803
+        },
+        "occurrence_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.38864309624774834
+        },
+        "quantile_head": {
+          "parameter_tensors": 2,
+          "missing": 0,
+          "nonzero_tensors": 2,
+          "l2_norm": 0.00031810824619660005
+        }
+      },
+      "clipping": {
+        "pre_clip_norm": 8.006965637207031,
+        "post_clip_norm": 4.9999998099890295,
+        "limit": 5.0,
+        "missing_gradients": []
+      },
+      "optimizer": {
+        "parameter_state_count": 74,
+        "all_steps_equal_one": true,
+        "moments_dtype": "float32",
+        "all_finite": true,
+        "second_moment_nonnegative": true
+      },
+      "lr_used": 1.9127773527161438e-08,
+      "scheduler": {
+        "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+        "steps_per_epoch": 5228,
+        "original_horizon": 261400,
+        "proposed_stop": 47052,
+        "completed": 1
+      },
+      "parameter_sha256_before": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331",
+      "parameter_sha256_after": "8aa903bca9b73f17d5eeb59662ee71e0a24b346b9050e2f851a3e9fd71afdac9",
+      "changed_parameter_tensors": {
+        "backbone": 56,
+        "occurrence_head": 2,
+        "quantile_head": 2
+      },
+      "parameter_change_observed": true,
+      "buffers_unchanged": true,
+      "real_optimizer_calls": 1,
+      "checkpoint": {
+        "bytes": 52089321,
+        "filename": "B1_V2.pt",
+        "schema": "REAL_TRAIN_SMOKE_ENGINEERING_v1",
+        "sha256": "6e62f28ecf19e559b56c24a0dddaca0029c1a07a4a695792e602c07e5e5fc97b",
+        "weights_only": true,
+        "same_verified_bytes_deserialized": true,
+        "all_payload_state_digests_match": true,
+        "no_live_state_restore": true,
+        "forbidden_future_use": true
+      },
+      "forward_and_loss_seconds": 0.09977869999420363,
+      "backward_seconds": 0.14060269999754382,
+      "optimizer_step_seconds": 0.029417400000966154,
+      "checkpoint_seconds": 0.3308598000003258,
+      "cuda_admission": {
+        "free_bytes": 7258243072,
+        "total_bytes": 8546484224,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "torch_version": "2.11.0+cu128",
+        "cuda_build": "12.8"
+      },
+      "cuda_peak_allocated_bytes": 2858972672,
+      "cuda_peak_reserved_bytes": 3435134976,
+      "cpu": {
+        "working_set_bytes": 2340376576,
+        "peak_working_set_bytes": 2453544960,
+        "private_bytes": 7315124224,
+        "peak_pagefile_bytes": 7416758272
+      }
+    }
+  ],
+  "decoded_scenes": 2,
+  "accounted_content_bytes": 66077219,
+  "raw_reads": [
+    {
+      "file_key": "969a8e654b4ac60753c1fa4fa4d00554de79eaf9293e78dfc6efb151e0a9754b",
+      "group": "YUNNAN_MASK",
+      "expected_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+      "actual_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+      "bytes": 20916,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:48.223788+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:48.226792+00:00",
+      "read_sha_seconds": 0.0023446999985026196
+    },
+    {
+      "file_key": "456a5cc85767c58a9f16e462bcc79298720416c2ef81083e3044bffd5d982d3a",
+      "group": "B13_2023",
+      "expected_sha256": "f8ab655c5d94d5b63772a77735d97d323263e6d693eb6dd14708af62d939b414",
+      "actual_sha256": "f8ab655c5d94d5b63772a77735d97d323263e6d693eb6dd14708af62d939b414",
+      "bytes": 4077072,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:48.246792+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.284928+00:00",
+      "read_sha_seconds": 10.037190300005022
+    },
+    {
+      "file_key": "7f69d23e196e1e972569fda0034adb805c383598dadb22a77cfe513a2bc90df5",
+      "group": "B13_2023",
+      "expected_sha256": "8ddaf91a8eed3689fd8874bf9e6efab632d83b6b2021e94a695e6aea5edec22d",
+      "actual_sha256": "8ddaf91a8eed3689fd8874bf9e6efab632d83b6b2021e94a695e6aea5edec22d",
+      "bytes": 4188856,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.294933+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.311907+00:00",
+      "read_sha_seconds": 0.01647860000230139
+    },
+    {
+      "file_key": "68685645183157a543727bee9c5cf4e97e87de025326f07db5e245b3c76ac681",
+      "group": "B13_2023",
+      "expected_sha256": "06adbbe5b18b04a15d060873f70c9082fc10c327dd7316f514d960dc94b21109",
+      "actual_sha256": "06adbbe5b18b04a15d060873f70c9082fc10c327dd7316f514d960dc94b21109",
+      "bytes": 4272682,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.320897+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.338370+00:00",
+      "read_sha_seconds": 0.01692159999947762
+    },
+    {
+      "file_key": "d372168c9257802e1416d7ea72a2e8848fa4102d5b326f7b6949f8ae2b936d88",
+      "group": "B13_2023",
+      "expected_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+      "actual_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+      "bytes": 4340775,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.349228+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.366661+00:00",
+      "read_sha_seconds": 0.016972800003713928
+    },
+    {
+      "file_key": "ec2a8434d79cbd14724ae928a6b8681a1c5edc0e474813a3cf174de429e1b24f",
+      "group": "B13_2023",
+      "expected_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+      "actual_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+      "bytes": 4404528,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.375155+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.392694+00:00",
+      "read_sha_seconds": 0.0165156000002753
+    },
+    {
+      "file_key": "b4015e0cb2881c80415970523d8979497859df95b482a087bcd317fda15affb9",
+      "group": "B13_2023",
+      "expected_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+      "actual_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+      "bytes": 4453622,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.401695+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.420118+00:00",
+      "read_sha_seconds": 0.017523599999549333
+    },
+    {
+      "file_key": "f9a794a5926256d2c24570c074e4d3aa008456f892b6fef507192a5c5cf2a33d",
+      "group": "IMERG_2023",
+      "expected_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "actual_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "bytes": 390273,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.430830+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.435019+00:00",
+      "read_sha_seconds": 0.002927199995610863
+    },
+    {
+      "file_key": "d372168c9257802e1416d7ea72a2e8848fa4102d5b326f7b6949f8ae2b936d88",
+      "group": "B13_2023",
+      "expected_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+      "actual_sha256": "bae19249fd22b5ab1b546b38ceb264e52305f87b068a20955fdb1997128bfd16",
+      "bytes": 4340775,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.441027+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.449024+00:00",
+      "read_sha_seconds": 0.00651790000119945
+    },
+    {
+      "file_key": "ec2a8434d79cbd14724ae928a6b8681a1c5edc0e474813a3cf174de429e1b24f",
+      "group": "B13_2023",
+      "expected_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+      "actual_sha256": "bfd93052d808145dc67f384a559607766a96ef01578b008c463c4999d3d06dca",
+      "bytes": 4404528,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.457230+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.466169+00:00",
+      "read_sha_seconds": 0.008302599999296945
+    },
+    {
+      "file_key": "b4015e0cb2881c80415970523d8979497859df95b482a087bcd317fda15affb9",
+      "group": "B13_2023",
+      "expected_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+      "actual_sha256": "16eac20cffefd7f53d06500cf158f8f5a90dc42976b6ec88ccff8ff7c7a98144",
+      "bytes": 4453622,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.475788+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.481953+00:00",
+      "read_sha_seconds": 0.0055334999997285195
+    },
+    {
+      "file_key": "bfc3082ce69c0130ee8eef18546f35319ce0ad7993f276aaf59578a9aa88bbf0",
+      "group": "B13_2023",
+      "expected_sha256": "1659e248a6196c566274b403070268de1dfbab002cf82248bc9975793e150e84",
+      "actual_sha256": "1659e248a6196c566274b403070268de1dfbab002cf82248bc9975793e150e84",
+      "bytes": 4494736,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.489949+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.509320+00:00",
+      "read_sha_seconds": 0.018530499997723382
+    },
+    {
+      "file_key": "f8a9841c2a1b0b83a92f740c8db62a6016a043f2082970e41c33df6bc3e07523",
+      "group": "B13_2023",
+      "expected_sha256": "ca7099a64bd3b4c506138f38864856982a3ee3d0456d773fb812f06afa22d79a",
+      "actual_sha256": "ca7099a64bd3b4c506138f38864856982a3ee3d0456d773fb812f06afa22d79a",
+      "bytes": 4528116,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.519319+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.538890+00:00",
+      "read_sha_seconds": 0.017477399997005705
+    },
+    {
+      "file_key": "0246cf302b9081e444534d739f78e65e37ba271ab05603c1d5cc0d99db7be037",
+      "group": "B13_2023",
+      "expected_sha256": "ff8a511199f8c76a97ac7ba9b89beaa27c661c335431800bee7df60c7ec334cb",
+      "actual_sha256": "ff8a511199f8c76a97ac7ba9b89beaa27c661c335431800bee7df60c7ec334cb",
+      "bytes": 4560118,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.547910+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.565799+00:00",
+      "read_sha_seconds": 0.01752670000132639
+    },
+    {
+      "file_key": "f9a794a5926256d2c24570c074e4d3aa008456f892b6fef507192a5c5cf2a33d",
+      "group": "IMERG_2023",
+      "expected_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "actual_sha256": "6cd68051af5cfafbc1ebead08ea0961a9701df3adfba4d37a552156c2f6d2928",
+      "bytes": 390273,
+      "status": "SHA_PASS",
+      "opened_utc": "2026-10-10T15:52:58.573806+00:00",
+      "open_success": true,
+      "error": null,
+      "closed_utc": "2026-10-10T15:52:58.578357+00:00",
+      "read_sha_seconds": 0.003136100000119768
+    }
+  ],
+  "memory_netcdf_views": 18,
+  "cpu_resources": {
+    "working_set_bytes": 2329473024,
+    "peak_working_set_bytes": 2453544960,
+    "private_bytes": 4085604352,
+    "peak_pagefile_bytes": 7416758272
+  },
+  "application_scope_access_audit_only": true,
+  "no_raw_pixel_or_weight_arrays_published": true,
+  "no_2024_raw_reads": true,
+  "no_new_2025_path_queries": true,
+  "extra_inference_forwards": 0,
+  "formal_epoch_runs": 0,
+  "formal_runs": 0,
+  "approval_boundary_unchanged": true,
+  "operational_near_realtime": "NOT_VERIFIED",
+  "initialization": {
+    "seed": 2026,
+    "state_sha256": {
+      "B0_MATCHED_V2": "a8381729fc22077dd33d632ff2f8c293a04c160dd0c5425fc9a46b93b4885719",
+      "B1_V2": "f02fda62c40e6a103bae61d0572685ef3aafa2c73efef7bd0ca57f08e058c331"
+    },
+    "buffers_sha256": {
+      "B0_MATCHED_V2": "55f2ac1f12e1f601a7c7ee12aed0e37b6f7efe793a8ce1f8ee11dc3da89b4356",
+      "B1_V2": "55f2ac1f12e1f601a7c7ee12aed0e37b6f7efe793a8ce1f8ee11dc3da89b4356"
+    },
+    "same_shape_shared_bit_identical": true,
+    "native_zero_skip_preserved": true,
+    "parameter_counts": {
+      "B0_MATCHED_V2": {
+        "DECAY_GROUP": 4322880,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4329410
+      },
+      "B1_V2": {
+        "DECAY_GROUP": 4325280,
+        "NO_DECAY_GROUP": 6530,
+        "total": 4331810
+      }
+    },
+    "historical_checkpoint_loaded": false
+  },
+  "external_watchdog_limitation": "VENV_WRAPPER_PID_MONITORED; actual-worker PID repair only statically tested after execution",
+  "driver": {
+    "finished_at_utc": "2026-10-10T15:53:01.765177+00:00",
+    "exit_code": 0,
+    "watchdog_violation": null,
+    "elapsed_seconds": 17.875,
+    "peak_sampled_child_working_set_bytes": 5005312,
+    "monitor_interval_seconds": 0.1,
+    "retries": 0,
+    "peak_sampled_child_working_set_bytes_is_actual_worker_peak": false
+  },
+  "post_execution_watchdog_end_to_end_status": "NOT_VERIFIED_NO_REAL_RERUN",
+  "static_tests": {
+    "final_passed": 39,
+    "final_failed": 0,
+    "actual_optimizer_calls": 0,
+    "initial_runs": [
+      {
+        "tests": 36,
+        "errors": 2
+      },
+      {
+        "tests": 37,
+        "errors": 1
+      },
+      {
+        "tests": 37,
+        "errors": 0
+      }
+    ],
+    "post_environment_change_failed_runs": [
+      {
+        "tests": 39,
+        "errors": 28
+      },
+      {
+        "tests": 39,
+        "errors": 28
+      }
+    ],
+    "final_run": {
+      "tests": 39,
+      "errors": 0
+    }
+  },
+  "final_commit_identity": "Resolve via git log for this directory; self-referential commit SHA is not embedded"
+}

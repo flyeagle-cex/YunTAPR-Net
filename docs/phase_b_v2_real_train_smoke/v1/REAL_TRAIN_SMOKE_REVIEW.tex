@@ -1,0 +1,49 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\title{YunTAPR-Net\\首次真实数据训练链路冒烟测试}
+\author{研究者审查用工程摘要}
+\date{执行收据：2026-10-10 23:52--23:53（上海时间）}
+\begin{document}
+\pagestyle{plain}
+\maketitle
+\vspace{-12mm}
+\textbf{限定工程结果：BOUNDED\_REAL\_TRAIN\_SMOKE\_PASS。}
+B0-Matched-v2/E0、B1-v2/E0 各完成一次真实更新；预留、进入和返回调用总数均为 2，永久账本已封存。正式 Phase-B optimizer steps 为 0。没有完整 epoch、真实验证、其他 seed 或实验臂。
+
+\section*{固定输入与数学口径}
+冻结 2023 Train 原始清单第 0、1 个场景：2023-03-01 00:30、01:00 UTC。两模型严格配对，未根据雨量或预测选样，fresh seed2026，无历史 checkpoint。
+B0 输入为 $[2,1,501,501]$，B1 为 $[2,6,501,501]$；FP32 输入，BF16 骨干及发生头、FP64 条件分位数路径。
+\[
+L_{\rm smoke}=\frac{S_{\rm occ}(\alpha=0.5,\gamma=2)+S_{\rm qr}}{N_{\rm valid}},
+\qquad \tau_i=\frac{i-0.5}{32},\quad i=1,\ldots,32.
+\]
+Pinball 在 $\log(1+r)$ 空间，先对 32 个 tau 求平均，再只对真实有雨且有效像元求和；有雨阈值为原始 FP32 雨强严格大于 FP32(0.1 mm/h)。两个场景 $N_{\rm valid}=6860$，$N_{\rm rain}=45$；这些是像元暴露，不是独立事件。所有输出形状、数值、严格单调性和支撑下界通过。
+
+\section*{更新及状态核验}
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+模型 & 工程训练目标 & 裁剪前 L2 & 裁剪后 L2 & 更新调用\\
+\midrule
+B0/E0 & 0.101619122034 & 6.367124081 & 4.999999200 & 1\\
+B1/E0 & 0.112793514889 & 8.006965637 & 4.999999810 & 1\\
+\bottomrule
+\end{tabular}
+\end{center}
+以上随机初态训练目标仅用于接口核验，不能比较模型科学性能。每模型 74 个参数张量均有有限梯度；骨干与两输出头均有非零梯度，60 个张量字节发生改变，buffers 不变。AdamW state 完整、step 均为 1、FP32 moments 有限。冻结 clip=5，S0 第一更新 LR=$1.9127773527161438\times10^{-8}$。
+
+\clearpage
+\section*{字节、checkpoint 与资源}
+原始文件打开 15 次、去重 11 文件，读取 53,320,892 bytes，全部同次 SHA 匹配；解码消费同一不可变字节。没有读取 2024/2025 原始数据或历史权重。两份 smoke checkpoint 均原子保存、同字节 SHA 后以 \texttt{weights\_only=True} 安全读取，全字段状态摘要一致；约 49.65/49.68 MiB，仅本地保存，禁止正式 warm-start 或恢复。
+
+真实工作进程峰值工作集 2.285 GiB；CUDA peak allocated 2.663 GiB、peak reserved 3.199 GiB；worker 执行 14.953 秒，含启动器 17.875 秒。CPU工作集低于 4 GiB，GPU reserved 低于 6 GiB，原始读取低于 1 GiB。pagefile/commit 峰值约 6.907 GiB，与工作集不同。
+
+\section*{限制、失败记录与审批边界}
+最终新增防护测试 39 通过、0 失败。保留首轮路径身份错误、夹具分类错误及环境切换后的临时目录权限失败与修复日志。真实更新事务失败=0、重试=0。
+外部 watchdog 首次监控了 venv 包装进程，其 5 MB 数字不代表真实 worker；实际峰值来自 worker 自身 Win32 计数器。PID 绑定已执行后修复并做静态测试，完整停止联动未验证，未重跑真实 smoke。准确执行源码与修复版本分别留存。
+
+\textbf{正式训练仍未授权。}科学协议、效应及副作用界限、正式版本集成、数据/资源许可及首批六组执行须独立批准。历史 B1 恢复未追认；2025 像元读取为 0，但历史路径属性访问仍为 \texttt{NOT\_INSTRUMENTED}。IMERG Final 为回顾性监督，业务近实时延迟未验证。证据、逐模型 SHA 和失败日志见同目录 Markdown/JSON；提交身份以本目录 Git 历史为准。
+\end{document}

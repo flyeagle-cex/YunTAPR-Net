@@ -1,0 +1,36 @@
+"""One-shot child with external CPU/time watchdog; there is no retry branch."""
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+from . import ROOT,OUT,LIMITS
+from .resources import memory,utcnow
+
+def launch():
+    root=OUT/'.local'; root.mkdir(exist_ok=True)
+    if (root/'attempt_001').exists() or (root/'driver_status.json').exists():
+        raise PermissionError('NO_SMOKE_LAUNCH_RETRY')
+    env=os.environ.copy(); env.update(PYTHONPATH=str(ROOT/'src'),PYTHONHASHSEED='2026',CUBLAS_WORKSPACE_CONFIG=':4096:8')
+    started=time.monotonic(); peak=0; violation=None
+    with (root/'worker_console.private.log').open('xb') as log:
+        process=subprocess.Popen([sys.executable,'-m','yuntapr.experimental.phase_b_v2_real_train_smoke.run'],
+            cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
+        while process.poll() is None:
+            try: peak=max(peak,memory(process._handle)['working_set_bytes'])
+            except OSError:
+                if process.poll() is None: violation='CPU_WATCHDOG_UNAVAILABLE'
+            if peak>LIMITS['MAX_CPU_WORKING_SET_BYTES']: violation='CPU_WATCHDOG_LIMIT'
+            if time.monotonic()-started>=LIMITS['MAX_ELAPSED_SECONDS']: violation='TIME_WATCHDOG_LIMIT'
+            if violation:
+                process.kill(); process.wait(); break
+            time.sleep(.1)
+    status=dict(finished_at_utc=utcnow(),exit_code=process.returncode,watchdog_violation=violation,
+        elapsed_seconds=time.monotonic()-started,peak_sampled_child_working_set_bytes=peak,
+        monitor_interval_seconds=.1,retries=0)
+    (root/'driver_status.json').write_text(json.dumps(status,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(status))
+    return process.returncode
+
+if __name__=='__main__': raise SystemExit(launch())

@@ -1,0 +1,1334 @@
+test_formal_json_cannot_enable (test_smoke.GateTests.test_formal_json_cannot_enable) ... ok
+test_no_checkpoint_path_load (test_smoke.GateTests.test_no_checkpoint_path_load) ... ok
+test_no_extra_pair (test_smoke.GateTests.test_no_extra_pair) ... ok
+test_no_extra_scene (test_smoke.GateTests.test_no_extra_scene) ... ok
+test_no_reread_pair (test_smoke.GateTests.test_no_reread_pair) ... ok
+test_no_smoke_formal_restore (test_smoke.GateTests.test_no_smoke_formal_restore) ... ok
+test_no_unauthorized_backward (test_smoke.GateTests.test_no_unauthorized_backward) ... ok
+test_no_unauthorized_optimizer_call (test_smoke.GateTests.test_no_unauthorized_optimizer_call) ... ok
+test_optimizer_constructor_under_guard_no_updates (test_smoke.GateTests.test_optimizer_constructor_under_guard_no_updates) ... ok
+test_watchdog_actual_worker_handle (test_smoke.GateTests.test_watchdog_actual_worker_handle) ... ok
+test_watchdog_invalid_pid_no_native_call (test_smoke.GateTests.test_watchdog_invalid_pid_no_native_call) ... ok
+test_b1_requires_b0_complete (test_smoke.QuotaTests.test_b1_requires_b0_complete) ... ERROR
+test_cross_process_duplicate_reservation (test_smoke.QuotaTests.test_cross_process_duplicate_reservation) ... ERROR
+test_duplicate_entry_consumed (test_smoke.QuotaTests.test_duplicate_entry_consumed) ... ERROR
+test_duplicate_forward (test_smoke.QuotaTests.test_duplicate_forward) ... ERROR
+test_full_two_transaction_logic_without_updates (test_smoke.QuotaTests.test_full_two_transaction_logic_without_updates) ... ERROR
+test_identity_mismatch (test_smoke.QuotaTests.test_identity_mismatch) ... ERROR
+test_missing_ledger_not_recreated (test_smoke.QuotaTests.test_missing_ledger_not_recreated) ... ERROR
+test_no_completion_without_step_return (test_smoke.QuotaTests.test_no_completion_without_step_return) ... ERROR
+test_no_existing_ledger_reset (test_smoke.QuotaTests.test_no_existing_ledger_reset) ... ERROR
+test_no_false_completion (test_smoke.QuotaTests.test_no_false_completion) ... ERROR
+test_no_out_of_order_step (test_smoke.QuotaTests.test_no_out_of_order_step) ... ERROR
+test_no_unreserved_entry (test_smoke.QuotaTests.test_no_unreserved_entry) ... ERROR
+test_uncertain_failure_no_refund (test_smoke.QuotaTests.test_uncertain_failure_no_refund) ... ERROR
+test_unknown_model (test_smoke.QuotaTests.test_unknown_model) ... ERROR
+test_unknown_stage (test_smoke.QuotaTests.test_unknown_stage) ... ERROR
+test_2025_denied_before_readhandle (test_smoke.StoreTests.test_2025_denied_before_readhandle) ... ERROR
+test_after_blob_failure_no_receipt (test_smoke.StoreTests.test_after_blob_failure_no_receipt) ... ERROR
+test_existing_lock_not_removed (test_smoke.StoreTests.test_existing_lock_not_removed) ... ERROR
+test_guarded_roundtrip (test_smoke.StoreTests.test_guarded_roundtrip) ... ERROR
+test_incomplete_blob (test_smoke.StoreTests.test_incomplete_blob) ... ERROR
+test_lock_failure_preserves_evidence (test_smoke.StoreTests.test_lock_failure_preserves_evidence) ... ERROR
+test_mid_save_failure_preserved (test_smoke.StoreTests.test_mid_save_failure_preserved) ... ERROR
+test_no_overwrite (test_smoke.StoreTests.test_no_overwrite) ... ERROR
+test_receipt_escape (test_smoke.StoreTests.test_receipt_escape) ... ERROR
+test_same_byte_roundtrip (test_smoke.StoreTests.test_same_byte_roundtrip) ... ERROR
+test_schema_missing (test_smoke.StoreTests.test_schema_missing) ... ERROR
+test_sha_before_load (test_smoke.StoreTests.test_sha_before_load) ... ERROR
+test_wrong_store_before_open (test_smoke.StoreTests.test_wrong_store_before_open) ... ERROR
+
+======================================================================
+ERROR: test_b1_requires_b0_complete (test_smoke.QuotaTests.test_b1_requires_b0_complete)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_cross_process_duplicate_reservation (test_smoke.QuotaTests.test_cross_process_duplicate_reservation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_duplicate_entry_consumed (test_smoke.QuotaTests.test_duplicate_entry_consumed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_duplicate_forward (test_smoke.QuotaTests.test_duplicate_forward)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_full_two_transaction_logic_without_updates (test_smoke.QuotaTests.test_full_two_transaction_logic_without_updates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_identity_mismatch (test_smoke.QuotaTests.test_identity_mismatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_missing_ledger_not_recreated (test_smoke.QuotaTests.test_missing_ledger_not_recreated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_completion_without_step_return (test_smoke.QuotaTests.test_no_completion_without_step_return)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_existing_ledger_reset (test_smoke.QuotaTests.test_no_existing_ledger_reset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_false_completion (test_smoke.QuotaTests.test_no_false_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_out_of_order_step (test_smoke.QuotaTests.test_no_out_of_order_step)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_unreserved_entry (test_smoke.QuotaTests.test_no_unreserved_entry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_uncertain_failure_no_refund (test_smoke.QuotaTests.test_uncertain_failure_no_refund)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_unknown_model (test_smoke.QuotaTests.test_unknown_model)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_unknown_stage (test_smoke.QuotaTests.test_unknown_stage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 24, in setUp
+    self.q=QuotaCore(self.path,create=True,campaign='UNIT_TEST_NO_REAL_PERMISSION')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/quota.py", line 17, in __init__
+    with path.open('xb'): pass  # existing ledger is never reset/reused
+         ^^^^^^^^^^^^^^^
+  File "<local-redacted>/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '<local-path-redacted>
+
+======================================================================
+ERROR: test_2025_denied_before_readhandle (test_smoke.StoreTests.test_2025_denied_before_readhandle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_after_blob_failure_no_receipt (test_smoke.StoreTests.test_after_blob_failure_no_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_existing_lock_not_removed (test_smoke.StoreTests.test_existing_lock_not_removed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_guarded_roundtrip (test_smoke.StoreTests.test_guarded_roundtrip)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_incomplete_blob (test_smoke.StoreTests.test_incomplete_blob)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_lock_failure_preserves_evidence (test_smoke.StoreTests.test_lock_failure_preserves_evidence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_mid_save_failure_preserved (test_smoke.StoreTests.test_mid_save_failure_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_no_overwrite (test_smoke.StoreTests.test_no_overwrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_receipt_escape (test_smoke.StoreTests.test_receipt_escape)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_same_byte_roundtrip (test_smoke.StoreTests.test_same_byte_roundtrip)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_schema_missing (test_smoke.StoreTests.test_schema_missing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_sha_before_load (test_smoke.StoreTests.test_sha_before_load)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+======================================================================
+ERROR: test_wrong_store_before_open (test_smoke.StoreTests.test_wrong_store_before_open)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<local-redacted>/test_smoke.py", line 73, in setUp
+    self.temp=tempfile.TemporaryDirectory(dir=TEST_TEMP); self.store=SmokeStore(Path(self.temp.name)/'owned')
+                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/checkpoint.py", line 26, in __init__
+    self.root.mkdir(exist_ok=False)
+  File "<local-redacted>/pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+----------------------------------------------------------------------
+Ran 39 tests in 1.197s
+
+FAILED (errors=28)
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<local-redacted>/weakref.py", line 666, in _exitfunc
+    f()
+  File "<local-redacted>/weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "<local-redacted>/tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "<local-redacted>/shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<local-redacted>/shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "<local-redacted>/shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "<local-redacted>/tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "<local-redacted>/tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "<local-redacted>/tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: '<local-path-redacted>
