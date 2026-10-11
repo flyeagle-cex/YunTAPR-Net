@@ -1,0 +1,112 @@
+\documentclass[UTF8,a4paper,11pt]{ctexart}
+\usepackage[margin=23mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{plain}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\begin{document}
+\begin{center}
+{\Large\bfseries YunTAPR-Net：执行安全最终工程审查}\\[5pt]
+{\large Phase-B v2 / v1}\quad 2026年10月11日
+\end{center}
+\textbf{结论：WATCHDOG\_SYNTHETIC\_TERMINATION\_PASS。}
+
+正式训练仍为
+\textbf{NOT\_READY / NOT\_AUTHORIZED}。本文件不包含批准、签署或新的科学结果。
+
+本地与本轮开始时远端 main 均核验为
+\code{16e3715f02615c9a6c9d86c1fdc8ee4b87651bef}。源码、完整逐用例收据、失败记录及未决问题见本目录 Markdown/JSON；本摘要可由研究者直接编辑。
+
+\section*{1. 实际执行及终止能力}
+最终31项不同检查通过、0项失败，其中17个人工进程场景。开发与复核累计预留并启动33个用例，上限40；每例上限15秒，最长实测2.031秒。只分配32 MiB人工内存，授权上限64 MiB。
+
+Windows Job Object 在创建进程时原子绑定，未开放 breakaway。
+持有内核进程句柄，绑定 PID、创建时间与原生可执行文件路径哈希。
+错误或外来 PID 触发拒绝，只终止自己的 Job，外来父进程继续存活。
+\begin{center}
+\begin{tabular}{p{.51\linewidth}p{.36\linewidth}}
+\toprule
+检查 & 实际结果\\\midrule
+venv包装器退出，真实工作进程仍存活 & PASS：继续监控至工作完成\\
+身份登记前退出 / 超时未登记 & PASS：明确失败收据及清理\\
+错误PID、创建时间、image、nonce & PASS：拒绝及清理\\
+24 MiB模拟工作集阈值 & PASS：停止32 MiB分配进程\\
+1.8秒时间阈值与子孙进程 & PASS：清空整棵测试树\\
+工作进程异常退出 / 失效监控句柄 & PASS：停止Job并核验\\
+关闭最后Job句柄 & PASS：保留进程句柄均退出\\
+监控子进程\code{os._exit(17)} & PASS：内层工作进程先被内核终止\\
+自报JSON/布尔值代替正式批准 & PASS：始终拒绝正式入口\\\bottomrule
+\end{tabular}
+\end{center}
+终止后活跃Job成员为零、保留进程句柄退出；Job销毁例不能继续查询Job，使用句柄证明，不填写虚假的查询成功。无遗留测试树，无自动重启。
+
+首轮自动19项PASS，但两类异常退出被笼统分类，人工审查标为未核验；已保留原收据并修正。保护审计另有一次 SQL tuple 与 JSON list 比较误报：文件SHA未变，修复仅规范表示，回归通过。用例执行时源码SHA未同时登记，保留该溯源限制，当前manifest绑定最终源码。
+
+\newpage
+\section*{2. 资源证据及不可外推范围}
+本轮无 PyTorch 导入、无模型、无 GPU 操作、无真实数据读取、无优化器更新或历史checkpoint读取。人工采样峰值：worker working set 53,411,840 bytes，tree working set 67,100,672 bytes，worker private commit 44,249,088 bytes。20 ms轮询不等于连续精确峰值。
+
+旧smoke报告中的有限真实事务：
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+模型 & CUDA allocated峰值(bytes) & CUDA reserved峰值(bytes)\\\midrule
+B0 & 2,834,127,872 & 3,416,260,608\\
+B1 & 2,858,972,672 & 3,435,134,976\\\bottomrule
+\end{tabular}
+\end{center}
+旧实际worker peak working set为2,453,544,960 bytes，peak pagefile/commit为7,416,758,272 bytes。它们不同：4 GiB工作集上限不能被解释为4 GiB提交上限。旧CUDA准入free为7,283,408,896 bytes，满足5 GiB；allocator/阶段reserved上限6 GiB。
+
+本轮仓库卷时点可用空间约47.6 GiB；该值不保证未来checkpoint卷容量。候选Store有写入空间与payload限制，但其他进程可能同时耗尽存储。正式GPU回收、驱动阻塞、系统commit压力、长时间稳定、热降频、掉电与目录持久性均为\textbf{NOT\_VERIFIED}。不以两个smoke耗时外推282,312次正式更新。
+
+\section*{3. 正式Runner关键阻塞及最小差异}
+\textbf{P1：checkpoint同字节问题。}
+\code{phase_b_v2_formal_integration_candidate/checkpoint.py} 的
+\code{Store.read} 继承
+\code{phase_b_v2_runner_candidate/checkpoint.py} 的
+\code{SyntheticStore.read}：SHA校验后再按路径打开反序列化，存在TOCTOU窗口；base reader拒绝外来路径前执行resolve。
+未来另批版本应采用词法先拒绝、只读句柄、同一不可变字节SHA与安全反序列化。smoke专属reader已有可参考模式；本轮没有打开权重或应用该正式差异。
+
+\textbf{P1：真实启动器尚未接入新Job后端。}
+旧smoke的\code{launch.py}仍以wrapper寿命结束监控，只有PID登记，taskkill没有全树清空证明。历史任务已封存，本轮未改写或重启。新watchdog只能运行固定人工用例，不能把256 MiB人工Job预算套用于模型。
+
+\textbf{正式全量集成尚未验证。}
+\code{IntegratedEngine}硬编码seed2026/E0、2/2人工profile及两日期；
+\code{RealDataAdapter}始终在路径操作前拒绝。需独立正式版本实现真实batch iterator、完整训练/验证覆盖、来源与日期、18运行范围、权限验真及跨进程额度。
+正式指标scratch预算、所有复用依赖SHA、受限目录ACL及恢复独立批准也待核验。现有B9/统一FP64评价定义保留，不以合成通过替代正式验收。
+
+\newpage
+\section*{4. 科学与批准边界}
+训练与共同评价必须区分：
+\[
+ L_{\rm train}=\frac{S_{\rm occ}(\gamma)+\lambda_q S_q}{N_{\rm valid}},\qquad
+ C_{\rm common}=\frac{S_{\rm occ}(2,\mathrm{FP64})+S_q}{N_{\rm valid}},
+ \qquad \mathrm{CPB}=\frac{S_q}{N_{\rm rain}}.
+\]
+\(\tau_i=(i-0.5)/32\)，\(\tau_{32}=0.984375\)。雨标签来自原始float32参考值严格大于0.1 mm/h；\(N_{\rm rain}=0\)时CPB不可估计。E0/E1/E2、paired fresh初始化与科学定义没有修改。
+
+研究者仍须独立决定：科学协议接受范围、M-C探索性报告选择及未定效应/副作用界限；正式源码版本审查与上述修复许可；真实数据消费的独立权限及同字节核验；GPU/CPU commit/磁盘/停止预算；批准事件验真机制和运行范围；首批seed2026六组的独立执行许可。每次真实恢复还须另批具体LAST SHA及原授权祖先。历史B1恢复偏差独立处置，未追认。
+
+现有两个smoke的永久账本、两处witness及3,657个既有src/config/docs文件SHA均不变；原额度仍\code{COMPLETE_SEALED}，预留/进入/返回各2。本轮新增更新为0。以下状态保持：
+\begin{quote}\ttfamily
+V2\_PHASE\_B\_AUTHORIZED=false\\
+FORMAL\_SCIENTIFIC\_EXECUTION\_AUTHORIZED=false\\
+RESEARCHER\_SCIENTIFIC\_APPROVAL\_REQUIRED=true\\
+FORMAL\_PHASE\_B\_OPTIMIZER\_STEPS=0\\
+HISTORICAL\_RECOVERY\_RATIFICATION=NOT\_GRANTED\\
+2025\_PIXELS\_READ=0\\
+historical\_2025\_path\_attributes=NOT\_INSTRUMENTED
+\end{quote}
+历史2025属性访问不能追溯宣称系统级零访问；本轮只作源代码与人工进程范围审计。2024仍是开发集，IMERG Final仍是回顾性参考，业务实时能力未验证。交付后停止，不自动启动预检、训练、恢复或其他工作包。
+
+\section*{5. 实现依据}
+Microsoft文档与本轮人工收据共同支持工程结论，未引用新科研性能：
+\begin{itemize}
+\item Microsoft Learn, Job Objects；包含子进程继承及kill-on-close语义。
+\par{\footnotesize\url{https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects}}\par
+\item Microsoft, The Old New Thing (2023-02-09)，创建时将进程加入Job，关闭先创建后绑定的孤儿窗口。
+\par{\footnotesize\url{https://devblogs.microsoft.com/oldnewthing/20230209-00/?p=107812}}\par
+\end{itemize}
+源码身份、逐例PID/创建时间/image哈希和资源收据见本目录manifest与tests。最终Git提交身份以仓库对本目录的git log及交付回复为准，不在文件内填写自引用SHA。
+\end{document}

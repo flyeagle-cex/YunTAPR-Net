@@ -1,0 +1,1663 @@
+{
+  "run": "run_d07768eed92a",
+  "tests": 19,
+  "passed": 19,
+  "failed": 0,
+  "launch_budget_reserved_total": 16,
+  "launch_hard_limit": 40,
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "maximum_case_seconds": 15,
+  "maximum_controlled_allocation_bytes": 67108864,
+  "elapsed_seconds": 7.766000000000076,
+  "results": [
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "success",
+      "utc": "2026-10-11T04:35:22.341469+00:00",
+      "root_pid": 23864,
+      "worker_identity": {
+        "pid": 26460,
+        "creation_filetime": 134361669219717376,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": true,
+      "observed_process_identities": [
+        {
+          "pid": 23864,
+          "creation_filetime": 134361669219416916,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 24248,
+          "creation_filetime": 134361669219505871,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 26460,
+          "creation_filetime": 134361669219717376,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "23864": 0,
+        "24248": 0,
+        "26460": 0
+      },
+      "violation": null,
+      "error_class": null,
+      "elapsed_seconds": 0.4070000000001528,
+      "peak_worker_working_set_bytes": 19755008,
+      "peak_worker_private_commit_bytes": 10526720,
+      "peak_sampled_tree_working_set_bytes": 33443840,
+      "resource_samples": [
+        {
+          "elapsed": 0.172,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.204,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.219,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.235,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.266,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.282,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.297,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.329,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.344,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        },
+        {
+          "elapsed": 0.36,
+          "working_set_bytes": 19755008,
+          "peak_working_set_bytes": 19755008,
+          "private_commit_bytes": 10526720,
+          "peak_pagefile_bytes": 10526720
+        }
+      ],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "wrapper_exit",
+      "utc": "2026-10-11T04:35:22.959935+00:00",
+      "root_pid": 11896,
+      "worker_identity": {
+        "pid": 23832,
+        "creation_filetime": 134361669225975756,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": true,
+      "observed_process_identities": [
+        {
+          "pid": 11896,
+          "creation_filetime": 134361669223540928,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 21892,
+          "creation_filetime": 134361669223624853,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 12996,
+          "creation_filetime": 134361669223850341,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        {
+          "pid": 28312,
+          "creation_filetime": 134361669225288891,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 23832,
+          "creation_filetime": 134361669225975756,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "11896": 0,
+        "21892": 0,
+        "12996": 0,
+        "28312": 0,
+        "23832": 0
+      },
+      "violation": null,
+      "error_class": null,
+      "elapsed_seconds": 0.6100000000001273,
+      "peak_worker_working_set_bytes": 19648512,
+      "peak_worker_private_commit_bytes": 10420224,
+      "peak_sampled_tree_working_set_bytes": 35500032,
+      "resource_samples": [
+        {
+          "elapsed": 0.391,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.422,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.438,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.453,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.485,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.5,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.516,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.547,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.563,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        },
+        {
+          "elapsed": 0.578,
+          "working_set_bytes": 19648512,
+          "peak_working_set_bytes": 19648512,
+          "private_commit_bytes": 10420224,
+          "peak_pagefile_bytes": 10420224
+        }
+      ],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "before_registration",
+      "utc": "2026-10-11T04:35:23.138013+00:00",
+      "root_pid": 4112,
+      "worker_identity": null,
+      "root_exited_during_monitor": true,
+      "observed_process_identities": [
+        {
+          "pid": 4112,
+          "creation_filetime": 134361669229681208,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 3876,
+          "creation_filetime": 134361669229761935,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 37432,
+          "creation_filetime": 134361669229962135,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "4112": 7,
+        "3876": 0,
+        "37432": 7
+      },
+      "violation": "EXIT_BEFORE_IDENTITY",
+      "error_class": null,
+      "elapsed_seconds": 0.17200000000002547,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 32985088,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "unexpected_exit",
+      "utc": "2026-10-11T04:35:23.318614+00:00",
+      "root_pid": 17316,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 17316,
+          "creation_filetime": 134361669231487871,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 11464,
+          "creation_filetime": 134361669231560405,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 34576,
+          "creation_filetime": 134361669231753185,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "17316": 99,
+        "11464": 99,
+        "34576": 9
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "PermissionError",
+      "elapsed_seconds": 0.15599999999994907,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 32014336,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "memory",
+      "utc": "2026-10-11T04:35:23.522084+00:00",
+      "root_pid": 416,
+      "worker_identity": {
+        "pid": 37980,
+        "creation_filetime": 134361669233584834,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 416,
+          "creation_filetime": 134361669233303077,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 9848,
+          "creation_filetime": 134361669233378999,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 37980,
+          "creation_filetime": 134361669233584834,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "416": 99,
+        "9848": 99,
+        "37980": 99
+      },
+      "violation": "CPU_WORKING_SET_LIMIT",
+      "error_class": null,
+      "elapsed_seconds": 0.18800000000010186,
+      "peak_worker_working_set_bytes": 53100544,
+      "peak_worker_private_commit_bytes": 43917312,
+      "peak_sampled_tree_working_set_bytes": 66789376,
+      "resource_samples": [
+        {
+          "elapsed": 0.172,
+          "working_set_bytes": 53100544,
+          "peak_working_set_bytes": 53100544,
+          "private_commit_bytes": 43917312,
+          "peak_pagefile_bytes": 43958272
+        }
+      ],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "allocation": {
+        "controlled_allocation_bytes": 33554432
+      },
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "tree_timeout",
+      "utc": "2026-10-11T04:35:25.374358+00:00",
+      "root_pid": 8616,
+      "worker_identity": {
+        "pid": 16788,
+        "creation_filetime": 134361669237187573,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": true,
+      "observed_process_identities": [
+        {
+          "pid": 8616,
+          "creation_filetime": 134361669235359151,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 32636,
+          "creation_filetime": 134361669235439874,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 24220,
+          "creation_filetime": 134361669235680653,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        {
+          "pid": 19160,
+          "creation_filetime": 134361669237054985,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 16788,
+          "creation_filetime": 134361669237187573,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        {
+          "pid": 26928,
+          "creation_filetime": 134361669238541692,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 35048,
+          "creation_filetime": 134361669238814756,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "8616": 0,
+        "32636": 99,
+        "24220": 0,
+        "19160": 99,
+        "16788": 99,
+        "26928": 99,
+        "35048": 99
+      },
+      "violation": "ELAPSED_TIME_LIMIT",
+      "error_class": null,
+      "elapsed_seconds": 1.844000000000051,
+      "peak_worker_working_set_bytes": 20008960,
+      "peak_worker_private_commit_bytes": 10649600,
+      "peak_sampled_tree_working_set_bytes": 58658816,
+      "resource_samples": [
+        {
+          "elapsed": 0.344,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.36,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.391,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.406,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.422,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.453,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.469,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.485,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.516,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.531,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.547,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.563,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.594,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.61,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.625,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.656,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.672,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.688,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.719,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.735,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.75,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.781,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.797,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.813,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.844,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.86,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.875,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.906,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.922,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.938,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.953,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 0.985,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.0,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.016,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.047,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.063,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.078,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.11,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.125,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.141,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.172,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.188,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.203,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.235,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.25,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.266,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.297,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.313,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.328,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.344,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.375,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.391,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.406,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.438,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.453,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.469,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.5,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.516,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.531,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.563,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.578,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.594,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.625,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.641,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.656,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.688,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.703,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.719,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.735,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.766,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.781,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.797,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        },
+        {
+          "elapsed": 1.828,
+          "working_set_bytes": 20008960,
+          "peak_working_set_bytes": 20008960,
+          "private_commit_bytes": 10649600,
+          "peak_pagefile_bytes": 10649600
+        }
+      ],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "foreign_pid",
+      "utc": "2026-10-11T04:35:25.575763+00:00",
+      "root_pid": 4384,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 4384,
+          "creation_filetime": 134361669253841234,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 26932,
+          "creation_filetime": 134361669253921741,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 13132,
+          "creation_filetime": 134361669254124209,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "4384": 99,
+        "26932": 99,
+        "13132": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "PermissionError",
+      "elapsed_seconds": 0.18699999999989814,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33017856,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "missing_pid",
+      "utc": "2026-10-11T04:35:25.776460+00:00",
+      "root_pid": 38280,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 38280,
+          "creation_filetime": 134361669255855924,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 12180,
+          "creation_filetime": 134361669255933175,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 17184,
+          "creation_filetime": 134361669256130487,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "38280": 99,
+        "12180": 99,
+        "17184": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "OSError",
+      "elapsed_seconds": 0.20299999999997453,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33075200,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "bad_creation",
+      "utc": "2026-10-11T04:35:25.976148+00:00",
+      "root_pid": 9748,
+      "worker_identity": {
+        "pid": 18744,
+        "creation_filetime": 134361669258118458,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 9748,
+          "creation_filetime": 134361669257852837,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 38048,
+          "creation_filetime": 134361669257927540,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 18744,
+          "creation_filetime": 134361669258118458,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "9748": 99,
+        "38048": 99,
+        "18744": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "ValueError",
+      "elapsed_seconds": 0.20299999999997453,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33181696,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "bad_image",
+      "utc": "2026-10-11T04:35:26.178034+00:00",
+      "root_pid": 4312,
+      "worker_identity": {
+        "pid": 9120,
+        "creation_filetime": 134361669260139361,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 4312,
+          "creation_filetime": 134361669259864127,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 8484,
+          "creation_filetime": 134361669259943044,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 9120,
+          "creation_filetime": 134361669260139361,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "4312": 99,
+        "8484": 99,
+        "9120": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "ValueError",
+      "elapsed_seconds": 0.18800000000010186,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 32616448,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "bad_nonce",
+      "utc": "2026-10-11T04:35:26.459706+00:00",
+      "root_pid": 23792,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 23792,
+          "creation_filetime": 134361669261866777,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 6652,
+          "creation_filetime": 134361669261949987,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 36512,
+          "creation_filetime": 134361669262163980,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "23792": 99,
+        "6652": 99,
+        "36512": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "ValueError",
+      "elapsed_seconds": 0.2820000000001528,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33558528,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "bad_campaign",
+      "utc": "2026-10-11T04:35:26.703658+00:00",
+      "root_pid": 17232,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 17232,
+          "creation_filetime": 134361669264698149,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 33744,
+          "creation_filetime": 134361669264947186,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 13156,
+          "creation_filetime": 134361669265326668,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "17232": 99,
+        "33744": 99,
+        "13156": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "ValueError",
+      "elapsed_seconds": 0.2339999999999236,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33140736,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "no_registration",
+      "utc": "2026-10-11T04:35:28.760719+00:00",
+      "root_pid": 35264,
+      "worker_identity": null,
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 35264,
+          "creation_filetime": 134361669267115990,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 36464,
+          "creation_filetime": 134361669267198275,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 38544,
+          "creation_filetime": 134361669267393158,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "35264": 99,
+        "36464": 99,
+        "38544": 99
+      },
+      "violation": "REGISTRATION_TIMEOUT",
+      "error_class": null,
+      "elapsed_seconds": 2.0470000000000255,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33398784,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "worker_exit_tree",
+      "utc": "2026-10-11T04:35:29.150181+00:00",
+      "root_pid": 37248,
+      "worker_identity": {
+        "pid": 30108,
+        "creation_filetime": 134361669288015986,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 37248,
+          "creation_filetime": 134361669287715267,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 36700,
+          "creation_filetime": 134361669287800411,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 30108,
+          "creation_filetime": 134361669288015986,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        {
+          "pid": 37852,
+          "creation_filetime": 134361669289456758,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 528,
+          "creation_filetime": 134361669289580825,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "37248": 99,
+        "36700": 99,
+        "30108": 9,
+        "37852": 99,
+        "528": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "PermissionError",
+      "elapsed_seconds": 0.38999999999987267,
+      "peak_worker_working_set_bytes": 20058112,
+      "peak_worker_private_commit_bytes": 10690560,
+      "peak_sampled_tree_working_set_bytes": 57987072,
+      "resource_samples": [
+        {
+          "elapsed": 0.203,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.218,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.234,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.265,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.281,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.296,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.328,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        },
+        {
+          "elapsed": 0.343,
+          "working_set_bytes": 20058112,
+          "peak_working_set_bytes": 20058112,
+          "private_commit_bytes": 10690560,
+          "peak_pagefile_bytes": 10690560
+        }
+      ],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "invalid_handle",
+      "utc": "2026-10-11T04:35:29.353086+00:00",
+      "root_pid": 11484,
+      "worker_identity": {
+        "pid": 37984,
+        "creation_filetime": 134361669291905739,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 11484,
+          "creation_filetime": 134361669291621460,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 29024,
+          "creation_filetime": 134361669291702887,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 37984,
+          "creation_filetime": 134361669291905739,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "11484": 99,
+        "29024": 99
+      },
+      "violation": "MONITOR_OR_IDENTITY_FAILURE",
+      "error_class": "OSError",
+      "elapsed_seconds": 0.20299999999997453,
+      "peak_worker_working_set_bytes": 0,
+      "peak_worker_private_commit_bytes": 0,
+      "peak_sampled_tree_working_set_bytes": 33607680,
+      "resource_samples": [],
+      "job_empty_after_stop": true,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": false,
+      "member_pids_before_close": [],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    },
+    {
+      "scope": "SYNTHETIC_ENGINEERING_ONLY",
+      "case": "close_job",
+      "utc": "2026-10-11T04:35:29.703503+00:00",
+      "root_pid": 25480,
+      "worker_identity": {
+        "pid": 18500,
+        "creation_filetime": 134361669293928059,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "root_exited_during_monitor": false,
+      "observed_process_identities": [
+        {
+          "pid": 25480,
+          "creation_filetime": 134361669293643356,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 37944,
+          "creation_filetime": 134361669293724384,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        },
+        {
+          "pid": 18500,
+          "creation_filetime": 134361669293928059,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        },
+        {
+          "pid": 4284,
+          "creation_filetime": 134361669295255847,
+          "image_path_key": "bdc694457cdcd8747d4a3a9b0ce9fb5480c240a79e7263cc8933ed45cfa235b0"
+        },
+        {
+          "pid": 18396,
+          "creation_filetime": 134361669295376541,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+        }
+      ],
+      "exit_codes": {
+        "25480": 0,
+        "37944": 0,
+        "18500": 0,
+        "4284": 0,
+        "18396": 0
+      },
+      "violation": "SIMULATED_MONITOR_LOSS_KILL_ON_CLOSE",
+      "error_class": null,
+      "elapsed_seconds": 0.34400000000005093,
+      "peak_worker_working_set_bytes": 20041728,
+      "peak_worker_private_commit_bytes": 10670080,
+      "peak_sampled_tree_working_set_bytes": 58322944,
+      "resource_samples": [
+        {
+          "elapsed": 0.172,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.203,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.219,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.235,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.266,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.282,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.297,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        },
+        {
+          "elapsed": 0.328,
+          "working_set_bytes": 20041728,
+          "peak_working_set_bytes": 20041728,
+          "private_commit_bytes": 10670080,
+          "peak_pagefile_bytes": 10670080
+        }
+      ],
+      "job_empty_after_stop": null,
+      "all_retained_process_handles_signaled": true,
+      "cleanup_verified": true,
+      "kill_on_close_test": true,
+      "member_pids_before_close": [
+        25480,
+        37944,
+        4284,
+        18500,
+        18396
+      ],
+      "restarts": 0,
+      "model_imports": 0,
+      "gpu_operations": 0,
+      "real_data_reads": 0,
+      "optimizer_steps": 0,
+      "test_status": "PASS"
+    }
+  ],
+  "science_or_gpu_imports_present": []
+}
