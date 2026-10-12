@@ -1,0 +1,27 @@
+{
+  "scope": "NEW_RECOVERY_BOUNDARIES_ONLY",
+  "distinct_checks_passed": 8,
+  "distinct_checks_failed_final": 0,
+  "test_executions": 14,
+  "initial_errors": 3,
+  "second_attempt_errors": 3,
+  "failure_cause": "Windows tempfile mode 0700 denied sandbox token; workspace fixtures now inherit ordinary ACLs",
+  "raw_failure_logs": ".local/test_initial_private.txt and .local/test_fixed_private.txt",
+  "fix_confirmation": ".local/test_fixed2_private.txt",
+  "SYNTHETIC_CPU_OPTIMIZER_STEPS": 3,
+  "FORMAL_OPTIMIZER_STEPS_DURING_TESTS": 0,
+  "checks": [
+    "287540 = 162068 + 125472 = 282312 + 5228",
+    "nonrefundable persistent reservations and no duplicate launch",
+    "forbidden 2025/source path rejected before native access",
+    "wrong ancestor SHA rejected before native access",
+    "model/AdamW/scheduler/RNG exact CPU next-step trajectory",
+    "old restore denial remains unchanged",
+    "training and validation arithmetic AST unchanged",
+    "all original resource limits unchanged"
+  ],
+  "full_model_training_in_tests": false,
+  "raw_data_read_in_tests": false,
+  "actual_real_restore": "NOT_YET_EXECUTED_AT_TEST_RECORD",
+  "actual_resume_launch": "NOT_YET_EXECUTED_AT_TEST_RECORD"
+}
