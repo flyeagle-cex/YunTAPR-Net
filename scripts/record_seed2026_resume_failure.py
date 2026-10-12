@@ -36,7 +36,7 @@ def main():
         failure=dict(file='src/yuntapr/training/phase_b_v2_seed2026_v2/data.py',function='Reader.lock_parents',winerror=3,
                      frozen_source_drive='H:',minimal_remedy='Restore original frozen H drive; new release/launch requires direct researcher decision'))
     for name in ('failure_receipt.json','final_status.json'):
-        (OUT/name).write_text(json.dumps(row,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+        (OUT/name).write_bytes((json.dumps(row,indent=2,ensure_ascii=False)+'\n').encode('utf-8'))
     print(json.dumps(row))
 
 if __name__=='__main__':main()
