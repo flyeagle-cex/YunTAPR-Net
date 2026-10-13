@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "suite": "NEW_OPERATOR_BOUNDARIES_ONLY",
+  "initial_control_tests": {
+    "passed": 18,
+    "failed": 0
+  },
+  "initial_combined": {
+    "passed": 23,
+    "failed": 1
+  },
+  "final": {
+    "passed": 24,
+    "failed": 0
+  },
+  "initial_failure": "Test checked Job emptiness before waiting for all retained process handles to be signaled; implementation already awaited both",
+  "repair": "Test now awaits BOTH predicates and at least three artificial Job members",
+  "training_math_ast_unchanged": true,
+  "validation_math_ast_unchanged": true,
+  "synthetic_optimizer_steps": 0,
+  "formal_optimizer_steps_during_tests": 0,
+  "real_data_reads_during_tests": 0,
+  "logs_sha256": {
+    "combined_test_02.txt": "0a1b199dd7a677b613e1da58c22f056b598ee4ea7bacf21ae711029475fbb814",
+    "final_test_03.txt": "fa35e25d181439f5e2df44da24e7c22c95c4ec0b42f0262883cca274a236a373",
+    "initial_control_test_01.txt": "756a193b9b981e4a06396b3a28967a0cbf9aa99bac1852edb3f196dbb2a0c79d"
+  },
+  "power_loss_durability": "NOT_VERIFIED",
+  "real_long_epoch_operator_pause_resume": "NOT_VERIFIED"
+}
