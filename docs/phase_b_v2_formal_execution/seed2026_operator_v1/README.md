@@ -4,12 +4,29 @@
 
 历史 186,891 次更新不退款；本命名空间最多 104,560 次。包括第八轮 3,911 次重放，累计上限为 291,451。所有手动启停共用这一份 SQLite 账本，不能通过重启、改名或改目录增加预算。
 
-在仓库根目录的 PowerShell 中使用：
+在仓库根目录的 PowerShell 中按需要选择一条命令，四条不是连续执行的流程。
+
+启动或从安全暂停继续：
 
 ```powershell
 & .\scripts\phase_b_v2_operator\Start-Training.ps1
+```
+
+请求完整 epoch 后安全暂停：
+
+```powershell
 & .\scripts\phase_b_v2_operator\Pause-Training.ps1
+```
+
+只读查看进度：
+
+```powershell
 & .\scripts\phase_b_v2_operator\Status-Training.ps1
+```
+
+紧急终止所属进程树（不作为普通暂停）：
+
+```powershell
 & .\scripts\phase_b_v2_operator\Emergency-Stop-Training.ps1
 ```
 
