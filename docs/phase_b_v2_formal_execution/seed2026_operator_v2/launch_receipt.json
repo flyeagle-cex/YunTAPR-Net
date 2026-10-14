@@ -1,0 +1,115 @@
+{
+  "status": "RUNNING_RESTORED_FIRST_UPDATE_VERIFIED",
+  "task": "START_COMMAND_DELIVERED_TRAINING_CONTINUES",
+  "campaign": "RESEARCHER_PHASE_B_V2_SEED2026_EPOCH7_OPERATOR_20261014_V2",
+  "source_commit": "9b79bb887ad46097816ffbac34d888c41c6b600a",
+  "snapshot_utc": "2026-10-14T00:25:28.737231+00:00",
+  "old_nonrefundable_attempts": 192119,
+  "new_reserved": 1651,
+  "new_verified": 1651,
+  "combined_reserved": 193770,
+  "combined_verified": 193770,
+  "combined_limit": 296679,
+  "new_lifetime_limit": 104560,
+  "additional_replay_allowance": 5228,
+  "runs": [
+    {
+      "id": "B0_MATCHED_V2__E0__s2026",
+      "status": "COMPLETE",
+      "complete_epoch": 9,
+      "logical_updates": 47052,
+      "last_sha": "a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94"
+    },
+    {
+      "id": "B1_V2__E0__s2026",
+      "status": "COMPLETE",
+      "complete_epoch": 9,
+      "logical_updates": 47052,
+      "last_sha": "ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051"
+    },
+    {
+      "id": "B0_MATCHED_V2__E1__s2026",
+      "status": "COMPLETE",
+      "complete_epoch": 9,
+      "logical_updates": 47052,
+      "last_sha": "d36f6d541245b15b20e90cc93b95f15898d46f8c32568355af850d5389182cda"
+    },
+    {
+      "id": "B1_V2__E1__s2026",
+      "status": "RUNNING",
+      "complete_epoch": 7,
+      "logical_updates": 38247,
+      "last_sha": "2058390159ecc9195acf9812078ac56f7e63756bf3f176228e3c1ed6c1cf0ec2"
+    },
+    {
+      "id": "B0_MATCHED_V2__E2__s2026",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "logical_updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E2__s2026",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "logical_updates": 0,
+      "last_sha": null
+    }
+  ],
+  "first_resumed_update": {
+    "run": "B1_V2__E1__s2026",
+    "logical_update": 36597,
+    "status": "RETURNED_VERIFIED"
+  },
+  "restore_proof": {
+    "model_sha256": "02fd5d2f5eb49c71cfc50c6ebb32a61fa232ae0e42d0d9afa4c49c992911f886",
+    "optimizer_sha256": "5160980395e4bea676ce836c87397007ac6829a0bc32ea12ec3ce3ba63a117ce",
+    "rng_sha256": "bc942077400a9dbed6b01f0e0e7e0da88452d53523ef1845a40b1e2a2742c66f",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 36596
+    },
+    "all_state_verified_before_first_resumed_step": true,
+    "source_last_sha256": "2058390159ecc9195acf9812078ac56f7e63756bf3f176228e3c1ed6c1cf0ec2",
+    "source_epoch": 7,
+    "source_update": 36596,
+    "same_bytes_deserialized": true,
+    "weights_only": true,
+    "old_reserved_not_refunded": 192119,
+    "abandoned_updates_total": 14367,
+    "exact_stop_point_state_available": false,
+    "restores_complete_epoch7_state": true
+  },
+  "heartbeat": {
+    "utc": "2026-10-14T00:25:27.735312+00:00",
+    "elapsed_seconds": 137111.93699999998,
+    "content_bytes": 9599181425708,
+    "cpu": {
+      "working_set_bytes": 2998419456,
+      "peak_working_set_bytes": 3021901824,
+      "private_bytes": 7987167232,
+      "peak_pagefile_bytes": 8010752000
+    },
+    "cuda_peak_allocated": 2894721024,
+    "cuda_peak_reserved": 3468689408
+  },
+  "new_tests": {
+    "passed": 10,
+    "failed": 0,
+    "optimizer_calls": 0
+  },
+  "safe_pause_policy": "FULL_EPOCH_VALIDATION_LAST_JOB_EXIT",
+  "real_full_epoch_pause_resume": "NOT_YET_EXERCISED",
+  "no_automatic_retry": true,
+  "no_quota_refund": true,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "TEST_2025_AUTHORIZED": false,
+  "PIXELS_2025_READ": 0,
+  "HISTORICAL_2025_PATH_ATTRIBUTE_ACCESS": "NOT_INSTRUMENTED",
+  "SEED2027_AUTHORIZED": false,
+  "SEED2028_AUTHORIZED": false,
+  "FINALFIT_AUTHORIZED": false
+}
