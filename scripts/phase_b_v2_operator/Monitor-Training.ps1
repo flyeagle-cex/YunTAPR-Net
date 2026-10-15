@@ -19,7 +19,8 @@
 param(
     [int]$IntervalSeconds = 60,
     [switch]$Once,
-    [double]$SecondsPerUpdate = 0
+    [double]$SecondsPerUpdate = 0,
+    [switch]$Open
 )
 
 $ErrorActionPreference = 'Continue'
@@ -220,11 +221,13 @@ function Update {
     Write-Host ("{0}  {1}  ETA {2}  GPU {3}  心跳 {4}" -f $now.ToString('HH:mm:ss'), $stTxt, $etaText, $gpuTxt, $hbTxt)
 }
 
-if ($Once) { Update; return }
+if ($Once) { Update; if ($Open) { Start-Process $htmlPath }; return }
 
 Write-Host "监控启动（每 $IntervalSeconds 秒刷新）… Ctrl+C 停止监控（不影响训练）。HTML: $htmlPath" -ForegroundColor Cyan
+Update
+if ($Open) { Start-Process $htmlPath }
 try {
-    while ($true) { Update; Start-Sleep -Seconds $IntervalSeconds }
+    while ($true) { Start-Sleep -Seconds $IntervalSeconds; Update }
 } finally {
     Write-Host "监控已停止。训练进程不受影响；最近快照保留在 $htmlPath" -ForegroundColor Cyan
 }
