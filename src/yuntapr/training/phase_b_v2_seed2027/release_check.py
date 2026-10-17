@@ -1,0 +1,14 @@
+"""Publication check only: no torch, host admission, Job, data or ledger writes."""
+import json,sys
+from .protocol import OUT,DB,CAMPAIGN,verify_published_release,verify_release
+def main():
+    release=verify_published_release()
+    try:verify_release()
+    except PermissionError as e:gate=str(e)
+    else:raise RuntimeError('RESEARCHER_WITHHELD_START_MUST_BE_ENFORCED')
+    if 'torch' in sys.modules:raise RuntimeError('PUBLICATION_CHECK_IMPORTED_TORCH')
+    print(json.dumps(dict(publication='PASS',campaign=CAMPAIGN,source_commit=release['source_commit'],
+        source_sha256=release['source_sha256'],launch_gate=gate,ledger_exists=DB.exists(),
+        once_exists=DB.with_suffix('.once').exists(),sessions_exist=(OUT/'.local/sessions').exists(),
+        status='NOT_STARTED',optimizer_updates=0,raw_observation_reads=0)))
+if __name__=='__main__':main()
