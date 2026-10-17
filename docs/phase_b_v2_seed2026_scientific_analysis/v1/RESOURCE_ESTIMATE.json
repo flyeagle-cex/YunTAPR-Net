@@ -1,0 +1,71 @@
+{
+  "models": {
+    "B0": {
+      "observed_epochs": 27,
+      "train_median_seconds": 1839.9689999999973,
+      "validation_median_seconds": 796.5159999999996,
+      "mean_train_seconds": 1887.6174814814813,
+      "mean_validation_seconds": 838.4305555555557,
+      "epoch_p10_seconds": 2597.4343999999996,
+      "epoch_p90_seconds": 2922.085,
+      "future_runs": 6,
+      "future_epochs": 54,
+      "future_central_hours": 40.89072055555555,
+      "future_p10_scenario_hours": 38.961515999999996,
+      "future_p90_scenario_hours": 43.831275
+    },
+    "B1": {
+      "observed_epochs": 27,
+      "train_median_seconds": 3188.9539999999997,
+      "validation_median_seconds": 1400.2649999999999,
+      "mean_train_seconds": 3363.163703703702,
+      "mean_validation_seconds": 2261.7540370370375,
+      "epoch_p10_seconds": 4412.4216,
+      "epoch_p90_seconds": 5456.578200000004,
+      "future_runs": 6,
+      "future_epochs": 54,
+      "future_central_hours": 84.37376611111108,
+      "future_p10_scenario_hours": 66.186324,
+      "future_p90_scenario_hours": 81.84867300000006
+    }
+  },
+  "remaining_planned_updates": 564624,
+  "remaining_epochs": 108,
+  "remaining_validation_scenes": 1134108,
+  "committed_six_train_validation_hours": 62.63224333333332,
+  "remaining_core_hours": 125.26448666666664,
+  "remaining_p10_scenario_hours": 105.14784,
+  "remaining_p90_scenario_hours": 125.67994800000005,
+  "observed_all_campaign_active_hours": 66.25112805555555,
+  "remaining_historical_elapsed_ratio_hours": 132.5022561111111,
+  "planning_25_percent_margin_hours": 165.6278201388889,
+  "observed_raw_content_bytes": 15205271067625,
+  "remaining_content_bytes_linear_scenario": 30410542135250,
+  "six_final_payload_bytes": 315858678,
+  "remaining_108_checkpoint_payload_bytes": 5685456204,
+  "three_copy_checkpoint_bytes": 17056368612,
+  "observed_audit_log_bytes": 4069965018,
+  "remaining_log_bytes_linear_scenario": 8139930036,
+  "observed_committed_score_db_bytes": 19947520,
+  "remaining_score_db_bytes_linear_scenario": 39895040,
+  "remaining_score_db_hard_bound_bytes": 28991029248,
+  "missing_score_db_metadata": [],
+  "peaks_bytes": {
+    "cuda_allocated": 3549292544,
+    "cuda_reserved": 5983174656,
+    "working_set": 5650432000,
+    "sampled_private_commit": 10925150208,
+    "peak_pagefile_proxy": 10925166592
+  },
+  "crash": {
+    "record": "ancestor latest_crash_ancestor; source scripts/prepare_seed2026_operator_v3.py",
+    "driver": "nvlddmkm event153 / LiveKernelEvent",
+    "utc": "2026-10-14T00:26:59Z",
+    "lost_verified_updates": 1795,
+    "root_cause": "NOT_ESTABLISHED"
+  },
+  "forecast_scope": "OCCUPIED_SINGLE_GPU_WALL_HOURS_NOT_GPU_UTILIZATION_INTEGRAL",
+  "forecast_is_confidence_interval": false,
+  "margin_is_assumption_not_execution_grant": true,
+  "training_new_seeds_authorized": false
+}

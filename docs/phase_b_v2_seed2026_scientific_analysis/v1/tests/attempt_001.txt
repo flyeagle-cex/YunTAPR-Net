@@ -1,0 +1,29 @@
+test_01_all_54_receipts (__main__.AnalysisTests.test_01_all_54_receipts) ... ok
+test_02_all_source_hashes (__main__.AnalysisTests.test_02_all_source_hashes) ... ok
+test_03_pooled_ratio_not_block_mean (__main__.AnalysisTests.test_03_pooled_ratio_not_block_mean) ... ok
+test_04_zero_rain_rejected (__main__.AnalysisTests.test_04_zero_rain_rejected) ... ok
+test_05_invalid_weights_rejected (__main__.AnalysisTests.test_05_invalid_weights_rejected) ... ok
+test_06_final_csv_full_precision (__main__.AnalysisTests.test_06_final_csv_full_precision) ... ok
+test_07_32_coverage_and_denominator (__main__.AnalysisTests.test_07_32_coverage_and_denominator) ... ok
+test_08_exactly_four_exploratory_contrasts (__main__.AnalysisTests.test_08_exactly_four_exploratory_contrasts) ... ok
+test_09_all_dry_empty_bins_not_invented (__main__.AnalysisTests.test_09_all_dry_empty_bins_not_invented) ... ok
+test_10_no_new_training_or_raw_reads (__main__.AnalysisTests.test_10_no_new_training_or_raw_reads) ... ok
+test_11_primary_sha_only_audit (__main__.AnalysisTests.test_11_primary_sha_only_audit) ... ok
+test_12_all_publication_formats (__main__.AnalysisTests.test_12_all_publication_formats) ... FAIL
+test_13_remaining_budget_is_arithmetic_not_permission (__main__.AnalysisTests.test_13_remaining_budget_is_arithmetic_not_permission) ... ok
+test_14_backup_not_inferred_from_primary (__main__.AnalysisTests.test_14_backup_not_inferred_from_primary) ... ok
+test_15_registered_endpoint (__main__.AnalysisTests.test_15_registered_endpoint) ... ok
+test_16_original_strata_counts (__main__.AnalysisTests.test_16_original_strata_counts) ... ok
+
+======================================================================
+FAIL: test_12_all_publication_formats (__main__.AnalysisTests.test_12_all_publication_formats)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "analysis/test_analysis.py", line 53, in test_12_all_publication_formats
+    self.assertEqual(len(index),10)
+AssertionError: 4 != 10
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.407s
+
+FAILED (failures=1)
