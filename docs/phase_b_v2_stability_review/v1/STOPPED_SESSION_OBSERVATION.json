@@ -1,0 +1,140 @@
+{
+  "schema": "STOPPED_SESSION_REVIEW_v1",
+  "observed_utc": "2026-10-17T23:45:55.575050+00:00",
+  "estimated_current_boot_utc": "2026-10-17T23:24:30.263050+00:00",
+  "boot_estimate_method": "UTC minus GetTickCount64; supporting evidence, not authority",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V1",
+  "observation": {
+    "record_kind": "POSTMORTEM_OBSERVATION_NOT_TERMINATION_RECEIPT",
+    "ledger_state_observed": "ACTIVE",
+    "ledger_was_modified": false,
+    "heartbeat_age_seconds": 39292.842776,
+    "heartbeat_before_current_boot": true,
+    "formal_launch_capability": false,
+    "resume_allowed": false,
+    "automatic_retries": 0,
+    "historical_cleanup_execution": "NOT_VERIFIED",
+    "observed_process_tree_empty": true,
+    "effective_state": "STOPPED_UNCLEAN_NO_LAST"
+  },
+  "native_probes": {
+    "owner": {
+      "status": "ABSENT",
+      "winerror": 87
+    },
+    "worker": {
+      "status": "ABSENT",
+      "winerror": 87
+    },
+    "job": {
+      "status": "ABSENT",
+      "pids": [],
+      "winerror": 2
+    }
+  },
+  "ledger_state_observed": "ACTIVE",
+  "ledger_reason": null,
+  "session_state_observed": "ACTIVE",
+  "quota": {
+    "limit": 282698,
+    "reserved": 1127,
+    "returned_verified": 1126,
+    "new_reserved": 741,
+    "new_returned_verified": 741,
+    "old_campaign_reserved": 386,
+    "old_campaign_returned_verified": 385,
+    "old_unverified_attempts": 1,
+    "abandoned_old_updates": 386,
+    "combined_authorized_attempt_cap": 282698
+  },
+  "runs": [
+    {
+      "run_id": "B0_MATCHED_V2__E0__s2027",
+      "status": "RUNNING",
+      "epoch": 0,
+      "updates": 741,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E0__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B0_MATCHED_V2__E1__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E1__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B0_MATCHED_V2__E2__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E2__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    }
+  ],
+  "epochs": [
+    [
+      "B0_MATCHED_V2__E0__s2027",
+      1,
+      "TRAINING"
+    ]
+  ],
+  "heartbeat": {
+    "utc": "2026-10-17T12:51:02.732274+00:00",
+    "elapsed_seconds": 572.8600000000006,
+    "content_bytes": 11043114409,
+    "cpu": {
+      "working_set_bytes": 2793754624,
+      "peak_working_set_bytes": 2808516608,
+      "private_bytes": 7726927872,
+      "peak_pagefile_bytes": 7741788160
+    },
+    "cuda_peak_allocated": 2867387904,
+    "cuda_peak_reserved": 3422552064
+  },
+  "source_commit_of_stopped_run": "f86970c2689f858688c9212de75a574f5ea2bea0",
+  "source_sha256_of_stopped_run": "7227a5fd68d81d9c2145199d58685c68ea369567a6c4e64b332070c1de55a74d",
+  "source_evidence_sha256": {
+    "docs/phase_b_v2_formal_execution/seed2027_restart_v1/.local/sessions/session_0001/supervisor_identity.json": "daa572d95e048eca097d220f0b0fe58aaacea0e0ebe8ea0ea020035ac0bfed66",
+    "docs/phase_b_v2_formal_execution/seed2027_restart_v1/.local/sessions/session_0001/worker_identity.json": "4e95ccfbcd01175c65692d2eee38d454f53d7013eaf2c75c9f57d92cfad28386",
+    "docs/phase_b_v2_formal_execution/seed2027_restart_v1/.local/sessions/session_0001/bound_identity.json": "3f23d9ac52a11e1f127ad7adee3f31a47371fd5fce39202f1a8e095559be6ae8",
+    "docs/phase_b_v2_formal_execution/seed2027_restart_v1/.local/sessions/session_0001/heartbeat.json": "80d85a7c8936b37f42f75d364d71def0515a53712b445a333f8cdb349fe2b06c",
+    "docs/phase_b_v2_formal_execution/seed2027_restart_v1/release.json": "637dd6b7eb04217789ff0d6a75381ed7739703059d9f502c35a7de947d258fb6",
+    ".git/phase_b_v2_seed2027_fresh_restart_v1.sqlite": "431e845ab37c31b965d6b954271eb8b824a327dfa582a83c004b8153a46cb576"
+  },
+  "current_memory": {
+    "caller_available_commit_bytes": 32278114304,
+    "caller_commit_limit_bytes": 49859125248,
+    "system_commit_total_bytes": 17581010944,
+    "system_commit_limit_bytes": 49859125248,
+    "system_available_commit_bytes": 32278114304,
+    "system_available_physical_bytes": 20784021504,
+    "page_size_bytes": 4096,
+    "original_resource_thresholds_modified": false,
+    "settings_modified": false
+  },
+  "new_real_data_reads": 0,
+  "new_optimizer_updates": 0,
+  "driver_or_system_settings_changed": false,
+  "original_ledgers_modified": false,
+  "historic_2025_path_attribute_access": "NOT_INSTRUMENTED"
+}

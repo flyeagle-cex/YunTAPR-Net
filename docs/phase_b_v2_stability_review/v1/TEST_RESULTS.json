@@ -1,0 +1,88 @@
+{
+  "initial": {
+    "tests": 16,
+    "passed": 15,
+    "failures": 1,
+    "evidence_sha256": "7d42eac1142dcf8eda05bc072d21833988f731f6a108afbfc3385e25658a1863",
+    "failure": "Artificial cleanup initially checked empty Job member list before process handles were signaled.",
+    "repair": "Wait for BOTH an empty Job and all retained handles signaled; add conservative classification regression."
+  },
+  "final": {
+    "tests": 17,
+    "passed": 17,
+    "failures": [],
+    "errors": [],
+    "synthetic_only": true,
+    "new_optimizer_updates": 0,
+    "controlled_allocation_bytes": 0,
+    "max_case_seconds": 15,
+    "process_cases": [
+      {
+        "case": "live_identity_then_owned_cleanup",
+        "elapsed_seconds": 0.10999999999989996,
+        "job_empty_and_handles_signaled": true,
+        "identities": [
+          {
+            "pid": 39388,
+            "creation_filetime": 134367543388061796,
+            "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb"
+          },
+          {
+            "pid": 19372,
+            "creation_filetime": 134367543388147505,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          }
+        ],
+        "resource_sample": {
+          "working_set_bytes": 19886080,
+          "peak_working_set_bytes": 19886080,
+          "private_commit_bytes": 10293248,
+          "peak_pagefile_bytes": 10293248
+        },
+        "controlled_allocation_bytes": 0
+      },
+      {
+        "case": "owner_abrupt_exit_without_finally",
+        "elapsed_seconds": 0.26500000000010004,
+        "job_empty_and_handles_signaled": true,
+        "identities": [
+          {
+            "pid": 22780,
+            "creation_filetime": 134367543389294748,
+            "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb"
+          },
+          {
+            "pid": 36092,
+            "creation_filetime": 134367543389387035,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          },
+          {
+            "pid": 8200,
+            "creation_filetime": 134367543390599852,
+            "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb"
+          },
+          {
+            "pid": 20776,
+            "creation_filetime": 134367543390691406,
+            "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+          }
+        ],
+        "postmortem_native_probes": {
+          "owner": {
+            "status": "EXITED"
+          },
+          "worker": {
+            "status": "EXITED"
+          },
+          "job": {
+            "status": "ABSENT",
+            "pids": [],
+            "winerror": 2
+          }
+        },
+        "controlled_allocation_bytes": 0
+      }
+    ]
+  },
+  "all_original_test_runs_preserved": true
+}
