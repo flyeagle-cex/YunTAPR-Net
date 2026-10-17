@@ -1,0 +1,95 @@
+{
+  "contrasts": [
+    {
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "contrast": "E1-E0",
+      "primary_metric": "brier",
+      "units": "dimensionless",
+      "difference": -0.021439950129234733,
+      "exploratory_95_percentile_interval": [
+        -0.02451547533931989,
+        -0.018640570435883727
+      ],
+      "valid_replicates": 2000,
+      "side_effect_differences": {
+        "core_fp64": 0.026786817331209106,
+        "conditional_pinball": 0.0014225021292070955,
+        "auroc": -0.0011421588705058383,
+        "average_precision": -0.0012080398489863198
+      }
+    },
+    {
+      "model": "B0_MATCHED_V2",
+      "seed": 2026,
+      "contrast": "E2-E0",
+      "primary_metric": "q32_absolute_error",
+      "units": "dimensionless",
+      "difference": -0.0033216207801449738,
+      "exploratory_95_percentile_interval": [
+        -0.004316190481547119,
+        -0.0023641485513527993
+      ],
+      "valid_replicates": 2000,
+      "side_effect_differences": {
+        "core_fp64": 5.146246476726152e-05,
+        "conditional_pinball": 0.00048211478607233793,
+        "auroc": -0.00013531356118146043,
+        "average_precision": -0.0016918112713136813
+      }
+    },
+    {
+      "model": "B1_V2",
+      "seed": 2026,
+      "contrast": "E1-E0",
+      "primary_metric": "brier",
+      "units": "dimensionless",
+      "difference": -0.022084239346462434,
+      "exploratory_95_percentile_interval": [
+        -0.024863497379445664,
+        -0.019584493266762475
+      ],
+      "valid_replicates": 2000,
+      "side_effect_differences": {
+        "core_fp64": 0.02859706101721423,
+        "conditional_pinball": 0.000316465104745145,
+        "auroc": 0.00010398447155757218,
+        "average_precision": 0.0015135798015534219
+      }
+    },
+    {
+      "model": "B1_V2",
+      "seed": 2026,
+      "contrast": "E2-E0",
+      "primary_metric": "q32_absolute_error",
+      "units": "dimensionless",
+      "difference": -0.0008001601209802756,
+      "exploratory_95_percentile_interval": [
+        -0.0022990931906729352,
+        0.0006312850588764738
+      ],
+      "valid_replicates": 2000,
+      "side_effect_differences": {
+        "core_fp64": -0.00017239593368269246,
+        "conditional_pinball": -0.000660734763701612,
+        "auroc": 0.0007261320184043241,
+        "average_precision": 0.0014667698664032613
+      }
+    }
+  ],
+  "scope": "2024_DEVELOPMENT_SEED2026_ONLY",
+  "paired_same_week_weights": true,
+  "block_method": "35 nonoverlapping UTC seven-day blocks, label window_start",
+  "intervals_cover_primary_contrasts_only": true,
+  "multiplicity_correction": false,
+  "confirmatory_significance": false,
+  "limitations": [
+    "2024 already used for BEST and diagnostics",
+    "cross-week dependence",
+    "seasonal nonstationarity",
+    "single seed does not estimate training-seed variability",
+    "scene-pixel exposures are not independent events"
+  ],
+  "minimum_meaningful_effect": "NOT_YET_ESTABLISHED",
+  "scientific_success": "NOT_ESTABLISHED"
+}
