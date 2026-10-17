@@ -1,0 +1,39 @@
+{
+  "latest": {
+    "tests": 17,
+    "passed": 17,
+    "failures": [],
+    "errors": []
+  },
+  "test_runs": [
+    {
+      "tests": 15,
+      "passed": 15,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "tests": 16,
+      "passed": 16,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "tests": 17,
+      "passed": 17,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "real_optimizer_attempts_during_tests": 0,
+  "tests_use_no_raw_data_or_model": true,
+  "preparation_failure_and_repair": {
+    "phase": "PRE_LAUNCH_EVIDENCE_PREPARATION",
+    "error": "INCOMPLETE_PRIOR_BYTE_ACCOUNTING",
+    "cause": "Initial sum omitted PUBLIC_METADATA_READ bytes that the original Budget charged",
+    "repair": "Sum READ_FINISHED and PUBLIC_METADATA_READ; reject if below heartbeat; add targeted regression test",
+    "optimizer_attempts": 0,
+    "old_evidence_modified": false
+  },
+  "note": "New restart/accounting delta only; old model and smoke suites not rerun."
+}
