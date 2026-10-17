@@ -1,0 +1,118 @@
+{
+  "schema": "SEED2027_FRESH_RESTART_STARTUP_SNAPSHOT_v1",
+  "snapshot_utc": "2026-10-17T12:46:52.079927+00:00",
+  "status": "RUNNING_FIRST_NEW_UPDATE_VERIFIED",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V1",
+  "source_commit": "f86970c2689f858688c9212de75a574f5ea2bea0",
+  "source_sha256": "7227a5fd68d81d9c2145199d58685c68ea369567a6c4e64b332070c1de55a74d",
+  "failed_ancestor_sha256": "ad8c68efd4be8402217980f547dc5c42bf66694916c0cc520edabf463cd72832",
+  "full_preflight": "PASS",
+  "metadata": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "dependencies": {
+    "file_count": 16919,
+    "hashed_software_bytes": 4561093795,
+    "files_sha256": "b83fb3d3daff78171e09584612e784a28ed965dc7c26cfe8c912d9cf39d8f6ed"
+  },
+  "quota": {
+    "limit": 282698,
+    "reserved": 561,
+    "returned_verified": 560,
+    "new_reserved": 175,
+    "new_returned_verified": 175,
+    "old_campaign_reserved": 386,
+    "old_campaign_returned_verified": 385,
+    "old_unverified_attempts": 1,
+    "abandoned_old_updates": 386,
+    "combined_authorized_attempt_cap": 282698
+  },
+  "runs": [
+    {
+      "run_id": "B0_MATCHED_V2__E0__s2027",
+      "status": "RUNNING",
+      "complete_epoch": 0,
+      "updates": 175,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E0__s2027",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B0_MATCHED_V2__E1__s2027",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E1__s2027",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B0_MATCHED_V2__E2__s2027",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "run_id": "B1_V2__E2__s2027",
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    }
+  ],
+  "first_verified_new_update": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-17T12:45:40.676348+00:00",
+    "run_id": "B0_MATCHED_V2__E0__s2027",
+    "epoch": 1,
+    "update": 1,
+    "campaign_attempt": 1
+  },
+  "owned_job_native_identity_verified": true,
+  "heartbeat": {
+    "utc": "2026-10-17T12:46:51.106753+00:00",
+    "elapsed_seconds": 321.2350000000006,
+    "content_bytes": 5509062252,
+    "cpu": {
+      "working_set_bytes": 2728148992,
+      "peak_working_set_bytes": 2762100736,
+      "private_bytes": 7659827200,
+      "peak_pagefile_bytes": 7696490496
+    },
+    "cuda_peak_allocated": 2867387904,
+    "cuda_peak_reserved": 3420454912
+  },
+  "runtime_system_memory": {
+    "total_phys": 33752997888,
+    "available_phys": 12111736832,
+    "total_page": 49859125248,
+    "available_page": 12242612224
+  },
+  "old_failure_evidence_preserved": true,
+  "preexisting_dirty_files_preserved": true,
+  "automatic_retries": 0,
+  "seed2028_authorized": false,
+  "test2025_authorized": false,
+  "historical_recovery_ratification": "NOT_GRANTED",
+  "historical_2025_path_attribute_access": "NOT_INSTRUMENTED",
+  "note": "Fresh restart, not checkpoint recovery. Snapshot is not completion or a guarantee against future resource pressure."
+}
