@@ -1,0 +1,59 @@
+{
+  "schema": "SEED2027_STARTUP_VERIFICATION_SNAPSHOT_v1",
+  "snapshot_utc": "2026-10-17T11:04:55.702845+00:00",
+  "status": "FORMAL_TRAINING_STARTED_FIRST_UPDATE_VERIFIED",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_FRESH_V1",
+  "current_run": "B0_MATCHED_V2__E0__s2027",
+  "current_epoch": 1,
+  "completed_epochs": 0,
+  "completed_runs": 0,
+  "attempts_reserved": 146,
+  "attempts_returned_verified": 146,
+  "hard_cap": 282312,
+  "automatic_retries": 0,
+  "source_commit": "87fc53daeceeba31a9da4cd725bd5a8b3e070ff8",
+  "source_sha256": "23cab19122542ef6758c56465bdc7a04999db51427e5794688e6e7b8e867cb0a",
+  "full_preflight_status": "PASS",
+  "full_metadata": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "owned_job_identity_bound": true,
+  "dependencies": {
+    "file_count": 16919,
+    "hashed_software_bytes": 4561093795,
+    "files_sha256": "b83fb3d3daff78171e09584612e784a28ed965dc7c26cfe8c912d9cf39d8f6ed"
+  },
+  "first_verified_update": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-17T11:03:55.922404+00:00",
+    "run_id": "B0_MATCHED_V2__E0__s2027",
+    "epoch": 1,
+    "update": 1
+  },
+  "latest_heartbeat": {
+    "utc": "2026-10-17T11:04:54.363301+00:00",
+    "elapsed_seconds": 97.68799999999464,
+    "content_bytes": 1459343520,
+    "cpu": {
+      "working_set_bytes": 2748338176,
+      "peak_working_set_bytes": 2758471680,
+      "private_bytes": 7683514368,
+      "peak_pagefile_bytes": 7693733888
+    },
+    "cuda_peak_allocated": 2867387904,
+    "cuda_peak_reserved": 3420454912
+  },
+  "seed2028_authorized": false,
+  "test2025_authorized": false,
+  "historical_recovery_ratification": "NOT_GRANTED",
+  "historical_2025_path_attribute_access": "NOT_INSTRUMENTED",
+  "note": "Read-only startup snapshot, not final training results or proof of long-run stability. Live ledger/status take precedence."
+}
