@@ -1,15 +1,15 @@
-"""Fixed seed2027 executable publication; startup remains explicitly withheld."""
+"""Fixed seed2027 execution release bound to the new direct human instruction."""
 from __future__ import annotations
 import hashlib,json,os,subprocess
 from pathlib import Path
 from yuntapr.training.phase_b_v2_seed2026_operator_v3.protocol import LIMITS as ORIGINAL_LIMITS
-from .authority import PUBLICATION_DECISION,PUBLICATION_SCOPE
+from .authority import execution_instruction,EXECUTION_SCOPE
 
 ROOT=Path(__file__).absolute().parents[4]
 if os.environ.get('YUNTAPR_REPLICATION_SEED') not in (None,'2027'):
     raise PermissionError('ONLY_PUBLISHED_SEED2027_SCOPE')
 SEED=2027
-OUT=ROOT/'docs/phase_b_v2_formal_execution/seed2027_release_v1'
+OUT=ROOT/'docs/phase_b_v2_formal_execution/seed2027_execution_v1'
 LOCAL=OUT/'.local'
 CAMPAIGN='YUNTAPR_PHASE_B_V2_SEED2027_FRESH_V1'
 BASELINE='69ed793fed393a9466385f59de8fa062764c0445'
@@ -80,14 +80,18 @@ def validate_plan(plan):
     if plan.get('runs')!=expected:raise ValueError('FIXED_SIX_RUN_ORDER_PARAMETERS_AND_BUDGET')
     return plan
 def validate_record(release,actual,config_raw):
-    if (release.get('schema')!='SEED2027_EXECUTION_PUBLICATION_WITHOUT_LAUNCH_v1'
+    if (release.get('schema')!='SEED2027_HUMAN_AUTHORIZED_EXECUTION_v1'
         or release.get('campaign')!=CAMPAIGN or release.get('seed')!=2027
-        or release.get('publication_decision')!=PUBLICATION_DECISION or release.get('publication_scope')!=PUBLICATION_SCOPE
-        or release.get('launch_authorized') is not False or release.get('planned_attempt_cap')!=TOTAL
+        or release.get('human_instruction')!=execution_instruction()
+        or release.get('human_instruction_sha256')!=digest(execution_instruction())
+        or release.get('execution_scope')!=EXECUTION_SCOPE
+        or release.get('launch_authorized') is not True or release.get('planned_attempt_cap')!=TOTAL
+        or release.get('held_publication_commit')!='ed45c6c817b9c5ab47b1e3f30ce30e99ddb9e38c'
+        or release.get('dependency_manifest_sha256')!='2d02c5757f9da5fc1fef8b82168ffd689b96c07056d1cc13acf354a3fd88e780'
         or release.get('original_resource_limits')!=LIMITS
         or release.get('source_sha256')!=actual['sha256'] or release.get('source_pins')!=actual['pins']
         or release.get('config_sha256')!=hashlib.sha256(config_raw).hexdigest()):
-        raise ValueError('PUBLISHED_RELEASE_IDENTITY_OR_WITHHELD_SCOPE')
+        raise ValueError('ACTIVATED_RELEASE_IDENTITY_OR_HUMAN_SCOPE')
     return release
 def verify_published_release():
     config_raw=(OUT/'config.json').read_bytes()

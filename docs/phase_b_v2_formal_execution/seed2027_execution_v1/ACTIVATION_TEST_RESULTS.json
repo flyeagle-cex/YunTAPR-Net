@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "tests_run": 10,
+  "passed": 10,
+  "failed": 0,
+  "optimizer_updates": 0,
+  "raw_payload_reads": 0,
+  "cuda_model_tests": 0,
+  "scope": "Activation delta only; no repeat of completed synthetic/model tests",
+  "cases": [
+    "actual human instruction and other-seed rejection",
+    "unchanged science configuration bytes",
+    "exact active release identity",
+    "boolean/JSON alone insufficient",
+    "scope/budget/resource/dependency/source tamper rejection",
+    "configuration-byte tamper rejection",
+    "historical held release rejected as active",
+    "AST equality of train/validate/run_one/run",
+    "same lifetime DB and 282312 cap",
+    "no torch/session/quota side effects"
+  ],
+  "static_check_repair": {
+    "initial_result": "git diff --cached --check flagged CRLF as trailing whitespace in two new JSON summaries",
+    "repair": "Normalized only the two new summary files to LF; frozen config bytes unchanged",
+    "final_result": "RECHECK_REQUIRED"
+  }
+}
