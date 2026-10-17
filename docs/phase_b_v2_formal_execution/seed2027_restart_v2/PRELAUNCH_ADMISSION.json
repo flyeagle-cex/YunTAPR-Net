@@ -1,0 +1,54 @@
+{
+  "status": "HOST_RESOURCE_AND_SOURCE_ADMISSION_PASS",
+  "observed_utc": "2026-10-17T23:59:20.074720+00:00",
+  "host": {
+    "total_phys": 33752997888,
+    "available_phys": 20121120768,
+    "total_page": 49859125248,
+    "available_page": 31203430400,
+    "disk_free_bytes": 45457334272
+  },
+  "commit_headroom": {
+    "caller_available_commit_bytes": 31200919552,
+    "caller_commit_limit_bytes": 49859125248,
+    "system_commit_total_bytes": 18658205696,
+    "system_commit_limit_bytes": 49859125248,
+    "system_available_commit_bytes": 31200919552,
+    "system_available_physical_bytes": 20111454208,
+    "page_size_bytes": 4096,
+    "original_resource_thresholds_modified": false,
+    "settings_modified": false
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "driver": "573.24",
+    "free_mib": 6240,
+    "used_mib": 1571,
+    "utilization_percent": 3,
+    "temperature_c": 47
+  },
+  "source_commit": "b95d97ee1d35b5f25a6141f4deffb8ec920f576c",
+  "source_sha256": "66b5f70b6bcea8d3fb5fe2a61a437f84367506ad7a7bb71fb479f74d3d2dd98d",
+  "limits": {
+    "max_seconds": 604800,
+    "max_working_set_bytes": 6442450944,
+    "max_process_commit_bytes": 12884901888,
+    "max_job_commit_bytes": 17179869184,
+    "minimum_available_ram_bytes": 6442450944,
+    "minimum_available_commit_bytes": 10737418240,
+    "minimum_cuda_free_bytes": 5368709120,
+    "max_cuda_reserved_bytes": 6442450944,
+    "minimum_disk_free_bytes": 12884901888,
+    "max_read_bytes": 35184372088832,
+    "frame_cache_bytes": 268435456,
+    "target_cache_bytes": 134217728,
+    "directory_handle_limit": 518,
+    "max_checkpoint_bytes": 134217728,
+    "max_score_database_bytes": 268435456
+  },
+  "new_campaign_not_created": true,
+  "raw_payload_reads": 0,
+  "model_instances": 0,
+  "optimizer_steps": 0,
+  "full_data_metadata_gate": "WORKER_BEFORE_FIRST_STEP"
+}
