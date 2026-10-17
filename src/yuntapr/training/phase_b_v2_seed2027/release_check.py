@@ -10,5 +10,6 @@ def main():
     print(json.dumps(dict(publication='PASS',campaign=CAMPAIGN,source_commit=release['source_commit'],
         source_sha256=release['source_sha256'],launch_gate=gate,ledger_exists=DB.exists(),
         once_exists=DB.with_suffix('.once').exists(),sessions_exist=(OUT/'.local/sessions').exists(),
-        status='NOT_STARTED',optimizer_updates=0,raw_observation_reads=0)))
+        status='NOT_STARTED' if not DB.exists() else 'LEDGER_PRESENT_USE_STATUS',
+        optimizer_updates='NOT_EXECUTED_BY_THIS_CHECK',raw_observation_reads=0)))
 if __name__=='__main__':main()
