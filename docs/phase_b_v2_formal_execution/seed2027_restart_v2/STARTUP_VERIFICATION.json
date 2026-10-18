@@ -1,0 +1,140 @@
+{
+  "schema": "SEED2027_RESTART_V2_ACTUAL_STARTUP_v1",
+  "observed_utc": "2026-10-18T00:01:03.583297+00:00",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V2",
+  "source_commit": "b95d97ee1d35b5f25a6141f4deffb8ec920f576c",
+  "source_sha256": "66b5f70b6bcea8d3fb5fe2a61a437f84367506ad7a7bb71fb479f74d3d2dd98d",
+  "release_sha256": "ad5932faabd05cc54b4e75e409fd64284b7d9abbd85de1114e800b9d2f851c15",
+  "status_snapshot": {
+    "status": "ACTIVE",
+    "reason": null,
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V2",
+    "reserved": 1225,
+    "returned_verified": 1224,
+    "hard_cap": 283439,
+    "prior_reserved": 1127,
+    "prior_returned_verified": 1126,
+    "prior_unverified": 1,
+    "new_reserved": 98,
+    "new_returned_verified": 98,
+    "pause_requested": false,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 0,
+        "logical_updates": 98,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ],
+    "updated_utc": "2026-10-18T00:01:03.574296+00:00",
+    "session": {
+      "number": 1,
+      "status": "ACTIVE"
+    },
+    "heartbeat": {
+      "utc": "2026-10-18T00:01:01.886069+00:00",
+      "elapsed_seconds": 40660.595230000006,
+      "content_bytes": 12033049408,
+      "cpu": {
+        "working_set_bytes": 2664337408,
+        "peak_working_set_bytes": 2673569792,
+        "private_bytes": 7598657536,
+        "peak_pagefile_bytes": 7607951360
+      },
+      "cuda_peak_allocated": 2867387904,
+      "cuda_peak_reserved": 3420454912
+    }
+  },
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 35032,
+        "creation_filetime": 134367551833778276,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 29860,
+        "creation_filetime": 134367551848837576,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        11560,
+        26196,
+        29860
+      ]
+    }
+  },
+  "preflight_status": "PASS",
+  "metadata_gate": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "directory_handles": 518,
+  "directory_registry_sha256": "687bc105f7ed3db69cf853866e5e8c1108a1e2564b6b5e39abc176c37a0bb1b7",
+  "first_optimizer_returned_verified": true,
+  "first_step_utc": "2026-10-18T00:00:29.768220+00:00",
+  "fresh_initial_matches_prior_seed2027": true,
+  "initial_sha256": "7b26ee7eea7349fa5d187febc17ed72a3a57b840de65487e051e54de922a67cb",
+  "old_evidence_sha256_unchanged": true,
+  "science_config_bytes_unchanged": true,
+  "driver_or_resource_settings_modified": false,
+  "gpu_root_cause": "NOT_ESTABLISHED",
+  "new_scope_attempt_cap": 282312,
+  "cumulative_cap": 283439,
+  "historical_unverified_attempts": 1,
+  "automatic_retries": 0,
+  "seed2028_authorized": false,
+  "test2025_authorized": false,
+  "historic_2025_path_attribute_access": "NOT_INSTRUMENTED",
+  "scientific_performance_claim": false
+}
