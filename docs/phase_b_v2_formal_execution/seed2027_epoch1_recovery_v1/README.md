@@ -1,5 +1,7 @@
 # seed2027：从完整 epoch 1 恢复
 
+**本次启动结果：STOPPED_NO_RETRY。新增更新预留 0、执行 0。** 完整数据元数据与地理检查通过，原 LAST 的完整 checkpoint Contract 通过；随后新增的历史报告 Python 容器对照拒绝了 JSON list / checkpoint tuple 差异。两边规范化报告 SHA 完全一致。Worker、Supervisor、Job 均已退出，未应用恢复状态、未开始 epoch 2。详见 `STARTUP_VERIFICATION.json` 和 `FAILURE_AND_FIX.md`。
+
 本版本绑定研究者本次明确回复“授权从此 LAST 恢复，额度不变（推荐）”。只恢复 B0/E0 的指定 epoch 1 LAST，从 epoch 2 继续，并保持既定六组顺序与全部科学、资源配置。不是 fresh 重跑。
 
 - 指定 LAST SHA256：`e4c0162492ab10bfe3136fa8117c0f5e111078957fa35832e0a88cb5dc1ab0ff`。

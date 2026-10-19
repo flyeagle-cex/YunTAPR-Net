@@ -1,0 +1,121 @@
+{
+  "status": "STOPPED_NO_RETRY_ZERO_NEW_UPDATES",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_EPOCH1_RECOVERY_V1",
+  "source_commit": "52a366e17f8b36b25e17de60a76916bc65b4fd3b",
+  "release_commit": "20dae71",
+  "new_reserved": 0,
+  "new_returned_verified": 0,
+  "prior_reserved": 75327,
+  "prior_returned_verified": 75326,
+  "combined_cap": 352411,
+  "last_sha256": "e4c0162492ab10bfe3136fa8117c0f5e111078957fa35832e0a88cb5dc1ab0ff",
+  "source_epoch": 1,
+  "source_update": 5228,
+  "model_state_restored": false,
+  "first_resumed_optimizer_step": false,
+  "failure": "AUTHORIZED_LAST_METRICS",
+  "cause": "JSON lists compared directly to checkpoint tuples; canonical SHA of both train and full validation report matches exactly.",
+  "historical_last_intact": true,
+  "job_empty_and_handles_signaled": true,
+  "worker_observed": "ABSENT",
+  "supervisor_observed": "ABSENT",
+  "job_observed": "ABSENT",
+  "new_charged_content_bytes": 55517165,
+  "termination": {
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_EPOCH1_RECOVERY_V1",
+    "status": "STOPPED_NO_RETRY",
+    "worker_identity": {
+      "pid": 4172,
+      "creation_filetime": 134368917832417071,
+      "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+    },
+    "job_empty_and_handles_signaled": true,
+    "peak_process_working_set_bytes": 959614976,
+    "peak_process_private_commit_bytes": 2223874048,
+    "elapsed_seconds": 146838.53063,
+    "failure": {
+      "type": "RuntimeError",
+      "code": "WORKER_FAILED_NO_RETRY"
+    },
+    "automatic_retries": 0,
+    "refunds": 0
+  },
+  "metadata_diagnosis": {
+    "train_equal": true,
+    "validation_python_equal": false,
+    "train_canonical_sha_equal": true,
+    "validation_canonical_sha_equal": true,
+    "container_mismatches": [
+      {
+        "path": "validation.scene_blocks[0]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[1]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[2]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[3]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[4]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[5]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[6]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[7]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[8]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[9]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[10]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      },
+      {
+        "path": "validation.scene_blocks[11]",
+        "json_type": "list",
+        "checkpoint_type": "tuple"
+      }
+    ],
+    "mismatch_count": 10501,
+    "model_state_applied": false,
+    "optimizer_updates": 0
+  },
+  "recovery_delta_tests_passed": 13,
+  "monitor_tests_passed": 7,
+  "metadata_fix_tests_passed": 8,
+  "metadata_fix_candidate_only": true,
+  "relaunch_requires_new_explicit_decision": true,
+  "test_2025_authorized": false,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED"
+}

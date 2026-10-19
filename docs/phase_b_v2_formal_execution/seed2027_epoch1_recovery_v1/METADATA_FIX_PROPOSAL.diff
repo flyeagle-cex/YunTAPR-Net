@@ -1,0 +1,10 @@
+--- a/recovery.py
++++ b/recovery.py
+@@
+-    if history[0]['train']!=payload['train'] or history[0]['development']!=payload['validation']:
++    # protocol.digest is already the frozen JSON receipt identity algorithm.
++    if digest(history[0]['train'])!=digest(payload['train']) or digest(history[0]['development'])!=digest(payload['validation']):
+         raise ValueError('AUTHORIZED_LAST_METRICS')
+
+The new recovery version must import protocol.digest. This proposal is not
+applied to the sealed failed v1 release. No launch authority is created here.
