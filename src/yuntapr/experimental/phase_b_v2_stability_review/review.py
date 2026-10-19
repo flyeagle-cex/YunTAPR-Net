@@ -20,7 +20,8 @@ TARGETS={
         accounting=('yuntapr.training.phase_b_v2_seed2027_restart_v2.accounting','fields')),
     'YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V3':dict(run='docs/phase_b_v2_formal_execution/seed2027_restart_v3',
         db='.git/phase_b_v2_seed2027_fresh_restart_v3.sqlite',
-        accounting=('yuntapr.training.phase_b_v2_seed2027_restart_v3.accounting','fields')),
+        accounting=('yuntapr.training.phase_b_v2_seed2027_restart_v3.accounting','fields'),
+        sessions=[(1,'PAUSED'),(2,'ACTIVE')]),
 }
 
 def _target(campaign):
@@ -80,7 +81,10 @@ def inspect(campaign=None) -> dict:
             counts=dict(con.execute('SELECT status,count(*) FROM attempts GROUP BY status'))
             runs=[dict(zip(('run_id','status','epoch','updates','last_sha'),r)) for r in con.execute('SELECT id,status,epoch,updates,last_sha FROM runs ORDER BY ordinal')]
             epochs=con.execute('SELECT run,epoch,phase FROM epochs').fetchall();con.execute('COMMIT')
-        if campaign_row[0]!=CAMPAIGN or not sessions or sessions[-1][0]!=1:raise ValueError('REGISTERED_CAMPAIGN_SESSION')
+        expected_sessions=cfg.get('sessions')
+        if (campaign_row[0]!=CAMPAIGN or not sessions or
+            (expected_sessions is not None and sessions!=expected_sessions) or
+            (expected_sessions is None and sessions[-1][0]!=1)):raise ValueError('REGISTERED_CAMPAIGN_SESSION')
         try:read(stack,SESSION/'termination.json',65536,pins,REGISTERED);has_term=True
         except FileNotFoundError:has_term=False
         snapshot=dict(ledger_state=campaign_row[1],heartbeat_utc=heartbeat['utc'],
