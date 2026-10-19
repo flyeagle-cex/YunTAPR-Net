@@ -18,6 +18,9 @@ TARGETS={
     'YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V2':dict(run='docs/phase_b_v2_formal_execution/seed2027_restart_v2',
         db='.git/phase_b_v2_seed2027_fresh_restart_v2.sqlite',
         accounting=('yuntapr.training.phase_b_v2_seed2027_restart_v2.accounting','fields')),
+    'YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V3':dict(run='docs/phase_b_v2_formal_execution/seed2027_restart_v3',
+        db='.git/phase_b_v2_seed2027_fresh_restart_v3.sqlite',
+        accounting=('yuntapr.training.phase_b_v2_seed2027_restart_v3.accounting','fields')),
 }
 
 def _target(campaign):
