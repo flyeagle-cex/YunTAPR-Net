@@ -34,7 +34,7 @@ def evidence_path(relative: str) -> Path:
 def read_registered(stack: ExitStack, relative: str) -> bytes:
     path=evidence_path(relative)
     h=stack.enter_context(ReadHandle(str(path),payload=True))
-    if os.path.normcase(h.final_path)!=os.path.normcase(str(path)) or not 0<h.before['size']<=64*1024**2:
+    if os.path.normcase(h.final_path)!=os.path.normcase(str(path)) or not 0<h.before['size']<=2048*1024**2:
         raise PermissionError('STOPPED_ANCESTOR_OBJECT_OR_SIZE')
     raw=bytearray(h.before['size']);n=0
     while n<len(raw):
