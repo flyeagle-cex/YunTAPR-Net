@@ -1,0 +1,150 @@
+{
+  "status": "AUTHORIZED_EPOCH1_RECOVERY_RUNNING_VERIFIED",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_EPOCH1_RECOVERY_V2",
+  "observed_utc": "2026-10-19T14:08:12.196935+00:00",
+  "source_commit": "4f60618132332b5b6c1adef76ded8b95d87a4971",
+  "release_commit": "65477869094b738cd98b052152f9a222717e56c1",
+  "state_restoration": {
+    "last_sha256": "e4c0162492ab10bfe3136fa8117c0f5e111078957fa35832e0a88cb5dc1ab0ff",
+    "epoch": 1,
+    "update": 5228,
+    "model_sha256": "b77dd518da93a28e852a6842f1824a29882ad022de5d20c80550a8ca9621a583",
+    "optimizer_sha256": "b060eb1910c10e998825039abe3730201f330138512c48573fbb4f9950b7fc66",
+    "rng_sha256": "8ddaa6aa5dea2edf0210a67eb8d892800ff6fb76f43a71e446975076d89faa60",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 5228
+    },
+    "all_state_verified_before_first_resumed_step": true
+  },
+  "first_resumed_step": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-19T14:06:59.645431+00:00",
+    "run_id": "B0_MATCHED_V2__E0__s2027",
+    "epoch": 2,
+    "update": 5229,
+    "campaign_attempt": 1,
+    "lr": 9.99999999962777e-05,
+    "n_valid": 6860,
+    "n_rain": 2194
+  },
+  "full_data_preflight": "PASS",
+  "metadata_gate": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "old_reserved": 75327,
+  "old_verified": 75326,
+  "new_reserved_observed": 210,
+  "new_returned_verified_observed": 210,
+  "total_reserved_observed": 75537,
+  "total_verified_observed": 75536,
+  "unchanged_attempt_cap": 352411,
+  "ledger_state": "ACTIVE",
+  "runs": [
+    {
+      "id": "B0_MATCHED_V2__E0__s2027",
+      "ordinal": 0,
+      "status": "RUNNING",
+      "complete_epoch": 1,
+      "updates": 5438,
+      "last_sha": "e4c0162492ab10bfe3136fa8117c0f5e111078957fa35832e0a88cb5dc1ab0ff"
+    },
+    {
+      "id": "B1_V2__E0__s2027",
+      "ordinal": 1,
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B0_MATCHED_V2__E1__s2027",
+      "ordinal": 2,
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E1__s2027",
+      "ordinal": 3,
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B0_MATCHED_V2__E2__s2027",
+      "ordinal": 4,
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E2__s2027",
+      "ordinal": 5,
+      "status": "PENDING",
+      "complete_epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    }
+  ],
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 41664,
+        "creation_filetime": 134368923763506430,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 26328,
+        "creation_filetime": 134368923820080465,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        35184,
+        4356,
+        26328
+      ]
+    }
+  },
+  "heartbeat": {
+    "utc": "2026-10-19T14:08:11.336522+00:00",
+    "elapsed_seconds": 146940.29663,
+    "content_bytes": 2731630218684,
+    "cpu": {
+      "working_set_bytes": 2764738560,
+      "peak_working_set_bytes": 2776608768,
+      "private_bytes": 7736262656,
+      "peak_pagefile_bytes": 7748177920
+    },
+    "cuda_peak_allocated": 2870348288,
+    "cuda_peak_reserved": 3451912192
+  },
+  "old_evidence_preserved": true,
+  "automatic_retry": false,
+  "other_seeds_authorized": false,
+  "test_2025_authorized": false,
+  "historical_2025_path_attributes": "NOT_INSTRUMENTED",
+  "live_monitor_url": "http://127.0.0.1:53079/",
+  "note": "Read-only startup snapshot. Counters continue increasing; not a completed-epoch or scientific-performance claim."
+}
