@@ -1,0 +1,116 @@
+{
+  "status": "VERIFIED_RUNNING_AFTER_AUTHORIZED_B1_EPOCH7_RECOVERY",
+  "observed_utc": "2026-10-20T23:53:32.917628+00:00",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V1",
+  "session": 1,
+  "source_commit": "f4cbf3e2a98a88644219de57b1758f529a1a66f0",
+  "source_sha256": "c2e124c6f11e5b94efdf9b8f43bb04f618a878ffb5c4b7f28fc8e934c307259a",
+  "release_sha256": "b46d1cfd50529a26d16bf87866f7e649d3ecd4e5178c6509e709f3886b284edb",
+  "source_last_sha256": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a",
+  "source_epoch": 7,
+  "source_update": 36596,
+  "first_resumed_step": {
+    "utc": "2026-10-20T23:52:49.609314+00:00",
+    "run_id": "B1_V2__E0__s2027",
+    "epoch": 8,
+    "update": 36597,
+    "campaign_attempt": 1,
+    "n_valid": 6860,
+    "n_rain": 85,
+    "lr": 9.638215167989367e-05
+  },
+  "full_state_restore": {
+    "last_sha256": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a",
+    "epoch": 7,
+    "update": 36596,
+    "model_sha256": "09abc9a555a46393924ac488cffbc90b8f2456ec183d95025f366e3675b787c9",
+    "optimizer_sha256": "9204df7555d7463b375b6f116a24b5502d1136cd370adc9ceea1b81d644514c8",
+    "rng_sha256": "8ddaa6aa5dea2edf0210a67eb8d892800ff6fb76f43a71e446975076d89faa60",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 36596
+    },
+    "all_state_verified_before_first_resumed_step": true
+  },
+  "metadata_gate": {
+    "files": 67006,
+    "groups": {
+      "IMERG": 490,
+      "B13": 66516
+    },
+    "current_total_payload_bytes": 294841651602,
+    "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+    "prior_full_payload_sha_pass": true,
+    "new_full_payload_rescan": false
+  },
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 25372,
+        "creation_filetime": 134370139042435322,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 13948,
+        "creation_filetime": 134370139163452297,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        20684,
+        39732,
+        13948
+      ]
+    }
+  },
+  "quota_snapshot": {
+    "reserved": 164910,
+    "verified": 164909,
+    "new_reserved": 75,
+    "new_verified": 75,
+    "cap": 363499,
+    "adopted": 83648,
+    "abandoned": 81187
+  },
+  "prior_reserved": 164835,
+  "prior_verified": 164834,
+  "old_uncertain_attempt_still_charged": true,
+  "completed_b0_preserved": true,
+  "completed_b0_last_sha256": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673",
+  "current_phase": {
+    "run": "B1_V2__E0__s2027",
+    "epoch": 8,
+    "phase": "TRAINING"
+  },
+  "heartbeat": {
+    "utc": "2026-10-20T23:53:31.507612+00:00",
+    "elapsed_seconds": 237128.148828,
+    "content_bytes": 7016952234707,
+    "cpu": {
+      "working_set_bytes": 2820808704,
+      "peak_working_set_bytes": 2847469568,
+      "private_bytes": 7810830336,
+      "peak_pagefile_bytes": 7837806592
+    },
+    "cuda_peak_allocated": 2894721024,
+    "cuda_peak_reserved": 3468689408
+  },
+  "current_forward_updates_are_formal_authorized_scope": true,
+  "automatic_retries": 0,
+  "monitor": "http://127.0.0.1:53082/",
+  "refresh_seconds": 10,
+  "SEED2028_AUTHORIZED": false,
+  "FINALFIT_AUTHORIZED": false,
+  "PIXELS_2025_READ": 0,
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "HISTORICAL_2025_PATH_ATTRIBUTE_ACCESS": "NOT_INSTRUMENTED"
+}
