@@ -1,0 +1,188 @@
+{
+  "status": "RESTORED_AND_RUNNING_FIRST_OPTIMIZER_VERIFIED",
+  "observed_utc": "2026-10-21T00:52:04.900482+00:00",
+  "source_commit": "3c9953f44fa3e000cc8e49f3a99e132c72e6efe2",
+  "source_sha256": "0de95f96c1379ef299655f7e659a9eea37c697120966c1ab6dcfc90cb064b2db",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V3",
+  "session": 1,
+  "restore": {
+    "last_sha256": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a",
+    "epoch": 7,
+    "update": 36596,
+    "model_sha256": "09abc9a555a46393924ac488cffbc90b8f2456ec183d95025f366e3675b787c9",
+    "optimizer_sha256": "9204df7555d7463b375b6f116a24b5502d1136cd370adc9ceea1b81d644514c8",
+    "rng_sha256": "8ddaa6aa5dea2edf0210a67eb8d892800ff6fb76f43a71e446975076d89faa60",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 36596
+    },
+    "all_state_verified_before_first_resumed_step": true
+  },
+  "first_optimizer": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-21T00:50:48.558332+00:00",
+    "run_id": "B1_V2__E0__s2027",
+    "epoch": 8,
+    "update": 36597,
+    "campaign_attempt": 1,
+    "lr": 9.638215167989367e-05,
+    "n_valid": 6860,
+    "n_rain": 85
+  },
+  "preflight_summary": {
+    "status": "PASS",
+    "metadata": {
+      "files": 67006,
+      "groups": {
+        "IMERG": 490,
+        "B13": 66516
+      },
+      "current_total_payload_bytes": 294841651602,
+      "payload_sha_policy": "STRICT_SHA_ON_EVERY_CACHE_MISS_BEFORE_MEMORY_DECODING",
+      "prior_full_payload_sha_pass": true,
+      "new_full_payload_rescan": false
+    }
+  },
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 4532,
+        "creation_filetime": 134370173895556900,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 10372,
+        "creation_filetime": 134370174029878618,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        17596,
+        11616,
+        10372
+      ]
+    }
+  },
+  "os_owned_parent_chain": [
+    {
+      "created": "2026-10-21T00:49:49.5556900Z",
+      "pid": 4532,
+      "image": "python.exe",
+      "parent_pid": 36656
+    },
+    {
+      "created": "2026-10-21T00:49:49.5368940Z",
+      "pid": 36656,
+      "image": "python.exe",
+      "parent_pid": 10704
+    },
+    {
+      "created": "2026-10-21T00:49:48.9384550Z",
+      "pid": 10704,
+      "image": "powershell.exe",
+      "parent_pid": 1228
+    },
+    {
+      "created": "2026-10-20T23:39:26.3303350Z",
+      "pid": 1228,
+      "image": "svchost.exe",
+      "parent_pid": 1856
+    },
+    {
+      "created": "2026-10-20T23:39:25.7162090Z",
+      "pid": 1856,
+      "image": "services.exe",
+      "parent_pid": 1068
+    },
+    {
+      "created": "2026-10-20T23:39:25.5408130Z",
+      "pid": 1068,
+      "image": "wininit.exe",
+      "parent_pid": 1376
+    }
+  ],
+  "historical_consumed": 165383,
+  "hard_cap": 364047,
+  "remaining_new_attempt_cap": 198664,
+  "additional_budget_this_reissue": 0,
+  "snapshot": {
+    "cumulative_reserved": 165513,
+    "cumulative_returned_verified": 165512,
+    "new_reserved": 130,
+    "new_returned_verified": 130,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 7,
+        "logical_updates": 36726,
+        "last_sha": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a"
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ]
+  },
+  "resource_snapshot": {
+    "utc": "2026-10-21T00:52:04.646321+00:00",
+    "elapsed_seconds": 239028.43200700002,
+    "content_bytes": 7049411314633,
+    "cpu": {
+      "working_set_bytes": 2848522240,
+      "peak_working_set_bytes": 2868875264,
+      "private_bytes": 7840514048,
+      "peak_pagefile_bytes": 7860965376
+    },
+    "cuda_peak_allocated": 2894721024,
+    "cuda_peak_reserved": 3468689408
+  },
+  "training_controlled_by_codex_lifetime": false,
+  "independent_readonly_monitor": "http://127.0.0.1:53084/",
+  "auto_restart_on_system_boot": false,
+  "automatic_failure_retry": false,
+  "prior_winerror5_root_cause": "NOT_UNIQUELY_IDENTIFIED_NOT_REPRODUCED_THIS_LAUNCH",
+  "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+  "PIXELS_2025_READ": 0,
+  "HISTORICAL_2025_PATH_ATTRIBUTE_ACCESS": "NOT_INSTRUMENTED"
+}
