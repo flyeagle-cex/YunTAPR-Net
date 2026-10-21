@@ -55,8 +55,9 @@ class Tests(unittest.TestCase):
             finally:ledger.close()
             self.assertEqual(before,hashlib.sha256((folder/'old.sqlite').read_bytes()).hexdigest())
     def test_04_direct_human_scope_science_unchanged(self):
-        row=execution_instruction();self.assertEqual(row['additional_attempts'],922);self.assertEqual(row['maximum_attempts'],364969)
-        self.assertEqual(row['message'],'授权修复集成、恢复及额外922次额度')
+        row=execution_instruction();self.assertEqual(row['additional_attempts'],0);self.assertEqual(row['inherited_replay_attempts'],922)
+        self.assertEqual(row['maximum_attempts'],364969)
+        self.assertEqual(row['message'],'给你所有权限，继续训练进程')
         self.assertEqual(row['last_sha256'],p.LAST_SHA)
         self.assertEqual(p.LIMITS,old.LIMITS);self.assertEqual(p.ORDER,old.ORDER)
         self.assertEqual((p.OUT/'config.json').read_bytes(),(old.OUT/'config.json').read_bytes())
