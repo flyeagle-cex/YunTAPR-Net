@@ -1,0 +1,93 @@
+test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh) ... FAIL
+test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh) ... ERROR
+test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation) ... ERROR
+test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation) ... ERROR
+test_missing_one_v7_verified_attempt_is_rejected (__main__.PredecessorInterface.test_missing_one_v7_verified_attempt_is_rejected) ... ERROR
+test_preparation_authority_still_refuses_seed2028 (__main__.PredecessorInterface.test_preparation_authority_still_refuses_seed2028) ... ok
+test_unchanged_completed_fresh_contract_still_works (__main__.PredecessorInterface.test_unchanged_completed_fresh_contract_still_works) ... ERROR
+
+======================================================================
+ERROR: test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 61, in tearDown
+    shutil.rmtree(resolved)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-completed-review-20261021\\tmp\\completed_review_fixtures\\7b239ee0c96447c1a838f7957fdaf651\\.git\\phase_b_v2_seed2027_b1_epoch7_recovery_v7.sqlite'
+
+======================================================================
+ERROR: test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 66, in test_completed_authorized_v7_is_recognized_without_mutation
+    self.assertIsNone(self.guard())
+                      ^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\src\yuntapr\experimental\phase_b_v2_multiseed_candidate\protocol.py", line 100, in require_predecessor
+    if not peer.exists():raise PermissionError('SEED2027_COMPLETE_BEFORE_SEED2028')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: SEED2027_COMPLETE_BEFORE_SEED2028
+
+======================================================================
+ERROR: test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 61, in tearDown
+    shutil.rmtree(resolved)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-completed-review-20261021\\tmp\\completed_review_fixtures\\df6e9ed2777a4cf6b9b20b3db9c2efac\\.git\\phase_b_v2_seed2027_b1_epoch7_recovery_v7.sqlite'
+
+======================================================================
+ERROR: test_missing_one_v7_verified_attempt_is_rejected (__main__.PredecessorInterface.test_missing_one_v7_verified_attempt_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 61, in tearDown
+    shutil.rmtree(resolved)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-completed-review-20261021\\tmp\\completed_review_fixtures\\0b669bb332b54dc7b258cd2fd50b4660\\.git\\phase_b_v2_seed2027_b1_epoch7_recovery_v7.sqlite'
+
+======================================================================
+ERROR: test_unchanged_completed_fresh_contract_still_works (__main__.PredecessorInterface.test_unchanged_completed_fresh_contract_still_works)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 61, in tearDown
+    shutil.rmtree(resolved)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 635, in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-completed-review-20261021\\tmp\\completed_review_fixtures\\321ef8658b1f4ede9b17b91fb97fbfda\\.git\\phase_b_v2_seed2027_fresh_v1.sqlite'
+
+======================================================================
+FAIL: test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 72, in test_active_v7_cannot_fall_back_to_stale_completed_fresh
+    with self.assertRaises(PermissionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PermissionError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.372s
+
+FAILED (failures=1, errors=5)
