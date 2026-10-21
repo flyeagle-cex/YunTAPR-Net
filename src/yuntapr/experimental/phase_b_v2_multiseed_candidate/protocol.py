@@ -95,14 +95,24 @@ def verify_release():
 def require_predecessor():
     """Keep seed batches sequential; never start 2028 while 2027 is incomplete."""
     if SEED==2027:return
+    from contextlib import closing
     import sqlite3
     peer=ROOT/'.git/phase_b_v2_seed2027_fresh_v1.sqlite'
+    campaign,attempts='YUNTAPR_PHASE_B_V2_SEED2027_FRESH_V1',TOTAL
+    # The approved v7 recovery adopts 83,648 retained updates and has its own
+    # 198,664-attempt ledger. Cumulative 364,969 includes abandoned ancestry;
+    # it must not be confused with 282,312 retained scientific updates.
+    recovery=ROOT/'.git/phase_b_v2_seed2027_b1_epoch7_recovery_v7.sqlite'
+    if recovery.exists():
+        peer=recovery
+        campaign,attempts='YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V7',198664
     if not peer.exists():raise PermissionError('SEED2027_COMPLETE_BEFORE_SEED2028')
-    with sqlite3.connect(peer.as_uri()+'?mode=ro',uri=True,timeout=1) as con:
+    with closing(sqlite3.connect(peer.as_uri()+'?mode=ro',uri=True,timeout=1)) as con:
         con.execute('PRAGMA query_only=ON')
-        if (con.execute('SELECT id,status FROM campaign').fetchone()!=('YUNTAPR_PHASE_B_V2_SEED2027_FRESH_V1','COMPLETE')
-            or con.execute("SELECT count(*) FROM attempts WHERE status='RETURNED_VERIFIED'").fetchone()[0]!=TOTAL
-            or con.execute('SELECT count(*) FROM attempts').fetchone()[0]!=TOTAL
+        con.execute('BEGIN')
+        if (con.execute('SELECT id,status FROM campaign').fetchone()!=(campaign,'COMPLETE')
+            or con.execute("SELECT count(*) FROM attempts WHERE status='RETURNED_VERIFIED'").fetchone()[0]!=attempts
+            or con.execute('SELECT count(*) FROM attempts').fetchone()[0]!=attempts
             or con.execute("SELECT count(*) FROM runs WHERE status='COMPLETE' AND epoch=9 AND updates=47052").fetchone()[0]!=6
             or con.execute("SELECT count(*) FROM epochs WHERE phase='LAST_COMMITTED'").fetchone()[0]!=54):
             raise PermissionError('SEED2027_COMPLETE_BEFORE_SEED2028')
