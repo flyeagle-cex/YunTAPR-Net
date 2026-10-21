@@ -1,0 +1,194 @@
+{
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "unified_command": "scripts/phase_b_v2_owner_lifetime_candidate/Test-Owner-Lifetime.ps1",
+  "tests_run": 8,
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "suite": "test_audit",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "final_log": "tests/test_audit.log",
+      "sha256": "e6f9d9e7ba1b5049869a29de2c5bc5a374dfba161144197e7b2b7da18e8c888a"
+    },
+    {
+      "suite": "test_inheritance",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "final_log": "tests/test_inheritance.log",
+      "sha256": "0869ba1ba11db450e5b8a00138b2d9c6ddb03d690522bbc4d9d5c4b9a562aad6"
+    },
+    {
+      "suite": "test_task_owner",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "final_log": "tests/test_task_owner.log",
+      "sha256": "13fbd01395671fe3f19464f115a417387b612ff4c8d99ab25b76e2f5305c1f3d"
+    }
+  ],
+  "os_task_cases": [
+    {
+      "case": "normal",
+      "task": "YunTAPR_ArtificialOwner_2748d112f315250024325c16c8d6ea04",
+      "registration": {
+        "registered": true,
+        "triggers": 0,
+        "automatic_retries": 0,
+        "run_level": "Limited"
+      },
+      "client": {
+        "pid": 520,
+        "creation_filetime": 134370157170706383,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "2748d112f315250024325c16c8d6ea04"
+      },
+      "owner": {
+        "pid": 42092,
+        "creation_filetime": 134370157192656955,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "2748d112f315250024325c16c8d6ea04",
+        "profile": {
+          "in_job": true,
+          "flags": 12288,
+          "kill_on_close": true
+        }
+      },
+      "worker": {
+        "pid": 38888,
+        "creation_filetime": 134370157193890839,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "2748d112f315250024325c16c8d6ea04"
+      },
+      "owner_outside_artificial_codex_job": true,
+      "survived_artificial_codex_close": true,
+      "worker_tree_stopped": true,
+      "forced_owner_exit": false,
+      "elapsed_seconds": 2.5160000000000764
+    },
+    {
+      "case": "venv",
+      "task": "YunTAPR_ArtificialOwner_ef5b3e56107227358a566ecb2d6bed52",
+      "registration": {
+        "registered": true,
+        "triggers": 0,
+        "automatic_retries": 0,
+        "run_level": "Limited"
+      },
+      "client": {
+        "pid": 40988,
+        "creation_filetime": 134370157211968280,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "ef5b3e56107227358a566ecb2d6bed52"
+      },
+      "owner": {
+        "pid": 17236,
+        "creation_filetime": 134370157231576484,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "ef5b3e56107227358a566ecb2d6bed52",
+        "profile": {
+          "in_job": true,
+          "flags": 12288,
+          "kill_on_close": true
+        }
+      },
+      "worker": {
+        "pid": 43080,
+        "creation_filetime": 134370157232828462,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "ef5b3e56107227358a566ecb2d6bed52"
+      },
+      "owner_outside_artificial_codex_job": true,
+      "survived_artificial_codex_close": true,
+      "worker_tree_stopped": true,
+      "forced_owner_exit": false,
+      "elapsed_seconds": 2.2660000000000764
+    },
+    {
+      "case": "owner_crash",
+      "task": "YunTAPR_ArtificialOwner_f09540935118a4bf04b8a165fe3ca489",
+      "registration": {
+        "registered": true,
+        "triggers": 0,
+        "automatic_retries": 0,
+        "run_level": "Limited"
+      },
+      "client": {
+        "pid": 37252,
+        "creation_filetime": 134370157250910504,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "f09540935118a4bf04b8a165fe3ca489"
+      },
+      "owner": {
+        "pid": 34560,
+        "creation_filetime": 134370157271070942,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "f09540935118a4bf04b8a165fe3ca489",
+        "profile": {
+          "in_job": true,
+          "flags": 12288,
+          "kill_on_close": true
+        }
+      },
+      "worker": {
+        "pid": 39076,
+        "creation_filetime": 134370157272578341,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+        "nonce": "f09540935118a4bf04b8a165fe3ca489"
+      },
+      "owner_outside_artificial_codex_job": true,
+      "survived_artificial_codex_close": true,
+      "worker_tree_stopped": true,
+      "forced_owner_exit": true,
+      "elapsed_seconds": 2.342999999999847
+    }
+  ],
+  "leftover_owned_processes": [],
+  "remaining_artificial_tasks": 0,
+  "cleanup_checked_utc": "2026-10-21T00:23:13.4135758Z",
+  "training_task_created": false,
+  "failure_artifacts": [
+    {
+      "private_log_id": "tests_initial.log",
+      "bytes": 5531,
+      "sha256": "c18a6b083945fdfe91ebfcbe8f9c03d87543dff956928b4065c74490dda2f89e",
+      "retained_locally": true,
+      "replaces_final_result": false
+    },
+    {
+      "private_log_id": "tests_standalone_guard.log",
+      "bytes": 1626,
+      "sha256": "96df61814901af064f14c736563e94033358c745fbeee80dfa7adcebfadb373e",
+      "retained_locally": true,
+      "replaces_final_result": false
+    },
+    {
+      "private_log_id": "tests_task_owned.log",
+      "bytes": 4516,
+      "sha256": "2ada9b4e237b0d0fe0b0c2351b90fab05d3731c94b4bc0fa1b0119e53f5eb41c",
+      "retained_locally": true,
+      "replaces_final_result": false
+    },
+    {
+      "private_log_id": "tests_final_audit.log",
+      "bytes": 2240,
+      "sha256": "8235ec0a80634dd78de2287ff5981821c5a94df0b5758c58c1c8358ad1620e95",
+      "retained_locally": true,
+      "replaces_final_result": false
+    }
+  ],
+  "original_training_ledger_unchanged": true,
+  "repair_raw_data_reads": 0,
+  "repair_checkpoint_weight_reads": 0,
+  "repair_optimizer_updates": 0,
+  "limits": "Artificial owner deadline 10 s; cleanup deadline 3 s; OS-task watchdog 30 s. No deliberate memory pressure.",
+  "actual_codex_closed_during_final_test": false,
+  "evidence_scope": "A synthetic client Job was closed; the actual historical killer is not uniquely proven."
+}

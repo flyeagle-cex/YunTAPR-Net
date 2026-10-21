@@ -1,0 +1,112 @@
+{
+  "observed_utc": "2026-10-21T00:10:06.211560+00:00",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V1",
+  "native_probes": {
+    "owner": {
+      "status": "ABSENT",
+      "winerror": 87
+    },
+    "worker": {
+      "status": "ABSENT",
+      "winerror": 87
+    },
+    "job": {
+      "status": "ABSENT",
+      "pids": [],
+      "winerror": 2
+    }
+  },
+  "observation": {
+    "record_kind": "POSTMORTEM_OBSERVATION_NOT_TERMINATION_RECEIPT",
+    "ledger_state_observed": "ACTIVE",
+    "ledger_was_modified": false,
+    "heartbeat_age_seconds": 718.290663,
+    "heartbeat_before_current_boot": false,
+    "formal_launch_capability": false,
+    "resume_allowed": false,
+    "automatic_retries": 0,
+    "historical_cleanup_execution": "NOT_VERIFIED",
+    "observed_process_tree_empty": true,
+    "effective_state": "STOPPED_UNCLEAN_LAST_NOT_VERIFIED"
+  },
+  "runs": [
+    {
+      "id": "B0_MATCHED_V2__E0__s2027",
+      "status": "COMPLETE",
+      "epoch": 9,
+      "updates": 47052,
+      "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+    },
+    {
+      "id": "B1_V2__E0__s2027",
+      "status": "RUNNING",
+      "epoch": 7,
+      "updates": 37144,
+      "last_sha": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a"
+    },
+    {
+      "id": "B0_MATCHED_V2__E1__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E1__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B0_MATCHED_V2__E2__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    },
+    {
+      "id": "B1_V2__E2__s2027",
+      "status": "PENDING",
+      "epoch": 0,
+      "updates": 0,
+      "last_sha": null
+    }
+  ],
+  "incomplete_epochs": [
+    [
+      "B1_V2__E0__s2027",
+      8,
+      "TRAINING"
+    ]
+  ],
+  "counts": {
+    "RETURNED_VERIFIED": 548
+  },
+  "new_reserved": 548,
+  "new_verified": 548,
+  "cumulative_reserved": 165383,
+  "cumulative_verified": 165382,
+  "current_hard_cap": 363499,
+  "historical_unknown_still_charged": 1,
+  "heartbeat": {
+    "utc": "2026-10-20T23:58:07.920897+00:00",
+    "elapsed_seconds": 237404.554828,
+    "content_bytes": 7042167960131,
+    "cpu": {
+      "working_set_bytes": 2884636672,
+      "peak_working_set_bytes": 2909790208,
+      "private_bytes": 7876968448,
+      "peak_pagefile_bytes": 7902191616
+    },
+    "cuda_peak_allocated": 2894721024,
+    "cuda_peak_reserved": 3470786560
+  },
+  "researcher_reported_codex_closed": true,
+  "original_ledger_modified": false,
+  "actual_termination_receipt_generated": false,
+  "model_or_raw_data_reads": 0,
+  "new_optimizer_updates": 0,
+  "HISTORICAL_2025_PATH_ATTRIBUTE_ACCESS": "NOT_INSTRUMENTED",
+  "stopped_ledger_sha256": "fa24d74bb16433a525afdf59836c691c4aceabc32d7105ff3ef96fd1d9951363"
+}
