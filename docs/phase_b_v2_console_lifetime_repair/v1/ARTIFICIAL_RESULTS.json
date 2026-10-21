@@ -1,0 +1,519 @@
+{
+  "tests_run": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "records": [
+    {
+      "case": "console_control_event",
+      "pass_case": true,
+      "survived_client_close": true,
+      "all_console_free": true,
+      "identities": {
+        "client": {
+          "pid": 34656,
+          "creation_filetime": 134370189736277550,
+          "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb",
+          "nonce": "d508d95d7d1b7b8e380e7eccf2f7fcab",
+          "console": {
+            "hwnd": 3867884,
+            "process_count": 1,
+            "process_ids": [
+              34656
+            ],
+            "winerror": 0
+          }
+        },
+        "gui": {
+          "pid": 42572,
+          "creation_filetime": 134370189761125649,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7",
+          "nonce": "d508d95d7d1b7b8e380e7eccf2f7fcab",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "synthetic_only": true
+        },
+        "owner": {
+          "pid": 37872,
+          "creation_filetime": 134370189762363516,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "d508d95d7d1b7b8e380e7eccf2f7fcab",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                37872,
+                30928
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        },
+        "worker": {
+          "pid": 3740,
+          "creation_filetime": 134370189763533178,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "d508d95d7d1b7b8e380e7eccf2f7fcab",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                3740,
+                34452
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        }
+      },
+      "exit_path": "console_control_event",
+      "worker_tree_stopped": true,
+      "gui_entry_sha256": "b3fdcffd19583a1386f4803a91df80acef62628a2262614091e5a96940072912",
+      "gui_binary_sha256": "54ae26d81bbde7cc2b925339894a9257e1eae245de470f474ececa347f99f4d6",
+      "task_cleanup": {
+        "state": "Ready",
+        "last_result": 0
+      },
+      "elapsed_seconds": 5.530999999999949,
+      "leftovers": {
+        "client": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "gui": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "owner": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "worker": {
+          "status": "ABSENT",
+          "winerror": 87
+        }
+      }
+    },
+    {
+      "case": "client_job_close",
+      "pass_case": true,
+      "survived_client_close": true,
+      "all_console_free": true,
+      "identities": {
+        "client": {
+          "pid": 36888,
+          "creation_filetime": 134370189791642707,
+          "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb",
+          "nonce": "e64885e30eb9b258a716c299e42b4544",
+          "console": {
+            "hwnd": 3933420,
+            "process_count": 1,
+            "process_ids": [
+              36888
+            ],
+            "winerror": 0
+          }
+        },
+        "gui": {
+          "pid": 7848,
+          "creation_filetime": 134370189815492796,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7",
+          "nonce": "e64885e30eb9b258a716c299e42b4544",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "synthetic_only": true
+        },
+        "owner": {
+          "pid": 35160,
+          "creation_filetime": 134370189817059162,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "e64885e30eb9b258a716c299e42b4544",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                35160,
+                28984
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        },
+        "worker": {
+          "pid": 7764,
+          "creation_filetime": 134370189818505859,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "e64885e30eb9b258a716c299e42b4544",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                7764,
+                40556
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        }
+      },
+      "exit_path": "close_client_job",
+      "worker_tree_stopped": true,
+      "gui_entry_sha256": "b3fdcffd19583a1386f4803a91df80acef62628a2262614091e5a96940072912",
+      "gui_binary_sha256": "54ae26d81bbde7cc2b925339894a9257e1eae245de470f474ececa347f99f4d6",
+      "task_cleanup": {
+        "state": "Ready",
+        "last_result": 0
+      },
+      "elapsed_seconds": 5.359999999999673,
+      "leftovers": {
+        "client": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "gui": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "owner": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "worker": {
+          "status": "ABSENT",
+          "winerror": 87
+        }
+      }
+    },
+    {
+      "case": "gui_crash",
+      "pass_case": true,
+      "survived_client_close": true,
+      "all_console_free": true,
+      "identities": {
+        "client": {
+          "pid": 20140,
+          "creation_filetime": 134370189845197242,
+          "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb",
+          "nonce": "d083ed9a7cfda7a80135fd65813c0b35",
+          "console": {
+            "hwnd": 8131074,
+            "process_count": 1,
+            "process_ids": [
+              20140
+            ],
+            "winerror": 0
+          }
+        },
+        "gui": {
+          "pid": 14008,
+          "creation_filetime": 134370189871348083,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7",
+          "nonce": "d083ed9a7cfda7a80135fd65813c0b35",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "synthetic_only": true
+        },
+        "owner": {
+          "pid": 35520,
+          "creation_filetime": 134370189873040757,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "d083ed9a7cfda7a80135fd65813c0b35",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                35520,
+                13756
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        },
+        "worker": {
+          "pid": 29108,
+          "creation_filetime": 134370189874542377,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "d083ed9a7cfda7a80135fd65813c0b35",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                29108,
+                33164
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        }
+      },
+      "exit_path": "gui_crash",
+      "worker_tree_stopped": true,
+      "gui_entry_sha256": "b3fdcffd19583a1386f4803a91df80acef62628a2262614091e5a96940072912",
+      "gui_binary_sha256": "54ae26d81bbde7cc2b925339894a9257e1eae245de470f474ececa347f99f4d6",
+      "task_cleanup": {
+        "state": "Ready",
+        "last_result": 99
+      },
+      "elapsed_seconds": 5.453000000000429,
+      "leftovers": {
+        "client": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "gui": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "owner": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "worker": {
+          "status": "ABSENT",
+          "winerror": 87
+        }
+      }
+    },
+    {
+      "case": "owner_crash",
+      "pass_case": true,
+      "survived_client_close": true,
+      "all_console_free": true,
+      "identities": {
+        "client": {
+          "pid": 19636,
+          "creation_filetime": 134370189899736175,
+          "image_path_key": "7146abd54bdc9fc04186809bb59d206c96fb0808952997eccdbc9fe64b676fdb",
+          "nonce": "40fb3400685dc95a74f4ef5cb515eb6a",
+          "console": {
+            "hwnd": 8196610,
+            "process_count": 1,
+            "process_ids": [
+              19636
+            ],
+            "winerror": 0
+          }
+        },
+        "gui": {
+          "pid": 20560,
+          "creation_filetime": 134370189924656266,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7",
+          "nonce": "40fb3400685dc95a74f4ef5cb515eb6a",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "synthetic_only": true
+        },
+        "owner": {
+          "pid": 19172,
+          "creation_filetime": 134370189926170224,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "40fb3400685dc95a74f4ef5cb515eb6a",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                19172,
+                32548
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        },
+        "worker": {
+          "pid": 39540,
+          "creation_filetime": 134370189927434413,
+          "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f",
+          "nonce": "40fb3400685dc95a74f4ef5cb515eb6a",
+          "console": {
+            "hwnd": 0,
+            "process_count": 0,
+            "process_ids": [],
+            "winerror": 6
+          },
+          "detachment": {
+            "before": {
+              "hwnd": 0,
+              "process_count": 2,
+              "process_ids": [
+                39540,
+                8996
+              ],
+              "winerror": 0
+            },
+            "detached": true,
+            "after": {
+              "hwnd": 0,
+              "process_count": 0,
+              "process_ids": [],
+              "winerror": 6
+            }
+          },
+          "hash_probe": -7747074102733411994,
+          "torch_imported": false
+        }
+      },
+      "exit_path": "owner_crash",
+      "worker_tree_stopped": true,
+      "gui_entry_sha256": "b3fdcffd19583a1386f4803a91df80acef62628a2262614091e5a96940072912",
+      "gui_binary_sha256": "54ae26d81bbde7cc2b925339894a9257e1eae245de470f474ececa347f99f4d6",
+      "task_cleanup": {
+        "state": "Ready",
+        "last_result": 99
+      },
+      "elapsed_seconds": 5.219000000000051,
+      "leftovers": {
+        "client": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "gui": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "owner": {
+          "status": "ABSENT",
+          "winerror": 87
+        },
+        "worker": {
+          "status": "ABSENT",
+          "winerror": 87
+        }
+      }
+    }
+  ],
+  "leftover_owned_processes": [],
+  "synthetic_only": true,
+  "real_data_reads": 0,
+  "checkpoint_reads": 0,
+  "optimizer_steps": 0,
+  "actual_codex_window_closed_in_test": false,
+  "pass_all": true
+}

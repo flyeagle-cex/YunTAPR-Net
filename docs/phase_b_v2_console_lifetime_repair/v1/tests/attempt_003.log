@@ -1,0 +1,59 @@
+test_01_scope_refuses_real_and_parent_paths_before_any_io (__main__.Tests.test_01_scope_refuses_real_and_parent_paths_before_any_io) ... ok
+test_02_close_artificial_console_owner_survives (__main__.Tests.test_02_close_artificial_console_owner_survives) ... ERROR
+test_03_close_codex_like_job_owner_survives (__main__.Tests.test_03_close_codex_like_job_owner_survives) ... ERROR
+test_04_gui_bootstrap_crash_kills_entire_owned_tree (__main__.Tests.test_04_gui_bootstrap_crash_kills_entire_owned_tree) ... ERROR
+test_05_owner_crash_kills_worker_and_records_failure (__main__.Tests.test_05_owner_crash_kills_worker_and_records_failure) ... ERROR
+
+======================================================================
+ERROR: test_02_close_artificial_console_owner_survives (__main__.Tests.test_02_close_artificial_console_owner_survives)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 146, in test_02_close_artificial_console_owner_survives
+    self.run_case('console_close', 'close_console')
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 76, in run_case
+    wait_for(lambda: (folder / 'ready.json').exists(), 7)
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 33, in wait_for
+    raise TimeoutError('BOUNDED_ARTIFICIAL_WAIT')
+TimeoutError: BOUNDED_ARTIFICIAL_WAIT
+
+======================================================================
+ERROR: test_03_close_codex_like_job_owner_survives (__main__.Tests.test_03_close_codex_like_job_owner_survives)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 149, in test_03_close_codex_like_job_owner_survives
+    self.run_case('client_job_close', 'close_client_job')
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 76, in run_case
+    wait_for(lambda: (folder / 'ready.json').exists(), 7)
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 33, in wait_for
+    raise TimeoutError('BOUNDED_ARTIFICIAL_WAIT')
+TimeoutError: BOUNDED_ARTIFICIAL_WAIT
+
+======================================================================
+ERROR: test_04_gui_bootstrap_crash_kills_entire_owned_tree (__main__.Tests.test_04_gui_bootstrap_crash_kills_entire_owned_tree)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 152, in test_04_gui_bootstrap_crash_kills_entire_owned_tree
+    self.run_case('gui_crash', 'gui_crash')
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 76, in run_case
+    wait_for(lambda: (folder / 'ready.json').exists(), 7)
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 33, in wait_for
+    raise TimeoutError('BOUNDED_ARTIFICIAL_WAIT')
+TimeoutError: BOUNDED_ARTIFICIAL_WAIT
+
+======================================================================
+ERROR: test_05_owner_crash_kills_worker_and_records_failure (__main__.Tests.test_05_owner_crash_kills_worker_and_records_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 155, in test_05_owner_crash_kills_worker_and_records_failure
+    self.run_case('owner_crash', 'owner_crash')
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 76, in run_case
+    wait_for(lambda: (folder / 'ready.json').exists(), 7)
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 33, in wait_for
+    raise TimeoutError('BOUNDED_ARTIFICIAL_WAIT')
+TimeoutError: BOUNDED_ARTIFICIAL_WAIT
+
+----------------------------------------------------------------------
+Ran 5 tests in 45.762s
+
+FAILED (errors=4)
+{"results_relative_path": "docs/phase_b_v2_console_lifetime_repair/v1/.local/artificial_tasks_20261021T011322_154d717a/results.json", "pass_all": false}

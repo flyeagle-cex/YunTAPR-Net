@@ -1,0 +1,116 @@
+{
+  "utc": "2026-10-21T01:18:14.112252+00:00",
+  "snapshot": {
+    "status": "ACTIVE",
+    "reason": null,
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V3",
+    "reserved": 166305,
+    "returned_verified": 166304,
+    "hard_cap": 364047,
+    "prior_reserved": 165383,
+    "prior_returned_verified": 165382,
+    "prior_unverified": 1,
+    "new_reserved": 922,
+    "new_returned_verified": 922,
+    "pause_requested": false,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 7,
+        "logical_updates": 37518,
+        "last_sha": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a"
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ],
+    "updated_utc": "2026-10-21T01:18:12.159513+00:00",
+    "session": {
+      "number": 1,
+      "status": "ACTIVE"
+    },
+    "heartbeat": {
+      "utc": "2026-10-21T00:59:57.091673+00:00",
+      "elapsed_seconds": 239500.91600700002,
+      "content_bytes": 7091665596239,
+      "cpu": {
+        "working_set_bytes": 1567395840,
+        "peak_working_set_bytes": 2907893760,
+        "private_bytes": 7923421184,
+        "peak_pagefile_bytes": 7947587584
+      },
+      "cuda_peak_allocated": 2894721024,
+      "cuda_peak_reserved": 3470786560
+    },
+    "ledger_state": "ACTIVE",
+    "native_probes": {
+      "owner": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "worker": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "job": {
+        "status": "ABSENT",
+        "pids": [],
+        "winerror": 2
+      }
+    },
+    "effective_state": "STOPPED_UNCLEAN"
+  },
+  "scheduler": {
+    "state": "Ready",
+    "result": 3221225786,
+    "executable": "powershell.exe",
+    "restart_count": 0
+  },
+  "scheduler_result_hex": "0xC000013A",
+  "researcher_report": "Only Codex was closed; no PowerShell close or Ctrl+C reported.",
+  "actual_exit_initiator": "NOT_VERIFIED",
+  "historical_db_sha256": "4d66e89b4b24dbe66b75f3c082055fbac9f6f7fad9bacded62cefcd182024f25",
+  "historical_db_unchanged_during_review": true,
+  "missing_receipts": [
+    "termination.json",
+    "task_failure.json",
+    "supervisor_failure_private.txt",
+    "failure_private.txt"
+  ],
+  "checkpoint_payload_reads_this_review": 0,
+  "new_optimizer_steps": 0,
+  "new_recovery_authorization": false
+}

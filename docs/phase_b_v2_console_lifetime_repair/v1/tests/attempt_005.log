@@ -1,0 +1,16 @@
+test_02_artificial_console_control_event_owner_survives (tools.phase_b_v2_console_lifetime_candidate.test_console_owner.Tests.test_02_artificial_console_control_event_owner_survives) ... FAIL
+
+======================================================================
+FAIL: test_02_artificial_console_control_event_owner_survives (tools.phase_b_v2_console_lifetime_candidate.test_console_owner.Tests.test_02_artificial_console_control_event_owner_survives)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 150, in test_02_artificial_console_control_event_owner_survives
+    self.run_case('console_control_event', 'console_control_event')
+  File "<REPOSITORY>\tools\phase_b_v2_console_lifetime_candidate\test_console_owner.py", line 115, in run_case
+    self.assertTrue(bridge.load(folder / 'termination.json')['job_empty'])
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 1 test in 5.733s
+
+FAILED (failures=1)
