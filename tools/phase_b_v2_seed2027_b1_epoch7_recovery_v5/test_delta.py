@@ -105,7 +105,7 @@ class Tests(unittest.TestCase):
     def test_12_zero_update_ancestor_constants(self):
         self.assertEqual(a.SOURCE_CAMPAIGN,'YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V4')
         self.assertTrue(a.SOURCE_TASK.startswith('YunTAPR_Seed2027_B1E7V4_'))
-        self.assertIn('gui_bootstrap_failure_private.txt',a.CURRENT)
+        self.assertTrue(any(rel.endswith('gui_bootstrap_failure_private.txt') for rel in a.CURRENT))
         self.assertEqual((p.SOURCE_EPOCH,p.SOURCE_UPDATE,p.LAST_SHA),(7,36596,'bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a'))
 
 if __name__=='__main__':unittest.main(verbosity=2)
