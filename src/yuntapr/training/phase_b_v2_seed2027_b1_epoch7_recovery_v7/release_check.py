@@ -3,7 +3,7 @@ import json,sys
 from .protocol import OUT,DB,CAMPAIGN,verify_published_release,verify_release
 def main():
     release=verify_release()
-    gate='AUTHORIZED_B1_EPOCH7_RECOVERY_PRIOR_166305_CHARGED_NO_NEW_BUDGET_INTERFACE_REISSUE_V6'
+    gate='AUTHORIZED_B1_EPOCH7_RECOVERY_PRIOR_166305_CHARGED_NO_NEW_BUDGET_WATCHDOG_REISSUE_V7'
     if 'torch' in sys.modules:raise RuntimeError('PUBLICATION_CHECK_IMPORTED_TORCH')
     print(json.dumps(dict(publication='PASS',campaign=CAMPAIGN,source_commit=release['source_commit'],
         source_sha256=release['source_sha256'],launch_gate=gate,ledger_exists=DB.exists(),
