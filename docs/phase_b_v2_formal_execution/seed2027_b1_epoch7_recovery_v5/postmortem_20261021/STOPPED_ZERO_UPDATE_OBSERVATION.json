@@ -1,0 +1,171 @@
+{
+  "snapshot": {
+    "status": "FAILED_NO_RETRY",
+    "reason": "GUI_OWNER_FAILED_NO_RETRY",
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V5",
+    "reserved": 166305,
+    "returned_verified": 166304,
+    "hard_cap": 364969,
+    "prior_reserved": 166305,
+    "prior_returned_verified": 166304,
+    "prior_unverified": 1,
+    "new_reserved": 0,
+    "new_returned_verified": 0,
+    "pause_requested": false,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 7,
+        "logical_updates": 36596,
+        "last_sha": "bd2e12c38551e1356add16990a8edd17fa3c20a8594863005c90461b27b6931a"
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ],
+    "updated_utc": "2026-10-21T05:59:00.144642+00:00",
+    "session": {
+      "number": 1,
+      "status": "ACTIVE"
+    },
+    "heartbeat": {
+      "utc": "2026-10-21T01:44:59.053009+00:00",
+      "elapsed_seconds": 241003.57946400004,
+      "content_bytes": 7091758975401,
+      "cpu": {
+        "working_set_bytes": 883773440,
+        "peak_working_set_bytes": 958906368,
+        "private_bytes": 2151485440,
+        "peak_pagefile_bytes": 2227789824
+      },
+      "cuda_peak_allocated": 0,
+      "cuda_peak_reserved": 0
+    },
+    "termination": {
+      "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V5",
+      "status": "STOPPED_NO_RETRY",
+      "worker_identity": {
+        "pid": 22120,
+        "creation_filetime": 134370206350651889,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      },
+      "job_empty_and_handles_signaled": true,
+      "peak_process_working_set_bytes": 958906368,
+      "peak_process_private_commit_bytes": 2179174400,
+      "elapsed_seconds": 241035.01746400003,
+      "failure": {
+        "type": "RuntimeError",
+        "winerror": null,
+        "code": "RuntimeError",
+        "phase": "GetExitCodeProcess",
+        "process_identity": {
+          "pid": 28176,
+          "creation_filetime": 134370206638664778,
+          "image_path_key": "25193318e83d0508392efa098b6d93e382601c47bc929caf9e99a02278d20e34"
+        }
+      },
+      "automatic_retries": 0,
+      "refunds": 0
+    },
+    "ledger_state": "FAILED_NO_RETRY",
+    "native_probes": {
+      "owner": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "worker": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "job": {
+        "status": "ABSENT",
+        "pids": [],
+        "winerror": 2
+      }
+    },
+    "effective_state": "FAILED_NO_RETRY"
+  },
+  "gui_native_probes": {
+    "gui": {
+      "status": "ABSENT",
+      "winerror": 87
+    },
+    "gui_job": {
+      "status": "ABSENT",
+      "pids": [],
+      "winerror": 2
+    }
+  },
+  "native_console_receipts": {
+    "gui_bootstrap_identity.json": {
+      "detached": false,
+      "after": {
+        "hwnd": 0,
+        "process_count": 0,
+        "process_ids": [],
+        "winerror": 6
+      }
+    },
+    "task_owner_started.json": {
+      "detached": true,
+      "after": {
+        "hwnd": 0,
+        "process_count": 0,
+        "process_ids": [],
+        "winerror": 6
+      }
+    },
+    "worker_console_isolation.json": {
+      "detached": true,
+      "after": {
+        "hwnd": 0,
+        "process_count": 0,
+        "process_ids": [],
+        "winerror": 6
+      }
+    }
+  },
+  "launch_failure": "ImportError: COMPLETE_PREFIX missing; RECOVERY_PREFIX and SOURCE_CP also missing",
+  "real_model_created_before_failure": false,
+  "real_optimizer_attempts": 0,
+  "new_retry_performed_by_review": false,
+  "source_commit": "0a8574792a22b7d545d5a981b44d95d689e0dfda",
+  "historical_databases_sha256": {
+    "v3": "4d66e89b4b24dbe66b75f3c082055fbac9f6f7fad9bacded62cefcd182024f25",
+    "v4": "1f2d0d0ed412b3d5d934dfc8721554969ddea24b9c876dd79b399cfa3e090efd",
+    "v5": "ed7685a9c650531ba107b7c4b116c692bffe675948b5e410ad400ff69f11d903"
+  }
+}

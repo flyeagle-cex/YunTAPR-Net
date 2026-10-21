@@ -1,0 +1,11 @@
+--- a/src/yuntapr/training/phase_b_v2_seed2027_b1_epoch7_recovery_v5/ancestor.py
++++ b/FUTURE_SEPARATELY_RELEASED_ANCESTOR/ancestor.py
+@@ -112,3 +112,8 @@
+ def carried_resources():
+     release=json.loads((OUT/'release.json').read_bytes())
+     with Guard(release['failed_ancestor_sha256']) as g:return dict(g.receipt['carried_resources'])
++
++# Explicitly preserve consumer-facing bindings from the original provider.
++COMPLETE_PREFIX=prior.COMPLETE_PREFIX
++RECOVERY_PREFIX=prior.RECOVERY_PREFIX
++SOURCE_CP=prior.SOURCE_CP

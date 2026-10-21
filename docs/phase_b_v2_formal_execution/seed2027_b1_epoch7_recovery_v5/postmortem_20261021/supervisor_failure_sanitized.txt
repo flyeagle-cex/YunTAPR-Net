@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\supervisor.py", line 68, in main
+    monitor(job,local,allowed,nonce,n,start,launched,watch)
+  File "<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\monitor.py", line 41, in monitor
+    if code(worker)!=0:raise RuntimeError('WORKER_FAILED_NO_RETRY')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: WORKER_FAILED_NO_RETRY

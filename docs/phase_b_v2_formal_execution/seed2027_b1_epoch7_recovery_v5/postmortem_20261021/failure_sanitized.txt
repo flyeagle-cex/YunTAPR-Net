@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\worker.py", line 48, in main
+    engine=Engine(adapter,budget,ledger,release);result=engine.run()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\engine.py", line 54, in __init__
+    result=completed_result(ident)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\engine.py", line 39, in completed_result
+    from .ancestor import Guard,COMPLETE_PREFIX
+ImportError: cannot import name 'COMPLETE_PREFIX' from 'yuntapr.training.phase_b_v2_seed2027_b1_epoch7_recovery_v5.ancestor' (<REPOSITORY>\src\yuntapr\training\phase_b_v2_seed2027_b1_epoch7_recovery_v5\ancestor.py)
