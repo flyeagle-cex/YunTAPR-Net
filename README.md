@@ -23,3 +23,10 @@ The historical [formal-readiness report](stage0-b0-evidence/evidence/outputs/sta
 The new [B0 spatial and probability contract resolution](stage0-b0-evidence/evidence/outputs/b0_spatial_probability_contract_resolution/run_20260928T144303_935304Z/FINAL_B0_SPATIAL_PROBABILITY_CONTRACT_REPORT.md) records actual-coordinate SP04 geometry, five spatial-alignment candidates, probability-output and loss candidates, 40 passing focused tests, and the remaining researcher decisions. It does not start formal training or freeze a projection, τ grid, or loss hyperparameter.
 
 This public repository excludes source satellite/precipitation values, storage benchmark arrays, and restricted boundary/mask payloads. Scientific Freeze v1 adds only coordinate-axis metadata and an explicit index map required to execute the frozen spatial rule. The snapshot README and manifests identify other included files and local artifacts excluded from public distribution.
+
+
+## 2026-10-24 completed-work review and seed2027 completion
+
+This review branch preserves the [2026-10-21 audit](docs/audits/20261021_completed_work_review/AUDIT_REPORT.md) and the subsequent [seed2027 completion evidence](docs/phase_b_v2_seed2027_completion/20261024/README.md). All six registered runs completed nine epochs (54 committed LAST receipts); the final completion receipt was issued at 2026-10-23 23:20:40 Asia/Shanghai. The source and result provenance, exact-byte manifest, inherited regression evidence, and explicit remaining limitations are linked in that completion record.
+
+The results are exploratory 2024-development evidence. This branch does not authorize seed2028, FinalFit, or 2025 final-test evaluation. Recovery launchers under research_snapshots are archival source snapshots tied to their original isolated workspaces, not a runnable deployment. Historical failures and the one unresolved historical attempt remain preserved.

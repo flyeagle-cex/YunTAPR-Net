@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "command": "python -B tools/seed2027_b0_e1_recovery/test_contracts.py",
+  "interpreter": "Codex bundled Python 3.12 (stdlib only)",
+  "tests_run": 7,
+  "test_names": [
+    "test_accounting_and_refusal",
+    "test_headroom_blocks_before_claim",
+    "test_human_and_path_scope",
+    "test_metric_receipt_order_and_export",
+    "test_unchanged_scientific_algorithms",
+    "test_source_ledger_exact_and_negative",
+    "test_streamed_read_accounting_and_truncation"
+  ],
+  "raw_observation_reads": 0,
+  "optimizer_step_calls": 0,
+  "original_repository_writes": 0,
+  "scope": "Engineering contracts and unchanged-algorithm AST comparison; not scientific result evidence",
+  "additional_real_LAST_evidence": "RESTORE_PREFLIGHT.json",
+  "legacy_scientific_source_pins": "All 667 original v7 source pins match",
+  "failed_v7_read_log": {
+    "bytes": 271823637,
+    "lines": 548525,
+    "trailing_read_reservation": null,
+    "sha256": "d0a597d7d9e057123418138c398efb54018285b7e44bdad4c9f654972d272531"
+  },
+  "cumulative_attempt_accounting": {
+    "prior_reserved": 187217,
+    "prior_returned_verified": 187216,
+    "adopted_logical_updates": 99332,
+    "abandoned_charged_attempts": 87885,
+    "remaining_logical_updates": 182980,
+    "previous_cap": 364969,
+    "approved_replay_addition": 5228,
+    "new_cumulative_cap": 370197
+  },
+  "frozen_runtime_limits_changed": false,
+  "seed2028_authorized": false,
+  "finalfit_authorized": false,
+  "test2025_authorized": false
+}

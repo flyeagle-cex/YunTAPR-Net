@@ -1,0 +1,142 @@
+{
+  "observed_utc": "2026-10-22T23:38:09.313327+00:00",
+  "status": "ACTUAL_CLEAN_PAUSE_CONTINUATION_VERIFIED",
+  "state": {
+    "status": "ACTIVE",
+    "reason": null,
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_E1_EPOCH6_RECOVERY_V2",
+    "reserved": 302298,
+    "returned_verified": 302296,
+    "hard_cap": 375425,
+    "prior_reserved": 265637,
+    "prior_returned_verified": 265636,
+    "prior_unverified": 1,
+    "new_reserved": 36661,
+    "new_returned_verified": 36660,
+    "pause_requested": false,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43"
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "bfe0e2edfcd5c6544f682148cafff36f2e458855452143fe6f74b141416f847a"
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "56f2c7af67a28dcb27e03cd65e09966d2d24b1d1df887676a04e9948f1b8ff69"
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 4,
+        "logical_updates": 20977,
+        "last_sha": "48104b14a6888fe652a99b3641edc25957785e4161cddcd6a36f026502316d1f"
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ],
+    "updated_utc": "2026-10-22T23:38:09.307328+00:00",
+    "session": {
+      "number": 2,
+      "status": "ACTIVE"
+    },
+    "heartbeat": {
+      "utc": "2026-10-22T23:38:08.562870+00:00",
+      "elapsed_seconds": 379077.429283,
+      "content_bytes": 13418217512086,
+      "cpu": {
+        "working_set_bytes": 2703826944,
+        "peak_working_set_bytes": 2713600000,
+        "private_bytes": 7676354560,
+        "peak_pagefile_bytes": 7686234112
+      },
+      "cuda_peak_allocated": 2870348288,
+      "cuda_peak_reserved": 3449815040
+    },
+    "ledger_state": "ACTIVE",
+    "native_probes": {
+      "owner": {
+        "status": "LIVE_MATCH",
+        "actual_identity": {
+          "pid": 38572,
+          "creation_filetime": 134371857992359807,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7"
+        }
+      },
+      "worker": {
+        "status": "LIVE_MATCH",
+        "actual_identity": {
+          "pid": 24684,
+          "creation_filetime": 134371858075473201,
+          "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7"
+        }
+      },
+      "job": {
+        "status": "PRESENT",
+        "pids": [
+          12148,
+          24684
+        ]
+      }
+    },
+    "effective_state": "RUNNING"
+  },
+  "original_release_sha256_unchanged": "184d6170104e5398681047f28d27f4336344fadf5a657ffac496f5b7f5cff5a5",
+  "source_release_check": "63f9296db2ce055ef7a446f7e1ca9ad2a289892bbd710eb0890332fcd94bb0e4",
+  "last_verified_resumed_step": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-22T23:38:09.293590+00:00",
+    "run_id": "B0_MATCHED_V2__E2__s2027",
+    "epoch": 5,
+    "update": 20977,
+    "campaign_attempt": 36661,
+    "lr": 9.907962006843307e-05,
+    "n_valid": 6860,
+    "n_rain": 20,
+    "s_occ_unweighted": 25.76741600036621,
+    "s_qr_unweighted": 1.0078765191410766,
+    "training_objective": 0.004050024641202386,
+    "pre_clip_norm": 0.03363974392414093,
+    "post_clip_norm": 0.03363974411123572,
+    "limit": 5.0,
+    "missing_gradients": []
+  },
+  "safe_resume_events": [
+    {
+      "event": "VERIFIED_SAFE_PAUSE_LAST_RESUMED",
+      "utc": "2026-10-22T23:37:45.609806+00:00",
+      "run_id": "B0_MATCHED_V2__E2__s2027",
+      "epoch": 4,
+      "last_sha": "48104b14a6888fe652a99b3641edc25957785e4161cddcd6a36f026502316d1f"
+    }
+  ],
+  "additional_budget": 0,
+  "replayed_updates": 0,
+  "automatic_retries": 0,
+  "scientific_worker_modified": false,
+  "first_update_expected": 20913,
+  "bounded_event_tail_bytes": 412321
+}

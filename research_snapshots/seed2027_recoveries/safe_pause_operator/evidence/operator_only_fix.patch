@@ -1,0 +1,5 @@
+--- frozen/quota.py::Ledger.claim_session
++++ isolated/resume_gate.py::ResumeLedger.claim_session
+@@ -5 +5 @@
+-        if state!='READY' or self.con.execute('SELECT count(*) FROM sessions').fetchone()[0]:raise PermissionError('ONE_HUMAN_APPROVED_LAUNCH_ONLY')
++        if state not in ('READY','PAUSED') or (state=='READY' and self.con.execute('SELECT count(*) FROM sessions').fetchone()[0]):raise PermissionError('ONE_HUMAN_APPROVED_LAUNCH_ONLY')

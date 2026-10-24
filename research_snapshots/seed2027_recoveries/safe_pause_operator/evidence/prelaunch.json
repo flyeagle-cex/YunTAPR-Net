@@ -1,0 +1,151 @@
+{
+  "observed_utc": "2026-10-22T23:36:27.987868+00:00",
+  "operator": {
+    "source_commit": "d2d4300fff9d16ef99cbd82c0da1afa30420b054",
+    "source_pins": {
+      "bootstrap.py": "07c3a29fc4fb854322658018b1c0d75db184af02e045b7d9150d810fe255dd3d",
+      "resume_gate.py": "b6dbf76a00226b600059065d82328dc8475a59febfb565f42ca2402253318d31",
+      "test_resume_gate.py": "57e26c05ba0fc241b403e9d2ad080878102131a920c97eaff64e294eba143737",
+      "operate.py": "744ec769a039cc53a8dcaea738f2e52f9e62daa808715e271511cca5b01e13d4"
+    },
+    "scope": "OPERATOR_ONLY_CLEAN_PAUSE_SESSION1_TO_SESSION2_NO_NEW_BUDGET",
+    "user_instruction": "继续进程",
+    "original_scientific_release_sha256": "184d6170104e5398681047f28d27f4336344fadf5a657ffac496f5b7f5cff5a5",
+    "worker_source_modified": false,
+    "automatic_retries": 0
+  },
+  "original_release_sha256": "184d6170104e5398681047f28d27f4336344fadf5a657ffac496f5b7f5cff5a5",
+  "state": {
+    "status": "PAUSED",
+    "reason": null,
+    "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_E1_EPOCH6_RECOVERY_V2",
+    "reserved": 302233,
+    "returned_verified": 302232,
+    "hard_cap": 375425,
+    "prior_reserved": 265637,
+    "prior_returned_verified": 265636,
+    "prior_unverified": 1,
+    "new_reserved": 36596,
+    "new_returned_verified": 36596,
+    "pause_requested": true,
+    "runs": [
+      {
+        "id": "B0_MATCHED_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+      },
+      {
+        "id": "B1_V2__E0__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43"
+      },
+      {
+        "id": "B0_MATCHED_V2__E1__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "bfe0e2edfcd5c6544f682148cafff36f2e458855452143fe6f74b141416f847a"
+      },
+      {
+        "id": "B1_V2__E1__s2027",
+        "status": "COMPLETE",
+        "complete_epoch": 9,
+        "logical_updates": 47052,
+        "last_sha": "56f2c7af67a28dcb27e03cd65e09966d2d24b1d1df887676a04e9948f1b8ff69"
+      },
+      {
+        "id": "B0_MATCHED_V2__E2__s2027",
+        "status": "RUNNING",
+        "complete_epoch": 4,
+        "logical_updates": 20912,
+        "last_sha": "48104b14a6888fe652a99b3641edc25957785e4161cddcd6a36f026502316d1f"
+      },
+      {
+        "id": "B1_V2__E2__s2027",
+        "status": "PENDING",
+        "complete_epoch": 0,
+        "logical_updates": 0,
+        "last_sha": null
+      }
+    ],
+    "updated_utc": "2026-10-22T23:36:27.911868+00:00",
+    "session": {
+      "number": 1,
+      "status": "PAUSED"
+    },
+    "heartbeat": {
+      "utc": "2026-10-22T16:01:47.020766+00:00",
+      "elapsed_seconds": 379011.53381099994,
+      "content_bytes": 13417523505089,
+      "cpu": {
+        "working_set_bytes": 982921216,
+        "peak_working_set_bytes": 2922352640,
+        "private_bytes": 9501929472,
+        "peak_pagefile_bytes": 10823737344
+      },
+      "cuda_peak_allocated": 3547183616,
+      "cuda_peak_reserved": 5983174656
+    },
+    "termination": {
+      "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_E1_EPOCH6_RECOVERY_V2",
+      "status": "PAUSED",
+      "worker_identity": {
+        "pid": 34840,
+        "creation_filetime": 134371343963679362,
+        "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7"
+      },
+      "job_empty_and_handles_signaled": true,
+      "peak_process_working_set_bytes": 2922352640,
+      "peak_process_private_commit_bytes": 10186342400,
+      "elapsed_seconds": 379015.101283,
+      "failure": null,
+      "automatic_retries": 0,
+      "refunds": 0
+    },
+    "ledger_state": "PAUSED",
+    "native_probes": {
+      "owner": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "worker": {
+        "status": "ABSENT",
+        "winerror": 87
+      },
+      "job": {
+        "status": "ABSENT",
+        "pids": [],
+        "winerror": 2
+      }
+    },
+    "effective_state": "PAUSED"
+  },
+  "resources": {
+    "available_commit": 28359663616,
+    "available_ram": 19024695296,
+    "available_gpu": 6631194624,
+    "required_commit": 24159191040,
+    "required_ram": 13421772800,
+    "required_gpu": 6442450944,
+    "disk_free": 35519164416,
+    "minimum_disk": 12884901888,
+    "ready": true,
+    "runtime_limits_changed": false,
+    "preflight_only": true
+  },
+  "original_ledger_sha256_before_resume": "85bc29b2203fe797634fbb89ff49fa50c2814d3df7b573cd8e1414c738223669",
+  "exact_last_sha256": "48104b14a6888fe652a99b3641edc25957785e4161cddcd6a36f026502316d1f",
+  "next_logical_update": 20913,
+  "additional_budget": 0,
+  "replayed_updates": 0,
+  "automatic_retries": 0,
+  "scientific_worker_modified": false,
+  "user_instruction": "继续进程",
+  "seed2028_authorized": false,
+  "finalfit_authorized": false,
+  "test2025_authorized": false
+}
