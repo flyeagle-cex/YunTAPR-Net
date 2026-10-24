@@ -1,5 +1,26 @@
 # Stage 3: evidence-only population and statistics preparation
 
+## Authorized data execution, 2026-10-24
+
+The manifest-bound f006 campaign is complete on isolated branch
+`dev/stage3-data-production-20261024`. See `execution_summary/main.pdf`
+(editable `main.tex`) and `execution_summary/evidence.json` for the sanitized
+outcome and receipt fingerprints. Private manifests, source paths, fitted
+scalers and the byte/statistics ledger remain under ignored `.local/`.
+
+`tools/core_stage3/produce_authorized.py` adds one serial, metered campaign with
+a pilot, precommitted intents, a grant lock and no automatic rereads/retries.
+`summarize_authorized.py` reconciles completed SQLite/JSON receipts and existing
+target QC; it forbids raw weather opens. No optimizer or training was launched.
+The execution receipt is retained unchanged; a reporting placeholder in its
+inherited high-intensity baseline field is corrected in the cached-only final
+summary and in future driver output. It did not affect membership or scalers.
+
+The remaining text records the **c5ccd52 preparation-stage state**, before this
+separately approved campaign. It is not the current execution status.
+
+## Preparation-stage evidence
+
 Base: `e4563a0`. Source/model/history modules from Stage 2 are unchanged. The
 inherited 52+20 tests were not rerun. New tests are synthetic CPU/SQLite only.
 

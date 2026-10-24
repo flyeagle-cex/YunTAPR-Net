@@ -1,0 +1,312 @@
+{
+  "status": "VERIFIED_COMPLETED_DATA_ONLY",
+  "base_commit": "c5ccd52afb9f7890278109c28a93cd0d13760c5d",
+  "execution_code_commit": "d8920ab78cf04834e6f3f95bf514779e59d8e41a",
+  "request_sha256": "32b1802a0058627f67ba46d8dffe9c24619404149bd5837618fe0236383d4481",
+  "joint_population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+  "actual_read_files": 15375,
+  "actual_read_bytes": 52683053145,
+  "approved_max_bytes": 52683603968,
+  "unused_bytes": 550823,
+  "file_states": {
+    "READ_COMPLETE": 15375
+  },
+  "job_states": {
+    "COMPLETE": 13453
+  },
+  "source_hash_evidence": {
+    "matched_prior_sha": 11535,
+    "first_observed_sha": 3840
+  },
+  "read_breakdown": {
+    "Train": {
+      "satellite": {
+        "files": 5754,
+        "bytes": 25882115518
+      },
+      "main": {
+        "files": 959,
+        "bytes": 272589016
+      },
+      "thermo": {
+        "files": 959,
+        "bytes": 89508928
+      }
+    },
+    "Development": {
+      "satellite": {
+        "files": 5777,
+        "bytes": 26061638264
+      },
+      "main": {
+        "files": 963,
+        "bytes": 287429347
+      },
+      "thermo": {
+        "files": 963,
+        "bytes": 89772072
+      }
+    }
+  },
+  "source_job_QC": {
+    "PASS": 13453
+  },
+  "source_job_QC_errors": {},
+  "budget": {
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "models": [
+      "B3",
+      "B4"
+    ],
+    "seed_count": 1,
+    "seed_value": null,
+    "loss_arm_candidate": "E0",
+    "epochs": 9,
+    "physical_batch": 2,
+    "validation_batch": 8,
+    "drop_last": false,
+    "gradient_accumulation": 1,
+    "train_scenes": 959,
+    "dev_scenes": 963,
+    "updates_per_epoch_per_model": 480,
+    "updates_per_model": 4320,
+    "paired_update_cap": 8640,
+    "validation_batches_per_epoch_per_model": 121,
+    "paired_validation_batches": 2178,
+    "replay_allowance": 0,
+    "inherited_allowance": 0,
+    "wall_time_and_VRAM": "Prior Stage2 shape checks are not runtime calibration for this actual population; no benchmark/optimizer executed",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+  },
+  "limitations": [
+    "Fixed f006 retrospective, historical release times unknown; no operational NRT claim.",
+    "Inherited scene-max >=20 mm/h is descriptive; not independent storm events or high-intensity pixel counts.",
+    "00/06/12/18 UTC analysis population only; cannot generalize to all hours or sealed 2025.",
+    "Most GFS original inventories lacked source hashes; hashes established at authorized first read.",
+    "Statistics and exact population do not approve science definitions, MEE13, optimizer or formal training."
+  ],
+  "formal_training_launched": false,
+  "optimizer_updates": 0,
+  "raw_2025_reads": 0,
+  "target_payload_reads": 0,
+  "candidate_manifest_sha256": {
+    "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+    "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+  },
+  "populations": {
+    "Train": {
+      "population_sha256": "b4a6aa9650fc6d3a86c81b05ca202a349b559548e2ddef436d2c1f0defe811dd",
+      "candidate_scenes": 959,
+      "actual_scenes": 959,
+      "excluded_after_raw_QC": 0,
+      "exclusion_reasons": {},
+      "distribution": {
+        "scenes": 959,
+        "qc_evidence_missing": 0,
+        "valid_target_pixels": 3289370,
+        "rain_pixels_gt_0p1": 345725,
+        "scenes_with_rain": 936,
+        "scenes_max_ge_20_mm_h": 159,
+        "high_intensity_pixel_count": null,
+        "monthly": {
+          "202303": 122,
+          "202304": 118,
+          "202305": 119,
+          "202306": 117,
+          "202307": 121,
+          "202308": 122,
+          "202309": 117,
+          "202310": 123
+        },
+        "analysis_utc_hour": {
+          "00": 241,
+          "06": 243,
+          "12": 238,
+          "18": 237
+        }
+      },
+      "high_intensity_scene_retention": 0.10025220680958385,
+      "total_scene_retention": 0.09172644667623146,
+      "high_intensity_analysis_utc_hour": {
+        "00": 34,
+        "06": 30,
+        "12": 54,
+        "18": 41
+      },
+      "high_intensity_month": {
+        "202303": 6,
+        "202304": 7,
+        "202305": 11,
+        "202306": 30,
+        "202307": 29,
+        "202308": 51,
+        "202309": 16,
+        "202310": 9
+      },
+      "inherited_B1_scenes": 10455,
+      "inherited_B1_scenes_max_ge_20_mm_h": 1586
+    },
+    "Development": {
+      "population_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+      "candidate_scenes": 963,
+      "actual_scenes": 963,
+      "excluded_after_raw_QC": 0,
+      "exclusion_reasons": {},
+      "distribution": {
+        "scenes": 963,
+        "qc_evidence_missing": 0,
+        "valid_target_pixels": 3303090,
+        "rain_pixels_gt_0p1": 407820,
+        "scenes_with_rain": 952,
+        "scenes_max_ge_20_mm_h": 208,
+        "high_intensity_pixel_count": null,
+        "monthly": {
+          "202403": 120,
+          "202404": 116,
+          "202405": 124,
+          "202406": 117,
+          "202407": 124,
+          "202408": 121,
+          "202409": 117,
+          "202410": 124
+        },
+        "analysis_utc_hour": {
+          "00": 237,
+          "06": 242,
+          "12": 240,
+          "18": 244
+        }
+      },
+      "high_intensity_scene_retention": 0.10004810004810005,
+      "total_scene_retention": 0.09170555185220455,
+      "high_intensity_analysis_utc_hour": {
+        "00": 45,
+        "06": 30,
+        "12": 78,
+        "18": 55
+      },
+      "high_intensity_month": {
+        "202403": 7,
+        "202404": 10,
+        "202405": 37,
+        "202406": 52,
+        "202407": 37,
+        "202408": 30,
+        "202409": 24,
+        "202410": 11
+      },
+      "inherited_B1_scenes": 10501,
+      "inherited_B1_scenes_max_ge_20_mm_h": 2079
+    }
+  },
+  "statistics": {
+    "status": "COMPUTED_CANDIDATE_REQUIRES_SCIENTIFIC_FREEZE",
+    "new_spectral_variables": [
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B15",
+      "B16"
+    ],
+    "new_band_count_each": 1444259754,
+    "scene_slot_exposures": 5754,
+    "B13_refitted": false,
+    "environment_order": [
+      "pwat",
+      "cape",
+      "temperature850",
+      "temperature700",
+      "relative_humidity850",
+      "relative_humidity700",
+      "u850",
+      "v850",
+      "u700",
+      "v700",
+      "ps",
+      "temperature500",
+      "relative_humidity500"
+    ],
+    "environment_units": [
+      "kg m-2",
+      "J/kg",
+      "K",
+      "K",
+      "%",
+      "%",
+      "m/s",
+      "m/s",
+      "m/s",
+      "m/s",
+      "Pa",
+      "K",
+      "%"
+    ],
+    "environment_valid_fractions": {
+      "pwat": 1.0,
+      "cape": 1.0,
+      "temperature850": 0.5066914494264859,
+      "temperature700": 0.8817075078206466,
+      "relative_humidity850": 0.5066914494264859,
+      "relative_humidity700": 0.8817075078206466,
+      "u850": 0.5066914494264859,
+      "v850": 0.5066914494264859,
+      "u700": 0.8817075078206466,
+      "v700": 0.8817075078206466,
+      "ps": 1.0,
+      "temperature500": 1.0,
+      "relative_humidity500": 1.0
+    },
+    "fit_years": [
+      2023
+    ],
+    "dev_fit_contributions": 0,
+    "T500_RH500": "QC_AND_TRAIN_MOMENTS_READY_MODEL_ADAPTER_UNFROZEN",
+    "PWAT_positive_exposures": 9590000,
+    "PWAT_reference_rule": "Final 2023 Train valid positive scene-pixel exposure arithmetic mean; candidate only",
+    "full_scalers_and_PWAT_value": "PRIVATE_LOCAL_ONLY_COMPUTED_CANDIDATE_NOT_FROZEN"
+  },
+  "private_receipt_sha256": {
+    "authorization.json": "51112c3abf8aa183aa784a2bb1f153098175e4b197eee4c4dd312152620c28cc",
+    "pilot_receipt.json": "9c76c39b8dd43984439f9230170a95aeb6d963a174ee5be09f8e048d7625ad5e",
+    "populations.json": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "train_statistics.json": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "completion.json": "194edc840cf185398fb2b69859102ddb3f2590f9bc872a287d821f3acb6a2b8d",
+    "final_summary.json": "662bb8f4657ce68facc6b0fe6b862dc75c9880cd67d70462f52669b1e45d20b4",
+    "statistics.sqlite": "caa14bfae57cd3ded4594c921ad69e57a6f8cbf3b05bcfd11ea92324bc7a4b41"
+  },
+  "pilot": {
+    "status": "PASS",
+    "files": 15,
+    "bytes": 63306092,
+    "cache_reuse_no_reads": true,
+    "all_prior_hashes_matched": true,
+    "metadata_masks_checked": true
+  },
+  "reporting_correction": {
+    "field": "completion.baseline_descriptive_high_intensity",
+    "original_receipt_retained": true,
+    "original_values": {
+      "Train": 2023,
+      "Development": 2024
+    },
+    "correct_values": {
+      "Train": 1586,
+      "Development": 2079
+    },
+    "impact": "REPORT_FIELD_ONLY_POPULATIONS_AND_SCALERS_UNCHANGED",
+    "cached_only_regression": "PASS_NO_RAW_READS"
+  },
+  "tests": {
+    "inherited_85_rerun": false,
+    "new_unique_driver_checks": 3,
+    "final_status": "PASS",
+    "original_failed_assertion_log_retained": true,
+    "runs": [
+      "20261024T034227_632436Z",
+      "20261024T034301_174220Z",
+      "20261024T034840_582770Z"
+    ],
+    "note": "First run one PASS/one incorrect expected exception type; corrected case alone passed; separate synthetic hash-fault/no-retry case passed. No completed unchanged test rerun."
+  }
+}

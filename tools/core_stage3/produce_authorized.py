@@ -196,7 +196,7 @@ def main(args):
         populations={k:v['accepted_scenes'] for k,v in populations.items()},distributions=distributions,PWAT_reference_kg_m2=fitted['positive_PWAT_reference_kg_m2'],
         statistics_complete=True,environment_variables=V13_KEYS,T500_RH500_QC='PASS_IN_APPROVED_F006_POPULATION_MODEL_ADAPTER_STILL_PENDING',training_budget=budget,
         source_hash_limitation='Satellite hashes and available prior GFS hashes matched. Other GFS hashes established on first authorized read; prior file-level hashes absent from original inventory.',
-        baseline_descriptive_high_intensity={role:manifests[role]['year'] for role in manifests},formal_training_launched=False,optimizer_updates=0,raw_2025_reads=0,
+        baseline_descriptive_high_intensity={role:r['roles'][role]['rainfall_evidence']['scenes_max_ge_20_mm_h']+r['roles'][role]['loss_from_inherited_B1']['scenes_max_ge_20_mm_h'] for role in manifests},formal_training_launched=False,optimizer_updates=0,raw_2025_reads=0,
         operational_release_established=False,final_resources=resources())
     write(out/'completion.json',result);print(json.dumps(dict(event='COMPLETED',populations=result['populations'],actual_reads=totals,PWAT_reference_kg_m2=result['PWAT_reference_kg_m2'],budget=budget)),flush=True)
     cache.close()

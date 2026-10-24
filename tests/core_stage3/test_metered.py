@@ -48,3 +48,21 @@ class MeteredTests(unittest.TestCase):
                 return dict(year=2023,source_sha256=r['source_sha256'],raw_bytes_read=r['bytes_read'])
             result=cache.read_once('fixture',load);self.assertEqual(meter.totals()['delivered_bytes'],result['raw_bytes_read'])
         finally:meter.uninstall();cache.close()
+
+    def test_synthetic_hash_fault_is_recorded_and_never_retried(self):
+        source,cache,meter,sha=self.setup_cache(b'synthetic hash conflict','fault.nc')
+        meter.files[path_key(source)]['sha']='0'*64
+        meter.install()
+        try:
+            def load():
+                meter.active={path_key(source)}
+                with source.open('rb') as f:raw=f.read()
+                return dict(year=2023,source_sha256=sha,raw_bytes_read=len(raw))
+            with self.assertRaises(IdentityConflict):cache.read_once('fixture',load)
+            self.assertEqual(cache.db.execute('SELECT state FROM jobs').fetchone()[0],'UNCERTAIN_NO_RETRY')
+            state,count,actual=cache.db.execute('SELECT state,actual_bytes,sha256 FROM file_io').fetchone()
+            self.assertEqual((state,count,actual),('SHA_CONFLICT',len(b'synthetic hash conflict'),sha))
+            before=meter.totals()
+            with self.assertRaises(RuntimeError):cache.read_once('fixture',lambda:self.fail('Uncertain source retried'))
+            self.assertEqual(meter.totals(),before)
+        finally:meter.uninstall();cache.close()
