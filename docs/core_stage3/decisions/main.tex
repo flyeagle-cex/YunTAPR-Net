@@ -1,0 +1,23 @@
+\documentclass[UTF8,10pt]{ctexart}
+\usepackage[a4paper,margin=1.55cm]{geometry}
+\usepackage{tabularx,array,booktabs,amsmath}
+\setCJKmainfont{Microsoft YaHei}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{document}
+\begin{center}{\Large YunTAPR-Net Stage 3：研究者决策表}\\[4pt]2026年10月24日\end{center}
+范围：仅复用已有证据、代码准备与合成检查。本表不批准新增读取或正式训练。真实人口、统计值与私有文件清单留在本地。\par\smallskip
+\small
+\begin{tabularx}{\textwidth}{p{2.1cm}XXX}
+\toprule 需决定事项 & 推荐候选 & 现有依据 & 主要代价与局限\\\midrule
+固定 GFS vintage & 首轮严格同 valid，固定 f006，继续 retrospective。 & 同一 valid 的起报身份可显式配对；相对 f000 更早起报。 & 实际历史发布时间未证实；不能声称业务可用。不同 lead 的时段覆盖偏斜明显，需接受人口变化。\\
+MEE 变量 & 将 T500/RH500 补入 V1.3 对齐的13变量候选，再冻结模型接口。 & 当前11变量仅有850/700 hPa T/RH；现有 thermo 文件已含500 hPa层。 & 不增加源文件。width16 且值/掩膜成对输入时首层增加576参数（纯构造算术）；尚未实现13通道模型适配，不能直接开训。\\
+DEM footprint & 首轮物理候选优先0.02度，0.10度作为预先声明的尺度对照。 & 先保留原生米制导数，再聚合东西/南北分量；共享边界与梯度 halo 可检查。 & 0.02度保留更多坡度结构但噪声较敏感；0.10度平滑相反坡向。原生中心面积求积并非精确像元交叠积分。\\
+DOTE 水汽耦合 & $O_p=u_p h_x+v_p h_y$；$W_p=\max(O_p,0)$，$M_p=W_pQ$；$Q=PWAT/\overline{PWAT}_{Train,+}$。 & 当前候选可表达 W 乘正值 PWAT 尺度；参考值仅来自最终2023 Train正PWAT，按有效场景--像素暴露计权。 & 禁止提前填数、用Dev拟合或自动截断。O/M为地形抬升诊断候选，未经验证不得称真实垂直速度。\\
+DTFM 插入方式 & 四个编码器尺度，在各尺度块后、下采样前候选调制；条件必须映射到各尺度明确物理网格。 & 已有有界 $\gamma,\beta$、恒等初始化、融合卷积/残差和等参数 B7/B8 接口。 & 建议界限0.5及条件width16仅为待批候选。B7/B8共用同一 O/W/L/M、GFS、mask与投影初始化；完整骨干插入尚未接线，不能宣称创新有效。\\
+时间边界与训练 & 先暂列两个10月末边界场景；E0、单seed、9轮，batch2/验证8。 & 旧B1按目标起点纳入，Stage2对 analysis 月份的限制会拒绝11月1日；两者差异已保留。 & 是否允许继承旧B1边界语义由研究者决定。最终额度只在共同人口核实后计算，禁止借用旧seed2027额度。\\\bottomrule
+\end{tabularx}
+\normalsize\medskip
+正式预算表达式：两模型共 $18\lceil N_{Train}/2\rceil$ 次新更新；验证批次为 $18\lceil N_{Dev}/8\rceil$。当前 $N$ 尚未确认，精确额度为空。优化器与损失沿用已冻结口径；调度器需按最终每轮更新数展开原50轮轨迹的前9轮，不得复用旧5228步常量。\par\smallskip
+下一次集中授权应同时绑定：所选 vintage 的文件清单SHA、文件数/字节上限、QC与充分统计量产出、无自动重读、无训练。若拟合/源身份/边界检查失败，停在失败收据；不替换样本或扩大范围。
+\end{document}

@@ -1,0 +1,92 @@
+{
+  "status": "PASS_ALL_LATEST_STAGE3_DELTA_TESTS",
+  "unique_tests": 13,
+  "inherited_72_rerun": false,
+  "latest_outcomes": {
+    "test_preparation.PreparationTests.test_cached_exposure_weighting_equals_inherited_train_moments": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T031000_972898Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_development_has_no_fitted_sufficient_statistics": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_exact_training_budget_not_reported_for_unverified_population": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_gfs_masks_positive_pwat_and_11_13_channel_contract": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_grant_and_budget_checked_before_loader": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_resume_dedup_and_changed_processor_rejection": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_same_valid_leads_and_different_valid_not_mixed": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_satellite_dedup_preserves_exposure_counts": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_preparation.PreparationTests.test_uncertain_read_is_reserved_and_cannot_auto_retry": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T030643_905814Z/public.log"
+    },
+    "test_new_paths.NewPathTests.test_finalized_population_statistics_end_to_end_without_raw_reads": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T031606_856479Z/public.log"
+    },
+    "test_new_paths.NewPathTests.test_shared_edge_join_preserves_native_gradient_and_rejects_mismatch": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T031000_972898Z/public.log"
+    },
+    "test_scope_resume.ScopeResumeTests.test_inventory_identity_conflict_and_forbidden_year": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T031606_856479Z/public.log"
+    },
+    "test_scope_resume.ScopeResumeTests.test_pending_intent_reopen_never_calls_loader": {
+      "outcome": "ok",
+      "log": "docs/core_stage3/tests/20261024T031606_856479Z/public.log"
+    }
+  },
+  "runs": [
+    {
+      "folder": "docs/core_stage3/tests/20261024T030643_905814Z",
+      "tests": 9,
+      "success": true
+    },
+    {
+      "folder": "docs/core_stage3/tests/20261024T031000_972898Z",
+      "tests": 3,
+      "success": true
+    },
+    {
+      "folder": "docs/core_stage3/tests/20261024T031606_856479Z",
+      "tests": 3,
+      "success": true
+    }
+  ],
+  "source_sha256": {
+    "src/yuntapr/experimental/core_innovation/stage3/planning.py": "c2b1a78fdef33091087d17ca3aab0509585d1ddcb0d915bab2eff9fac9b4c304",
+    "src/yuntapr/experimental/core_innovation/stage3/statistics.py": "d4e5c1974683844eb6fa2b3568a346bbcc15c72db2b4f2b0bdea37489b79ce25",
+    "src/yuntapr/experimental/core_innovation/stage3/terrain_boundary.py": "0aab374d65597b35717f51b478fcb173163b25f3f4b276f920df5744b8551e95",
+    "src/yuntapr/experimental/core_innovation/stage3/__init__.py": "29e96627ccb70a6cd446ac37e8bb7af0c40d2b0c591fd5a1f47eb45d45afbb5e",
+    "tests/core_stage3/test_new_paths.py": "f13146cd0b0afd8af90fbe7baa0bdae6d9b35064afc31ae8784ced7ec757e118",
+    "tests/core_stage3/test_preparation.py": "b9d2f1356f91f4cc709d7e12aa7d03cac67e6a3e17dd1ec0b7d2d7ceb5357a20",
+    "tests/core_stage3/test_scope_resume.py": "ef07b415320456a392fa0fb92e7927b717dc8ea57413d69f06394e683d413031",
+    "tools/core_stage3/plan_population.py": "eaec11769b4357dfeae0afa6590290b7679a3ee82696b95cee2b3a589fff0cc0",
+    "tools/core_stage3/run_checks.py": "bc44dee817bd9253b8f27afa470bae88535ea49c58d28c345ee69d96cf15c487"
+  },
+  "real_statistics_produced": false,
+  "new_raw_weather_reads": 0,
+  "optimizer_updates": 0,
+  "wording_only_change_after_tests": "PWAT reference weighting clarified as valid scene-pixel exposure; no numeric implementation change.",
+  "publication_fix": "Removed a private source-root constant from metadata-only raw-file denial guard. No raw I/O or statistic implementation changed."
+}
