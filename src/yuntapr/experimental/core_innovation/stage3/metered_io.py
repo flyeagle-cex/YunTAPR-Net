@@ -13,8 +13,20 @@ class MeasuredReader:
     def __init__(self,owner,path,handle):
         self.owner=owner;self.path=path;self.handle=handle;self.n=0;self.hash=hashlib.sha256()
     def __enter__(self):return self
-    def __exit__(self,*args):
-        self.handle.close();self.owner.finish(self.path,self.n,self.hash.hexdigest())
+    def __exit__(self,exc_type,exc,tb):
+        close_error=receipt_error=None
+        try:self.handle.close()
+        except OSError as error:close_error=error
+        try:self.owner.finish(self.path,self.n,self.hash.hexdigest())
+        except IdentityConflict as error:receipt_error=error
+        # A partial digest cannot establish changed source contents. Preserve
+        # the original I/O error while still recording the uncertain read.
+        if exc is not None:
+            for error in (close_error,receipt_error):
+                if error is not None:exc.add_note('Read finalization: '+str(error))
+            return False
+        if close_error is not None:raise close_error
+        if receipt_error is not None:raise receipt_error
     def read(self,size=-1):
         expected=self.owner.files[self.path]['bytes'];remaining=expected-self.n
         if remaining<=0:return b''
@@ -64,7 +76,7 @@ class SourceMeter:
         with self.db:self.db.execute('UPDATE file_io SET actual_bytes=? WHERE path=?',(count,path))
     def finish(self,path,count,sha):
         expected=self.files[path];state='READ_COMPLETE' if count==expected['bytes'] else 'PARTIAL_UNCERTAIN'
-        if expected.get('sha') is not None and sha!=expected['sha']:state='SHA_CONFLICT'
+        if state=='READ_COMPLETE' and expected.get('sha') is not None and sha!=expected['sha']:state='SHA_CONFLICT'
         with self.db:self.db.execute('UPDATE file_io SET state=?,sha256=? WHERE path=?',(state,sha,path))
         if state!='READ_COMPLETE':raise IdentityConflict(state)
     def receipt(self,path):

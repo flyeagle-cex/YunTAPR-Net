@@ -108,23 +108,33 @@ class UpdateLedger:
 
 
 class PairedExecutor:
-    def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None):
+    def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
+        self.recovery=recovery
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
-        self.decision.validate();resources();self.folder.mkdir(exist_ok=False)
+        self.decision.validate()
+        if self.recovery is not None:self.recovery.validate(self.plan,self.decision)
+        resources();self.folder.mkdir(exist_ok=False)
         if len(self.plan.ids('Train'))!=TRAIN_N or len(self.plan.ids('Development'))!=DEV_N:raise ValueError('Wrong population')
-        models=paired_models(self.decision.seed,self.plan.root);ledger=UpdateLedger(self.folder/'updates.sqlite',dict(decision=asdict(self.decision),data=self.plan.identity))
-        write(self.folder/'paired_initial_identity.json',{k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()})
+        models=paired_models(self.decision.seed,self.plan.root);identity=dict(decision=asdict(self.decision),data=self.plan.identity)
+        ledger=UpdateLedger(self.folder/'updates.sqlite',identity) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
+        initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
+        if self.recovery is not None:self.recovery.check_initial(initial_identity)
+        write(self.folder/'paired_initial_identity.json',initial_identity)
         orders={e:epoch_order(self.plan.ids('Train'),self.decision.seed,e) for e in range(1,EPOCHS+1)}
+        if self.recovery is not None:self.recovery.check_orders(orders)
         write(self.folder/'paired_orders.json',{str(e):dict(ids=o,sha256=digest(o)) for e,o in orders.items()})
         results={};self.poisoned=False
         try:
             for kind in ('B3','B4'):
                 model=models.pop(kind).cuda();initial=state_digest(model.state_dict());buffer_sha=state_digest(dict(model.named_buffers()))
                 optimizer,groups=new_adamw(model);u=0;epochs=[]
+                if self.recovery is not None:
+                    u,epochs=self.recovery.restore(kind,model,optimizer,groups)
                 for epoch,order in orders.items():
+                    if self.recovery is not None and epoch<=self.recovery.completed_epochs(kind):continue
                     resources(backward=False)
                     reader=reader_factory('Train',epoch,order,self.folder/f'{kind}_train_reads_{epoch:02d}')
                     visited=[];model.train();nvalid=nrain=0;socc=sqr=0.
@@ -171,8 +181,11 @@ class PairedExecutor:
                     epochs.append(report);del payload
                 results[kind]=epochs;del optimizer,model;gc.collect();torch.cuda.empty_cache()
             for epoch in range(EPOCHS):write(self.folder/f'paired_difference_{epoch+1:02d}.json',paired_difference(results['B3'][epoch],results['B4'][epoch]))
-            if ledger.db.execute("SELECT COUNT(*) FROM updates WHERE state='RETURNED'").fetchone()[0]!=PAIR_CAP:raise RuntimeError('Paired endpoint ledger incomplete')
-            return dict(status='COMPLETE',updates=PAIR_CAP)
+            actual=ledger.db.execute("SELECT COUNT(*) FROM updates WHERE state='RETURNED'").fetchone()[0]
+            if actual!=getattr(ledger,'expected_returned',PAIR_CAP):raise RuntimeError('Paired endpoint ledger incomplete')
+            result=dict(status='COMPLETE',updates=PAIR_CAP)
+            if self.recovery is not None:result.update(segment_updates=actual,cumulative_attempts=self.recovery.request['prior_updates']+actual,replayed_updates=480)
+            return result
         except BaseException as exc:
             self.poisoned=True;write(self.folder/'failure.json',dict(status='STOP_NO_AUTOMATIC_RETRY',error=type(exc).__name__+': '+str(exc)));raise
         finally:ledger.close()
