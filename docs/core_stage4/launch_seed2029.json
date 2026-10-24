@@ -1,0 +1,185 @@
+{
+  "status": "PREPARED_WAITING_FINAL_START",
+  "config": {
+    "seed": 2029,
+    "models": [
+      "B3",
+      "B4"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 8640,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9",
+    "BEST_selection": false
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "roles": {
+      "Train": {
+        "file_count": 7918,
+        "bytes_per_pass": 26424262556,
+        "by_kind": {
+          "satellite": {
+            "files": 5754,
+            "bytes": 25882115518
+          },
+          "GFS_main": {
+            "files": 959,
+            "bytes": 272589016
+          },
+          "GFS_thermo": {
+            "files": 959,
+            "bytes": 89508928
+          },
+          "IMERG": {
+            "files": 245,
+            "bytes": 180028178
+          },
+          "static_mask": {
+            "files": 1,
+            "bytes": 20916
+          }
+        },
+        "source_manifest_sha256": "f0c0a9188e771bfbba7c1e8a8ffdbfabd2d4e927bd1428d353b290be236a13dc"
+      },
+      "Development": {
+        "file_count": 7950,
+        "bytes_per_pass": 26639253112,
+        "by_kind": {
+          "satellite": {
+            "files": 5778,
+            "bytes": 26067197976
+          },
+          "GFS_main": {
+            "files": 963,
+            "bytes": 287429347
+          },
+          "GFS_thermo": {
+            "files": 963,
+            "bytes": 89772072
+          },
+          "IMERG": {
+            "files": 245,
+            "bytes": 194832801
+          },
+          "static_mask": {
+            "files": 1,
+            "bytes": 20916
+          }
+        },
+        "source_manifest_sha256": "65e8b3754775ece7bbf60db0ca2b5320638c193fe20a9f21ee49828272514060"
+      }
+    },
+    "passes_per_role": 18,
+    "total_passes": 36,
+    "logical_source_read_instances": 285624,
+    "logical_raw_bytes": 955143282024,
+    "unique_source_files": 15867,
+    "IMERG_combined_unique_bytes": 374860979,
+    "IMERG_cache_limit_bytes": 536870912,
+    "cache_over_limit": false,
+    "byte_definition": "Full source payload delivered to Python; includes per-pass frozen mask, excludes metadata/checkpoints/OS sectors",
+    "loader_rule": "Existing common batch loader reads GFS for both arms; B3 model does not consume GFS",
+    "replay_allowance": 0
+  },
+  "preparation_sha256": "ac6d7915cca353272735d55c69317a22e560d21ea95cfa89610388b187821c7a",
+  "metadata_sha256": {
+    "stage0-b0-evidence/evidence/outputs/stage0_p0_audit/run_20260927T161311_417313Z/IMERG/imerg_inventory.csv": "9dfdd6d6d5f6d1326d48d66d46b54805ad1a043f9250aee58582a2c12ba05571"
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/core_innovation/stage4/__init__.py": "cf9457b3a02f9aedf76c272956b6f0a1d81e10e01abeaf881f0b3546afee0abe",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": "7719fdf937093620956df54ac1923159e208aded2149e83eaab749f8db59d592",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "9d364a5b961833079c850a8765eb41d3a09ac04a251d2db79110557e5c34bc09",
+    "src/yuntapr/experimental/core_innovation/stage4/evaluation.py": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+    "src/yuntapr/experimental/core_innovation/stage4/launch.py": "7429be63d5dbefd0763e16117f70a3d2b583a3b37e49e08dd60b8e843386e233",
+    "tools/core_stage4/start_pair.py": "e5c55715355e6135396d88025155f9717ae9c4c7eb8d6a63217a8f790f275196"
+  },
+  "raw_source_opens_during_preparation": 0,
+  "optimizer_updates": 0,
+  "final_start_authorized": false,
+  "base_commit": "d475722ed25f2d65319bf3562fd4408365649178",
+  "preparation_file_sha256": "e5320cb532a1694753beda80e586248d28ef2650648efcb21bc73ec107afa9cc",
+  "cache_check": {
+    "train_days": 245,
+    "train_IMERG_bytes": 180028178,
+    "development_days": 245,
+    "development_IMERG_bytes": 194832801,
+    "combined_bytes": 374860979,
+    "limit_bytes": 536870912,
+    "combined_MiB": 357.49528789520264,
+    "raw_cache_strategy_changed": false
+  },
+  "tests": {
+    "new_targeted_checks": 4,
+    "status": "PASS",
+    "prior_checks_rerun": false,
+    "raw_source_opens": 0,
+    "optimizer_updates": 0
+  },
+  "researcher_decisions": {
+    "seed": 2029,
+    "fixed_epoch9_endpoint": true,
+    "per_epoch_LAST_receipts": true,
+    "new_BEST_selection": false,
+    "final_start_command_still_required": true
+  },
+  "budget_boundaries": [
+    "Exactly18 Train and18 Development passes for two9-epoch models.",
+    "Full logical source bytes, not OS-sector traffic; metadata, checkpoint and evaluator I/O excluded.",
+    "Includes GFS for both arms because the existing common loader constructs those tensors.",
+    "Existing inventory and completed read evidence only; no raw source open/stat for budget estimation.",
+    "Any source size/SHA conflict at actual launch stops instead of increasing quota or retrying."
+  ],
+  "readiness": "NO_IDENTIFIED_CACHE_OR_IO_BUDGET_BLOCKER_WAITING_FINAL_START_AND_RUNTIME_RESOURCE_ADMISSION",
+  "metadata_constructor_check": {
+    "Train": {
+      "status": "PASS_MANIFEST_ONLY_CONSTRUCTION",
+      "source_files": 7918,
+      "source_bytes": 26424262556,
+      "actual_raw_reads": {
+        "opened_files": 0,
+        "delivered_bytes": 0,
+        "reserved_bytes": 0,
+        "states": {}
+      }
+    },
+    "Development": {
+      "status": "PASS_MANIFEST_ONLY_CONSTRUCTION",
+      "source_files": 7950,
+      "source_bytes": 26639253112,
+      "actual_raw_reads": {
+        "opened_files": 0,
+        "delivered_bytes": 0,
+        "reserved_bytes": 0,
+        "states": {}
+      }
+    }
+  },
+  "metadata_constructor_receipt_sha256": "6ccf24d8f7d3199844c36592c87887fbd41c2b88e38e2bbcaadac775c7fcb6ff"
+}

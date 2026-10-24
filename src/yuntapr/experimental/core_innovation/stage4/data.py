@@ -115,10 +115,16 @@ class BatchReader:
     One reader owns one pass. Further epochs require independently authorized
     fresh scopes; Stage4 CLI only supplies the ten declared dry-run scenes.
     """
-    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2):
+    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2,source_bytes=None):
         self.plan=plan;self.ids_by_role=ids_by_role;self.folder=Path(folder);self.folder.mkdir(exist_ok=False)
         self.mapping=load_sp04(plan.root);self.grid=frozen_sp04_grid(plan.root);self.native=GridSpec(self.mapping.axes['native_lat'],self.mapping.axes['native_lon'])
         chosen={};self.target_paths={};self.target_buffers={};self.scene_seen=set()
+        indexed_bytes=None if source_bytes is None else {path_key(p):n for p,n in source_bytes.items()}
+        def size(path):
+            if indexed_bytes is None:return Path(path).stat().st_size
+            n=indexed_bytes.get(path_key(path))
+            if type(n)!=int or n<=0:raise PermissionError('Exact indexed source size required')
+            return n
         for role,ids in ids_by_role.items():
             if len(set(ids))!=len(ids) or not set(ids)<=set(plan.ids(role)):raise PermissionError('Unlisted scene')
             for sid in ids:
@@ -127,9 +133,9 @@ class BatchReader:
                     p,_=plan.sat[row[f'slot_{i}_nominal']];chosen[p]=plan.sources[p]
                 for p in plan.gfs[row['analysis_time']].values():chosen[p]=plan.sources[p]
                 t=utc(sid);p=IMERG_ROOT/str(t.year)/('imerg_'+t.strftime('%Y%m%d')+'.nc')
-                self.target_paths[sid]=str(p);chosen[str(p)]=dict(bytes=p.stat().st_size,sha=row['imerg_sha256'],year=t.year)
+                self.target_paths[sid]=str(p);chosen[str(p)]=dict(bytes=size(p),sha=row['imerg_sha256'],year=t.year)
         ref=read(plan.root/'config/science_v2/phase_a_protocol_frozen_v1.json')['identity']['yunnan_mask']
-        self.mask_path=ref['path'];chosen[self.mask_path]=dict(bytes=Path(self.mask_path).stat().st_size,sha=ref['sha256'],year=2023)
+        self.mask_path=ref['path'];chosen[self.mask_path]=dict(bytes=size(self.mask_path),sha=ref['sha256'],year=2023)
         jobs={str(i):dict(year=f['year'],bytes=f['bytes'],files=1,expected_sha256=f['sha']) for i,(p,f) in enumerate(chosen.items())}
         if len(jobs)>max_files or sum(f['bytes'] for f in jobs.values())>max_bytes:raise PermissionError('Small batch read cap exceeded')
         self.path_jobs={path_key(p):str(i) for i,p in enumerate(chosen)}
