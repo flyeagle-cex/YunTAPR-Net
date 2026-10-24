@@ -1,0 +1,15 @@
+test_forbidden_year_rejected_before_missing_evidence_join (test_population_scope.ScopeTests.test_forbidden_year_rejected_before_missing_evidence_join) ... FAIL
+
+======================================================================
+FAIL: test_forbidden_year_rejected_before_missing_evidence_join (test_population_scope.ScopeTests.test_forbidden_year_rejected_before_missing_evidence_join)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage2\test_population_scope.py", line 11, in test_forbidden_year_rejected_before_missing_evidence_join
+    with self.assertRaises(PermissionError): joint_population([row], {}, native_grid_id='synthetic')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PermissionError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

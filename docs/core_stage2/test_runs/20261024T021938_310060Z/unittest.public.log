@@ -1,0 +1,24 @@
+test_native_gradient_aggregation_axis_reversal_and_complete_border (test_stage2.DoteTests.test_native_gradient_aggregation_axis_reversal_and_complete_border) ... ok
+test_owlm_reversal_moisture_and_underground (test_stage2.DoteTests.test_owlm_reversal_moisture_and_underground) ... ok
+test_active_gradients_after_identity_release_and_invalid_condition (test_stage2.FusionTests.test_active_gradients_after_identity_release_and_invalid_condition) ... FAIL
+test_exact_active_parameter_match_identity_and_same_dynamic_input (test_stage2.FusionTests.test_exact_active_parameter_match_identity_and_same_dynamic_input) ... ok
+test_b3_b4_construct_reuse_heads_and_only_stem_differs_from_pilot (test_stage2.ModelTests.test_b3_b4_construct_reuse_heads_and_only_stem_differs_from_pilot) ... ok
+test_mee_pressure_masks_order_and_gradient (test_stage2.ModelTests.test_mee_pressure_masks_order_and_gradient) ... ok
+test_exposure_fit_2023_only_complete_and_b13_preserved (test_stage2.PopulationTests.test_exposure_fit_2023_only_complete_and_b13_preserved) ... ok
+test_joint_missing_and_channel_substitution_do_not_pass (test_stage2.PopulationTests.test_joint_missing_and_channel_substitution_do_not_pass) ... ok
+test_same_valid_different_vintage_and_different_valid (test_stage2.TemporalTests.test_same_valid_different_vintage_and_different_valid) ... ok
+test_target_mismatch_future_actual_and_future_forecast_reject (test_stage2.TemporalTests.test_target_mismatch_future_actual_and_future_forecast_reject) ... ok
+
+======================================================================
+FAIL: test_active_gradients_after_identity_release_and_invalid_condition (test_stage2.FusionTests.test_active_gradients_after_identity_release_and_invalid_condition)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage2\test_stage2.py", line 145, in test_active_gradients_after_identity_release_and_invalid_condition
+    self.assertIsNotNone(p.grad); self.assertTrue(torch.isfinite(p.grad).all()); self.assertGreater(p.grad.abs().sum().item(), 0)
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0.0 not greater than 0
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.432s
+
+FAILED (failures=1)

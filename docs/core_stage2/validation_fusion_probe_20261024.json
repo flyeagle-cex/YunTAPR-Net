@@ -1,0 +1,51 @@
+{
+  "scope": "NEW_SYNTHETIC_VALIDATION_MEMORY_AND_FUSION_AMP",
+  "optimizer_updates": 0,
+  "real_weather_reads": 0,
+  "raw_2025_reads": 0,
+  "inference": [
+    {
+      "kind": "B3",
+      "batch": 8,
+      "status": "PASS",
+      "peak_allocated_bytes": 3860416512,
+      "peak_reserved_bytes": 5081399296,
+      "output_shape": [
+        8,
+        1,
+        100,
+        100
+      ]
+    },
+    {
+      "kind": "B4",
+      "batch": 8,
+      "status": "PASS",
+      "peak_allocated_bytes": 3865548800,
+      "peak_reserved_bytes": 5083496448,
+      "output_shape": [
+        8,
+        1,
+        100,
+        100
+      ]
+    }
+  ],
+  "fusion": [
+    {
+      "kind": "B7",
+      "status": "PASS_CUDA_AMP_IDENTITY_FINITE_GRADIENTS",
+      "feature_dtype": "torch.bfloat16"
+    },
+    {
+      "kind": "B8",
+      "status": "PASS_CUDA_AMP_IDENTITY_FINITE_GRADIENTS",
+      "feature_dtype": "torch.bfloat16"
+    }
+  ],
+  "four_scale_active_parameter_counts": [
+    2319408,
+    2319408
+  ],
+  "status": "PASS"
+}

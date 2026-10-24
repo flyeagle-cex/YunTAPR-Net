@@ -1,0 +1,18 @@
+test_gfs_canonical_pwat_unit_connects_to_train_scaler (test_data_budget.AdditionalTests.test_gfs_canonical_pwat_unit_connects_to_train_scaler) ... ERROR
+
+======================================================================
+ERROR: test_gfs_canonical_pwat_unit_connects_to_train_scaler (test_data_budget.AdditionalTests.test_gfs_canonical_pwat_unit_connects_to_train_scaler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage2\test_data_budget.py", line 32, in test_gfs_canonical_pwat_unit_connects_to_train_scaler
+    scalers[k] = EnvironmentScaler(k, 0., 1., unit, (2023,), 'Train', 'synthetic_population')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 10, in __init__
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage2\environment.py", line 23, in __post_init__
+    raise ValueError('Explicit matching units and finite 2023 Train-only environment scaler required')
+ValueError: Explicit matching units and finite 2023 Train-only environment scaler required
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)

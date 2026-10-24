@@ -1,0 +1,18 @@
+test_no_new_observation_start_relative_to_nominal_qc_threshold (test_temporal_inheritance.TemporalInheritanceTests.test_no_new_observation_start_relative_to_nominal_qc_threshold) ... ERROR
+
+======================================================================
+ERROR: test_no_new_observation_start_relative_to_nominal_qc_threshold (test_temporal_inheritance.TemporalInheritanceTests.test_no_new_observation_start_relative_to_nominal_qc_threshold)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage2\test_temporal_inheritance.py", line 12, in test_no_new_observation_start_relative_to_nominal_qc_threshold
+    result = TargetBinding(b.window_start, b.analysis, b.nominal,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 8, in __init__
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage2\coupling.py", line 33, in __post_init__
+    raise ValueError('Future or reversed actual satellite interval')
+ValueError: Future or reversed actual satellite interval
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)

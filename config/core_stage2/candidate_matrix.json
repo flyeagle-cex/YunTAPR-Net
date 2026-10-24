@@ -1,0 +1,49 @@
+{
+  "status": "SCIENTIFIC_CANDIDATES_NO_TRAINING_AUTHORIZATION",
+  "evidence_base_commit": "ede6e64569b72d0763e10f33ce82a3ab2b5b3a9b",
+  "definitions_from_researcher": {
+    "B2": "B08/B09/B10/B11/B13/B15/B16 x one time",
+    "B3": "same seven bands x six historical times",
+    "B4": "B3 + GFS MEE",
+    "offsets_before_analysis_minutes": [60, 50, 40, 30, 20, 10],
+    "selected_this_round": "valid_equals_analysis_retrospective",
+    "temporal_selection_authority": "Researcher explicitly selected strict same-valid small-population pairing in this conversation on 2026-10-24",
+    "historical_operational_release_evidence": "NOT_ESTABLISHED"
+  },
+  "paired_experiment_candidate": {
+    "loss_arm": null,
+    "seed": null,
+    "epoch_candidate": 9,
+    "physical_batch_candidate": 2,
+    "validation_batch_candidate": 8,
+    "gradient_accumulation": 1,
+    "population": "Verified seven-band six-slot intersection AND paired GFS at the exact analysis valid time; SAME IDs for B3 and B4",
+    "new_band_scalers": "2023 Train scene-slot exposure moments, ddof=0; shared across slots and arms",
+    "B13_scaler": "Reuse pinned 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+    "environment_scalers": "Pending 2023 Train fit on declared matched population; masked pressure levels excluded",
+    "forecast_vintage_selection": "RESEARCHER_FREEZE_REQUIRED_NO_IMPLICIT_LATEST",
+    "MEE_candidate": "PWAT/CAPE/T850/T700/RH850/RH700/u850/v850/u700/v700/PS; 11 values + 11 masks; width 16; target-grid residual adapter",
+    "formal_optimizer_attempt_cap": null,
+    "inherited_seed2027_allowance": 0,
+    "retry_allowance": 0
+  },
+  "interface_pilot": {
+    "name": "B1_GFS_INTERFACE_PILOT_NOT_B4",
+    "candidate_scene_cap": 64,
+    "candidate_dev_cap": 16,
+    "optimizer_updates": 0,
+    "additional_real_reads_authorized_by_this_file": false
+  },
+  "researcher_freeze_required": [
+    "exact forecast vintage policy among same-valid files and source-lineage caveats",
+    "MEE T/RH levels, width, insertion, normalization and missing-level use rule",
+    "DOTE PWAT reference and M signed_O versus windward_W basis",
+    "DEM footprint and complete-halo boundary/mosaic rules",
+    "DTFM insertion scales, modulation bound, fusion width; B7/B8 same dynamic payload",
+    "one inherited loss arm, paired seed, epochs, final common population and independent budget"
+  ],
+  "formal_training_authorized": false,
+  "seed2028_authorized": false,
+  "FinalFit_authorized": false,
+  "test2025_authorized": false
+}
