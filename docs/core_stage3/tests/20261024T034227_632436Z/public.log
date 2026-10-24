@@ -1,0 +1,22 @@
+test_measured_bytes_intent_cache_and_forbidden_source (test_metered.MeteredTests.test_measured_bytes_intent_cache_and_forbidden_source) ... ERROR
+test_real_reader_memory_decode_through_meter_on_synthetic_netcdf (test_metered.MeteredTests.test_real_reader_memory_decode_through_meter_on_synthetic_netcdf) ... ok
+
+======================================================================
+ERROR: test_measured_bytes_intent_cache_and_forbidden_source (test_metered.MeteredTests.test_measured_bytes_intent_cache_and_forbidden_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage3\test_metered.py", line 31, in test_measured_bytes_intent_cache_and_forbidden_source
+    with self.assertRaises(RuntimeError):source.open('rb')
+                                         ^^^^^^^^^^^^^^^^^
+  File "[PYTHON_BASE]\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage3\metered_io.py", line 52, in open
+    if not job or job[0]!='PENDING':raise PermissionError('Job intent must be committed before source open')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: Job intent must be committed before source open
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.179s
+
+FAILED (errors=1)
