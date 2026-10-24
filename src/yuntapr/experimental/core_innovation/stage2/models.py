@@ -12,7 +12,7 @@ from yuntapr.models.quantile_v2.heads import ProbabilityHeadsV2
 from yuntapr.spatial.sp04_mapping import load_sp04
 from yuntapr.spatial.projection import SP04Projection
 from ..grid import frozen_sp04_grid
-from . import CHANNELS, MEE_KEYS
+from . import CHANNELS, MEE_KEYS, MEE_V13_KEYS
 
 
 class NativeBackboneCandidate(B0Backbone):
@@ -31,23 +31,26 @@ class NativeBackboneCandidate(B0Backbone):
 
 
 class MEECandidate(nn.Module):
-    """11 specified normalized variables + 11 separate validity channels.
+    """Explicit 11/13 normalized variables with separate validity channels.
 
-    T/RH 850/700 hPa and width are explicit candidates, not scientific freeze.
+    Optional T500/RH500 never replace 850/700 winds; design is not frozen.
     Raw physical values require separate 2023 Train scalers before formal use.
     Missing pressure layers are neutral with masks, never replaced by other levels.
     """
-    def __init__(self, *, width):
+    def __init__(self, *, width, keys=MEE_KEYS):
         super().__init__()
         if type(width) is not int or width <= 0:
             raise ValueError('Explicit positive MEE candidate width required')
-        self.encoder = nn.Sequential(nn.Conv2d(22, width, 3, padding=1), nn.GELU(),
+        if tuple(keys) not in (MEE_KEYS, MEE_V13_KEYS):
+            raise ValueError('Explicit supported eleven/thirteen-variable order required')
+        self.keys = tuple(keys)
+        self.encoder = nn.Sequential(nn.Conv2d(2*len(self.keys), width, 3, padding=1), nn.GELU(),
                                      nn.Conv2d(width, width, 3, padding=1), nn.GELU())
         self.output = nn.Conv2d(width, 48, 1)
         nn.init.zeros_(self.output.weight); nn.init.zeros_(self.output.bias)
 
     def forward(self, values, valid, *, keys):
-        if tuple(keys) != MEE_KEYS or values.ndim != 4 or values.shape[1] != 11 or valid.shape != values.shape or valid.dtype != torch.bool:
+        if tuple(keys) != self.keys or values.ndim != 4 or values.shape[1] != len(self.keys) or valid.shape != values.shape or valid.dtype != torch.bool:
             raise ValueError('Exact MEE order and independent per-channel masks required')
         if values.device != valid.device or not bool((torch.isfinite(values) | ~valid).all()):
             raise ValueError('MEE nonfinite valid value or device mismatch')
@@ -65,7 +68,7 @@ class MEECandidate(nn.Module):
 
 class SpectralCandidate(nn.Module):
     """B2=7x1, B3=7x6, B4=B3+MEE; pilot=B1+MEE (not B4)."""
-    def __init__(self, kind, *, numerics, mee_width=None, root=REPO_ROOT):
+    def __init__(self, kind, *, numerics, mee_width=None, mee_keys=MEE_KEYS, root=REPO_ROOT):
         super().__init__()
         sizes = {'B2': 7, 'B3': 42, 'B4': 42, 'B1_GFS_PILOT': 6}
         if kind not in sizes or (kind in ('B4', 'B1_GFS_PILOT')) != (mee_width is not None):
@@ -75,7 +78,7 @@ class SpectralCandidate(nn.Module):
         self.backbone = NativeBackboneCandidate(cfg['backbone'], tuple(science['backbone']['channels']), input_channels=sizes[kind])
         self.projection = SP04Projection(load_sp04(root), cfg['projection']['feature_reduction_operator'])
         self.grid = frozen_sp04_grid(root)
-        self.mee = MEECandidate(width=mee_width) if mee_width is not None else None
+        self.mee = MEECandidate(width=mee_width, keys=mee_keys) if mee_width is not None else None
         self.heads = ProbabilityHeadsV2(numerics=numerics)
 
     def forward(self, x, valid, *, channel_order, environment=None, environment_valid=None,
@@ -102,14 +105,14 @@ class SpectralCandidate(nn.Module):
         return out
 
 
-def paired_spectral_candidates(*, numerics, mee_width, root=REPO_ROOT):
+def paired_spectral_candidates(*, numerics, mee_width, mee_keys=MEE_KEYS, root=REPO_ROOT):
     """Fresh B3/B4 common weights bit-identical; no historical checkpoint reuse.
 
     Caller controls the candidate RNG. MEE's zero output makes initial B4 target
     features equal B3; no claim about effectiveness follows from that identity.
     """
     b3 = SpectralCandidate('B3', numerics=numerics, root=root)
-    b4 = SpectralCandidate('B4', numerics=numerics, mee_width=mee_width, root=root)
+    b4 = SpectralCandidate('B4', numerics=numerics, mee_width=mee_width, mee_keys=mee_keys, root=root)
     b4.backbone.load_state_dict(b3.backbone.state_dict()); b4.heads.load_state_dict(b3.heads.state_dict())
     for part in ('backbone', 'heads'):
         a = getattr(b3, part).state_dict(); b = getattr(b4, part).state_dict()

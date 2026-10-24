@@ -6,3 +6,5 @@ OFFSETS = (60, 50, 40, 30, 20, 10)
 MEE_KEYS = ('pwat', 'cape', 'temperature850', 'temperature700',
             'relative_humidity850', 'relative_humidity700',
             'u850', 'v850', 'u700', 'v700', 'ps')
+# Stage3 statistics order; thirteen-variable design remains a candidate.
+MEE_V13_KEYS = (*MEE_KEYS, 'temperature500', 'relative_humidity500')
