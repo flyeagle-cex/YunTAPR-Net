@@ -1,0 +1,36 @@
+test_complete_wrong_content_remains_sha_conflict (test_recovery.MeterFailureTests.test_complete_wrong_content_remains_sha_conflict) ... ok
+test_io_error_keeps_original_exception_and_partial_receipt (test_recovery.MeterFailureTests.test_io_error_keeps_original_exception_and_partial_receipt) ... ERROR
+
+======================================================================
+ERROR: test_io_error_keeps_original_exception_and_partial_receipt (test_recovery.MeterFailureTests.test_io_error_keeps_original_exception_and_partial_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage4\test_recovery.py", line 21, in test_io_error_keeps_original_exception_and_partial_receipt
+    with MeasuredReader(m,p,Broken()) as f:f.read()
+                                           ^^^^^^^^
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage3\metered_io.py", line 21, in read
+    raw=self.handle.read(remaining if size<0 else min(size,remaining));self.n+=len(raw);self.hash.update(raw)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[REPO]\tests\core_stage4\test_recovery.py", line 17, in read
+    def read(self,*args):raise OSError(22,'synthetic detached source')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] synthetic detached source
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage4\test_recovery.py", line 21, in test_io_error_keeps_original_exception_and_partial_receipt
+    with MeasuredReader(m,p,Broken()) as f:f.read()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage3\metered_io.py", line 17, in __exit__
+    self.handle.close();self.owner.finish(self.path,self.n,self.hash.hexdigest())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage3\metered_io.py", line 69, in finish
+    if state!='READ_COMPLETE':raise IdentityConflict(state)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+yuntapr.experimental.core_innovation.stage3.metered_io.IdentityConflict: SHA_CONFLICT
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+FAILED (errors=1)

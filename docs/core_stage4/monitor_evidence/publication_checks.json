@@ -1,0 +1,27 @@
+{
+  "scope": "publication_export_only",
+  "copy_sha256": {
+    "server.py": "9e7c2d562cd7e769991a0890db1e223976f568398876b20b3bb8e5568b6ee2d8",
+    "app.js": "ed499e2f53cb92e62368b52b25e6ab6a531d70c9c899344bee220e9e06ce6337",
+    "index.html": "f638eecd19c10185218aa3cecd2b146d363e4e6abf50455f399181dfd29eda04",
+    "style.css": "9cb82575056c53178ea17d2ee7cdbe6d8ac4f9998dcc87aa9278981fd3d0824e",
+    "test_monitor.py": "111bca42dc6ac83441b860c46b6d954ead2f6f1b0ffa3961f734f5d42c83c34e"
+  },
+  "python_ast_files": [
+    "server.py",
+    "test_monitor.py"
+  ],
+  "node_syntax_files": [
+    "app.js",
+    "check-page.cjs",
+    "check-recovery-page.cjs"
+  ],
+  "syntax_checks": "PASS",
+  "private_path_and_credential_pattern_scan": "PASS",
+  "historical_checks_rerun": false,
+  "browser_checks_rerun": false,
+  "training_process_control": false,
+  "optimizer_updates": 0,
+  "real_weather_reads": 0,
+  "note": "Browser check imports use normal Playwright resolution; historical evidence predates this portable import change."
+}

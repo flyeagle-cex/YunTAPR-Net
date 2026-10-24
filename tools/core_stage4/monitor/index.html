@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f7"><title>Seed 2029 · YunTAPR-Net 训练监测</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header><div class="wordmark">YunTAPR-Net <span>科研运行台</span></div><div id="connection" role="status">正在连接本机收据…</div></header>
+<main>
+  <section class="intro"><div><h1>Seed 2029 <span>B3 / B4 配对训练</span></h1><p>固定 f006 · 2024 Development · 00 / 06 / 12 / 18 UTC</p></div>
+    <div class="controls"><label><input id="auto" type="checkbox" checked>每 15 秒刷新</label><button id="refresh" type="button">立即刷新</button></div>
+  </section>
+  <div id="error" class="notice warning" role="alert" hidden>采集暂不可用，保留上次结果。请稍后刷新；此提示不代表训练失败。</div>
+  <div id="failure" class="notice failure" role="alert" hidden></div>
+  <section class="overview" aria-labelledby="progress-heading">
+    <div class="primary"><h2 id="progress-heading">正式更新进度</h2><div class="total"><span id="updates">—</span><span class="denominator" id="update-limit"> / 8,640</span></div>
+      <progress id="total-progress" max="8640" value="0" aria-label="配对总更新进度"></progress><p id="phase">等待读取当前运行状态</p><p class="note" id="recovery-note" hidden></p></div>
+    <dl class="facts"><div><dt>执行状态</dt><dd id="state">—</dd></div><div><dt>已封存轮次</dt><dd id="sealed">— / 18</dd></div><div><dt>待确认更新</dt><dd id="uncertain">—</dd></div><div><dt>本次数据人口</dt><dd>Train 959 / Dev 963</dd></div></dl>
+  </section>
+  <section class="section" aria-labelledby="models-heading"><div class="section-title"><h2 id="models-heading">模型与训练阶段</h2><p>B3 九轮完成后运行 B4；训练与验证分别显示</p></div><div id="models" class="models"></div></section>
+  <section class="section" aria-labelledby="resources-heading"><div class="section-title"><h2 id="resources-heading">当前资源与读取额度</h2><p>仅页面打开时采集 · 设备瞬时值</p></div>
+    <div class="resource-grid"><div><h3 id="gpu-name">GPU</h3><p class="reading" id="gpu-memory">—</p><p id="gpu-detail">等待设备读数</p></div><div><h3>系统可用余量</h3><p class="reading" id="ram">—</p><p id="host-detail">等待内存与磁盘读数</p></div><div><h3>原始源文件逻辑读取</h3><p class="reading" id="io-bytes">—</p><progress id="io-progress" max="955143282024" value="0" aria-label="原始源文件逻辑字节额度"></progress><p id="io-files">— / 285,624 次读取</p></div></div>
+    <p class="note" id="io-detail">逻辑读取量包含按遍历重复读取的源文件；不等于磁盘物理流量。</p>
+  </section>
+  <section class="section" aria-labelledby="metrics-heading"><div class="section-title"><h2 id="metrics-heading">逐轮损失与 Dev 指标</h2><label class="select-label" for="model-filter">模型 <select id="model-filter"><option value="all">B3 + B4</option value="B3">B3</option><option value="B4">B4</option></select></label></div>
+    <p class="note">仅展示完整输出的逐轮指标。E0、Brier、条件 pinball 越低越好；AUROC、AP 越高越好。q32 覆盖率为雨像元条件覆盖率。</p>
+    <div class="table-wrap"><table><thead><tr><th scope="col">模型 / 轮次</th><th scope="col">阶段</th><th scope="col">Train E0</th><th scope="col">Dev Brier</th><th scope="col">AUROC</th><th scope="col">AP</th><th scope="col">条件 pinball</th><th scope="col">q32 覆盖率</th></tr></thead><tbody id="metrics"></tbody></table></div>
+  </section>
+  <section class="section" aria-labelledby="paired-heading"><div class="section-title"><h2 id="paired-heading">同轮配对差值与分组</h2><label class="select-label" for="pair-epoch">轮次 <select id="pair-epoch"></select></label></div>
+    <p class="note" id="pair-note">B4 − B3；两模型同轮 Dev 收据齐备后显示。固定第 9 轮为正式终点，不按 Dev 选择 BEST。</p>
+    <div class="table-wrap"><table><thead><tr><th scope="col">Dev 分组</th><th scope="col">场景数</th><th scope="col">Δ Brier ↓</th><th scope="col">Δ AUROC ↑</th><th scope="col">Δ AP ↑</th><th scope="col">Δ pinball ↓</th><th scope="col">Δ q32 偏差</th></tr></thead><tbody id="paired"></tbody></table></div>
+    <div class="table-wrap strata"><table><thead><tr><th scope="col">降水强度 mm/h</th><th scope="col">雨像元数</th><th scope="col">B3 pinball</th><th scope="col">B4 pinball</th><th scope="col">Δ pinball ↓</th></tr></thead><tbody id="strata"></tbody></table></div>
+    <p class="note">q32 偏差为覆盖率减目标分位，距零越近越好。强雨分组使用既有“场景最大雨强 ≥20 mm/h”标签，场景数不等于独立暴雨事件数。高海拔分组尚未冻结，当前不可估计。</p>
+  </section>
+  <section class="section evidence" aria-labelledby="evidence-heading"><h2 id="evidence-heading">实验身份</h2><dl><div><dt>执行提交</dt><dd id="commit">—</dd></div><div><dt>共同人口 SHA</dt><dd id="population">—</dd></div><div><dt>公共初始化</dt><dd id="initial">—</dd></div><div><dt>Train 统计与冻结 B13</dt><dd id="statistics">—</dd></div><div><dt>最新 LAST 收据</dt><dd id="last">尚未封存</dd></div></dl></section>
+  <footer><p>本机只读监测 · Seed 2029 / E0 / MEE 13变量 × width 16 / batch 2，验证 batch 8</p><p>仅支持固定 f006 小人口的 retrospective 配对解释；不代表全天近实时或 2025 独立测试结论。</p><p id="sampling">尚未采集</p></footer>
+</main>
+</body></html>

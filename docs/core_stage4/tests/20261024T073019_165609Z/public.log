@@ -1,0 +1,20 @@
+test_io_error_keeps_original_exception_and_partial_receipt (test_recovery.MeterFailureTests.test_io_error_keeps_original_exception_and_partial_receipt) ... ok
+test_complete_wrong_content_remains_sha_conflict (test_recovery.RecoveryTests.test_complete_wrong_content_remains_sha_conflict) ... ERROR
+test_missing_explicit_caps_cannot_open_source_or_optimizer (test_recovery.RecoveryTests.test_missing_explicit_caps_cannot_open_source_or_optimizer) ... ok
+test_model_adamw_and_rng_restore_without_optimizer_step (test_recovery.RecoveryTests.test_model_adamw_and_rng_restore_without_optimizer_step) ... ok
+test_one_source_verification_is_metered_and_cannot_retry (test_recovery.RecoveryTests.test_one_source_verification_is_metered_and_cannot_retry) ... ok
+test_resume_offsets_and_uncertainty_never_reset (test_recovery.RecoveryTests.test_resume_offsets_and_uncertainty_never_reset) ... ok
+
+======================================================================
+ERROR: test_complete_wrong_content_remains_sha_conflict (test_recovery.RecoveryTests.test_complete_wrong_content_remains_sha_conflict)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[REPO]\tests\core_stage4\test_recovery.py", line 89, in test_complete_wrong_content_remains_sha_conflict
+    db,m,p=self.meter(b'expected')
+           ^^^^^^^^^^
+AttributeError: 'RecoveryTests' object has no attribute 'meter'
+
+----------------------------------------------------------------------
+Ran 6 tests in 3.152s
+
+FAILED (errors=1)
