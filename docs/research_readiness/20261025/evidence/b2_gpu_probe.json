@@ -1,0 +1,100 @@
+{
+  "status": "PASS_SYNTHETIC_ONLY_FORMAL_PEAK_NOT_VERIFIED",
+  "scope": "SYNTHETIC_ENGINEERING_ONLY",
+  "raw_weather_reads": 0,
+  "checkpoint_loads": 0,
+  "optimizer_constructions": 0,
+  "optimizer_updates": 0,
+  "python_version": "3.12.14 (main, Aug 14 2026, 15:40:22) [MSC v.1944 64 bit (AMD64)]",
+  "torch_version": "2.11.0+cu128",
+  "cuda_build": "12.8",
+  "admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 18223947776,
+    "workspace_free_bytes": 79984955392,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 20777521152
+  },
+  "initialization": {
+    "stem_rule": "LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED",
+    "decision_status": "PROPOSED_REQUIRES_RESEARCHER_APPROVAL",
+    "b3_reference_sha256": "a8a0731e309d6ddd1765a753707bf334e1f1fd7f66d7b24e581748ddfe7ddc2e",
+    "b2_initial_sha256": "2bfef21b586ed8425303e625affe006ae834b6f534ae833cef6f52dc1db6c8d6",
+    "compatible_state_sha256": "2fbf8aa25940576db8901459a3415394e8c5e860798eac9f2f556098081f2c9f",
+    "compatible_tensors": 72,
+    "differing_input_kernels": {
+      "backbone.enc0.conv1.weight": {
+        "B2": [
+          48,
+          7,
+          3,
+          3
+        ],
+        "B3": [
+          48,
+          42,
+          3,
+          3
+        ]
+      },
+      "backbone.enc0.skip.weight": {
+        "B2": [
+          48,
+          7,
+          1,
+          1
+        ],
+        "B3": [
+          48,
+          42,
+          1,
+          1
+        ]
+      }
+    },
+    "selected_slot": 5,
+    "offset_before_analysis_minutes": 10,
+    "new_formal_optimizer_updates": 0
+  },
+  "parameter_bytes": 17329160,
+  "modes": {
+    "train_batch2": {
+      "seconds_single_cold_pass": 1.1760053999969386,
+      "peak_allocated_bytes": 2947130880,
+      "peak_reserved_bytes": 3521118208,
+      "output_quantile_shape": [
+        2,
+        32,
+        100,
+        100
+      ],
+      "finite_loss": true
+    },
+    "validation_batch8": {
+      "seconds_single_cold_pass": 0.3270778000005521,
+      "peak_allocated_bytes": 3860796928,
+      "peak_reserved_bytes": 5117050880,
+      "output_quantile_shape": [
+        8,
+        32,
+        100,
+        100
+      ],
+      "finite_loss": true
+    }
+  },
+  "analytical_AdamW_m_v_additional_bytes": 34658320,
+  "limitations": [
+    "No AdamW step or allocated optimizer moments; their bytes are analytical.",
+    "One cold synthetic pass is not a wall-time benchmark and excludes source decoding, metrics SQLite and checkpoint writes.",
+    "Actual formal GPU peak and resource availability must be admitted again after researcher approval."
+  ]
+}

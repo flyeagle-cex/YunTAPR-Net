@@ -1,0 +1,220 @@
+test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh) ... ERROR
+test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation) ... ERROR
+test_missing_one_v7_verified_attempt_is_rejected (__main__.PredecessorInterface.test_missing_one_v7_verified_attempt_is_rejected) ... ERROR
+test_preparation_authority_still_refuses_seed2028 (__main__.PredecessorInterface.test_preparation_authority_still_refuses_seed2028) ... ERROR
+test_unchanged_completed_fresh_contract_still_works (__main__.PredecessorInterface.test_unchanged_completed_fresh_contract_still_works) ... ERROR
+
+======================================================================
+ERROR: test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\���˽�ˮԤ��\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 52, in setUp
+    (self.root / ".git").mkdir()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_a8hcc2sr\\.git'
+
+======================================================================
+ERROR: test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\���˽�ˮԤ��\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 52, in setUp
+    (self.root / ".git").mkdir()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_bcz4cv8u\\.git'
+
+======================================================================
+ERROR: test_missing_one_v7_verified_attempt_is_rejected (__main__.PredecessorInterface.test_missing_one_v7_verified_attempt_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\���˽�ˮԤ��\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 52, in setUp
+    (self.root / ".git").mkdir()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_i4yd_eqx\\.git'
+
+======================================================================
+ERROR: test_preparation_authority_still_refuses_seed2028 (__main__.PredecessorInterface.test_preparation_authority_still_refuses_seed2028)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\���˽�ˮԤ��\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 52, in setUp
+    (self.root / ".git").mkdir()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_yqr7vilo\\.git'
+
+======================================================================
+ERROR: test_unchanged_completed_fresh_contract_still_works (__main__.PredecessorInterface.test_unchanged_completed_fresh_contract_still_works)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\���˽�ˮԤ��\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 52, in setUp
+    (self.root / ".git").mkdir()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1311, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_3s8r62ed\\.git'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.013s
+
+FAILED (errors=5)
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_3s8r62ed'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_3s8r62ed'
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_yqr7vilo'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_yqr7vilo'
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_i4yd_eqx'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_i4yd_eqx'
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_bcz4cv8u'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_bcz4cv8u'
+Traceback (most recent call last):
+  File "<frozen os>", line 366, in walk
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_a8hcc2sr'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 666, in _exitfunc
+    f()
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\weakref.py", line 590, in __call__
+    return info.func(*info.args, **(info.kwargs or {}))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 939, in _cleanup
+    cls._rmtree(name, ignore_errors=ignore_errors)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 934, in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 781, in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 623, in _rmtree_unsafe
+    for dirpath, dirnames, filenames in results:
+                                        ^^^^^^^
+  File "<frozen os>", line 369, in walk
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py", line 621, in onerror
+    onexc(os.scandir, err.filename, err)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 906, in onexc
+    _resetperms(path)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 286, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\chenerxiao\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py", line 277, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] �ܾ����ʡ�: 'C:\\Users\\CHENER~1\\AppData\\Local\\Temp\\yuntapr_metadata_review_a8hcc2sr'

@@ -1,0 +1,686 @@
+{
+  "stage3": {
+    "status": "VERIFIED_COMPLETED_DATA_ONLY",
+    "base_commit": "c5ccd52afb9f7890278109c28a93cd0d13760c5d",
+    "execution_code_commit": "d8920ab78cf04834e6f3f95bf514779e59d8e41a",
+    "request_sha256": "32b1802a0058627f67ba46d8dffe9c24619404149bd5837618fe0236383d4481",
+    "joint_population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "actual_read_files": 15375,
+    "actual_read_bytes": 52683053145,
+    "approved_max_bytes": 52683603968,
+    "unused_bytes": 550823,
+    "file_states": {
+      "READ_COMPLETE": 15375
+    },
+    "job_states": {
+      "COMPLETE": 13453
+    },
+    "source_hash_evidence": {
+      "matched_prior_sha": 11535,
+      "first_observed_sha": 3840
+    },
+    "read_breakdown": {
+      "Train": {
+        "satellite": {
+          "files": 5754,
+          "bytes": 25882115518
+        },
+        "main": {
+          "files": 959,
+          "bytes": 272589016
+        },
+        "thermo": {
+          "files": 959,
+          "bytes": 89508928
+        }
+      },
+      "Development": {
+        "satellite": {
+          "files": 5777,
+          "bytes": 26061638264
+        },
+        "main": {
+          "files": 963,
+          "bytes": 287429347
+        },
+        "thermo": {
+          "files": 963,
+          "bytes": 89772072
+        }
+      }
+    },
+    "source_job_QC": {
+      "PASS": 13453
+    },
+    "source_job_QC_errors": {},
+    "budget": {
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "models": [
+        "B3",
+        "B4"
+      ],
+      "seed_count": 1,
+      "seed_value": null,
+      "loss_arm_candidate": "E0",
+      "epochs": 9,
+      "physical_batch": 2,
+      "validation_batch": 8,
+      "drop_last": false,
+      "gradient_accumulation": 1,
+      "train_scenes": 959,
+      "dev_scenes": 963,
+      "updates_per_epoch_per_model": 480,
+      "updates_per_model": 4320,
+      "paired_update_cap": 8640,
+      "validation_batches_per_epoch_per_model": 121,
+      "paired_validation_batches": 2178,
+      "replay_allowance": 0,
+      "inherited_allowance": 0,
+      "wall_time_and_VRAM": "Prior Stage2 shape checks are not runtime calibration for this actual population; no benchmark/optimizer executed",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "limitations": [
+      "Fixed f006 retrospective, historical release times unknown; no operational NRT claim.",
+      "Inherited scene-max >=20 mm/h is descriptive; not independent storm events or high-intensity pixel counts.",
+      "00/06/12/18 UTC analysis population only; cannot generalize to all hours or sealed 2025.",
+      "Most GFS original inventories lacked source hashes; hashes established at authorized first read.",
+      "Statistics and exact population do not approve science definitions, MEE13, optimizer or formal training."
+    ],
+    "formal_training_launched": false,
+    "optimizer_updates": 0,
+    "raw_2025_reads": 0,
+    "target_payload_reads": 0,
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    },
+    "populations": {
+      "Train": {
+        "population_sha256": "b4a6aa9650fc6d3a86c81b05ca202a349b559548e2ddef436d2c1f0defe811dd",
+        "candidate_scenes": 959,
+        "actual_scenes": 959,
+        "excluded_after_raw_QC": 0,
+        "exclusion_reasons": {},
+        "distribution": {
+          "scenes": 959,
+          "qc_evidence_missing": 0,
+          "valid_target_pixels": 3289370,
+          "rain_pixels_gt_0p1": 345725,
+          "scenes_with_rain": 936,
+          "scenes_max_ge_20_mm_h": 159,
+          "high_intensity_pixel_count": null,
+          "monthly": {
+            "202303": 122,
+            "202304": 118,
+            "202305": 119,
+            "202306": 117,
+            "202307": 121,
+            "202308": 122,
+            "202309": 117,
+            "202310": 123
+          },
+          "analysis_utc_hour": {
+            "00": 241,
+            "06": 243,
+            "12": 238,
+            "18": 237
+          }
+        },
+        "high_intensity_scene_retention": 0.10025220680958385,
+        "total_scene_retention": 0.09172644667623146,
+        "high_intensity_analysis_utc_hour": {
+          "00": 34,
+          "06": 30,
+          "12": 54,
+          "18": 41
+        },
+        "high_intensity_month": {
+          "202303": 6,
+          "202304": 7,
+          "202305": 11,
+          "202306": 30,
+          "202307": 29,
+          "202308": 51,
+          "202309": 16,
+          "202310": 9
+        },
+        "inherited_B1_scenes": 10455,
+        "inherited_B1_scenes_max_ge_20_mm_h": 1586
+      },
+      "Development": {
+        "population_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+        "candidate_scenes": 963,
+        "actual_scenes": 963,
+        "excluded_after_raw_QC": 0,
+        "exclusion_reasons": {},
+        "distribution": {
+          "scenes": 963,
+          "qc_evidence_missing": 0,
+          "valid_target_pixels": 3303090,
+          "rain_pixels_gt_0p1": 407820,
+          "scenes_with_rain": 952,
+          "scenes_max_ge_20_mm_h": 208,
+          "high_intensity_pixel_count": null,
+          "monthly": {
+            "202403": 120,
+            "202404": 116,
+            "202405": 124,
+            "202406": 117,
+            "202407": 124,
+            "202408": 121,
+            "202409": 117,
+            "202410": 124
+          },
+          "analysis_utc_hour": {
+            "00": 237,
+            "06": 242,
+            "12": 240,
+            "18": 244
+          }
+        },
+        "high_intensity_scene_retention": 0.10004810004810005,
+        "total_scene_retention": 0.09170555185220455,
+        "high_intensity_analysis_utc_hour": {
+          "00": 45,
+          "06": 30,
+          "12": 78,
+          "18": 55
+        },
+        "high_intensity_month": {
+          "202403": 7,
+          "202404": 10,
+          "202405": 37,
+          "202406": 52,
+          "202407": 37,
+          "202408": 30,
+          "202409": 24,
+          "202410": 11
+        },
+        "inherited_B1_scenes": 10501,
+        "inherited_B1_scenes_max_ge_20_mm_h": 2079
+      }
+    },
+    "statistics": {
+      "status": "COMPUTED_CANDIDATE_REQUIRES_SCIENTIFIC_FREEZE",
+      "new_spectral_variables": [
+        "B08",
+        "B09",
+        "B10",
+        "B11",
+        "B15",
+        "B16"
+      ],
+      "new_band_count_each": 1444259754,
+      "scene_slot_exposures": 5754,
+      "B13_refitted": false,
+      "environment_order": [
+        "pwat",
+        "cape",
+        "temperature850",
+        "temperature700",
+        "relative_humidity850",
+        "relative_humidity700",
+        "u850",
+        "v850",
+        "u700",
+        "v700",
+        "ps",
+        "temperature500",
+        "relative_humidity500"
+      ],
+      "environment_units": [
+        "kg m-2",
+        "J/kg",
+        "K",
+        "K",
+        "%",
+        "%",
+        "m/s",
+        "m/s",
+        "m/s",
+        "m/s",
+        "Pa",
+        "K",
+        "%"
+      ],
+      "environment_valid_fractions": {
+        "pwat": 1.0,
+        "cape": 1.0,
+        "temperature850": 0.5066914494264859,
+        "temperature700": 0.8817075078206466,
+        "relative_humidity850": 0.5066914494264859,
+        "relative_humidity700": 0.8817075078206466,
+        "u850": 0.5066914494264859,
+        "v850": 0.5066914494264859,
+        "u700": 0.8817075078206466,
+        "v700": 0.8817075078206466,
+        "ps": 1.0,
+        "temperature500": 1.0,
+        "relative_humidity500": 1.0
+      },
+      "fit_years": [
+        2023
+      ],
+      "dev_fit_contributions": 0,
+      "T500_RH500": "QC_AND_TRAIN_MOMENTS_READY_MODEL_ADAPTER_UNFROZEN",
+      "PWAT_positive_exposures": 9590000,
+      "PWAT_reference_rule": "Final 2023 Train valid positive scene-pixel exposure arithmetic mean; candidate only",
+      "full_scalers_and_PWAT_value": "PRIVATE_LOCAL_ONLY_COMPUTED_CANDIDATE_NOT_FROZEN"
+    },
+    "private_receipt_sha256": {
+      "authorization.json": "51112c3abf8aa183aa784a2bb1f153098175e4b197eee4c4dd312152620c28cc",
+      "pilot_receipt.json": "9c76c39b8dd43984439f9230170a95aeb6d963a174ee5be09f8e048d7625ad5e",
+      "populations.json": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "train_statistics.json": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "completion.json": "194edc840cf185398fb2b69859102ddb3f2590f9bc872a287d821f3acb6a2b8d",
+      "final_summary.json": "662bb8f4657ce68facc6b0fe6b862dc75c9880cd67d70462f52669b1e45d20b4",
+      "statistics.sqlite": "caa14bfae57cd3ded4594c921ad69e57a6f8cbf3b05bcfd11ea92324bc7a4b41"
+    },
+    "pilot": {
+      "status": "PASS",
+      "files": 15,
+      "bytes": 63306092,
+      "cache_reuse_no_reads": true,
+      "all_prior_hashes_matched": true,
+      "metadata_masks_checked": true
+    },
+    "reporting_correction": {
+      "field": "completion.baseline_descriptive_high_intensity",
+      "original_receipt_retained": true,
+      "original_values": {
+        "Train": 2023,
+        "Development": 2024
+      },
+      "correct_values": {
+        "Train": 1586,
+        "Development": 2079
+      },
+      "impact": "REPORT_FIELD_ONLY_POPULATIONS_AND_SCALERS_UNCHANGED",
+      "cached_only_regression": "PASS_NO_RAW_READS"
+    },
+    "tests": {
+      "inherited_85_rerun": false,
+      "new_unique_driver_checks": 3,
+      "final_status": "PASS",
+      "original_failed_assertion_log_retained": true,
+      "runs": [
+        "20261024T034227_632436Z",
+        "20261024T034301_174220Z",
+        "20261024T034840_582770Z"
+      ],
+      "note": "First run one PASS/one incorrect expected exception type; corrected case alone passed; separate synthetic hash-fault/no-retry case passed. No completed unchanged test rerun."
+    }
+  },
+  "seed2029_configuration": {
+    "seed": 2029,
+    "models": [
+      "B3",
+      "B4"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 8640,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9",
+    "BEST_selection": false
+  },
+  "seed2029_data_identity": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "historical_2025_catalogue_only": {
+    "FINAL_TEST_PROTOCOL_V1_1_FROZEN": true,
+    "FINAL_TEST_CATALOGUE_AUTHORIZED": true,
+    "REAL_2025_CANDIDATE_CATALOGUE": "FROZEN",
+    "REAL_2025_CANDIDATE_COUNT": 10272,
+    "REAL_2025_ELIGIBLE_COUNT": 10244,
+    "REAL_2025_REJECTED_COUNT": 28,
+    "CANDIDATE_CATALOGUE_SHA256": "b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d",
+    "ELIGIBLE_POPULATION_MANIFEST_SHA256": "53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e",
+    "CATALOGUE_FREEZE_RECORD_SHA256": "0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f",
+    "2025_CATALOGUE_QC_ACCESS": true,
+    "FINAL_TEST_2025_AUTHORIZED": false,
+    "FINAL_TEST_2025_EXECUTED": false,
+    "2025_FINAL_TEST_EXECUTED": false,
+    "2025_MODEL_INFERENCE_SCENES": 0,
+    "2025_FINAL_TEST_METRICS_COMPUTED": false,
+    "2025_TARGET_OUTCOME_SUMMARIES_EXPOSED": false,
+    "MODEL_PARAMETERS_UPDATED": false,
+    "OPTIMIZER_STEPS": 0,
+    "BACKWARD_CALLS": 0,
+    "FINAL_CHECKPOINT_LOADS": 0,
+    "MODEL_FORWARD_CALLS": 0,
+    "FINAL_identity_record_sha256_unchanged": true,
+    "FINAL_actual_file_sha256_recomputed": false,
+    "FINAL_actual_file_sha256_status": "NOT_RECOMPUTED_RESEARCHER_APPROVED_IDENTITY_RECORD_ONLY",
+    "frozen_FINAL_sha256_identity_value": "05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65",
+    "historical_artifacts_unchanged": 1771,
+    "source_guard_raw_open_events": 20964,
+    "metadata_manifest_open_events": 2,
+    "second_stage_researcher_authorization_required": true,
+    "completed_utc": "2026-10-03T02:19:36.127822+00:00",
+    "raw_access_telemetry": {
+      "2025_PIXELS_READ": 2676986256,
+      "2025_CATALOGUE_QC_ACCESS": true,
+      "raw_source_open_events": 20964,
+      "b13_pixel_values_read": 2574266256,
+      "imerg_pixel_values_read": 102720000,
+      "source_hash_bytes_read": 45912491227,
+      "source_copy_bytes_read": 45912491227,
+      "source_copy_bytes_written": 45912491227,
+      "copy_seconds": 144.56355669996628,
+      "read_seconds": 97.77970909999749,
+      "temporary_bytes_peak": 6112392,
+      "cleanup_success": true
+    }
+  },
+  "all_modalities_2025_completeness": "NOT_VERIFIED; old catalogue is not a B3/B4/MEE final-test population",
+  "inherited_dem_audit": {
+    "SRTM": {
+      "tile_count": 237,
+      "center_footprint_bounds": [
+        94.0,
+        18.0,
+        110.0,
+        33.0
+      ],
+      "raster_support_bounds": [
+        93.99986111111112,
+        17.99986111111111,
+        110.0001388888889,
+        33.00013888888889
+      ],
+      "nominal_gap_area_deg2": 3.000000000000057,
+      "nominal_duplicate_footprints": 0,
+      "nominal_overlap_area_deg2": 0.0,
+      "support_overlap_area_deg2": 0.12196273148242653,
+      "crs_mismatch": false,
+      "resolution_mismatch": false,
+      "total_pixels": 3073226637,
+      "valid_pixels": 3073226637,
+      "nodata_pixels": 0,
+      "nonfinite_pixels": 0,
+      "min_elevation": -468.0,
+      "max_elevation": 7439.0,
+      "yunnan_footprint_covers": true,
+      "yunnan_invalid_touched_cells": 0,
+      "yunnan_boundary_invalid_cells": 0,
+      "yunnan_coverage": "FULL",
+      "common_candidate_footprint_covers": true,
+      "common_candidate_invalid_cells": 0,
+      "common_candidate_coverage": "FULL"
+    },
+    "AWS_Skadi": {
+      "tile_count": 3,
+      "center_footprint_bounds": [
+        107.0,
+        18.0,
+        109.0,
+        21.0
+      ],
+      "raster_support_bounds": [
+        106.99986111111112,
+        17.99986111111111,
+        109.0001388888889,
+        21.000138888888888
+      ],
+      "nominal_gap_area_deg2": 3.0,
+      "nominal_duplicate_footprints": 0,
+      "nominal_overlap_area_deg2": 0.0,
+      "support_overlap_area_deg2": 0.0002779320987658096,
+      "crs_mismatch": false,
+      "resolution_mismatch": false,
+      "total_pixels": 38901603,
+      "valid_pixels": 38901603,
+      "nodata_pixels": 0,
+      "nonfinite_pixels": 0,
+      "min_elevation": -94.0,
+      "max_elevation": -18.0,
+      "yunnan_footprint_covers": false,
+      "yunnan_invalid_touched_cells": 0,
+      "yunnan_boundary_invalid_cells": 0,
+      "yunnan_coverage": "MISSING",
+      "common_candidate_footprint_covers": false,
+      "common_candidate_invalid_cells": 0,
+      "common_candidate_coverage": "PARTIAL"
+    }
+  },
+  "core_52_existing_checks": {
+    "scope": "NEW_INTERFACE_TESTS_NOT_FORMAL_SCIENTIFIC_EXPERIMENTS",
+    "tests_run": 52,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "success": true,
+    "python": "3.12.14",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.3",
+    "netCDF4": "1.7.4",
+    "torch_threads": 1,
+    "cuda_initialized": false,
+    "new_training_launched": false,
+    "new_formal_model_evaluation": false,
+    "raw_2025_reads": 0,
+    "dependency_warnings": [
+      "DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+    ],
+    "command": "python -B tools/core_innovation/run_checks.py"
+  },
+  "stage2_20_existing_delta_checks": {
+    "status": "PASS_ALL_LATEST_DELTA_OUTCOMES",
+    "unique_delta_tests": 20,
+    "inherited_52_rerun": false,
+    "outcomes": {
+      "test_stage2.DoteTests.test_native_gradient_aggregation_axis_reversal_and_complete_border": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T021938_310060Z/unittest.public.log"
+      },
+      "test_stage2.DoteTests.test_owlm_reversal_moisture_and_underground": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T021938_310060Z/unittest.public.log"
+      },
+      "test_stage2.FusionTests.test_active_gradients_after_identity_release_and_invalid_condition": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023351_731355Z/unittest.public.log"
+      },
+      "test_stage2.FusionTests.test_exact_active_parameter_match_identity_and_same_dynamic_input": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023351_731355Z/unittest.public.log"
+      },
+      "test_stage2.ModelTests.test_b3_b4_construct_reuse_heads_and_only_stem_differs_from_pilot": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T021938_310060Z/unittest.public.log"
+      },
+      "test_stage2.ModelTests.test_mee_pressure_masks_order_and_gradient": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T021938_310060Z/unittest.public.log"
+      },
+      "test_stage2.PopulationTests.test_exposure_fit_2023_only_complete_and_b13_preserved": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023804_047099Z/unittest.public.log"
+      },
+      "test_stage2.PopulationTests.test_joint_missing_and_channel_substitution_do_not_pass": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023804_047099Z/unittest.public.log"
+      },
+      "test_stage2.TemporalTests.test_same_valid_different_vintage_and_different_valid": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T024250_748036Z/unittest.public.log"
+      },
+      "test_stage2.TemporalTests.test_target_mismatch_future_actual_and_future_forecast_reject": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T024250_748036Z/unittest.public.log"
+      },
+      "test_data_budget.AdditionalTests.test_gfs_canonical_pwat_unit_connects_to_train_scaler": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T022917_371987Z/unittest.public.log"
+      },
+      "test_data_budget.AdditionalTests.test_b3_connected_order_and_frozen_b13_scaling": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T022917_371987Z/unittest.public.log"
+      },
+      "test_data_budget.AdditionalTests.test_b7_b8_share_projection_initialization_and_active_count": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T022917_371987Z/unittest.public.log"
+      },
+      "test_data_budget.AdditionalTests.test_independent_budget_rounding_no_inherited_allowance": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T022917_371987Z/unittest.public.log"
+      },
+      "test_data_budget.AdditionalTests.test_seven_band_actual_reader_packing_grid_missing_and_2025_guard": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T022917_371987Z/unittest.public.log"
+      },
+      "test_final_connections.FinalConnectionTests.test_canonical_pwat_owlm_payload_and_missing_moisture_mask": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023023_769057Z/unittest.public.log"
+      },
+      "test_final_connections.FinalConnectionTests.test_paired_b3_b4_common_initialization_is_identical": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023023_769057Z/unittest.public.log"
+      },
+      "test_precision.PrecisionTests.test_b7_b8_autocast_backbone_features_and_float_conditions": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023349_219157Z/unittest.public.log"
+      },
+      "test_population_scope.ScopeTests.test_forbidden_year_rejected_before_missing_evidence_join": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T023801_480244Z/unittest.public.log"
+      },
+      "test_temporal_inheritance.TemporalInheritanceTests.test_no_new_observation_start_relative_to_nominal_qc_threshold": {
+        "outcome": "ok",
+        "evidence": "docs/core_stage2/test_runs/20261024T024247_165376Z/unittest.public.log"
+      }
+    },
+    "all_runs_including_failures": [
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T021938_310060Z",
+        "tests": 10,
+        "failures": 1,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T021959_682367Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T022904_802896Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 1
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T022917_371987Z",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023023_769057Z",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023312_347383Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 1
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023349_219157Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023351_731355Z",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023747_053622Z",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023801_480244Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T023804_047099Z",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T024224_865648Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 1
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T024247_165376Z",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0
+      },
+      {
+        "folder": "docs/core_stage2/test_runs/20261024T024250_748036Z",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0
+      }
+    ],
+    "optimizer_updates": 0,
+    "raw_2025_reads": 0,
+    "source_sha256": {
+      "src/yuntapr/experimental/core_innovation/stage2/budget.py": "8b3fdc6d00d189a06aad3b38714ff7386192e3f8727af659fe07ae77054c4998",
+      "src/yuntapr/experimental/core_innovation/stage2/coupling.py": "463da4a7a115114395f81b8355a81d80c35416da194c9976840038dcf6c2629d",
+      "src/yuntapr/experimental/core_innovation/stage2/dote_v13.py": "eb715cba9a1d80a2738ba7ce274d97ccf9263cc1c2e6ef41498bfb96aa7f5949",
+      "src/yuntapr/experimental/core_innovation/stage2/environment.py": "2775664f70f42a479ef74f432f6550bf264b789c717e4783e0842fa25fe9ad21",
+      "src/yuntapr/experimental/core_innovation/stage2/fusion.py": "ed0206fc954b051c6e5d074352f4166ce7c917a56b241dd06410531bb2ad847d",
+      "src/yuntapr/experimental/core_innovation/stage2/models.py": "05fa8c3ca5ecc9ca0d9891b4cd7814edacff5f7bf0b9efe8c30336e57efde248",
+      "src/yuntapr/experimental/core_innovation/stage2/population.py": "c290733e31724872e6b293f6df0f9df5761fe966bc956a345674d6c0eb94dbac",
+      "src/yuntapr/experimental/core_innovation/stage2/__init__.py": "69044045a6eda8dd90173f4e5019a6b164371d456f49a59299fde71cc75b25f4",
+      "tests/core_stage2/test_data_budget.py": "95f247a4c3ee9d858b5569acf1a83ecd96b3d2294192c2aad6e439de1904d9d3",
+      "tests/core_stage2/test_final_connections.py": "45a64904aced770745bb8ce9448b42008f8bb1ce8485cfd44f7666241ea37a84",
+      "tests/core_stage2/test_population_scope.py": "5201d55a36a2a9c917a73a37539532129757e90d16c8372d02dbabc686d0cf6d",
+      "tests/core_stage2/test_precision.py": "1dbe90b602d1bc5dbda4b1e8b166a11be8f3cabfb1777c8bd1d191573312aaa2",
+      "tests/core_stage2/test_stage2.py": "789f5a7eb4d76740ca75ad15fb334f2751ad3138d796e6158adc911ecb9058cd",
+      "tests/core_stage2/test_temporal_inheritance.py": "c032d90cdd3eb20590d6e81340ea18ae572106c53382b0ee2035d56f17e3d808"
+    },
+    "limitation": "This index inherits unchanged passing checks; it is not a newly rerun full suite. Synthetic engineering correctness does not establish meteorological skill."
+  },
+  "checks_rerun": false,
+  "DOTE_DTFM_formal_training": false,
+  "independent_physical_validation": "NOT_AVAILABLE"
+}

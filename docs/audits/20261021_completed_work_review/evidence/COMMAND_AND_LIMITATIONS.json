@@ -1,0 +1,33 @@
+{
+  "python": "C:\\Users\\chenerxiao\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "executed_targeted_test": "-B tests/completed_work_review/test_predecessor_interface.py",
+  "test_working_directory": "C:\\Users\\chenerxiao\\Documents\\极端降水预测\\YunTAPR-Net-completed-review-20261021",
+  "formal_environment_used": false,
+  "test_method": "AST-extracted real guard function; synthetic SQLite in isolated tmp; no training imports",
+  "inherited_checks_not_repeated": [
+    "raw decoding/QC",
+    "GPU forward/backward",
+    "full 2000-draw ranking intervals",
+    "checkpoint deserialization",
+    "backup payload SHA sweep"
+  ],
+  "isolation": {
+    "method": "independent git init + copied objects/shallow marker, no hardlinks or alternates",
+    "initial_clone_failure": "shallow local transport sh signal pipe Win32 error5",
+    "checkout_repair": "core.longpaths=true in isolated repository",
+    "shared_git_worktree_registration": false
+  },
+  "environment_test_attempts": [
+    "system temp ACL rejected fixture setup",
+    "fixture SQLite connection cleanup corrected"
+  ],
+  "remote_compare": {
+    "service": "GitHub connector",
+    "base": "main",
+    "head": "96a2a61eeb9b0c4a8513133133c75bfdf4b58726",
+    "status": "404_NOT_VERIFIED"
+  },
+  "live_read_caveat": "Initial lightweight Python reads used ordinary file opens; final incident observation used Windows shared READ/WRITE/DELETE handles. No zero-resource-interference guarantee.",
+  "reproduction_boundary": "Do not rerun the full metadata collector during formal training without separate resource headroom assessment; it is not a live monitor.",
+  "failures_preserved": true
+}

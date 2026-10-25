@@ -1,0 +1,32 @@
+\documentclass[UTF8,10pt]{ctexart}
+\usepackage[a4paper,margin=1.7cm]{geometry}
+\usepackage{booktabs,tabularx,amsmath}
+\setCJKmainfont{Microsoft YaHei}
+\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\begin{document}
+\begin{center}{\Large YunTAPR-Net Stage 4：B3/B4 实施准备}\\[3pt]2026年10月24日\end{center}
+\textbf{结论：13变量B4与配对执行器已实现，真实小batch及零更新dry-run通过；停在正式启动前。}基于0cf938f，独立分支\texttt{dev/stage4-b3-b4-ready-20261024}。正式seed尚未指定；本轮专用dry-run seed为40261024。
+
+\begin{tabularx}{\textwidth}{Xrr}
+\toprule 实测项目 & B3 & B4（13变量MEE）\\\midrule
+参数量 & 4,349,090 & 4,355,986\\
+真实Train输入 & \multicolumn{2}{c}{[2,42,501,501]；GFS为[2,13,100,100]}\\
+真实Dev输入 & \multicolumn{2}{c}{[8,42,501,501]；GFS为[8,13,100,100]}\\
+Train反向显存分配峰值（GiB） & 2.812 & 2.812\\
+Dev batch8显存分配峰值（GiB） & 3.601 & 3.601\\
+Dev batch8缓存保留峰值（GiB） & 4.736 & 4.756\\
+实际优化器构造/更新次数 & 0 / 0 & 0 / 0\\\bottomrule
+\end{tabularx}
+
+\textbf{模型与数据。}MEE宽度16，26输入平面为13变量加各自有效掩膜，保留目标SP04网格零初始化残差融合。变量沿Stage3统计顺序绑定：原11变量后追加T500/RH500；均只使用已生产的2023 Train统计，B13冻结统计未改变。850/700地下层保持中性值和独立mask，500 hPa单独有效不会代替缺失低层风场。B3参数与公共初始化不受扩展影响；B4较11变量版本只增加576参数。
+
+真实读取仅为预先按日期固定的2个Train、8个Dev场景：60卫星、20 GFS、3个IMERG日文件及1个冻结静态mask，共\textbf{84文件、294,985,188字节}，本轮每源只读一次；未重做全量QC、未拟合统计。源SHA、时刻、空间映射、标签索引和监督掩膜均绑定既有证据。两模型共用同一批张量和公共初始化，初始预测逐位一致；前向、E0损失和反向均有限，参数/缓冲区未被更新。
+
+\textbf{执行器与预算。}复用V2双头、E0、AdamW分组、梯度裁剪与既定评价。绑定Train959、Dev963及最终共同人口SHA；两模型使用相同9轮排列和标签。每轮$\lceil959/2\rceil=480$次，各9轮共4,320次，配对硬上限\textbf{8,640次新更新}；验证每轮121批、配对共2,178批。学习率采用480步预热及24,000步原50轮轨迹前缀，第4,320步约$9.36303\times10^{-5}$，不复用5228常量。更新前先持久登记意图；失败后停止，无自动重试、恢复或额外额度。LAST与验证收据只写新实验目录。
+
+\textbf{评价与解释边界。}沿用Brier、精确tie分组AUROC/AP、FP64条件pinball/分位数覆盖和既有降水分层，加入00/06/12/18 UTC、既存最大雨强$\ge20$ mm/h场景及配对差值。高海拔接口支持显式米制目标DEM与分层，但当前只有合成验证，真实网格和阈值尚未冻结。未训练模型的dry-run指标仅留本地，不是科研性能证据。固定f006只覆盖上述四个时刻，历史发布时间仍未知，不能推断全天业务NRT或2025测试性能。
+
+\textbf{检查与剩余决定。}9项新增定向检查最终通过；首次8项通过，后续只跑2项受影响检查及1项新增seed启动检查。原85项和不变GPU计算未重跑。首次导入失败来自旧引擎seed门禁，已避免无关导入，旧代码未改；后续只用缓存核验元数据，零新增原始读取。仍需研究者确认：正式新seed、13变量MEE/scaler候选、f006覆盖偏斜、E0/9轮及8,640额度、正式启动与完整人口读取范围，高海拔网格/阈值。当前资源通过小batch验收；未构造AdamW、未实测其更新峰值、未跑完整9轮，不能保证长期稳定性或精确墙钟耗时。
+
+证据见\texttt{../evidence.json}及定向测试日志；完整batch、来源路径和未训练诊断结果留本地。无正式训练，无2025读取，无DOTE/DTFM公式变更，无main合并。
+\end{document}

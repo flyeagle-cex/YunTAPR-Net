@@ -1,0 +1,15 @@
+{
+  "scope": "New branch diff versus verified remote main; pattern scan is not proof of absence of every possible secret",
+  "checked_files": 227,
+  "checked_bytes": 65236020,
+  "copied_source_and_index_blob_hashes_verified": 143,
+  "credential_pattern_hits": [],
+  "forbidden_payload_paths": [],
+  "files_containing_original_machine_paths": 8,
+  "original_bytes_preserved": true,
+  "whitespace_check": {
+    "command": "git -c core.whitespace=cr-at-eol diff --cached --check",
+    "status": "PASS",
+    "reason": "Original CRLF evidence is byte-preserved; carriage-return line endings are treated as line endings, not rewritten."
+  }
+}

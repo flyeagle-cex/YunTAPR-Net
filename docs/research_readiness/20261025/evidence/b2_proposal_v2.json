@@ -1,0 +1,265 @@
+{
+  "status": "PREPARED_PENDING_RESEARCHER_REVIEW",
+  "formal_training_status": "NOT_STARTED",
+  "as_of": "2026-10-25T17:39:11+08:00",
+  "base_commit": "0ccb3e26e2d50494aba07788fa94dd40ec89b4aa",
+  "reference_execution_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35",
+  "public_main_commit": "6c505d0ec63ed39f679720b82a65f601139dcd35",
+  "config": {
+    "model": "B2",
+    "seed": 2029,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "optimizer": "AdamW",
+    "lead_hours": 6,
+    "mode": "retrospective",
+    "input_channels": 7,
+    "input_offset_before_analysis_minutes": 10,
+    "stem_rule": "LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED",
+    "initialization_status": "PROPOSED_NOT_FROZEN",
+    "normalization": "REUSE_B3_TRAIN_ONLY_SCALERS_NO_REFIT",
+    "lr_warmup_updates": 480,
+    "lr_original_horizon_updates": 24000,
+    "lr_first": 2.0833333333333333e-07,
+    "lr_last": 9.363027585410778e-05
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "split_and_observation_timing": {
+    "Train": {
+      "scenes": 959,
+      "checked_observation_exposures": 5754,
+      "year": 2023
+    },
+    "Development": {
+      "scenes": 963,
+      "checked_observation_exposures": 5778,
+      "year": 2024
+    }
+  },
+  "spectral_scalers": {
+    "B08": {
+      "mean": 235.00007574389502,
+      "std": 7.791292191669376,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B09": {
+      "mean": 243.7146571395821,
+      "std": 9.73762464901543,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B10": {
+      "mean": 250.19903528431246,
+      "std": 11.24291445275265,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B11": {
+      "mean": 269.61579808651504,
+      "std": 18.926010968470653,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B15": {
+      "mean": 268.2304756202996,
+      "std": 19.41106602939604,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B16": {
+      "mean": 256.78762394092297,
+      "std": 14.568208389887563,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+    },
+    "B13": {
+      "mean": 271.60515414265217,
+      "std": 19.93959597783802,
+      "fit_years": [
+        2023
+      ],
+      "fit_role": "Train",
+      "population_id": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+    }
+  },
+  "input_dimension_difference": {
+    "stem_rule": "LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED",
+    "decision_status": "PROPOSED_REQUIRES_RESEARCHER_APPROVAL",
+    "b3_reference_sha256": "a8a0731e309d6ddd1765a753707bf334e1f1fd7f66d7b24e581748ddfe7ddc2e",
+    "b2_initial_sha256": "2bfef21b586ed8425303e625affe006ae834b6f534ae833cef6f52dc1db6c8d6",
+    "compatible_state_sha256": "2fbf8aa25940576db8901459a3415394e8c5e860798eac9f2f556098081f2c9f",
+    "compatible_tensors": 72,
+    "differing_input_kernels": {
+      "backbone.enc0.conv1.weight": {
+        "B2": [
+          48,
+          7,
+          3,
+          3
+        ],
+        "B3": [
+          48,
+          42,
+          3,
+          3
+        ]
+      },
+      "backbone.enc0.skip.weight": {
+        "B2": [
+          48,
+          7,
+          1,
+          1
+        ],
+        "B3": [
+          48,
+          42,
+          1,
+          1
+        ]
+      }
+    },
+    "selected_slot": 5,
+    "offset_before_analysis_minutes": 10,
+    "new_formal_optimizer_updates": 0
+  },
+  "train_orders_9_epochs_match_historical_B3": true,
+  "b2_parameter_count": 4332290,
+  "dropout_modules": 0,
+  "budget": {
+    "status": "PROPOSED_NOT_AUTHORIZED",
+    "optimizer_update_cap": 4320,
+    "replay_allowance": 0,
+    "train_passes": 9,
+    "development_passes": 9,
+    "logical_source_read_instances": 142812,
+    "logical_source_bytes": 477571641012,
+    "cached_IMERG_limit_bytes": 536870912,
+    "scopes": {
+      "Train": {
+        "file_count": 7918,
+        "bytes_per_pass": 26424262556,
+        "source_manifest_sha256": "f0c0a9188e771bfbba7c1e8a8ffdbfabd2d4e927bd1428d353b290be236a13dc",
+        "by_kind": {
+          "satellite": {
+            "files": 5754,
+            "bytes": 25882115518
+          },
+          "GFS_main": {
+            "files": 959,
+            "bytes": 272589016
+          },
+          "GFS_thermo": {
+            "files": 959,
+            "bytes": 89508928
+          },
+          "IMERG": {
+            "files": 245,
+            "bytes": 180028178
+          },
+          "static_mask": {
+            "files": 1,
+            "bytes": 20916
+          }
+        }
+      },
+      "Development": {
+        "file_count": 7950,
+        "bytes_per_pass": 26639253112,
+        "source_manifest_sha256": "65e8b3754775ece7bbf60db0ca2b5320638c193fe20a9f21ee49828272514060",
+        "by_kind": {
+          "satellite": {
+            "files": 5778,
+            "bytes": 26067197976
+          },
+          "GFS_main": {
+            "files": 963,
+            "bytes": 287429347
+          },
+          "GFS_thermo": {
+            "files": 963,
+            "bytes": 89772072
+          },
+          "IMERG": {
+            "files": 245,
+            "bytes": 194832801
+          },
+          "static_mask": {
+            "files": 1,
+            "bytes": 20916
+          }
+        }
+      }
+    },
+    "checkpoint_tensor_bytes_lower_bound_per_epoch": 51987480,
+    "nine_LAST_tensor_bytes_lower_bound": 467887320,
+    "checkpoint_python_rng_receipts_and_SQLite_overhead": "NOT_INCLUDED_IN_LOWER_BOUND",
+    "metric_SQLite_hard_ceiling_per_group": 268435456,
+    "metric_groups_per_epoch": 6,
+    "nine_epoch_metric_SQLite_sum_ceiling": 14495514624,
+    "notes": [
+      "Conservative inherited six-frame loader includes GFS for B2 without feeding it to the model.",
+      "No source verification pass, retry, replay, normalization refit or extra endpoint inference is included.",
+      "Byte cap describes source payload delivered to Python, not physical disk sectors or monetary cost."
+    ]
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/__init__.py": "0b6d1ffcb1c4d6c9d0247341971b90fa0cc43c13c9d06ee34d27dc83a29d98bb",
+    "src/yuntapr/experimental/research_readiness/b2.py": "67c5d51ba453b5c7aa3a757d989624053002e755f240d5b078b905e7ba6a2ee3",
+    "src/yuntapr/experimental/research_readiness/b2_runner.py": "8721468a39c4e4cfc1f3d45043184b0ff976d14aad52ba326fac8f357a30a6f0",
+    "src/yuntapr/experimental/research_readiness/static_terrain.py": "0ae68604b95aa3b6e2440193f94fca74a3bbfb764fa01a378763615f2d334727",
+    "src/yuntapr/experimental/research_readiness/tail_diagnostics.py": "035d120c089cc0f6a74add956eaa75586e4ae6940984fb8040a2706e548eb85f",
+    "tools/research_readiness/audit_state.py": "0fc9d7b5113fefda6e3dd9527d4ebb64e071a54ad1c0bfab21d1fb88d6f08d4a",
+    "tools/research_readiness/build_reports.py": "babdae2430bcc5bb4dfa426851b2409fd767c76fac9b14339f493e56a2ea4fcb",
+    "tools/research_readiness/prepare_b2.py": "b87d176f5a79bb437c77269545ea6206bc7f323524290c9f2eb25f9928b0afe7",
+    "tools/research_readiness/probe_gpu.py": "37c223b0ffd5e965f29556a547bc74e1a97f9dba58c003b61b20bb03e88fb226",
+    "tools/research_readiness/run_checks.py": "3de298531f4b7415b10af6fa25f188b115065590b2675394cc6ff39fb5a21306",
+    "tools/research_readiness/train_b2.py": "15d5ad71d3e60e183108b0a54976b9cc73d7f331a299455d29bbae0183d98847",
+    "tools/research_readiness/verify_delivery.py": "e9198fcc25f09af416c240161e489f3fc096f9457fff10b588e1737e5c19f65b"
+  },
+  "formal_authorization": false,
+  "raw_weather_reads": 0,
+  "checkpoint_loads": 0,
+  "optimizer_updates": 0,
+  "remaining_runtime_checks": [
+    "Actual source availability/SHA under approved read budget",
+    "Formal training/evaluation end-to-end not executed",
+    "GPU resource admission and observed runtime forecast required at execution"
+  ],
+  "proposal_sha256": "7bcdbe6fc215622589995a13daa5473047f1f671755484301a6c1db2cfcfa5e7"
+}

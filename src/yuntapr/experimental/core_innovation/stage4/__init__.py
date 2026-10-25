@@ -1,0 +1,7 @@
+"""B3/B4 implementation candidate. No scientific freeze or launch authorization."""
+POPULATION_SHA='2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8'
+DRY_SEED=40261024
+TRAIN_N,DEV_N=959,963
+EPOCHS,BATCH,VAL_BATCH=9,2,8
+STEPS=(TRAIN_N+BATCH-1)//BATCH
+PAIR_CAP=2*EPOCHS*STEPS

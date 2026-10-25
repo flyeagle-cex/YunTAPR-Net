@@ -1,0 +1,5392 @@
+{
+  "status": "VERIFIED_COMPLETE_TRAIN_AND_DEV_EVALUATION",
+  "verified_at": "2026-10-25T22:58:17+08:00",
+  "run_id": "B2_s2029_formal_20261025_v1",
+  "experiment_id": "B2__E0__s2029__f006",
+  "executed_commit": "a35302186b4b5d3d7ec735885a8d93762e6d3567",
+  "science_freeze_commit": "52060ce5dd349a59907db7c70f6996b9a6ebc361",
+  "config": {
+    "model": "B2",
+    "seed": 2029,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "optimizer": "AdamW",
+    "lead_hours": 6,
+    "mode": "retrospective",
+    "input_channels": 7,
+    "input_offset_before_analysis_minutes": 10,
+    "stem_rule": "LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED",
+    "initialization_status": "FROZEN_BY_RESEARCHER_20261025",
+    "normalization": "REUSE_B3_TRAIN_ONLY_SCALERS_NO_REFIT",
+    "lr_warmup_updates": 480,
+    "lr_original_horizon_updates": 24000,
+    "lr_first": 2.0833333333333333e-07,
+    "lr_last": 9.363027585410778e-05,
+    "single_time_status": "FROZEN_T_MINUS_10_NO_FALLBACK"
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "B13_scaler": {
+    "mean": 271.60515414265217,
+    "std": 19.93959597783802,
+    "fit_years": [
+      2023
+    ],
+    "fit_role": "Train",
+    "population_id": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31"
+  },
+  "authorization": {
+    "decision_id": "RESEARCHER_FINAL_B2_START_20261025_A353021",
+    "approved_at": "2026-10-25T18:33:01+08:00",
+    "optimizer_update_cap": 4320,
+    "source_read_byte_cap": 477571641012,
+    "max_wall_seconds": 21600,
+    "replay_allowance": 0
+  },
+  "completion": {
+    "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+    "model": "B2",
+    "seed": 2029,
+    "updates": 4320,
+    "epochs": 9,
+    "scientific_acceptance": "NOT_IMPLIED_BY_RUN_COMPLETION",
+    "proposal_sha256": "0e002ad10dd3b6e6b6b0f354394cdba3eae11e3ec4d92829a5d4f594126b6bf3"
+  },
+  "ledger": {
+    "sha256": "6c542815c7f5a4e496ca0539d2d25951ab94338a3766d011ca030f1df9718e7c",
+    "rows": [
+      [
+        "RETURNED",
+        4320,
+        1,
+        4320
+      ]
+    ],
+    "read_only_unchanged": true
+  },
+  "initialization": {
+    "stem_rule": "LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED",
+    "decision_status": "FROZEN_BY_RESEARCHER_20261025",
+    "b3_reference_sha256": "a8a0731e309d6ddd1765a753707bf334e1f1fd7f66d7b24e581748ddfe7ddc2e",
+    "b2_initial_sha256": "2bfef21b586ed8425303e625affe006ae834b6f534ae833cef6f52dc1db6c8d6",
+    "compatible_state_sha256": "2fbf8aa25940576db8901459a3415394e8c5e860798eac9f2f556098081f2c9f",
+    "compatible_tensors": 72,
+    "differing_input_kernels": {
+      "backbone.enc0.conv1.weight": {
+        "B2": [
+          48,
+          7,
+          3,
+          3
+        ],
+        "B3": [
+          48,
+          42,
+          3,
+          3
+        ]
+      },
+      "backbone.enc0.skip.weight": {
+        "B2": [
+          48,
+          7,
+          1,
+          1
+        ],
+        "B3": [
+          48,
+          42,
+          1,
+          1
+        ]
+      }
+    },
+    "selected_slot": 5,
+    "offset_before_analysis_minutes": 10,
+    "new_formal_optimizer_updates": 0
+  },
+  "train_orders_match_B3_all_nine_epochs": true,
+  "actual_io": {
+    "opened_files": 142812,
+    "delivered_bytes": 477571641012,
+    "reserved_bytes": 477571641012,
+    "passes": 18
+  },
+  "checkpoint_metadata": [
+    {
+      "model": "B2",
+      "epoch": 1,
+      "updates": 480,
+      "checkpoint_sha256": "299c170484e4f0c6466fc895fc9670c09064d473769eb4e5e0660338f854d5a9",
+      "validation_receipt_sha256": "73d2a7513a4fb7ddb15fc8252db0b23a3ce6e6b0d3b9548c8a0d89a18341076f",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52617963,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 2,
+      "updates": 960,
+      "checkpoint_sha256": "d9548656d7a802ea5e6c435cf7dc1c49c4d2597445d5b5eb7bf4cdd2910e3a00",
+      "validation_receipt_sha256": "59a5cde875a1a14fa4e784a317189586a27e00e095e87f6868fa7c97223165c2",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52620971,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 3,
+      "updates": 1440,
+      "checkpoint_sha256": "616a6b5cdf8fb72155deb306bbdd731b05edf82618adc99202f7937f989ff102",
+      "validation_receipt_sha256": "d1378b0fdc7e0834ffc95843794023dc0e5d7a1c65d1d874be12fd79e52c6cbe",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52625259,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 4,
+      "updates": 1920,
+      "checkpoint_sha256": "831b6733668ccdc8e711e5db77453958346bc00f34395ea696b9147479cfc689",
+      "validation_receipt_sha256": "e2211e4a0b509c5865bd8c53943f5666212f351ed249a53292c0a431ba70b52e",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52621803,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 5,
+      "updates": 2400,
+      "checkpoint_sha256": "a825cec1e34fa6fc69965d81e99ae9c9d6c9a55dab4bedac2405057cff4e7178",
+      "validation_receipt_sha256": "8dc50a18ed913acb96bc0baab98fac2218b3771408a1f1dc8ef99a7d15123645",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52622187,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 6,
+      "updates": 2880,
+      "checkpoint_sha256": "55a27c058018f9248ba8cf25323176522abcc7748399d8349b5d8553fb7635a0",
+      "validation_receipt_sha256": "ce8b5abab03c956e1b01761af3223c78e4ae5ce1ef9ac8ffbe5ff03987836169",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52621227,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 7,
+      "updates": 3360,
+      "checkpoint_sha256": "c88c5741d5dddbfe995a0c7be2d0b443f9923de6f9389be41eceb00d05445f7e",
+      "validation_receipt_sha256": "449a1d7818b3def7f79f403da79b855c1e68896b31cfed687c5d00aada5e97b1",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52619691,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 8,
+      "updates": 3840,
+      "checkpoint_sha256": "058991f555c36056e756fd2da401fb4e6e263c9ae0b73489e46dc25c4c955114",
+      "validation_receipt_sha256": "5632a0b50e5466cdc2e7227ae51c4457f5e9ba60534ef5a4468fe4273f375d2a",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52623147,
+      "sha_check": "RECEIPT_BINDING_AND_FILE_PRESENCE"
+    },
+    {
+      "model": "B2",
+      "epoch": 9,
+      "updates": 4320,
+      "checkpoint_sha256": "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+      "validation_receipt_sha256": "8a88168ca213cfe499ef90fd08020d045bd0cea1abeebc67b5e3f312653138a1",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "bytes": 52620843,
+      "sha_check": "FILE_REHASHED"
+    }
+  ],
+  "started_approval_at": "2026-10-25T18:33:01+08:00",
+  "completion_file_mtime": "2026-10-25T22:00:27.152460+08:00",
+  "elapsed_wall_clock_proxy_seconds": 12446.15246,
+  "wall_clock_definition": "Approval timestamp to original completion-file mtime; not GPU billing or exact CUDA compute time",
+  "epochs": [
+    {
+      "epoch": 1,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 480,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 114832.74543237686,
+        "s_qr_unweighted": 50935.88756749197,
+        "weighted_mean": 0.05039525289033123,
+        "loss_arm": "E0",
+        "train_order_sha256": "3d2b2b090a090855540404e4fa2e986b5a65eb6848da687bfd8e4a15d795930f"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 124291.29273769286,
+        "s_qr": 56838.04761727038,
+        "brier_sum": 325636.04123336077,
+        "q32_log_min": 0.4948444735465207,
+        "q32_log_max": 5.236624829974332,
+        "span_log_max": 5.023662179043317,
+        "core_fp64": 0.05483633214806839,
+        "conditional_pinball": 0.13937042719158055,
+        "brier": 0.09858527658445902,
+        "auroc": 0.8673232591190124,
+        "average_precision": 0.4916372027491421,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          13928,
+          28410,
+          42177,
+          59803,
+          81551,
+          99936,
+          118914,
+          132676,
+          143632,
+          157014,
+          166887,
+          178231,
+          188913,
+          198449,
+          213483,
+          220923,
+          229002,
+          236391,
+          248688,
+          254855,
+          265469,
+          272220,
+          278991,
+          289543,
+          297198,
+          307166,
+          316308,
+          321775,
+          326617,
+          331287,
+          338524,
+          341900
+        ],
+        "coverage": [
+          0.03415232210288853,
+          0.06966308665587759,
+          0.1034206267470943,
+          0.1466406748075131,
+          0.19996812319160415,
+          0.24504928644990437,
+          0.2915845225834927,
+          0.32532980236378795,
+          0.3521945956549458,
+          0.3850080918052082,
+          0.4092173017507724,
+          0.4370334951694375,
+          0.46322642342209797,
+          0.4866092884115541,
+          0.5234735912902752,
+          0.5417169339414447,
+          0.5615271443283801,
+          0.5796454318081506,
+          0.6097984404884508,
+          0.6249203079790103,
+          0.6509464960031386,
+          0.6675003678093276,
+          0.6841032808592026,
+          0.7099774410279045,
+          0.728747977048698,
+          0.7531901329017704,
+          0.7756068853906135,
+          0.7890123093521652,
+          0.8008851944485312,
+          0.8123363248491982,
+          0.8300818988769555,
+          0.8383600608111421
+        ],
+        "q32_signed_bias": -0.14601493918885788,
+        "q32_absolute_error": 0.14601493918885788,
+        "reliability": [
+          {
+            "n": 45923,
+            "rain": 325,
+            "probability_sum": 4315.133056640625,
+            "mean_probability": 0.09396452881215567,
+            "frequency": 0.00707706378067635
+          },
+          {
+            "n": 1513515,
+            "rain": 25583,
+            "probability_sum": 229456.86767578125,
+            "mean_probability": 0.15160528153059682,
+            "frequency": 0.016903036970231548
+          },
+          {
+            "n": 925255,
+            "rain": 72270,
+            "probability_sum": 223417.5673828125,
+            "mean_probability": 0.2414659389928317,
+            "frequency": 0.07810819719969089
+          },
+          {
+            "n": 534686,
+            "rain": 148511,
+            "probability_sum": 186377.572265625,
+            "mean_probability": 0.34857387750123436,
+            "frequency": 0.2777536722487591
+          },
+          {
+            "n": 279238,
+            "rain": 157897,
+            "probability_sum": 121316.55859375,
+            "mean_probability": 0.43445576387794643,
+            "frequency": 0.5654567071816873
+          },
+          {
+            "n": 4471,
+            "rain": 3232,
+            "probability_sum": 2287.84375,
+            "mean_probability": 0.5117073920823082,
+            "frequency": 0.722880787295907
+          },
+          {
+            "n": 2,
+            "rain": 2,
+            "probability_sum": 1.2109375,
+            "mean_probability": 0.60546875,
+            "frequency": 1.0
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 21490.928926010136,
+            "conditional_pinball": 0.08719384649032606
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 23432.770193857963,
+            "conditional_pinball": 0.17269851122339785
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 8358.033825601506,
+            "conditional_pinball": 0.41489371186902485
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2925.436551368984,
+            "conditional_pinball": 0.6095929467324409
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 476.30200435058345,
+            "conditional_pinball": 0.844507099912382
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 146.6386423727176,
+            "conditional_pinball": 0.9975417848484192
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 7.9374737084707645,
+            "conditional_pinball": 1.3229122847451273
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 31999,
+            "rain": 24732,
+            "dry": 7267,
+            "scenes": 448,
+            "unique_grid": 3428
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 110,
+            "rain": 103,
+            "dry": 7,
+            "scenes": 12,
+            "unique_grid": 109
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 5,
+            "rain": 5,
+            "dry": 0,
+            "scenes": 1,
+            "unique_grid": 5
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 1,
+        "updates": 480,
+        "checkpoint_sha256": "299c170484e4f0c6466fc895fc9670c09064d473769eb4e5e0660338f854d5a9",
+        "validation_receipt_sha256": "73d2a7513a4fb7ddb15fc8252db0b23a3ce6e6b0d3b9548c8a0d89a18341076f",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 2,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 960,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 100596.29559326172,
+        "s_qr_unweighted": 47887.40619529822,
+        "weighted_mean": 0.04514046817127898,
+        "loss_arm": "E0",
+        "train_order_sha256": "1e68765b705617a21e0640b078453810f594294978b9840b39317b9791a113c7"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 115022.32911884875,
+        "s_qr": 55974.20410176864,
+        "brier_sum": 328873.5286322832,
+        "q32_log_min": 0.37819005029118014,
+        "q32_log_max": 4.160950527655068,
+        "span_log_max": 4.0453583538767255,
+        "core_fp64": 0.05176865699106515,
+        "conditional_pinball": 0.13725222917406857,
+        "brier": 0.09956541560547343,
+        "auroc": 0.8726973589770138,
+        "average_precision": 0.5162889267550845,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          11164,
+          25713,
+          39807,
+          58692,
+          79832,
+          97701,
+          118331,
+          132632,
+          143137,
+          154833,
+          165005,
+          176296,
+          187477,
+          198193,
+          218295,
+          226685,
+          236512,
+          244749,
+          258049,
+          266824,
+          280032,
+          288315,
+          296601,
+          308731,
+          317774,
+          328592,
+          339558,
+          347099,
+          352108,
+          356147,
+          363792,
+          366429
+        ],
+        "coverage": [
+          0.02737482222549164,
+          0.0630498749448286,
+          0.09760923937031044,
+          0.14391643372075916,
+          0.1957530282967976,
+          0.2395689274680006,
+          0.29015497033004756,
+          0.3252219116276789,
+          0.3509808248737188,
+          0.37966014418125643,
+          0.4046025207199255,
+          0.4322887548428228,
+          0.4597052621254475,
+          0.48598156049237407,
+          0.5352729145211123,
+          0.555845716247364,
+          0.5799421313324505,
+          0.6001397675445049,
+          0.6327521945956549,
+          0.654269040262861,
+          0.6866558775930558,
+          0.7069663086655877,
+          0.7272840959246727,
+          0.7570276102201952,
+          0.7792016085527929,
+          0.8057280172625177,
+          0.8326173311755186,
+          0.8511083321073022,
+          0.8633907115884459,
+          0.8732945907508214,
+          0.892040606149772,
+          0.8985066941297631
+        ],
+        "q32_signed_bias": -0.08586830587023686,
+        "q32_absolute_error": 0.08586830587023686,
+        "reliability": [
+          {
+            "n": 275214,
+            "rain": 995,
+            "probability_sum": 23898.267578125,
+            "mean_probability": 0.08683521760566323,
+            "frequency": 0.0036153684042236223
+          },
+          {
+            "n": 1294935,
+            "rain": 22846,
+            "probability_sum": 198498.1865234375,
+            "mean_probability": 0.15328814691350337,
+            "frequency": 0.017642584376822004
+          },
+          {
+            "n": 695978,
+            "rain": 43219,
+            "probability_sum": 166464.6318359375,
+            "mean_probability": 0.23918088191859155,
+            "frequency": 0.06209822724281515
+          },
+          {
+            "n": 411987,
+            "rain": 66864,
+            "probability_sum": 144780.638671875,
+            "mean_probability": 0.3514204056726911,
+            "frequency": 0.1622963831383029
+          },
+          {
+            "n": 465188,
+            "rain": 170180,
+            "probability_sum": 206558.57421875,
+            "mean_probability": 0.44403246476424585,
+            "frequency": 0.36583058892318804
+          },
+          {
+            "n": 157990,
+            "rain": 102171,
+            "probability_sum": 84061.90234375,
+            "mean_probability": 0.532071031987784,
+            "frequency": 0.6466928286600417
+          },
+          {
+            "n": 1797,
+            "rain": 1545,
+            "probability_sum": 1103.15625,
+            "mean_probability": 0.6138877295492488,
+            "frequency": 0.8597662771285476
+          },
+          {
+            "n": 1,
+            "rain": 0,
+            "probability_sum": 0.71484375,
+            "mean_probability": 0.71484375,
+            "frequency": 0.0
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 24115.928603972596,
+            "conditional_pinball": 0.09784409896407556
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 19887.908650379104,
+            "conditional_pinball": 0.14657303369823788
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 8214.378185629686,
+            "conditional_pinball": 0.4077626302124441
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 3085.840142250203,
+            "conditional_pinball": 0.6430173249114821
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 505.3365336623405,
+            "conditional_pinball": 0.8959867618126605
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 156.84148481663215,
+            "conditional_pinball": 1.0669488763036201
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 7.970501058047559,
+            "conditional_pinball": 1.3284168430079266
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 20030,
+            "rain": 15014,
+            "dry": 5016,
+            "scenes": 467,
+            "unique_grid": 3332
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 21,
+            "rain": 20,
+            "dry": 1,
+            "scenes": 3,
+            "unique_grid": 21
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 2,
+        "updates": 960,
+        "checkpoint_sha256": "d9548656d7a802ea5e6c435cf7dc1c49c4d2597445d5b5eb7bf4cdd2910e3a00",
+        "validation_receipt_sha256": "59a5cde875a1a14fa4e784a317189586a27e00e095e87f6868fa7c97223165c2",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 3,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 1440,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 98170.66272830963,
+        "s_qr_unweighted": 47029.895187154696,
+        "weighted_mean": 0.04414236097351904,
+        "loss_arm": "E0",
+        "train_order_sha256": "1e298d8c765dc3838ce23abdbc7ca721f561629ecbe36598432bcb3b4d7e0469"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 118759.43741723392,
+        "s_qr": 57212.04911990118,
+        "brier_sum": 366437.7523586154,
+        "q32_log_min": 0.3708262821703236,
+        "q32_log_max": 6.127027150620291,
+        "span_log_max": 6.012372969167439,
+        "core_fp64": 0.05327480829681755,
+        "conditional_pinball": 0.1402875021330518,
+        "brier": 0.11093786495633343,
+        "auroc": 0.8768562272975365,
+        "average_precision": 0.534612742014663,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          11941,
+          27790,
+          43916,
+          63339,
+          84891,
+          104586,
+          128615,
+          145024,
+          155784,
+          169882,
+          183683,
+          198529,
+          210587,
+          219718,
+          243936,
+          251931,
+          262274,
+          273285,
+          286669,
+          295310,
+          309482,
+          317821,
+          326831,
+          338856,
+          346991,
+          355817,
+          365133,
+          370352,
+          374147,
+          377097,
+          381795,
+          383604
+        ],
+        "coverage": [
+          0.029280074542690403,
+          0.06814280810161345,
+          0.10768476288558677,
+          0.1553111666911873,
+          0.2081580108871561,
+          0.2564513756068854,
+          0.31537197783335785,
+          0.35560786621548723,
+          0.38199205531852287,
+          0.4165612279927419,
+          0.4504021381982247,
+          0.4868054533862979,
+          0.516372419204551,
+          0.5387621990093668,
+          0.5981462409886714,
+          0.6177504781521259,
+          0.6431121573243097,
+          0.6701118140356039,
+          0.702930214310235,
+          0.7241184836447452,
+          0.7588691089206022,
+          0.7793168554754548,
+          0.8014099357559707,
+          0.8308959835221421,
+          0.8508435093913982,
+          0.8724854102300035,
+          0.8953288215389142,
+          0.9081261340787602,
+          0.9174317100681674,
+          0.9246652935118435,
+          0.9361850816536708,
+          0.940620862145064
+        ],
+        "q32_signed_bias": -0.04375413785493598,
+        "q32_absolute_error": 0.04375413785493598,
+        "reliability": [
+          {
+            "n": 180797,
+            "rain": 382,
+            "probability_sum": 15823.535400390625,
+            "mean_probability": 0.08752100643478944,
+            "frequency": 0.0021128669170395525
+          },
+          {
+            "n": 804227,
+            "rain": 8057,
+            "probability_sum": 122913.169921875,
+            "mean_probability": 0.1528339261450747,
+            "frequency": 0.010018315724291774
+          },
+          {
+            "n": 1033489,
+            "rain": 35346,
+            "probability_sum": 252427.0751953125,
+            "mean_probability": 0.24424747161828766,
+            "frequency": 0.03420065428853137
+          },
+          {
+            "n": 485053,
+            "rain": 52511,
+            "probability_sum": 168294.697265625,
+            "mean_probability": 0.34696146042932424,
+            "frequency": 0.10825827280730146
+          },
+          {
+            "n": 373166,
+            "rain": 89534,
+            "probability_sum": 166723.775390625,
+            "mean_probability": 0.44678179520809774,
+            "frequency": 0.23993075467754296
+          },
+          {
+            "n": 268829,
+            "rain": 115645,
+            "probability_sum": 146611.95703125,
+            "mean_probability": 0.5453725492087907,
+            "frequency": 0.430180523678621
+          },
+          {
+            "n": 140021,
+            "rain": 91390,
+            "probability_sum": 89863.94140625,
+            "mean_probability": 0.6417890274048178,
+            "frequency": 0.6526878111140472
+          },
+          {
+            "n": 17487,
+            "rain": 14936,
+            "probability_sum": 12607.58203125,
+            "mean_probability": 0.7209688357780065,
+            "frequency": 0.8541202035798021
+          },
+          {
+            "n": 21,
+            "rain": 19,
+            "probability_sum": 17.10546875,
+            "mean_probability": 0.8145461309523809,
+            "frequency": 0.9047619047619048
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 29396.188383686567,
+            "conditional_pinball": 0.1192673776993284
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 19161.246941283927,
+            "conditional_pinball": 0.14121756807101637
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 5963.417479600948,
+            "conditional_pinball": 0.29602469494171996
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2201.9346749532992,
+            "conditional_pinball": 0.45883198061123137
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 367.29756003274315,
+            "conditional_pinball": 0.6512368085686935
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 115.77611416744757,
+            "conditional_pinball": 0.7875926133839971
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 6.187966176270651,
+            "conditional_pinball": 1.0313276960451085
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 121760,
+            "rain": 79543,
+            "dry": 42217,
+            "scenes": 807,
+            "unique_grid": 3430
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 3459,
+            "rain": 2674,
+            "dry": 785,
+            "scenes": 246,
+            "unique_grid": 1737
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 450,
+            "rain": 382,
+            "dry": 68,
+            "scenes": 67,
+            "unique_grid": 376
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 3,
+        "updates": 1440,
+        "checkpoint_sha256": "616a6b5cdf8fb72155deb306bbdd731b05edf82618adc99202f7937f989ff102",
+        "validation_receipt_sha256": "d1378b0fdc7e0834ffc95843794023dc0e5d7a1c65d1d874be12fd79e52c6cbe",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 4,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 1920,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 97212.8430557251,
+        "s_qr_unweighted": 46304.856230040234,
+        "weighted_mean": 0.04363075582429624,
+        "loss_arm": "E0",
+        "train_order_sha256": "c9917951cc57b3795d5391630ab2a2be9dca1691a0349dc4cd40a91b1b5d6978"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 112463.5959033288,
+        "s_qr": 55018.937017608754,
+        "brier_sum": 324537.2324744463,
+        "q32_log_min": 0.3683785006562762,
+        "q32_log_max": 5.6661002807786875,
+        "span_log_max": 5.534434899635938,
+        "core_fp64": 0.05070480456812789,
+        "conditional_pinball": 0.13490985488109644,
+        "brier": 0.09825261572480505,
+        "auroc": 0.8785021653489229,
+        "average_precision": 0.5347830941874352,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          10818,
+          24150,
+          37592,
+          54590,
+          73893,
+          90093,
+          110027,
+          125517,
+          136753,
+          150199,
+          163121,
+          175972,
+          189027,
+          199485,
+          221200,
+          230341,
+          241683,
+          252319,
+          265976,
+          277239,
+          292782,
+          302736,
+          312846,
+          325601,
+          335117,
+          344945,
+          356257,
+          362895,
+          367729,
+          371536,
+          376932,
+          378877
+        ],
+        "coverage": [
+          0.026526408709724877,
+          0.0592173017507724,
+          0.0921779216320926,
+          0.1338580746407729,
+          0.18119023098425777,
+          0.22091363836986905,
+          0.2697930459516453,
+          0.3077754891864058,
+          0.3353268598891668,
+          0.3682972880192242,
+          0.3999828355647099,
+          0.4314942866951106,
+          0.4635059585111078,
+          0.4891496248344858,
+          0.542396155166495,
+          0.5648104555931538,
+          0.5926217448874503,
+          0.6187018782796332,
+          0.6521896915305773,
+          0.6798072679123143,
+          0.7179196704428424,
+          0.7423274974253347,
+          0.7671178461085774,
+          0.7983938992692855,
+          0.8217277230150557,
+          0.8458265901623265,
+          0.8735643175910941,
+          0.8898411063704575,
+          0.9016943749693492,
+          0.9110293757049679,
+          0.9242607032514345,
+          0.9290299641998921
+        ],
+        "q32_signed_bias": -0.055345035800107856,
+        "q32_absolute_error": 0.055345035800107856,
+        "reliability": [
+          {
+            "n": 123743,
+            "rain": 168,
+            "probability_sum": 11219.8154296875,
+            "mean_probability": 0.09067030401467153,
+            "frequency": 0.0013576525540838673
+          },
+          {
+            "n": 1293383,
+            "rain": 18305,
+            "probability_sum": 199879.26123046875,
+            "mean_probability": 0.15453988588876516,
+            "frequency": 0.014152807018493361
+          },
+          {
+            "n": 945162,
+            "rain": 55181,
+            "probability_sum": 226865.0771484375,
+            "mean_probability": 0.24002771709869578,
+            "frequency": 0.05838258414959552
+          },
+          {
+            "n": 434035,
+            "rain": 84489,
+            "probability_sum": 150467.958984375,
+            "mean_probability": 0.3466724088711164,
+            "frequency": 0.19465941686730331
+          },
+          {
+            "n": 311728,
+            "rain": 125207,
+            "probability_sum": 138870.443359375,
+            "mean_probability": 0.445485947234047,
+            "frequency": 0.40165464764153364
+          },
+          {
+            "n": 159279,
+            "rain": 95800,
+            "probability_sum": 86206.6953125,
+            "mean_probability": 0.5412307668462258,
+            "frequency": 0.6014603306148331
+          },
+          {
+            "n": 35729,
+            "rain": 28644,
+            "probability_sum": 22400.3046875,
+            "mean_probability": 0.6269502277561645,
+            "frequency": 0.8017016989000532
+          },
+          {
+            "n": 31,
+            "rain": 26,
+            "probability_sum": 21.94921875,
+            "mean_probability": 0.708039314516129,
+            "frequency": 0.8387096774193549
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 25707.634653537025,
+            "conditional_pinball": 0.1043020316770479
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 19796.505134155756,
+            "conditional_pinball": 0.14589939370425656
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 6539.285477879748,
+            "conditional_pinball": 0.3246108452658103
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2423.158086829208,
+            "conditional_pinball": 0.5049297951300704
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 415.29605642569896,
+            "conditional_pinball": 0.7363405255774804
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 130.06210249264,
+            "conditional_pinball": 0.8847762074329252
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 6.995506288617505,
+            "conditional_pinball": 1.165917714769584
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 95502,
+            "rain": 67412,
+            "dry": 28090,
+            "scenes": 720,
+            "unique_grid": 3430
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 716,
+            "rain": 626,
+            "dry": 90,
+            "scenes": 62,
+            "unique_grid": 589
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 62,
+            "rain": 53,
+            "dry": 9,
+            "scenes": 8,
+            "unique_grid": 62
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 4,
+        "updates": 1920,
+        "checkpoint_sha256": "831b6733668ccdc8e711e5db77453958346bc00f34395ea696b9147479cfc689",
+        "validation_receipt_sha256": "e2211e4a0b509c5865bd8c53943f5666212f351ed249a53292c0a431ba70b52e",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 5,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 2400,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 95828.08248996735,
+        "s_qr_unweighted": 46047.17356760629,
+        "weighted_mean": 0.043131437344407476,
+        "loss_arm": "E0",
+        "train_order_sha256": "c37eb279b82d3a54cebf383a0f9611d51233b003a3b05cea13ec2352222d77ce"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 113272.27056600459,
+        "s_qr": 53298.889157827165,
+        "brier_sum": 304721.60252153873,
+        "q32_log_min": 0.4222867587638248,
+        "q32_log_max": 4.15346374379355,
+        "span_log_max": 4.03978205371582,
+        "core_fp64": 0.050428889229125376,
+        "conditional_pinball": 0.13069219056894504,
+        "brier": 0.09225349673231391,
+        "auroc": 0.8812080202309962,
+        "average_precision": 0.5558957290735236,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          8178,
+          18601,
+          29750,
+          43935,
+          61296,
+          75730,
+          94661,
+          107891,
+          118148,
+          130371,
+          141523,
+          153082,
+          165342,
+          176101,
+          196696,
+          206039,
+          217139,
+          227729,
+          240857,
+          254586,
+          271089,
+          283389,
+          294103,
+          307346,
+          317994,
+          329330,
+          342255,
+          351133,
+          357314,
+          362144,
+          369977,
+          372706
+        ],
+        "coverage": [
+          0.020052964543180816,
+          0.04561080869010838,
+          0.07294884998283556,
+          0.10773135206708842,
+          0.15030160364866854,
+          0.18569466921681133,
+          0.23211465842773774,
+          0.26455544112598695,
+          0.2897062429503212,
+          0.31967779902898336,
+          0.34702319650826347,
+          0.3753665832965524,
+          0.40542886567603353,
+          0.4318106027168849,
+          0.4823108234024815,
+          0.5052204403903683,
+          0.5324383306360649,
+          0.5584056691677701,
+          0.590596341523221,
+          0.6242607032514345,
+          0.6647270854788877,
+          0.6948874503457407,
+          0.7211588445882987,
+          0.7536315040949438,
+          0.7797410622333383,
+          0.8075376391545289,
+          0.8392305428865676,
+          0.8609999509587564,
+          0.876156147319896,
+          0.8879996076700505,
+          0.9072066107596488,
+          0.9138982884605954
+        ],
+        "q32_signed_bias": -0.0704767115394046,
+        "q32_absolute_error": 0.0704767115394046,
+        "reliability": [
+          {
+            "n": 417072,
+            "rain": 1444,
+            "probability_sum": 35341.75341796875,
+            "mean_probability": 0.08473777529531772,
+            "frequency": 0.003462231940768021
+          },
+          {
+            "n": 1319715,
+            "rain": 27798,
+            "probability_sum": 198134.06787109375,
+            "mean_probability": 0.1501339818605485,
+            "frequency": 0.02106363874018254
+          },
+          {
+            "n": 692574,
+            "rain": 52398,
+            "probability_sum": 166907.5283203125,
+            "mean_probability": 0.24099594890988182,
+            "frequency": 0.07565689731350007
+          },
+          {
+            "n": 413711,
+            "rain": 87488,
+            "probability_sum": 144144.455078125,
+            "mean_probability": 0.3484182317562864,
+            "frequency": 0.21147129276233892
+          },
+          {
+            "n": 292063,
+            "rain": 123026,
+            "probability_sum": 129790.50390625,
+            "mean_probability": 0.44439214794838783,
+            "frequency": 0.42123103576967985
+          },
+          {
+            "n": 138333,
+            "rain": 90337,
+            "probability_sum": 74829.8515625,
+            "mean_probability": 0.54093998946383,
+            "frequency": 0.6530401278075368
+          },
+          {
+            "n": 29233,
+            "rain": 24965,
+            "probability_sum": 18454.52734375,
+            "mean_probability": 0.6312909158741833,
+            "frequency": 0.8540006157424828
+          },
+          {
+            "n": 389,
+            "rain": 364,
+            "probability_sum": 277.29296875,
+            "mean_probability": 0.7128353952442159,
+            "frequency": 0.9357326478149101
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 21240.533751575054,
+            "conditional_pinball": 0.08617793328914346
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 20645.026192747053,
+            "conditional_pinball": 0.15215295751033306
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 7849.914079412383,
+            "conditional_pinball": 0.3896705921773335
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2923.7635870478894,
+            "conditional_pinball": 0.6092443398724504
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 482.7753559133945,
+            "conditional_pinball": 0.8559846736053094
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 149.16120129809838,
+            "conditional_pinball": 1.0147020496469277
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 7.7149898333458555,
+            "conditional_pinball": 1.2858316388909758
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 28333,
+            "rain": 22898,
+            "dry": 5435,
+            "scenes": 570,
+            "unique_grid": 3407
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 7,
+            "rain": 6,
+            "dry": 1,
+            "scenes": 3,
+            "unique_grid": 7
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 5,
+        "updates": 2400,
+        "checkpoint_sha256": "a825cec1e34fa6fc69965d81e99ae9c9d6c9a55dab4bedac2405057cff4e7178",
+        "validation_receipt_sha256": "8dc50a18ed913acb96bc0baab98fac2218b3771408a1f1dc8ef99a7d15123645",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 6,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 2880,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 94736.48507213593,
+        "s_qr_unweighted": 45580.58965251454,
+        "weighted_mean": 0.042657735288110024,
+        "loss_arm": "E0",
+        "train_order_sha256": "b23b76bf707d6748af0e55c05b6eb1dc0b6324ebd1e750a722c259a378add215"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 113345.98403397083,
+        "s_qr": 53176.77582010131,
+        "brier_sum": 373660.5633625984,
+        "q32_log_min": 0.4159025141658502,
+        "q32_log_max": 4.544911799661875,
+        "span_log_max": 4.378987941366971,
+        "core_fp64": 0.05041423632237455,
+        "conditional_pinball": 0.13039276107130918,
+        "brier": 0.1131245480330837,
+        "auroc": 0.8802246667059966,
+        "average_precision": 0.5524382925656376,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          10124,
+          22780,
+          34936,
+          50794,
+          69173,
+          84458,
+          106008,
+          119431,
+          130373,
+          142798,
+          155473,
+          168340,
+          180313,
+          190183,
+          210993,
+          220254,
+          231741,
+          242678,
+          255364,
+          267727,
+          284010,
+          295528,
+          305500,
+          318755,
+          328722,
+          339538,
+          352404,
+          361224,
+          366972,
+          371860,
+          378077,
+          380444
+        ],
+        "coverage": [
+          0.024824677553822765,
+          0.05585797655828552,
+          0.08566524447059977,
+          0.1245500465891815,
+          0.16961649747437596,
+          0.2070962679613555,
+          0.2599382080329557,
+          0.2928522387327743,
+          0.31968270315335195,
+          0.35014957579324213,
+          0.38122946397920654,
+          0.41278014810455593,
+          0.44213868863714384,
+          0.4663405423961552,
+          0.5173679564513756,
+          0.5400765043401501,
+          0.5682433426511696,
+          0.5950615467608259,
+          0.6261684076308175,
+          0.6564832524152813,
+          0.6964101809621892,
+          0.724653033200922,
+          0.7491049973027316,
+          0.7816070815555882,
+          0.8060467853464763,
+          0.8325682899318326,
+          0.8641165219949978,
+          0.8857437104604973,
+          0.8998381638958364,
+          0.9118238438526801,
+          0.9270683144524545,
+          0.9328723456426855
+        ],
+        "q32_signed_bias": -0.05150265435731449,
+        "q32_absolute_error": 0.05150265435731449,
+        "reliability": [
+          {
+            "n": 451,
+            "rain": 0,
+            "probability_sum": 43.951171875,
+            "mean_probability": 0.09745270925720621,
+            "frequency": 0.0
+          },
+          {
+            "n": 568346,
+            "rain": 3609,
+            "probability_sum": 97746.0126953125,
+            "mean_probability": 0.171983286053412,
+            "frequency": 0.0063500051025255745
+          },
+          {
+            "n": 1459512,
+            "rain": 40431,
+            "probability_sum": 358649.61328125,
+            "mean_probability": 0.24573255532071678,
+            "frequency": 0.027701724960123658
+          },
+          {
+            "n": 631466,
+            "rain": 77625,
+            "probability_sum": 217374.875,
+            "mean_probability": 0.3442384467255561,
+            "frequency": 0.12292823366578723
+          },
+          {
+            "n": 384719,
+            "rain": 125201,
+            "probability_sum": 171199.62109375,
+            "mean_probability": 0.4449991320775683,
+            "frequency": 0.3254349278304425
+          },
+          {
+            "n": 191990,
+            "rain": 108562,
+            "probability_sum": 103942.76171875,
+            "mean_probability": 0.5413967483658003,
+            "frequency": 0.5654565341944893
+          },
+          {
+            "n": 59421,
+            "rain": 45857,
+            "probability_sum": 37879.79296875,
+            "mean_probability": 0.6374815800600798,
+            "frequency": 0.7717305329765571
+          },
+          {
+            "n": 7185,
+            "rain": 6535,
+            "probability_sum": 5199.51171875,
+            "mean_probability": 0.7236620346207376,
+            "frequency": 0.9095337508698678
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 23189.860018652078,
+            "conditional_pinball": 0.09408681688725369
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 19587.08124499336,
+            "conditional_pinball": 0.14435594862398005
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 7174.13106450986,
+            "conditional_pinball": 0.3561246495164984
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2638.6164607784376,
+            "conditional_pinball": 0.5498263098100516
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 443.003746881057,
+            "conditional_pinball": 0.7854676363139308
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 136.73641490119186,
+            "conditional_pinball": 0.9301796932053868
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 7.346869385406929,
+            "conditional_pinball": 1.2244782309011548
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 45130,
+            "rain": 35265,
+            "dry": 9865,
+            "scenes": 628,
+            "unique_grid": 3430
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 73,
+            "rain": 66,
+            "dry": 7,
+            "scenes": 18,
+            "unique_grid": 73
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 6,
+        "updates": 2880,
+        "checkpoint_sha256": "55a27c058018f9248ba8cf25323176522abcc7748399d8349b5d8553fb7635a0",
+        "validation_receipt_sha256": "ce8b5abab03c956e1b01761af3223c78e4ae5ce1ef9ac8ffbe5ff03987836169",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 7,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 3360,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 93837.99981212616,
+        "s_qr_unweighted": 45248.548774652496,
+        "weighted_mean": 0.04228364355082544,
+        "loss_arm": "E0",
+        "train_order_sha256": "9ee2d8ba5139bb616cf6f5ed8922b0b91114eca034ee8d7503c8fc8c7def7827"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 113137.62457297237,
+        "s_qr": 53628.141403389825,
+        "brier_sum": 368857.3853815794,
+        "q32_log_min": 0.31112721345209293,
+        "q32_log_max": 4.08310926969276,
+        "span_log_max": 3.9161497661059035,
+        "core_fp64": 0.05048780565360381,
+        "conditional_pinball": 0.1314995375493841,
+        "brier": 0.11167040116423695,
+        "auroc": 0.8824059983185009,
+        "average_precision": 0.5406989890444537,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          8134,
+          19960,
+          31802,
+          46738,
+          64071,
+          78790,
+          98084,
+          112135,
+          122055,
+          134153,
+          146078,
+          157374,
+          169450,
+          179404,
+          198178,
+          207001,
+          218210,
+          228034,
+          240828,
+          253684,
+          270711,
+          282798,
+          293075,
+          305891,
+          316686,
+          327812,
+          341413,
+          351717,
+          358211,
+          364038,
+          371689,
+          374487
+        ],
+        "coverage": [
+          0.019945073807071747,
+          0.048943161198567994,
+          0.077980481585013,
+          0.1146044823696729,
+          0.15710607621009268,
+          0.19319797950076015,
+          0.24050806728458635,
+          0.2749619930361434,
+          0.2992864499043696,
+          0.3289514982099946,
+          0.35819233975773623,
+          0.3858908341915551,
+          0.4155019371291256,
+          0.43990976411161786,
+          0.48594477955960963,
+          0.507579324211662,
+          0.535064489235447,
+          0.5591535481339807,
+          0.5905252317198764,
+          0.6220489431611985,
+          0.6638002059732235,
+          0.6934382815948212,
+          0.7186381246628415,
+          0.7500637536167917,
+          0.7765337648962778,
+          0.8038154087587661,
+          0.8371659065273895,
+          0.8624319552743858,
+          0.8783556470992104,
+          0.892643813447109,
+          0.9114045412191654,
+          0.9182654112108283
+        ],
+        "q32_signed_bias": -0.06610958878917172,
+        "q32_absolute_error": 0.06610958878917172,
+        "reliability": [
+          {
+            "n": 73070,
+            "rain": 31,
+            "probability_sum": 6531.0869140625,
+            "mean_probability": 0.08938123599373889,
+            "frequency": 0.00042425071848912
+          },
+          {
+            "n": 856367,
+            "rain": 6554,
+            "probability_sum": 129784.6630859375,
+            "mean_probability": 0.15155262064738306,
+            "frequency": 0.00765326080990977
+          },
+          {
+            "n": 983179,
+            "rain": 28773,
+            "probability_sum": 243236.65625,
+            "mean_probability": 0.24739814036914945,
+            "frequency": 0.02926527112560378
+          },
+          {
+            "n": 658214,
+            "rain": 67922,
+            "probability_sum": 227691.6015625,
+            "mean_probability": 0.34592336468458584,
+            "frequency": 0.10319136329522009
+          },
+          {
+            "n": 455823,
+            "rain": 137460,
+            "probability_sum": 203745.904296875,
+            "mean_probability": 0.4469846942714058,
+            "frequency": 0.3015644230326245
+          },
+          {
+            "n": 265208,
+            "rain": 157341,
+            "probability_sum": 142570.31640625,
+            "mean_probability": 0.5375792449935523,
+            "frequency": 0.5932739585532865
+          },
+          {
+            "n": 11225,
+            "rain": 9735,
+            "probability_sum": 6917.51953125,
+            "mean_probability": 0.6162600918708241,
+            "frequency": 0.867260579064588
+          },
+          {
+            "n": 4,
+            "rain": 4,
+            "probability_sum": 2.83984375,
+            "mean_probability": 0.7099609375,
+            "frequency": 1.0
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 21242.26577537739,
+            "conditional_pinball": 0.08618496052459047
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 20432.50730602446,
+            "conditional_pinball": 0.15058670243079214
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 8225.109134840824,
+            "conditional_pinball": 0.40829531570319305
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 3068.514933228577,
+            "conditional_pinball": 0.6394071542464215
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 497.4777582128731,
+            "conditional_pinball": 0.8820527627887821
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 154.26406409030955,
+            "conditional_pinball": 1.049415401974895
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 8.0024316153829,
+            "conditional_pinball": 1.3337386025638167
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 18717,
+            "rain": 15101,
+            "dry": 3616,
+            "scenes": 559,
+            "unique_grid": 3286
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 7,
+            "rain": 7,
+            "dry": 0,
+            "scenes": 3,
+            "unique_grid": 7
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 7,
+        "updates": 3360,
+        "checkpoint_sha256": "c88c5741d5dddbfe995a0c7be2d0b443f9923de6f9389be41eceb00d05445f7e",
+        "validation_receipt_sha256": "449a1d7818b3def7f79f403da79b855c1e68896b31cfed687c5d00aada5e97b1",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 8,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 3840,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 93561.10803604126,
+        "s_qr_unweighted": 45118.56062520927,
+        "weighted_mean": 0.04215994815458599,
+        "loss_arm": "E0",
+        "train_order_sha256": "36adfd67b315830aafea814cf083af47fb9997a2f5ab71d2e328ebdb716d5756"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 109785.99898932801,
+        "s_qr": 53531.091161330216,
+        "brier_sum": 335130.5708454251,
+        "q32_log_min": 0.45457222739451125,
+        "q32_log_max": 4.774705809035063,
+        "span_log_max": 4.607297912269055,
+        "core_fp64": 0.049443730007556023,
+        "conditional_pinball": 0.13126156432085287,
+        "brier": 0.10145971525009162,
+        "auroc": 0.8855337293568875,
+        "average_precision": 0.560642749349816,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          10851,
+          25443,
+          39376,
+          55141,
+          73279,
+          88879,
+          111066,
+          126169,
+          136450,
+          149310,
+          163450,
+          176540,
+          188604,
+          198078,
+          219627,
+          228397,
+          240426,
+          251130,
+          263433,
+          275561,
+          291782,
+          304002,
+          314521,
+          327815,
+          338675,
+          348697,
+          361852,
+          370815,
+          376471,
+          380890,
+          386957,
+          388938
+        ],
+        "coverage": [
+          0.02660732676180668,
+          0.062387818155068414,
+          0.09655240056887843,
+          0.13520916090432053,
+          0.17968466480309941,
+          0.2179368348781325,
+          0.2723407385611299,
+          0.3093742337305674,
+          0.3345838850473248,
+          0.36611740473738413,
+          0.40078956402334365,
+          0.4328870580157913,
+          0.46246873620715023,
+          0.4856995733411799,
+          0.5385390613505958,
+          0.5600436467068804,
+          0.589539502721789,
+          0.615786376342504,
+          0.6459540973959099,
+          0.6756927075670639,
+          0.7154676082585454,
+          0.7454318081506547,
+          0.7712250502672747,
+          0.803822764945319,
+          0.8304521602667844,
+          0.8550267274778088,
+          0.8872836055122358,
+          0.9092614388700897,
+          0.9231303025844736,
+          0.9339659653768819,
+          0.9488426266490119,
+          0.9537001618361042
+        ],
+        "q32_signed_bias": -0.030674838163895823,
+        "q32_absolute_error": 0.030674838163895823,
+        "reliability": [
+          {
+            "n": 111615,
+            "rain": 52,
+            "probability_sum": 9795.831787109375,
+            "mean_probability": 0.08776447419351678,
+            "frequency": 0.00046588720154101153
+          },
+          {
+            "n": 1188045,
+            "rain": 13080,
+            "probability_sum": 184229.9736328125,
+            "mean_probability": 0.15506986152276428,
+            "frequency": 0.011009683976617047
+          },
+          {
+            "n": 911738,
+            "rain": 42079,
+            "probability_sum": 219398.7841796875,
+            "mean_probability": 0.2406379729480262,
+            "frequency": 0.04615251311231955
+          },
+          {
+            "n": 441906,
+            "rain": 63382,
+            "probability_sum": 153130.248046875,
+            "mean_probability": 0.34652221976364883,
+            "frequency": 0.143428692979955
+          },
+          {
+            "n": 331414,
+            "rain": 99546,
+            "probability_sum": 148118.345703125,
+            "mean_probability": 0.4469284511309872,
+            "frequency": 0.300367516158038
+          },
+          {
+            "n": 243075,
+            "rain": 130882,
+            "probability_sum": 132440.50390625,
+            "mean_probability": 0.5448544848554973,
+            "frequency": 0.5384428674277486
+          },
+          {
+            "n": 73713,
+            "rain": 57318,
+            "probability_sum": 46521.65625,
+            "mean_probability": 0.6311187477107159,
+            "frequency": 0.7775833299418013
+          },
+          {
+            "n": 1584,
+            "rain": 1481,
+            "probability_sum": 1133.0390625,
+            "mean_probability": 0.7153024384469697,
+            "frequency": 0.9349747474747475
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 25434.550167126665,
+            "conditional_pinball": 0.10319406250228895
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 18524.303765051576,
+            "conditional_pinball": 0.13652332418268337
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 6517.856326011422,
+            "conditional_pinball": 0.3235470998268266
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2492.221395740893,
+            "conditional_pinball": 0.5193209826507383
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 422.5243157815996,
+            "conditional_pinball": 0.7491565882652476
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 132.58762485155316,
+            "conditional_pinball": 0.9019566316432188
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 7.047566766479014,
+            "conditional_pinball": 1.1745944610798358
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 63487,
+            "rain": 47495,
+            "dry": 15992,
+            "scenes": 740,
+            "unique_grid": 3430
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 151,
+            "rain": 137,
+            "dry": 14,
+            "scenes": 28,
+            "unique_grid": 141
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 8,
+            "rain": 7,
+            "dry": 1,
+            "scenes": 2,
+            "unique_grid": 8
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 8,
+        "updates": 3840,
+        "checkpoint_sha256": "058991f555c36056e756fd2da401fb4e6e263c9ae0b73489e46dc25c4c955114",
+        "validation_receipt_sha256": "5632a0b50e5466cdc2e7227ae51c4457f5e9ba60534ef5a4468fe4273f375d2a",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    },
+    {
+      "epoch": 9,
+      "train": {
+        "scenes": 959,
+        "batches": 480,
+        "updates": 4320,
+        "n_valid": 3289370,
+        "n_rain": 345725,
+        "s_occ_unweighted": 93052.91573238373,
+        "s_qr_unweighted": 44783.382326978695,
+        "weighted_mean": 0.0419035554101127,
+        "loss_arm": "E0",
+        "train_order_sha256": "72f7cb6eca84ecd053d848b8cde5fe475a1dca901de00fe9177a93efce8a286b"
+      },
+      "development": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "s_occ": 109420.57540277165,
+        "s_qr": 52808.701307965195,
+        "brier_sum": 325810.7891755104,
+        "q32_log_min": 0.4214300488764812,
+        "q32_log_max": 4.322127482305617,
+        "span_log_max": 4.134290815377079,
+        "core_fp64": 0.04911439794578315,
+        "conditional_pinball": 0.12949021947909664,
+        "brier": 0.09863818096858105,
+        "auroc": 0.8853437282496801,
+        "average_precision": 0.5578497386306888,
+        "tau": [
+          0.015625,
+          0.046875,
+          0.078125,
+          0.109375,
+          0.140625,
+          0.171875,
+          0.203125,
+          0.234375,
+          0.265625,
+          0.296875,
+          0.328125,
+          0.359375,
+          0.390625,
+          0.421875,
+          0.453125,
+          0.484375,
+          0.515625,
+          0.546875,
+          0.578125,
+          0.609375,
+          0.640625,
+          0.671875,
+          0.703125,
+          0.734375,
+          0.765625,
+          0.796875,
+          0.828125,
+          0.859375,
+          0.890625,
+          0.921875,
+          0.953125,
+          0.984375
+        ],
+        "covered": [
+          9113,
+          20973,
+          33199,
+          47317,
+          64217,
+          78567,
+          97926,
+          112407,
+          122119,
+          134196,
+          146652,
+          158107,
+          170185,
+          180003,
+          198720,
+          207415,
+          219361,
+          230146,
+          242382,
+          255320,
+          271661,
+          284162,
+          295285,
+          308849,
+          320592,
+          331667,
+          346039,
+          356051,
+          362809,
+          368963,
+          376779,
+          379434
+        ],
+        "coverage": [
+          0.022345642685498504,
+          0.05142710019126085,
+          0.0814060124564759,
+          0.11602422637438085,
+          0.15746407728900005,
+          0.1926511696336619,
+          0.2401206414594674,
+          0.2756289539502722,
+          0.2994433818841646,
+          0.32905693688391935,
+          0.35959982345152275,
+          0.3876881957726448,
+          0.41730420283458386,
+          0.44137854936001175,
+          0.4872737972634986,
+          0.5085944779559609,
+          0.5378868128095728,
+          0.564332303467216,
+          0.594335736354274,
+          0.6260605168947084,
+          0.6661296650483056,
+          0.6967828944142024,
+          0.7240571820901378,
+          0.7573169535579423,
+          0.7861115197881419,
+          0.813268108479231,
+          0.8485091461919474,
+          0.873059192781129,
+          0.889630229022608,
+          0.9047202197047717,
+          0.923885537737237,
+          0.9303957628365456
+        ],
+        "q32_signed_bias": -0.05397923716345443,
+        "q32_absolute_error": 0.05397923716345443,
+        "reliability": [
+          {
+            "n": 198578,
+            "rain": 262,
+            "probability_sum": 17722.34033203125,
+            "mean_probability": 0.08924624244393262,
+            "frequency": 0.0013193807974700119
+          },
+          {
+            "n": 1271950,
+            "rain": 17405,
+            "probability_sum": 189625.2060546875,
+            "mean_probability": 0.14908228000683008,
+            "frequency": 0.013683713982467864
+          },
+          {
+            "n": 761054,
+            "rain": 39248,
+            "probability_sum": 185361.26171875,
+            "mean_probability": 0.24355861964952552,
+            "frequency": 0.051570585004480626
+          },
+          {
+            "n": 478841,
+            "rain": 73144,
+            "probability_sum": 166492.306640625,
+            "mean_probability": 0.347698519217496,
+            "frequency": 0.1527521661678929
+          },
+          {
+            "n": 380856,
+            "rain": 139144,
+            "probability_sum": 170079.8671875,
+            "mean_probability": 0.4465726342436511,
+            "frequency": 0.36534543239439576
+          },
+          {
+            "n": 193722,
+            "rain": 122606,
+            "probability_sum": 104313.7109375,
+            "mean_probability": 0.5384711645424887,
+            "frequency": 0.6328966250606539
+          },
+          {
+            "n": 18039,
+            "rain": 15962,
+            "probability_sum": 11249.6640625,
+            "mean_probability": 0.6236301381728477,
+            "frequency": 0.8848605798547592
+          },
+          {
+            "n": 50,
+            "rain": 49,
+            "probability_sum": 35.66015625,
+            "mean_probability": 0.713203125,
+            "frequency": 0.98
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          },
+          {
+            "n": 0,
+            "rain": 0,
+            "probability_sum": 0.0,
+            "mean_probability": null,
+            "frequency": null
+          }
+        ],
+        "rain_strata": [
+          {
+            "upper": 1,
+            "n": 246473,
+            "pinball_sum": 21554.30176396632,
+            "conditional_pinball": 0.08745096527395016
+          },
+          {
+            "upper": 5,
+            "n": 135686,
+            "pinball_sum": 19954.749737779952,
+            "conditional_pinball": 0.14706564964535732
+          },
+          {
+            "upper": 10,
+            "n": 20145,
+            "pinball_sum": 7752.891466982239,
+            "conditional_pinball": 0.38485437910063236
+          },
+          {
+            "upper": 20,
+            "n": 4799,
+            "pinball_sum": 2908.0048524115846,
+            "conditional_pinball": 0.605960586041172
+          },
+          {
+            "upper": 30,
+            "n": 564,
+            "pinball_sum": 481.7217684424098,
+            "conditional_pinball": 0.8541166107134927
+          },
+          {
+            "upper": 50,
+            "n": 147,
+            "pinball_sum": 148.94894478796422,
+            "conditional_pinball": 1.0132581278092805
+          },
+          {
+            "upper": null,
+            "n": 6,
+            "pinball_sum": 8.082773594783728,
+            "conditional_pinball": 1.3471289324639546
+          }
+        ],
+        "tail": [
+          {
+            "threshold_mm_h": 10.0,
+            "exposures": 25038,
+            "rain": 20803,
+            "dry": 4235,
+            "scenes": 557,
+            "unique_grid": 3408
+          },
+          {
+            "threshold_mm_h": 50.0,
+            "exposures": 10,
+            "rain": 10,
+            "dry": 0,
+            "scenes": 3,
+            "unique_grid": 10
+          },
+          {
+            "threshold_mm_h": 100.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 500.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          },
+          {
+            "threshold_mm_h": 1000.0,
+            "exposures": 0,
+            "rain": 0,
+            "dry": 0,
+            "scenes": 0,
+            "unique_grid": 0
+          }
+        ],
+        "not_estimable": {
+          "auroc": null,
+          "conditional": null
+        }
+      },
+      "checkpoint": {
+        "model": "B2",
+        "epoch": 9,
+        "updates": 4320,
+        "checkpoint_sha256": "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+        "validation_receipt_sha256": "8a88168ca213cfe499ef90fd08020d045bd0cea1abeebc67b5e3f312653138a1",
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8"
+      }
+    }
+  ],
+  "endpoint_groups": {
+    "B2": {
+      "all": {
+        "ids_sha": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+        "summary": {
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "core_fp64": 0.04911439794578315,
+          "brier": 0.09863818096858105,
+          "brier_sum": 325810.7891755104,
+          "auroc": 0.8853437282496801,
+          "average_precision": 0.5578497386306888,
+          "conditional_pinball": 0.12949021947909664,
+          "s_qr": 52808.701307965195,
+          "q32_signed_bias": -0.05397923716345443,
+          "q32_absolute_error": 0.05397923716345443,
+          "covered": [
+            9113,
+            20973,
+            33199,
+            47317,
+            64217,
+            78567,
+            97926,
+            112407,
+            122119,
+            134196,
+            146652,
+            158107,
+            170185,
+            180003,
+            198720,
+            207415,
+            219361,
+            230146,
+            242382,
+            255320,
+            271661,
+            284162,
+            295285,
+            308849,
+            320592,
+            331667,
+            346039,
+            356051,
+            362809,
+            368963,
+            376779,
+            379434
+          ],
+          "coverage": [
+            0.022345642685498504,
+            0.05142710019126085,
+            0.0814060124564759,
+            0.11602422637438085,
+            0.15746407728900005,
+            0.1926511696336619,
+            0.2401206414594674,
+            0.2756289539502722,
+            0.2994433818841646,
+            0.32905693688391935,
+            0.35959982345152275,
+            0.3876881957726448,
+            0.41730420283458386,
+            0.44137854936001175,
+            0.4872737972634986,
+            0.5085944779559609,
+            0.5378868128095728,
+            0.564332303467216,
+            0.594335736354274,
+            0.6260605168947084,
+            0.6661296650483056,
+            0.6967828944142024,
+            0.7240571820901378,
+            0.7573169535579423,
+            0.7861115197881419,
+            0.813268108479231,
+            0.8485091461919474,
+            0.873059192781129,
+            0.889630229022608,
+            0.9047202197047717,
+            0.923885537737237,
+            0.9303957628365456
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 21554.30176396632,
+              "conditional_pinball": 0.08745096527395016
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 19954.749737779952,
+              "conditional_pinball": 0.14706564964535732
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7752.891466982239,
+              "conditional_pinball": 0.38485437910063236
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2908.0048524115846,
+              "conditional_pinball": 0.605960586041172
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 481.7217684424098,
+              "conditional_pinball": 0.8541166107134927
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 148.94894478796422,
+              "conditional_pinball": 1.0132581278092805
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.082773594783728,
+              "conditional_pinball": 1.3471289324639546
+            }
+          ]
+        }
+      },
+      "analysis_UTC_00": {
+        "ids_sha": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+        "summary": {
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "core_fp64": 0.04979806611297094,
+          "brier": 0.09742495245250225,
+          "brier_sum": 79197.7180981636,
+          "auroc": 0.8952548213699543,
+          "average_precision": 0.6328400111832729,
+          "conditional_pinball": 0.12214417307039369,
+          "s_qr": 13269.254385675289,
+          "q32_signed_bias": -0.03766304447880997,
+          "q32_absolute_error": 0.03766304447880997,
+          "covered": [
+            2713,
+            6417,
+            10153,
+            14558,
+            19824,
+            24377,
+            30180,
+            34438,
+            37396,
+            40980,
+            44597,
+            47781,
+            51245,
+            53991,
+            59057,
+            61399,
+            64281,
+            67170,
+            70235,
+            73353,
+            77505,
+            80513,
+            83242,
+            86445,
+            89174,
+            91629,
+            95084,
+            97491,
+            98991,
+            100309,
+            102238,
+            102847
+          ],
+          "coverage": [
+            0.024973305349976067,
+            0.059068816966751356,
+            0.09345889023896314,
+            0.13400714312014433,
+            0.18248094554291394,
+            0.22439154608048897,
+            0.2778084612835524,
+            0.3170035715600722,
+            0.34423211458448394,
+            0.3772230199933724,
+            0.4105176921094297,
+            0.43982657682536175,
+            0.47171287602636325,
+            0.4969899480835082,
+            0.5436227401597997,
+            0.5651809713170588,
+            0.5917099304098089,
+            0.6183033248646858,
+            0.6465168084244634,
+            0.6752181597260577,
+            0.713437534518944,
+            0.7411263301299753,
+            0.7662469163076696,
+            0.7957306970065172,
+            0.8208512831842115,
+            0.8434496851872307,
+            0.8752531389226408,
+            0.8974096984425053,
+            0.9112172760410914,
+            0.9233495342243824,
+            0.941106079016164,
+            0.94671195552119
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6128.591702919111,
+              "conditional_pinball": 0.08668937001979053
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4451.918136344912,
+              "conditional_pinball": 0.1412231359074011
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1794.2876152646977,
+              "conditional_pinball": 0.3598651454602282
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 759.0647477458708,
+              "conditional_pinball": 0.5934829927645588
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 108.72906515659497,
+              "conditional_pinball": 0.8629290885444045
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 26.663118244108304,
+              "conditional_pinball": 1.066524729764332
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ]
+        }
+      },
+      "analysis_UTC_06": {
+        "ids_sha": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+        "summary": {
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "core_fp64": 0.04189390360974448,
+          "brier": 0.0909309274095646,
+          "brier_sum": 75478.12560558319,
+          "auroc": 0.8692633862608046,
+          "average_precision": 0.41704532880414613,
+          "conditional_pinball": 0.12870509241500608,
+          "s_qr": 9929.726584910135,
+          "q32_signed_bias": -0.0699733720236938,
+          "q32_absolute_error": 0.0699733720236938,
+          "covered": [
+            937,
+            2289,
+            3688,
+            5310,
+            7368,
+            9256,
+            11940,
+            14033,
+            15545,
+            17381,
+            19402,
+            21224,
+            23398,
+            25191,
+            28762,
+            30451,
+            32821,
+            35047,
+            37800,
+            40724,
+            44406,
+            47419,
+            50106,
+            53412,
+            56359,
+            59157,
+            62548,
+            64795,
+            66562,
+            68016,
+            69900,
+            70547
+          ],
+          "coverage": [
+            0.012145014322562249,
+            0.02966909048489326,
+            0.04780236160257158,
+            0.06882606835945095,
+            0.09550103044678618,
+            0.1199725214190354,
+            0.15476144184780496,
+            0.181890059752952,
+            0.20148799108242277,
+            0.22528547912535157,
+            0.25148086220528576,
+            0.2750968879210898,
+            0.3032753950046014,
+            0.32651553447136134,
+            0.372801389482962,
+            0.39469352309108113,
+            0.4254125027543389,
+            0.45426501276717085,
+            0.4899482832367695,
+            0.5278479864162486,
+            0.5755725784500525,
+            0.6146258635662531,
+            0.6494536687794066,
+            0.692304701170432,
+            0.7305025210301875,
+            0.7667690632655442,
+            0.8107218312141126,
+            0.8398465347176317,
+            0.8627496727197315,
+            0.8815958315511141,
+            0.9060154761441848,
+            0.9144016279763062
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3225.555112739379,
+              "conditional_pinball": 0.07753738251777353
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4744.999553117803,
+              "conditional_pinball": 0.1513266855822746
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1496.1155116061805,
+              "conditional_pinball": 0.4229899665270513
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 386.54796572145386,
+              "conditional_pinball": 0.6676130668764315
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 54.29922078168904,
+              "conditional_pinball": 0.9203257759608311
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 20.636488129681386,
+              "conditional_pinball": 1.0861309541937572
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.5727328139410914,
+              "conditional_pinball": 1.5727328139410914
+            }
+          ]
+        }
+      },
+      "analysis_UTC_12": {
+        "ids_sha": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+        "summary": {
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "core_fp64": 0.0606958662757286,
+          "brier": 0.10841089581174683,
+          "brier_sum": 89243.84943223,
+          "auroc": 0.8830947689993012,
+          "average_precision": 0.6308491505334817,
+          "conditional_pinball": 0.13305745421249113,
+          "s_qr": 17631.97548751405,
+          "q32_signed_bias": -0.06293273729568194,
+          "q32_absolute_error": 0.06293273729568194,
+          "covered": [
+            3082,
+            6861,
+            10995,
+            15824,
+            21643,
+            26305,
+            32761,
+            37460,
+            40660,
+            44547,
+            48417,
+            52165,
+            56037,
+            59164,
+            64924,
+            67745,
+            71656,
+            74975,
+            78787,
+            82994,
+            88091,
+            92052,
+            95477,
+            99718,
+            103404,
+            106937,
+            111406,
+            114626,
+            116751,
+            118835,
+            121221,
+            122104
+          ],
+          "coverage": [
+            0.023257919917895466,
+            0.05177566143954601,
+            0.08297236518405603,
+            0.11941379778740359,
+            0.16332613912492264,
+            0.19850732752765746,
+            0.24722670812140604,
+            0.28268711230511495,
+            0.306835504173144,
+            0.3361682539203405,
+            0.3653727153357381,
+            0.39365651931116713,
+            0.42287607347148226,
+            0.44647358015002186,
+            0.48994068551247416,
+            0.5112290022186335,
+            0.5407428649048402,
+            0.5657892750954616,
+            0.5945560469082513,
+            0.6263036358422507,
+            0.6647674962645457,
+            0.6946586775736904,
+            0.7205050032449402,
+            0.7525091688425374,
+            0.7803250977255234,
+            0.8069864316223192,
+            0.8407111701405134,
+            0.8650104894577176,
+            0.8810465309325807,
+            0.8967731711366346,
+            0.9147788158232337,
+            0.9214422627043181
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 6966.506766017344,
+              "conditional_pinball": 0.08636236786275932
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6558.510149755533,
+              "conditional_pinball": 0.15240652870484356
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2744.9739518708743,
+              "conditional_pinball": 0.40432669787463166
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1089.619537676223,
+              "conditional_pinball": 0.6302021617560573
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 196.27717094089326,
+              "conditional_pinball": 0.8723429819595255
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 70.78070219700113,
+              "conditional_pinball": 1.0408926793676638
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.307209056184142,
+              "conditional_pinball": 1.3268022640460355
+            }
+          ]
+        }
+      },
+      "analysis_UTC_18": {
+        "ids_sha": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+        "summary": {
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "core_fp64": 0.04422004497246736,
+          "brier": 0.09784817669494529,
+          "brier_sum": 81891.09603953362,
+          "auroc": 0.8984287271715234,
+          "average_precision": 0.5340839783944541,
+          "conditional_pinball": 0.13380114668244447,
+          "s_qr": 11977.744849865747,
+          "q32_signed_bias": -0.04674164842100559,
+          "q32_absolute_error": 0.04674164842100559,
+          "covered": [
+            2381,
+            5406,
+            8363,
+            11625,
+            15382,
+            18629,
+            23045,
+            26476,
+            28518,
+            31288,
+            34236,
+            36937,
+            39505,
+            41657,
+            45977,
+            47820,
+            50603,
+            52954,
+            55560,
+            58249,
+            61659,
+            64178,
+            66460,
+            69274,
+            71655,
+            73944,
+            77001,
+            79139,
+            80505,
+            81803,
+            83420,
+            83936
+          ],
+          "coverage": [
+            0.02659770551503033,
+            0.06038941453769591,
+            0.09342150828315776,
+            0.12986069996313632,
+            0.17182944402864198,
+            0.2081010735151197,
+            0.2574313832817614,
+            0.2957584423418492,
+            0.318569242283761,
+            0.3495123940169126,
+            0.382443950446274,
+            0.4126163160893218,
+            0.4413029636166624,
+            0.4653425529775802,
+            0.5136004647058167,
+            0.5341882728806175,
+            0.5652766451814698,
+            0.5915392263094985,
+            0.6206503647270412,
+            0.6506886806152884,
+            0.688781152604475,
+            0.7169204302997129,
+            0.7424122253376378,
+            0.7738468928383918,
+            0.8004445983534222,
+            0.8260145890816475,
+            0.8601637641171148,
+            0.8840469620974318,
+            0.8993062925189066,
+            0.9138060076631777,
+            0.9318692121225661,
+            0.9376333515789944
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5233.648182290468,
+              "conditional_pinball": 0.09780509021118028
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4199.321898561677,
+              "conditional_pinball": 0.14104463435198591
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1717.5143882404966,
+              "conditional_pinball": 0.35537231289892335
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 672.7726012680383,
+              "conditional_pinball": 0.5550929053366653
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 122.41631156323241,
+              "conditional_pinball": 0.7949111140469637
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 30.868636217173428,
+              "conditional_pinball": 0.8819610347763837
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.2028317246584947,
+              "conditional_pinball": 1.2028317246584947
+            }
+          ]
+        }
+      },
+      "scene_max_ge20": {
+        "ids_sha": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+        "summary": {
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "core_fp64": 0.08055046009219322,
+          "brier": 0.1382470853442928,
+          "brier_sum": 98631.00056803226,
+          "auroc": 0.8630836401912132,
+          "average_precision": 0.6595311752602049,
+          "conditional_pinball": 0.14922625722231764,
+          "s_qr": 23302.127744036567,
+          "q32_signed_bias": -0.07522179769200721,
+          "q32_absolute_error": 0.07522179769200721,
+          "covered": [
+            2963,
+            6845,
+            10946,
+            15697,
+            21570,
+            26441,
+            33237,
+            38291,
+            41583,
+            45900,
+            50383,
+            54647,
+            58860,
+            62240,
+            69130,
+            72223,
+            76766,
+            80887,
+            85364,
+            90020,
+            96164,
+            100881,
+            105215,
+            110631,
+            115416,
+            120058,
+            126602,
+            131188,
+            134019,
+            136959,
+            140724,
+            141967
+          ],
+          "coverage": [
+            0.018974979667377507,
+            0.043835212900168424,
+            0.07009791678674121,
+            0.10052320480554328,
+            0.13813375343413192,
+            0.1693275185234994,
+            0.2128489366198536,
+            0.24521462924183332,
+            0.26629651687767764,
+            0.29394247949126817,
+            0.32265150205247417,
+            0.3499580539598983,
+            0.3769380031123321,
+            0.39858344059992445,
+            0.4427068324015549,
+            0.46251432889537825,
+            0.49160758999186693,
+            0.5179983733902006,
+            0.5466689720978783,
+            0.5764858824358161,
+            0.615831908448765,
+            0.6460394612975735,
+            0.6737942914961608,
+            0.7084782232810128,
+            0.7391212464698085,
+            0.7688485011495136,
+            0.8107561173976805,
+            0.8401247494444551,
+            0.8582544043342106,
+            0.8770820925630631,
+            0.9011930606520528,
+            0.9091532023079928
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7616.451657689776,
+              "conditional_pinball": 0.09221332337752162
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8563.179855557206,
+              "conditional_pinball": 0.14797525195799488
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4322.215924210617,
+              "conditional_pinball": 0.3796079329185506
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2161.526819753818,
+              "conditional_pinball": 0.6029363513957652
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 481.7217684424098,
+              "conditional_pinball": 0.8541166107134927
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 148.94894478796422,
+              "conditional_pinball": 1.0132581278092805
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.082773594783728,
+              "conditional_pinball": 1.3471289324639546
+            }
+          ]
+        }
+      }
+    },
+    "B3": {
+      "all": {
+        "ids_sha": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+        "summary": {
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "core_fp64": 0.04867047225243023,
+          "brier": 0.09957884578407393,
+          "brier_sum": 328917.88972091675,
+          "auroc": 0.8880247781349105,
+          "average_precision": 0.5707417679094422,
+          "conditional_pinball": 0.12925806665118195,
+          "s_qr": 52714.02474168502,
+          "q32_signed_bias": -0.04932522313765875,
+          "q32_absolute_error": 0.04932522313765875,
+          "covered": [
+            9694,
+            18999,
+            35225,
+            50845,
+            68630,
+            80752,
+            97525,
+            113279,
+            121261,
+            134473,
+            147579,
+            159957,
+            171345,
+            181767,
+            200172,
+            209129,
+            219794,
+            229625,
+            240547,
+            255228,
+            272756,
+            284892,
+            298339,
+            308655,
+            320535,
+            334878,
+            347169,
+            356321,
+            363463,
+            368020,
+            378683,
+            381332
+          ],
+          "coverage": [
+            0.023770290814575056,
+            0.04658672943945859,
+            0.08637389044186161,
+            0.12467510176058065,
+            0.16828502770830267,
+            0.19800892550635085,
+            0.23913736452356432,
+            0.27776715217497916,
+            0.29733951253003776,
+            0.32973615810896967,
+            0.36187288509636606,
+            0.3922245108135942,
+            0.42014859496836837,
+            0.44570398705311165,
+            0.49083419155509783,
+            0.5127973125398461,
+            0.5389485557353735,
+            0.5630547790691972,
+            0.589836202246089,
+            0.6258349271737531,
+            0.6688146731401108,
+            0.6985728998087392,
+            0.7315457800009808,
+            0.7568412534941886,
+            0.7859717522436369,
+            0.8211416801530087,
+            0.851279976460203,
+            0.8737212495708891,
+            0.8912338776911383,
+            0.9024079250649797,
+            0.9285542641361385,
+            0.9350497768623413
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 21549.421527291535,
+              "conditional_pinball": 0.0874311649847713
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 20088.88918152546,
+              "conditional_pinball": 0.14805425159209837
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7639.737859577845,
+              "conditional_pinball": 0.3792374216717719
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2815.497136398674,
+              "conditional_pinball": 0.5866841292766564
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 467.53577906578363,
+              "conditional_pinball": 0.8289641472797582
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 144.63496295775997,
+              "conditional_pinball": 0.9839113126378229
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.308294867949478,
+              "conditional_pinball": 1.384715811324913
+            }
+          ]
+        }
+      },
+      "analysis_UTC_00": {
+        "ids_sha": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+        "summary": {
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "core_fp64": 0.049631737958224655,
+          "brier": 0.09966752199163424,
+          "brier_sum": 81020.72530221939,
+          "auroc": 0.8951335210444394,
+          "average_precision": 0.6326762777786897,
+          "conditional_pinball": 0.12331004064411681,
+          "s_qr": 13395.909575414275,
+          "q32_signed_bias": -0.03396261368238884,
+          "q32_absolute_error": 0.03396261368238884,
+          "covered": [
+            3033,
+            5821,
+            10706,
+            15699,
+            21228,
+            25005,
+            30098,
+            34828,
+            37253,
+            41122,
+            44793,
+            48372,
+            51649,
+            54509,
+            59343,
+            61708,
+            64448,
+            67046,
+            69784,
+            73495,
+            77874,
+            80834,
+            83963,
+            86367,
+            89078,
+            92313,
+            95302,
+            97417,
+            99117,
+            100144,
+            102681,
+            103249
+          ],
+          "coverage": [
+            0.0279189219043411,
+            0.05358260613424647,
+            0.09854928384697521,
+            0.14451010714680215,
+            0.19540483817519055,
+            0.23017231856843035,
+            0.2770536470414964,
+            0.32059354173570453,
+            0.3429157921867521,
+            0.37853013733937185,
+            0.41232188224897826,
+            0.4452667623992047,
+            0.47543171692624914,
+            0.5017581648808866,
+            0.5462553849552635,
+            0.5680253323023675,
+            0.5932471740491182,
+            0.6171618984498692,
+            0.6423653300931551,
+            0.6765252770720571,
+            0.7168341986081962,
+            0.7440811517360728,
+            0.7728837586067233,
+            0.7950127029713907,
+            0.819967598217902,
+            0.849745940572186,
+            0.8772598402003019,
+            0.8967285246143083,
+            0.9123771125593726,
+            0.9218307006885379,
+            0.9451839169336131,
+            0.9504123863176112
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6221.949998954027,
+              "conditional_pinball": 0.08800992982564823
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4497.710349861942,
+              "conditional_pinball": 0.14267575021767356
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1795.523612187448,
+              "conditional_pinball": 0.3601130389465399
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 747.9163347675168,
+              "conditional_pinball": 0.5847664853538052
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 106.49457116683568,
+              "conditional_pinball": 0.8451950092606006
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 26.31470847650612,
+              "conditional_pinball": 1.0525883390602448
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ]
+        }
+      },
+      "analysis_UTC_06": {
+        "ids_sha": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+        "summary": {
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "core_fp64": 0.04245433641555308,
+          "brier": 0.09262038926707662,
+          "brier_sum": 76880.48031502962,
+          "auroc": 0.8647271454907715,
+          "average_precision": 0.40467423224753196,
+          "conditional_pinball": 0.13064379221063496,
+          "s_qr": 10079.299212842698,
+          "q32_signed_bias": -0.07719298032429911,
+          "q32_absolute_error": 0.07719298032429911,
+          "covered": [
+            907,
+            2019,
+            3912,
+            5704,
+            7907,
+            9403,
+            11643,
+            13850,
+            15083,
+            17038,
+            18946,
+            20983,
+            22989,
+            24923,
+            28524,
+            30315,
+            32444,
+            34388,
+            36801,
+            39990,
+            43772,
+            46699,
+            49926,
+            52539,
+            55305,
+            58874,
+            61634,
+            63762,
+            65581,
+            66729,
+            69306,
+            69990
+          ],
+          "coverage": [
+            0.011756166478723542,
+            0.026169459890344908,
+            0.05070575883656725,
+            0.07393293670853261,
+            0.10248733004108826,
+            0.12187787585384506,
+            0.15091184819380177,
+            0.1795180879055359,
+            0.19549973428730671,
+            0.2208396521107957,
+            0.2455703749789374,
+            0.27197314357558555,
+            0.29797410273360037,
+            0.3230418270664023,
+            0.36971652992184156,
+            0.3929307461990123,
+            0.42052598151676585,
+            0.44572332179751395,
+            0.47699965003694056,
+            0.518334175836995,
+            0.5673549273502612,
+            0.6052935153141242,
+            0.6471205817163744,
+            0.6809892289147257,
+            0.7168410001166543,
+            0.7631009319386657,
+            0.7988749335718267,
+            0.8264572072947856,
+            0.8500343482262057,
+            0.8649142590504336,
+            0.8983162888361784,
+            0.9071820196757009
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3132.9726205570523,
+              "conditional_pinball": 0.07531184184031375
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4920.963780011116,
+              "conditional_pinball": 0.1569385055495317
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1551.6832181197203,
+              "conditional_pinball": 0.43870037266602213
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 393.76777382627614,
+              "conditional_pinball": 0.680082510926211
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 56.65166467496336,
+              "conditional_pinball": 0.9601977063553111
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 21.692792460731685,
+              "conditional_pinball": 1.1417259189858782
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.567363192837778,
+              "conditional_pinball": 1.567363192837778
+            }
+          ]
+        }
+      },
+      "analysis_UTC_12": {
+        "ids_sha": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+        "summary": {
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "core_fp64": 0.05870233573682569,
+          "brier": 0.10750735406270585,
+          "brier_sum": 88500.05386441946,
+          "auroc": 0.8922221196812056,
+          "average_precision": 0.6614148646076787,
+          "conditional_pinball": 0.1309927588086723,
+          "s_qr": 17358.374440772404,
+          "q32_signed_bias": -0.05039821264168309,
+          "q32_absolute_error": 0.05039821264168309,
+          "covered": [
+            3168,
+            6335,
+            11820,
+            17154,
+            23317,
+            27384,
+            33107,
+            38163,
+            40763,
+            45132,
+            49496,
+            53422,
+            57037,
+            60442,
+            66204,
+            69054,
+            72441,
+            75524,
+            79087,
+            83802,
+            89421,
+            93280,
+            97541,
+            100781,
+            104596,
+            109140,
+            112957,
+            115895,
+            118059,
+            119501,
+            122898,
+            123765
+          ],
+          "coverage": [
+            0.023906907949348747,
+            0.04780626952623874,
+            0.08919812246253227,
+            0.12945047315755318,
+            0.17595876662088533,
+            0.2066498634106585,
+            0.24983775299213667,
+            0.2879922121436226,
+            0.3076127805363962,
+            0.34058288180871454,
+            0.37351525121873913,
+            0.4031423094918273,
+            0.4304224459302413,
+            0.456117844152316,
+            0.4996000422596858,
+            0.5211072037671491,
+            0.5466667672849661,
+            0.5699322335753203,
+            0.5968199586458789,
+            0.632401104788928,
+            0.6748041716346952,
+            0.7039256229530465,
+            0.7360807159998188,
+            0.7605309627661982,
+            0.7893203736963642,
+            0.8236110901489654,
+            0.8524155938240487,
+            0.8745868361078829,
+            0.8909171861086376,
+            0.9017990551941681,
+            0.9274340824365728,
+            0.9339767873583169
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 7024.193887355063,
+              "conditional_pinball": 0.08707750337633034
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6396.239837047192,
+              "conditional_pinball": 0.14863569439841964
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2629.969033109061,
+              "conditional_pinball": 0.3873868070568657
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1045.9108878827972,
+              "conditional_pinball": 0.604922433708963
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 187.74140885316578,
+              "conditional_pinball": 0.8344062615696257
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 68.70285423972499,
+              "conditional_pinball": 1.0103360917606616
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.61653228539889,
+              "conditional_pinball": 1.4041330713497224
+            }
+          ]
+        }
+      },
+      "analysis_UTC_18": {
+        "ids_sha": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+        "summary": {
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "core_fp64": 0.044034561039299286,
+          "brier": 0.09859560082116364,
+          "brier_sum": 82516.63023924828,
+          "auroc": 0.900520420108663,
+          "average_precision": 0.5497770883471911,
+          "conditional_pinball": 0.13271418930791914,
+          "s_qr": 11880.441512655614,
+          "q32_signed_bias": -0.042362689764184114,
+          "q32_absolute_error": 0.042362689764184114,
+          "covered": [
+            2586,
+            4824,
+            8787,
+            12288,
+            16178,
+            18960,
+            22677,
+            26438,
+            28162,
+            31181,
+            34344,
+            37180,
+            39670,
+            41893,
+            46101,
+            48052,
+            50461,
+            52667,
+            54875,
+            57941,
+            61689,
+            64079,
+            66909,
+            68968,
+            71556,
+            74551,
+            77276,
+            79247,
+            80706,
+            81646,
+            83798,
+            84328
+          ],
+          "coverage": [
+            0.02888772215954155,
+            0.05388800142986405,
+            0.09815793295278097,
+            0.1372669489158726,
+            0.18072141109708553,
+            0.21179861258503782,
+            0.25332052413454126,
+            0.29533395145164715,
+            0.3145924328913415,
+            0.3483171170366067,
+            0.3836503982394799,
+            0.4153308236240351,
+            0.4431461477451714,
+            0.4679788648219931,
+            0.5149856455054235,
+            0.5367799014734302,
+            0.5636903897496621,
+            0.5883332030071828,
+            0.6129983578905037,
+            0.6472480702420715,
+            0.6891162769914767,
+            0.7158145198226075,
+            0.7474279203297624,
+            0.7704286240909751,
+            0.7993386878763168,
+            0.8327952725119807,
+            0.8632357376646299,
+            0.8852534098906377,
+            0.9015516259118176,
+            0.9120521900378691,
+            0.9360917793987868,
+            0.9420123102358159
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5170.305020425374,
+              "conditional_pinball": 0.09662134926324259
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4273.975214605217,
+              "conditional_pinball": 0.1435520510061202
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1662.561996161614,
+              "conditional_pinball": 0.34400206831401076
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 627.9021399220841,
+              "conditional_pinball": 0.5180710725429737
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 116.64813437081897,
+              "conditional_pinball": 0.757455417992331
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 27.92460778079725,
+              "conditional_pinball": 0.7978459365942071
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.12439938971281,
+              "conditional_pinball": 1.12439938971281
+            }
+          ]
+        }
+      },
+      "scene_max_ge20": {
+        "ids_sha": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+        "summary": {
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "core_fp64": 0.07926766307120653,
+          "brier": 0.1371976959407764,
+          "brier_sum": 97882.32419198751,
+          "auroc": 0.8678323907165846,
+          "average_precision": 0.6749427368412386,
+          "conditional_pinball": 0.1482524164050661,
+          "s_qr": 23150.059578900284,
+          "q32_signed_bias": -0.06582716550434509,
+          "q32_absolute_error": 0.06582716550434509,
+          "covered": [
+            3160,
+            6114,
+            11622,
+            16764,
+            22950,
+            27103,
+            32977,
+            38521,
+            41130,
+            45830,
+            50843,
+            55271,
+            59250,
+            62917,
+            69756,
+            72872,
+            76817,
+            80530,
+            84487,
+            89872,
+            96640,
+            101187,
+            106605,
+            110733,
+            115922,
+            121943,
+            127637,
+            131797,
+            135027,
+            137179,
+            142226,
+            143434
+          ],
+          "coverage": [
+            0.020236562858222385,
+            0.039153906745307485,
+            0.07442700428425966,
+            0.10735624675798736,
+            0.14697123974563409,
+            0.17356695036278522,
+            0.21118390296696188,
+            0.2466875436270837,
+            0.26339551593629323,
+            0.293494201200105,
+            0.32559733082297493,
+            0.3539541347268384,
+            0.3794355535916697,
+            0.4029189320730309,
+            0.4467157211196711,
+            0.4666705090520195,
+            0.49193419274685724,
+            0.5157121541052686,
+            0.5410526855071629,
+            0.5755380940487855,
+            0.6188802008286745,
+            0.6479990778275153,
+            0.6826958175635435,
+            0.7091314287909934,
+            0.7423616581173592,
+            0.7809199951329786,
+            0.8173842321313071,
+            0.8440247705775745,
+            0.8647096117269601,
+            0.878490967192433,
+            0.9108118319852965,
+            0.9185478344956549
+          ],
+          "tau": [
+            0.015625,
+            0.046875,
+            0.078125,
+            0.109375,
+            0.140625,
+            0.171875,
+            0.203125,
+            0.234375,
+            0.265625,
+            0.296875,
+            0.328125,
+            0.359375,
+            0.390625,
+            0.421875,
+            0.453125,
+            0.484375,
+            0.515625,
+            0.546875,
+            0.578125,
+            0.609375,
+            0.640625,
+            0.671875,
+            0.703125,
+            0.734375,
+            0.765625,
+            0.796875,
+            0.828125,
+            0.859375,
+            0.890625,
+            0.921875,
+            0.953125,
+            0.984375
+          ],
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7612.456125558188,
+              "conditional_pinball": 0.0921649489752311
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8594.370574075949,
+              "conditional_pinball": 0.14851424033724359
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4236.639648144618,
+              "conditional_pinball": 0.37209201195719466
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2086.1141942300324,
+              "conditional_pinball": 0.5819007515286003
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 467.53577906578363,
+              "conditional_pinball": 0.8289641472797582
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 144.63496295775997,
+              "conditional_pinball": 0.9839113126378229
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.308294867949478,
+              "conditional_pinball": 1.384715811324913
+            }
+          ]
+        }
+      }
+    }
+  },
+  "paired_difference": {
+    "direction": "B2_MINUS_B3",
+    "descriptive_only": true,
+    "groups": {
+      "all": {
+        "brier": -0.0009406648154928754,
+        "auroc": -0.0026810498852304354,
+        "average_precision": -0.012892029278753436,
+        "conditional_pinball": 0.0002321528279146945,
+        "q32_coverage": -0.004654014025795683,
+        "q32_signed_bias": -0.004654014025795683
+      },
+      "analysis_UTC_00": {
+        "brier": -0.002242569539131989,
+        "auroc": 0.00012130032551482817,
+        "average_precision": 0.00016373340458319952,
+        "conditional_pinball": -0.0011658675737231255,
+        "q32_coverage": -0.003700430796421128,
+        "q32_signed_bias": -0.003700430796421128
+      },
+      "analysis_UTC_06": {
+        "brier": -0.001689461857512023,
+        "auroc": 0.0045362407700331175,
+        "average_precision": 0.01237109655661417,
+        "conditional_pinball": -0.0019386997956288843,
+        "q32_coverage": 0.007219608300605307,
+        "q32_signed_bias": 0.007219608300605307
+      },
+      "analysis_UTC_12": {
+        "brier": 0.0009035417490409758,
+        "auroc": -0.0091273506819044,
+        "average_precision": -0.03056571407419706,
+        "conditional_pinball": 0.002064695403818817,
+        "q32_coverage": -0.012534524653998846,
+        "q32_signed_bias": -0.012534524653998846
+      },
+      "analysis_UTC_18": {
+        "brier": -0.0007474241262183517,
+        "auroc": -0.002091692937139511,
+        "average_precision": -0.015693109952736983,
+        "conditional_pinball": 0.001086957374525327,
+        "q32_coverage": -0.0043789586568214744,
+        "q32_signed_bias": -0.0043789586568214744
+      },
+      "scene_max_ge20": {
+        "brier": 0.0010493894035163986,
+        "auroc": -0.004748750525371381,
+        "average_precision": -0.01541156158103374,
+        "conditional_pinball": 0.0009738408172515478,
+        "q32_coverage": -0.009394632187662122,
+        "q32_signed_bias": -0.009394632187662122
+      }
+    },
+    "tail_coverage_comparison": "B3_REAL_RAIN_STRATUM_COVERED_COUNTS_NOT_AVAILABLE"
+  },
+  "B2_tail_strata": [
+    {
+      "lower": 0.1,
+      "upper": 1.0,
+      "n_rain": 246473,
+      "q32_covered": 246197,
+      "q32_coverage": 0.9988802018882392,
+      "conditional_pinball": 0.0874509652739501,
+      "q32_shortfall_log_sum": 14.190597649433927
+    },
+    {
+      "lower": 1.0,
+      "upper": 5.0,
+      "n_rain": 135686,
+      "q32_covered": 121679,
+      "q32_coverage": 0.8967690108043571,
+      "conditional_pinball": 0.14706564964535715,
+      "q32_shortfall_log_sum": 3040.964367835247
+    },
+    {
+      "lower": 5.0,
+      "upper": 10.0,
+      "n_rain": 20145,
+      "q32_covered": 10502,
+      "q32_coverage": 0.5213204269049392,
+      "conditional_pinball": 0.38485437910063286,
+      "q32_shortfall_log_sum": 3585.72047775211
+    },
+    {
+      "lower": 10.0,
+      "upper": 20.0,
+      "n_rain": 4799,
+      "q32_covered": 1033,
+      "q32_coverage": 0.21525317774536362,
+      "conditional_pinball": 0.6059605860411722,
+      "q32_shortfall_log_sum": 2237.2669232328644
+    },
+    {
+      "lower": 20.0,
+      "upper": 30.0,
+      "n_rain": 564,
+      "q32_covered": 21,
+      "q32_coverage": 0.03723404255319149,
+      "conditional_pinball": 0.8541166107134924,
+      "q32_shortfall_log_sum": 495.1457382940651
+    },
+    {
+      "lower": 30.0,
+      "upper": 50.0,
+      "n_rain": 147,
+      "q32_covered": 2,
+      "q32_coverage": 0.013605442176870748,
+      "conditional_pinball": 1.0132581278092807,
+      "q32_shortfall_log_sum": 170.84804261860677
+    },
+    {
+      "lower": 50.0,
+      "upper": null,
+      "n_rain": 6,
+      "q32_covered": 0,
+      "q32_coverage": 0.0,
+      "conditional_pinball": 1.3471289324639546,
+      "q32_shortfall_log_sum": 11.075128120279096
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "B2_COMPLETION",
+      "bytes": 275,
+      "sha256": "132b57751044a7d4c82c32be4024181fab4aef0472092b5111d251bb59cefd22",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_ORDERS",
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_INITIALIZATION",
+      "bytes": 952,
+      "sha256": "e42356d7a0c0ec1c36c90d78549f36ee8260d320a6bc9c56e55c730c0caab64f",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E01",
+      "bytes": 342,
+      "sha256": "d1e14a6185d7676d9f89a4eaa374fa56b4165dd5999ca2971f5e0b017cc383b1",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E01",
+      "bytes": 1868060,
+      "sha256": "7ab669899e3cc500f8c2b3864945c07c518f648b40bc1db915f7bf13d5f67781",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E01",
+      "bytes": 339,
+      "sha256": "76314a8b2d94207b67b9208ca6fd5eb17ffa0dcd6fcee592c747102cd9d7d7e0",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E02",
+      "bytes": 342,
+      "sha256": "b8c36ee170c0894e104bcd40efd09ca986c3d06fd810885c3a74524e3cb74262",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E02",
+      "bytes": 1876259,
+      "sha256": "dd8002c0a65b66b5127823b6a69902c44049f305571d409525321144cb2c019e",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E02",
+      "bytes": 339,
+      "sha256": "fbb93f6ede31252ec284a2441e0a5395af0e3dcb48adbc20ae102724fc8b433b",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E03",
+      "bytes": 343,
+      "sha256": "3f72d4a87c7e0ebb994346f5feedc3dfda1f13ce023bc03df2a4b764b7f887a0",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E03",
+      "bytes": 1885632,
+      "sha256": "6d55aa8959321f34fddcb4a9aee663436188a83beb520e78ba1035e1937877e2",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E03",
+      "bytes": 340,
+      "sha256": "f33cce075462930200aa682b07dbc13ec0ea6210398f82163edc02526ef84f2b",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E04",
+      "bytes": 342,
+      "sha256": "ac85e05cfe74d240076a405af9de2b09f19b492e663161170e07400c46a44ad7",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E04",
+      "bytes": 1878340,
+      "sha256": "309938b1fdff6024d72f9e6096e59b35c6f520eb16277d07bb2934a9389e0912",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E04",
+      "bytes": 340,
+      "sha256": "6ab4d34ba76651f56bd1d44bb4332cf0c527fa324db6acc8fcfe4fcb4dfc508d",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E05",
+      "bytes": 343,
+      "sha256": "40a2999bb5e534bdd9b369d9e2f89d799e6ced749d62af0d276b5d379b003869",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E05",
+      "bytes": 1878974,
+      "sha256": "d756984548d2975738296c80c58d4d7521872d36390203bfef894a0489122d47",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E05",
+      "bytes": 340,
+      "sha256": "c9cdc4f87d240d6c6fd51d15bc5d2bef567a8d8c892baf67ca76d7620cf8a173",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E06",
+      "bytes": 343,
+      "sha256": "e980f9149614e4b7aa9507072ccdd469d772a61efffaf8b5f19ff6986bcb6875",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E06",
+      "bytes": 1876764,
+      "sha256": "ea26840cde6e42f47536608dba278cc2fc2ae958e9030c2fbae764cb3c7bce23",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E06",
+      "bytes": 340,
+      "sha256": "e511f492542288ff646b9aa2684e349751403d9ab0d1a5142394eaffca26fdb2",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E07",
+      "bytes": 343,
+      "sha256": "890b23931d6a2853282d68ac2be5a1479e61c6cfb508b63ab7985048ae23fdfd",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E07",
+      "bytes": 1873270,
+      "sha256": "52070668f42b7c639708b5bac6ce03ba377ae53099cbc11c469cae122d24c56b",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E07",
+      "bytes": 340,
+      "sha256": "e575ac2f3547aed9732fbea4152b96022fbb180202f6bd554254e56e2c930b73",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E08",
+      "bytes": 342,
+      "sha256": "268bb177dc4b09374cc4694e15670dd43bedbbab3b1555037b7dab9d980ea50a",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E08",
+      "bytes": 1880092,
+      "sha256": "fd9c4320c5366ec88ebfcab7219655efcde89209d01b9be76253f1315fedd4a8",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E08",
+      "bytes": 340,
+      "sha256": "5a56a397e1cae4525c3d2d1993eddc7f8abebf7009b301869b1c3731a8896c4b",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TRAIN_E09",
+      "bytes": 342,
+      "sha256": "40f4233b23c9543c5a48761a5ec5492f33b38774683af501835433a20785b68f",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_DEV_E09",
+      "bytes": 1876367,
+      "sha256": "411332948602665317ee1d333cfed71040669ff259bdf2be4b686cb3ed521da7",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_LAST_RECEIPT_E09",
+      "bytes": 340,
+      "sha256": "8898aaa3664411ce58d8fbfe3245399e217d242ffb8e3ef7130928f430e07ea9",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E01",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E01",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E02",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E02",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E03",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E03",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E04",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E04",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E05",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E05",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E06",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E06",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E07",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E07",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E08",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E08",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_TRAIN_E09",
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_IO_DEVELOPMENT_E09",
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_MINUS_B3_E09",
+      "bytes": 2013,
+      "sha256": "acb9c6b6c865c5f2829f73fc75865e012df3cc4072ca274fbbd6d463a2b4dbf6",
+      "visibility": "LOCAL_ONLY"
+    },
+    {
+      "source_id": "B2_TAIL_E09",
+      "bytes": 1509774,
+      "sha256": "e3a1d2e97381532583e4e305ee80ae72f5515b2661c63ed5ef0c4f9de3d16b29",
+      "visibility": "LOCAL_ONLY"
+    }
+  ],
+  "old_129_sources_and_126_epoch_checks_rerun": false,
+  "new_training_or_model_inference": 0,
+  "new_raw_weather_reads_during_closeout": 0,
+  "model_checkpoint_loads_during_closeout": 0,
+  "checkpoint_hash_bytes": 52620843,
+  "scientific_acceptance": "IN_PROGRESS_SINGLE_SEED_DEV_ONLY",
+  "final_2025_model_evaluation": "NOT_STARTED",
+  "baseline_B3": {
+    "experiment_id": "B3__E0__s2029__f006",
+    "executed_E9_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35",
+    "dev_source": {
+      "source_id": "SEED2029_B3_DEV_E09",
+      "bytes": 1878272,
+      "sha256": "41567d338e39fd0ddb362f9dd1d3f3e1cce6aa017406b3c14e43b84187854beb",
+      "visibility": "LOCAL_ONLY",
+      "url": null
+    },
+    "checkpoint_sha256_inherited_not_rehashed": "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+    "note": "One inherited endpoint identity bound for the new pair; no baseline model rerun"
+  },
+  "environment_reference": {
+    "scope": "PRELAUNCH_MEASUREMENT_SAME_CUDA_RUNTIME_NOT_FORMAL_PEAK",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "source": "evidence/b2_cached_real_check.json"
+  },
+  "completion_page_check": {
+    "status": "PASS",
+    "state": "COMPLETE",
+    "confirmed_updates": 4320,
+    "sealed_epochs": 9,
+    "elapsed_seconds_frozen_at_completion": 12446.15246,
+    "read_only": true
+  }
+}

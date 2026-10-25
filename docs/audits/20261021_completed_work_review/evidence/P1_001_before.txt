@@ -1,0 +1,31 @@
+test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh) ... FAIL
+test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation) ... ERROR
+test_missing_one_v7_verified_attempt_is_rejected (__main__.PredecessorInterface.test_missing_one_v7_verified_attempt_is_rejected) ... ok
+test_preparation_authority_still_refuses_seed2028 (__main__.PredecessorInterface.test_preparation_authority_still_refuses_seed2028) ... ok
+test_unchanged_completed_fresh_contract_still_works (__main__.PredecessorInterface.test_unchanged_completed_fresh_contract_still_works) ... ok
+
+======================================================================
+ERROR: test_completed_authorized_v7_is_recognized_without_mutation (__main__.PredecessorInterface.test_completed_authorized_v7_is_recognized_without_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 69, in test_completed_authorized_v7_is_recognized_without_mutation
+    self.assertIsNone(self.guard())
+                      ^^^^^^^^^^^^
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\src\yuntapr\experimental\phase_b_v2_multiseed_candidate\protocol.py", line 100, in require_predecessor
+    if not peer.exists():raise PermissionError('SEED2027_COMPLETE_BEFORE_SEED2028')
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: SEED2027_COMPLETE_BEFORE_SEED2028
+
+======================================================================
+FAIL: test_active_v7_cannot_fall_back_to_stale_completed_fresh (__main__.PredecessorInterface.test_active_v7_cannot_fall_back_to_stale_completed_fresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\chenerxiao\Documents\极端降水预测\YunTAPR-Net-completed-review-20261021\tests\completed_work_review\test_predecessor_interface.py", line 75, in test_active_v7_cannot_fall_back_to_stale_completed_fresh
+    with self.assertRaises(PermissionError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: PermissionError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.393s
+
+FAILED (failures=1, errors=1)

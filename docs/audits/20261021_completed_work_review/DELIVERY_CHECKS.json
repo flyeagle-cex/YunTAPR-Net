@@ -1,0 +1,21 @@
+{
+  "scope": "DELIVERABLE_METADATA_VALIDATION_NOT_NEW_SCIENTIFIC_TESTS",
+  "checks": {
+    "required_outputs_nonempty": true,
+    "evidence_matrix_rows_30": true,
+    "all_evidence_json_parse": true,
+    "markdown_local_links_resolve": true,
+    "tracked_changes_in_authorized_scope": true,
+    "seed2028_authority_bytes_unchanged": true,
+    "single_existing_source_file_modified": true,
+    "final_live_source_pins_unchanged": true,
+    "protected_exit_explicitly_reported": true
+  },
+  "broken_links": [],
+  "evidence_json_files": 14,
+  "regression_evidence": "P1_001_after.txt; inherited 5/5 after no subsequent source change",
+  "patch_reverse_check": "git apply --reverse --check CODE_DIFF.patch returned 0",
+  "v7_control_actions": 0,
+  "v7_recovery_performed": false,
+  "shared_resource_zero_impact": "NOT_DEMONSTRATED; see RUN_STATE_CHANGE.md"
+}

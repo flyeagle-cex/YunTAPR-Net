@@ -1,0 +1,163 @@
+{
+  "observed_utc": "2026-10-21T11:28:33.690821+00:00",
+  "state_change": "EARLIER_WORKER_AND_OWNER_PIDS_NO_LONGER_PRESENT",
+  "observations": {
+    "execution_status.json": {
+      "sha256": "ed9bed5ebc5026a7f65dee062918c90ce6e7857564c09de6ea3d8b3689cbcc7e",
+      "bytes": 2611,
+      "value": {
+        "status": "RUNNING",
+        "current_run": "B0_MATCHED_V2__E1__s2027",
+        "epoch": 2,
+        "phase": "TRAINING",
+        "epoch_completed_batches": 5172,
+        "epoch_total_batches": 5228,
+        "complete_epochs": 1,
+        "run_updates": 10400,
+        "quota": {
+          "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V7",
+          "limit": 364969,
+          "reserved": 187161,
+          "returned_verified": 187160,
+          "new_reserved": 20856,
+          "new_returned_verified": 20856,
+          "old_campaign_reserved": 166305,
+          "old_campaign_returned_verified": 166304,
+          "old_unverified_attempts": 1,
+          "abandoned_old_updates": 82657,
+          "adopted_prior_updates": 83648,
+          "combined_authorized_attempt_cap": 364969,
+          "old_ancestor_receipt_sha256": "db050ab079001373e8b2d69bed75287faad7713a1a2e244bb183b75ab1961123",
+          "runs": [
+            {
+              "id": "B0_MATCHED_V2__E0__s2027",
+              "ordinal": 0,
+              "status": "COMPLETE",
+              "epoch": 9,
+              "updates": 47052,
+              "last_sha": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673"
+            },
+            {
+              "id": "B1_V2__E0__s2027",
+              "ordinal": 1,
+              "status": "COMPLETE",
+              "epoch": 9,
+              "updates": 47052,
+              "last_sha": "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43"
+            },
+            {
+              "id": "B0_MATCHED_V2__E1__s2027",
+              "ordinal": 2,
+              "status": "RUNNING",
+              "epoch": 1,
+              "updates": 10400,
+              "last_sha": "9bdd53f2544885abc6284aeccae65c7e0d2234af199a83f7ced22f241f38a55e"
+            },
+            {
+              "id": "B1_V2__E1__s2027",
+              "ordinal": 3,
+              "status": "PENDING",
+              "epoch": 0,
+              "updates": 0,
+              "last_sha": null
+            },
+            {
+              "id": "B0_MATCHED_V2__E2__s2027",
+              "ordinal": 4,
+              "status": "PENDING",
+              "epoch": 0,
+              "updates": 0,
+              "last_sha": null
+            },
+            {
+              "id": "B1_V2__E2__s2027",
+              "ordinal": 5,
+              "status": "PENDING",
+              "epoch": 0,
+              "updates": 0,
+              "last_sha": null
+            }
+          ]
+        },
+        "first_optimizer_returned_verified": true,
+        "updated_utc": "2026-10-21T11:13:47.842578+00:00",
+        "selected_seed": 2027,
+        "execution_scope": "SEED2027_B1_EPOCH7_CONSOLE_FREE_RECOVERY_V7_NO_RETRY",
+        "FORMAL_SCIENTIFIC_EXECUTION_AUTHORIZED": true,
+        "SEED2028_AUTHORIZED": false,
+        "FINALFIT_AUTHORIZED": false,
+        "HISTORICAL_RECOVERY_RATIFICATION": "NOT_GRANTED",
+        "TEST_2025_AUTHORIZED": false,
+        "PIXELS_2025_READ": 0,
+        "HISTORICAL_2025_PATH_ATTRIBUTE_ACCESS": "NOT_INSTRUMENTED",
+        "statistics": "M-C_EXPLORATORY",
+        "no_automatic_retry_or_recovery": true
+      }
+    },
+    "watchdog_failure.json": {
+      "unavailable": "FileNotFoundError",
+      "winerror": 2
+    },
+    ".local/sessions/session_0001/heartbeat.json": {
+      "sha256": "ef1517ac9650d7a226b1228230e9caee1a3a840a462f293a1c9cc4143bd1e877",
+      "bytes": 362,
+      "value": {
+        "utc": "2026-10-21T11:15:09.915321+00:00",
+        "elapsed_seconds": 275066.43166400003,
+        "content_bytes": 8101938008016,
+        "cpu": {
+          "working_set_bytes": 710737920,
+          "peak_working_set_bytes": 2873036800,
+          "private_bytes": 9485225984,
+          "peak_pagefile_bytes": 10821459968
+        },
+        "cuda_peak_allocated": 3547183616,
+        "cuda_peak_reserved": 5983174656
+      }
+    },
+    ".local/sessions/session_0001/failure.json": {
+      "unavailable": "FileNotFoundError",
+      "winerror": 2
+    },
+    ".local/sessions/session_0001/termination.json": {
+      "unavailable": "FileNotFoundError",
+      "winerror": 2
+    },
+    ".local/sessions/session_0001/gui_termination.json": {
+      "sha256": "75bd0996533d9bb92e8ffbe81624a169d6919e1c13df522475c01b2f603ca026",
+      "bytes": 314,
+      "value": {
+        "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_EPOCH7_RECOVERY_V7",
+        "session": 1,
+        "supervisor_exit_code": 1,
+        "job_empty_and_handles_signaled": true,
+        "failure": {
+          "type": "MemoryError",
+          "winerror": null
+        },
+        "automatic_retries": 0,
+        "refunds": 0,
+        "nonce_sha256": "1b8ac10e24c0eaa7f30188cf0bb31ddb106eed66c1e0654cdd37ed295cf57552"
+      }
+    },
+    ".local/sessions/session_0001/supervisor_failure_private.txt": {
+      "sha256": "6601e7424d8de299392dd3b47f827966280628281394d6a8e2ffbc2742334dbe",
+      "bytes": 1003,
+      "value": "MemoryError: AVAILABLE_COMMIT_LIMIT",
+      "traceback_location": "supervisor.main -> monitor.monitor -> resources.host_admission; available_page < minimum_available_commit_bytes"
+    },
+    ".local/sessions/session_0001/worker_failure_private.txt": {
+      "unavailable": "FileNotFoundError",
+      "winerror": 2
+    },
+    ".local/sessions/session_0001/gui_stderr.txt": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "value": ""
+    }
+  },
+  "source_pin_count": 667,
+  "source_pin_mismatches": [],
+  "control_actions_performed": 0,
+  "restart_performed": false
+}

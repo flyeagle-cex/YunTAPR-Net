@@ -1,0 +1,201 @@
+{
+  "status": "PASS_REAL_BATCH_DRY_RUN_ZERO_UPDATES",
+  "dry_seed": 40261024,
+  "formal_seed": null,
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963
+  },
+  "actual_reads": {
+    "opened_files": 84,
+    "delivered_bytes": 294985188,
+    "reserved_bytes": 294985188,
+    "states": {
+      "READ_COMPLETE": 84
+    }
+  },
+  "shared_initial_predictions_exact": true,
+  "updates_per_epoch": 480,
+  "updates_per_model": 4320,
+  "paired_candidate_cap": 8640,
+  "validation_batches_per_epoch": 121,
+  "paired_validation_batches": 2178,
+  "scheduler": {
+    "steps_per_epoch": 480,
+    "warmup": 480,
+    "horizon": 24000,
+    "lr_first": 2.0833333333333333e-07,
+    "lr_480": 0.0001,
+    "lr_4320": 9.363027585410778e-05
+  },
+  "optimizer_counts": {
+    "optimizer_constructions": 0,
+    "optimizer_steps": 0
+  },
+  "formal_training_started": false,
+  "raw_2025_reads": 0,
+  "new_statistics_fitted": false,
+  "pending": [
+    "Formal seed, E0/9-epoch budget and launch authorization",
+    "MEE13 width16 target-residual and produced scalers scientific freeze",
+    "Fixed f006 coverage/time bias acceptance",
+    "Pinned target DEM and altitude strata for real high-altitude diagnostics"
+  ],
+  "base_commit": "0cf938fb2037dec84a86cdeb0573b169103330be",
+  "shapes": {
+    "train": [
+      2,
+      42,
+      501,
+      501
+    ],
+    "development": [
+      8,
+      42,
+      501,
+      501
+    ],
+    "environment_per_scene": [
+      13,
+      100,
+      100
+    ]
+  },
+  "raw_scope": {
+    "satellite_files": 60,
+    "GFS_files": 20,
+    "IMERG_daily_files": 3,
+    "frozen_static_mask_files": 1,
+    "maximum_files": 84,
+    "maximum_bytes": 536870912,
+    "calendar_predeclared": true,
+    "duplicate_reads_within_stage4_pass": 0
+  },
+  "models": {
+    "B3": {
+      "parameters": 4349090,
+      "common_initial_sha256": "53f8a3499925e83e627715c82d7fb87070d2da2265d9272ca6c087bd7ef20312",
+      "training_probe": {
+        "batch": 2,
+        "seconds": 1.3673099999996339,
+        "peak_allocated_bytes": 3019184640,
+        "peak_reserved_bytes": 3596615680,
+        "all_gradients_finite": true,
+        "loss_finite": true,
+        "n_valid": 6860,
+        "pre_clip_norm": 2.3901195526123047,
+        "post_clip_norm": 2.3901195867360925,
+        "limit": 5.0,
+        "missing_gradients": []
+      },
+      "validation_probe": {
+        "batch": 8,
+        "seconds": 0.3435924999994313,
+        "peak_allocated_bytes": 3866163200,
+        "peak_reserved_bytes": 5085593600,
+        "n_valid": 27440
+      },
+      "weights_unchanged": true,
+      "optimizer_constructed": false,
+      "optimizer_updates": 0,
+      "estimated_training_peak_with_adamw_and_512MiB_margin": 3597041424,
+      "estimate_limitation": "AdamW buffers/step not allocated or executed; estimate is not measured optimizer-step peak"
+    },
+    "B4": {
+      "parameters": 4355986,
+      "common_initial_sha256": "53f8a3499925e83e627715c82d7fb87070d2da2265d9272ca6c087bd7ef20312",
+      "training_probe": {
+        "batch": 2,
+        "seconds": 0.26563480000004347,
+        "peak_allocated_bytes": 3019608576,
+        "peak_reserved_bytes": 3613392896,
+        "all_gradients_finite": true,
+        "loss_finite": true,
+        "n_valid": 6860,
+        "pre_clip_norm": 2.391631841659546,
+        "post_clip_norm": 2.391631919585665,
+        "limit": 5.0,
+        "missing_gradients": []
+      },
+      "validation_probe": {
+        "batch": 8,
+        "seconds": 0.33874610000020766,
+        "peak_allocated_bytes": 3866749440,
+        "peak_reserved_bytes": 5106565120,
+        "n_valid": 27440
+      },
+      "weights_unchanged": true,
+      "optimizer_constructed": false,
+      "optimizer_updates": 0,
+      "estimated_training_peak_with_adamw_and_512MiB_margin": 3597520528,
+      "estimate_limitation": "AdamW buffers/step not allocated or executed; estimate is not measured optimizer-step peak"
+    }
+  },
+  "mee13_extra_parameters_vs_mee11": 576,
+  "tests": {
+    "unique_new_checks": 9,
+    "first_run": 8,
+    "affected_or_new_followup": 3,
+    "final_status": "PASS",
+    "historical_tests_rerun": false,
+    "runs": [
+      "20261024T042230_662512Z",
+      "20261024T042803_662455Z"
+    ],
+    "initial_import_failure_preserved": true
+  },
+  "cached_verification": {
+    "status": "PASS_CACHED_ONLY_CURRENT_METADATA",
+    "new_weather_reads": 0,
+    "optimizer_updates": 0,
+    "prior_read_ledger_unchanged": true,
+    "final_data_identity": {
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "lead": 6,
+      "mode": "retrospective",
+      "train": 959,
+      "dev": 963,
+      "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+      "candidate_manifest_sha256": {
+        "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+        "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+      }
+    },
+    "final_development_strong_scenes": 208,
+    "steps_per_epoch": 480,
+    "paired_update_cap": 8640,
+    "original_real_dry_receipt_sha256": "0e831d6436df7c5083ef1f0268ecc2c437834a1b2a96dd3949dce1ad327fb652",
+    "post_probe_changes": "Only provenance, startup/partition guards, target-buffer bound and inactive formal-run receipts changed; numerical GPU path was not rerun unchanged."
+  },
+  "source_sha256": {
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": "cb68490f82830be5e47aed141a7bae4dd8840c71f930a1d157d5e340fe202352",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "9d364a5b961833079c850a8765eb41d3a09ac04a251d2db79110557e5c34bc09",
+    "src/yuntapr/experimental/core_innovation/stage4/evaluation.py": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+    "src/yuntapr/experimental/core_innovation/stage4/__init__.py": "cf9457b3a02f9aedf76c272956b6f0a1d81e10e01abeaf881f0b3546afee0abe",
+    "src/yuntapr/experimental/core_innovation/stage2/__init__.py": "528a229ac66882187fcbc2d2b2c0d231dd04ce9e66ab70161e9a72540f3e567c",
+    "src/yuntapr/experimental/core_innovation/stage2/models.py": "9573fd013c797c5e846d0b08d1eeb4049167c6f35944cd4b78dd8b72dd4cdb0c",
+    "src/yuntapr/experimental/core_innovation/stage2/environment.py": "dc2cda3b99246a10a3168c2d9ecfa2761dcd3718ece0fc70a7720d140934e835"
+  },
+  "receipt_sha256": {
+    "selection.json": "eee7716dfb7c103910c2d3c18e7f64f199d78ac2319b58d277bb2df9f83d2a24",
+    "batch_receipt.json": "8923926e5cb8ebcc46edca42b25f14121c6275df706f6eab15b1dbda0d7cde9b",
+    "completion.json": "0e831d6436df7c5083ef1f0268ecc2c437834a1b2a96dd3949dce1ad327fb652",
+    "cached_verification.json": "426758047e3311e6a4f60fe542c058e7a76522f0a6f96f9e3c90b10d46e05e10",
+    "import_failure_from_tool.json": "5031a2bf9519da6e87e1ef94ee6d9186bc4bad38f79d6899899cdee0dd1b08b8",
+    "reads/reads.sqlite": "d5e9342df2428d93eb9570aa7e3769853dd1d520ecdf071c715245510174683f"
+  },
+  "limitations": [
+    "AdamW construction/step and full9-epoch execution were NOT run; resource estimates do not establish long-run stability.",
+    "B3/B4 initial identity is a construction check, not a skill result.",
+    "Formal seed/MEE13/scalers/f006 acceptance/new budget and launch remain unapproved.",
+    "Real high-altitude diagnostics need an approved target DEM and altitude edges; interface has synthetic evidence only.",
+    "Scope remains2024 Dev retrospective at00/06/12/18UTC, not all-day NRT or2025 final-test evidence."
+  ]
+}

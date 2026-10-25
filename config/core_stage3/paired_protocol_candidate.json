@@ -1,0 +1,45 @@
+{
+  "status": "RESEARCHER_DECISION_AND_FINAL_POPULATION_REQUIRED",
+  "evidence_base": "e4563a0554ff6a6ffaaa8cc1e913cc005044688e",
+  "models": {"B3": "seven specified bands x six frozen historical slots", "B4": "same B3 + approved MEE candidate"},
+  "comparison": {
+    "same_train_and_development_ids": true,
+    "same_label_sha256_and_IMERG_indices": true,
+    "same_target_masks_and_frozen_evaluation": true,
+    "common_initial_weights": "Reuse stage2 paired_spectral_candidates after MEE channel decision; no historical checkpoint loading",
+    "training_order": "One persisted seed/epoch permutation SHA per epoch, consumed identically by both arms; one pass, drop_last=false",
+    "seed": null,
+    "loss_arm_candidate": "E0",
+    "loss_definition_source": "src/yuntapr/experimental/phase_b_v2_ablations/config.py:get_config(E0)",
+    "loss_parameters_candidate": {"alpha": 0.5, "gamma": 2.0, "lambda_q": 1.0},
+    "epochs_candidate": 9,
+    "physical_batch": 2,
+    "gradient_accumulation": 1,
+    "validation_batch": 8,
+    "optimizer_and_precision": "Inherit pinned Phase-A AdamW/BF16 policy; new MEE parameters must receive complete disjoint parameter groups before launch",
+    "scheduler": "Keep one-epoch warmup and first nine epochs of 50-epoch cosine horizon; derive steps_per_epoch from FINAL N. Do not call the old hard-coded 5228-step learning_rate_prefix.",
+    "formal_run_driver": "Existing B0/B1-only RunSpec/runner is not an authorized B3/B4 runner. Bind new run identities, source/population/scaler pins and independent cap after approval."
+  },
+  "data": {
+    "time_operator": "Researcher selected valid=analysis, retrospective",
+    "fixed_vintage_recommendation": "f006; pending researcher decision, release evidence still absent",
+    "MEE_recommendation": "V1.3 alignment: retain current eleven variables and add T500/RH500 as a thirteen-channel candidate; same files, model adapter pending approval",
+    "B13_statistics": "Keep frozen 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+    "fit_population": "Final joint 2023 Train only, six scene-slot exposures per scene for new satellite bands; one masked GFS exposure per scene",
+    "final_train_population_sha": null,
+    "final_development_population_sha": null,
+    "final_scaler_sha": null
+  },
+  "budget": {
+    "exact_attempt_cap": null,
+    "formula_after_verified_population": "2 * 9 * ceil(N_final_Train / 2)",
+    "validation_batches_after_verified_population": "2 * 9 * ceil(N_final_Development / 8)",
+    "inherited_seed2027_allowance": 0,
+    "replay_allowance": 0
+  },
+  "formal_training_authorized": false,
+  "raw_read_authorized_by_this_file": false,
+  "seed2028_authorized": false,
+  "FinalFit_authorized": false,
+  "test2025_authorized": false
+}

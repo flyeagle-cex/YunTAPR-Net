@@ -1,0 +1,101 @@
+{
+  "status": "ACTUAL_TRAINING_RESUMED_VERIFIED",
+  "observed_utc": "2026-10-21T12:13:23.977228+00:00",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B0_E1_EPOCH1_RECOVERY_V1",
+  "session": 1,
+  "latest_new_returned_verified": 163,
+  "latest_new_reserved": 163,
+  "cumulative_reserved": 187380,
+  "hard_cap": 370197,
+  "exact_restoration": {
+    "last_sha256": "9bdd53f2544885abc6284aeccae65c7e0d2234af199a83f7ced22f241f38a55e",
+    "epoch": 1,
+    "update": 5228,
+    "model_sha256": "3a8bc788f246cecc7f0b8841c03df013405a6436d472490a30f49b3d2c434873",
+    "optimizer_sha256": "9ff11b183bfb85d49cebd505752b20c8d17bead2c15c2fe17c5e2b72246431b2",
+    "rng_sha256": "8ddaa6aa5dea2edf0210a67eb8d892800ff6fb76f43a71e446975076d89faa60",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 5228
+    },
+    "all_state_verified_before_first_resumed_step": true
+  },
+  "first_resumed_optimizer_step": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-21T12:12:30.778913+00:00",
+    "run_id": "B0_MATCHED_V2__E1__s2027",
+    "epoch": 2,
+    "update": 5229,
+    "campaign_attempt": 1,
+    "lr": 9.99999999962777e-05,
+    "n_valid": 6860,
+    "n_rain": 2194,
+    "s_occ_unweighted": 1885.3731689453125,
+    "s_qr_unweighted": 294.0694248019646,
+    "training_objective": 0.3177030020039762,
+    "pre_clip_norm": 0.20894548296928406,
+    "post_clip_norm": 0.20894549843589444,
+    "limit": 5.0,
+    "missing_gradients": []
+  },
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 48056,
+        "creation_filetime": 134370582842731564,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 15104,
+        "creation_filetime": 134370582976021988,
+        "image_path_key": "ac5604569b8315f2a5a499dff0fdbaa7d6dafc1457653410f92a42db20e7c09f"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        36016,
+        40136,
+        15104
+      ]
+    }
+  },
+  "heartbeat": {
+    "utc": "2026-10-21T12:13:22.996941+00:00",
+    "elapsed_seconds": 278905.349737,
+    "content_bytes": 8103582639761,
+    "cpu": {
+      "working_set_bytes": 2409594880,
+      "peak_working_set_bytes": 2418270208,
+      "private_bytes": 7771607040,
+      "peak_pagefile_bytes": 7780327424
+    },
+    "cuda_peak_allocated": 2870348288,
+    "cuda_peak_reserved": 3451912192
+  },
+  "host_resources": {
+    "total_phys": 33752997888,
+    "available_phys": 17401004032,
+    "total_page": 49859125248,
+    "available_page": 18798129152,
+    "disk_free_bytes": 35224997888
+  },
+  "source_v7_ledger_sha256_unchanged": "8870fd8431538c8b8e930b640f736ed42e645270351f612dd4c562ed76bba38d",
+  "old_failure_history_preserved": true,
+  "original_source_and_frozen_config": "VERIFIED_BY_RELEASE_GUARD_BEFORE_WORKER_AND_EPOCH_START",
+  "supervisor_and_gui_resource_watchdogs": true,
+  "automatic_retries": 0,
+  "seed2028_authorized": false,
+  "finalfit_authorized": false,
+  "test_2025_authorized": false,
+  "independent_working_directory": "YunTAPR-Net-completed-review-20261021",
+  "source_commit": "998a5746bf4c9024b28042ec0eaf4618337f9d60",
+  "scope": "Startup verification only; epoch2 validation and new LAST not yet complete"
+}

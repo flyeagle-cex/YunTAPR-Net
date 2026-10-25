@@ -1,0 +1,17 @@
+{
+  "scope": "STAGE2_DELTA_ONLY",
+  "inherited_52_tests_rerun": false,
+  "tests": 5,
+  "errors": 0,
+  "failures": 0,
+  "success": true,
+  "optimizer_updates": 0,
+  "raw_data_reads": 0,
+  "test2025_reads": 0,
+  "torch": "2.11.0+cu128",
+  "numpy": "2.5.3",
+  "warnings": [
+    "Setting the shape on a NumPy array has been deprecated in NumPy 2.5.\nAs an alternative, you can create a new view using np.reshape (with copy=False if needed)."
+  ],
+  "command": "python -B tools/core_stage2/run_checks.py --test test_data_budget.AdditionalTests"
+}

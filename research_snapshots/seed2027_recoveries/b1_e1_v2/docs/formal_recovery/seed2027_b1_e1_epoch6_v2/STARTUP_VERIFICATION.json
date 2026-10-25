@@ -1,0 +1,114 @@
+{
+  "status": "ACTUAL_TRAINING_RESUMED_VERIFIED",
+  "observed_utc": "2026-10-22T09:22:21.013042+00:00",
+  "campaign": "YUNTAPR_PHASE_B_V2_SEED2027_B1_E1_EPOCH6_RECOVERY_V2",
+  "session": 1,
+  "exact_last_sha256": "245619dbc66e60c677c2288660286a88748c9bf3121200610d3e7b13ebe4bc2b",
+  "source_epoch": 6,
+  "source_update": 31368,
+  "actual_restoration": {
+    "last_sha256": "245619dbc66e60c677c2288660286a88748c9bf3121200610d3e7b13ebe4bc2b",
+    "epoch": 6,
+    "update": 31368,
+    "model_sha256": "0048d320d277a4bab9e35deedd52f1cb0adc5542f340004ee5ee6c771b718e61",
+    "optimizer_sha256": "7d9dba9c15bed5ed3f091a825639543ac6bb480c1fd2d130d3956842a550b8ed",
+    "rng_sha256": "8ddaa6aa5dea2edf0210a67eb8d892800ff6fb76f43a71e446975076d89faa60",
+    "scheduler": {
+      "trajectory": "S0_ORIGINAL_50_EPOCH_PREFIX",
+      "steps_per_epoch": 5228,
+      "original_horizon": 261400,
+      "proposed_stop": 47052,
+      "completed": 31368
+    },
+    "all_state_verified_before_first_resumed_step": true
+  },
+  "first_verified_resumed_step": {
+    "event": "STEP_RETURNED",
+    "utc": "2026-10-22T09:20:40.997233+00:00",
+    "run_id": "B1_V2__E1__s2027",
+    "epoch": 7,
+    "update": 31369,
+    "campaign_attempt": 1,
+    "lr": 9.747806818751449e-05,
+    "n_valid": 6860,
+    "n_rain": 1493,
+    "s_occ_unweighted": 1218.0106201171875,
+    "s_qr_unweighted": 192.19384455501304,
+    "training_objective": 0.20556916394638494,
+    "pre_clip_norm": 0.2953971326351166,
+    "post_clip_norm": 0.2953971483347932,
+    "limit": 5.0,
+    "missing_gradients": []
+  },
+  "new_returned_verified": 174,
+  "new_reserved": 174,
+  "cumulative_reserved": 265811,
+  "hard_cap": 375425,
+  "native_probes": {
+    "owner": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 39476,
+        "creation_filetime": 134371343894442660,
+        "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7"
+      }
+    },
+    "worker": {
+      "status": "LIVE_MATCH",
+      "actual_identity": {
+        "pid": 34840,
+        "creation_filetime": 134371343963679362,
+        "image_path_key": "136acdbf78984a1811dd66988eb7968ba9adc1c1f918c933b676f59fb0db1cf7"
+      }
+    },
+    "job": {
+      "status": "PRESENT",
+      "pids": [
+        40060,
+        34840
+      ]
+    }
+  },
+  "owned_worker_job_images": [
+    {
+      "pid": 40060,
+      "image_name": "pythonw.exe"
+    },
+    {
+      "pid": 34840,
+      "image_name": "pythonw.exe"
+    }
+  ],
+  "no_console_host_in_current_worker_job": true,
+  "heartbeat": {
+    "utc": "2026-10-22T09:22:19.186886+00:00",
+    "elapsed_seconds": 355041.53381099994,
+    "content_bytes": 11749132759005,
+    "cpu": {
+      "working_set_bytes": 2852642816,
+      "peak_working_set_bytes": 2880798720,
+      "private_bytes": 7842217984,
+      "peak_pagefile_bytes": 7870529536
+    },
+    "cuda_peak_allocated": 2894721024,
+    "cuda_peak_reserved": 3468689408
+  },
+  "host_resources": {
+    "total_phys": 33752997888,
+    "available_phys": 15356018688,
+    "total_page": 46101028864,
+    "available_page": 18357264384,
+    "disk_free_bytes": 37680312320
+  },
+  "zero_update_failed_ledger_sha256_unchanged": "285a600798a7baf0f7ac230a6ba2b16e505816bb939c272dd1bd4570bcbf4ff7",
+  "all_old_failed_histories_preserved": true,
+  "original_scientific_source": "Verified unchanged by release guard before actual epoch start",
+  "frozen_environment_files_modified": false,
+  "scientific_configuration_changed": false,
+  "new_additional_attempt_budget": 0,
+  "automatic_retries": 0,
+  "seed2028_authorized": false,
+  "finalfit_authorized": false,
+  "test_2025_authorized": false,
+  "scope": "Startup proof only; replay epoch7 development validation and LAST are not yet complete"
+}
