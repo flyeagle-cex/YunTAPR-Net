@@ -1,0 +1,22 @@
+test_candidates (unittest.loader._FailedTest.test_candidates) ... ERROR
+
+======================================================================
+ERROR: test_candidates (unittest.loader._FailedTest.test_candidates)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_candidates
+Traceback (most recent call last):
+  File "[PYTHON]\Lib\unittest\loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+  File "[REPO]\tests\research_readiness\test_candidates.py", line 7, in <module>
+    from yuntapr.experimental.core_innovation.stage2.models import SpectralCandidate
+  File "[REPO]\src\yuntapr\experimental\core_innovation\stage2\models.py", line 8, in <module>
+    from yuntapr.contracts.loader import REPO_ROOT, load_contract
+  File "[REPO]\src\yuntapr\contracts\loader.py", line 4, in <module>
+    import yaml
+ModuleNotFoundError: No module named 'yaml'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

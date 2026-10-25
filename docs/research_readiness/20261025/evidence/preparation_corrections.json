@@ -1,0 +1,21 @@
+{
+  "status": "CORRECTED_AND_TARGETED_CHECKS_PASSED",
+  "formal_training_status": "NOT_STARTED",
+  "items": [
+    {
+      "step": "Initial synthetic candidate import",
+      "failure": "Default Python did not contain PyYAML; tests did not execute",
+      "correction": "Used the existing historical CUDA environment; installed no packages",
+      "verification": "Candidate tests and CUDA synthetic forward/backward passed"
+    },
+    {
+      "step": "First metadata-only B2 proposal construction",
+      "failure": "Python tuple versus JSON list comparison falsely reported read-scope drift",
+      "correction": "Compare canonical JSON SHA256; role source identities and data are unchanged",
+      "verification": "All source scope canonical digests, actual B3 initialization and nine train orders match"
+    }
+  ],
+  "raw_weather_reads": 0,
+  "checkpoint_loads": 0,
+  "optimizer_updates": 0
+}
