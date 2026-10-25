@@ -80,7 +80,9 @@ class B2Reader(base.Reader):
                 state = 'BUDGET_ALERT'
             current = next((e for e in epochs if e['phase'] != 'SEALED'), epochs[-1])
             now = datetime.now(timezone.utc)
-            elapsed = max(0,(now-self.started).total_seconds())
+            terminal = self.folder/'failure.json' if failure else self.folder/'completion.json' if complete else None
+            stopped_at = datetime.fromtimestamp(terminal.stat().st_mtime,timezone.utc) if terminal else now
+            elapsed = max(0,(stopped_at-self.started).total_seconds())
             result = dict(state=state,snapshot_utc=now.isoformat(),refresh_seconds=15,read_only=True,process_observed=live,
                 returned=returned,reserved=reserved,uncertain=reserved-returned,io=io,epochs=epochs,
                 sealed_epochs=sum(bool(e['checkpoint_sha256']) for e in epochs),current_epoch=current['epoch'],phase=current['phase'],
