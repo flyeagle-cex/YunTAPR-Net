@@ -1,6 +1,6 @@
 # B2 七通道单时次训练与配对评价报告
 
-**科学协议：FROZEN（研究者2026-10-25确认）；正式训练：NOT_STARTED；B2/B3配对结果：NOT_VERIFIED。本轮仅补B2真实缓存检查，不重跑未变化的既有检查。**
+**科学协议：FROZEN（研究者2026-10-25确认）；正式训练：IN_PROGRESS（已获研究者最终批准）；B2/B3第九轮配对结果：NOT_VERIFIED。本轮仅补B2真实缓存检查，不重跑未变化的既有检查。**
 
 核查时间：2026-10-25T17:42:33+08:00（北京时间）。研究者为主体，AI 仅辅助核查和实现。本文文件已生成，不代表正式实验或科学验收完成。
 
@@ -71,13 +71,13 @@ B3/B4 的第九轮权重文件已重新哈希：B3=`c7780bc6e45992639c90339c8855
 
 |指标|B2|历史B3 seed2029|B2−B3|
 |---|---|---|---|
-|Brier Score（布里尔分数）|NOT_STARTED|0.0995788457841|NOT_VERIFIED|
-|AUROC（ROC 曲线下面积）|NOT_STARTED|0.888024778135|NOT_VERIFIED|
-|AP（平均精确率）|NOT_STARTED|0.570741767909|NOT_VERIFIED|
-|Conditional Pinball（条件分位数损失）|NOT_STARTED|0.129258066651|NOT_VERIFIED|
-|q32 Coverage（最高分位数覆盖率）|NOT_STARTED|0.935049776862|NOT_VERIFIED|
+|Brier Score（布里尔分数）|IN_PROGRESS|0.0995788457841|NOT_VERIFIED|
+|AUROC（ROC 曲线下面积）|IN_PROGRESS|0.888024778135|NOT_VERIFIED|
+|AP（平均精确率）|IN_PROGRESS|0.570741767909|NOT_VERIFIED|
+|Conditional Pinball（条件分位数损失）|IN_PROGRESS|0.129258066651|NOT_VERIFIED|
+|q32 Coverage（最高分位数覆盖率）|IN_PROGRESS|0.935049776862|NOT_VERIFIED|
 
-**当前没有B2实验结果，无法交付有效的B2/B3数值比较。** 表内B3来自真实第九轮Dev收据，不能充当B2。未来获批完成后，执行器用同人口、同分组、同掩膜的B2 E9收据与历史B3 E9计算差值；不得改换最佳轮。
+**当前尚无B2第九轮终点结果，无法交付最终B2/B3数值比较。** 表内B3来自真实第九轮Dev收据，不能充当B2。未来获批完成后，执行器用同人口、同分组、同掩膜的B2 E9收据与历史B3 E9计算差值；不得改换最佳轮。
 
 最终冻结提案：[b2_proposal_v4.json](evidence/b2_proposal_v4.json)；旧v3及旧交付收据按原快照保留，不重新执行其中已通过的检查。；[授权模板（False）](B2_RESEARCHER_APPROVAL_TEMPLATE.json)；[最小运行说明](RUNBOOK.md)。
 
@@ -98,3 +98,9 @@ B13继续使用2023 Train冻结统计：统计身份SHA=656fe7a929cbd8617b08427e
 最小真实数据缺口已补齐，准备状态为READY_WAITING_FINAL_START_APPROVAL。当前无已知科学或代码阻塞；唯一未满足条件为研究者的一次明确最终启动批准。完整九轮训练状态仍NOT_STARTED，这不再作为新的预检查关卡。实际源文件的即时可读性/SHA和资源入场沿用执行器内置校验，在获批运行中自然检查，失败即停；不额外申请新的验证轮。
 
 最终额度固定：4,320更新、477,571,641,012逻辑源字节、142,812源读取实例、21,600秒、零replay、至少24GiB可用训练工作空间。缓存检查时可用工作空间约75.2GiB；启动时直接执行已有资源入场检查。B3/B4新seed和B5–B8不在此授权范围。
+
+## 已启动与本地进度页面
+
+研究者已经对提交a35302186b4b5d3d7ec735885a8d93762e6d3567给出“批准正式启动B2”的明确回复；单次正式运行已于2026-10-25 18:33（北京时间）启动，状态IN_PROGRESS。上述准备阶段“待最终批准/NOT_STARTED”段落为历史状态，不构成再次申请或启动指令。运行标识B2_s2029_formal_20261025_v1，原资源额度及零replay保持不变。
+
+新增只读本地页面tools/b2_monitor/：按用户要求替代聊天中持续轮询和逐轮播报；页面打开时每15秒读取已有JSON/只读SQLite快照，展示真实更新数、完整Train/Dev/LAST、预算及数值指标。它不导入训练执行器，不读气象源/权重，不提供训练控制接口。实际网址与快捷方式仅保存在私有service目录。页面创建时已完成前三轮训练及Dev，仍在第4轮；不是正式完成结论。页面检查收据见evidence/b2_monitor_page_check.json。
