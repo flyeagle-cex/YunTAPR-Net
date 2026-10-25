@@ -159,6 +159,17 @@ class TailTests(unittest.TestCase):
 
 
 class AuthorizationTests(unittest.TestCase):
+    def test_frozen_six_hour_cap(self):
+        proposal = dict(proposal_sha256='a'*64, budget=dict(logical_source_bytes=477571641012, logical_source_read_instances=142812))
+        approval = dict(approved_by_researcher=True, model='B2', seed=2029, proposal_sha256='a'*64,
+                        code_commit='b'*40, optimizer_update_cap=4320, source_read_byte_cap=477571641012,
+                        source_read_file_cap=142812, replay_allowance=0, approved_stem_rule=STEM_RULE,
+                        decision_id='SYNTHETIC_AUTHORIZATION_VALIDATOR_ONLY_NOT_A_TRAINING_GRANT', max_wall_seconds=21600)
+        validate_authorization(approval, proposal, current_commit='b'*40)
+        approval['max_wall_seconds'] = 21601
+        with self.assertRaises(PermissionError):
+            validate_authorization(approval, proposal, current_commit='b'*40)
+
     def test_historical_or_incomplete_authorization_never_grants_b2(self):
         proposal = dict(proposal_sha256='a'*64, budget=dict(logical_source_bytes=123, logical_source_read_instances=5))
         for approval in ({}, dict(approved_by_researcher=False), dict(approved_by_researcher=True, model='B3', seed=2029)):

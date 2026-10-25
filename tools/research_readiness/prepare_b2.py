@@ -97,6 +97,7 @@ def main():
                   logical_source_read_instances=9*sum(v['file_count'] for v in per_role.values()),
                   logical_source_bytes=9*sum(v['bytes_per_pass'] for v in per_role.values()),
                   cached_IMERG_limit_bytes=512*1024**2, scopes=per_role,
+                  max_wall_seconds=21600, minimum_workspace_bytes=24*1024**3,
                   checkpoint_tensor_bytes_lower_bound_per_epoch=3*model_bytes,
                   nine_LAST_tensor_bytes_lower_bound=9*3*model_bytes,
                   checkpoint_python_rng_receipts_and_SQLite_overhead='NOT_INCLUDED_IN_LOWER_BOUND',
@@ -107,7 +108,7 @@ def main():
                          'Byte cap describes source payload delivered to Python, not physical disk sectors or monetary cost.'])
     code_files = [p for folder in ('src/yuntapr/experimental/research_readiness', 'tools/research_readiness') for p in (ROOT/folder).glob('*.py')]
     code = {p.relative_to(ROOT).as_posix(): sha(p) for p in sorted(code_files)}
-    proposal = dict(status='PREPARED_PENDING_RESEARCHER_REVIEW', formal_training_status='NOT_STARTED',
+    proposal = dict(status='SCIENTIFIC_PROTOCOL_FROZEN_WAITING_FINAL_START', formal_training_status='NOT_STARTED',
                     as_of=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat(timespec='seconds'),
                     base_commit=subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD'], text=True).strip(),
                     reference_execution_commit='7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35',
@@ -115,7 +116,7 @@ def main():
                     config=dict(model='B2', seed=2029, loss='E0', epochs=9, batch=2, validation_batch=8,
                                 endpoint='FIXED_EPOCH_9_LAST', optimizer='AdamW', lead_hours=6, mode='retrospective',
                                 input_channels=7, input_offset_before_analysis_minutes=10, stem_rule=STEM_RULE,
-                                initialization_status='PROPOSED_NOT_FROZEN', normalization='REUSE_B3_TRAIN_ONLY_SCALERS_NO_REFIT',
+                                initialization_status='FROZEN_BY_RESEARCHER_20261025', normalization='REUSE_B3_TRAIN_ONLY_SCALERS_NO_REFIT',
                                 lr_warmup_updates=480, lr_original_horizon_updates=24000,
                                 lr_first=lr_for_update(1, steps_per_epoch=480), lr_last=lr_for_update(4320, steps_per_epoch=480)),
                     data=plan.identity, split_and_observation_timing=time_checks, spectral_scalers=scales,

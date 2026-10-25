@@ -1,7 +1,7 @@
-"""B2 candidate paired with the unchanged seed2029 B3 initializer.
+"""Researcher-frozen B2 t-10 input and seed2029 B3 stem mapping (2026-10-25).
 
-The input-stem rule is a proposal requiring researcher approval. It is not a
-new frozen scientific decision. Historical B3/B4 modules are left unchanged.
+Scientific approval does not grant formal training or source-read budgets.
+Historical B3/B4 modules are unchanged.
 """
 import math
 import torch
@@ -15,6 +15,8 @@ from yuntapr.experimental.core_innovation.stage4 import POPULATION_SHA
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.config import get_config
 
+# Retain the original machine identifier so existing tensor receipts stay bound.
+# Its suffix is historical; the scientific decision is now frozen.
 STEM_RULE = 'LATEST_SLOT_FANIN_RESCALED_SQRT6_PROPOSED'
 INPUT_OFFSET_MINUTES = 10
 STEM_WEIGHTS = ('backbone.enc0.conv1.weight', 'backbone.enc0.skip.weight')
@@ -57,7 +59,7 @@ def initialize_b2(reference_b3, *, stem_rule, root=REPO_ROOT):
     shared = {k: v for k, v in target.items() if k not in STEM_WEIGHTS}
     if not all(torch.equal(v, source[k]) for k, v in shared.items()):
         raise AssertionError('Shape-compatible initialization differs')
-    evidence = dict(stem_rule=stem_rule, decision_status='PROPOSED_REQUIRES_RESEARCHER_APPROVAL',
+    evidence = dict(stem_rule=stem_rule, decision_status='FROZEN_BY_RESEARCHER_20261025',
                     b3_reference_sha256=state_digest(source),
                     b2_initial_sha256=state_digest(target),
                     compatible_state_sha256=state_digest(shared),

@@ -33,8 +33,8 @@ def validate_authorization(approval, proposal, *, current_commit):
     if any(approval.get(k) != v for k, v in required.items()):
         raise PermissionError('No exact researcher approval for this B2 proposal/code/budget')
     if (not isinstance(approval.get('decision_id'), str) or not approval['decision_id'].strip()
-            or type(approval.get('max_wall_seconds')) != int or not 0 < approval['max_wall_seconds'] <= 43200):
-        raise PermissionError('Explicit researcher decision ID and reviewed wall-time cap <=12h required')
+            or type(approval.get('max_wall_seconds')) != int or not 0 < approval['max_wall_seconds'] <= 21600):
+        raise PermissionError('Explicit researcher decision ID and reviewed wall-time cap <=6h required')
 
 
 class B2Ledger:
@@ -86,6 +86,7 @@ def difference(b3, b2):
 
 
 def execute(proposal_path, private_path, approval_path, output, *, root, current_commit):
+    start = time.monotonic()
     proposal, private, approval = map(read, (proposal_path, private_path, approval_path))
     body = dict(proposal)
     expected = body.pop('proposal_sha256')
@@ -133,7 +134,6 @@ def execute(proposal_path, private_path, approval_path, output, *, root, current
     orders = {e: epoch_order(plan.ids('Train'), 2029, e) for e in range(1, 10)}
     write(output/'train_orders.json', {str(e): dict(ids=o, sha256=digest(o)) for e, o in orders.items()})
     ledger = B2Ledger(output/'updates.sqlite', dict(approval=approval, data=plan.identity))
-    start = time.monotonic()
     def deadline():
         if time.monotonic()-start > approval['max_wall_seconds']:
             raise RuntimeError('Reviewed wall-time cap reached; no retry/resume')
@@ -187,6 +187,7 @@ def execute(proposal_path, private_path, approval_path, output, *, root, current
                     del b, out, loss
             finally:
                 r.close()
+            deadline()
             if tuple(visited) != order or u != epoch*480 or nvalid != 959*3430 or state_digest(dict(model.named_buffers())) != buffer_sha:
                 raise RuntimeError('Incomplete B2 epoch or changed buffers')
             training = dict(scenes=959, batches=480, updates=u, n_valid=nvalid, n_rain=nrain,
@@ -220,6 +221,7 @@ def execute(proposal_path, private_path, approval_path, output, *, root, current
             finally:
                 ev.close()
                 r.close()
+            deadline()
             write(output/f'B2_development_{epoch:02d}.json', report)
             write(output/f'B2_tail_diagnostics_{epoch:02d}.json', tail.finish())
             payload = dict(identity=dict(data=plan.identity, approval=approval, model='B2'), epoch=epoch, updates=u,
@@ -238,6 +240,7 @@ def execute(proposal_path, private_path, approval_path, output, *, root, current
         if ledger.db.execute("SELECT COUNT(*) FROM updates WHERE state='RETURNED'").fetchone()[0] != 4320:
             raise RuntimeError('B2 update ledger incomplete')
         write(output/'B2_minus_B3_E09.json', difference(baseline, report))
+        deadline()
         result = dict(status='COMPLETE_TRAIN_AND_DEV_EVALUATION', model='B2', seed=2029, updates=4320, epochs=9,
                       scientific_acceptance='NOT_IMPLIED_BY_RUN_COMPLETION', proposal_sha256=expected)
         write(output/'completion.json', result)
