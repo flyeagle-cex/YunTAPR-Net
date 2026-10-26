@@ -1,6 +1,6 @@
 # B2完成记录与阶段验收
 
-最新：三任务限额恢复入口已准备，等待研究者批准390次必要重放及新预算。当前未恢复，旧只读页面继续显示真实停止状态；见[恢复方案](B3_B4_MULTI_SEED_PLAN.md)与[恢复提案](evidence/b3_b4_recovery_proposal.json)。不重训已完成B3。
+最新：三任务限额恢复已获研究者明确批准，943da95固定副本已启动。单源校验通过，B4已从更新481进入真实训练；同一只读页面显示新恢复包，原失败收据保留。见[恢复方案](B3_B4_MULTI_SEED_PLAN.md)与[恢复提案](evidence/b3_b4_recovery_proposal.json)。不重训已完成B3。
 
 B2 seed2029/E0/f006九轮及Dev评估已核实完成；B2/B3固定E9配对已补齐。B0–B4总体科研验收仍IN_PROGRESS。
 

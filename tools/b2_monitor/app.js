@@ -10,8 +10,8 @@ function render(s){
   lastGood=s;
   let view=s;
   if(s.runs){
-    put('page-title','B3/B4 多seed复现');put('subtitle','Seed 2030 / 2031 · 固定串行 · E0 · 每模型九轮 LAST');
-    put('time-label','距离整包 24 小时时限');$('campaign-section').hidden=false;
+    put('page-title',s.recovery?'B3/B4 限额恢复':'B3/B4 多seed复现');put('subtitle',s.recovery?`B4从E1恢复 · 必要重放 ${s.replay_returned} / 390 · 累计预算包含原失败段`:'Seed 2030 / 2031 · 固定串行 · E0 · 每模型九轮 LAST');
+    put('time-label',s.recovery?'恢复包剩余时间额度':'距离整包 24 小时时限');$('campaign-section').hidden=false;
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
     view=chosen;
     $('task').replaceChildren();$('campaign-runs').replaceChildren();
@@ -47,6 +47,7 @@ function render(s){
   }
   put('bytes',`${(s.io.bytes/1e9).toFixed(3)} / ${(s.limits.bytes/1e9).toFixed(3)} GB`);
   put('files',`${number.format(s.io.files)} / ${number.format(s.limits.files)}`);put('uncertain',String(s.uncertain));
+  put('replay',s.recovery?'390（额外重试0）':'0');
   const r=s.resources||{},g=r.gpu;
   put('gpu',g?.name||'暂不可用');put('gpu-use',g?`${fmt(g.used_mib/1024,2)} / ${fmt(g.total_mib/1024,2)} GiB · ${fmt(g.utilization,0)}%`:'—');
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');

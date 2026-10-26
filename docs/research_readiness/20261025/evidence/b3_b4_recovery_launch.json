@@ -1,0 +1,184 @@
+{
+  "status": "IN_PROGRESS",
+  "as_of": "2026-10-26T06:21:22.980737+00:00",
+  "training_commit": "943da957a3af846746c21b52d05a148bcb135064",
+  "proposal_sha256": "bef5b3c842043bf2836c930bb0760b8a303ca4c971c6dad2d905c91ec55f237c",
+  "researcher_approval": {
+    "approved": true,
+    "decision_id": "RESEARCHER_RECOVERY1_943DA95_20261026",
+    "approved_at": "2026-10-26T14:17:13.416389+08:00",
+    "answer": "批准该限额恢复包",
+    "approved_replay_updates": 390,
+    "private_approval_sha256": "14289c64a46dcfa038607446acb48b1bfb59382335e53ebac70e8de8261350e5"
+  },
+  "budget": {
+    "new_updates": 12480,
+    "new_task_updates": [
+      3840,
+      4320,
+      4320
+    ],
+    "replay_allowance": 390,
+    "cumulative_updates": 17670,
+    "prior_updates": 5190,
+    "new_source_bytes": 1379654740081,
+    "cumulative_source_bytes": 1931972785094,
+    "new_source_files": 412569,
+    "cumulative_source_files": 577748,
+    "verification_bytes": 3332713,
+    "verification_files": 1,
+    "checkpoint_loads": 1,
+    "task_wall_seconds": [
+      19584,
+      21600,
+      21600
+    ],
+    "max_wall_seconds": 62784,
+    "prior_wall_seconds": 14498,
+    "prior_B4_wall_seconds": 2016,
+    "minimum_initial_free_bytes": 77309411328,
+    "minimum_task_free_bytes": 25769803776,
+    "additional_retry_allowance": 0,
+    "wall_accounting": "Prior executed interval plus new recovery wall time; approval waiting excluded"
+  },
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "checkpoint": {
+    "model": "B4",
+    "seed": 2030,
+    "epoch": 1,
+    "updates": 480,
+    "sha256": "ba9d605fc655ab8361827c830c5b984dfe02ae0d40ab8a6e4389f76e6beac69c",
+    "parent_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+    "verification": "INHERITED_PREVIOUS_ACTUAL_FILE_SHA; REHASH_BEFORE_FORMAL_LOAD"
+  },
+  "execution": {
+    "frozen_clean_checkout": true,
+    "training_source_modified": false,
+    "single_dispatch": true,
+    "worker_console": "CREATE_NO_WINDOW",
+    "runtime": "Same direct Python3.12.14 base plus existing CUDA dependencies",
+    "actual_E1_restore_reached": true,
+    "restoration_evidence": "Returned updates begin481 after bound checkpoint SHA/model/AdamW checks and Python/NumPy/Torch CPU/CUDA RNG restoration; no new E1 training"
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 18500743168,
+    "workspace_free_bytes": 76277174272,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 24086478848
+  },
+  "single_source_verification": {
+    "receipt": {
+      "opened_files": 1,
+      "delivered_bytes": 3332713,
+      "reserved_bytes": 3332713,
+      "states": {
+        "READ_COMPLETE": 1
+      }
+    },
+    "ledger_rows": [
+      [
+        "READ_COMPLETE",
+        3332713,
+        3332713,
+        "1d24c7f06958a9756d4fdd754bc7d9156877fa74f7c82f9923ff9200e2438e9f"
+      ]
+    ]
+  },
+  "observation": {
+    "ledger_rows": [
+      [
+        "B4",
+        "RETURNED",
+        153,
+        481,
+        633
+      ]
+    ],
+    "new_returned_updates": 153,
+    "cumulative_returned_updates": 5343,
+    "effective_B4_updates": 633,
+    "replay_returned": 153,
+    "uncertain_optimizer_updates": 0,
+    "cumulative_source_bytes": 560867148938,
+    "cumulative_source_files": 167831,
+    "tasks": [
+      {
+        "model": "B3",
+        "seed": 2030,
+        "state": "COMPLETE",
+        "returned": 4320,
+        "reserved": 4320,
+        "sealed_epochs": 9
+      },
+      {
+        "model": "B4",
+        "seed": 2030,
+        "state": "RUNNING",
+        "returned": 633,
+        "reserved": 633,
+        "sealed_epochs": 1
+      },
+      {
+        "model": "B3",
+        "seed": 2031,
+        "state": "PENDING",
+        "returned": 0,
+        "reserved": 0,
+        "sealed_epochs": 0
+      },
+      {
+        "model": "B4",
+        "seed": 2031,
+        "state": "PENDING",
+        "returned": 0,
+        "reserved": 0,
+        "sealed_epochs": 0
+      }
+    ]
+  },
+  "initializer_and_all_nine_orders_match_completed_B3": true,
+  "monitor": {
+    "state": "PASS_API_AND_BROWSER_VISUAL_CHECK",
+    "recovery_detected": true,
+    "cumulative_cost_includes_original_failed_segment": true,
+    "inherited_E1_marked": true,
+    "new_budget_and_replay_390_visible": true,
+    "browser_console_errors": [],
+    "javascript_syntax": "PASS",
+    "python_syntax": "PASS",
+    "same_private_loopback_address": true,
+    "read_only": true,
+    "training_controls": false,
+    "raw_source_reads_by_monitor": 0,
+    "model_weight_reads_by_monitor": 0,
+    "optimizer_updates_by_monitor": 0
+  },
+  "original_failed_run": "PRESERVED_NOT_RELABELED",
+  "completed_B3_retrained": false,
+  "additional_retry_allowance": 0,
+  "frozen_2025": true,
+  "completion": "IN_PROGRESS_NO_NEW_E9_RESULT_YET",
+  "private_paths_and_process_ids": "OMITTED"
+}
