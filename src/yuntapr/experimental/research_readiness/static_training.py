@@ -61,21 +61,22 @@ def hashes(root):
         h[name]=sha(root/name)
     return h
 
-def prepare(root,inherited,terrain,public_terrain,output):
+def prepare(root,inherited,terrain,public_terrain,output,*,prior_failed_root=None):
     root,terrain,output=map(Path,(root,terrain,output));_,p=load_inherited(inherited)
     r=read(terrain/'production_receipt.json');public=read(public_terrain)
     if r['status']!='COMPLETE_CANDIDATE_DEM_PRODUCTION_NOT_A_TRAINING_GRANT' or sha(terrain/'production_receipt.json')!=public['artifacts_sha256']['production_receipt.json']:raise ValueError('Terrain production receipt changed')
     if output.exists() or not output.parent.is_dir():raise PermissionError('Fresh output under confirmed storage parent required')
     byte_sizes={k:(terrain/f'{k}_static.npz').stat().st_size for k in ('B5','B6')}
     precheck=read(root/'docs/research_readiness/20261025/evidence/b5_b6_cached_real_check.json')
-    certificate=read(root/'docs/research_readiness/20261025/evidence/b5_b6_preparation_checks.json')
+    certificate_path=root/'docs/research_readiness/20261025/evidence'/('b5_b6_corrected_start_checks.json' if prior_failed_root is not None else 'b5_b6_preparation_checks.json')
+    certificate=read(certificate_path)
     if (precheck['status']!='PASS_ACTUAL_STATIC_CACHED_REAL_ZERO_UPDATES' or precheck['source_data']!=p['data']
             or any(sha(terrain/f'{k}_static.npz')!=precheck['static_sha256'][k] for k in byte_sizes)
             or certificate['after_real_check_changes']['current_module_sha256']!=sha(root/'src/yuntapr/experimental/research_readiness/static_training.py')):
         raise ValueError('Actual static data/numerical-path precheck binding differs')
     if shutil.disk_usage(output.parent).free<48*1024**3:raise RuntimeError('Reserve48GiB for two full retained models')
     scientific=dict(aggregation_rule=r['aggregation_rule'],footprint='ACTUAL_SP04_CENTRES_MIDPOINT_ENDPOINT_HALFSTEP_FLOAT32_EDGES',native_post_area='NEAREST_POST_VORONOI_CELLS_WGS84_ELLIPSOID_AREA',derivative_order='NATIVE_CENTRAL_GRADIENT_THEN_AREA_AVERAGE_EAST_NORTH_COMPONENTS_THEN_SLOPE_ASPECT',static_width=16,fusion='ADDITIVE_TARGET_SP04_FEATURE_RESIDUAL_ZERO_OUTPUT_INITIALIZATION',B5_channels=['elevation_m'],B6_channels=['elevation_m','east_gradient','north_gradient','slope_degrees','aspect_sin','aspect_cos'],flat_aspect='ZERO_NORMALIZED_VALUE_PLUS_SEPARATE_INVALID_INDICATOR',scaler_fit='2023_TRAIN_UNIQUE_SPATIAL_SUPPORT',source_release=r['release_version'],vertical_datum=r['vertical_datum'])
-    proposal=dict(status='READY_WAITING_EXPLICIT_B5_B6_PROTOCOL_AND_BUDGET_APPROVAL',authorized=False,tasks=[dict(model=k,seed=s) for k,s in TASKS],data=p['data'],scientific_choices=scientific,budget=training_budget(byte_sizes),static_source_sha256={k:sha(terrain/f'{k}_static.npz') for k in byte_sizes},terrain_receipt_sha256=sha(terrain/'production_receipt.json'),grid_sha256=r['grid_sha256'],region_sha256=r['region_sha256'],production_source_bytes=r['source_reads']['delivered_bytes'],production_source_files=r['source_reads']['opened_files'],scalers=r['scalers'],source_sha256=r['source_sha256'],code_sha256=hashes(root),zero_update_precheck_sha256=sha(root/'docs/research_readiness/20261025/evidence/b5_b6_cached_real_check.json'),preparation_checks_sha256=sha(root/'docs/research_readiness/20261025/evidence/b5_b6_preparation_checks.json'),storage_admission_free_bytes=shutil.disk_usage(output.parent).free)
+    proposal=dict(status='READY_WAITING_EXPLICIT_B5_B6_PROTOCOL_AND_BUDGET_APPROVAL',authorized=False,tasks=[dict(model=k,seed=s) for k,s in TASKS],data=p['data'],scientific_choices=scientific,budget=training_budget(byte_sizes),static_source_sha256={k:sha(terrain/f'{k}_static.npz') for k in byte_sizes},terrain_receipt_sha256=sha(terrain/'production_receipt.json'),grid_sha256=r['grid_sha256'],region_sha256=r['region_sha256'],production_source_bytes=r['source_reads']['delivered_bytes'],production_source_files=r['source_reads']['opened_files'],scalers=r['scalers'],source_sha256=r['source_sha256'],code_sha256=hashes(root),zero_update_precheck_sha256=sha(root/'docs/research_readiness/20261025/evidence/b5_b6_cached_real_check.json'),preparation_checks_sha256=sha(certificate_path),storage_admission_free_bytes=shutil.disk_usage(output.parent).free)
     proposal['proposal_sha256']=digest(proposal)
     wrapper=read(inherited)
     inherited_closeout=read(root/'docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json')
@@ -83,8 +84,15 @@ def prepare(root,inherited,terrain,public_terrain,output):
     if sha(Path(wrapper['historical_b3_run'])/'B4_development_09.json')!=baseline_sha:raise ValueError('Previously verified B4 E9 baseline changed')
     proposal['baseline_E9_Dev_sha256']=baseline_sha
     proposal['protocol']=dict(p['config'],models=['B5','B6'],seed=2029)
-    proposal['proposal_sha256']=digest({k:x for k,x in proposal.items() if k!='proposal_sha256'})
     private=dict(proposal_sha256=proposal['proposal_sha256'],inherited=str(Path(inherited).resolve()),terrain=str(terrain.resolve()),output_root=str(output.resolve()),historical_pair=wrapper['historical_b3_run'])
+    if prior_failed_root is not None:
+        prior=Path(prior_failed_root);stop_path=root/'docs/research_readiness/20261025/evidence/b5_b6_initial_start_stop.json';stop=read(stop_path)
+        if stop['actual']['optimizer_returned']!=0 or stop['actual']['weather_source_bytes']!=0 or any(sha(prior/n)!=h for n,h in stop['sources'].items()):raise ValueError('Only the exact zero-update stopped startup is covered')
+        seconds=stop['actual']['prior_wall_seconds_ceiling'];caps=proposal['budget']
+        caps.update(task_wall_seconds={'B5':21600-seconds,'B6':21600},max_package_seconds=43200-seconds,prior_source_bytes=62828,prior_source_files=1,cumulative_source_bytes=caps['total_source_bytes']+62828,cumulative_source_files=caps['total_source_files']+1,prior_wall_seconds=seconds)
+        proposal['prior_failed_start']=dict(evidence_sha256=sha(stop_path),source_pins=stop['sources'],optimizer_updates=0,weather_source_bytes=0,static_source_bytes=62828,static_source_files=1,optimizer_replay=0)
+        private['prior_failed_root']=str(prior.resolve())
+    proposal['proposal_sha256']=digest({k:x for k,x in proposal.items() if k!='proposal_sha256'});private['proposal_sha256']=proposal['proposal_sha256']
     return proposal,private
 
 def validate_approval(a,p,v,commit):
@@ -99,6 +107,7 @@ def checked(root,proposal,private,approval,commit):
     if prepared['data']!=p['data']:raise ValueError('Inherited population drift')
     if sha(Path(v['terrain'])/'production_receipt.json')!=p['terrain_receipt_sha256']:raise ValueError('Terrain receipt changed')
     if sha(Path(v['historical_pair'])/'B4_development_09.json')!=p['baseline_E9_Dev_sha256']:raise ValueError('Frozen B4 E9 comparison baseline changed')
+    if 'prior_failed_start' in p and any(sha(Path(v['prior_failed_root'])/n)!=h for n,h in p['prior_failed_start']['source_pins'].items()):raise ValueError('Stopped startup evidence changed')
     return p,v,a,prepared
 
 def worker(root,proposal,private,approval,commit,index):
@@ -121,8 +130,8 @@ def worker(root,proposal,private,approval,commit,index):
     inputs=prepared['private_inputs'];plan=PopulationPlan(inputs['stage3_run'],inputs['request'],root=root)
     if plan.identity!=p['data']:raise ValueError('Population changed')
     def deadline():
-        if time.monotonic()-started>21600:raise RuntimeError('Static model6h cap; no retry')
-    PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),kinds=(kind,),deadline=deadline,tail_factory=BatchTail,code_commit=commit,pair_reference=Path(v['historical_pair']),model_factory=model_factory(packs,p['scalers'])).run(ReaderFactory(plan,prepared,a['decision_id']))
+        if time.monotonic()-started>p['budget'].get('task_wall_seconds',{}).get(kind,21600):raise RuntimeError('Static model remaining time cap; no retry')
+    PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),kinds=(kind,),deadline=deadline,tail_factory=BatchTail,code_commit=commit,pair_reference=Path(v['historical_pair']),model_factory=model_factory(packs,p['scalers'])).run(ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,)))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=source_totals,total_logical_source_bytes=result['logical_source_bytes']+n,total_logical_source_files=result['logical_source_files']+1)
     deadline();write(folder/'completion.json',result);return result
 
@@ -134,14 +143,14 @@ def execute(root,proposal,private,approval,commit):
     active=None;total_updates=total_bytes=total_files=0
     try:
         for index,(kind,seed) in enumerate(TASKS):
-            remaining=43200-(time.monotonic()-started)
+            remaining=p['budget']['max_package_seconds']-(time.monotonic()-started)
             if remaining<=0:raise RuntimeError('Static package12h cap')
             write(out/f'task_{index+1}_claim.json',dict(index=index,controller_pid=os.getpid(),code_commit=commit))
             env=dict(os.environ,PYTHONHASHSEED='2029',CUBLAS_WORKSPACE_CONFIG=':4096:8',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',PYTHONUTF8='1')
             command=[sys.executable,'-B',str(root/ENTRY),'worker','--proposal',str(proposal),'--private-preparation',str(private),'--researcher-approval',str(approval),'--task-index',str(index)]
             with (out/f'{kind}_console.log').open('xb') as f:
                 active=subprocess.Popen(command,cwd=root,env=env,stdout=f,stderr=subprocess.STDOUT,creationflags=worker_creation_flags())
-                try:rc=active.wait(timeout=min(remaining,21600))
+                try:rc=active.wait(timeout=min(remaining,p['budget'].get('task_wall_seconds',{}).get(kind,21600)))
                 except subprocess.TimeoutExpired:active.kill();active.wait();raise RuntimeError('Static deadline reached; no retry')
             active=None
             if rc:raise RuntimeError(f'{kind} worker failed; remaining task blocked')
@@ -160,7 +169,7 @@ def execute(root,proposal,private,approval,commit):
             deltas[kind+'_minus_B4']={k:values[kind][k]-values['B4'][k] for k in values['B4']}
         deltas['B6_minus_B5']={k:values['B6'][k]-values['B5'][k] for k in values['B4']}
         write(out/'static_paired_summary.json',dict(seed=2029,endpoint='FIXED_EPOCH_9_LAST',values=values,differences=deltas,descriptive_only=True,significance='NOT_CLAIMED'))
-        if time.monotonic()-started>43200:raise RuntimeError('Static package closure12h cap')
+        if time.monotonic()-started>p['budget']['max_package_seconds']:raise RuntimeError('Static package closure time cap')
         write(out/'completion.json',dict(status='COMPLETE_TRAIN_AND_DEV_EVALUATION',updates=total_updates,total_logical_source_bytes=total_bytes,total_logical_source_files=total_files,code_commit=commit))
     except BaseException as exc:
         if active is not None and active.poll() is None:active.kill();active.wait()

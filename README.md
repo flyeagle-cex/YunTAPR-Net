@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新推进（2026-10-27）：B0–B4基线按限定结论带局限完成交接；真实候选DEM、B5/B6模型和真实缓存零更新检查已完成。B5/B6正式训练未启动，需新协议/预算集中明确批准，2025冻结。 见[静态地形就绪及两模型预算](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)。下方保留既有实验证据。
+> 最新实际状态（2026-10-27）：B5/B6首次获批启动在首遍气象读取前因读臂白名单遗漏停止，实际0更新、62,828字节静态读取；B6未启动。已最小修复，未擅自重启；[唯一修正启动方案与精确额度](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)。B0–B4基线交接及2025冻结不变。
 
 The current authoritative [Scientific Freeze v1.1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md) and [machine-readable contract](config/science_contract_v1.1.yaml) supersede v1 **only for explicitly updated QC / normalization / quantile numerical implementation / engineering staging rules**. D1–D7 otherwise inherit [historical v1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.md) unchanged. Formal supervised B0 requires a full-valid B13 expected latest slot, prohibits older-frame fallback, and applies Decision 8 Train-only Z-score. The versioned [SP04 coordinate/index artifacts](config/spatial/sp04_coordinate_manifest_v1.json) remain unchanged. **B0_FORMAL_SCIENTIFIC_CONTRACT=FROZEN; B0_FORMAL_SKELETON_IMPLEMENTED=true; B0_FORMAL_TRAINING_STARTED=false; FORMAL_TRAINING_AUTHORIZED=false.**
 

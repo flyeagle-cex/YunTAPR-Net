@@ -102,11 +102,13 @@ class PassReader:
 
 
 class ReaderFactory:
-    def __init__(self,plan,prepared,start_id):self.plan=plan;self.prepared=prepared;self.start_id=start_id;self.seen=set()
+    def __init__(self,plan,prepared,start_id,*,allowed_models=('B3','B4')):
+        if tuple(allowed_models) not in (('B3','B4'),('B5',),('B6',)):raise ValueError('Explicit supported reader arms required')
+        self.plan=plan;self.prepared=prepared;self.start_id=start_id;self.seen=set();self.allowed_models=tuple(allowed_models)
     def __call__(self,role,epoch,ids,folder):
         from .data import BatchReader
         kind=Path(folder).name.split('_',1)[0];key=(kind,role,epoch);scope=self.prepared['roles'][role]
-        if kind not in ('B3','B4') or type(epoch)!=int or not 1<=epoch<=9 or key in self.seen or len(ids)!=len(scope['ids']) or set(ids)!=set(scope['ids']):raise PermissionError('Unlisted/repeated model-role-epoch pass')
+        if kind not in self.allowed_models or type(epoch)!=int or not 1<=epoch<=9 or key in self.seen or len(ids)!=len(scope['ids']) or set(ids)!=set(scope['ids']):raise PermissionError('Unlisted/repeated model-role-epoch pass')
         self.seen.add(key)
         reader=BatchReader(self.plan,{role:ids},folder,decision_id=self.start_id,max_files=scope['file_count'],max_bytes=scope['bytes_per_pass'],source_bytes={p:f['bytes'] for p,f in scope['files'].items()})
         if {p:{k:f[k] for k in ('bytes','sha')} for p,f in reader.meter.files.items()}!={p:{k:f[k] for k in ('bytes','sha')} for p,f in scope['files'].items()}:

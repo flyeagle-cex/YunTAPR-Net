@@ -107,6 +107,7 @@ class CampaignReader(base.Reader):
         self.approval=binding['approval'];self.budget=self.approval['budget']
         self.recovery_parent=Path(binding['recovery_parent']) if binding.get('recovery_parent') else None
         listed=[(x['model'],x['seed']) for x in self.approval['tasks']]
+        self.static=listed==[('B5',2029),('B6',2029)]
         if self.recovery_parent:
             if listed!=[('B4',2030),('B3',2031),('B4',2031)] or self.budget['replay_allowance']!=390 or self.budget['cumulative_updates']!=17670:
                 raise ValueError('Not the approved bounded recovery')
@@ -115,9 +116,12 @@ class CampaignReader(base.Reader):
                 'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
         else:
             self.tasks=self.approval['tasks'];self.extra_io=(0,0,0)
-        if (not self.recovery_parent and (listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)]
+        if (not self.recovery_parent and not self.static and (listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)]
                 or self.budget['total_updates']!=17280 or self.budget['replay_allowance']!=0)) or binding['controller_pid']!=pid:
             raise ValueError('Not the approved four-model package')
+        if self.static:
+            if self.budget['total_updates']!=8640 or self.budget['replay_allowance']!=0:raise ValueError('Not the approved B5/B6 package')
+            self.extra_io=(self.budget.get('prior_source_files',0),self.budget.get('prior_source_bytes',0),self.budget.get('prior_source_bytes',0))
         self.started=datetime.fromtimestamp(self.token/10**7-11644473600,timezone.utc) if self.token else datetime.fromtimestamp((self.folder/'authorization_binding.json').stat().st_mtime,timezone.utc)
 
     def snapshot(self, include_resources=True):
@@ -162,6 +166,11 @@ class CampaignReader(base.Reader):
                 claim=self.folder/f'task_{index if self.recovery_parent else index+1}_claim.json'
                 state='COMPLETE' if completion and completion.get('status')=='COMPLETE_TRAIN_AND_DEV_EVALUATION' and returned==4320 and sealed==9 else 'FAILED' if failure else 'RUNNING' if folder.exists() or claim.exists() else 'PENDING'
                 current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
+                if self.static:
+                    static_db=self.folder/f'{kind}_static_source.sqlite'
+                    if static_db.exists():
+                        counts=base.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
+                        for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
                 runs.append(dict(model=kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
             failure=self.document('failure.json');completion=self.document('completion.json')
@@ -177,6 +186,7 @@ class CampaignReader(base.Reader):
                 if verification:
                     for key,value in zip(('files','bytes','reserved_bytes'),(verification['opened_files'],verification['delivered_bytes'],verification['reserved_bytes'])):io[key]+=value
                 limits=dict(updates=17670,bytes=self.budget['cumulative_source_bytes'],files=self.budget['cumulative_source_files'],epochs=36,seconds=self.budget['max_wall_seconds'])
+            elif self.static:limits=dict(updates=8640,bytes=self.budget.get('cumulative_source_bytes',self.budget['total_source_bytes']),files=self.budget.get('cumulative_source_files',self.budget['total_source_files']),epochs=18,seconds=self.budget['max_package_seconds'])
             else:limits=dict(updates=17280,bytes=self.budget['total_source_bytes'],files=4*self.budget['source_files_per_model'],epochs=36,seconds=86400)
             state='FAILED' if failure else 'COMPLETE' if completion and all(r['state']=='COMPLETE' for r in runs) and returned==limits['updates'] else 'RUNNING' if live else 'UNKNOWN'
             over=reserved>limits['updates'] or any(r['reserved']>4320 for r in runs) or io['reserved_bytes']>limits['bytes'] or io['files']>limits['files']
@@ -188,7 +198,7 @@ class CampaignReader(base.Reader):
             result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,
                 returned=returned,reserved=reserved,uncertain=reserved-returned,io=io,
                 sealed_epochs=sum(r['sealed_epochs'] for r in runs),completed_models=sum(r['state']=='COMPLETE' for r in runs),
-                limits=limits,recovery=bool(self.recovery_parent),replay_returned=replay_returned,
+                limits=limits,recovery=bool(self.recovery_parent),static=self.static,replay_returned=replay_returned,
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
                 message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else None)

@@ -6,7 +6,7 @@ os.environ.update(CUBLAS_WORKSPACE_CONFIG=':4096:8',OMP_NUM_THREADS='1',MKL_NUM_
 
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest='mode',required=True)
-    q=sub.add_parser('prepare');q.add_argument('--inherited',type=Path,required=True);q.add_argument('--terrain',type=Path,required=True);q.add_argument('--terrain-receipt',type=Path,required=True);q.add_argument('--output-root',type=Path,required=True)
+    q=sub.add_parser('prepare');q.add_argument('--inherited',type=Path,required=True);q.add_argument('--terrain',type=Path,required=True);q.add_argument('--terrain-receipt',type=Path,required=True);q.add_argument('--output-root',type=Path,required=True);q.add_argument('--prior-failed-root',type=Path)
     for mode in ('execute','worker'):
         q=sub.add_parser(mode);q.add_argument('--researcher-approval',type=Path,required=True)
         if mode=='worker':q.add_argument('--task-index',type=int,required=True)
@@ -19,7 +19,7 @@ def main():
     from yuntapr.experimental.core_innovation.stage4.engine import write
     if a.mode=='prepare':
         if not a.private_preparation.is_relative_to(ROOT/'docs/research_readiness/.local'):raise PermissionError('Private paths stay ignored')
-        proposal,private=prepare(ROOT,a.inherited,a.terrain,a.terrain_receipt,a.output_root)
+        proposal,private=prepare(ROOT,a.inherited,a.terrain,a.terrain_receipt,a.output_root,prior_failed_root=a.prior_failed_root)
         write(a.proposal,proposal);write(a.private_preparation,private)
         print(json.dumps({k:proposal[k] for k in ('status','proposal_sha256','budget','authorized')}));return
     if subprocess.check_output(['git','-C',str(ROOT),'status','--porcelain','--untracked-files=no'],text=True).strip():raise PermissionError('Reviewed execution copy must be clean')

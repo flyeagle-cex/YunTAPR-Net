@@ -1,5 +1,7 @@
 # B2本次运行已完成
 
+2026-10-27最新：d696fe2首次已获批调度，在第一遍气象读取前因旧ReaderFactory臂白名单拒绝B5而停止，0更新、62,828字节静态读取，B6未启动。**不要重跑原execute；原批准已消费、额外重试0。** 读取臂已最小修复，唯一待批准[修正启动提案](evidence/b5_b6_corrected_start_proposal.json)新目录未创建。累计只增加62,828字节/1次静态读取，13秒已从原时间扣除；新包43,187秒，8640更新不增加。详见[B5/B6报告](B5_B6_READINESS_REPORT.md)。原准备和命令保留历史时点。
+
 2026-10-27 B5/B6状态：B0–B4限定基线已交接，真实DEM候选与真实缓存零更新检查通过。正式两模型训练**NOT_STARTED_WAITING_REQUIRED_APPROVAL**；新[集中协议与精确预算](B5_B6_READINESS_REPORT.md)和[机器可执行提案](evidence/b5_b6_training_proposal.json)已就绪，提案SHA为`41add1c3bbd851bbaa5076b3edaf795d065bdc4f73ef1c104d1e3887cf20e6c3`。本机false批准模板已实测在GPU、输出目录及优化器之前拒绝，未创建正式训练目录。
 
 唯一新增正式入口（**尚未执行；须先取得本提案、最终执行commit、科学选择及精确预算的明确批准**）：
