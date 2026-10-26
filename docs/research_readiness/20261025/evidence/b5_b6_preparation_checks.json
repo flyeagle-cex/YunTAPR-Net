@@ -1,0 +1,45 @@
+{
+  "status": "PASS_NECESSARY_STATIC_PREPARATION_CHECKS",
+  "unique_checks_passed": 15,
+  "new_production_checks": 6,
+  "new_static_training_checks": 6,
+  "affected_legacy_engine_checks": 3,
+  "failures_preserved": [
+    {
+      "check": "target-edge fixture",
+      "reason": "fixture used wrong second float32 longitude",
+      "action": "correct fixture to actual frozen axis; rerun only failed check passed"
+    },
+    {
+      "check": "static ledger fixture",
+      "reason": "default temp directory inaccessible in sandbox",
+      "action": "use fresh ignored workspace fixture; rerun only failed check passed"
+    }
+  ],
+  "synthetic_cpu_optimizer_updates": 1,
+  "formal_optimizer_updates": 0,
+  "real_cache_check": "b5_b6_cached_real_check.json",
+  "production_check": "b5_b6_terrain_production.json",
+  "unchanged_historical_checks": "129 sources/126 summaries and unchanged synthetic checks inherited",
+  "after_real_check_changes": {
+    "scope": "controller completion/file-count validation, metadata E9 summary and preparation evidence binding",
+    "prior_module_sha256": "35a03da7c0dfbd43fbcdead6c5607ae2b55e1f069384d267e6fac785d56ab256",
+    "current_module_sha256": "8873b7337670462c3ee717aff77f900ac282ba3d36efbd637641819ed82f4f0f",
+    "numeric_AST_nodes_unchanged": [
+      "StaticTrainingModel",
+      "unpack",
+      "model_factory"
+    ],
+    "real_GPU_check_reused": true
+  },
+  "inherited_cache_receipt_pin_verified": true,
+  "source_control_state": "PREPARATION_BASE_9877a59_PLUS_EXPLICIT_FILE_SHA_BOUND_NEW_UNCOMMITTED_SOURCE",
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/static_training.py": "8873b7337670462c3ee717aff77f900ac282ba3d36efbd637641819ed82f4f0f",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "cc6094368eb918a7693cf56ebe863a87281197e3df3c4d582fdee38c5553064e",
+    "src/yuntapr/experimental/research_readiness/terrain_production.py": "adb77a9921954fa56e410e46ca595cf11864931397d8335973cf393ce99fc231",
+    "tests/research_readiness/test_static_training.py": "9cf1fac3d801de2bf87720a51b63f7418cafd49f573048193c6ef3592d47cfb2",
+    "tests/research_readiness/test_terrain_production.py": "993f7c2037a737c58eb77828bb0aaea1c563886a4649b45781c800518daf7ea5"
+  },
+  "new_optimizer_parameter_grouping": "PASS_CONV_KERNEL_DECAY_BIAS_GROUPNORM_NO_DECAY_NO_OPTIMIZER_CONSTRUCTED"
+}

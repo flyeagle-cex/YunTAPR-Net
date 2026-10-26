@@ -59,7 +59,7 @@ def paired_models(seed,root):
 
 def forward(model,batch):
     if batch.identity['population_sha256']!=POPULATION_SHA:raise ValueError('Wrong population tensor binding')
-    extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind=='B4' else {}
+    extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6') else {}
     output=model(batch.x,batch.native_valid,channel_order=CHANNELS,**extra)
     loss=candidate_loss(output.rain_logit,output.conditional_quantiles_log,batch.rate,batch.valid,batch.region,config=get_config('E0'))
     if loss.n_valid!=len(batch.ids)*3430:raise ValueError('Frozen supervision denominator')
@@ -87,7 +87,9 @@ class FormalDecision:
 
 
 class UpdateLedger:
-    def __init__(self,path,identity):
+    def __init__(self,path,identity,*,allowed_models=('B3','B4')):
+        if tuple(allowed_models) not in (('B3','B4'),('B5',),('B6',)):raise ValueError('Explicit supported ledger arms required')
+        self.allowed_models=tuple(allowed_models)
         if Path(path).exists():raise PermissionError('No update ledger overwrite/resume/retry')
         self.db=sqlite3.connect(path);self.db.execute('PRAGMA synchronous=FULL')
         self.db.execute('CREATE TABLE identity(value TEXT)');self.db.execute('INSERT INTO identity VALUES (?)',(json.dumps(identity,sort_keys=True),))
@@ -97,7 +99,7 @@ class UpdateLedger:
         try:
             total=self.db.execute('SELECT COUNT(*) FROM updates').fetchone()[0]
             n,returned=self.db.execute("SELECT COUNT(*),COALESCE(SUM(state='RETURNED'),0) FROM updates WHERE model=?",(model,)).fetchone()
-            if model not in ('B3','B4') or type(u)!=int or total>=PAIR_CAP or u!=n+1 or n!=returned or u>EPOCHS*STEPS:raise PermissionError('Cap/order/uncertain-update boundary')
+            if model not in self.allowed_models or type(u)!=int or total>=PAIR_CAP or u!=n+1 or n!=returned or u>EPOCHS*STEPS:raise PermissionError('Cap/order/uncertain-update boundary')
             self.db.execute('INSERT INTO updates VALUES (?,?,?)',(model,u,'INTENT'));self.db.commit()
         except BaseException:self.db.rollback();raise
     def returned(self,model,u):
@@ -109,36 +111,42 @@ class UpdateLedger:
 
 class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
-                 kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None):
+                 kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
         self.tail_factory=tail_factory;self.code_commit=code_commit
         self.pair_reference=Path(pair_reference) if pair_reference is not None else None
+        self.model_factory=model_factory
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
-        if self.kinds not in (('B3','B4'),('B3',),('B4',)) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
+        static=self.kinds in (('B5',),('B6',)) and self.model_factory is not None and self.recovery is None
+        if (self.kinds not in (('B3','B4'),('B3',),('B4',)) and not static) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
         self.deadline()
         if self.recovery is not None:self.recovery.validate(self.plan,self.decision)
         resources();self.folder.mkdir(exist_ok=False)
         if len(self.plan.ids('Train'))!=TRAIN_N or len(self.plan.ids('Development'))!=DEV_N:raise ValueError('Wrong population')
-        models=paired_models(self.decision.seed,self.plan.root);identity=dict(decision=asdict(self.decision),data=self.plan.identity)
-        ledger=UpdateLedger(self.folder/'updates.sqlite',identity) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
+        models=(self.model_factory or paired_models)(self.decision.seed,self.plan.root);identity=dict(decision=asdict(self.decision),data=self.plan.identity)
+        ledger=UpdateLedger(self.folder/'updates.sqlite',identity,allowed_models=self.kinds if static else ('B3','B4')) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
         initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
         if self.recovery is not None:self.recovery.check_initial(initial_identity)
         write(self.folder/'paired_initial_identity.json',initial_identity)
         if initial_identity['B3']['common_sha256']!=initial_identity['B4']['common_sha256']:
             raise RuntimeError('Paired common initialization differs')
+        if static and any(initial_identity[k]['common_sha256']!=initial_identity['B4']['common_sha256'] for k in self.kinds):
+            raise RuntimeError('Static arm changed common backbone/heads initialization')
         models={k:v for k,v in models.items() if k in self.kinds}
         orders={e:epoch_order(self.plan.ids('Train'),self.decision.seed,e) for e in range(1,EPOCHS+1)}
         if self.recovery is not None:self.recovery.check_orders(orders)
         write(self.folder/'paired_orders.json',{str(e):dict(ids=o,sha256=digest(o)) for e,o in orders.items()})
         if self.pair_reference is not None:
             for name in ('paired_initial_identity.json','paired_orders.json'):
-                if json.loads((self.folder/name).read_text(encoding='utf-8'))!=json.loads((self.pair_reference/name).read_text(encoding='utf-8')):
+                actual=json.loads((self.folder/name).read_text(encoding='utf-8'));reference=json.loads((self.pair_reference/name).read_text(encoding='utf-8'))
+                if static and name=='paired_initial_identity.json':actual={k:actual[k] for k in reference}
+                if actual!=reference:
                     raise RuntimeError('B4 initialization/order differs from its completed B3 pair')
         results={};self.poisoned=False
         try:

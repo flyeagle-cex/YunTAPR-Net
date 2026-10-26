@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+最新推进（2026-10-27）：B0–B4基线按限定结论带局限完成交接；真实候选DEM、B5/B6模型和真实缓存零更新检查已完成。B5/B6正式训练未启动，需新协议/预算集中明确批准，2025冻结。 见[真实地形与启动预算](../research_readiness/20261025/B5_B6_READINESS_REPORT.md)。
+
 最新完成（2026-10-27）：B3/B4 seed2029、2030、2031的三组固定E9配对训练与2024 Dev评价全部完成；四个新增模型均为COMPLETE_TRAIN_AND_DEV_EVALUATION。943da95恢复包在北京时间00:27封口，390次必要重放已计费，无额外重试。总体Brier/AUROC/AP/条件Pinball三seed均改善；q32方向不一致，强雨仍有退化。总体科学验收继续IN_PROGRESS，2025继续冻结。
 
 最新矩阵为[27行完整矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)，收据为[三seed完成与配对结果](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)。以下旧数值快照保留其明确时点；新增结果优先。B2 seed2029已于3acf7b0收口，B2/B3结论混合。

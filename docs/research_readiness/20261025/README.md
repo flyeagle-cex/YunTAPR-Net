@@ -1,5 +1,7 @@
 # B2完成记录与阶段验收
 
+最新推进（2026-10-27）：B0–B4基线按限定结论带局限完成交接；真实候选DEM、B5/B6模型和真实缓存零更新检查已完成。B5/B6正式训练未启动，需新协议/预算集中明确批准，2025冻结。 见[真实地形与启动预算](B5_B6_READINESS_REPORT.md)。
+
 最新完成（2026-10-27）：B3/B4 seed2029、2030、2031的三组固定E9配对训练与2024 Dev评价全部完成；四个新增模型均为COMPLETE_TRAIN_AND_DEV_EVALUATION。943da95恢复包在北京时间00:27封口，390次必要重放已计费，无额外重试。总体Brier/AUROC/AP/条件Pinball三seed均改善；q32方向不一致，强雨仍有退化。总体科学验收继续IN_PROGRESS，2025继续冻结。 见[三seed完成与配对收据](evidence/b3_b4_three_seed_completion.json)与[B3/B4三seed结果](B3_B4_MULTI_SEED_PLAN.md)。
 
 B2 seed2029/E0/f006九轮及Dev评估已核实完成；B2/B3固定E9配对已补齐。B0–B4总体科研验收仍IN_PROGRESS。

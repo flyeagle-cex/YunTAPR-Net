@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+B5/B6准备新证据（2026-10-27）：[实际100瓦片生产与3430有效点](../research_readiness/20261025/evidence/b5_b6_terrain_production.json)、[真实缓存零更新检查](../research_readiness/20261025/evidence/b5_b6_cached_real_check.json)、[必要检查及失败保留](../research_readiness/20261025/evidence/b5_b6_preparation_checks.json)。这是候选生产/准备完成，正式训练未启动；原DEM发布版本链未独立核实，候选按本地SHA固定，不从HGT头伪造版本。
+
 最新完成证据（2026-10-27）：[三seed固定E9完成与配对收据](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)包含恢复新增26轮封口、3份新E9文件SHA、52个新增读取账本核对、原E1引用、精确预算、全部六个终点及分组/上尾充分量；[结果报告](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)给出三seed差值、均值和样本标准差。[最新27行矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)优先于此目录保留的22行历史快照。188项仅为新增结果相关文件身份，未重复历史129来源/126逐轮核验。原始数据、权重和私有账本不公开。
 
 本轮数值快照核查时间：2026-10-25 00:04:14 +08:00。所有新文件仅位于 `docs/research_progress/`，不改旧收据或实验源码。

@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新完成（2026-10-27）：B3/B4 seed2029、2030、2031的三组固定E9配对训练与2024 Dev评价全部完成；四个新增模型均为COMPLETE_TRAIN_AND_DEV_EVALUATION。943da95恢复包在北京时间00:27封口，390次必要重放已计费，无额外重试。总体Brier/AUROC/AP/条件Pinball三seed均改善；q32方向不一致，强雨仍有退化。总体科学验收继续IN_PROGRESS，2025继续冻结。 见[三seed结果与边界](docs/research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)、[完成收据](docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)及[完整实验矩阵](docs/research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)。下方工程/历史记录保留各自时点。
+> 最新推进（2026-10-27）：B0–B4基线按限定结论带局限完成交接；真实候选DEM、B5/B6模型和真实缓存零更新检查已完成。B5/B6正式训练未启动，需新协议/预算集中明确批准，2025冻结。 见[静态地形就绪及两模型预算](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)。下方保留既有实验证据。
 
 The current authoritative [Scientific Freeze v1.1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md) and [machine-readable contract](config/science_contract_v1.1.yaml) supersede v1 **only for explicitly updated QC / normalization / quantile numerical implementation / engineering staging rules**. D1–D7 otherwise inherit [historical v1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.md) unchanged. Formal supervised B0 requires a full-valid B13 expected latest slot, prohibits older-frame fallback, and applies Decision 8 Train-only Z-score. The versioned [SP04 coordinate/index artifacts](config/spatial/sp04_coordinate_manifest_v1.json) remain unchanged. **B0_FORMAL_SCIENTIFIC_CONTRACT=FROZEN; B0_FORMAL_SKELETON_IMPLEMENTED=true; B0_FORMAL_TRAINING_STARTED=false; FORMAL_TRAINING_AUTHORIZED=false.**
 

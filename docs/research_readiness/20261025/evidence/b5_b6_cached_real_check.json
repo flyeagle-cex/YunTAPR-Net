@@ -1,0 +1,108 @@
+{
+  "status": "PASS_ACTUAL_STATIC_CACHED_REAL_ZERO_UPDATES",
+  "scope": "ACTUAL_STATIC_PLUS_CACHED_TRAIN_DEV_ZERO_UPDATES",
+  "preparation_code_commit": "9877a5905314e40b0cd97db1f2959aa0f66a1a24",
+  "code_sha256": {
+    "tools/research_readiness/check_static_cached_real.py": "4f5ae7f05a4fb92e1538d44e405616341154acddfc7854f24529a4dab663bfe6",
+    "src/yuntapr/experimental/research_readiness/static_training.py": "35a03da7c0dfbd43fbcdead6c5607ae2b55e1f069384d267e6fac785d56ab256",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "cc6094368eb918a7693cf56ebe863a87281197e3df3c4d582fdee38c5553064e"
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 20611788800,
+    "workspace_free_bytes": 75532382208,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 22453338112
+  },
+  "optimizer_updates": 0,
+  "optimizer_constructions": 0,
+  "model_checkpoint_loads": 0,
+  "raw_weather_reads": 0,
+  "raw_2025_reads": 0,
+  "static_sha256": {
+    "B5": "98d91515b8475f15343b931be0e14d8b005762987f6d4caeb69e9c9ce1d134b8",
+    "B6": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "cases": [
+    {
+      "model": "B5",
+      "role": "Train",
+      "scenes": 2,
+      "n_valid": 6860,
+      "loss": 0.10200403583955105,
+      "forward_identical_to_B4": true,
+      "backward": true,
+      "gradients_finite": true
+    },
+    {
+      "model": "B6",
+      "role": "Train",
+      "scenes": 2,
+      "n_valid": 6860,
+      "loss": 0.10200403583955105,
+      "forward_identical_to_B4": true,
+      "backward": true,
+      "gradients_finite": true
+    },
+    {
+      "model": "B5",
+      "role": "Development",
+      "scenes": 1,
+      "n_valid": 3430,
+      "loss": 0.09955726786631776,
+      "forward_identical_to_B4": true,
+      "backward": false,
+      "gradients_finite": true
+    },
+    {
+      "model": "B6",
+      "role": "Development",
+      "scenes": 1,
+      "n_valid": 3430,
+      "loss": 0.09955726786631776,
+      "forward_identical_to_B4": true,
+      "backward": false,
+      "gradients_finite": true
+    }
+  ],
+  "parameter_counts": {
+    "B3": 4349090,
+    "B4": 4355986,
+    "B5": 4359426,
+    "B6": 4360866
+  },
+  "source_data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "limits": {
+    "raw_weather_source_bytes": 0,
+    "cached_payload_files": 2,
+    "static_payload_files": 2,
+    "max_seconds": 600,
+    "cached_payload_bytes": 534209698,
+    "static_payload_bytes": 375656
+  },
+  "weights_unchanged": true,
+  "peak_cuda_allocated_bytes": 3021302272,
+  "elapsed_seconds": 5.39100000000326,
+  "source_control_state": "PREPARATION_BASE_9877a59_PLUS_EXPLICIT_FILE_SHA_BOUND_NEW_UNCOMMITTED_SOURCE"
+}
