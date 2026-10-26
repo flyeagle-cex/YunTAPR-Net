@@ -108,13 +108,20 @@ class UpdateLedger:
 
 
 class PairedExecutor:
-    def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None):
+    def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
+                 kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
+        self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
+        self.tail_factory=tail_factory;self.code_commit=code_commit
+        self.pair_reference=Path(pair_reference) if pair_reference is not None else None
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
+        if self.kinds not in (('B3','B4'),('B3',),('B4',)) or (self.recovery is not None and self.kinds!=('B3','B4')):
+            raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
+        self.deadline()
         if self.recovery is not None:self.recovery.validate(self.plan,self.decision)
         resources();self.folder.mkdir(exist_ok=False)
         if len(self.plan.ids('Train'))!=TRAIN_N or len(self.plan.ids('Development'))!=DEV_N:raise ValueError('Wrong population')
@@ -123,30 +130,39 @@ class PairedExecutor:
         initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
         if self.recovery is not None:self.recovery.check_initial(initial_identity)
         write(self.folder/'paired_initial_identity.json',initial_identity)
+        if initial_identity['B3']['common_sha256']!=initial_identity['B4']['common_sha256']:
+            raise RuntimeError('Paired common initialization differs')
+        models={k:v for k,v in models.items() if k in self.kinds}
         orders={e:epoch_order(self.plan.ids('Train'),self.decision.seed,e) for e in range(1,EPOCHS+1)}
         if self.recovery is not None:self.recovery.check_orders(orders)
         write(self.folder/'paired_orders.json',{str(e):dict(ids=o,sha256=digest(o)) for e,o in orders.items()})
+        if self.pair_reference is not None:
+            for name in ('paired_initial_identity.json','paired_orders.json'):
+                if json.loads((self.folder/name).read_text(encoding='utf-8'))!=json.loads((self.pair_reference/name).read_text(encoding='utf-8')):
+                    raise RuntimeError('B4 initialization/order differs from its completed B3 pair')
         results={};self.poisoned=False
         try:
-            for kind in ('B3','B4'):
+            for kind in self.kinds:
                 model=models.pop(kind).cuda();initial=state_digest(model.state_dict());buffer_sha=state_digest(dict(model.named_buffers()))
                 optimizer,groups=new_adamw(model);u=0;epochs=[]
                 if self.recovery is not None:
                     u,epochs=self.recovery.restore(kind,model,optimizer,groups)
                 for epoch,order in orders.items():
+                    self.deadline()
                     if self.recovery is not None and epoch<=self.recovery.completed_epochs(kind):continue
                     resources(backward=False)
                     reader=reader_factory('Train',epoch,order,self.folder/f'{kind}_train_reads_{epoch:02d}')
                     visited=[];model.train();nvalid=nrain=0;socc=sqr=0.
                     try:
                         for pos in range(0,TRAIN_N,BATCH):
+                            self.deadline()
                             b=reader.batch('Train',order[pos:pos+BATCH]).to('cuda');optimizer.zero_grad(set_to_none=True)
                             if b.identity!=self.plan.identity or b.role!='Train' or b.ids!=order[pos:pos+BATCH]:raise ValueError('Training batch identity/order differs')
                             lr=lr_for_update(u+1,steps_per_epoch=STEPS)
                             for group in optimizer.param_groups:group['lr']=lr
                             with torch.autocast('cuda',dtype=torch.bfloat16):out,loss=forward(model,b)
                             loss.training_objective.backward();clip_and_check(model)
-                            ledger.reserve(kind,u+1);optimizer.step();u+=1;ledger.returned(kind,u)
+                            self.deadline();ledger.reserve(kind,u+1);optimizer.step();u+=1;ledger.returned(kind,u)
                             check_finite(model.state_dict());check_finite(optimizer.state_dict());visited.extend(b.ids)
                             nvalid+=loss.n_valid;nrain+=loss.n_rain;socc+=float(loss.s_occ.detach());sqr+=float(loss.s_qr.detach())
                             if u%50==0:resources(backward=False)
@@ -157,19 +173,26 @@ class PairedExecutor:
                         weighted_mean=(socc+sqr)/nvalid,loss_arm='E0',train_order_sha256=digest(order))
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
+                    self.deadline()
                     ids=self.plan.ids('Development');reader=reader_factory('Development',epoch,ids,self.folder/f'{kind}_dev_reads_{epoch:02d}')
                     ev=Evaluation(ids,[self.plan.rows['Development'][s]['analysis_time'] for s in ids],self.plan.identity,self.folder/f'{kind}_evaluation_{epoch:02d}',strong_scene_ids=self.strong,altitude=self.altitude)
                     model.eval()
+                    tail=self.tail_factory() if self.tail_factory is not None else None
                     try:
                         with torch.no_grad():
                             for pos in range(0,DEV_N,VAL_BATCH):
+                                self.deadline()
                                 b=reader.batch('Development',ids[pos:pos+VAL_BATCH]).to('cuda')
                                 if b.identity!=self.plan.identity or b.role!='Development' or b.ids!=ids[pos:pos+VAL_BATCH]:raise ValueError('Development batch identity/order differs')
                                 with torch.autocast('cuda',dtype=torch.bfloat16):out,_=forward(model,b)
-                                ev.add(out,b);del b,out
+                                ev.add(out,b)
+                                if tail is not None:tail.add_batch(out,b)
+                                del b,out
                         report=ev.finish()
                     finally:ev.close();reader.close()
                     write(self.folder/f'{kind}_development_{epoch:02d}.json',report)
+                    if tail is not None:write(self.folder/f'{kind}_tail_{epoch:02d}.json',tail.finish_checked(report,ids))
+                    self.deadline()
                     payload=dict(identity=dict(decision=asdict(self.decision),data=self.plan.identity,model=kind),initial_sha256=initial,epoch=epoch,updates=u,
                         model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),scheduler=dict(completed=u,steps_per_epoch=STEPS,original_horizon=50*STEPS),
                         rng=dict(python=random.getstate(),numpy=np.random.get_state(),torch_cpu=torch.get_rng_state(),torch_cuda=torch.cuda.get_rng_state_all()),
@@ -177,13 +200,19 @@ class PairedExecutor:
                     path=self.folder/f'{kind}_LAST_epoch_{epoch:02d}.pt'
                     with path.open('xb') as f:torch.save(payload,f);f.flush();os.fsync(f.fileno())
                     from .data import sha
-                    write(path.with_suffix('.receipt.json'),dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=sha(path),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report)))
+                    receipt=dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=sha(path),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report))
+                    if self.code_commit is not None:receipt['code_commit']=self.code_commit
+                    write(path.with_suffix('.receipt.json'),receipt)
+                    self.deadline()
                     epochs.append(report);del payload
                 results[kind]=epochs;del optimizer,model;gc.collect();torch.cuda.empty_cache()
-            for epoch in range(EPOCHS):write(self.folder/f'paired_difference_{epoch+1:02d}.json',paired_difference(results['B3'][epoch],results['B4'][epoch]))
+            if self.kinds==('B3','B4'):
+                for epoch in range(EPOCHS):write(self.folder/f'paired_difference_{epoch+1:02d}.json',paired_difference(results['B3'][epoch],results['B4'][epoch]))
             actual=ledger.db.execute("SELECT COUNT(*) FROM updates WHERE state='RETURNED'").fetchone()[0]
-            if actual!=getattr(ledger,'expected_returned',PAIR_CAP):raise RuntimeError('Paired endpoint ledger incomplete')
-            result=dict(status='COMPLETE',updates=PAIR_CAP)
+            expected=len(self.kinds)*EPOCHS*STEPS
+            if actual!=getattr(ledger,'expected_returned',expected):raise RuntimeError('Endpoint ledger incomplete')
+            self.deadline()
+            result=dict(status='COMPLETE',updates=expected)
             if self.recovery is not None:result.update(segment_updates=actual,cumulative_attempts=self.recovery.request['prior_updates']+actual,replayed_updates=480)
             return result
         except BaseException as exc:
