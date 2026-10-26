@@ -45,6 +45,11 @@ function render(s){
     const values=[e.epoch,phases[e.phase],fmt(e.training_loss),fmt(m.brier),fmt(m.auroc),fmt(m.average_precision),fmt(m.conditional_pinball),Number.isFinite(m.q32_coverage)?`${(m.q32_coverage*100).toFixed(3)}%`:'—'];
     values.forEach((value,i)=>{const td=document.createElement('td');td.textContent=value;if(i===1)td.className='status';tr.append(td);});$('metrics').append(tr);
   }
+  const paired=s.paired_summary;$('paired-section').hidden=!paired;$('paired-metrics').replaceChildren();
+  if(paired){
+    const rows=[...Object.entries(paired.values).map(([label,m])=>({label,m,delta:false})),...Object.entries(paired.differences).map(([label,m])=>({label:label.replace('_minus_',' − '),m,delta:true}))];
+    for(const {label,m,delta} of rows){const row=document.createElement('tr');const cells=[label,fmt(m.brier),fmt(m.auroc),fmt(m.average_precision),fmt(m.conditional_pinball),Number.isFinite(m.q32_coverage)?`${(100*m.q32_coverage).toFixed(5)}${delta?' pp':'%'}`:'—'];for(const value of cells){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}$('paired-metrics').append(row);}
+  }
   put('bytes',`${(s.io.bytes/1e9).toFixed(3)} / ${(s.limits.bytes/1e9).toFixed(3)} GB`);
   put('files',`${number.format(s.io.files)} / ${number.format(s.limits.files)}`);put('uncertain',String(s.uncertain));
   put('replay',s.recovery?'390（额外重试0）':'0');

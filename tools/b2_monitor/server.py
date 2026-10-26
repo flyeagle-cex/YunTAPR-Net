@@ -202,6 +202,7 @@ class CampaignReader(base.Reader):
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
                 message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else None)
+            if self.static and completion:result['paired_summary']=self.document('static_paired_summary.json')
             self.cache,self.cached_at=result,time.monotonic()
             return result
 

@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+最新纠正训练启动（2026-10-27）：[真实更新、批准绑定与资源入场](../research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)记录B5已跨过原读取臂问题，179次RETURNED启动快照、原成本与累计上限；B6仍等待。旧首启失败和待批准提案保留历史时点，当前批准已取得并消费。
+
 最新B5/B6执行事实（2026-10-27）：[原批准首启停止收据](../research_readiness/20261025/evidence/b5_b6_initial_start_stop.json)记录0更新、0气象载荷、62,828字节静态读取和B6未启动；[读臂最小修复检查](../research_readiness/20261025/evidence/b5_b6_corrected_start_checks.json)与[唯一待批准修正启动提案](../research_readiness/20261025/evidence/b5_b6_corrected_start_proposal.json)保留新的代码/成本边界。原批准已消费，当前未重启；下面准备完成状态不能误作九轮训练完成。
 
 B5/B6准备新证据（2026-10-27）：[实际100瓦片生产与3430有效点](../research_readiness/20261025/evidence/b5_b6_terrain_production.json)、[真实缓存零更新检查](../research_readiness/20261025/evidence/b5_b6_cached_real_check.json)、[必要检查及失败保留](../research_readiness/20261025/evidence/b5_b6_preparation_checks.json)。这是候选生产/准备完成，正式训练未启动；原DEM发布版本链未独立核实，候选按本地SHA固定，不从HGT头伪造版本。
