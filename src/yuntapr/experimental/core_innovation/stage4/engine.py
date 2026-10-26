@@ -119,7 +119,7 @@ class PairedExecutor:
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
-        if self.kinds not in (('B3','B4'),('B3',),('B4',)) or (self.recovery is not None and self.kinds!=('B3','B4')):
+        if self.kinds not in (('B3','B4'),('B3',),('B4',)) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
         self.deadline()
         if self.recovery is not None:self.recovery.validate(self.plan,self.decision)
@@ -213,7 +213,7 @@ class PairedExecutor:
             if actual!=getattr(ledger,'expected_returned',expected):raise RuntimeError('Endpoint ledger incomplete')
             self.deadline()
             result=dict(status='COMPLETE',updates=expected)
-            if self.recovery is not None:result.update(segment_updates=actual,cumulative_attempts=self.recovery.request['prior_updates']+actual,replayed_updates=480)
+            if self.recovery is not None:result.update(segment_updates=actual,cumulative_attempts=self.recovery.request['prior_updates']+actual,replayed_updates=self.recovery.request.get('replayed_updates',480))
             return result
         except BaseException as exc:
             self.poisoned=True;write(self.folder/'failure.json',dict(status='STOP_NO_AUTOMATIC_RETRY',error=type(exc).__name__+': '+str(exc)));raise

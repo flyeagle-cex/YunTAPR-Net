@@ -112,6 +112,24 @@ def verify_source(request,folder,decision_id):
         finally:meter.uninstall();cache.close()
 
 
+def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=None,seed=None):
+    """Shared LAST restoration; no optimizer step and no source-data access."""
+    import random,numpy as np,torch
+    from yuntapr.training.phase_a_protocol import state_digest
+    payload=torch.load(path,map_location='cpu',weights_only=False)
+    if (payload['identity']['data']!=data_identity or payload['optimizer_groups']!=groups
+            or payload['epoch']!=epoch or payload['updates']!=updates
+            or (kind is not None and payload['identity']['model']!=kind)
+            or (seed is not None and payload['identity']['decision']['seed']!=seed)):
+        raise ValueError('Checkpoint state/grouping identity differs')
+    if payload['scheduler']!=dict(completed=updates,steps_per_epoch=480,original_horizon=24000):raise ValueError('Original schedule differs')
+    model.load_state_dict(payload['model'],strict=True);optimizer.load_state_dict(payload['optimizer'])
+    if state_digest(model.state_dict())!=state_digest(payload['model']):raise ValueError('Restored model tensors differ')
+    if state_digest(optimizer.state_dict())!=state_digest(payload['optimizer']):raise ValueError('Restored optimizer tensors differ')
+    rng=payload['rng'];random.setstate(rng['python']);np.random.set_state(rng['numpy']);torch.set_rng_state(rng['torch_cpu'])
+    torch.cuda.set_rng_state_all(rng['torch_cuda'])
+
+
 class ResumeState:
     def __init__(self,request):self.request=request;self.parent=Path(request['parent'])
     def completed_epochs(self,kind):return 3 if kind=='B3' else 0
@@ -127,16 +145,8 @@ class ResumeState:
         if {str(e):dict(ids=list(o),sha256=digest(o)) for e,o in orders.items()}!=old:raise ValueError('Paired Train order changed')
     def restore(self,kind,model,optimizer,groups):
         if kind=='B4':return 0,[]
-        import random,numpy as np,torch
-        from yuntapr.training.phase_a_protocol import state_digest
-        payload=torch.load(self.parent/'B3_LAST_epoch_03.pt',map_location='cpu',weights_only=False)
-        if payload['identity']['data']!=self.request['data_identity'] or payload['optimizer_groups']!=groups or payload['epoch']!=3 or payload['updates']!=1440:raise ValueError('Checkpoint state/grouping identity differs')
-        if payload['scheduler']!=dict(completed=1440,steps_per_epoch=480,original_horizon=24000):raise ValueError('Original schedule differs')
-        model.load_state_dict(payload['model'],strict=True);optimizer.load_state_dict(payload['optimizer'])
-        if state_digest(model.state_dict())!=state_digest(payload['model']):raise ValueError('Restored model tensors differ')
-        if state_digest(optimizer.state_dict())!=state_digest(payload['optimizer']):raise ValueError('Restored optimizer tensors differ')
-        rng=payload['rng'];random.setstate(rng['python']);np.random.set_state(rng['numpy']);torch.set_rng_state(rng['torch_cpu'])
-        torch.cuda.set_rng_state_all(rng['torch_cuda'])
+        restore_last(self.parent/'B3_LAST_epoch_03.pt',model,optimizer,groups,
+                     data_identity=self.request['data_identity'],epoch=3,updates=1440)
         reports=[read(self.parent/f'B3_development_{e:02d}.json') for e in range(1,4)]
         for e,report in enumerate(reports,1):
             if digest(report)!=read(self.parent/f'B3_LAST_epoch_{e:02d}.receipt.json')['validation_receipt_sha256']:raise ValueError('Inherited Dev report identity differs')
@@ -145,16 +155,18 @@ class ResumeState:
 
 class RecoveryLedger:
     expected_returned=7200
-    def __init__(self,path,identity):
+    def __init__(self,path,identity,*,offsets=None,segment_cap=7200,prior_updates=1920,cumulative_cap=UPDATE_CAP):
         from .engine import UpdateLedger
         self.base=UpdateLedger(path,identity);self.db=self.base.db
+        self.offsets={'B3':1440,'B4':0} if offsets is None else dict(offsets)
+        self.expected_returned=segment_cap;self.prior_updates=prior_updates;self.cumulative_cap=cumulative_cap
     def reserve(self,model,u):
         self.db.execute('BEGIN IMMEDIATE')
         try:
             n,total_returned=self.db.execute("SELECT COUNT(*),COALESCE(SUM(state='RETURNED'),0) FROM updates").fetchone()
             count,returned=self.db.execute("SELECT COUNT(*),COALESCE(SUM(state='RETURNED'),0) FROM updates WHERE model=?",(model,)).fetchone()
-            offset=1440 if model=='B3' else 0
-            if model not in ('B3','B4') or type(u)!=int or u!=offset+count+1 or u>4320 or count!=returned or n!=total_returned or n>=7200 or 1920+n>=UPDATE_CAP:raise PermissionError('Recovery cap/order/uncertain-update boundary')
+            offset=self.offsets.get(model)
+            if offset is None or type(u)!=int or u!=offset+count+1 or u>4320 or count!=returned or n!=total_returned or n>=self.expected_returned or self.prior_updates+n>=self.cumulative_cap:raise PermissionError('Recovery cap/order/uncertain-update boundary')
             self.db.execute('INSERT INTO updates VALUES (?,?,?)',(model,u,'INTENT'));self.db.commit()
         except BaseException:self.db.rollback();raise
     def returned(self,*a):return self.base.returned(*a)

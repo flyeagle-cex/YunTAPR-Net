@@ -42,6 +42,8 @@ def code_hashes(root):
                                      'src/yuntapr', 'config'], text=True).splitlines()
     names += [ENTRY]
     names += ['src/yuntapr/experimental/research_readiness/multiseed.py']
+    recovery=root/'src/yuntapr/experimental/research_readiness/multiseed_recovery.py'
+    if recovery.exists():names += [recovery.relative_to(root).as_posix()]
     return {n: sha(root/n) for n in sorted(set(names))}
 
 
@@ -165,7 +167,7 @@ class BatchTail(TailDiagnostics):
         return result
 
 
-def endpoint(folder, kind, seed, commit):
+def endpoint(folder, kind, seed, commit, *, inherited=None, inherited_commit=None):
     """Completion is allowed only after all 9 Train/Dev/LAST and 18 read seals."""
     folder = Path(folder)
     db = sqlite3.connect((folder/'updates.sqlite').resolve().as_uri()+'?mode=ro', uri=True)
@@ -173,25 +175,28 @@ def endpoint(folder, kind, seed, commit):
         rows = db.execute('SELECT model,state,count(*),min(u),max(u) FROM updates GROUP BY model,state').fetchall()
     finally:
         db.close()
-    if rows != [(kind, 'RETURNED', 4320, 1, 4320)]:
+    offset=480 if inherited is not None else 0
+    if rows != [(kind, 'RETURNED', 4320-offset, offset+1, 4320)]:
         raise RuntimeError('Incomplete/uncertain update ledger')
     total_bytes = total_files = 0
     checkpoints = []
     for e in range(1, 10):
-        training = read(folder/f'{kind}_train_{e:02d}.json')
-        dev = read(folder/f'{kind}_development_{e:02d}.json')
-        receipt = read(folder/f'{kind}_LAST_epoch_{e:02d}.receipt.json')
-        checkpoint = folder/f'{kind}_LAST_epoch_{e:02d}.pt'
+        source=Path(inherited) if inherited is not None and e==1 else folder
+        expected_commit=inherited_commit if source!=folder else commit
+        training = read(source/f'{kind}_train_{e:02d}.json')
+        dev = read(source/f'{kind}_development_{e:02d}.json')
+        receipt = read(source/f'{kind}_LAST_epoch_{e:02d}.receipt.json')
+        checkpoint = source/f'{kind}_LAST_epoch_{e:02d}.pt'
         if (training['updates'] != 480*e or receipt['model'] != kind or receipt['epoch'] != e
-                or receipt['updates'] != 480*e or receipt['code_commit'] != commit
+                or receipt['updates'] != 480*e or receipt['code_commit'] != expected_commit
                 or receipt['validation_receipt_sha256'] != digest(dev)
                 or receipt['population_sha256'] != POPULATION_SHA
                 or not checkpoint.is_file() or sha(checkpoint) != receipt['checkpoint_sha256']):
             raise RuntimeError('Train/Dev/checkpoint seal differs')
-        read(folder/f'{kind}_tail_{e:02d}.json')
+        read(source/f'{kind}_tail_{e:02d}.json')
         checkpoints.append(receipt)
         for role in ('train', 'dev'):
-            r = read(folder/f'{kind}_{role}_reads_{e:02d}'/'pass_receipt.json')
+            r = read(source/f'{kind}_{role}_reads_{e:02d}'/'pass_receipt.json')
             a = r['actual_reads']
             if (r['during_failure'] or a['opened_files'] != r['expected_files']
                     or a['delivered_bytes'] != r['expected_bytes']

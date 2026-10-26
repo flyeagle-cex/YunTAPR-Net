@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+恢复准备（2026-10-26）：B4 seed2030从E1恢复后接两个seed2031模型的最小入口已就绪，待新的明确限额恢复批准；当前训练仍停止。新增上限12,480更新（390重放）、1,379,654,740,081源字节、17小时26分24秒；已完成B3不重训。见[恢复方案与预算](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)及[准备收据](../research_readiness/20261025/evidence/b3_b4_recovery_preparation_check.json)。
+
 最新更新（2026-10-26）：B2 seed2029 已完成九轮/4,320更新及2024 Dev评估，执行版本 a353021、完成证据提交 3acf7b0，见[B2报告](../research_readiness/20261025/B2_TRAINING_AND_EVALUATION_REPORT.md)。B3/B4 seed2030、2031 的四模型串行包已获研究者明确批准，52a8e90固定副本已启动，**B3 seed2030九轮完成，B4在870更新处因window-CLOSE中止，seed2031未启动；整包已停，未恢复**；见[多seed冻结方案与收据](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)。2025继续冻结，B0–B4整体科研验收仍 IN_PROGRESS。以下旧证据核查保留其原始时点，最新矩阵使用[27行完整矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)。
 
 数值证据核查：**2026-10-25 00:04:14，北京时间**；本机进程观测：**2026-10-25 00:06:43，北京时间**。这是一次只读证据整理，不是新的实验。
