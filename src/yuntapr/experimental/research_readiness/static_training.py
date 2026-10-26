@@ -77,7 +77,14 @@ def prepare(root,inherited,terrain,public_terrain,output):
     scientific=dict(aggregation_rule=r['aggregation_rule'],footprint='ACTUAL_SP04_CENTRES_MIDPOINT_ENDPOINT_HALFSTEP_FLOAT32_EDGES',native_post_area='NEAREST_POST_VORONOI_CELLS_WGS84_ELLIPSOID_AREA',derivative_order='NATIVE_CENTRAL_GRADIENT_THEN_AREA_AVERAGE_EAST_NORTH_COMPONENTS_THEN_SLOPE_ASPECT',static_width=16,fusion='ADDITIVE_TARGET_SP04_FEATURE_RESIDUAL_ZERO_OUTPUT_INITIALIZATION',B5_channels=['elevation_m'],B6_channels=['elevation_m','east_gradient','north_gradient','slope_degrees','aspect_sin','aspect_cos'],flat_aspect='ZERO_NORMALIZED_VALUE_PLUS_SEPARATE_INVALID_INDICATOR',scaler_fit='2023_TRAIN_UNIQUE_SPATIAL_SUPPORT',source_release=r['release_version'],vertical_datum=r['vertical_datum'])
     proposal=dict(status='READY_WAITING_EXPLICIT_B5_B6_PROTOCOL_AND_BUDGET_APPROVAL',authorized=False,tasks=[dict(model=k,seed=s) for k,s in TASKS],data=p['data'],scientific_choices=scientific,budget=training_budget(byte_sizes),static_source_sha256={k:sha(terrain/f'{k}_static.npz') for k in byte_sizes},terrain_receipt_sha256=sha(terrain/'production_receipt.json'),grid_sha256=r['grid_sha256'],region_sha256=r['region_sha256'],production_source_bytes=r['source_reads']['delivered_bytes'],production_source_files=r['source_reads']['opened_files'],scalers=r['scalers'],source_sha256=r['source_sha256'],code_sha256=hashes(root),zero_update_precheck_sha256=sha(root/'docs/research_readiness/20261025/evidence/b5_b6_cached_real_check.json'),preparation_checks_sha256=sha(root/'docs/research_readiness/20261025/evidence/b5_b6_preparation_checks.json'),storage_admission_free_bytes=shutil.disk_usage(output.parent).free)
     proposal['proposal_sha256']=digest(proposal)
-    wrapper=read(inherited);private=dict(proposal_sha256=proposal['proposal_sha256'],inherited=str(Path(inherited).resolve()),terrain=str(terrain.resolve()),output_root=str(output.resolve()),historical_pair=wrapper['historical_b3_run'])
+    wrapper=read(inherited)
+    inherited_closeout=read(root/'docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json')
+    baseline_sha=inherited_closeout['sources']['s2029/B4/development_09.json']['sha256']
+    if sha(Path(wrapper['historical_b3_run'])/'B4_development_09.json')!=baseline_sha:raise ValueError('Previously verified B4 E9 baseline changed')
+    proposal['baseline_E9_Dev_sha256']=baseline_sha
+    proposal['protocol']=dict(p['config'],models=['B5','B6'],seed=2029)
+    proposal['proposal_sha256']=digest({k:x for k,x in proposal.items() if k!='proposal_sha256'})
+    private=dict(proposal_sha256=proposal['proposal_sha256'],inherited=str(Path(inherited).resolve()),terrain=str(terrain.resolve()),output_root=str(output.resolve()),historical_pair=wrapper['historical_b3_run'])
     return proposal,private
 
 def validate_approval(a,p,v,commit):
@@ -91,6 +98,7 @@ def checked(root,proposal,private,approval,commit):
     _,prepared=load_inherited(v['inherited'])
     if prepared['data']!=p['data']:raise ValueError('Inherited population drift')
     if sha(Path(v['terrain'])/'production_receipt.json')!=p['terrain_receipt_sha256']:raise ValueError('Terrain receipt changed')
+    if sha(Path(v['historical_pair'])/'B4_development_09.json')!=p['baseline_E9_Dev_sha256']:raise ValueError('Frozen B4 E9 comparison baseline changed')
     return p,v,a,prepared
 
 def worker(root,proposal,private,approval,commit,index):

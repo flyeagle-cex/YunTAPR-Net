@@ -1,5 +1,15 @@
 # B2本次运行已完成
 
+2026-10-27 B5/B6状态：B0–B4限定基线已交接，真实DEM候选与真实缓存零更新检查通过。正式两模型训练**NOT_STARTED_WAITING_REQUIRED_APPROVAL**；新[集中协议与精确预算](B5_B6_READINESS_REPORT.md)和[机器可执行提案](evidence/b5_b6_training_proposal.json)已就绪，提案SHA为`41add1c3bbd851bbaa5076b3edaf795d065bdc4f73ef1c104d1e3887cf20e6c3`。本机false批准模板已实测在GPU、输出目录及优化器之前拒绝，未创建正式训练目录。
+
+唯一新增正式入口（**尚未执行；须先取得本提案、最终执行commit、科学选择及精确预算的明确批准**）：
+
+```powershell
+python -B tools/research_readiness/start_static_pair.py execute --proposal docs/research_readiness/20261025/evidence/b5_b6_training_proposal.json --private-preparation PRIVATE_PREPARATION_JSON --researcher-approval EXPLICIT_RESEARCHER_APPROVAL_JSON
+```
+
+执行时沿用已有经过验证的底层Python3.12.14＋现有CUDA依赖路径及CREATE_NO_WINDOW，在最终commit独立固定副本运行；私有JSON用绝对路径传入，不复制原B2/B3/B4批准。依次B5/2029→B6/2029，每模型4,320更新、6小时，合计8,640更新、955,143,657,680源字节、285,626读取实例、12小时，初始48GiB/每任务24GiB，replay=0。获批后只做原启动绑定/资源入场，不循环审查。下方旧实验命令均保留历史，不可重用。
+
 最新完成（2026-10-27）：B3/B4 seed2029、2030、2031的三组固定E9配对训练与2024 Dev评价全部完成；四个新增模型均为COMPLETE_TRAIN_AND_DEV_EVALUATION。943da95恢复包在北京时间00:27封口，390次必要重放已计费，无额外重试。总体Brier/AUROC/AP/条件Pinball三seed均改善；q32方向不一致，强雨仍有退化。总体科学验收继续IN_PROGRESS，2025继续冻结。 见[三seed完成与配对收据](evidence/b3_b4_three_seed_completion.json)。原execute与execute-recovery批准均已消费，禁止重复启动；仅保留只读页面与历史原件。
 
 运行B2_s2029_formal_20261025_v1已经完成九轮、4,320更新及2024 Dev评价。原单次批准已执行完毕，replay额度为0；不要重复执行启动命令、复用授权或覆盖原运行目录。
