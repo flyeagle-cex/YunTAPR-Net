@@ -1,6 +1,6 @@
 # YunTAPR-Net 当前科研进度
 
-最新更新（2026-10-26）：B2 seed2029 已完成九轮/4,320更新及2024 Dev评估，执行版本 a353021、完成证据提交 3acf7b0，见[B2报告](../research_readiness/20261025/B2_TRAINING_AND_EVALUATION_REPORT.md)。B3/B4 seed2030、2031 的四模型串行包已获研究者明确批准，52a8e90固定副本已启动，**首个B3 seed2030为IN_PROGRESS，其余串行等待**；见[多seed冻结方案与收据](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)。2025继续冻结，B0–B4整体科研验收仍 IN_PROGRESS。以下旧证据核查保留其原始时点，最新矩阵使用[27行完整矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)。
+最新更新（2026-10-26）：B2 seed2029 已完成九轮/4,320更新及2024 Dev评估，执行版本 a353021、完成证据提交 3acf7b0，见[B2报告](../research_readiness/20261025/B2_TRAINING_AND_EVALUATION_REPORT.md)。B3/B4 seed2030、2031 的四模型串行包已获研究者明确批准，52a8e90固定副本已启动，**B3 seed2030九轮完成，B4在870更新处因window-CLOSE中止，seed2031未启动；整包已停，未恢复**；见[多seed冻结方案与收据](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)。2025继续冻结，B0–B4整体科研验收仍 IN_PROGRESS。以下旧证据核查保留其原始时点，最新矩阵使用[27行完整矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)。
 
 数值证据核查：**2026-10-25 00:04:14，北京时间**；本机进程观测：**2026-10-25 00:06:43，北京时间**。这是一次只读证据整理，不是新的实验。
 
@@ -15,8 +15,8 @@
 |B0|B13 单通道、单时次|已实现；Phase-B V2 在 seed2026、2027 的 E0/E1/E2 各完成九轮及 Dev 评估|有两 seed 的开发集重复证据；旧版 Phase-A/FinalFit 另列，不能混用|
 |B1|B13 单通道、六时次|已实现；与 B0 同一 seed/损失臂配对完成|总体发生识别有方向一致的改善；上尾校准不全面改善|
 |B2|七通道、单时次|**seed2029/E0/f006九轮及Dev完成，3acf7b0收口**|固定E9同人口配对：B2的Brier更好，B3的AUROC/AP/条件Pinball更好；仅1seed|
-|B3|七通道、六时次|**seed2029/E0/f006完成；2030首个训练IN_PROGRESS，2031排队**|Train=959、Dev=963；保留轨迹4,320次更新；固定E9 LAST|
-|B4|B3 + GFS MEE|**seed2029/E0/f006完成；2030/2031已批准串行排队，NOT_STARTED**|13变量、width16、目标网格残差融合；每seed与B3配对|
+|B3|七通道、六时次|**seed2029/E0/f006完成；2030九轮完成，2031未启动**|Train=959、Dev=963；保留轨迹4,320次更新；固定E9 LAST|
+|B4|B3 + GFS MEE|**seed2029/E0/f006完成；2030中止不完整，2031未启动**|13变量、width16、目标网格残差融合；每seed与B3配对|
 |B5|B4 + 海拔|未找到完整模型接入或正式实验收据|存在 DEM 读取/地形接口，不等于 B5 已实现或训练|
 |B6|B4 + 完整静态地形|未找到完整模型接入或正式实验收据|静态特征候选存在；正式结构与数据生产参数仍需冻结|
 |B7|B6 + DOTE|动态特征与 concat 融合候选已实现、已有针对性测试|没有完整 B7 正式训练、降水消融或独立物理机制验证|

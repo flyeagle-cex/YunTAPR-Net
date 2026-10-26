@@ -31,6 +31,11 @@ BUDGET = dict(models=4, updates_per_model=4320, total_updates=17280,
 ENTRY = 'tools/research_readiness/start_multiseed.py'
 
 
+def worker_creation_flags():
+    # A detached controller does not imply console isolation for its children.
+    return subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+
+
 def code_hashes(root):
     # Bind executable dependencies, not historical experiment/source receipts.
     names = subprocess.check_output(['git', '-C', str(root), 'ls-files',
@@ -282,7 +287,8 @@ def run_package(root, proposal_path, private_path, approval_path, commit):
                        '--private-preparation', str(private_path), '--researcher-approval', str(approval_path),
                        '--task-index', str(index)]
             with (package/f'{kind}_s{seed}_console.log').open('xb') as log:
-                active = subprocess.Popen(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
+                active = subprocess.Popen(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT,
+                                          creationflags=worker_creation_flags())
                 try:
                     rc = active.wait(timeout=min(BUDGET['max_model_seconds'], remaining))
                 except subprocess.TimeoutExpired:

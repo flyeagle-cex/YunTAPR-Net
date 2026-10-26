@@ -149,6 +149,10 @@ class CampaignReader(base.Reader):
                 runs.append(dict(model=kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
             failure=self.document('failure.json');completion=self.document('completion.json')
+            if failure:
+                # A native-runtime abort can exit before Python writes task failure.json.
+                for run in runs:
+                    if run['state']=='RUNNING':run['state']='FAILED'
             live=self.token is not None and base.process_token(self.pid)==self.token
             returned=sum(r['returned'] for r in runs);reserved=sum(r['reserved'] for r in runs)
             state='FAILED' if failure else 'COMPLETE' if completion and all(r['state']=='COMPLETE' for r in runs) and returned==17280 else 'RUNNING' if live else 'UNKNOWN'

@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sqlite3
 import subprocess
+import sys
 import uuid
 from types import SimpleNamespace
 import unittest
@@ -230,6 +231,13 @@ class MultiseedTests(unittest.TestCase):
     def test_hard_time_cap_kills_worker_without_replay(self):
         calls=self.controller_fixture(timeout_at=0)
         self.assertEqual(len(calls),1)
+
+    @unittest.skipUnless(os.name=='nt','Windows console isolation only')
+    def test_actual_worker_creation_has_no_console(self):
+        result=subprocess.check_output([sys._base_executable,'-B','-c',
+            'import ctypes,json; k=ctypes.WinDLL("kernel32",use_last_error=True); k.GetConsoleWindow.restype=ctypes.c_void_p; print(json.dumps({"console_window":k.GetConsoleWindow()}))'],
+            creationflags=m.worker_creation_flags(),text=True)
+        self.assertIsNone(json.loads(result)['console_window'])
 
 
 if __name__=='__main__':unittest.main()
