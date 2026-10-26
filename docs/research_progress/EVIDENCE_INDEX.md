@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+最新完成证据（2026-10-27）：[三seed固定E9完成与配对收据](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)包含恢复新增26轮封口、3份新E9文件SHA、52个新增读取账本核对、原E1引用、精确预算、全部六个终点及分组/上尾充分量；[结果报告](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)给出三seed差值、均值和样本标准差。[最新27行矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)优先于此目录保留的22行历史快照。188项仅为新增结果相关文件身份，未重复历史129来源/126逐轮核验。原始数据、权重和私有账本不公开。
+
 本轮数值快照核查时间：2026-10-25 00:04:14 +08:00。所有新文件仅位于 `docs/research_progress/`，不改旧收据或实验源码。
 
 ## 读取入口
