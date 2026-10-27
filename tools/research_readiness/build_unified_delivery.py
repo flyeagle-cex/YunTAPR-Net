@@ -26,6 +26,7 @@ FULL = READY + 'evidence/b3_b4_full_endpoint_metrics_20261027.json'
 STATIC = READY + 'evidence/b5_b6_completion_and_paired_evidence.json'
 INNOVATION = READY + 'evidence/b7_b8_training_proposal.json'
 INNOVATION_LAUNCH = READY + 'evidence/b7_b8_approved_launch.json'
+INNOVATION_TERMINAL = READY + 'evidence/b7_b8_terminal_20261028.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -110,6 +111,10 @@ def main():
     assert len(matrix) == 29
     innovation = read(INNOVATION) if (ROOT / INNOVATION).is_file() else None
     innovation_launch = read(INNOVATION_LAUNCH) if (ROOT / INNOVATION_LAUNCH).is_file() else None
+    innovation_terminal = read(INNOVATION_TERMINAL) if (ROOT / INNOVATION_TERMINAL).is_file() else None
+    if innovation_terminal:
+        assert innovation_terminal['status']=='VERIFIED_B7_COMPLETE_B8_FAILED_PARTIAL_PACKAGE'
+        assert innovation_terminal['training_commit']=='b1f072e45fdd17b80106a774083995c350b28f04'
     if innovation:
         assert innovation['authorized'] is False and innovation['formal_training_started'] is False
         if innovation_launch:
@@ -190,6 +195,18 @@ def main():
                      source_snapshot_commit=innovation_launch['training_commit'],
                      executed_commit=innovation_launch['training_commit'] if run['training_started'] else 'NOT_STARTED_PENDING_SERIAL_QUEUE',
                      notes='Dated approved launch snapshot; B7 running, B8 pending serial queue; neither fixed E9 or scientific result complete.')
+        if innovation_terminal and r['model_id'] in ('B7','B8'):
+            task=next(s for s in innovation_terminal['tasks'] if s['model']==r['model_id'])
+            complete=task['status']=='COMPLETE_TRAIN_AND_DEV_EVALUATION'
+            r.update(status=task['status'],phase='DYNAMIC_TERRAIN_FORMAL_COMPLETE' if complete else 'DYNAMIC_TERRAIN_STOPPED_PARTIAL',
+                     execution_state='COMPLETE' if complete else 'FAILED',epochs=str(task['sealed_train_dev_epochs']),global_steps=str(task['returned_updates']),
+                     verified_at=innovation_terminal['verified_at'],status_as_of=innovation_terminal['verified_at'],
+                     metrics_path=INNOVATION_TERMINAL+'#endpoint_groups/B7/all/summary' if complete else 'NOT_AVAILABLE_FIXED_E9',
+                     checkpoint_reference=task['fixed_E9_sha256'] if complete else 'NOT_AVAILABLE_FIXED_E9',
+                     checkpoint_selection='FIXED_EPOCH_9_LAST' if complete else 'FIXED_E9_NOT_REACHED;LATEST_SAVED_E6_2880',
+                     evidence_path=INNOVATION_TERMINAL,source_manifest_reference=INNOVATION_TERMINAL,
+                     authorization_status='APPROVED_CONSUMED_NO_AUTOMATIC_REPLAY',executed_commit=innovation_terminal['training_commit'],
+                     notes='B7 fixed E9 verified; single-seed mixed DOTE results.' if complete else 'B8 source-path WinError121 stop; 6 sealed epochs,2942 returned, E6/2880 saved,62 unsaved; no E9 comparison or authorized recovery.')
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -269,6 +286,22 @@ def main():
             eid = f"{item['model']}__E0__s2029__f006__static"
             add(eid, item['development'], STATIC, f'/epochs/{i}/development', epoch=item['epoch'], kind='RAW_EPOCH')
             add(eid, item['train'], STATIC, f'/epochs/{i}/train', epoch=item['epoch'], kind='RAW_EPOCH', split='2023_Train')
+    if innovation_terminal:
+        for model, groups in innovation_terminal['endpoint_groups'].items():
+            if model!='B7':
+                continue
+            eid='B7__E0__s2029__f006__dynamic'
+            for group,obj in groups.items():
+                pointer=f'/endpoint_groups/{model}/{group}/summary'
+                add(eid,obj['summary'],INNOVATION_TERMINAL,pointer,group=group,ids=obj['ids_sha256'])
+                add(eid,{'q32_coverage':obj['summary']['coverage'][-1]},INNOVATION_TERMINAL,pointer,group=group,ids=obj['ids_sha256'])
+                seen[(eid,'ENDPOINT','2024_Development',group,'q32_coverage')]['source_pointer']=pointer+'/coverage/31'
+            add(eid,innovation_terminal['tail_diagnostics']['B7'],INNOVATION_TERMINAL,'/tail_diagnostics/B7',group='tail_diagnostics')
+        for i,item in enumerate(innovation_terminal['epochs']):
+            eid=f"{item['model']}__E0__s2029__f006__dynamic"
+            add(eid,item['development'],INNOVATION_TERMINAL,f'/epochs/{i}/development',epoch=item['epoch'],kind='RAW_EPOCH')
+            add(eid,item['train'],INNOVATION_TERMINAL,f'/epochs/{i}/train',epoch=item['epoch'],kind='RAW_EPOCH',split='2023_Train')
+            add(eid,item['elevation_diagnostics'],INNOVATION_TERMINAL,f'/epochs/{i}/elevation_diagnostics',epoch=item['epoch'],kind='RAW_EPOCH',group='elevation_diagnostics')
     # Existing epoch CSV is inherited verbatim numerically; no historical receipt audit.
     epoch_source = PROGRESS + 'epoch_metrics.csv'
     with (ROOT / epoch_source).open(encoding='utf-8-sig', newline='') as f:
@@ -280,7 +313,7 @@ def main():
                 split = '2023_Train' if metric == 'training_loss' else '2024_Development'
                 add(item['experiment_id'], obj, epoch_source, f'/row/{i}', epoch=item['epoch'], kind='RAW_EPOCH', split=split)
     for r in matrix:
-        if not any(x['experiment_id'] == r['experiment_id'] for x in rows):
+        if not any(x['experiment_id'] == r['experiment_id'] and x['epoch']=='ENDPOINT' for x in rows):
             add(r['experiment_id'], {'endpoint_metrics': 'NOT_AVAILABLE'}, 'EXPERIMENT_MATRIX.csv', '/experiment_id/' + r['experiment_id'])
     raw_rows = list(rows)
     by_exp = defaultdict(dict)
@@ -295,6 +328,8 @@ def main():
         pairs += [(f'{target}__E0__s2029__f006__static',
                    f'{base}__E0__s2029__f006' + ('__static' if base == 'B5' else ''),
                    target + '_MINUS_' + base) for target, base in (('B5', 'B4'), ('B6', 'B4'), ('B6', 'B5'))]
+    if innovation_terminal:
+        pairs += [('B7__E0__s2029__f006__dynamic',f'{base}__E0__s2029__f006'+('__static' if base in ('B5','B6') else ''),'B7_MINUS_'+base) for base in ('B4','B5','B6')]
     aggregates = defaultdict(list)
     for target, base, comparison in pairs:
         for key in sorted(by_exp[target].keys() & by_exp[base].keys()):
@@ -338,6 +373,11 @@ def main():
             for metric, expected in differences.items():
                 actual = aggregates[(comparison.upper(), 'E0', 'all', metric)]
                 assert len(actual) == 1 and math.isclose(float(actual[0]['value']), expected, abs_tol=1e-15)
+    if innovation_terminal:
+        for comparison,differences in innovation_terminal['summary']['differences'].items():
+            for metric,expected in differences.items():
+                actual=aggregates[(comparison.upper(),'E0','all',metric)]
+                assert len(actual)==1 and math.isclose(float(actual[0]['value']),expected,abs_tol=1e-15)
     write_csv('METRICS.csv', FIELDS, rows)
     counts = Counter(r['record_type'] for r in rows)
     summary_table = '\n'.join(f"|{metric}|{data['B4_minus_B3_by_seed']['2029']:.12g}|{data['B4_minus_B3_by_seed']['2030']:.12g}|{data['B4_minus_B3_by_seed']['2031']:.12g}|{data['mean']:.12g}|{data['sample_sd']:.12g}|" for metric, data in b34['summary']['metrics'].items())
@@ -390,9 +430,83 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 
 证据：[本轮18轮、账本、预算、E9身份与完整分组]({STATIC})。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 '''
+    innovation_analysis_text=innovation_text
+    innovation_stage_rows=f"|B7/B8|{'已获明确批准并启动B7，B8同控制器串行等待' if innovation_launch else ('完整新模型、原物理DOTE接入、等活跃参数单尺度对照、必要及真实零更新检查通过' if innovation else '保留既有候选实现与工程证据')}|固定E9和完整Dev科研终点未齐备；{'批准已消费、零重放/额外重试' if innovation_launch else ('科学选择及精确预算待新批准' if innovation else '创新有效性未核实')}|{'IN_PROGRESS（B7运行，B8排队）' if innovation_launch else 'NOT_STARTED（正式训练未启动）'}|"
+    if innovation_terminal:
+        t=innovation_terminal;cost=t['budget_closure'];v=t['summary']['values'];delta=t['summary']['differences']
+        innovation_stage_rows='|B7|seed2029九轮Train/2024 Dev、4,320更新和固定E9身份已核验|单seed；相对B6收益混合、强雨Pinball退化；机制/最终泛化未证明|COMPLETE_TRAIN_AND_DEV_EVALUATION；探索性结论带局限|\n|B8|六轮Train/Dev已封口，共2,942次RETURNED|第七轮源路径解析WinError121停止；最新E6/2880，62更新未保存，无固定E9|FAILED_INCOMPLETE_NO_FIXED_E9，DTFM对照未验收|'
+        innovation_text=f'''\n## B7完成、B8停止：整包未完成
+
+停止于`{t['package_stopped_at']}`，本次核查`{t['verified_at']}`。B8第七轮Train加载卫星数据时，`Path.resolve(strict=True)`抛出OSError WinError121（信号灯超时）；底层存储/连接原因NOT_VERIFIED，未重新探测或读取源。不是模型指标触发的停止。
+
+B7九轮完整，E9 SHA `{t['tasks'][0]['fixed_E9_sha256']}`。B8六轮完整、2,942更新已RETURNED且无不确定优化器INTENT；最后E6/2,880已保存，62次更新未进检查点，E7–E9 Dev和E9权重不存在。**不得以E6替代E9，不得自动恢复。** 原批准零重放/额外重试，剩余上限不是恢复授权。
+
+实际消耗7,262更新、799,430,612,283源字节/239,130次，均未超上限；失败pass和原件保留。B7可与B4/B5/B6作同人口固定E9比较，B8的固定终点比较及B7/B8整体验收仍NOT_VERIFIED。[完整新核查收据]({INNOVATION_TERMINAL})；[全部正负结果](SCIENTIFIC_ANALYSIS.md)。2025冻结，无新训练、推理或原始读取。
+'''
+        main_table='\n'.join(f"|{k}|{v['B4'][k]:.12g}|{v['B5'][k]:.12g}|{v['B6'][k]:.12g}|{v['B7'][k]:.12g}|NOT_AVAILABLE|" for k in HEADLINE)
+        delta_table='\n'.join(f"|{k}|{delta['B7_minus_B4'][k]:.12g}|{delta['B7_minus_B5'][k]:.12g}|{delta['B7_minus_B6'][k]:.12g}|" for k in HEADLINE)
+        rain_table=[];lo=.1
+        for i,row in enumerate(t['endpoint_groups']['B7']['all']['summary']['rain_strata']):
+            b4=t['endpoint_groups']['B4']['all']['summary']['rain_strata'][i]['conditional_pinball'];b6=t['endpoint_groups']['B6']['all']['summary']['rain_strata'][i]['conditional_pinball']
+            rain_table.append(f"|({lo},{row['upper'] if row['upper'] is not None else '∞'}]|{row['n']}|{b4:.12g}|{b6:.12g}|{row['conditional_pinball']:.12g}|{row['conditional_pinball']-b6:.12g}|");lo=row['upper']
+        time_table=[]
+        for group,item in t['endpoint_groups']['B7'].items():
+            if group=='all':continue
+            s=item['summary'];b=t['endpoint_groups']['B6'][group]['summary']
+            time_table.append(f"|{group}|{s['brier']-b['brier']:.12g}|{s['auroc']-b['auroc']:.12g}|{s['average_precision']-b['average_precision']:.12g}|{s['conditional_pinball']-b['conditional_pinball']:.12g}|{s['coverage'][-1]-b['coverage'][-1]:.12g}|")
+        altitude=t['tail_diagnostics']['B7']['elevation_diagnostics']['bins']
+        elevation_table='\n'.join(f"|{name}|{s['n_valid']}|{s['n_rain']}|{s['brier']:.12g}|{s['conditional_pinball']:.12g}|{s['q32_coverage']:.12g}|" for name,s in altitude.items())
+        innovation_analysis_text=innovation_text+f'''\n### B4–B8固定E9总体结果
+
+全部为相同959/963、seed2029/E0/f006、固定E9。B8缺少该终点，不能用E6与E9横比。表格便读舍入，CSV保留完整原值和差值。
+
+|指标|B4|B5|B6|B7|B8固定E9|
+|---|---|---|---|---|---|
+{main_table}
+
+|指标|B7−B4|B7−B5|B7−B6|
+|---|---|---|---|
+{delta_table}
+
+B7相对B6的AUROC、AP和欠覆盖状态下q32方向改善，但Brier和条件Pinball退化；相对B4的Brier/AUROC/AP改善，条件Pinball和q32退化。DOTE及新增融合路径的整体收益混合，不能写成全面优于静态地形或证明地形抬升。参数额外增加50,192，仍不能把全部差异唯一归因于某个物理因子。B8因源I/O停止，不是DTFM被科学否定；其与concat的有效固定终点比较仍未获得。
+
+### 强雨反例与上尾覆盖
+
+|真实雨强mm/h|有雨像元时次|B4条件Pinball|B6|B7|B7−B6|
+|---|---|---|---|---|---|
+{chr(10).join(rain_table)}
+
+B7对B6仅0.1–1及1–5 mm/h两层改善，其余5 mm/h以上各层退化；20–30和30–50分别+0.01650159247064409、+0.017778099416098758。对B4这两层分别+0.02909704596847118、+0.03247889721680197。>50仅6个像元时次，误差也上升；不能当独立暴雨事件数或稳定极端能力结论。
+
+B7总体q32=0.9348241871413859，较98.4375%名义水平欠4.955081285861407个百分点。对B6改善约0.3351969005934041个百分点，仍不通过校准；对B4反而下降约0.14025795694178056个百分点。B7的20–30、30–50、>50 covered分别38/564、1/147、0/6。总体欠覆盖方向改善不能掩盖强雨尾部不足；按真实雨强分层不能要求各层直接达到同一名义覆盖。
+
+### UTC与强雨场景：B7−B6
+
+|既定分组|Brier差值|AUROC差值|AP差值|条件Pinball差值|q32覆盖差值|
+|---|---|---|---|---|---|
+{chr(10).join(time_table)}
+
+B7对B6四UTC的Brier和条件Pinball均退化；06 UTC的AUROC/AP退化，12 UTC AP也退化。相对B4，四UTC Brier改善，但06 UTC AUROC/AP下降，00/12 UTC AP下降。强雨场景子集对B6仍有Brier/Pinball退化。以上均是重叠的既定描述性分组，不选择有利时次。
+
+### B7海拔充分量（无历史基线配对）
+
+|预设海拔区间|有效像元时次|有雨像元时次|Brier|条件Pinball|q32覆盖|
+|---|---|---|---|---|---|
+{elevation_table}
+
+区间为<1000、[1000,2000)、≥2000米，仅补充同次前向统计，分母相加已与总体核对。B4/B5/B6没有同口径海拔充分量；B8 E6不能代替E9，所以没有DTFM海拔配对结论。分层AUROC/AP没有计算，NOT_COMPUTED不补零；不能用海拔与误差相关性证明地形因果。
+
+### 失败和科研边界
+
+30个完整气象读取账本及1个失败时部分账本、2个静态账本已核对。B8第七轮已完成计量1,108文件/3,477,251,607字节，另有1个SourceCache任务UNCERTAIN_NO_RETRY；文件I/O账本没有未完成字节保留，优化器账本无不确定INTENT。保留的是一次源路径失败，未验证该源当前可访问性或底层连接原因。两份最新实际权重（B7 E9、B8 E6）仅读取字节SHA，未反序列化或推理。
+
+既有整包上限8,640更新、955,143,907,680字节/285,626次，实际7,262更新、799,430,612,283字节/239,130次；时间mtime代理26,715.136秒，少于12小时，不是GPU计费时间。失败不是额度耗尽。62个未保存更新意味着未来从E6恢复将涉及必要重放；原replay=0及未消费的数额均不授予恢复许可，本次不提出或执行新训练。
+
+只保留单seed同一Dev年的探索性结论，不声称统计显著性、独立年份泛化或真实地形抬升机制；2025仍冻结。原B3/B4三seed、B5/B6全部混合及负面结果不变。B8 E1–E6只作为不完整轨迹保留在CSV（epoch=1–6），不选BEST、不生成B8 ENDPOINT数值或B8−B7差值。
+'''
     stage = f'''# 阶段验收统一入口
 
-B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列候选提案和本次Git提交绑定，不将该旧观测时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。这是研究者已限定范围的验收记录，不能把训练完成等同于全部科学假设通过。
+B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{'最新B7完整、B8失败未完成，核心创新整体验收未通过。' if innovation_terminal else ''}不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
@@ -400,7 +514,7 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列�
 |B2|seed2029/E0/f006，九轮、4,320更新及2024 Dev，固定E9 LAST|仅一seed；B2/B3指标方向混合，未证明时序增量全面改善|当前探索性配对条目完成|
 |B3/B4|2029/2030/2031三个独立seed的九轮Train/Dev及固定E9配对|强雨和q32缺陷、同一开发年，未证明最终泛化或统计显著性|描述性随机性复现完成|
 {static_stage}
-|B7/B8|{'已获明确批准并启动B7，B8同控制器串行等待' if innovation_launch else ('完整新模型、原物理DOTE接入、等活跃参数单尺度对照、必要及真实零更新检查通过' if innovation else '保留既有候选实现与工程证据')}|固定E9和完整Dev科研终点未齐备；{'批准已消费、零重放/额外重试' if innovation_launch else ('科学选择及精确预算待新批准' if innovation else '创新有效性未核实')}|{'IN_PROGRESS（B7运行，B8排队）' if innovation_launch else 'NOT_STARTED（正式训练未启动）'}|
+{innovation_stage_rows}
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -420,11 +534,11 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列�
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含{len(matrix)}条历史/当前记录；不是{len(matrix)}个独立seed或{len(matrix)}个已完成模型。{'B7/B8为获批进行中状态，B8排队不等于已训练，两者都没有固定E9终点。' if innovation_launch else ('其中B7/B8是待批准新行，均0更新/0轮，无正式指标。' if innovation else '')}`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含{len(matrix)}条历史/当前记录；不是{len(matrix)}个独立seed或{len(matrix)}个已完成模型。{'B7九轮完整，B8仅六轮封口且失败，无固定E9；部分轨迹不冒充完成。' if innovation_terminal else ('B7/B8为获批进行中状态，B8排队不等于已训练，两者都没有固定E9终点。' if innovation_launch else ('其中B7/B8是待批准新行，均0更新/0轮，无正式指标。' if innovation else ''))}`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
-{'本轮直接继承B0–B6既有完成核查；仅对B7/B8新增路径做13项新检查、2项受影响入口检查及真实小缓存零更新检查。没有重跑历史模型、129来源、126轮或15项旧地形检查。' if innovation else ('本轮核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值；没有重跑训练、模型推理、129来源、126轮或全量归一化。' if static else '本轮仅核对新CSV及差值，不重跑训练或历史审查。')}
+{'本轮只核对新B7九轮、新B8六轮及第七轮部分读取、两个新权重SHA和实际预算；不运行训练、推理或原始数据读取，旧B0–B6检查直接继承。' if innovation_terminal else ('本轮直接继承B0–B6既有完成核查；仅对B7/B8新增路径做13项新检查、2项受影响入口检查及真实小缓存零更新检查。没有重跑历史模型、129来源、126轮或15项旧地形检查。' if innovation else ('本轮核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值；没有重跑训练、模型推理、129来源、126轮或全量归一化。' if static else '本轮仅核对新CSV及差值，不重跑训练或历史审查。'))}
 
-本轮出版基线：`{'5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb'}`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
+本轮出版基线：`{'6a89e43c51f51c360fb4e89a1fd896fa84796433' if innovation_terminal else ('5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb')}`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
 {innovation_text}
@@ -433,6 +547,7 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列�
     analysis = f'''# 科学分析统一入口
 
 B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6{'九轮及固定E9配对完成，地形收益混合、校准退化，仅支持单seed探索性消融' if static else '仍IN_PROGRESS，地形增益尚未验证'}；最终泛化未验证。
+{f'最新B7九轮完成但收益混合，B8因源路径超时停止且缺少固定E9；B7/B8整包未完成，DTFM融合对照NOT_VERIFIED。停止与核查证据见[本轮终态]({INNOVATION_TERMINAL})。' if innovation_terminal else ''}
 
 ## B3/B4：全部三个seed
 
@@ -462,7 +577,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 本轮地形实验采用已批准的WGS84面积聚合、原生米制梯度、目标footprint、width16 SP04残差融合；B5增加海拔，B6增加完整六静态通道。DEM本地源SHA固定，但供应商发布版本链NOT_VERIFIED；研究者接受该限制用于探索性消融。零输出残差保证起点行为与B4相同，不证明训练后一定获益。{'两模型均已取得固定E9结果，全部正负结果如下。' if static else '当前两个模型固定E9尚未齐备，地形正/负结果均不得预填。'}
 {static_text}
-{innovation_text}
+{innovation_analysis_text}
 
 三seed主要检验训练随机性；相邻seed按seed+epoch−1排列规则存在移位重叠，不能声称所有轮排列彼此独立。大量像元也不是大量独立事件。重复使用2024 Dev存在开发集选择影响，没有事件级独立性估计、置信区间或显著性声明。不同人口不可跨模型排名归因，2025最终测试继续冻结；旧catalogue/QC访问事实不改写为历史从未访问。
 
@@ -472,7 +587,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
-`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；{'B5/B6完整终点及新增18轮Train/Dev数值已加入，三个地形比较各仅一个seed，不计算伪造的样本标准差' if static else 'B5/B6不填最终数值'}。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
+`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；{'继承B5/B6完整终点和18轮Train/Dev数值' if static else 'B5/B6不填最终数值'}。{'本轮新增B7九轮、B8六轮轨迹与B7固定E9；B8固定E9缺失单列。地形比较各仅一个seed，不计算伪造的样本标准差。' if innovation_terminal else ''}源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
 '''
     (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis, encoding='utf-8')
     input_names = [BASE, OLD, GROUPS, B2, B34, FULL, epoch_source,
@@ -487,16 +602,18 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
                         READY+'evidence/b7_b8_preparation_checks.json']
     if innovation_launch:
         input_names.append(INNOVATION_LAUNCH)
+    if innovation_terminal:
+        input_names.append(INNOVATION_TERMINAL)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
     evidence = f'''# 统一证据索引
 
-出版基线commit：`{'5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb'}`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`{'6a89e43c51f51c360fb4e89a1fd896fa84796433' if innovation_terminal else ('5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb')}`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
-仅摘录现有只读进度服务元数据；状态时点是UTC（北京时间加8小时），不是页面实时值。{'B5/B6均COMPLETE_TRAIN_AND_DEV_EVALUATION，已由本轮18轮完整新收据、账本及实际E9文件SHA收口' if static else 'B5/B6阶段均IN_PROGRESS，B6执行PENDING，终态须依完整新收据另行收口'}，不从checkpoint存在或部分轮次判完成。
+此嵌入快照仅记录既有B5/B6收口时点，供继承和确定性重建；B7/B8最新终态见下方独立收据。状态时点是UTC（北京时间加8小时），不是页面实时值。{'B5/B6均COMPLETE_TRAIN_AND_DEV_EVALUATION，18轮完整收据、账本及实际E9文件SHA沿用既有收口' if static else 'B5/B6阶段均IN_PROGRESS，B6执行PENDING，终态须依完整新收据另行收口'}，不从checkpoint存在或部分轮次判完成。
 
 <!-- STATUS_SNAPSHOT -->
 ```json
@@ -517,7 +634,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 |B5/B6，2029|[一次纠正启动]({READY}evidence/b5_b6_corrected_start_launch.json)、[原失败]({READY}evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案]({READY}evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA]({READY}evidence/b5_b6_terrain_production.json)；{'E9及18轮完整收据见下一行' if static else '当前E9身份NOT_AVAILABLE'}|
 {f'|B5/B6本轮完整收口|[18轮、36读取账本、2静态账本及E9]({STATIC})|sources中B5或B6/train、development、tail、LAST receipt、reads.sqlite、updates.sqlite均有字节SHA；完整endpoint_groups和epochs仅公开脱敏统计，原件及权重LOCAL_ONLY|' if static else ''}
 {f"|B7/B8{'历史准备时点' if innovation_launch else '准备，未训练'}|[科学协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)、[精确提案]({INNOVATION})、[真实零更新]({READY}evidence/b7_b8_cached_real_check.json)|code/data SHA、3份新GFS原件身份及缓存纠正均已记录；准备时无正式批准或E9结果，实际新批准另列，不复用B6授权|" if innovation else ''}
-{f'|B7/B8最新获批启动|[新批准、真实更新和资源入场]({INNOVATION_LAUNCH})|按新b1f072e/64e8提案单次启动；B7 RUNNING，B8 PENDING；旧准备状态保留当时时点，固定E9结果仍未产生|' if innovation_launch else ''}
+{f"|B7/B8{'历史启动快照' if innovation_terminal else '最新获批启动'}|[新批准、真实更新和资源入场]({INNOVATION_LAUNCH})|b1f072e/64e8单次启动；当时B7 RUNNING、B8 PENDING，固定E9尚无；不把该快照当当前状态|" if innovation_launch else ''}
+{f"|B7完成/B8停止的最新终态|[15轮、31气象账本、2静态账本与权重身份]({INNOVATION_TERMINAL})|B7固定E9完成，B8源路径WinError121停止；B8最新E6 SHA {innovation_terminal['tasks'][1]['last_saved_sha256']}，E9缺失；不重试原始源或训练|" if innovation_terminal else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -537,7 +655,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮{'继承B0–B6原收口，仅对B7/B8新增代码、物理小缓存、零更新GPU检查及审批绑定进行核对' if innovation else ('先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值' if static else '仅校验新增导出及差值')}，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮{'仅核对新B7九轮、新B8六轮和第七轮部分账本、实际更新/读取额度及两份最新权重字节SHA，继承全部旧B0–B6证据' if innovation_terminal else ('继承B0–B6原收口，仅对B7/B8新增代码、物理小缓存、零更新GPU检查及审批绑定进行核对' if innovation else ('先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值' if static else '仅校验新增导出及差值'))}，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|

@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-10-28终态：B7 seed2029九轮Train/2024 Dev及固定E9完成；B8第七轮源文件路径解析WinError121停止，六轮封口、2,942次RETURNED、E6/2,880已保存，62次更新未保存，无固定E9。整包未完成，不自动恢复。[新终态核查](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。B0–B6继承、2025冻结。下文IN_PROGRESS是历史快照。
+
 最新B7/B8获批执行：b1f072e/64e8提案已被研究者明确批准并单次启动，B7真实训练进行中、B8同控制器串行等待；整包IN_PROGRESS，非COMPLETE。批准已消费，零重放/额外重试，2025冻结。[新启动收据](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。以下NOT_STARTED和待批准记录保留历史时点。
 
 2026-10-27 B7/B8后续准备：DOTE原物理变量与B6梯度已接通，B7 concat及B8 DTFM同参数单尺度模型、必要检查及真实Train2/Dev1零更新检查通过；正式训练NOT_STARTED，待一份新科学方案/预算批准。B0–B6有效完成证据直接继承。[审批入口](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。

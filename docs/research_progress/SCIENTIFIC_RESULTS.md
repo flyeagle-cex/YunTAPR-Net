@@ -1,5 +1,7 @@
 # 已有真实实验结果与科学边界
 
+最新B7固定E9仅支持收益混合的单seed探索性结论：相对B6，AUROC/AP/q32欠覆盖方向改善，Brier和条件Pinball退化，20–50 mm/h反例保留。B7总体q32=0.9348241871413859，仍低于0.984375。B8源路径WinError121失败、缺少E9，不是DTFM性能被否定，也不能用E6补作最终对照。完整同人口B4–B7数值、UTC/雨强/海拔和B8缺失状态见[统一分析](../../SCIENTIFIC_ANALYSIS.md)及[新终态证据](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。
+
 B7/B8状态更新：已获整包新批准并开始B7，B8依序等待。科学参数按b1f072e/64e8冻结，仍无固定E9科研结果；新增物理代理量、初始预测等价及部分更新不构成创新有效性结论。[启动收据](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。B0–B6既有全部正负结果继续保留。
 
 B7/B8目前仅完成新增工程与少量真实缓存检查，没有正式训练结果。M推荐PWAT加权windward_W，单SP04尺度的B7拼接与B8 DTFM共享输入、活跃参数均4,411,058；科学选择与预算待新批准。不能将初始预测等价、有限梯度或物理启发量当成创新有效性证据，B0–B6混合/负面结果全部继承。[新协议与边界](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。

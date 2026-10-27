@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+最新B7/B8终态索引：[B7九轮完整、B8六轮/第七轮部分读取、两份实际权重SHA及精确额度](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。B7固定E9 SHA019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35；B8仅E6，E9不存在。失败原日志/账本保留，公开只含脱敏错误摘要与原件SHA，没有原始源重试或额外模型推理。
+
 最新B7/B8证据：[实际新批准、冻结执行代码、125次RETURNED启动快照、资源入场与只读进度页](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。B7 RUNNING，B8 PENDING，固定E9/完整Dev科研终点NOT_AVAILABLE；原false提案是准备快照，未改写为批准凭据。
 
 B7/B8新准备证据：[候选科学协议](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)、[机器提案](../research_readiness/20261025/evidence/b7_b8_training_proposal.json)、[真实零更新](../research_readiness/20261025/evidence/b7_b8_cached_real_check.json)、[原生压力mask纠正且零重读](../research_readiness/20261025/evidence/b7_b8_physical_cache_correction.json)。正式权重/九轮训练/Dev结果NOT_STARTED；不借用B6批准。

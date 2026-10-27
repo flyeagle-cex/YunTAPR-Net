@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 核心创新执行（2026-10-27）：B7/B8整包已获明确批准，固定b1f072e单次启动；B7正在真实训练，B8同控制器串行等待，IN_PROGRESS。见[新批准与启动收据](docs/research_readiness/20261025/evidence/b7_b8_approved_launch.json)。零重放/额外重试，B0–B6原结果保留，2025继续冻结。
+> 核心创新终态（2026-10-28）：B7九轮固定E9 Train/Dev已核验完成，B8第七轮因卫星源路径WinError121停止，仅六轮封口、无E9；整包未完成，不自动恢复。[终态与消耗收据](docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)及[全部正负分析](SCIENTIFIC_ANALYSIS.md)。B0–B6结果保留，2025冻结。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 
