@@ -1,0 +1,100 @@
+{
+  "status": "READY_WAITING_LIMITED_RECOVERY_APPROVAL",
+  "as_of": "2026-10-26T13:46:03.695248+08:00",
+  "baseline_commit": "28f99f4d339eeaecc96fff783e52d1b875525088",
+  "delivered_commit": "SEE_CONTAINING_GIT_COMMIT",
+  "proposal_sha256": "bef5b3c842043bf2836c930bb0760b8a303ca4c971c6dad2d905c91ec55f237c",
+  "proposal_file_sha256": "9b9e3351e0f557145bf1d92f414e5179208098291d77875665cc89c0bbef48d7",
+  "tests": {
+    "unique_passed": 11,
+    "new_recovery_checks": 9,
+    "affected_legacy_compatibility_checks": 2,
+    "first_attempt": {
+      "tests": 11,
+      "passed": 10,
+      "errors": 1,
+      "seconds": 1.964,
+      "reason": "Synthetic worker fixture omitted proposal_sha256"
+    },
+    "corrected_fixture_attempt": {
+      "tests": 1,
+      "passed": 1,
+      "seconds": 0.01
+    },
+    "no_formal_or_synthetic_optimizer_step": true,
+    "no_historical_checkpoint_deserialization": true,
+    "explicit_actual_cost_fields_regression": {
+      "tests": 1,
+      "passed": 1,
+      "seconds": 0.014,
+      "note": "After reporting4710 actual B4 attempts and cumulative actual source cost separately from4320 effective endpoint steps"
+    }
+  },
+  "budget": {
+    "new_updates": 12480,
+    "new_task_updates": [
+      3840,
+      4320,
+      4320
+    ],
+    "replay_allowance": 390,
+    "cumulative_updates": 17670,
+    "prior_updates": 5190,
+    "new_source_bytes": 1379654740081,
+    "cumulative_source_bytes": 1931972785094,
+    "new_source_files": 412569,
+    "cumulative_source_files": 577748,
+    "verification_bytes": 3332713,
+    "verification_files": 1,
+    "checkpoint_loads": 1,
+    "task_wall_seconds": [
+      19584,
+      21600,
+      21600
+    ],
+    "max_wall_seconds": 62784,
+    "prior_wall_seconds": 14498,
+    "prior_B4_wall_seconds": 2016,
+    "minimum_initial_free_bytes": 77309411328,
+    "minimum_task_free_bytes": 25769803776,
+    "additional_retry_allowance": 0,
+    "wall_accounting": "Prior executed interval plus new recovery wall time; approval waiting excluded"
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 18547884032,
+    "workspace_free_bytes": 75125506048,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 23626706944,
+    "output_volume_free_bytes": 106796871680
+  },
+  "old_checkpoint_verification": "Inherited previous E1 actual SHA receipt; actual weights not reopened during this preparation",
+  "interrupted_source": "Exactly one2023Train source; stat metadata only; payload verification requires recovery approval",
+  "source_scope": "All remaining passes inherit frozen959/963/f006/E0/E9; no2025 or normalization refit",
+  "code_and_tests_sha256": {
+    "src/yuntapr/experimental/research_readiness/multiseed_recovery.py": "7fafb942d72648635a4b49b191fa3502021eca7a5328456ca8198bbaf38f2278",
+    "src/yuntapr/experimental/research_readiness/multiseed.py": "7d3bb1e39bc85d5384218334845b03e5cc5751c98ad2d828e6e3cfba4adc611f",
+    "src/yuntapr/experimental/core_innovation/stage4/recovery.py": "9e9fd81eafe252e1b55b5a4e734559967e5fefe2820e3aec650406a6e701cb85",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "452fa8ebf02db2dfa737e8da628f8d7dac401fa1bcabface425b67826c975b93",
+    "tools/research_readiness/start_multiseed.py": "55ff52dc54dc47b2d56d037f382785105b530072ad1944d50ab7593855121861",
+    "tests/research_readiness/test_multiseed_recovery.py": "142a230e90f371ca0ae0a007e7d9b20d36ce58d3dbe05daa45f774021e30111b"
+  },
+  "formal_updates": 0,
+  "raw_weather_payload_reads": 0,
+  "historical_checkpoint_loads": 0,
+  "recovery_output_created": false,
+  "recovery_authorized": false,
+  "remaining_blockers": [
+    "Researcher explicit bounded recovery/replay approval"
+  ],
+  "original_data_weights_and_ledgers": "PRESERVED; no parent state rewriting",
+  "final_binding_note": "Only code/reporting identity rebound after the last affected test; resource and one-source stat checks reused without repeating them"
+}

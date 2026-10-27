@@ -1,0 +1,146 @@
+{
+  "status": "IN_PROGRESS_REAL_OPTIMIZER_UPDATES_CONFIRMED",
+  "as_of": "2026-10-27T07:55:16.170429+08:00",
+  "training_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+  "proposal_sha256": "36fc5dfbbc94c5576442ab95691595a7d4c3a130f373363015b5db13db6b57f1",
+  "approval": {
+    "approved": true,
+    "decision_id": "RESEARCHER_B5_B6_CORRECTED_B251FD9_20261027",
+    "approved_at": "2026-10-27T07:49:37.971603+08:00",
+    "answer": "批准这一次纠正启动",
+    "private_approval_sha256": "3528da9f4c109ec2c9105fc33f045b090d5b04c72e8841ab9582d117147ea94e"
+  },
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B5": 62828,
+      "B6": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B5": 477571703840,
+      "B6": 477571953840
+    },
+    "total_source_bytes": 955143657680,
+    "total_source_files": 285626,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43187,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776,
+    "task_wall_seconds": {
+      "B5": 21587,
+      "B6": 21600
+    },
+    "prior_source_bytes": 62828,
+    "prior_source_files": 1,
+    "cumulative_source_bytes": 955143720508,
+    "cumulative_source_files": 285627,
+    "prior_wall_seconds": 13
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "static_data_sha256": {
+    "B5": "98d91515b8475f15343b931be0e14d8b005762987f6d4caeb69e9c9ce1d134b8",
+    "B6": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 19721768960,
+    "workspace_free_bytes": 72649056256,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 21381611520
+  },
+  "first_actual_snapshot": {
+    "updates": [
+      [
+        "B5",
+        "RETURNED",
+        179,
+        1,
+        179
+      ]
+    ],
+    "returned_updates": 179,
+    "first_update": 1,
+    "weather_io": {
+      "opened_files": 3082,
+      "delivered_bytes": 10024840580,
+      "reserved_bytes": 10024840580,
+      "states": {
+        "READ_COMPLETE": 3082
+      }
+    },
+    "static_io": {
+      "opened_files": 1,
+      "delivered_bytes": 62828,
+      "reserved_bytes": 62828,
+      "states": {
+        "READ_COMPLETE": 1
+      }
+    },
+    "B5": "IN_PROGRESS_E1",
+    "B6": "PENDING_SERIAL_AFTER_B5_NINE_EPOCHS",
+    "live_snapshot_not_final_receipt": true
+  },
+  "initialization": {
+    "B3": {
+      "full_state_sha256": "a8a0731e309d6ddd1765a753707bf334e1f1fd7f66d7b24e581748ddfe7ddc2e",
+      "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+    },
+    "B4": {
+      "full_state_sha256": "5bf39fe2925955159e8d9c7acd307aa0ae6e4a1fb05c5a8de51a42a9c17516d0",
+      "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+    },
+    "B5": {
+      "full_state_sha256": "4cc17f8ebcd38e1c3688174fd6cdcf87f80da8266ed431d7a081d36ee15b397e",
+      "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+    }
+  },
+  "original_failed_start": {
+    "optimizer_updates": 0,
+    "static_source_bytes": 62828,
+    "static_source_files": 1,
+    "wall_seconds_charged": 13,
+    "evidence_sha256": "e0dc6834aa7297293b4d5801741f86b449810feb9317936ae0feb179d932bc96"
+  },
+  "monitor": {
+    "read_only": true,
+    "api_state": "RUNNING",
+    "static_pair_supported": true,
+    "cumulative_budget_includes_prior_static_file": true,
+    "final_E9_comparison_panel": "READS_EXECUTOR_SUMMARY_ONLY_AFTER_COMPLETION"
+  },
+  "execution_scope": "Only B5/2029 then B6/2029; fixed E9; no 2025/no other models/no further retry",
+  "immutable_sources": {
+    "authorization_binding.json": "4ac985ea9230cfe1ac2d332c91637d46ff1108a1600e6a7d124a463a93bd4cee",
+    "task_1_claim.json": "421e3234640ec49c842d8d9744d57960cc97b11904c1c53aa356b3dea90c2c10",
+    "B5_s2029/paired_initial_identity.json": "8d76e4ed52b88f9b813f22b93d9922ae6b497b7358640fe3178538bca529ee0c",
+    "B5_s2029/paired_orders.json": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+  }
+}

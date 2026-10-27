@@ -1,0 +1,47 @@
+{
+  "status": "PASS_TARGETED_READER_WIRING_FIX_NOT_A_RESTART_GRANT",
+  "new_checks_passed": 2,
+  "checks": [
+    "Explicit B5/B6 actual ReaderFactory entry for Train/Development, duplicate pass rejected",
+    "Legacy default allowlist and changed model/epoch/population rejected before BatchReader"
+  ],
+  "raw_weather_reads": 0,
+  "optimizer_updates": 0,
+  "prior_real_GPU_check_reused": true,
+  "prior_unchanged_checks_reused": 15,
+  "after_real_check_changes": {
+    "current_module_sha256": "31cfc8c1f51fd7421da8bfa2f041e8b0bc3de53ba92862139871f34a9287336b",
+    "numeric_AST_nodes_unchanged": [
+      "StaticTrainingModel",
+      "unpack",
+      "model_factory"
+    ],
+    "PassReader_unchanged": true,
+    "BatchReader_file_unchanged": true
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/static_training.py": "31cfc8c1f51fd7421da8bfa2f041e8b0bc3de53ba92862139871f34a9287336b",
+    "src/yuntapr/experimental/core_innovation/stage4/launch.py": "c7327f22d80e128782f6e493c51204ae7240d07ac0c8cac8852b1f033e69636e",
+    "tools/research_readiness/start_static_pair.py": "9727669fe0c551ce0ed7b4a75ac32636f5e5d63ccfa9e1c5441d8f2683bd776b",
+    "tests/research_readiness/test_static_reader_wiring.py": "5526a264aebf60af5e3619783febef0c377a7974a0e2a1081454ae669facf4ce"
+  },
+  "monitor": {
+    "api_state": "FAILED",
+    "actual_updates": 0,
+    "actual_source_bytes": 62828,
+    "actual_source_files": 1,
+    "models": [
+      {
+        "model": "B5",
+        "state": "FAILED"
+      },
+      {
+        "model": "B6",
+        "state": "PENDING"
+      }
+    ],
+    "javascript_syntax": "PASS",
+    "visible_page_reloaded": true
+  },
+  "source_control_state": "D696FE2_BASE_PLUS_EXPLICIT_SHA_BOUND_CORRECTION"
+}
