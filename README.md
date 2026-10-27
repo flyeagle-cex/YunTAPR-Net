@@ -2,7 +2,7 @@
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 
-> 最新科研状态（2026-10-27）：B5/B6纠正启动已获明确批准，固定b251fd9从B5 seed2029开始真实训练，B6自动串行衔接；整包IN_PROGRESS。原首启失败成本保留，不自动重试；[真实启动收据](docs/research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)。B0–B4限定基线与2025冻结不变。
+> 最新科研状态（2026-10-27）：B5/B6 seed2029各九轮Train/2024 Dev及固定E9配对已核验完成；首轮地形消融为COMPLETE_WITH_LIMITATIONS，收益混合，q32欠覆盖加重。见[完整新收据](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)和[统一科学分析](SCIENTIFIC_ANALYSIS.md)。B0–B4限定基线不变；2025与B7/B8继续冻结，无追加训练。
 
 The current authoritative [Scientific Freeze v1.1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.1.md) and [machine-readable contract](config/science_contract_v1.1.yaml) supersede v1 **only for explicitly updated QC / normalization / quantile numerical implementation / engineering staging rules**. D1–D7 otherwise inherit [historical v1](docs/scientific_freeze/YUNTAPR_SCIENTIFIC_FREEZE_v1.md) unchanged. Formal supervised B0 requires a full-valid B13 expected latest slot, prohibits older-frame fallback, and applies Decision 8 Train-only Z-score. The versioned [SP04 coordinate/index artifacts](config/spatial/sp04_coordinate_manifest_v1.json) remain unchanged. **B0_FORMAL_SCIENTIFIC_CONTRACT=FROZEN; B0_FORMAL_SKELETON_IMPLEMENTED=true; B0_FORMAL_TRAINING_STARTED=false; FORMAL_TRAINING_AUTHORIZED=false.**
 

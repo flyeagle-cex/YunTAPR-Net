@@ -23,6 +23,7 @@ OLD = PROGRESS + 'evidence/experiments.json'
 B2 = READY + 'evidence/b2_completion_and_paired_evidence.json'
 B34 = READY + 'evidence/b3_b4_three_seed_completion.json'
 FULL = READY + 'evidence/b3_b4_full_endpoint_metrics_20261027.json'
+STATIC = READY + 'evidence/b5_b6_completion_and_paired_evidence.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -90,7 +91,14 @@ def main():
         text = (ROOT / 'EVIDENCE_INDEX.md').read_text(encoding='utf-8')
         snapshot = json.loads(re.search(r'<!-- STATUS_SNAPSHOT -->\s*```json\s*(.*?)\s*```', text, re.S)[1])
     assert snapshot['source_commit'] == 'b251fd9ea06c0c90f48d2ac0decba0454114669d'
-    assert snapshot['state'] == 'RUNNING' and snapshot['completed_models'] == 0, 'Terminal state requires a new evidence-based closeout first.'
+    static = read(STATIC) if snapshot['state'] == 'COMPLETE' else None
+    if static:
+        assert static['status'] == 'VERIFIED_COMPLETE_STATIC_PAIR_TRAIN_AND_DEV'
+        assert static['training_commit'] == snapshot['source_commit']
+        assert snapshot['completed_models'] == 2
+        assert all(r['state'] == 'COMPLETE' and r['returned'] == 4320 and r['sealed_epochs'] == 9 for r in snapshot['runs'])
+    else:
+        assert snapshot['state'] == 'RUNNING', 'Terminal state requires a new evidence-based closeout first.'
     assert {r['model'] for r in snapshot['runs']} == {'B5', 'B6'}
     as_of = snapshot['snapshot_utc']
     with (ROOT / BASE).open(encoding='utf-8-sig', newline='') as f:
@@ -140,6 +148,14 @@ def main():
                      global_steps=str(s['returned']), verified_at=as_of, status_as_of=as_of,
                      evidence_path='EVIDENCE_INDEX.md#当前训练状态快照',
                      notes='DATED_METADATA_SNAPSHOT_ONLY; E9 results unavailable; B6 queue PENDING is not completed training.')
+            if static:
+                task = next(t for t in static['tasks'] if t['model'] == r['model_id'])
+                r.update(status=task['status'], phase='STATIC_TERRAIN_FORMAL_COMPLETE',
+                         metrics_path=STATIC + '#endpoint_groups/' + r['model_id'] + '/all/summary',
+                         checkpoint_reference=task['endpoint_sha256'], evidence_path=STATIC,
+                         verified_at=static['verified_at'], status_as_of=static['verified_at'],
+                         authorization_status='CORRECTED_START_APPROVED_CONSUMED_COMPLETE_NO_RETRY',
+                         notes='Nine Train/Dev epochs and E9 LAST verified; mixed single-seed terrain results; not final generalization.')
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -203,6 +219,22 @@ def main():
                 add(eid, obj, B34, f'/endpoint_groups/{seed}/{model}/{group}', group=group, ids=obj['ids_sha256'])
             add(eid, b34['summary']['endpoints'][seed][model], B34, f'/summary/endpoints/{seed}/{model}')
             add(eid, b34['tail_diagnostics'][seed][model], B34, f'/tail_diagnostics/{seed}/{model}', group='tail_diagnostics')
+    if static:
+        for model, groups in static['endpoint_groups'].items():
+            eid = f'{model}__E0__s2029__f006' + ('__static' if model in ('B5', 'B6') else '')
+            for group, obj in groups.items():
+                pointer = f'/endpoint_groups/{model}/{group}/summary'
+                add(eid, obj['summary'], STATIC, pointer, group=group, ids=obj['ids_sha256'])
+                if (eid, 'ENDPOINT', '2024_Development', group, 'q32_coverage') not in seen:
+                    add(eid, {'q32_coverage': obj['summary']['coverage'][-1]}, STATIC, pointer,
+                        group=group, ids=obj['ids_sha256'])
+                    seen[(eid, 'ENDPOINT', '2024_Development', group, 'q32_coverage')]['source_pointer'] = pointer + '/coverage/31'
+            if model in static['tail_diagnostics']:
+                add(eid, static['tail_diagnostics'][model], STATIC, f'/tail_diagnostics/{model}', group='tail_diagnostics')
+        for i, item in enumerate(static['epochs']):
+            eid = f"{item['model']}__E0__s2029__f006__static"
+            add(eid, item['development'], STATIC, f'/epochs/{i}/development', epoch=item['epoch'], kind='RAW_EPOCH')
+            add(eid, item['train'], STATIC, f'/epochs/{i}/train', epoch=item['epoch'], kind='RAW_EPOCH', split='2023_Train')
     # Existing epoch CSV is inherited verbatim numerically; no historical receipt audit.
     epoch_source = PROGRESS + 'epoch_metrics.csv'
     with (ROOT / epoch_source).open(encoding='utf-8-sig', newline='') as f:
@@ -225,6 +257,10 @@ def main():
              for seed in (2026, 2027) for arm in ('E0', 'E1', 'E2')]
     pairs += [('B2__E0__s2029__f006', 'B3__E0__s2029__f006', 'B2_MINUS_B3')]
     pairs += [(f'B4__E0__s{seed}__f006', f'B3__E0__s{seed}__f006', 'B4_MINUS_B3') for seed in (2029, 2030, 2031)]
+    if static:
+        pairs += [(f'{target}__E0__s2029__f006__static',
+                   f'{base}__E0__s2029__f006' + ('__static' if base == 'B5' else ''),
+                   target + '_MINUS_' + base) for target, base in (('B5', 'B4'), ('B6', 'B4'), ('B6', 'B5'))]
     aggregates = defaultdict(list)
     for target, base, comparison in pairs:
         for key in sorted(by_exp[target].keys() & by_exp[base].keys()):
@@ -263,20 +299,61 @@ def main():
         assert len(vals) == 3
         assert math.isclose(statistics.mean(float(r['value']) for r in vals), result['mean'], abs_tol=1e-15)
         assert math.isclose(statistics.stdev(float(r['value']) for r in vals), result['sample_sd'], abs_tol=1e-15)
+    if static:
+        for comparison, differences in static['summary']['differences'].items():
+            for metric, expected in differences.items():
+                actual = aggregates[(comparison.upper(), 'E0', 'all', metric)]
+                assert len(actual) == 1 and math.isclose(float(actual[0]['value']), expected, abs_tol=1e-15)
     write_csv('METRICS.csv', FIELDS, rows)
     counts = Counter(r['record_type'] for r in rows)
     summary_table = '\n'.join(f"|{metric}|{data['B4_minus_B3_by_seed']['2029']:.12g}|{data['B4_minus_B3_by_seed']['2030']:.12g}|{data['B4_minus_B3_by_seed']['2031']:.12g}|{data['mean']:.12g}|{data['sample_sd']:.12g}|" for metric, data in b34['summary']['metrics'].items())
-    status_table = '\n'.join(f"|{r['model']}|2029|IN_PROGRESS|{r['state']}|{r['returned']}|{r['sealed_epochs']}|" for r in snapshot['runs'])
+    phase_status = 'COMPLETE_TRAIN_AND_DEV_EVALUATION' if static else 'IN_PROGRESS'
+    status_table = '\n'.join(f"|{r['model']}|2029|{phase_status}|{r['state']}|{r['returned']}|{r['sealed_epochs']}|" for r in snapshot['runs'])
+    static_stage = ('|B5/B6|seed2029/E0/f006各九轮Train/Dev、4,320更新、固定E9权重身份与B4公平配对均完成|仅单seed；总体收益混合、q32和强雨仍有退化、DEM发布链未验证|训练/评价完成；探索性地形消融COMPLETE_WITH_LIMITATIONS|' if static else
+                    '|B5/B6|真实地形准备、冻结方案、明确纠正启动批准；当前串行执行中|两模型各九轮完整Train/Dev、最终权重身份和公平配对尚未齐备|IN_PROGRESS，未通过结果验收|')
+    static_text = ''
+    if static:
+        v, d = static['summary']['values'], static['summary']['differences']
+        table = '\n'.join(f"|{k}|{v['B4'][k]:.12g}|{v['B5'][k]:.12g}|{v['B6'][k]:.12g}|{d['B5_minus_B4'][k]:.12g}|{d['B6_minus_B4'][k]:.12g}|{d['B6_minus_B5'][k]:.12g}|" for k in HEADLINE)
+        rain = []
+        lower = .1
+        for i, base in enumerate(static['endpoint_groups']['B4']['all']['summary']['rain_strata']):
+            a = static['endpoint_groups']['B5']['all']['summary']['rain_strata'][i]['conditional_pinball']
+            b = static['endpoint_groups']['B6']['all']['summary']['rain_strata'][i]['conditional_pinball']
+            rain.append(f"|({lower},{base['upper'] if base['upper'] is not None else '∞'}]|{base['n']}|{base['conditional_pinball']:.12g}|{a:.12g}|{b:.12g}|{a-base['conditional_pinball']:.12g}|{b-base['conditional_pinball']:.12g}|")
+            lower = base['upper']
+        static_text = f'''\n### seed2029固定E9地形配对：已完成
+
+|指标|B4|B5|B6|B5−B4|B6−B4|B6−B5|
+|---|---|---|---|---|---|---|
+{table}
+
+B5在五项主指标中仅AUROC略有改善，Brier、AP、条件Pinball及q32覆盖均退化。B6相对B4的Brier和AUROC改善，AP下降、条件Pinball上升5.766171316340385e-06，q32覆盖更低；B6相对B5的前四项改善而q32进一步退化。不能写成地形全面有效、等效性通过或统计显著。
+
+B4/B5/B6参数量分别4,355,986/4,359,426/4,360,866。B6−B5除了输入变量还改变适配器参数量，且静态输入同时携带固定空间信息；没有等参数或空间替代对照，不能把差异唯一归因于某个物理因子。Brier与AUROC/AP衡量的误差/排序口径不同，观察到方向分化应并列记录，不从单一指标推导整体获益。
+
+|真实雨强mm/h|有雨像元时次|B4条件Pinball|B5|B6|B5−B4|B6−B4|
+|---|---|---|---|---|---|---|
+{chr(10).join(rain)}
+
+B5在20–30及30–50 mm/h两层略改善，必须与其总体退化一并保留；B6在这两层分别退化+0.012595453497827092、+0.014700797800703214。B6在1–20 mm/h同样退化，0.1–1 mm/h改善抵消了部分总体损失。按同一总体有雨人口407,820加权，不把分层均值再作不等权平均。
+
+B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.8148/4.9776/5.2903个百分点。B5在两强雨层covered为80/564、9/147，B6为66/564、3/147；B4对应层covered未保存，不能由总体反推。真实雨强条件化分层不直接要求各层达到名义覆盖。B5与B6总体q32均比B4更差，不能用B5强雨场景子集覆盖小幅改善掩盖它。
+
+四UTC：B5的Brier全部退化、AP全部下降，06UTC AUROC也下降；B6的Brier/AUROC四时次均改善，但00/12UTC AP下降，12/18UTC条件Pinball退化；两模型q32四时次均下降。强雨场景子集（scene_max_ge20）中B6仍有AP和条件Pinball退化。全部分组原值和配对差值保存在CSV。
+
+证据：[本轮18轮、账本、预算、E9身份与完整分组]({STATIC})。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
+'''
     stage = f'''# 阶段验收统一入口
 
-状态时点：`{as_of}`。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **IN_PROGRESS（进行中）**；最终泛化验收为 **NOT_VERIFIED（未核实）**。这是研究者已限定范围的验收记录，不能把训练完成等同于全部科学假设通过。
+状态时点：`{as_of}`。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。这是研究者已限定范围的验收记录，不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
 |B0/B1|seed2026、2027，各E0/E1/E2固定九轮Train/2024 Dev|两seed；10,455/10,501人口；历史执行commit绑定不完整；历史不确定尝试未追认|限定人口内基线对照可交接|
 |B2|seed2029/E0/f006，九轮、4,320更新及2024 Dev，固定E9 LAST|仅一seed；B2/B3指标方向混合，未证明时序增量全面改善|当前探索性配对条目完成|
 |B3/B4|2029/2030/2031三个独立seed的九轮Train/Dev及固定E9配对|强雨和q32缺陷、同一开发年，未证明最终泛化或统计显著性|描述性随机性复现完成|
-|B5/B6|真实地形准备、冻结方案、明确纠正启动批准；当前串行执行中|两模型各九轮完整Train/Dev、最终权重身份和公平配对尚未齐备|IN_PROGRESS，未通过结果验收|
+{static_stage}
 |B7/B8|保留既有候选实现与工程证据|没有正式科研训练/消融结果|NOT_STARTED（正式训练未启动）|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
@@ -285,7 +362,7 @@ def main():
 - B0/B1：同seed、同E臂的10,455 Train / 10,501 Dev，允许比较单通道时序增量。E0/E1/E2分别记录，损失臂及恢复不算新seed。
 - B2/B3：seed2029，959/963，E0/f006、固定E9 LAST。B2为7通道×1时次t−10分钟，4,332,290参数；B3为7×6，4,349,090参数。槽位权重映射乘sqrt(6)，其余72个兼容张量同初始化，不宣称模型完全等价。
 - B3/B4：三seed各自共享959/963、初始化兼容部分、顺序与评价掩膜；B4增加13变量GFS MEE（气象环境编码器）。跨seed改变初始化与排列，恢复重放仍属于原seed。
-- B5/B6：将与B4 seed2029在同人口、同评价口径下比较；当前没有固定E9结果。不得跨B0/B1与B2–B6的不同训练人口直接归因架构优势。
+- B5/B6：{'已与B4 seed2029在同人口、同初始B4身份、同顺序、同评价口径下完成固定E9配对' if static else '将与B4 seed2029在同人口、同评价口径下比较，尚无固定E9结果'}。不得跨B0/B1与B2–B6的不同训练人口直接归因架构优势。
 
 ## 当前训练状态
 
@@ -299,16 +376,16 @@ def main():
 
 五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含29条历史/当前记录；不是29个独立seed或29个已完成模型。`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
-本轮仅从现有公开数值与只读状态生成交付并核对新CSV结构、原值来源和配对差值。没有重跑训练、模型推理、129个来源审查、126轮收据审查、合成测试或全量归一化。
+本轮{'核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值' if static else '仅从现有公开数值与只读状态生成交付并核对新CSV结构、原值来源和配对差值'}。没有重跑训练、模型推理、129个来源审查、126轮收据审查、合成测试或全量归一化。
 
-本轮出版基线：`2ea3c9ce87f4e26c36ed7529c99122bea7cb3f54`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
+本轮出版基线：`35eb3178b55d49a6b95e8b781aeec1df091d2deb`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
 '''
     (ROOT / 'STAGE_ACCEPTANCE.md').write_text(stage, encoding='utf-8')
     analysis = f'''# 科学分析统一入口
 
-B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6仍IN_PROGRESS，地形增益及最终泛化均未验证。
+B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6{'九轮及固定E9配对完成，地形收益混合、校准退化，仅支持单seed探索性消融' if static else '仍IN_PROGRESS，地形增益尚未验证'}；最终泛化未验证。
 
 ## B3/B4：全部三个seed
 
@@ -336,7 +413,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 ## B5/B6与结论边界
 
-本轮地形实验采用已批准的WGS84面积聚合、原生米制梯度、目标footprint、width16 SP04残差融合；B5增加海拔，B6增加完整六静态通道。DEM本地源SHA固定，但供应商发布版本链NOT_VERIFIED；研究者接受该限制用于探索性消融。零输出残差保证起点行为与B4相同，不证明训练后一定获益。当前两个模型固定E9尚未齐备，地形正/负结果均不得预填。
+本轮地形实验采用已批准的WGS84面积聚合、原生米制梯度、目标footprint、width16 SP04残差融合；B5增加海拔，B6增加完整六静态通道。DEM本地源SHA固定，但供应商发布版本链NOT_VERIFIED；研究者接受该限制用于探索性消融。零输出残差保证起点行为与B4相同，不证明训练后一定获益。{'两模型均已取得固定E9结果，全部正负结果如下。' if static else '当前两个模型固定E9尚未齐备，地形正/负结果均不得预填。'}
+{static_text}
 
 三seed主要检验训练随机性；相邻seed按seed+epoch−1排列规则存在移位重叠，不能声称所有轮排列彼此独立。大量像元也不是大量独立事件。重复使用2024 Dev存在开发集选择影响，没有事件级独立性估计、置信区间或显著性声明。不同人口不可跨模型排名归因，2025最终测试继续冻结；旧catalogue/QC访问事实不改写为历史从未访问。
 
@@ -346,23 +424,25 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
-`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；B5/B6不填最终数值。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
+`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；{'B5/B6完整终点及新增18轮Train/Dev数值已加入，三个地形比较各仅一个seed，不计算伪造的样本标准差' if static else 'B5/B6不填最终数值'}。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
 '''
     (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis, encoding='utf-8')
     input_names = [BASE, OLD, GROUPS, B2, B34, FULL, epoch_source,
                    READY + 'evidence/b5_b6_corrected_start_launch.json',
                    READY + 'evidence/b5_b6_initial_start_stop.json',
                    READY + 'evidence/b5_b6_terrain_production.json']
+    if static:
+        input_names.append(STATIC)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
     evidence = f'''# 统一证据索引
 
-出版基线commit：`2ea3c9ce87f4e26c36ed7529c99122bea7cb3f54`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`35eb3178b55d49a6b95e8b781aeec1df091d2deb`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
-仅摘录现有只读进度服务元数据；状态时点是UTC（北京时间加8小时），不是页面实时值。B5/B6阶段均IN_PROGRESS，B6执行PENDING。终态须依据完整新收据另行收口，不从checkpoint存在或部分轮次判完成。
+仅摘录现有只读进度服务元数据；状态时点是UTC（北京时间加8小时），不是页面实时值。{'B5/B6均COMPLETE_TRAIN_AND_DEV_EVALUATION，已由本轮18轮完整新收据、账本及实际E9文件SHA收口' if static else 'B5/B6阶段均IN_PROGRESS，B6执行PENDING，终态须依完整新收据另行收口'}，不从checkpoint存在或部分轮次判完成。
 
 <!-- STATUS_SNAPSHOT -->
 ```json
@@ -380,7 +460,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 |B3/B4，2029|[保留执行收据]({PROGRESS}evidence/seed2029_execution.json)、[原件清单]({PROGRESS}evidence/source_manifest.json)|[总体及分组指标]({GROUPS})、[三seed完成收据]({B34})的s2029/B3或B4/development_09.json字节SHA；继承既有权重核验|
 |B3/B4，2030/2031|[原中止事实]({READY}evidence/b3_b4_multiseed_stop.json)、[三seed收口]({B34})的epochs/tasks/budget_closure|sources中s2030/s2031/{'{model}'}/development_09.json、训练日志、LAST receipt、updates.sqlite、读取账本分别有SHA；每个epoch/模型/seed定位，不把恢复段计为新seed|
 |2030/2031完整终点字段|[本轮4份既有E9数值摘录]({FULL})|groups包含六评价分组的完整summary，sources字节SHA与既有三seed收口一致；仅补足数值出版，不重新推理或读取原始气象|
-|B5/B6，2029|[一次纠正启动]({READY}evidence/b5_b6_corrected_start_launch.json)、[原失败]({READY}evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案]({READY}evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA]({READY}evidence/b5_b6_terrain_production.json)；当前E9身份NOT_AVAILABLE|
+|B5/B6，2029|[一次纠正启动]({READY}evidence/b5_b6_corrected_start_launch.json)、[原失败]({READY}evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案]({READY}evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA]({READY}evidence/b5_b6_terrain_production.json)；{'E9及18轮完整收据见下一行' if static else '当前E9身份NOT_AVAILABLE'}|
+{f'|B5/B6本轮完整收口|[18轮、36读取账本、2静态账本及E9]({STATIC})|sources中B5或B6/train、development、tail、LAST receipt、reads.sqlite、updates.sqlite均有字节SHA；完整endpoint_groups和epochs仅公开脱敏统计，原件及权重LOCAL_ONLY|' if static else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -400,7 +481,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮仅校验新增导出及差值，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮{'先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值' if static else '仅校验新增导出及差值'}，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
@@ -421,8 +502,10 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
     for name in ['STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv']:
         text = (ROOT / name).read_text(encoding='utf-8')
         assert not re.search(r'[A-Za-z]:[\\/]|/Users/|/home/', text), name
-    assert all(r['status'] == 'IN_PROGRESS' for r in matrix if r['model_id'] in ('B5', 'B6'))
-    assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
+    expected_status = 'COMPLETE_TRAIN_AND_DEV_EVALUATION' if static else 'IN_PROGRESS'
+    assert all(r['status'] == expected_status for r in matrix if r['model_id'] in ('B5', 'B6'))
+    if not static:
+        assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0, status_as_of=as_of), ensure_ascii=False))
 

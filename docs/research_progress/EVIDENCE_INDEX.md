@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+最新完成索引（2026-10-27T15:34:06.069260+08:00）：[B5/B6新增18轮、38读取账本、8,640更新、E9实际SHA和完整配对](../research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。B5/B6现为COMPLETE_TRAIN_AND_DEV_EVALUATION；历史启动/失败/IN_PROGRESS快照保留原字节。[根目录统一索引](../../EVIDENCE_INDEX.md)给出当前状态、代码和数据身份以及完整数值入口，旧公开清单仍仅约束原发布范围。
+
 发布清单维护：`PUBLICATION_MANIFEST.json`是当前文档索引；原清单按原字节保存为[PUBLICATION_MANIFEST_20261025.json](PUBLICATION_MANIFEST_20261025.json)。`PUBLIC_VERIFICATION.json`仍是2026-10-25的历史22实验/126轮检查，未改写或冒充本次复核；本次仅做报告发布范围、状态和文件身份检查，继承既有实验验证。
 
 报告合并时点状态：[B5/B6均IN_PROGRESS的脱敏快照](../research_readiness/20261025/evidence/b5_b6_status_for_main_20261027.json)。B6的阶段进行中与执行队列PENDING分别列明；已完成B0–B4结果和历史失败证据继续使用原收据，不把新训练的部分轮次或checkpoint当作完成。

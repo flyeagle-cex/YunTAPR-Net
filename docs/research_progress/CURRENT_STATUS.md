@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+最新地形收口（2026-10-27T15:34:06.069260+08:00）：B5/B6 seed2029九轮Train/2024 Dev与固定E9配对已核验完成（COMPLETE_TRAIN_AND_DEV_EVALUATION）；首轮消融COMPLETE_WITH_LIMITATIONS，B6改善Brier/AUROC但AP、条件Pinball和q32退化，B5总体仅AUROC改善。完整预算、代码/权重身份、反例见[新收据](../research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)和[统一阶段验收](../../STAGE_ACCEPTANCE.md)。2025与B7/B8仍冻结，无追加训练。以下按日期保留历史状态。
+
 当前报告发布状态（2026-10-27T08:09:47.988894+08:00，北京时间）：已完成结果为B0/B1既有正式实验、B2 seed2029及B3/B4三seed固定E9配对。**B5：IN_PROGRESS；B6：IN_PROGRESS（串行等待，尚未开始优化器更新）**。两模型均未完成九轮Train/Dev，不发布最终评价。见[固定状态快照](../research_readiness/20261025/evidence/b5_b6_status_for_main_20261027.json)。本次通过报告专用PR合入main，不改训练源码和历史证据。
 
 最新纠正运行（2026-10-27）：b251fd9/36fc5dfb已取得明确纠正启动批准，B5真实训练进行中，B6串行等待；07:55:16快照179确认更新，无额外优化器重放。当前IN_PROGRESS，不能宣称E9完成。见[启动与预算收据](../research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)。下方首启失败保持历史记录。
