@@ -59,7 +59,10 @@ def paired_models(seed,root):
 
 def forward(model,batch):
     if batch.identity['population_sha256']!=POPULATION_SHA:raise ValueError('Wrong population tensor binding')
-    extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6') else {}
+    extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
+    if model.kind in ('B7','B8'):
+        if batch.dynamic is None or batch.dynamic_valid is None:raise ValueError('DOTE physical transform was not connected to the reader')
+        extra.update(dynamic=batch.dynamic,dynamic_valid=batch.dynamic_valid,dynamic_grid=model.grid)
     output=model(batch.x,batch.native_valid,channel_order=CHANNELS,**extra)
     loss=candidate_loss(output.rain_logit,output.conditional_quantiles_log,batch.rate,batch.valid,batch.region,config=get_config('E0'))
     if loss.n_valid!=len(batch.ids)*3430:raise ValueError('Frozen supervision denominator')
@@ -88,7 +91,7 @@ class FormalDecision:
 
 class UpdateLedger:
     def __init__(self,path,identity,*,allowed_models=('B3','B4')):
-        if tuple(allowed_models) not in (('B3','B4'),('B5',),('B6',)):raise ValueError('Explicit supported ledger arms required')
+        if tuple(allowed_models) not in (('B3','B4'),('B5',),('B6',),('B7',),('B8',)):raise ValueError('Explicit supported ledger arms required')
         self.allowed_models=tuple(allowed_models)
         if Path(path).exists():raise PermissionError('No update ledger overwrite/resume/retry')
         self.db=sqlite3.connect(path);self.db.execute('PRAGMA synchronous=FULL')
@@ -122,7 +125,7 @@ class PairedExecutor:
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
-        static=self.kinds in (('B5',),('B6',)) and self.model_factory is not None and self.recovery is None
+        static=self.kinds in (('B5',),('B6',),('B7',),('B8',)) and self.model_factory is not None and self.recovery is None
         if (self.kinds not in (('B3','B4'),('B3',),('B4',)) and not static) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
         self.deadline()

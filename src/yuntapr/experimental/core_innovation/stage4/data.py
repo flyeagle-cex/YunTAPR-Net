@@ -105,8 +105,11 @@ class Batch:
     analyses:tuple
     role:str
     identity:dict
+    dynamic:torch.Tensor|None=None
+    dynamic_valid:torch.Tensor|None=None
     def to(self,device):
-        return Batch(*(getattr(self,k).to(device) for k in ('x','native_valid','environment','environment_valid','rate','valid','region')),self.ids,self.analyses,self.role,self.identity)
+        return Batch(*(getattr(self,k).to(device) for k in ('x','native_valid','environment','environment_valid','rate','valid','region')),self.ids,self.analyses,self.role,self.identity,
+                     *(getattr(self,k).to(device) if getattr(self,k,None) is not None else None for k in ('dynamic','dynamic_valid')))
 
 
 class BatchReader:
@@ -115,7 +118,8 @@ class BatchReader:
     One reader owns one pass. Further epochs require independently authorized
     fresh scopes; Stage4 CLI only supplies the ten declared dry-run scenes.
     """
-    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2,source_bytes=None):
+    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2,source_bytes=None,dynamic_transform=None):
+        self.dynamic_transform=dynamic_transform
         self.plan=plan;self.ids_by_role=ids_by_role;self.folder=Path(folder);self.folder.mkdir(exist_ok=False)
         self.mapping=load_sp04(plan.root);self.grid=frozen_sp04_grid(plan.root);self.native=GridSpec(self.mapping.axes['native_lat'],self.mapping.axes['native_lon'])
         chosen={};self.target_paths={};self.target_buffers={};self.scene_seen=set()
@@ -170,7 +174,7 @@ class BatchReader:
         return self.yunnan
     def batch(self,role,ids):
         if not ids or not set(ids)<=set(self.ids_by_role.get(role,())) or any(s in self.scene_seen for s in ids):raise PermissionError('Unlisted/repeated batch; retain tensor for paired dry-run')
-        values=[];masks=[];envs=[];env_valids=[];rates=[];valids=[];analyses=[]
+        values=[];masks=[];envs=[];env_valids=[];rates=[];valids=[];analyses=[];dynamics=[];dynamic_masks=[]
         region=self.region()
         for sid in ids:
             row=self.plan.rows[role][sid];frames=[];frame_masks=[];receipts=[]
@@ -190,6 +194,10 @@ class BatchReader:
             frame=combine_environment(decoded['main'],decoded['thermo'],target_valid_time=analysis,decision_time=analysis,mode='retrospective')
             TargetBinding(utc(sid),analysis,tuple(utc(r['nominal']) for r in receipts),tuple(utc(r['obs_start']) for r in receipts),tuple(utc(r['obs_end']) for r in receipts)).check_forecast(identity,valid_policy='valid_equals_analysis_retrospective_candidate')
             e,ev,_=prepare_mee(frame,target_grid=self.grid,scalers=self.plan.environment,keys=MEE_V13_KEYS);envs.append(e);env_valids.append(ev)
+            if self.dynamic_transform is not None:
+                dx,dm=self.dynamic_transform(frame)
+                if dx.shape!=(8,100,100) or dm.shape!=dx.shape or dm.dtype!=bool or not np.isfinite(dx).all():raise ValueError('Eight aligned masked dynamic channels required')
+                dynamics.append(dx);dynamic_masks.append(dm)
             p=self.target_paths[sid]
             if p not in self.target_buffers:
                 expected=self.cache.manifest[self.path_jobs[path_key(p)]]['bytes']
@@ -199,6 +207,7 @@ class BatchReader:
             if int((valid&region).sum())!=3430:raise ValueError('Target denominator changed')
             rates.append(y[None]);valids.append(valid[None]);analyses.append(row['analysis_time']);self.scene_seen.add(sid)
         tensor=lambda a:torch.from_numpy(np.stack(a))
-        return Batch(tensor(values),tensor(masks),tensor(envs),tensor(env_valids),tensor(rates),tensor(valids),tensor([region[None]]*len(ids)),tuple(ids),tuple(analyses),role,self.plan.identity)
+        return Batch(tensor(values),tensor(masks),tensor(envs),tensor(env_valids),tensor(rates),tensor(valids),tensor([region[None]]*len(ids)),tuple(ids),tuple(analyses),role,self.plan.identity,
+                     tensor(dynamics) if dynamics else None,tensor(dynamic_masks) if dynamics else None)
     def close(self):
         self.target_buffers.clear();self.meter.uninstall();self.cache.close()

@@ -1,0 +1,131 @@
+{
+  "status": "PASS_THREE_FROZEN_SCENES_PHYSICAL_DOTE_CACHE",
+  "scope": "USER_REQUESTED_B7_B8_PREPARATION_NOT_FORMAL_TRAINING",
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "definition": {
+    "pwat_reference_kg_m2": 31.85768219039871,
+    "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "moisture_basis": "windward_W",
+    "velocity_reference_m_s": 1.0
+  },
+  "source_reads": {
+    "opened_files": 3,
+    "delivered_bytes": 901220,
+    "reserved_bytes": 901220,
+    "states": {
+      "READ_COMPLETE": 3
+    }
+  },
+  "static_source_reads": {
+    "files": 1,
+    "bytes": 312828,
+    "sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "total_new_source_bytes": 1214048,
+  "total_new_source_files": 4,
+  "cases": [
+    {
+      "role": "Train",
+      "sample_id": "2023-05-01T05:30:00+00:00",
+      "source_alias": "gfs_0p25_2023050100_f006.nc",
+      "source_bytes": 301011,
+      "source_sha256": "a1ae6ab59556a4f862554543285877b1a64b25f6b10cef20a5cd469617b3d6b7",
+      "above_ground_valid_region": [
+        925,
+        3238
+      ],
+      "moisture_valid_region": [
+        925,
+        3238
+      ],
+      "physical_O_range_m_s": [
+        -1.8257625361619332,
+        2.2399563224582533
+      ]
+    },
+    {
+      "role": "Train",
+      "sample_id": "2023-05-01T11:30:00+00:00",
+      "source_alias": "gfs_0p25_2023050106_f006.nc",
+      "source_bytes": 301038,
+      "source_sha256": "077eb8a255dcc5d5ab9c33dc5e0a67ae038ec0d7c55df77c9f5badee38745048",
+      "above_ground_valid_region": [
+        904,
+        3238
+      ],
+      "moisture_valid_region": [
+        904,
+        3238
+      ],
+      "physical_O_range_m_s": [
+        -2.1398629277455754,
+        2.7876498935102063
+      ]
+    },
+    {
+      "role": "Development",
+      "sample_id": "2024-05-01T05:30:00+00:00",
+      "source_alias": "gfs_0p25_2024050100_f006.nc",
+      "source_bytes": 299171,
+      "source_sha256": "814cfc985efc54fa91eb182896bddf963ba0ac6d7cdb161d8887686fb06325a1",
+      "above_ground_valid_region": [
+        835,
+        3233
+      ],
+      "moisture_valid_region": [
+        835,
+        3233
+      ],
+      "physical_O_range_m_s": [
+        -2.9169005143124664,
+        1.8894947127036532
+      ]
+    }
+  ],
+  "artifacts": {
+    "B6_static.npz": {
+      "bytes": 312828,
+      "sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+    },
+    "Development_dynamic.npz": {
+      "bytes": 400508,
+      "sha256": "b79f582c38f3aa809834aa259d8f7100859a82535991bfabb9a7ae92ecf0f315"
+    },
+    "inputs.json": {
+      "bytes": 41032,
+      "sha256": "d0688b6312e082d7addbb7c100ed565a11780209b494d954a3498b09e0b4aeb1"
+    },
+    "physical_fields.npz": {
+      "bytes": 1629214,
+      "sha256": "21ad0a052274a3431767dcd479bf4863c257eb2e0a2deb20d92c07ab74c3e721"
+    },
+    "source_reads.sqlite": {
+      "bytes": 20480,
+      "sha256": "398beac2af98e11c21fb62e8351f9cfac15cd8c9cd6e5fcfb38a2e371e6be8da"
+    },
+    "Train_dynamic.npz": {
+      "bytes": 800508,
+      "sha256": "8131d829496e35b0de755aa32819ef4a5b1459d8d5b44993a5103931a2deab82"
+    }
+  },
+  "elapsed_seconds": 0.17200000000593718,
+  "optimizer_updates": 0,
+  "raw_satellite_reads": 0,
+  "raw_imerg_reads": 0,
+  "raw_dem_tile_reads": 0,
+  "final_2025": "FROZEN_NO_ACCESS",
+  "preprocessing_cache_for_formal_training": false
+}

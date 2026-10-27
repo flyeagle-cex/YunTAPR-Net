@@ -1,0 +1,35 @@
+{
+  "status": "PASS_NEW_B7_B8_PREPARATION_ONLY",
+  "new_distinct_unit_checks": 13,
+  "affected_existing_reader_checks": 2,
+  "old_129_source_audit_rerun": false,
+  "old_126_epoch_receipts_rerun": false,
+  "old_15_terrain_checks_rerun": false,
+  "formal_training_updates": 0,
+  "real_cache_check": "b7_b8_cached_real_check.json",
+  "physical_cache_correction": "b7_b8_physical_cache_correction.json",
+  "retained_failures": [
+    {
+      "scope": "CPU factory test invocation",
+      "reason": "Missing CUBLAS_WORKSPACE_CONFIG in initial test shell",
+      "resolution": "Set required inherited environment; reran only failed test. No physical data accessed."
+    },
+    {
+      "scope": "Real cache entrance consistency",
+      "reason": "Initial three-scene preparation omitted native-grid pressure masks; MEE mask differed",
+      "resolution": "Preserved initial cache, repaired derived cache from exact-source old masks and original physical values, zero new raw reads; only affected unit masks and real new path checked."
+    }
+  ],
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": "39ff14c4b2c701959b5d8bc5d5deca59887aaad54254371c017d9312e8e088ba",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "b7bd6f1190d356150851ff6c61a9c144ec336565c3e7c23896829b6c28983cae",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": "f0ae14926c98caae6fe226f86303cf3326821623833fe60651cf99f62e2a3404",
+    "src/yuntapr/experimental/core_innovation/stage4/launch.py": "93868ba09237c3dfe56d44298fbd000122b1a12321f23eae3424040fb1b877f9",
+    "tests/research_readiness/test_dynamic_terrain.py": "bb89b28955cd188001053ec052a19a04303e79b236ff1100a6e10a340069b427",
+    "tests/research_readiness/test_dynamic_training.py": "8fffc4b8f553aa537db6f08d01c4b087cc2de996ae49c9e7cf9d2c9515a6bb84",
+    "tools/research_readiness/check_dynamic_cached_real.py": "556d3b1fe61256d144a474a026ef2c605a7c393b86cc95bc0af9a00d651c0f3b",
+    "tools/research_readiness/start_dynamic_pair.py": "4b513edc1abc146c1b3db0c5a8d4e9f1d780de55be89d017953b93600581e834"
+  },
+  "execution_check_scope": "Unit-test fixtures, finite zero-step GPU check; synthetic controller receipts are not formal completion evidence"
+}
