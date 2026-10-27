@@ -71,11 +71,20 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 
 
+## B7/B8核心创新：准备通过，正式训练NOT_STARTED
+
+模型代码、DOTE原物理变量接入、单SP04尺度的B7 concat/B8 DTFM匹配活跃参数对照、13项新增及2项受影响旧入口检查、真实Train2/Dev1零更新检查已完成。初始输出与B6逐位相同、梯度有限、公共完整B6初始化保持；这些都是准备证据，不是科研训练结果。
+
+待研究者集中批准：M采用windward_W、既有Train正PWAT均值31.85768219039871 kg/m²、1m/s显式尺度、width16/SP04单尺度、λ=0.1、上述配对关系及额外海拔诊断、两模型新预算。完整候选与反例边界见[核心创新协议](docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)，规范化机器提案SHA `64e8d0f3c4b458b56e7cfaa1b81459eb4f61db0d947aceff62aa6e2ec579f5c8`。旧B0–B6结果直接继承，不把其混合结果当工程失败。
+
+尚无B7/B8固定E9、Dev科研指标、权重或创新有效性结论；CSV仅增加缺失状态行，不把少量未训练模型的前向/E0值充当正式结果。2025冻结，新增训练必须取得该新提案及准确代码提交的明确批准。
+
+
 三seed主要检验训练随机性；相邻seed按seed+epoch−1排列规则存在移位重叠，不能声称所有轮排列彼此独立。大量像元也不是大量独立事件。重复使用2024 Dev存在开发集选择影响，没有事件级独立性估计、置信区间或显著性声明。不同人口不可跨模型排名归因，2025最终测试继续冻结；旧catalogue/QC访问事实不改写为历史从未访问。
 
 ## CSV读取规范
 
-`METRICS.csv`为长表（一个数值一行），共25169行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。为补齐新seed的完整终点字段，本轮仅摘录4份既有E9评价JSON的summary并核对原有字节SHA，未重做历史逐轮审查；[完整终点摘录](docs/research_readiness/20261025/evidence/b3_b4_full_endpoint_metrics_20261027.json)不含场景ID、逐像元预测或私有路径。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
+`METRICS.csv`为长表（一个数值一行），共25171行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。此前为补齐新seed的完整终点字段，已摘录4份既有E9评价JSON的summary并核对原有字节SHA；本次继承该[完整终点摘录](docs/research_readiness/20261025/evidence/b3_b4_full_endpoint_metrics_20261027.json)，不重做历史逐轮审查。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 

@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+B7/B8新准备证据：[候选科学协议](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)、[机器提案](../research_readiness/20261025/evidence/b7_b8_training_proposal.json)、[真实零更新](../research_readiness/20261025/evidence/b7_b8_cached_real_check.json)、[原生压力mask纠正且零重读](../research_readiness/20261025/evidence/b7_b8_physical_cache_correction.json)。正式权重/九轮训练/Dev结果NOT_STARTED；不借用B6批准。
+
 最新完成索引（2026-10-27T15:34:06.069260+08:00）：[B5/B6新增18轮、38读取账本、8,640更新、E9实际SHA和完整配对](../research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。B5/B6现为COMPLETE_TRAIN_AND_DEV_EVALUATION；历史启动/失败/IN_PROGRESS快照保留原字节。[根目录统一索引](../../EVIDENCE_INDEX.md)给出当前状态、代码和数据身份以及完整数值入口，旧公开清单仍仅约束原发布范围。
 
 发布清单维护：`PUBLICATION_MANIFEST.json`是当前文档索引；原清单按原字节保存为[PUBLICATION_MANIFEST_20261025.json](PUBLICATION_MANIFEST_20261025.json)。`PUBLIC_VERIFICATION.json`仍是2026-10-25的历史22实验/126轮检查，未改写或冒充本次复核；本次仅做报告发布范围、状态和文件身份检查，继承既有实验验证。

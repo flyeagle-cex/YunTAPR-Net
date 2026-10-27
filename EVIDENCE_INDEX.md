@@ -1,6 +1,6 @@
 # 统一证据索引
 
-出版基线commit：`35eb3178b55d49a6b95e8b781aeec1df091d2deb`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`5939933dfab85de0c9d22ef4074a9166734b44b4`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
@@ -47,6 +47,7 @@
 |2030/2031完整终点字段|[本轮4份既有E9数值摘录](docs/research_readiness/20261025/evidence/b3_b4_full_endpoint_metrics_20261027.json)|groups包含六评价分组的完整summary，sources字节SHA与既有三seed收口一致；仅补足数值出版，不重新推理或读取原始气象|
 |B5/B6，2029|[一次纠正启动](docs/research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)、[原失败](docs/research_readiness/20261025/evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案](docs/research_readiness/20261025/evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA](docs/research_readiness/20261025/evidence/b5_b6_terrain_production.json)；E9及18轮完整收据见下一行|
 |B5/B6本轮完整收口|[18轮、36读取账本、2静态账本及E9](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)|sources中B5或B6/train、development、tail、LAST receipt、reads.sqlite、updates.sqlite均有字节SHA；完整endpoint_groups和epochs仅公开脱敏统计，原件及权重LOCAL_ONLY|
+|B7/B8准备，未训练|[科学协议](docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)、[精确提案](docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json)、[真实零更新](docs/research_readiness/20261025/evidence/b7_b8_cached_real_check.json)|code/data SHA、3份新GFS原件身份及缓存纠正均已记录；正式批准、E9权重、训练日志与Dev科研结果NOT_STARTED/NOT_AVAILABLE，不复用B6授权|
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -63,6 +64,8 @@
 |B4|2031|`17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea`|`943da957a3af846746c21b52d05a148bcb135064`|
 |B5|2029|`1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f`|`b251fd9ea06c0c90f48d2ac0decba0454114669d`|
 |B6|2029|`3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98`|`b251fd9ea06c0c90f48d2ac0decba0454114669d`|
+|B7|2029|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`NOT_STARTED_NOT_EXECUTED`|
+|B8|2029|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`NOT_STARTED_NOT_EXECUTED`|
 
 B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执行；累计4,710实际尝试含390必要重放，有效轨迹4,320，成本见三seed收口。历史原始失败段仍保留。B5/B6本次纠正批准已消费，不允许额外重试。
 
@@ -74,7 +77,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮继承B0–B6原收口，仅对B7/B8新增代码、物理小缓存、零更新GPU检查及审批绑定进行核对，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
@@ -89,16 +92,21 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/b5_b6_initial_start_stop.json](docs/research_readiness/20261025/evidence/b5_b6_initial_start_stop.json)|`e0dc6834aa7297293b4d5801741f86b449810feb9317936ae0feb179d932bc96`|
 |[docs/research_readiness/20261025/evidence/b5_b6_terrain_production.json](docs/research_readiness/20261025/evidence/b5_b6_terrain_production.json)|`75204e2d8fd0eb37e9a13012fb7c74c523f23ffe436ec5b0446e8c4d134ead03`|
 |[docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)|`a2ca0b49ec59e16ce295f3f8533e10533aa9e2c44d2fe746838c1a381e8f5161`|
+|[docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json](docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json)|`1e3eb1f34df503344984532d0f9cc5416373bf74504ff3368e6ab9c28c56bc0e`|
+|[docs/research_readiness/20261025/evidence/b7_b8_physical_cache_preparation.json](docs/research_readiness/20261025/evidence/b7_b8_physical_cache_preparation.json)|`c8d2daef47c12badaf9f49cdfc7151169bc8938215eb53a124750e6c16b2b25b`|
+|[docs/research_readiness/20261025/evidence/b7_b8_physical_cache_correction.json](docs/research_readiness/20261025/evidence/b7_b8_physical_cache_correction.json)|`e0bb6bfb6fb4e10d5ee5cfd18ff83d41860f6ec4895a49a0933a99d142b49d33`|
+|[docs/research_readiness/20261025/evidence/b7_b8_cached_real_check.json](docs/research_readiness/20261025/evidence/b7_b8_cached_real_check.json)|`243b614aa67c4a8070b51775afb29218050ff3decaa3b1cd11168b5819dafd11`|
+|[docs/research_readiness/20261025/evidence/b7_b8_preparation_checks.json](docs/research_readiness/20261025/evidence/b7_b8_preparation_checks.json)|`fb420982ea8bff0f4eb874dec1c798265d9733b35c558300c3ac2286579a4cf5`|
 
-五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查29个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
+五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查31个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
-导出构成：`{"MISSING_OR_NULL": 593, "PAIRED_DELTA": 2243, "PAIRED_MEAN": 427, "PAIRED_SAMPLE_SD": 427, "RAW_ENDPOINT": 14312, "RAW_EPOCH": 7167}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
+导出构成：`{"MISSING_OR_NULL": 595, "PAIRED_DELTA": 2243, "PAIRED_MEAN": 427, "PAIRED_SAMPLE_SD": 427, "RAW_ENDPOINT": 14312, "RAW_EPOCH": 7167}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`a0793066b627daea25a0a7de89435f50448d3b178441691239f201bfa9ee88af`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`9c4f2fa8da2be896e6b499d2c2474ab805fcc8ccad14a2cac17a40b8eeea0d0d`|
-|[METRICS.csv](METRICS.csv)|`79db7aaf6e7d59ce3fae48d5785d26862b01624911e6b3238389906d5ee45f12`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`b454610bff590239acfa24425b334a75448933fc5be7ef81edbd2f2ac4cab6b3`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`ab089a6051bbfd124cd5fb5563894e9fc2672e0f16edecea005aed58b37e0ab0`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`1a1a7c8be6dd2f9b3169c3cd4a499dd3c4ba4604ae453e650113214636e2c8f8`|
+|[METRICS.csv](METRICS.csv)|`df40fbf3cf694885202ab0bee44a8d49e54bcbda920d4c1da10a4904ce749e27`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`3414ef0ff3a3942e86275b6e45874adbb58a03a32f40c7eb5bee689c2c6454c7`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。

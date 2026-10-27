@@ -24,6 +24,7 @@ B2 = READY + 'evidence/b2_completion_and_paired_evidence.json'
 B34 = READY + 'evidence/b3_b4_three_seed_completion.json'
 FULL = READY + 'evidence/b3_b4_full_endpoint_metrics_20261027.json'
 STATIC = READY + 'evidence/b5_b6_completion_and_paired_evidence.json'
+INNOVATION = READY + 'evidence/b7_b8_training_proposal.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -106,8 +107,22 @@ def main():
         original_fields = reader.fieldnames
         matrix = list(reader)
     assert len(matrix) == 29
+    innovation = read(INNOVATION) if (ROOT / INNOVATION).is_file() else None
+    if innovation:
+        assert innovation['authorized'] is False and innovation['formal_training_started'] is False
+        for model in ('B7', 'B8'):
+            row = dict(next(r for r in matrix if r['model_id'] == 'B6'))
+            row.update(model_id=model, experiment_id=f'{model}__E0__s2029__f006__dynamic',
+                       phase='DYNAMIC_TERRAIN_PREPARED_NOT_TRAINED', config='DOTE_W_TRAIN_PWAT_SP04_' + ('CONCAT' if model == 'B7' else 'DTFM_LAMBDA_0.1'),
+                       epochs='0', global_steps='0', status='NOT_STARTED', metrics_path='NOT_AVAILABLE_NO_FORMAL_TRAINING',
+                       checkpoint_reference='NOT_AVAILABLE_NO_FORMAL_TRAINING', evidence_path='evidence/b7_b8_training_proposal.json',
+                       verified_at='NOT_STARTED_NO_TRAINING_VERIFICATION', notes='Ready zero-step real check; pending explicit new science and budget approval; no E9 results.',
+                       authorization_status='WAITING_EXPLICIT_NEW_SCIENCE_AND_BUDGET_APPROVAL',
+                       protocol_reference='B7_B8_INNOVATION_PROTOCOL.md', source_snapshot_commit='5939933dfab85de0c9d22ef4074a9166734b44b4',
+                       executed_commit='NOT_STARTED_NOT_EXECUTED', source_manifest_reference='evidence/b7_b8_training_proposal.json')
+            matrix.append(row)
     experiments = {r['experiment_id']: r for r in matrix}
-    assert len(experiments) == 29
+    assert len(experiments) == 29 + (2 if innovation else 0)
     old = read(OLD)
     b2, b34, groups29 = read(B2), read(B34), read(GROUPS)
     original_configs = {r['experiment_id']: ';'.join(r['source_ids']) for r in old['experiments']}
@@ -124,7 +139,7 @@ def main():
             r['metrics_path'] = PROGRESS + p
         elif p.startswith('evidence/'):
             r['metrics_path'] = READY + p
-        r.update(execution_state='CLOSED_SEE_STATUS', planned_epochs='SEE_ORIGINAL_PROTOCOL',
+        r.update(execution_state='NOT_STARTED' if r['status']=='NOT_STARTED' else 'CLOSED_SEE_STATUS', planned_epochs='SEE_ORIGINAL_PROTOCOL',
                  train_batch_size='NOT_VERIFIED_FROM_THIS_PUBLIC_EXTRACT',
                  dev_batch_size='NOT_VERIFIED_FROM_THIS_PUBLIC_EXTRACT',
                  optimizer='SEE_ORIGINAL_CONFIG', learning_rate_rule='SEE_ORIGINAL_CONFIG',
@@ -139,7 +154,9 @@ def main():
                      'B3': ('7x6_HIMAWARI', 4349090),
                      'B4': ('7x6_HIMAWARI_PLUS_13_GFS_MEE', 4355986),
                      'B5': ('B4_PLUS_1_ELEVATION_WIDTH16_SP04_RESIDUAL', 4359426),
-                     'B6': ('B4_PLUS_6_STATIC_WIDTH16_SP04_RESIDUAL', 4360866)}
+                     'B6': ('B4_PLUS_6_STATIC_WIDTH16_SP04_RESIDUAL', 4360866),
+                     'B7': ('B6_PLUS_8_DOTE_SINGLE_SP04_CONCAT', 4411058),
+                     'B8': ('B6_PLUS_SAME_DOTE_SINGLE_SP04_MATCHED_DTFM', 4411058)}
             r['input_spec'], params = specs[r['model_id']]
             r['parameter_count'] = str(params)
         if r['model_id'] in runs:
@@ -312,6 +329,16 @@ def main():
     static_stage = ('|B5/B6|seed2029/E0/f006各九轮Train/Dev、4,320更新、固定E9权重身份与B4公平配对均完成|仅单seed；总体收益混合、q32和强雨仍有退化、DEM发布链未验证|训练/评价完成；探索性地形消融COMPLETE_WITH_LIMITATIONS|' if static else
                     '|B5/B6|真实地形准备、冻结方案、明确纠正启动批准；当前串行执行中|两模型各九轮完整Train/Dev、最终权重身份和公平配对尚未齐备|IN_PROGRESS，未通过结果验收|')
     static_text = ''
+    innovation_text = ''
+    if innovation:
+        innovation_text = f'''\n## B7/B8核心创新：准备通过，正式训练NOT_STARTED
+
+模型代码、DOTE原物理变量接入、单SP04尺度的B7 concat/B8 DTFM匹配活跃参数对照、13项新增及2项受影响旧入口检查、真实Train2/Dev1零更新检查已完成。初始输出与B6逐位相同、梯度有限、公共完整B6初始化保持；这些都是准备证据，不是科研训练结果。
+
+待研究者集中批准：M采用windward_W、既有Train正PWAT均值31.85768219039871 kg/m²、1m/s显式尺度、width16/SP04单尺度、λ=0.1、上述配对关系及额外海拔诊断、两模型新预算。完整候选与反例边界见[核心创新协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)，规范化机器提案SHA `{innovation['proposal_sha256']}`。旧B0–B6结果直接继承，不把其混合结果当工程失败。
+
+尚无B7/B8固定E9、Dev科研指标、权重或创新有效性结论；CSV仅增加缺失状态行，不把少量未训练模型的前向/E0值充当正式结果。2025冻结，新增训练必须取得该新提案及准确代码提交的明确批准。
+'''
     if static:
         v, d = static['summary']['values'], static['summary']['differences']
         table = '\n'.join(f"|{k}|{v['B4'][k]:.12g}|{v['B5'][k]:.12g}|{v['B6'][k]:.12g}|{d['B5_minus_B4'][k]:.12g}|{d['B6_minus_B4'][k]:.12g}|{d['B6_minus_B5'][k]:.12g}|" for k in HEADLINE)
@@ -346,7 +373,7 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 '''
     stage = f'''# 阶段验收统一入口
 
-状态时点：`{as_of}`。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。这是研究者已限定范围的验收记录，不能把训练完成等同于全部科学假设通过。
+B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列候选提案和本次Git提交绑定，不将该旧观测时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。这是研究者已限定范围的验收记录，不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
@@ -354,7 +381,7 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 |B2|seed2029/E0/f006，九轮、4,320更新及2024 Dev，固定E9 LAST|仅一seed；B2/B3指标方向混合，未证明时序增量全面改善|当前探索性配对条目完成|
 |B3/B4|2029/2030/2031三个独立seed的九轮Train/Dev及固定E9配对|强雨和q32缺陷、同一开发年，未证明最终泛化或统计显著性|描述性随机性复现完成|
 {static_stage}
-|B7/B8|保留既有候选实现与工程证据|没有正式科研训练/消融结果|NOT_STARTED（正式训练未启动）|
+|B7/B8|{'完整新模型、原物理DOTE接入、等活跃参数单尺度对照、必要及真实零更新检查通过' if innovation else '保留既有候选实现与工程证据'}|没有正式科研训练/消融结果；{'科学选择及精确预算待新批准' if innovation else '创新有效性未核实'}|NOT_STARTED（正式训练未启动）|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -374,15 +401,16 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含29条历史/当前记录；不是29个独立seed或29个已完成模型。`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含{len(matrix)}条历史/当前记录；不是{len(matrix)}个独立seed或{len(matrix)}个已完成模型。{'其中B7/B8是待批准新行，均0更新/0轮，无正式指标。' if innovation else ''}`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
-本轮{'核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值' if static else '仅从现有公开数值与只读状态生成交付并核对新CSV结构、原值来源和配对差值'}。没有重跑训练、模型推理、129个来源审查、126轮收据审查、合成测试或全量归一化。
+{'本轮直接继承B0–B6既有完成核查；仅对B7/B8新增路径做13项新检查、2项受影响入口检查及真实小缓存零更新检查。没有重跑历史模型、129来源、126轮或15项旧地形检查。' if innovation else ('本轮核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值；没有重跑训练、模型推理、129来源、126轮或全量归一化。' if static else '本轮仅核对新CSV及差值，不重跑训练或历史审查。')}
 
-本轮出版基线：`35eb3178b55d49a6b95e8b781aeec1df091d2deb`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
+本轮出版基线：`{'5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb'}`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
+{innovation_text}
 '''
-    (ROOT / 'STAGE_ACCEPTANCE.md').write_text(stage, encoding='utf-8')
+    (ROOT / 'STAGE_ACCEPTANCE.md').write_text(stage.rstrip()+'\n', encoding='utf-8')
     analysis = f'''# 科学分析统一入口
 
 B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6{'九轮及固定E9配对完成，地形收益混合、校准退化，仅支持单seed探索性消融' if static else '仍IN_PROGRESS，地形增益尚未验证'}；最终泛化未验证。
@@ -415,12 +443,13 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 本轮地形实验采用已批准的WGS84面积聚合、原生米制梯度、目标footprint、width16 SP04残差融合；B5增加海拔，B6增加完整六静态通道。DEM本地源SHA固定，但供应商发布版本链NOT_VERIFIED；研究者接受该限制用于探索性消融。零输出残差保证起点行为与B4相同，不证明训练后一定获益。{'两模型均已取得固定E9结果，全部正负结果如下。' if static else '当前两个模型固定E9尚未齐备，地形正/负结果均不得预填。'}
 {static_text}
+{innovation_text}
 
 三seed主要检验训练随机性；相邻seed按seed+epoch−1排列规则存在移位重叠，不能声称所有轮排列彼此独立。大量像元也不是大量独立事件。重复使用2024 Dev存在开发集选择影响，没有事件级独立性估计、置信区间或显著性声明。不同人口不可跨模型排名归因，2025最终测试继续冻结；旧catalogue/QC访问事实不改写为历史从未访问。
 
 ## CSV读取规范
 
-`METRICS.csv`为长表（一个数值一行），共{len(rows)}行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。为补齐新seed的完整终点字段，本轮仅摘录4份既有E9评价JSON的summary并核对原有字节SHA，未重做历史逐轮审查；[完整终点摘录]({FULL})不含场景ID、逐像元预测或私有路径。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
+`METRICS.csv`为长表（一个数值一行），共{len(rows)}行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。此前为补齐新seed的完整终点字段，已摘录4份既有E9评价JSON的summary并核对原有字节SHA；本次继承该[完整终点摘录]({FULL})，不重做历史逐轮审查。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
@@ -433,12 +462,16 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
                    READY + 'evidence/b5_b6_terrain_production.json']
     if static:
         input_names.append(STATIC)
+    if innovation:
+        input_names += [INNOVATION, READY+'evidence/b7_b8_physical_cache_preparation.json',
+                        READY+'evidence/b7_b8_physical_cache_correction.json',READY+'evidence/b7_b8_cached_real_check.json',
+                        READY+'evidence/b7_b8_preparation_checks.json']
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
     evidence = f'''# 统一证据索引
 
-出版基线commit：`35eb3178b55d49a6b95e8b781aeec1df091d2deb`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`{'5939933dfab85de0c9d22ef4074a9166734b44b4' if innovation else '35eb3178b55d49a6b95e8b781aeec1df091d2deb'}`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
@@ -462,6 +495,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 |2030/2031完整终点字段|[本轮4份既有E9数值摘录]({FULL})|groups包含六评价分组的完整summary，sources字节SHA与既有三seed收口一致；仅补足数值出版，不重新推理或读取原始气象|
 |B5/B6，2029|[一次纠正启动]({READY}evidence/b5_b6_corrected_start_launch.json)、[原失败]({READY}evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案]({READY}evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA]({READY}evidence/b5_b6_terrain_production.json)；{'E9及18轮完整收据见下一行' if static else '当前E9身份NOT_AVAILABLE'}|
 {f'|B5/B6本轮完整收口|[18轮、36读取账本、2静态账本及E9]({STATIC})|sources中B5或B6/train、development、tail、LAST receipt、reads.sqlite、updates.sqlite均有字节SHA；完整endpoint_groups和epochs仅公开脱敏统计，原件及权重LOCAL_ONLY|' if static else ''}
+{f'|B7/B8准备，未训练|[科学协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)、[精确提案]({INNOVATION})、[真实零更新]({READY}evidence/b7_b8_cached_real_check.json)|code/data SHA、3份新GFS原件身份及缓存纠正均已记录；正式批准、E9权重、训练日志与Dev科研结果NOT_STARTED/NOT_AVAILABLE，不复用B6授权|' if innovation else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -481,13 +515,13 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮{'先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值' if static else '仅校验新增导出及差值'}，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮{'继承B0–B6原收口，仅对B7/B8新增代码、物理小缓存、零更新GPU检查及审批绑定进行核对' if innovation else ('先核对B5/B6新增18轮、36气象账本、2静态账本、8,640更新及2份实际E9 SHA，再校验数值导出和差值' if static else '仅校验新增导出及差值')}，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
 {source_table}
 
-五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查29个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
+五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查{len(matrix)}个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
 导出构成：`{json.dumps(dict(counts), ensure_ascii=False, sort_keys=True)}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
 

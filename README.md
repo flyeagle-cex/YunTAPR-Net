@@ -1,5 +1,7 @@
 # YunTAPR-Net
 
+> 核心创新准备（2026-10-27）：B7 DOTE/B8 DTFM完整接线和真实零更新检查通过，正式训练NOT_STARTED；[集中科学选择与精确预算](docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)待新批准。B0–B6结果与2025冻结边界继承。
+
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 
 > 最新科研状态（2026-10-27）：B5/B6 seed2029各九轮Train/2024 Dev及固定E9配对已核验完成；首轮地形消融为COMPLETE_WITH_LIMITATIONS，收益混合，q32欠覆盖加重。见[完整新收据](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)和[统一科学分析](SCIENTIFIC_ANALYSIS.md)。B0–B4限定基线不变；2025与B7/B8继续冻结，无追加训练。

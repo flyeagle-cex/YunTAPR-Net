@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-10-27 B7/B8后续准备：DOTE原物理变量与B6梯度已接通，B7 concat及B8 DTFM同参数单尺度模型、必要检查及真实Train2/Dev1零更新检查通过；正式训练NOT_STARTED，待一份新科学方案/预算批准。B0–B6有效完成证据直接继承。[审批入口](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。
+
 最新地形收口（2026-10-27T15:34:06.069260+08:00）：B5/B6 seed2029九轮Train/2024 Dev与固定E9配对已核验完成（COMPLETE_TRAIN_AND_DEV_EVALUATION）；首轮消融COMPLETE_WITH_LIMITATIONS，B6改善Brier/AUROC但AP、条件Pinball和q32退化，B5总体仅AUROC改善。完整预算、代码/权重身份、反例见[新收据](../research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)和[统一阶段验收](../../STAGE_ACCEPTANCE.md)。2025与B7/B8仍冻结，无追加训练。以下按日期保留历史状态。
 
 当前报告发布状态（2026-10-27T08:09:47.988894+08:00，北京时间）：已完成结果为B0/B1既有正式实验、B2 seed2029及B3/B4三seed固定E9配对。**B5：IN_PROGRESS；B6：IN_PROGRESS（串行等待，尚未开始优化器更新）**。两模型均未完成九轮Train/Dev，不发布最终评价。见[固定状态快照](../research_readiness/20261025/evidence/b5_b6_status_for_main_20261027.json)。本次通过报告专用PR合入main，不改训练源码和历史证据。

@@ -35,3 +35,13 @@ python -B tools/research_readiness/start_static_pair.py execute --proposal docs/
 独立入口 `tools/research_readiness/start_multiseed.py` 已准备。固定 B3/2030→B4/2030→B3/2031→B4/2031，完整预算17,280更新、1,910,286,564,048逻辑源字节、每模型6小时/串行24小时、零重放。启动需要[冻结提案](evidence/b3_b4_multiseed_proposal.json)、本机私有准备、与实际执行Git commit完全绑定的研究者批准；本次真实批准文件仅保留本机，已用于启动，不得复制其批准开展第二次执行。
 
 本次已调用[多seed方案](B3_B4_MULTI_SEED_PLAN.md)中的单条 execute 命令，不要重跑。它使用现有CUDA Python环境、研究者确认的新输出目录并检查96GiB初始空闲；四个子目录独立、不覆盖历史模型。包目录存在即拒绝再次执行，失败不自动恢复或重放。源载荷只由原计量读取器打开；2025不在源范围内。每模型完整九轮收据及SHA到齐才标记完成，所有模型完成后输出三seed描述性汇总。不得拿B2或历史恢复授权替代本包批准。
+
+## B7/B8候选启动入口（待明确批准）
+
+审批绑定[核心创新协议](B7_B8_INNOVATION_PROTOCOL.md)及新提案，旧B0–B6授权不适用。使用研究者最终批准的准确Git提交建立独立、干净的执行副本；模型工作目录在已确认科研存储父目录下全新且互不覆盖。使用实际Python解释器，避免Windows虚拟环境重定向中间进程破坏父进程身份。GPU/依赖路径只保留本地。
+
+```powershell
+& $ResearchPython -B tools/research_readiness/start_dynamic_pair.py execute --proposal docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json --private-preparation $PrivatePreparation --researcher-approval $ResearcherApproval
+```
+
+三个本地变量分别是实际解释器、私有定位JSON和研究者批准JSON；不是允许自行填写批准的模板。入口会核对Git、源码、科学参数、共同人口和预算绑定，B7→B8串行、失败即停、零重放。未批准时不运行execute；prepare只读元数据、不创建训练输出。九轮LAST与同次2024 Dev形成innovation_paired_summary.json，不新增评估推理，不解封2025。
