@@ -1,0 +1,47 @@
+{
+  "status": "STOPPED_BEFORE_FIRST_WEATHER_PASS_ZERO_OPTIMIZER_UPDATES",
+  "as_of": "2026-10-27T07:37:26.321736+08:00",
+  "training_commit": "d696fe25e632dc6a2d0e717caedb2fecac598fd9",
+  "proposal_sha256": "41add1c3bbd851bbaa5076b3edaf795d065bdc4f73ef1c104d1e3887cf20e6c3",
+  "researcher_approval": {
+    "approved": true,
+    "decision_id": "RESEARCHER_B5_B6_INITIAL_D696FE2_20261027",
+    "approved_at": "2026-10-27T07:34:31.486765+08:00"
+  },
+  "failure": {
+    "type": "PermissionError",
+    "message": "Unlisted/repeated model-role-epoch pass",
+    "cause": "Stage4 ReaderFactory still hard-codes B3/B4 and rejected the B5 pass before BatchReader construction",
+    "responsibility": "AI preparation missed end-to-end reader arm wiring; not a data or GPU failure"
+  },
+  "actual": {
+    "optimizer_returned": 0,
+    "optimizer_intent": 0,
+    "weather_source_bytes": 0,
+    "weather_source_files": 0,
+    "static_source_bytes": 62828,
+    "static_source_files": 1,
+    "static_source_state": "READ_COMPLETE",
+    "completed_train_epochs": 0,
+    "completed_dev_epochs": 0,
+    "checkpoints_written": 0,
+    "prior_wall_seconds_ceiling": 13,
+    "B6": "NOT_STARTED",
+    "binding_to_failure_seconds_ceiling": 7
+  },
+  "retry": "NOT_AUTHORIZED_NO_RESTART",
+  "original_files_preserved": true,
+  "raw_2025_reads": 0,
+  "sources": {
+    "authorization_binding.json": "b46d078ba7becdbad5f5213256b146a1c6748422c0dd0de71aeb409eee25a78a",
+    "task_1_claim.json": "ee5710a7644f76e23aaf02baa7f086a0aec40ce0607740dc7d1ec1679fd5c9e1",
+    "failure.json": "f78eba39942604ba3089fb1b36e333d129a8e5ad6d7dbd1cad4608e60622b554",
+    "B5_console.log": "b516d5a9437eda4e1f0cea4d76ebabf0d6bb73d65f75ff072dab8ccc2a5b5d62",
+    "B5_static_source.sqlite": "c78a5343b9967941e4709139e3c0d26b4d22291da2143b5d3984522972ce1e7b",
+    "B5_s2029/updates.sqlite": "0e642c2247d85f1ad363c3fb5a6077c3d2b43ff3a4212918b31d5b4dd2ce4aba",
+    "B5_s2029/failure.json": "0fcbc8ed2d9f2e3d3e2ec128be35833fccde45b7564c21e0c292b24dc4872f92",
+    "B5_s2029/paired_initial_identity.json": "8d76e4ed52b88f9b813f22b93d9922ae6b497b7358640fe3178538bca529ee0c",
+    "B5_s2029/paired_orders.json": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+  },
+  "timing_basis": "Conservative ceil(failure mtime minus private dispatch timestamp)+1 second, charged to B5 and package; binding-only interval retained separately"
+}

@@ -1,0 +1,3736 @@
+{
+  "status": "VERIFIED_COMPLETE_THREE_PAIRED_SEEDS_TRAIN_AND_DEV",
+  "verified_at": "2026-10-27T00:40:09.599240+08:00",
+  "completed_at": "2026-10-27T00:27:00.055688+08:00",
+  "training_commit": "943da957a3af846746c21b52d05a148bcb135064",
+  "original_training_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+  "proposal_sha256": "bef5b3c842043bf2836c930bb0760b8a303ca4c971c6dad2d905c91ec55f237c",
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "evaluation_script": "src/yuntapr/experimental/core_innovation/stage4/evaluation.py",
+  "evaluation_script_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+  "endpoint": "FIXED_EPOCH_9_LAST",
+  "tasks": [
+    {
+      "model": "B4",
+      "seed": 2030,
+      "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+      "epochs": 9,
+      "segment_updates": 3840,
+      "effective_updates": 4320,
+      "cumulative_attempt_updates": 4710,
+      "replay_updates": 390,
+      "segment_source_bytes": 424508125344,
+      "segment_source_files": 126944,
+      "endpoint_sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "inherited_E1_code_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+      "completed_at": "2026-10-26T17:20:54.782148+08:00",
+      "wall_seconds_mtime": 10988.232560396194
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+      "epochs": 9,
+      "segment_updates": 4320,
+      "effective_updates": 4320,
+      "cumulative_attempt_updates": 4320,
+      "replay_updates": 0,
+      "segment_source_bytes": 477571641012,
+      "segment_source_files": 142812,
+      "endpoint_sha256": "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "inherited_E1_code_commit": null,
+      "completed_at": "2026-10-26T20:52:02.510981+08:00",
+      "wall_seconds_mtime": 12667.095641851425
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+      "epochs": 9,
+      "segment_updates": 4320,
+      "effective_updates": 4320,
+      "cumulative_attempt_updates": 4320,
+      "replay_updates": 0,
+      "segment_source_bytes": 477571641012,
+      "segment_source_files": 142812,
+      "endpoint_sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "inherited_E1_code_commit": null,
+      "completed_at": "2026-10-27T00:26:58.923166+08:00",
+      "wall_seconds_mtime": 12895.744324207306
+    }
+  ],
+  "epochs": [
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 1,
+      "updates": 480,
+      "inherited": true,
+      "code_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+      "dev_digest": "056e2d88ea10f291c958ce75a82cf8ab755e8bcf60c0c3915a3e8d0eed43d098",
+      "checkpoint_sha256": "ba9d605fc655ab8361827c830c5b984dfe02ae0d40ab8a6e4389f76e6beac69c"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 2,
+      "updates": 960,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "4f7641f2abac7eb99ec5bb7b8e49ddaacbd1059ea84206048b8e1ae65d013a28",
+      "checkpoint_sha256": "59adea637209090df76331b220c1070c6f30d3fede5b94907292902ee863e3af"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 3,
+      "updates": 1440,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "5347a010e7e18c1d97fa8e13fb74a59d3b25c384b5d79f3865c1cfc7edeec070",
+      "checkpoint_sha256": "e1b156b139885b50205a7e5ce14bf8a5622c67ce1fab4a6b72f6901047c3fff8"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 4,
+      "updates": 1920,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "99e9c3329616c778bee86175a868fa62bebc171a33400609c78457f661d6d50a",
+      "checkpoint_sha256": "b58860100414689f7e79b191251dea6e4568714e0aeb02d197754e123f85ef17"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 5,
+      "updates": 2400,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "4460e258071e5f7d5abd4670bb6490d1425077d4604bb1cb4413f05865f8cfb5",
+      "checkpoint_sha256": "c00a6e98d39c9fae7e92fec464c66caa05e12f2a51f5c00ac9c7d2f91e4c4146"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 6,
+      "updates": 2880,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "f6e078e9f68dc3604d5e07bab2ec888dd9e5c6db2db487398bfcf9266a2fde3f",
+      "checkpoint_sha256": "e2eca1ec3d008343ddaf6750cca30366c849deeb34ed115bc7bb92086a53ed97"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 7,
+      "updates": 3360,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "ae0cd284db736bbaba47dc00cd1b2ab697bdae9745ad32e5d61ae2d2b7d4a82a",
+      "checkpoint_sha256": "bcc25dc4ad5991015b3fc6b24ce8f1aded3537530f36df5d9c0824bf622f2159"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 8,
+      "updates": 3840,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "576a535397071994039c9b46fda803e2efbd1a01150a03dc8374dd8105c51411",
+      "checkpoint_sha256": "60e8f59a5a44392733b6c2888004fdb547c21c18d63cd66e2907981ec1f832a4"
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "epoch": 9,
+      "updates": 4320,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "e80be23df3887a342ab8ba1f5edec75aeca95ce7dcf765a1600a48f01cc7847b",
+      "checkpoint_sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 1,
+      "updates": 480,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "b910fa7f8f0800bb7a59d752c9199905587b1fa90a5ae82d834bb79b76829313",
+      "checkpoint_sha256": "265562bc34340f5c67433b3fe3ba196b1f64a7b1f435ab82f7c7a23576878dcd"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 2,
+      "updates": 960,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "2a11d8bfac55991bb7657dd429943683ee861518d97cf06dcd87bd6249c59f78",
+      "checkpoint_sha256": "107058580e450a751ced86ebd8a51a81200eec2494bd7a4362b9e715510ecd9a"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 3,
+      "updates": 1440,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "f39054c912c139d1fea3b9c01bceb7df8000094aff2eb7890a1da2bcf7c6266a",
+      "checkpoint_sha256": "4dc4a6f3908600c5c5577bf03412c123bd31c83a86907615d5ceef289e6735b1"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 4,
+      "updates": 1920,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "7839576f564f133c31c1f221334055d3cceffea6e6bed994316613c421b616f2",
+      "checkpoint_sha256": "54f26615bd9632b62f3c65a584cc92e732ea6d354d63d02a404dfffc41de1e18"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 5,
+      "updates": 2400,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "38a5ea0611f5ee07dd1bdf553d5a3baa2b88c39619f14a8c9fd352728613544a",
+      "checkpoint_sha256": "5e418e53be23160323b9adcdc0d575d783eb795d761daa7eff029a649292ae4d"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 6,
+      "updates": 2880,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "35325cdb9d4de1d5f61e9ca85b44b25063f96556f301728a5416002bb046b3cc",
+      "checkpoint_sha256": "bd18b24db1bdb7d675e60f3eeabf89fe0d22d230d251e1d3ca467a3ef100585e"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 7,
+      "updates": 3360,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "7d1865e02ec99906dc0228c1b8e0782e4ad917d7b07dd68df414a8c81670e553",
+      "checkpoint_sha256": "a45276fb59252217827775d3b130842622ee53be258a00e2e500256f079840fd"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 8,
+      "updates": 3840,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "8578a6a09ef353e167c802dba1d52c2302d772fb9f892102889965d60d6ba564",
+      "checkpoint_sha256": "e876df1da536e27378b29a1674dff2ccf0032253b5a3ef3ad86db156549bb4b8"
+    },
+    {
+      "model": "B3",
+      "seed": 2031,
+      "epoch": 9,
+      "updates": 4320,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "8ccb903efd569a612382ecb1a537cf5b2106c62fec5c56d4540b2b56896e8966",
+      "checkpoint_sha256": "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 1,
+      "updates": 480,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "92364e494fa14bee51e1822853b95a9b80639e976374318d1d94c2dd3531532a",
+      "checkpoint_sha256": "6b0919e88ec126cbf7c452a55fc87284fa193c5ec1be65e3609d2b705338cd5b"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 2,
+      "updates": 960,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "b66aa3069afe8f641fbb98b881400f8787622505e7bee136cdffeff7fdfee77b",
+      "checkpoint_sha256": "68e15994c28c201ec81ff4cbcc458ad832647e67cbc93b594dc57101243efd4f"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 3,
+      "updates": 1440,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "f01b2470e7c454ccbc86297be80bd546607fb3e931ecd77be62b05d3fd3dc3b9",
+      "checkpoint_sha256": "b4550fdd1ed0cc366dec333606ce93c0908bc760e15ddfd908a1cf0f12f6759e"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 4,
+      "updates": 1920,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "eefb56ca30cb2d42622f55c63a07ccb76be0f204f52f8a1be6b518d0883a951f",
+      "checkpoint_sha256": "2d4eb19b040d1e26f7ffa0cd5e2248e0b8df8b7889eb6fa08d2f77ba03bc13ed"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 5,
+      "updates": 2400,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "3690255054a22091f2b9b6e2079905e10240d4c7d1ef4a9a9ae834712114032d",
+      "checkpoint_sha256": "725449ed63a1d679638480e50c85e7bb7e7754ceddf1210a57ab1355e644e4de"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 6,
+      "updates": 2880,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "9d76f69a10b864f09efa16469577d49f57cb54c6eb170b972d8cdb9fac200807",
+      "checkpoint_sha256": "d0abac42f8504cde3e6f6a1b0c4c60e6380c29f2a455a3c7c2307ab0554a47ac"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 7,
+      "updates": 3360,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "2c7e8be3be744a9164746d842e584ab23bfdf6d7e1e18aed74029e633f8d69c6",
+      "checkpoint_sha256": "5367b57bf4c1719ebd7895b55b8a87fd8023a96c9daa3607a1ca3314ccbba1be"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 8,
+      "updates": 3840,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "addd4389d4cf55a45c6dd92e11e59b964130b9b2671a0498f95e226b979666a1",
+      "checkpoint_sha256": "e16e6ced7c69e6b2a4d87b5215157fc2abee19de16246212934be2186c1e44e0"
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "epoch": 9,
+      "updates": 4320,
+      "inherited": false,
+      "code_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "dev_digest": "e81b39cc208d86213eb1fa76b406dbb6595ed449e6f80c922a0846995aa24faf",
+      "checkpoint_sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea"
+    }
+  ],
+  "summary": {
+    "seeds": [
+      2029,
+      2030,
+      2031
+    ],
+    "metrics": {
+      "brier": {
+        "B4_minus_B3_by_seed": {
+          "2029": -0.0016598539642849602,
+          "2030": -0.00036040212266806593,
+          "2031": -0.003952257857181604
+        },
+        "mean": -0.00199083798137821,
+        "sample_sd": 0.0018186587692769185,
+        "favorable_direction": "negative"
+      },
+      "auroc": {
+        "B4_minus_B3_by_seed": {
+          "2029": 0.006853626623328668,
+          "2030": 0.005467696300541669,
+          "2031": 0.005195185678984138
+        },
+        "mean": 0.005838836200951492,
+        "sample_sd": 0.0008893341389639521,
+        "favorable_direction": "positive"
+      },
+      "average_precision": {
+        "B4_minus_B3_by_seed": {
+          "2029": 0.021896515476796607,
+          "2030": 0.015463825594083436,
+          "2031": 0.01805570493927522
+        },
+        "mean": 0.018472015336718422,
+        "sample_sd": 0.003236488921973098,
+        "favorable_direction": "positive"
+      },
+      "conditional_pinball": {
+        "B4_minus_B3_by_seed": {
+          "2029": -0.0020643797733051195,
+          "2030": -0.0008244481360207001,
+          "2031": -0.0006572631772355786
+        },
+        "mean": -0.0011820303621871326,
+        "sample_sd": 0.0007686956908206194,
+        "favorable_direction": "negative"
+      },
+      "q32_coverage": {
+        "B4_minus_B3_by_seed": {
+          "2029": 0.0011769898484624841,
+          "2030": 0.004796233632484936,
+          "2031": -0.0015423471139228706
+        },
+        "mean": 0.0014769587890081832,
+        "sample_sd": 0.0031799194162198544,
+        "favorable_direction": "positive_for_undercoverage_only"
+      },
+      "q32_signed_bias": {
+        "B4_minus_B3_by_seed": {
+          "2029": 0.0011769898484624841,
+          "2030": 0.004796233632484936,
+          "2031": -0.0015423471139228706
+        },
+        "mean": 0.0014769587890081832,
+        "sample_sd": 0.0031799194162198544,
+        "favorable_direction": "positive_for_undercoverage_only"
+      },
+      "q32_absolute_error": {
+        "B4_minus_B3_by_seed": {
+          "2029": -0.0011769898484624841,
+          "2030": -0.004796233632484936,
+          "2031": 0.0015423471139228706
+        },
+        "mean": -0.0014769587890081832,
+        "sample_sd": 0.0031799194162198544,
+        "favorable_direction": "negative"
+      }
+    },
+    "descriptive_only": true,
+    "independent_weather_years": 1,
+    "significance": "NOT_CLAIMED",
+    "endpoints": {
+      "2029": {
+        "B3": {
+          "brier": 0.09957884578407393,
+          "auroc": 0.8880247781349105,
+          "average_precision": 0.5707417679094422,
+          "conditional_pinball": 0.12925806665118195,
+          "q32_coverage": 0.9350497768623413,
+          "q32_signed_bias": -0.04932522313765875,
+          "q32_absolute_error": 0.04932522313765875
+        },
+        "B4": {
+          "brier": 0.09791899181978897,
+          "auroc": 0.8948784047582392,
+          "average_precision": 0.5926382833862388,
+          "conditional_pinball": 0.12719368687787683,
+          "q32_coverage": 0.9362267667108037,
+          "q32_signed_bias": -0.04814823328919626,
+          "q32_absolute_error": 0.04814823328919626
+        }
+      },
+      "2030": {
+        "B3": {
+          "brier": 0.09535216057777933,
+          "auroc": 0.8880760332745852,
+          "average_precision": 0.570395915597846,
+          "conditional_pinball": 0.1293714618770597,
+          "q32_coverage": 0.9393261733117552,
+          "q32_signed_bias": -0.045048826688244836,
+          "q32_absolute_error": 0.045048826688244836
+        },
+        "B4": {
+          "brier": 0.09499175845511126,
+          "auroc": 0.8935437295751268,
+          "average_precision": 0.5858597411919294,
+          "conditional_pinball": 0.128547013741039,
+          "q32_coverage": 0.9441224069442401,
+          "q32_signed_bias": -0.0402525930557599,
+          "q32_absolute_error": 0.0402525930557599
+        }
+      },
+      "2031": {
+        "B3": {
+          "brier": 0.10021539556138473,
+          "auroc": 0.8891386888261764,
+          "average_precision": 0.5699960794013148,
+          "conditional_pinball": 0.12972735512703976,
+          "q32_coverage": 0.9460938649404149,
+          "q32_signed_bias": -0.03828113505958508,
+          "q32_absolute_error": 0.03828113505958508
+        },
+        "B4": {
+          "brier": 0.09626313770420312,
+          "auroc": 0.8943338745051606,
+          "average_precision": 0.58805178434059,
+          "conditional_pinball": 0.12907009194980418,
+          "q32_coverage": 0.944551517826492,
+          "q32_signed_bias": -0.03982348217350795,
+          "q32_absolute_error": 0.03982348217350795
+        }
+      }
+    }
+  },
+  "endpoint_groups": {
+    "2029": {
+      "B3": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "78a514294836cf1390bf535cd75c1f3f556cc039f9adf1f75121ac67ac493acd",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 328917.88972091675,
+          "s_qr": 52714.02474168502,
+          "brier": 0.09957884578407393,
+          "auroc": 0.8880247781349105,
+          "average_precision": 0.5707417679094422,
+          "conditional_pinball": 0.12925806665118195,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 21549.421527291535,
+              "conditional_pinball": 0.0874311649847713
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 20088.88918152546,
+              "conditional_pinball": 0.14805425159209837
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7639.737859577845,
+              "conditional_pinball": 0.3792374216717719
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2815.497136398674,
+              "conditional_pinball": 0.5866841292766564
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 467.53577906578363,
+              "conditional_pinball": 0.8289641472797582
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 144.63496295775997,
+              "conditional_pinball": 0.9839113126378229
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.308294867949478,
+              "conditional_pinball": 1.384715811324913
+            }
+          ],
+          "q32_covered": 381332,
+          "q32_coverage": 0.9350497768623413
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "b435f9dcd6a5c5cc66a50e5c631b45618c459ad94ac9a68293abd72edfdf0407",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 81020.72530221939,
+          "s_qr": 13395.909575414275,
+          "brier": 0.09966752199163424,
+          "auroc": 0.8951335210444394,
+          "average_precision": 0.6326762777786897,
+          "conditional_pinball": 0.12331004064411681,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6221.949998954027,
+              "conditional_pinball": 0.08800992982564823
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4497.710349861942,
+              "conditional_pinball": 0.14267575021767356
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1795.523612187448,
+              "conditional_pinball": 0.3601130389465399
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 747.9163347675168,
+              "conditional_pinball": 0.5847664853538052
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 106.49457116683568,
+              "conditional_pinball": 0.8451950092606006
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 26.31470847650612,
+              "conditional_pinball": 1.0525883390602448
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 103249,
+          "q32_coverage": 0.9504123863176112
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "33d92e45be29507d08fa993ce2f69282cd9fc050d4fbddfcbecce84d6e549468",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 76880.48031502962,
+          "s_qr": 10079.299212842698,
+          "brier": 0.09262038926707662,
+          "auroc": 0.8647271454907715,
+          "average_precision": 0.40467423224753196,
+          "conditional_pinball": 0.13064379221063496,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3132.9726205570523,
+              "conditional_pinball": 0.07531184184031375
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4920.963780011116,
+              "conditional_pinball": 0.1569385055495317
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1551.6832181197203,
+              "conditional_pinball": 0.43870037266602213
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 393.76777382627614,
+              "conditional_pinball": 0.680082510926211
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 56.65166467496336,
+              "conditional_pinball": 0.9601977063553111
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 21.692792460731685,
+              "conditional_pinball": 1.1417259189858782
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.567363192837778,
+              "conditional_pinball": 1.567363192837778
+            }
+          ],
+          "q32_covered": 69990,
+          "q32_coverage": 0.9071820196757009
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "115c2023ecb74dab9575002b0c74c229813331193726f954ab33aa56f5c0e93e",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 88500.05386441946,
+          "s_qr": 17358.374440772404,
+          "brier": 0.10750735406270585,
+          "auroc": 0.8922221196812056,
+          "average_precision": 0.6614148646076787,
+          "conditional_pinball": 0.1309927588086723,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 7024.193887355063,
+              "conditional_pinball": 0.08707750337633034
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6396.239837047192,
+              "conditional_pinball": 0.14863569439841964
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2629.969033109061,
+              "conditional_pinball": 0.3873868070568657
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1045.9108878827972,
+              "conditional_pinball": 0.604922433708963
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 187.74140885316578,
+              "conditional_pinball": 0.8344062615696257
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 68.70285423972499,
+              "conditional_pinball": 1.0103360917606616
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.61653228539889,
+              "conditional_pinball": 1.4041330713497224
+            }
+          ],
+          "q32_covered": 123765,
+          "q32_coverage": 0.9339767873583169
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "f4d002750d5bb0401c8cae4e1185ccd202025bd4eb880f1c4cd71dff6ae68c37",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 82516.63023924828,
+          "s_qr": 11880.441512655614,
+          "brier": 0.09859560082116364,
+          "auroc": 0.900520420108663,
+          "average_precision": 0.5497770883471911,
+          "conditional_pinball": 0.13271418930791914,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5170.305020425374,
+              "conditional_pinball": 0.09662134926324259
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4273.975214605217,
+              "conditional_pinball": 0.1435520510061202
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1662.561996161614,
+              "conditional_pinball": 0.34400206831401076
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 627.9021399220841,
+              "conditional_pinball": 0.5180710725429737
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 116.64813437081897,
+              "conditional_pinball": 0.757455417992331
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 27.92460778079725,
+              "conditional_pinball": 0.7978459365942071
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.12439938971281,
+              "conditional_pinball": 1.12439938971281
+            }
+          ],
+          "q32_covered": 84328,
+          "q32_coverage": 0.9420123102358159
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "fc30b8702dfdfcad3e9cf98680ae4d9cf557f89e0a1d9864e9c1f6ce9e935e2e",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 97882.32419198751,
+          "s_qr": 23150.059578900284,
+          "brier": 0.1371976959407764,
+          "auroc": 0.8678323907165846,
+          "average_precision": 0.6749427368412386,
+          "conditional_pinball": 0.1482524164050661,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7612.456125558188,
+              "conditional_pinball": 0.0921649489752311
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8594.370574075949,
+              "conditional_pinball": 0.14851424033724359
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4236.639648144618,
+              "conditional_pinball": 0.37209201195719466
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2086.1141942300324,
+              "conditional_pinball": 0.5819007515286003
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 467.53577906578363,
+              "conditional_pinball": 0.8289641472797582
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 144.63496295775997,
+              "conditional_pinball": 0.9839113126378229
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.308294867949478,
+              "conditional_pinball": 1.384715811324913
+            }
+          ],
+          "q32_covered": 143434,
+          "q32_coverage": 0.9185478344956549
+        }
+      },
+      "B4": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "8366153bbe643af27f35e38397bde846d09c3d2dfc0ab72b57096d16295ea0c1",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 323435.24269002676,
+          "s_qr": 51872.12938253573,
+          "brier": 0.09791899181978897,
+          "auroc": 0.8948784047582392,
+          "average_precision": 0.5926382833862388,
+          "conditional_pinball": 0.12719368687787683,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 20786.02925218251,
+              "conditional_pinball": 0.08433389966520678
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 20138.530937399813,
+              "conditional_pinball": 0.14842010920360105
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7538.992040014127,
+              "conditional_pinball": 0.3742363881863553
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2785.760114403003,
+              "conditional_pinball": 0.5804876254225887
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 469.6334333892,
+              "conditional_pinball": 0.8326833925340426
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 145.08241993637836,
+              "conditional_pinball": 0.9869552376624378
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.101185210737675,
+              "conditional_pinball": 1.3501975351229458
+            }
+          ],
+          "q32_covered": 381812,
+          "q32_coverage": 0.9362267667108037
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "d061cbd0b69bdf4610d229e46432de0ab20b62ef559f45662bf906d68a319832",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 79165.64606273174,
+          "s_qr": 13151.015577292103,
+          "brier": 0.09738549908689983,
+          "auroc": 0.903769108407634,
+          "average_precision": 0.6617123611187021,
+          "conditional_pinball": 0.12105577872245023,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 5970.725102498302,
+              "conditional_pinball": 0.08445633561302339
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4546.694247821692,
+              "conditional_pinball": 0.1442296107036446
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1773.0384038358163,
+              "conditional_pinball": 0.3556033702037337
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 730.3213493929647,
+              "conditional_pinball": 0.5710096555066183
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 103.92686172811447,
+              "conditional_pinball": 0.8248163629215435
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 26.309612015218264,
+              "conditional_pinball": 1.0523844806087306
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 103009,
+          "q32_coverage": 0.9482031739018373
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "97a6c0f147eff82fe0d42b2c88bf930ff2fccee6b75a9ac5edec6584c7fd80ec",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 76993.69777578115,
+          "s_qr": 9909.498905244487,
+          "brier": 0.09275678598629154,
+          "auroc": 0.8702011220833,
+          "average_precision": 0.42020675262389634,
+          "conditional_pinball": 0.12844290942754452,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3131.012259880186,
+              "conditional_pinball": 0.07526471778558139
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4819.66989550353,
+              "conditional_pinball": 0.15370805892025546
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1496.3635366543072,
+              "conditional_pinball": 0.42306008952623897
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 383.7370002472834,
+              "conditional_pinball": 0.6627582042267416
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 55.67886833428585,
+              "conditional_pinball": 0.9437096327845059
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 21.48261565778926,
+              "conditional_pinball": 1.1306639819889084
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.5547289671005822,
+              "conditional_pinball": 1.5547289671005822
+            }
+          ],
+          "q32_covered": 70889,
+          "q32_coverage": 0.9188344933960675
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "fa98b8cf0c4409c0788a2e0a630f9445ca3cae5bd912918df8a38fbf1eacd330",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 86478.87179815769,
+          "s_qr": 17132.38247058515,
+          "brier": 0.10505207944382616,
+          "auroc": 0.8993215776447963,
+          "average_precision": 0.6793682097104509,
+          "conditional_pinball": 0.12928733922895053,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 6795.0812447176095,
+              "conditional_pinball": 0.08423724053154501
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6449.991400376454,
+              "conditional_pinball": 0.14988477216035262
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2588.5511481991766,
+              "conditional_pinball": 0.38128607279410465
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1036.1952360732193,
+              "conditional_pinball": 0.5993032018931286
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 189.06391972691958,
+              "conditional_pinball": 0.8402840876751981
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 68.05994604577411,
+              "conditional_pinball": 1.000881559496678
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.439575446003419,
+              "conditional_pinball": 1.3598938615008547
+            }
+          ],
+          "q32_covered": 123791,
+          "q32_coverage": 0.9341729930422445
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "693b0aabdd701a1cb4d36fc83b283e0498b4f779306dd0a0391f27472536accb",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 80797.02705335617,
+          "s_qr": 11679.232429414074,
+          "brier": 0.09654092034287169,
+          "auroc": 0.9065992539989661,
+          "average_precision": 0.5703250310466453,
+          "conditional_pinball": 0.13046652028523636,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 4889.210645086431,
+              "conditional_pinball": 0.0913683288498894
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4322.17539369816,
+              "conditional_pinball": 0.14517097348934135
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1681.0389513248274,
+              "conditional_pinball": 0.34782515028446664
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 635.5065286895331,
+              "conditional_pinball": 0.5243453207009349
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 120.96378359988023,
+              "conditional_pinball": 0.7854791142849366
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 29.2302462175968,
+              "conditional_pinball": 0.8351498919313372
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.106880797633674,
+              "conditional_pinball": 1.106880797633674
+            }
+          ],
+          "q32_covered": 84123,
+          "q32_coverage": 0.9397222935913047
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "deb985e2956934823bb449ea7a8be315664350a6f6e89b868c98ac807343f01a",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 96194.8205294609,
+          "s_qr": 22866.261002657273,
+          "brier": 0.13483239029135022,
+          "auroc": 0.8732877605556695,
+          "average_precision": 0.6897835403019712,
+          "conditional_pinball": 0.1464349772508839,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7314.088294312181,
+              "conditional_pinball": 0.08855257269495109
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8668.162881421064,
+              "conditional_pinball": 0.14978940160398596
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4192.918604908174,
+              "conditional_pinball": 0.3682521170655343
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2068.2741834795406,
+              "conditional_pinball": 0.576924458432229
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 469.6334333892,
+              "conditional_pinball": 0.8326833925340426
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 145.08241993637836,
+              "conditional_pinball": 0.9869552376624378
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 8.101185210737675,
+              "conditional_pinball": 1.3501975351229458
+            }
+          ],
+          "q32_covered": 143283,
+          "q32_coverage": 0.9175808341818601
+        }
+      }
+    },
+    "2030": {
+      "B3": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "c710ca45dae4006d155f1d9c45d79526d5705296f56ff34da548f31c569f3734",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 314956.76808285713,
+          "s_qr": 52760.26958270248,
+          "brier": 0.09535216057777933,
+          "auroc": 0.8880760332745852,
+          "average_precision": 0.570395915597846,
+          "conditional_pinball": 0.1293714618770597,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 21956.53935741331,
+              "conditional_pinball": 0.08908293954069334
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 19880.843756198858,
+              "conditional_pinball": 0.14652096573116502
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7456.357548176976,
+              "conditional_pinball": 0.37013440298719164
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2836.789304410355,
+              "conditional_pinball": 0.5911209219442289
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 474.01385069676553,
+              "conditional_pinball": 0.8404500898878822
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 147.78796582777693,
+              "conditional_pinball": 1.0053603117535845
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.937799978533687,
+              "conditional_pinball": 1.3229666630889478
+            }
+          ],
+          "q32_covered": 383076,
+          "q32_coverage": 0.9393261733117552
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "0992362b178c08418ea386f42c63dbfcdbec8159d57a24b4a65340aa5b69e41c",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 78675.21536433697,
+          "s_qr": 13363.009929715274,
+          "brier": 0.09678219650925314,
+          "auroc": 0.8874176535860933,
+          "average_precision": 0.5928380847230045,
+          "conditional_pinball": 0.12300719770348019,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6020.540206751704,
+              "conditional_pinball": 0.08516097384224998
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4664.986915465404,
+              "conditional_pinball": 0.14798207446597528
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1801.6365123166058,
+              "conditional_pinball": 0.36133905180838466
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 745.6424394902923,
+              "conditional_pinball": 0.5829886157078126
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 105.04274645280684,
+              "conditional_pinball": 0.8336725908952923
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 25.16110923845296,
+              "conditional_pinball": 1.0064443695381184
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 102715,
+          "q32_coverage": 0.9454968886925145
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "2c235bf87165ba55f4d57775f0cf4e5537e750174a63b05af92ec272adec5652",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 75224.3607147932,
+          "s_qr": 10023.275983143394,
+          "brier": 0.09062520867743681,
+          "auroc": 0.8655269526563053,
+          "average_precision": 0.3975344834906404,
+          "conditional_pinball": 0.12991764180818646,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3301.8166340303014,
+              "conditional_pinball": 0.07937059216418994
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4808.409491908227,
+              "conditional_pinball": 0.15334894412259942
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1454.7075174821168,
+              "conditional_pinball": 0.4112828717789417
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 381.27656074148086,
+              "conditional_pinball": 0.65850874048615
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 54.66050858280499,
+              "conditional_pinball": 0.9264492980136438
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 20.785798019832157,
+              "conditional_pinball": 1.0939893694648504
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.6194723786360607,
+              "conditional_pinball": 1.6194723786360607
+            }
+          ],
+          "q32_covered": 71224,
+          "q32_coverage": 0.9231766276522664
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "d03ca197f2c8593b8e13ea9bc1f4d2a4dcc7d4832b6a6e6619fe5f87b1090681",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 84369.50825566053,
+          "s_qr": 17372.89315527779,
+          "brier": 0.1024896844699472,
+          "auroc": 0.8912894178741274,
+          "average_precision": 0.6570591372062893,
+          "conditional_pinball": 0.13110232243595235,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 7244.808029399735,
+              "conditional_pinball": 0.08981241203728628
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6277.133579615198,
+              "conditional_pinball": 0.14586790555190662
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2538.6990876685113,
+              "conditional_pinball": 0.3739430089362957
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1045.3192635198911,
+              "conditional_pinball": 0.6045802565181556
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 191.92695150953773,
+              "conditional_pinball": 0.8530086733757233
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 69.7411896157055,
+              "conditional_pinball": 1.025605729642728
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.265053949213506,
+              "conditional_pinball": 1.3162634873033765
+            }
+          ],
+          "q32_covered": 124370,
+          "q32_coverage": 0.9385423426958661
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "900d325b81af35d5fa403bf2f867e84cff14b1bed3a9ec6b46a5da47aa065ad6",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 76687.68374806643,
+          "s_qr": 12001.090514566058,
+          "brier": 0.09163084135648142,
+          "auroc": 0.9113012988340183,
+          "average_precision": 0.5986722535906644,
+          "conditional_pinball": 0.13406193673483907,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5389.374487231513,
+              "conditional_pinball": 0.10071526391268175
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4130.313769210031,
+              "conditional_pinball": 0.13872682528499078
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1661.3144307097389,
+              "conditional_pinball": 0.3437439335215681
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 664.5510406586897,
+              "conditional_pinball": 0.5483094394873677
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 122.38364415161595,
+              "conditional_pinball": 0.7946989879975062
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 32.09986895378631,
+              "conditional_pinball": 0.9171391129653232
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.0532736506841194,
+              "conditional_pinball": 1.0532736506841194
+            }
+          ],
+          "q32_covered": 84767,
+          "q32_coverage": 0.9469162970989399
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "9c936f34243dbfc3fd67323ceaa3ebdb1a9e94622006d4e6affc572359082b38",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 93596.74670213461,
+          "s_qr": 23181.241299321544,
+          "brier": 0.13119077526089737,
+          "auroc": 0.8690655602539715,
+          "average_precision": 0.6735814284926178,
+          "conditional_pinball": 0.14845210338143708,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7695.418644676239,
+              "conditional_pinball": 0.09316938646758001
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8572.230439258412,
+              "conditional_pinball": 0.1481316497478514
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4175.253299234667,
+              "conditional_pinball": 0.3667006235055917
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2108.5992996491527,
+              "conditional_pinball": 0.5881727474614095
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 474.01385069676553,
+              "conditional_pinball": 0.8404500898878822
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 147.78796582777693,
+              "conditional_pinball": 1.0053603117535845
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.937799978533687,
+              "conditional_pinball": 1.3229666630889478
+            }
+          ],
+          "q32_covered": 143393,
+          "q32_coverage": 0.918285271496545
+        }
+      },
+      "B4": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "67573c001b21671687de1aeca940fd0074b286c9bbaa022d6b3b70d23aae003b",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 313766.32743549347,
+          "s_qr": 52424.04314387053,
+          "brier": 0.09499175845511126,
+          "auroc": 0.8935437295751268,
+          "average_precision": 0.5858597411919294,
+          "conditional_pinball": 0.128547013741039,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 22784.248731629054,
+              "conditional_pinball": 0.09244115473755363
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 19148.93371501587,
+              "conditional_pinball": 0.14112682012157388
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 7097.645858427956,
+              "conditional_pinball": 0.3523279155337779
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2763.3274204913955,
+              "conditional_pinball": 0.5758131736802241
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 473.4567326389642,
+              "conditional_pinball": 0.8394622919130571
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 148.4804656897205,
+              "conditional_pinball": 1.0100711951681667
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.950219977535378,
+              "conditional_pinball": 1.325036662922563
+            }
+          ],
+          "q32_covered": 385032,
+          "q32_coverage": 0.9441224069442401
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "3c39fb1ad219e3acac65c3974a29159e520356529b17b945d69cb6e311fa4936",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 77701.7001375556,
+          "s_qr": 13392.442783907045,
+          "brier": 0.0955846282338212,
+          "auroc": 0.8962003338722613,
+          "average_precision": 0.6233521587156452,
+          "conditional_pinball": 0.12327812864894735,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6312.6636942192345,
+              "conditional_pinball": 0.08929308156358541
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4503.462192396749,
+              "conditional_pinball": 0.14285820937687949
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1725.1801553306943,
+              "conditional_pinball": 0.346004844631106
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 721.3198964710305,
+              "conditional_pinball": 0.5639717720649182
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 103.88850937850161,
+              "conditional_pinball": 0.8245119791944572
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 25.928336110841144,
+              "conditional_pinball": 1.0371334444336457
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 103018,
+          "q32_coverage": 0.9482860193674288
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "eeb58c0d1fad9d9e4d62dd9792e30c3e8cef73261ca38e045f56722f3f7f2f25",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 75218.39632415771,
+          "s_qr": 9755.299492158694,
+          "brier": 0.09061802318405623,
+          "auroc": 0.8716478535973118,
+          "average_precision": 0.41602026129493436,
+          "conditional_pinball": 0.1264442391175577,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3469.667133099787,
+              "conditional_pinball": 0.08340545993028334
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4516.114146208202,
+              "conditional_pinball": 0.1440271127123422
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1335.0961040184475,
+              "conditional_pinball": 0.37746567826362665
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 359.86040702359315,
+              "conditional_pinball": 0.6215205648075874
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 52.98796351517965,
+              "conditional_pinball": 0.8981010765284686
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 19.949755034626392,
+              "conditional_pinball": 1.0499871070855995
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.6239832588559553,
+              "conditional_pinball": 1.6239832588559553
+            }
+          ],
+          "q32_covered": 72297,
+          "q32_coverage": 0.9370844188668974
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "66053150269713f8a9b69e108e3c19d2010691199e851715869dd38e7e93b3dd",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 83774.57506066561,
+          "s_qr": 17338.617102630276,
+          "brier": 0.10176697650712538,
+          "auroc": 0.895547025687704,
+          "average_precision": 0.6694879959660606,
+          "conditional_pinball": 0.13084366257625818,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 7488.691257500398,
+              "conditional_pinball": 0.09283578282672252
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6126.758145485978,
+              "conditional_pinball": 0.14237348419784765
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2429.5782821087305,
+              "conditional_pinball": 0.3578698309189469
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 1026.156677345746,
+              "conditional_pinball": 0.5934972107262845
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 191.95863923418193,
+              "conditional_pinball": 0.8531495077074752
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 70.21736636499608,
+              "conditional_pinball": 1.0326083288970012
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.256734590259975,
+              "conditional_pinball": 1.3141836475649937
+            }
+          ],
+          "q32_covered": 124779,
+          "q32_coverage": 0.9416288090314986
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "68bcdf3f83da9289844b24a8a584794ff195381c7f9c4e047216f20066014b48",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 77071.65591311455,
+          "s_qr": 11937.683765174486,
+          "brier": 0.0920896333139542,
+          "auroc": 0.9143517676762803,
+          "average_precision": 0.6034511030663904,
+          "conditional_pinball": 0.13335363180078516,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5513.226646809659,
+              "conditional_pinball": 0.10302978166750124
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4002.5992309249395,
+              "conditional_pinball": 0.13443721596496622
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1607.7913169700857,
+              "conditional_pinball": 0.33266942209188616
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 655.9904396510251,
+              "conditional_pinball": 0.5412462373358293
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 124.62162051110074,
+              "conditional_pinball": 0.8092313020201347
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 32.38500817925686,
+              "conditional_pinball": 0.9252859479787674
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.0695021284194475,
+              "conditional_pinball": 1.0695021284194475
+            }
+          ],
+          "q32_covered": 84938,
+          "q32_coverage": 0.9488265061048492
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "21cd290b618777d55b115690e89ef53faf829bca43bd61b1e4e8435762a160b0",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 93330.18889683485,
+          "s_qr": 22990.864410422448,
+          "brier": 0.13081715196349356,
+          "auroc": 0.871531411142057,
+          "average_precision": 0.6805387551294301,
+          "conditional_pinball": 0.1472329344323993,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 7931.417972670657,
+              "conditional_pinball": 0.09602665955579757
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8335.566890344393,
+              "conditional_pinball": 0.14404200677987167
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 4026.130158514318,
+              "conditional_pinball": 0.3536035621389705
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 2067.861970586855,
+              "conditional_pinball": 0.5768094757564449
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 473.4567326389642,
+              "conditional_pinball": 0.8394622919130571
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 148.4804656897205,
+              "conditional_pinball": 1.0100711951681667
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.950219977535378,
+              "conditional_pinball": 1.325036662922563
+            }
+          ],
+          "q32_covered": 143652,
+          "q32_coverage": 0.9199439011738487
+        }
+      }
+    },
+    "2031": {
+      "B3": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "c410c21c2fd6708204e24cc2896bb2be055ebc82520ec0301b7183acd792b0f3",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 331020.4709248543,
+          "s_qr": 52905.40996790935,
+          "brier": 0.10021539556138473,
+          "auroc": 0.8891386888261764,
+          "average_precision": 0.5699960794013148,
+          "conditional_pinball": 0.12972735512703976,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 24137.773266365624,
+              "conditional_pinball": 0.09793272799197325
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 19067.439992249052,
+              "conditional_pinball": 0.14052621488030492
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 6631.776511456979,
+              "conditional_pinball": 0.32920211027336704
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2505.07185342467,
+              "conditional_pinball": 0.5219987191966389
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 424.531619099279,
+              "conditional_pinball": 0.7527156367008493
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 131.41600673864178,
+              "conditional_pinball": 0.8939864403989237
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.40071857509936,
+              "conditional_pinball": 1.2334530958498933
+            }
+          ],
+          "q32_covered": 385836,
+          "q32_coverage": 0.9460938649404149
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "60f2fcadecccecc5fad00952649fce0437fee803c0d7ab2bb26e09ac6f8579af",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 80699.92242503166,
+          "s_qr": 13362.806700230549,
+          "brier": 0.09927288682022814,
+          "auroc": 0.8908329974969136,
+          "average_precision": 0.6060996088374723,
+          "conditional_pinball": 0.12300532696555974,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6632.003198318183,
+              "conditional_pinball": 0.09381016179583263
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4386.342557493217,
+              "conditional_pinball": 0.13914295639808455
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1567.1004499981698,
+              "conditional_pinball": 0.314300130364655
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 658.7449973539092,
+              "conditional_pinball": 0.5150469095808516
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 95.51584756684514,
+              "conditional_pinball": 0.7580622822765487
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 23.099649500229372,
+              "conditional_pinball": 0.9239859800091749
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 103631,
+          "q32_coverage": 0.9539287160793843
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "7c8bd9e0ff6da071de7eeb573e53d295e49cae86d3f5f1fc91c5dc360adde81a",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 80150.79161834717,
+          "s_qr": 9899.50335601576,
+          "brier": 0.09656023855907665,
+          "auroc": 0.8661972670325339,
+          "average_precision": 0.3991460951480286,
+          "conditional_pinball": 0.12831335116869205,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3588.8602807908846,
+              "conditional_pinball": 0.08627067982670396
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4543.908530730541,
+              "conditional_pinball": 0.1449135263021604
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1343.135145728591,
+              "conditional_pinball": 0.3797385201381371
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 351.27271997877693,
+              "conditional_pinball": 0.6066886355419291
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 51.02088194919603,
+              "conditional_pinball": 0.8647607110033225
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 19.81395542298614,
+              "conditional_pinball": 1.0428397591045337
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.4918414147903611,
+              "conditional_pinball": 1.4918414147903611
+            }
+          ],
+          "q32_covered": 71662,
+          "q32_coverage": 0.9288538061723114
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "2398b2a53bba9bd5097167bde5f3eaf06c31cbd0cdf0638f3cfdeb0a0fe445e4",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 88524.46236085892,
+          "s_qr": 17488.726768479097,
+          "brier": 0.10753700481153902,
+          "auroc": 0.8936210915974564,
+          "average_precision": 0.6600733245121757,
+          "conditional_pinball": 0.13197644602441325,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 8026.948823904263,
+              "conditional_pinball": 0.09950845243230436
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 6039.200443448092,
+              "conditional_pinball": 0.14033882005549445
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2259.191684809342,
+              "conditional_pinball": 0.3327723795565388
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 926.3781291470575,
+              "conditional_pinball": 0.5357883916408661
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 170.65565693248917,
+              "conditional_pinball": 0.7584695863666185
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 61.39099233962481,
+              "conditional_pinball": 0.9028087108768355
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 4.961037898222534,
+              "conditional_pinball": 1.2402594745556335
+            }
+          ],
+          "q32_covered": 125348,
+          "q32_coverage": 0.9459226949605325
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "218137af22e61f853dfdac68626b6de1da77ce9a172d6b6e369cecbe3a8a47d9",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 81645.29452061653,
+          "s_qr": 12154.37314318399,
+          "brier": 0.09755447894735045,
+          "auroc": 0.9071177767175548,
+          "average_precision": 0.5801116776549973,
+          "conditional_pinball": 0.13577422829995855,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5889.960963352328,
+              "conditional_pinball": 0.1100700970520515
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 4097.988460577205,
+              "conditional_pinball": 0.13764109967343582
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1462.349230920893,
+              "conditional_pinball": 0.3025758805960879
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 568.6760069449266,
+              "conditional_pinball": 0.46920462619218367
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 107.33923265074864,
+              "conditional_pinball": 0.6970080042256406
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 27.111409475801487,
+              "conditional_pinball": 0.774611699308614
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 0.947839262086464,
+              "conditional_pinball": 0.947839262086464
+            }
+          ],
+          "q32_covered": 85195,
+          "q32_coverage": 0.9516974050201633
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "f3403bfaf96db194a6a237b973a59f1b8954961b4e2b7baa560d3f2fd6482055",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 97048.23432326317,
+          "s_qr": 22792.362163562546,
+          "brier": 0.136028585898272,
+          "auroc": 0.8698782379791818,
+          "average_precision": 0.6725669558025159,
+          "conditional_pinball": 0.1459617308893364,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 8514.582271196876,
+              "conditional_pinball": 0.10308710193225915
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 8194.03835854189,
+              "conditional_pinball": 0.14159633583683648
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 3671.7979131478965,
+              "conditional_pinball": 0.32248356869382544
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 1848.5952762628606,
+              "conditional_pinball": 0.5156472179254841
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 424.531619099279,
+              "conditional_pinball": 0.7527156367008493
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 131.41600673864178,
+              "conditional_pinball": 0.8939864403989237
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.40071857509936,
+              "conditional_pinball": 1.2334530958498933
+            }
+          ],
+          "q32_covered": 145043,
+          "q32_coverage": 0.9288518312168194
+        }
+      },
+      "B4": {
+        "all": {
+          "ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+          "exact_score_table_sha256": "52685e4e800fd43bd6ae5b1381d40a944605242d8d89a77c227234701cb275bf",
+          "scenes": 963,
+          "n_valid": 3303090,
+          "n_rain": 407820,
+          "brier_sum": 317965.8075193763,
+          "s_qr": 52637.364898969136,
+          "brier": 0.09626313770420312,
+          "auroc": 0.8943338745051606,
+          "average_precision": 0.58805178434059,
+          "conditional_pinball": 0.12907009194980418,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 246473,
+              "pinball_sum": 24438.63029595332,
+              "conditional_pinball": 0.0991533770269089
+            },
+            {
+              "upper": 5,
+              "n": 135686,
+              "pinball_sum": 18257.346220781972,
+              "conditional_pinball": 0.13455585853206647
+            },
+            {
+              "upper": 10,
+              "n": 20145,
+              "pinball_sum": 6691.824061397449,
+              "conditional_pinball": 0.33218287721009926
+            },
+            {
+              "upper": 20,
+              "n": 4799,
+              "pinball_sum": 2636.862163642465,
+              "conditional_pinball": 0.5494607550828224
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 461.63670359363755,
+              "conditional_pinball": 0.8185047936057404
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 143.18168794687034,
+              "conditional_pinball": 0.9740250880739479
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.883765653451297,
+              "conditional_pinball": 1.3139609422418828
+            }
+          ],
+          "q32_covered": 385207,
+          "q32_coverage": 0.944551517826492
+        },
+        "analysis_UTC_00": {
+          "ids_sha256": "0871ddeab94fccb3a38d208a0632810b6c49932678134256fddf4c831bbd6daa",
+          "exact_score_table_sha256": "c5af34d077676d16cfd57599834c13dbb8020e6bae90ee462e14213e5412eeaf",
+          "scenes": 237,
+          "n_valid": 812910,
+          "n_rain": 108636,
+          "brier_sum": 77537.40153193474,
+          "s_qr": 13404.007885638679,
+          "brier": 0.0953825165540278,
+          "auroc": 0.8977161737802651,
+          "average_precision": 0.632626004478136,
+          "conditional_pinball": 0.12338458600867741,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 70696,
+              "pinball_sum": 6729.057021747893,
+              "conditional_pinball": 0.09518299510223906
+            },
+            {
+              "upper": 5,
+              "n": 31524,
+              "pinball_sum": 4252.125106331231,
+              "conditional_pinball": 0.1348853288393361
+            },
+            {
+              "upper": 10,
+              "n": 4986,
+              "pinball_sum": 1602.9512838547205,
+              "conditional_pinball": 0.32149042997487376
+            },
+            {
+              "upper": 20,
+              "n": 1279,
+              "pinball_sum": 691.0508878746277,
+              "conditional_pinball": 0.5403056199176135
+            },
+            {
+              "upper": 30,
+              "n": 126,
+              "pinball_sum": 102.93435295803599,
+              "conditional_pinball": 0.8169393091907619
+            },
+            {
+              "upper": 50,
+              "n": 25,
+              "pinball_sum": 25.889232872172425,
+              "conditional_pinball": 1.035569314886897
+            },
+            {
+              "upper": null,
+              "n": 0,
+              "pinball_sum": 0.0,
+              "conditional_pinball": null
+            }
+          ],
+          "q32_covered": 103140,
+          "q32_coverage": 0.9494090356787805
+        },
+        "analysis_UTC_06": {
+          "ids_sha256": "203dc40fc082be68c980a22b6da6004f29e183aeee895ee5678777ee19e936cd",
+          "exact_score_table_sha256": "9bd03379c97eb34747561143a10e92ad3a66558414764df1429bf08ae3bb26bf",
+          "scenes": 242,
+          "n_valid": 830060,
+          "n_rain": 77151,
+          "brier_sum": 78199.25510150194,
+          "s_qr": 9805.820939880656,
+          "brier": 0.09420915970110828,
+          "auroc": 0.8698107758839303,
+          "average_precision": 0.4111509480263969,
+          "conditional_pinball": 0.12709907765136752,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 41600,
+              "pinball_sum": 3726.960345347775,
+              "conditional_pinball": 0.08959039291701382
+            },
+            {
+              "upper": 5,
+              "n": 31356,
+              "pinball_sum": 4343.75910385712,
+              "conditional_pinball": 0.13853039621945146
+            },
+            {
+              "upper": 10,
+              "n": 3537,
+              "pinball_sum": 1308.3953589069188,
+              "conditional_pinball": 0.36991669745742684
+            },
+            {
+              "upper": 20,
+              "n": 579,
+              "pinball_sum": 352.2110025580751,
+              "conditional_pinball": 0.6083091581313905
+            },
+            {
+              "upper": 30,
+              "n": 59,
+              "pinball_sum": 52.9071585846454,
+              "conditional_pinball": 0.8967315014346678
+            },
+            {
+              "upper": 50,
+              "n": 19,
+              "pinball_sum": 19.992560560325245,
+              "conditional_pinball": 1.0522400294908023
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.5954100657934658,
+              "conditional_pinball": 1.5954100657934658
+            }
+          ],
+          "q32_covered": 72125,
+          "q32_coverage": 0.9348550245622221
+        },
+        "analysis_UTC_12": {
+          "ids_sha256": "40a297ff51cc6a6065ad91ee36c0891579f79de7df829ede3285a78bbf9edc61",
+          "exact_score_table_sha256": "88bb650b01d97dbbe16492d25a093a4553f9d5db8b99ddf0fb02dcd4b6e2457d",
+          "scenes": 240,
+          "n_valid": 823200,
+          "n_rain": 132514,
+          "brier_sum": 84369.7642353177,
+          "s_qr": 17329.53265361805,
+          "brier": 0.10248999542677079,
+          "auroc": 0.8981573211394029,
+          "average_precision": 0.6774535272235951,
+          "conditional_pinball": 0.13077510794042932,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 80666,
+              "pinball_sum": 8101.314449150989,
+              "conditional_pinball": 0.10043034796755745
+            },
+            {
+              "upper": 5,
+              "n": 43033,
+              "pinball_sum": 5748.47121196913,
+              "conditional_pinball": 0.13358285994397626
+            },
+            {
+              "upper": 10,
+              "n": 6789,
+              "pinball_sum": 2253.551087366139,
+              "conditional_pinball": 0.3319415359207747
+            },
+            {
+              "upper": 20,
+              "n": 1729,
+              "pinball_sum": 970.5892782176755,
+              "conditional_pinball": 0.5613587496921201
+            },
+            {
+              "upper": 30,
+              "n": 225,
+              "pinball_sum": 184.00499514205194,
+              "conditional_pinball": 0.8177999784091198
+            },
+            {
+              "upper": 50,
+              "n": 68,
+              "pinball_sum": 66.38284592913563,
+              "conditional_pinball": 0.9762183224872887
+            },
+            {
+              "upper": null,
+              "n": 4,
+              "pinball_sum": 5.21878584293438,
+              "conditional_pinball": 1.304696460733595
+            }
+          ],
+          "q32_covered": 125122,
+          "q32_coverage": 0.9442172147848529
+        },
+        "analysis_UTC_18": {
+          "ids_sha256": "1f6e2562a5309be7e3b35cbbe4f1d8acd1ae1d0d105464ff8b4c0b85c5f03c5b",
+          "exact_score_table_sha256": "62499f399e7c8e6cc89eaf8fef94f263d4df7b9b9b9d67d56bb10d555a791c86",
+          "scenes": 244,
+          "n_valid": 836920,
+          "n_rain": 89519,
+          "brier_sum": 77859.38665062189,
+          "s_qr": 12098.003419831763,
+          "brier": 0.09303085916290911,
+          "auroc": 0.9133573305456231,
+          "average_precision": 0.5984695651887492,
+          "conditional_pinball": 0.13514453266716298,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 53511,
+              "pinball_sum": 5881.298479706653,
+              "conditional_pinball": 0.10990821475410015
+            },
+            {
+              "upper": 5,
+              "n": 29773,
+              "pinball_sum": 3912.990798624482,
+              "conditional_pinball": 0.13142749466377193
+            },
+            {
+              "upper": 10,
+              "n": 4833,
+              "pinball_sum": 1526.9263312696726,
+              "conditional_pinball": 0.3159375814752064
+            },
+            {
+              "upper": 20,
+              "n": 1212,
+              "pinball_sum": 623.0109949920875,
+              "conditional_pinball": 0.5140354744159138
+            },
+            {
+              "upper": 30,
+              "n": 154,
+              "pinball_sum": 121.79019690890411,
+              "conditional_pinball": 0.7908454344734033
+            },
+            {
+              "upper": 50,
+              "n": 35,
+              "pinball_sum": 30.91704858523709,
+              "conditional_pinball": 0.8833442452924883
+            },
+            {
+              "upper": null,
+              "n": 1,
+              "pinball_sum": 1.0695697447234516,
+              "conditional_pinball": 1.0695697447234516
+            }
+          ],
+          "q32_covered": 84820,
+          "q32_coverage": 0.9475083501826428
+        },
+        "scene_max_ge20": {
+          "ids_sha256": "863e846db9b9eab36890821b95f44540c9eccd23156220000f3680cd295536e5",
+          "exact_score_table_sha256": "d9355b649f86f892e63eb5728b594090b8f2e471c4ea6abdc90b7ffb4f457832",
+          "scenes": 208,
+          "n_valid": 713440,
+          "n_rain": 156153,
+          "brier_sum": 94165.32999688387,
+          "s_qr": 22750.496590152914,
+          "brier": 0.13198773547443915,
+          "auroc": 0.8727475199549113,
+          "average_precision": 0.6848962093063515,
+          "conditional_pinball": 0.1456936247792416,
+          "rain_strata": [
+            {
+              "upper": 1,
+              "n": 82596,
+              "pinball_sum": 8476.54308590714,
+              "conditional_pinball": 0.10262655680550076
+            },
+            {
+              "upper": 5,
+              "n": 57869,
+              "pinball_sum": 7915.731204549799,
+              "conditional_pinball": 0.13678707433254073
+            },
+            {
+              "upper": 10,
+              "n": 11386,
+              "pinball_sum": 3773.93078443415,
+              "conditional_pinball": 0.3314536083290137
+            },
+            {
+              "upper": 20,
+              "n": 3585,
+              "pinball_sum": 1971.5893580678678,
+              "conditional_pinball": 0.5499551905349701
+            },
+            {
+              "upper": 30,
+              "n": 564,
+              "pinball_sum": 461.63670359363755,
+              "conditional_pinball": 0.8185047936057404
+            },
+            {
+              "upper": 50,
+              "n": 147,
+              "pinball_sum": 143.18168794687034,
+              "conditional_pinball": 0.9740250880739479
+            },
+            {
+              "upper": null,
+              "n": 6,
+              "pinball_sum": 7.883765653451297,
+              "conditional_pinball": 1.3139609422418828
+            }
+          ],
+          "q32_covered": 143926,
+          "q32_coverage": 0.921698590484973
+        }
+      }
+    }
+  },
+  "tail_diagnostics": {
+    "2029": {
+      "B3": {
+        "status": "NOT_AVAILABLE_IN_INHERITED_RECEIPTS_NO_EXTRA_INFERENCE"
+      },
+      "B4": {
+        "status": "NOT_AVAILABLE_IN_INHERITED_RECEIPTS_NO_EXTRA_INFERENCE"
+      }
+    },
+    "2030": {
+      "B3": {
+        "scope": "ADDITIVE_2024_DEV_DIAGNOSTIC",
+        "nominal_q32": 0.984375,
+        "independent_event_count": "NOT_ESTIMATED",
+        "strata": [
+          {
+            "lower": 0.1,
+            "upper": 1.0,
+            "n_rain": 246473,
+            "q32_covered": 246082,
+            "q32_coverage": 0.9984136193416723,
+            "conditional_pinball": 0.08908293954069312,
+            "q32_shortfall_log_sum": 20.757568904486927
+          },
+          {
+            "lower": 1.0,
+            "upper": 5.0,
+            "n_rain": 135686,
+            "q32_covered": 123943,
+            "q32_coverage": 0.9134545936942647,
+            "conditional_pinball": 0.1465209657311651,
+            "q32_shortfall_log_sum": 2616.3971211593957
+          },
+          {
+            "lower": 5.0,
+            "upper": 10.0,
+            "n_rain": 20145,
+            "q32_covered": 11996,
+            "q32_coverage": 0.5954827500620501,
+            "conditional_pinball": 0.37013440298719147,
+            "q32_shortfall_log_sum": 2794.3744132668207
+          },
+          {
+            "lower": 10.0,
+            "upper": 20.0,
+            "n_rain": 4799,
+            "q32_covered": 1043,
+            "q32_coverage": 0.21733694519691601,
+            "conditional_pinball": 0.5911209219442288,
+            "q32_shortfall_log_sum": 1932.8096605259432
+          },
+          {
+            "lower": 20.0,
+            "upper": 30.0,
+            "n_rain": 564,
+            "q32_covered": 12,
+            "q32_coverage": 0.02127659574468085,
+            "conditional_pinball": 0.840450089887882,
+            "q32_shortfall_log_sum": 467.50940317442587
+          },
+          {
+            "lower": 30.0,
+            "upper": 50.0,
+            "n_rain": 147,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.0053603117535843,
+            "q32_shortfall_log_sum": 166.38906244003175
+          },
+          {
+            "lower": 50.0,
+            "upper": null,
+            "n_rain": 6,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.3229666630889476,
+            "q32_shortfall_log_sum": 11.029208996688824
+          }
+        ]
+      },
+      "B4": {
+        "scope": "ADDITIVE_2024_DEV_DIAGNOSTIC",
+        "nominal_q32": 0.984375,
+        "independent_event_count": "NOT_ESTIMATED",
+        "strata": [
+          {
+            "lower": 0.1,
+            "upper": 1.0,
+            "n_rain": 246473,
+            "q32_covered": 246309,
+            "q32_coverage": 0.9993346127162002,
+            "conditional_pinball": 0.09244115473755371,
+            "q32_shortfall_log_sum": 9.450796686663102
+          },
+          {
+            "lower": 1.0,
+            "upper": 5.0,
+            "n_rain": 135686,
+            "q32_covered": 125078,
+            "q32_coverage": 0.9218194950105391,
+            "conditional_pinball": 0.14112682012157385,
+            "q32_shortfall_log_sum": 2311.891718882561
+          },
+          {
+            "lower": 5.0,
+            "upper": 10.0,
+            "n_rain": 20145,
+            "q32_covered": 12530,
+            "q32_coverage": 0.6219905683792505,
+            "conditional_pinball": 0.35232791553377807,
+            "q32_shortfall_log_sum": 2771.9371053835644
+          },
+          {
+            "lower": 10.0,
+            "upper": 20.0,
+            "n_rain": 4799,
+            "q32_covered": 1110,
+            "q32_coverage": 0.23129818712231714,
+            "conditional_pinball": 0.575813173680224,
+            "q32_shortfall_log_sum": 1959.1654886546626
+          },
+          {
+            "lower": 20.0,
+            "upper": 30.0,
+            "n_rain": 564,
+            "q32_covered": 5,
+            "q32_coverage": 0.008865248226950355,
+            "conditional_pinball": 0.8394622919130568,
+            "q32_shortfall_log_sum": 495.9329422131877
+          },
+          {
+            "lower": 30.0,
+            "upper": 50.0,
+            "n_rain": 147,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.0100711951681667,
+            "q32_shortfall_log_sum": 177.31295532847162
+          },
+          {
+            "lower": 50.0,
+            "upper": null,
+            "n_rain": 6,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.325036662922563,
+            "q32_shortfall_log_sum": 11.409789173210527
+          }
+        ]
+      }
+    },
+    "2031": {
+      "B3": {
+        "scope": "ADDITIVE_2024_DEV_DIAGNOSTIC",
+        "nominal_q32": 0.984375,
+        "independent_event_count": "NOT_ESTIMATED",
+        "strata": [
+          {
+            "lower": 0.1,
+            "upper": 1.0,
+            "n_rain": 246473,
+            "q32_covered": 246035,
+            "q32_coverage": 0.9982229290835102,
+            "conditional_pinball": 0.0979327279919734,
+            "q32_shortfall_log_sum": 28.41953921730679
+          },
+          {
+            "lower": 1.0,
+            "upper": 5.0,
+            "n_rain": 135686,
+            "q32_covered": 124837,
+            "q32_coverage": 0.9200433353477883,
+            "conditional_pinball": 0.14052621488030495,
+            "q32_shortfall_log_sum": 2345.5774188424693
+          },
+          {
+            "lower": 5.0,
+            "upper": 10.0,
+            "n_rain": 20145,
+            "q32_covered": 12950,
+            "q32_coverage": 0.6428394142467113,
+            "conditional_pinball": 0.3292021102733677,
+            "q32_shortfall_log_sum": 2565.0920155775552
+          },
+          {
+            "lower": 10.0,
+            "upper": 20.0,
+            "n_rain": 4799,
+            "q32_covered": 1893,
+            "q32_coverage": 0.3944571785788706,
+            "conditional_pinball": 0.5219987191966389,
+            "q32_shortfall_log_sum": 1568.0746075390348
+          },
+          {
+            "lower": 20.0,
+            "upper": 30.0,
+            "n_rain": 564,
+            "q32_covered": 109,
+            "q32_coverage": 0.19326241134751773,
+            "conditional_pinball": 0.7527156367008492,
+            "q32_shortfall_log_sum": 368.0212063142351
+          },
+          {
+            "lower": 30.0,
+            "upper": 50.0,
+            "n_rain": 147,
+            "q32_covered": 12,
+            "q32_coverage": 0.08163265306122448,
+            "conditional_pinball": 0.8939864403989239,
+            "q32_shortfall_log_sum": 125.71472247350951
+          },
+          {
+            "lower": 50.0,
+            "upper": null,
+            "n_rain": 6,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.2334530958498933,
+            "q32_shortfall_log_sum": 9.216948031020081
+          }
+        ]
+      },
+      "B4": {
+        "scope": "ADDITIVE_2024_DEV_DIAGNOSTIC",
+        "nominal_q32": 0.984375,
+        "independent_event_count": "NOT_ESTIMATED",
+        "strata": [
+          {
+            "lower": 0.1,
+            "upper": 1.0,
+            "n_rain": 246473,
+            "q32_covered": 246151,
+            "q32_coverage": 0.9986935688696125,
+            "conditional_pinball": 0.09915337702690888,
+            "q32_shortfall_log_sum": 18.591243601009896
+          },
+          {
+            "lower": 1.0,
+            "upper": 5.0,
+            "n_rain": 135686,
+            "q32_covered": 125224,
+            "q32_coverage": 0.9228955087481391,
+            "conditional_pinball": 0.13455585853206642,
+            "q32_shortfall_log_sum": 2326.428693767528
+          },
+          {
+            "lower": 5.0,
+            "upper": 10.0,
+            "n_rain": 20145,
+            "q32_covered": 12486,
+            "q32_coverage": 0.6198064035740879,
+            "conditional_pinball": 0.33218287721009926,
+            "q32_shortfall_log_sum": 2746.628790616318
+          },
+          {
+            "lower": 10.0,
+            "upper": 20.0,
+            "n_rain": 4799,
+            "q32_covered": 1326,
+            "q32_coverage": 0.2763075640758491,
+            "conditional_pinball": 0.5494607550828225,
+            "q32_shortfall_log_sum": 1911.6715833034496
+          },
+          {
+            "lower": 20.0,
+            "upper": 30.0,
+            "n_rain": 564,
+            "q32_covered": 20,
+            "q32_coverage": 0.03546099290780142,
+            "conditional_pinball": 0.8185047936057401,
+            "q32_shortfall_log_sum": 484.3424290387567
+          },
+          {
+            "lower": 30.0,
+            "upper": 50.0,
+            "n_rain": 147,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 0.9740250880739483,
+            "q32_shortfall_log_sum": 166.92290635266392
+          },
+          {
+            "lower": 50.0,
+            "upper": null,
+            "n_rain": 6,
+            "q32_covered": 0,
+            "q32_coverage": 0.0,
+            "conditional_pinball": 1.3139609422418828,
+            "q32_shortfall_log_sum": 11.17101288964936
+          }
+        ]
+      }
+    }
+  },
+  "budget_closure": {
+    "new_updates": 12480,
+    "cumulative_updates": 17670,
+    "necessary_replay_updates": 390,
+    "extra_retries": 0,
+    "new_source_bytes": 1379654740081,
+    "cumulative_source_bytes": 1931972785094,
+    "new_source_files": 412569,
+    "cumulative_source_files": 577748,
+    "new_sealed_passes": 52,
+    "verification_files": 1,
+    "verification_bytes": 3332713,
+    "original_uncertain_source_record": "PRESERVED_UNMODIFIED_AND_SEPARATELY_CHARGED",
+    "wall_seconds_mtime": 36553.507098674774,
+    "cumulative_executed_interval_seconds_mtime": 51051.507098674774,
+    "maximum_recovery_seconds": 62784
+  },
+  "inherited_evidence": [
+    "b3_b4_multiseed_stop.json: B3/2030 completed nine epochs and original failed segment",
+    "seed2029 prior verified complete pair; no repeat training or historical full audit"
+  ],
+  "checks": {
+    "new_epoch_seals": 26,
+    "inherited_E1_seals": 1,
+    "new_read_ledgers": 52,
+    "actual_E9_weight_hashes": 3,
+    "paired_initialization": true,
+    "paired_orders_all_nine_epochs": true,
+    "cross_seed_initialization_and_same_epoch_orders_differ": true,
+    "summary_recomputed_from_all_six_endpoints": true,
+    "tail_additive_totals_match": true,
+    "live_page_complete": true
+  },
+  "closeout_activity": {
+    "raw_weather_payload_reads": 0,
+    "checkpoint_deserializations": 0,
+    "optimizer_updates": 0,
+    "model_inference": 0,
+    "scope_2025": "FROZEN_NO_ACCESS_IN_THIS_CLOSEOUT",
+    "weight_file_hash_reads": 3
+  },
+  "scientific_acceptance": {
+    "descriptive_replication_complete": true,
+    "B0_B4_overall": "IN_PROGRESS",
+    "significance": "NOT_CLAIMED",
+    "final_generalization": "NOT_VERIFIED",
+    "B5_B8_training": "NOT_STARTED",
+    "seed2029_stratum_q32": "NOT_AVAILABLE_NO_EXTRA_INFERENCE"
+  },
+  "sources": {
+    "RECOVERY/completion.json": {
+      "sha256": "44ca4af00402f188554f6d68af2ed256b680061ec142bfdefbdad8fafd8888b9",
+      "bytes": 286
+    },
+    "RECOVERY/authorization_binding.json": {
+      "sha256": "28d96d9051636d649c54c703b58cdd8929052a578a2d30139e7f688a9d6d8f09",
+      "bytes": 2547
+    },
+    "RECOVERY/three_seed_summary.json": {
+      "sha256": "2ca5df01653ea0b45b1883cd36b1632f7e0bea721c57fefa4f5c8f190199b67d",
+      "bytes": 4611
+    },
+    "s2029/B3/development_09.json": {
+      "sha256": "41567d338e39fd0ddb362f9dd1d3f3e1cce6aa017406b3c14e43b84187854beb",
+      "bytes": 1878272
+    },
+    "s2029/B4/development_09.json": {
+      "sha256": "5663b31c1789c95f07e385afdcd29ff3e7bf791c8b87fd0f6d51553e56d035a2",
+      "bytes": 1880560
+    },
+    "s2030/B3/development_09.json": {
+      "sha256": "2e816d8806e0ff5dd581f6b0737f13ba353be29bbc8e5e08ef2034d852ed9f27",
+      "bytes": 1881219
+    },
+    "s2030/B4/development_09.json": {
+      "sha256": "bc5ee14ea4f353df212e9aeaef53ec49c1e0d899142bea1632f9cd73400b23a0",
+      "bytes": 1883210
+    },
+    "s2031/B3/development_09.json": {
+      "sha256": "e8a07756b513c920bc83b43d83ea3c4d2f2ea37099a64f0a870778cb5b7cf5d9",
+      "bytes": 1880965
+    },
+    "s2031/B4/development_09.json": {
+      "sha256": "27f4827b1537c86b647dbdce68e030de60475c43ba5981fc502fe8c80ddf3a5f",
+      "bytes": 1884153
+    },
+    "s2030/B4/updates.sqlite": {
+      "sha256": "a61dbedd5684d2e20eaa7916c899332fc592f09a89fa2c4a9494e5662305de5c",
+      "bytes": 155648
+    },
+    "s2030/B4/completion.json": {
+      "sha256": "459571d6b5b707ac78eca7df05bc143d09a7d418bb1da93eea1012a2ab7f7c13",
+      "bytes": 4635
+    },
+    "s2030/B4/paired_orders.json": {
+      "sha256": "3cad8775b2ac64057a1c5a88f9301cefa008b975e821396b4a1995dab502545d",
+      "bytes": 311790
+    },
+    "s2030/B4/paired_initial_identity.json": {
+      "sha256": "31eea2b5cdd6b22b058369cc18c14ff146b602d4d2f7e06c409ffc52953fc5fb",
+      "bytes": 403
+    },
+    "s2030/B4/B4_train_01.json": {
+      "sha256": "402250e9c2d13c30dbc63f4c3bd7dfb3c39bfd57158af8e39cc7f79680cc0309",
+      "bytes": 342
+    },
+    "s2030/B4/B4_development_01.json": {
+      "sha256": "d8c9ced6b1af3e611392873c6dc7b1809b28db1f298c0e5e30a8ca383ea3dbbf",
+      "bytes": 1877727
+    },
+    "s2030/B4/B4_LAST_epoch_01.receipt.json": {
+      "sha256": "71e02e0dcad4d6a8c3c4017abcce4bcc1d15b9e3713267cc579ee701c3773f01",
+      "bytes": 401
+    },
+    "s2030/B4/B4_tail_01.json": {
+      "sha256": "737c8af375937a4fb9e27c3f1b0dbde9ea0f02d0282f159668f0619fd5ccc000",
+      "bytes": 1513609
+    },
+    "s2030/B4/train_01/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_01/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_02.json": {
+      "sha256": "414f552d9e2824bbd6465e65d829305c844cfc0629b204633f6c05d2c8d53814",
+      "bytes": 342
+    },
+    "s2030/B4/B4_development_02.json": {
+      "sha256": "149468b0379700de7ce1f5e07957ffa1156ad1b2b592bd96545d72f5255448de",
+      "bytes": 1883311
+    },
+    "s2030/B4/B4_LAST_epoch_02.receipt.json": {
+      "sha256": "bb89b7164428f8dbec1be2bf3ea354226771ecf755ff0a14244b10358eabac0c",
+      "bytes": 401
+    },
+    "s2030/B4/B4_tail_02.json": {
+      "sha256": "81bc28ea94329ac0a660cf4799e0ce5c607aa0bc73a6302257d3c8e67c5114ba",
+      "bytes": 1506466
+    },
+    "s2030/B4/train_02/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_02/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_03.json": {
+      "sha256": "cc1aa5acabeac4328defba42e757db03d257f4e05d98ae99bf0aabb2129109e9",
+      "bytes": 341
+    },
+    "s2030/B4/B4_development_03.json": {
+      "sha256": "7406cbf021336812c7b342cfc82f8385288a4004e14f358816d4358346621bce",
+      "bytes": 1878822
+    },
+    "s2030/B4/B4_LAST_epoch_03.receipt.json": {
+      "sha256": "11c5f2b668695a804940e71932acaea02f945204000e75d33442844449a09099",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_03.json": {
+      "sha256": "7659ce1b0e8da272c604017b760471324da6767e9538628da50815c0099f0154",
+      "bytes": 1511057
+    },
+    "s2030/B4/train_03/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_03/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_04.json": {
+      "sha256": "88a5510db17186d2b2874baef57cf8784e3db455992a26fcb0e1880f387592b7",
+      "bytes": 342
+    },
+    "s2030/B4/B4_development_04.json": {
+      "sha256": "f5af7a4704039cb24dd9548cdc32f5ceb8b32c16238ef8a4c2b2147f9b721be3",
+      "bytes": 1874193
+    },
+    "s2030/B4/B4_LAST_epoch_04.receipt.json": {
+      "sha256": "edeabe57be443b829b40bd11e7a7c652542a9403d0dad3859701f2158e5a1df8",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_04.json": {
+      "sha256": "567e4876181e1c8854ee4f641f524fb833e84b015a13a1eee057c2700ccfc1f9",
+      "bytes": 1510872
+    },
+    "s2030/B4/train_04/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_04/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_05.json": {
+      "sha256": "659bf98f9d66410523ec743c5d59ea439b557121403e4e3ee7ca7d3d47ff8361",
+      "bytes": 343
+    },
+    "s2030/B4/B4_development_05.json": {
+      "sha256": "05e466284e052e72c940f114ae922ca3a5d2eb348808e340e6bcb3996331d27f",
+      "bytes": 1876979
+    },
+    "s2030/B4/B4_LAST_epoch_05.receipt.json": {
+      "sha256": "f21c7292d6044a4f396c6161526a5afe3d0508a50a3d4fc9c5298e1319f42220",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_05.json": {
+      "sha256": "8d01697aeea3c089bfc1f0a7b960ba04cfc2ec716cbb24660f07d6833ca6df1d",
+      "bytes": 1507739
+    },
+    "s2030/B4/train_05/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_05/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_06.json": {
+      "sha256": "d47dc691c7fde3dca7b50458ec053336188f3a3007efa21021149059df881fad",
+      "bytes": 344
+    },
+    "s2030/B4/B4_development_06.json": {
+      "sha256": "2418fc68880fc10abbcbc4254a8207dc47cb76be82afebb37e8f5f98c5a5b864",
+      "bytes": 1877489
+    },
+    "s2030/B4/B4_LAST_epoch_06.receipt.json": {
+      "sha256": "c28a5f7ea0f01d1a206cff705b0b1e302f366a367f45fccf6b42a71a708b54e0",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_06.json": {
+      "sha256": "3f635eef5d671333315b540420973b273bda6219558c03ed3f0037ea1b467e8b",
+      "bytes": 1509200
+    },
+    "s2030/B4/train_06/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_06/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_07.json": {
+      "sha256": "19588c028beb8566dc3dc80f6219964c9a2f6b0be5ee9b5909f907c6181b66b6",
+      "bytes": 344
+    },
+    "s2030/B4/B4_development_07.json": {
+      "sha256": "e4eaea8bbac3e0b7518bfae3ad5bc349d6b4c3677aa77dc81990abc6c514dd69",
+      "bytes": 1877694
+    },
+    "s2030/B4/B4_LAST_epoch_07.receipt.json": {
+      "sha256": "2c46e4e54bf287e53ef1ef2c3d60cd4ff1cc55807c19cd9b218f52120c83122c",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_07.json": {
+      "sha256": "da1697d91b9ee57bb944b3b499e6f6b52606d34c85d150a691bdb1fb9f97d472",
+      "bytes": 1508067
+    },
+    "s2030/B4/train_07/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_07/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_08.json": {
+      "sha256": "4b07ad67d028997215df512cad1e3b0bb55cfd984373d8066d7e503c4bed7c68",
+      "bytes": 343
+    },
+    "s2030/B4/B4_development_08.json": {
+      "sha256": "fa3921ef1b2089dc036f3a900423531520677caed1b337427170683aa0cc11b2",
+      "bytes": 1879091
+    },
+    "s2030/B4/B4_LAST_epoch_08.receipt.json": {
+      "sha256": "17d3891c3b98e32009b03d3da3ecce5d8f6ca5db74b3a9e402289a1397365280",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_08.json": {
+      "sha256": "884ee79878d18a627d586d4fba815dd4f1253c93e31028a77d1c60cae5580043",
+      "bytes": 1509171
+    },
+    "s2030/B4/train_08/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_08/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/B4_train_09.json": {
+      "sha256": "f4cab416f55da6d4c0e41e8a822b178a9bbceaabc64c66dd4fcd1de78573b954",
+      "bytes": 343
+    },
+    "s2030/B4/B4_development_09.json": {
+      "sha256": "bc5ee14ea4f353df212e9aeaef53ec49c1e0d899142bea1632f9cd73400b23a0",
+      "bytes": 1883210
+    },
+    "s2030/B4/B4_LAST_epoch_09.receipt.json": {
+      "sha256": "9f8869ba30e9953a6eb1df99b60f952f34d91ba2d46c9442933a1ec8d48a0777",
+      "bytes": 402
+    },
+    "s2030/B4/B4_tail_09.json": {
+      "sha256": "ac373e71ab61ae4e83fa174c1e5aca35a74a477a4f6add563878b0b684ec02f9",
+      "bytes": 1509158
+    },
+    "s2030/B4/train_09/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2030/B4/dev_09/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2030/B4/LAST_epoch_09.pt": {
+      "sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "bytes": 52914619
+    },
+    "s2031/B3/updates.sqlite": {
+      "sha256": "5c0839fc5b195153af743995d1e1d1fc26ea8a693a7a9f0d8f97f9eb25a08ed1",
+      "bytes": 176128
+    },
+    "s2031/B3/completion.json": {
+      "sha256": "c45582138cc67f5596809e63c09cf4fc2bbf237c439e2039a8cc5ca057621909",
+      "bytes": 4595
+    },
+    "s2031/B3/paired_orders.json": {
+      "sha256": "1d10a8057e6f69f721f29ce32cab8801cbc23f61ef2fd07324be1deaa18ae26c",
+      "bytes": 311790
+    },
+    "s2031/B3/paired_initial_identity.json": {
+      "sha256": "d50ba4e4c248435d36927f5747cec41e85b8e0c9dd6bbec9f8913895ac9e9b95",
+      "bytes": 403
+    },
+    "s2031/B3/B3_train_01.json": {
+      "sha256": "f0ae42748c835c61ff956cf593728c87e95d722782149848c8c4fbd2aa4c83ed",
+      "bytes": 342
+    },
+    "s2031/B3/B3_development_01.json": {
+      "sha256": "0b1ea6f771f82aba0f97460c95f2aa7f0f57d8fb02dc7c561d5d86075afe94b4",
+      "bytes": 1888008
+    },
+    "s2031/B3/B3_LAST_epoch_01.receipt.json": {
+      "sha256": "a62998b5125b5075fa02630414de240952d014aa8f9ca338292621fa4af93faf",
+      "bytes": 401
+    },
+    "s2031/B3/B3_tail_01.json": {
+      "sha256": "0c58d8e82e354be724ea56a1aee0c969af5a10e8e9efa1114009002c54d1038b",
+      "bytes": 1510520
+    },
+    "s2031/B3/train_01/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_01/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_02.json": {
+      "sha256": "15ff57dc659214ce3cdfbdb39166d3b58638fd7f1239e16f3b31e7ae798b2281",
+      "bytes": 344
+    },
+    "s2031/B3/B3_development_02.json": {
+      "sha256": "4a3bd04937c6818761fc8067e2392aa4c819de344c8c2aa68e91f0e6b781e2f0",
+      "bytes": 1873696
+    },
+    "s2031/B3/B3_LAST_epoch_02.receipt.json": {
+      "sha256": "688416346e5e9700f6271053cbea4a956846d922bf4802daa9e947dce77d8818",
+      "bytes": 401
+    },
+    "s2031/B3/B3_tail_02.json": {
+      "sha256": "83453f40fe9fc80e4906a96fffcf3d392d0f42736a9760a956f5995fe9aae8b8",
+      "bytes": 1514409
+    },
+    "s2031/B3/train_02/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_02/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_03.json": {
+      "sha256": "0281117c46e4c4eb11a8436f6674320b54739841f2e4180eadbf5b203c5da350",
+      "bytes": 343
+    },
+    "s2031/B3/B3_development_03.json": {
+      "sha256": "a3d37a900131f05697baa24b3fb0942a5e0a6b92baf0805b4efd3fe8ef2a3093",
+      "bytes": 1875585
+    },
+    "s2031/B3/B3_LAST_epoch_03.receipt.json": {
+      "sha256": "450b51b671b12b8426e3c8c8a02528d1725ba364d9674eae01ad528d0b69e713",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_03.json": {
+      "sha256": "b9264a9d864c0a0631a17fa9a6de37a95d69274f0b96f131a9b52a35400aca38",
+      "bytes": 1512061
+    },
+    "s2031/B3/train_03/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_03/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_04.json": {
+      "sha256": "eef2f5decc4106d03bde622718522d5feb3bef362236ae5c0fd47b7c1e0302be",
+      "bytes": 344
+    },
+    "s2031/B3/B3_development_04.json": {
+      "sha256": "e082900e02ebfe051b30678edc6922253ccf24906df073732f51f4ef2211576b",
+      "bytes": 1873074
+    },
+    "s2031/B3/B3_LAST_epoch_04.receipt.json": {
+      "sha256": "e2c641b331c18693eac94e379c7ff6c00629b8edc8f341b7a82798668d324c9d",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_04.json": {
+      "sha256": "4ed073e62e1011e0b11d16c02a8a69b67c7f8d5341710f53e657962edd5bc0da",
+      "bytes": 1509481
+    },
+    "s2031/B3/train_04/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_04/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_05.json": {
+      "sha256": "44373884d5c238c84743334acaf4a5bbd1281aba27bcb7d1fba130b147d943aa",
+      "bytes": 343
+    },
+    "s2031/B3/B3_development_05.json": {
+      "sha256": "c489e723ff25ef24a9701acf6cd8bf73eae2e8e5e00d93ee0427dcdac1f9951b",
+      "bytes": 1871235
+    },
+    "s2031/B3/B3_LAST_epoch_05.receipt.json": {
+      "sha256": "22842963c65d2144451fce0538de26af70c6282a5a6b1e87c71c1012a9e29a78",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_05.json": {
+      "sha256": "0eca794890d5dd9468d1152ff213548531dbaa49ebf3883ee11f36326acd7a4a",
+      "bytes": 1512149
+    },
+    "s2031/B3/train_05/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_05/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_06.json": {
+      "sha256": "265f19583baa37c91ead7542d1d1ae0f7c69c1e28eb36e1bca2c541f3d715275",
+      "bytes": 342
+    },
+    "s2031/B3/B3_development_06.json": {
+      "sha256": "5a7f819992433121fc9d2ab83a97fe9c60f11ee65a8b74a160cea88aeb37a314",
+      "bytes": 1875719
+    },
+    "s2031/B3/B3_LAST_epoch_06.receipt.json": {
+      "sha256": "0e864180e23cb04a7a7d0547515e00aaa85d06ba921b0986d95f6490658d7177",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_06.json": {
+      "sha256": "f728c246fb07164961f9a6c8326288ad2365a6bd4d9a1c936439968696454811",
+      "bytes": 1510875
+    },
+    "s2031/B3/train_06/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_06/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_07.json": {
+      "sha256": "9a4100f3f197328a4fe7edad2baf2588edd5a71306b3ecea2b889e7a265c8f3a",
+      "bytes": 344
+    },
+    "s2031/B3/B3_development_07.json": {
+      "sha256": "61c19e6fda073b17e68ee67bfb8c7fc7d3696bb156283cdad923a5d79b8b51b0",
+      "bytes": 1874541
+    },
+    "s2031/B3/B3_LAST_epoch_07.receipt.json": {
+      "sha256": "ac6774c781b30ddb537b004df168963e317d1c2692fea5769e13b012c0a10dbc",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_07.json": {
+      "sha256": "14aefd239185fd47c3172bcf2be0d8e8462bdeba5559eee9bcd8cdc95da37284",
+      "bytes": 1511898
+    },
+    "s2031/B3/train_07/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_07/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_08.json": {
+      "sha256": "aad44567334589f732ce43de7bf44df804da25750bf763722f01abe15d4766cd",
+      "bytes": 344
+    },
+    "s2031/B3/B3_development_08.json": {
+      "sha256": "a6bc686ba2b46ea0bc71bee750309c4b33d000112f2cc4f628538906f4777431",
+      "bytes": 1882112
+    },
+    "s2031/B3/B3_LAST_epoch_08.receipt.json": {
+      "sha256": "64f03031d596806e1842dcb443dd02daf8797fe275356c99a6da959839e6ff46",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_08.json": {
+      "sha256": "c7c995d22c0e7c0d459552c72cc03c692ba49ea2f4fd2a2dc13699c76edece3a",
+      "bytes": 1511023
+    },
+    "s2031/B3/train_08/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_08/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/B3_train_09.json": {
+      "sha256": "cab60a57985889116d210810f1e3b762bc57e7988751513f28b8f8e6940d10ac",
+      "bytes": 341
+    },
+    "s2031/B3/B3_development_09.json": {
+      "sha256": "e8a07756b513c920bc83b43d83ea3c4d2f2ea37099a64f0a870778cb5b7cf5d9",
+      "bytes": 1880965
+    },
+    "s2031/B3/B3_LAST_epoch_09.receipt.json": {
+      "sha256": "5f9a379ab13e612c548f16056e2a22fa5e26ec507f038349a9a9fb82b2acc0a1",
+      "bytes": 402
+    },
+    "s2031/B3/B3_tail_09.json": {
+      "sha256": "034a0ccf6325281399fd5b8ef5d9e89ef9ba1341f550d2f80a984dfe724e0fae",
+      "bytes": 1509923
+    },
+    "s2031/B3/train_09/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B3/dev_09/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B3/LAST_epoch_09.pt": {
+      "sha256": "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+      "bytes": 52824299
+    },
+    "s2031/B4/updates.sqlite": {
+      "sha256": "d4b15a707f05533c69b17bad4e4001af70d1f4feb41d8989df064e617342bfd9",
+      "bytes": 176128
+    },
+    "s2031/B4/completion.json": {
+      "sha256": "418eed4dd2aef94d6642b496d15de6d624e9d09797eb36a3d0ff07523569b3d5",
+      "bytes": 4595
+    },
+    "s2031/B4/paired_orders.json": {
+      "sha256": "1d10a8057e6f69f721f29ce32cab8801cbc23f61ef2fd07324be1deaa18ae26c",
+      "bytes": 311790
+    },
+    "s2031/B4/paired_initial_identity.json": {
+      "sha256": "d50ba4e4c248435d36927f5747cec41e85b8e0c9dd6bbec9f8913895ac9e9b95",
+      "bytes": 403
+    },
+    "s2031/B4/B4_train_01.json": {
+      "sha256": "f060d1faaaaccafe11273df435c32cb03e1172eb9167c1cae7f108305b589890",
+      "bytes": 343
+    },
+    "s2031/B4/B4_development_01.json": {
+      "sha256": "ec62ce015660e21f40bdda0d6d4578a55ea61a1f4000cc54e1275accc37ec33b",
+      "bytes": 1889254
+    },
+    "s2031/B4/B4_LAST_epoch_01.receipt.json": {
+      "sha256": "e1b605f549778b0587221e63cfb28bd03a7fe55e47fc108d8e0f8a7769895dd2",
+      "bytes": 401
+    },
+    "s2031/B4/B4_tail_01.json": {
+      "sha256": "c2775a3c2e6c4461a71503fa705686f2d6aa52aa850a14e423b0785a8174a44c",
+      "bytes": 1510481
+    },
+    "s2031/B4/train_01/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_01/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_02.json": {
+      "sha256": "56fbfe03d40342570a142e05ca5163d0dd0518798b23177b633916823c80a4e0",
+      "bytes": 341
+    },
+    "s2031/B4/B4_development_02.json": {
+      "sha256": "fb398ec7dc98ba983ef86407b6d475f5f6afeca5fc4886e5bc57cc3190aed061",
+      "bytes": 1875150
+    },
+    "s2031/B4/B4_LAST_epoch_02.receipt.json": {
+      "sha256": "78e7a76f648b1e87fff72b6e8bc3340ad546ba99463ed4d49508ac2478de4fa9",
+      "bytes": 401
+    },
+    "s2031/B4/B4_tail_02.json": {
+      "sha256": "4d214b15ac996447c93174360af9a18bb995692758f1e22a7d3b96466187e9f3",
+      "bytes": 1514178
+    },
+    "s2031/B4/train_02/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_02/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_03.json": {
+      "sha256": "762fe134d1ff11c222d44ba19e687cb2ba8c8360809a5911bfb995c9cd73a981",
+      "bytes": 343
+    },
+    "s2031/B4/B4_development_03.json": {
+      "sha256": "10c5222925ad15a99dbda4d6fab0732ade5346de90d8f1339ca3059f4a41b41f",
+      "bytes": 1873889
+    },
+    "s2031/B4/B4_LAST_epoch_03.receipt.json": {
+      "sha256": "bda9101aefea7a568954a4813e40204b52ffe977c704c874762ac6eb7b1c966a",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_03.json": {
+      "sha256": "3ceaec6cca07fc9ba6c30a61df8b08257d558126ab3ab8986acf3fd78ea782a6",
+      "bytes": 1512985
+    },
+    "s2031/B4/train_03/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_03/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_04.json": {
+      "sha256": "ecf8712dcddf8addb37a281029720e2a87a543ecaa50adb94353ea051d26b486",
+      "bytes": 343
+    },
+    "s2031/B4/B4_development_04.json": {
+      "sha256": "b54c7d36aebdbbebfb12cef01e0bbbb2823c805e6f83d303a698ec7ed287c188",
+      "bytes": 1876350
+    },
+    "s2031/B4/B4_LAST_epoch_04.receipt.json": {
+      "sha256": "ba1c49d8aa76ab12dedd12412a99970c3ef2ab51b2981e1abd378c70850022d9",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_04.json": {
+      "sha256": "93cd2a6728a44e51bf08be2fa40b14990a432e0fd8f226ce2a9ea5344d123f05",
+      "bytes": 1508836
+    },
+    "s2031/B4/train_04/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_04/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_05.json": {
+      "sha256": "35556c878a6d648584248d8860a5e441ba9c3369f34d2dcae5bbc8cca842a36e",
+      "bytes": 341
+    },
+    "s2031/B4/B4_development_05.json": {
+      "sha256": "3a7fc28c0540dd4ed9a865a119acebb2fdeec898a079c004422226bed10b9731",
+      "bytes": 1873776
+    },
+    "s2031/B4/B4_LAST_epoch_05.receipt.json": {
+      "sha256": "f11bd2959b014e3d893e6c53e88d76ac89adea76e42a3489575c5a9a527582c6",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_05.json": {
+      "sha256": "eec8fdf79a1b82843dc3b46a0276c282d64ffe33b77b0a138df3f19f7847ea6f",
+      "bytes": 1510990
+    },
+    "s2031/B4/train_05/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_05/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_06.json": {
+      "sha256": "690d8949d60e886c60c7a9cfa6c6e3716238301497c8bc343c0fe11dd82e0591",
+      "bytes": 343
+    },
+    "s2031/B4/B4_development_06.json": {
+      "sha256": "5f4d1031d365e393a707fe81abd7cdef70f66ba09def23935da38b34a3a090b9",
+      "bytes": 1877072
+    },
+    "s2031/B4/B4_LAST_epoch_06.receipt.json": {
+      "sha256": "c28c4c3d8340beb8f1dffdf564403a42813fbca4e3c857bd7d76c96e7517240f",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_06.json": {
+      "sha256": "98998639f3688b947ce0b3375f0b7033951ad2c5ea7911af309082ac590c6321",
+      "bytes": 1509742
+    },
+    "s2031/B4/train_06/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_06/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_07.json": {
+      "sha256": "582dc69bb6ae5c55bf3a3f862008dca67383e404de526806aa595d9604e7842f",
+      "bytes": 342
+    },
+    "s2031/B4/B4_development_07.json": {
+      "sha256": "8003c796b0503a985ae21224387564ca357a9fe88a5960a45885f25e62a8f159",
+      "bytes": 1877481
+    },
+    "s2031/B4/B4_LAST_epoch_07.receipt.json": {
+      "sha256": "2056ac2c6f712ed279ba3c0674980923b0fb2aab73cad0681232eda6de279831",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_07.json": {
+      "sha256": "17cac8b1fa2de6fe5608feab34bc82bd241e8e2d53cea59ef922c56ce951fe76",
+      "bytes": 1511251
+    },
+    "s2031/B4/train_07/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_07/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_08.json": {
+      "sha256": "c6722fd09cb517d69f38f13262a5d89def4e12abc47fb4cf2e270d06f52e1be4",
+      "bytes": 340
+    },
+    "s2031/B4/B4_development_08.json": {
+      "sha256": "b3d5d41d9046b7502b5c1e9794fccd1a6bc411659ab4cee364b38ffb0d5ae507",
+      "bytes": 1882239
+    },
+    "s2031/B4/B4_LAST_epoch_08.receipt.json": {
+      "sha256": "ee55a258296c83672df0184d916ac087781596717e0451ae827c97174a207b52",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_08.json": {
+      "sha256": "eed2ccb667d0289d08597ad512d2604da9e20f85b03fdded31721b5169bfa83d",
+      "bytes": 1510202
+    },
+    "s2031/B4/train_08/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_08/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/B4_train_09.json": {
+      "sha256": "c26ccfc1f712825f5287b5704a1e2551b0493f5591a6624138b191d412eeb489",
+      "bytes": 342
+    },
+    "s2031/B4/B4_development_09.json": {
+      "sha256": "27f4827b1537c86b647dbdce68e030de60475c43ba5981fc502fe8c80ddf3a5f",
+      "bytes": 1884153
+    },
+    "s2031/B4/B4_LAST_epoch_09.receipt.json": {
+      "sha256": "c78bfa5095a332aa6275113c28752bd05819edcf6ea8179df2e0dc46efff711e",
+      "bytes": 402
+    },
+    "s2031/B4/B4_tail_09.json": {
+      "sha256": "914610f272f90077059dea6b511a00fbb07b041905d0e5ba4b4017b57f6a88cf",
+      "bytes": 1510083
+    },
+    "s2031/B4/train_09/pass_receipt.json": {
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782",
+      "bytes": 369
+    },
+    "s2031/B4/dev_09/pass_receipt.json": {
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731",
+      "bytes": 369
+    },
+    "s2031/B4/LAST_epoch_09.pt": {
+      "sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "bytes": 52914939
+    },
+    "RECOVERY/single_source_verification_receipt.json": {
+      "sha256": "1d67932cabc709ee088f76d0d49285f3a7ba77a19e0722b31c6689d64429c868",
+      "bytes": 131
+    },
+    "s2030/B3/B3_tail_09.json": {
+      "sha256": "b72fcf5ed5d9cfe8e133fd8ef124cfc6e45ca32fe5867a4d4c906010e257a03b",
+      "bytes": 1510404
+    }
+  },
+  "closeout_script_sha256": "c7bcf776bcdd6cc708773edbfa0177e9224a3b07aea193d7520321d5e6ac79c4"
+}

@@ -1,0 +1,97 @@
+{
+  "status": "PASS_MINIMAL_PREPARATION_NOT_A_TRAINING_GRANT",
+  "as_of": "2026-10-26T08:06:53.481005+08:00",
+  "baseline_commit": "3acf7b00b68b9f66a6f612173c174fe56ff71d5c",
+  "delivered_code_commit": "SEE_CONTAINING_GIT_COMMIT_NO_SELF_REFERENTIAL_SHA",
+  "proposal_sha256": "8f2c47ea97042df5fd2a89e6d28195db71efe91a080cdcfdc5067a872a375edc",
+  "proposal_file_sha256": "13f647bd03de3fa143dcdef2e1f5a1a848238780e895a5f1af252299ce77c611",
+  "tests": {
+    "unique_passed": 12,
+    "names": [
+      "test_exact_package_authorization_and_storage_binding",
+      "test_no_approval_stops_before_resources_outputs_or_optimizer",
+      "test_seeded_common_initialization_and_orders_change_across_seed",
+      "test_single_arm_uses_existing_engine_and_deadline_before_update",
+      "test_single_arm_full_engine_loop_with_tiny_cpu_fixture",
+      "test_b4_pair_mismatch_stops_before_optimizer",
+      "test_additive_tail_matches_existing_evaluator_on_same_batch",
+      "test_three_seed_summary_uses_sample_sd_and_all_seeds",
+      "test_endpoint_requires_all_nine_seals_and_exact_budget",
+      "test_serial_order_no_duplicate_run",
+      "test_failure_stops_dependent_tasks_without_replay",
+      "test_hard_time_cap_kills_worker_without_replay"
+    ],
+    "source_sha256": "6975efa74049a35920844e6ff7c3bb63891c1ca095d84b6e8ee565143c9b5c81",
+    "runtime": "Python3.12.14/PyTorch2.11.0+cu128",
+    "initial_attempt": {
+      "status": "FAILED_FIXTURE_FILESYSTEM_PERMISSION",
+      "errors": 16,
+      "tests": 10,
+      "detail": "Windows sandbox denied access beneath tempfile.TemporaryDirectory; no formal training/data activity"
+    },
+    "corrected_attempt": {
+      "status": "PASS",
+      "tests": 10,
+      "seconds": 2.174,
+      "change": "Use fresh project-local mkdir fixtures; preserve ignored synthetic artifacts"
+    },
+    "incremental_full_loop": {
+      "status": "PASS",
+      "tests": 1,
+      "seconds": 1.257
+    },
+    "final_affected_checks": {
+      "status": "PASS",
+      "tests": 3,
+      "seconds": 1.275,
+      "note": "New pair-reference rejection plus affected full-loop and summary checks; not a rerun of historical suites"
+    }
+  },
+  "formal_optimizer_updates": 0,
+  "synthetic_cpu_optimizer_updates_per_full_loop_test": 1,
+  "synthetic_full_loop_test_invocations": 2,
+  "raw_weather_payload_opens": 0,
+  "historical_checkpoint_loads": 0,
+  "final_test_2025_payload_opens": 0,
+  "source_metadata": {
+    "unique_files": 15867,
+    "missing_or_size_changed": 0,
+    "check": "EXISTENCE_AND_SIZE_ONLY_NOT_PAYLOAD_HASH_REVALIDATION"
+  },
+  "resources": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 19226005504,
+    "workspace_free_bytes": 79355944960,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 25090048000,
+    "output_volume_free_bytes": 107452657664,
+    "output_root": "PRIVATE_RESEARCHER_SELECTED_NEW_DIRECTORY"
+  },
+  "researcher_storage_permission": "USER_CONFIRMED_NEW_DIRECTORY_ON_ALTERNATE_VOLUME_20261026",
+  "private_output_paths": "OMITTED",
+  "formal_output_directory_created": false,
+  "formal_training_authorized": false,
+  "problems_requiring_fix": [],
+  "inherited_checks": "129 sources / 126 epoch summaries / unchanged engineering tests reused without rerun",
+  "storage_observations": {
+    "B2_retained_run_total_bytes": 581367390,
+    "B3_existing_E9_LAST_bytes": 52823019,
+    "B4_existing_E9_LAST_bytes": 52913659,
+    "note": "File metadata only; no historical weight deserialize; not a whole-pair disk-size claim"
+  },
+  "scope_notes": [
+    "Proposal source metadata/resource admission snapshot retained after only executable-code SHA rebinding; no second source scan",
+    "B4 pre-update common initialization and order check reuses B3 receipts",
+    "Read scopes cover2023/2024 only; formal loader validates payload SHA at actual read",
+    "No automatic replay; partial task ledgers preserved, not reported as zero",
+    "No new scientific results; all four jobs NOT_STARTED"
+  ]
+}
