@@ -155,9 +155,9 @@ class ResumeState:
 
 class RecoveryLedger:
     expected_returned=7200
-    def __init__(self,path,identity,*,offsets=None,segment_cap=7200,prior_updates=1920,cumulative_cap=UPDATE_CAP):
+    def __init__(self,path,identity,*,offsets=None,segment_cap=7200,prior_updates=1920,cumulative_cap=UPDATE_CAP,allowed_models=('B3','B4')):
         from .engine import UpdateLedger
-        self.base=UpdateLedger(path,identity);self.db=self.base.db
+        self.base=UpdateLedger(path,identity,allowed_models=allowed_models);self.db=self.base.db
         self.offsets={'B3':1440,'B4':0} if offsets is None else dict(offsets)
         self.expected_returned=segment_cap;self.prior_updates=prior_updates;self.cumulative_cap=cumulative_cap
     def reserve(self,model,u):

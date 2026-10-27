@@ -125,7 +125,7 @@ class PairedExecutor:
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
-        static=self.kinds in (('B5',),('B6',),('B7',),('B8',)) and self.model_factory is not None and self.recovery is None
+        static=self.kinds in (('B5',),('B6',),('B7',),('B8',)) and self.model_factory is not None
         if (self.kinds not in (('B3','B4'),('B3',),('B4',)) and not static) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
         self.deadline()

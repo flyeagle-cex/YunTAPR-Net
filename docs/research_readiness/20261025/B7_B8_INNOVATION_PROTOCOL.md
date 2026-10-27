@@ -1,5 +1,41 @@
 # B7 DOTE / B8 DTFM 首轮科学协议与审批入口
 
+## 2026-10-28 B8最小恢复申请：READY，未获批准、未启动
+
+原WinError121源现在可解析、stat与只读4KiB；大小3,543,995字节与冻结清单一致，头为HDF5，源卷报告本地exFAT。只有单文件五项有界操作、实际4,096字节/1次；不扫描磁盘、不全文件哈希、不重新解码。原故障可能涉及存储等因素，但原因仍NOT_VERIFIED，不能定性为网络或模型问题。原始诊断错误汇总BLOCKED来自大小写敏感的basename判断，五项操作均PASS且Windows normcase的same_path=true；已用元数据解释修正，未重新读取源。[诊断原件](evidence/b8_source_diagnostic_20261028.json)完整保留。
+
+恢复复用原Stage4训练/损失/评价及restore_last，只增加B8单臂恢复支持与账本允许列表参数。恢复真实E6（SHA `d4b20c3e486cdf89c763c642d36ef0527b36342f19a30883aefd1c9b1c774f24`，53,903,421字节）时严格恢复模型、AdamW一/二阶矩及step、Python/NumPy/torch CPU/所有CUDA RNG；原24,000步学习率轨迹下一次为2881，九轮原排列逐轮相同。BF16不使用GradScaler，无额外缩放状态。E1–E6仅继承；B7不重训，旧E7失败段与62次未保存更新账本保留。
+
+|待批准项目|精确额度|
+|---|---|
+|范围|仅B8 seed2029，E6/2880 → E7–E9，固定E9 LAST|
+|新执行更新|1,440，其中2881–2942的62次为必要重放|
+|训练气象源|159,190,547,004字节 / 47,604次|
+|新增静态包|312,828字节 / 1次，不重新生产DEM或DOTE缓存|
+|新增源总额|159,190,859,832字节 / 47,605次|
+|本轮诊断（已用）|4,096字节 / 1次，今后额外诊断载荷0|
+|恢复时限|8,316秒（2小时18分36秒）；与原B8已耗向上取整13,284秒合计仍≤6小时，等批准时间不计|
+|空间/重试|启动至少24GiB；额外重试0，无自动重启|
+|E6恢复源I/O|重哈希1次＋反序列化1次；后续新输出权重例行封口SHA不属于原始气象源额度|
+|累计实际尝试上限|B8=4,382；B7/B8=8,702，重放不是独立seed|
+|累计源（含诊断）|958,621,476,211字节 / 286,736次|
+
+入场已通过，F盘当前约93.20GiB可用、主存约16.40GiB、显存约6.78GiB；启动时重核即时资源。新独立目录尚未建立，历史文件不覆盖。按既有B8实耗估计1.5–2.1小时，硬上限不扩大；所有路径诊断只代表检查时点，不能保证未来无I/O故障。
+
+10项新增针对性检查及1项受影响旧账本检查最终通过；只局部重测改动范围，没有重复旧模型、129来源、126摘要或GPU压力测试。真实E6反序列化尚未发生，在批准后严格绑定SHA加载一次；当前已验证的是CPU合成恢复、所有RNG调用、AdamW/LR连续性、单任务一次性调度/失败即停及E7–E9白名单。[检查收据](evidence/b8_recovery_checks_20261028.json)。
+
+冻结提案规范化SHA `60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69`，JSON字节SHA `d45e725eb611e5ba168be66b854c282c0618c938ffe46c0f1ee33c7fc96ce16c`；实际执行commit由本次Git提交及研究者新批准共同绑定。状态READY_WAITING_EXPLICIT_B8_RECOVERY_AND_62_REPLAY_APPROVAL；本指令未授权训练，尚未生成任何批准文件或恢复更新。[唯一恢复提案](evidence/b8_recovery_proposal_20261028.json)。原科学方案、E0/f006、959/963、评价掩膜与精确AUROC/AP均不变，2025冻结。
+
+获批后在干净冻结副本执行一次：
+
+```powershell
+python -B tools/research_readiness/start_b8_recovery.py execute --proposal docs/research_readiness/20261025/evidence/b8_recovery_proposal_20261028.json --private-preparation docs/research_readiness/.local/b8_recovery_preparation_20261028.json --researcher-approval docs/research_readiness/.local/b8_recovery_approval_20261028.json
+```
+
+批准文件必须匹配研究者确认的commit、提案SHA、E6 SHA、62次重放、全部预算和新目录；没有该明确批准时命令拒绝执行。完成后复用新增三轮Dev统计，与既有B7固定E9比较全部主指标、UTC及强雨层；不追加推理、选BEST或按指标修改协议。以下停止/启动记录为历史时点，继续保留。
+
+---
+
 最新终态核查（2026-10-28T07:13:06.463449+08:00）：**B7 COMPLETE_TRAIN_AND_DEV_EVALUATION；B8 FAILED_INCOMPLETE_NO_FIXED_E9；整包未完成。** 停止时点为2026-10-28T03:32:59.573567+08:00。B8第七轮Train加载卫星输入时在Path.resolve(strict=True)处抛OSError WinError121（信号灯超时）；底层存储/连接原因尚未验证，本次不重新探测或读取原始源，不修改训练代码或重试。
 
 B7完整九轮、4,320更新及E9实际SHA已核对：`019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35`。B8共2,942次RETURNED、零不确定优化器INTENT；仅E1–E6 Train/Dev完整，最新保存E6/2,880，SHA `d4b20c3e486cdf89c763c642d36ef0527b36342f19a30883aefd1c9b1c774f24`；62次已返回更新未保存，E7–E9 Dev和E9缺失。失败不能归因于DTFM性能，E6不得替代E9或作BEST，B7/B8融合对照仍NOT_VERIFIED。

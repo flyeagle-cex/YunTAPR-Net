@@ -1,0 +1,109 @@
+{
+  "status": "PASS_RECOVERY_PREPARATION_ONLY_NOT_AUTHORIZED",
+  "checked_at": "2026-10-27T23:46:30.516389+00:00",
+  "execution_base_commit": "64586162a02ca18664cd803097b96ffdbd89b45a",
+  "proposal_sha256": "60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69",
+  "proposal_file_sha256": "d45e725eb611e5ba168be66b854c282c0618c938ffe46c0f1ee33c7fc96ce16c",
+  "source_access_interpretation": {
+    "current_path_and_4KiB_access": "PASS",
+    "case_only_resolved_spelling_difference": true,
+    "correction": "same_path=true is Windows normcase; raw summary BLOCKED was a case-sensitive diagnostic predicate error",
+    "repeated_source_reads": 0,
+    "historical_failure_cause": "NOT_VERIFIED"
+  },
+  "checks": [
+    {
+      "name": "test_exact_62_replay_and_source_time_caps",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_case_only_diagnostic_interpretation_never_reopens_source",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_missing_or_wrong_recovery_approval_stops_before_resources",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_B8_offset_ledger_has_exact_replay_and_stops_on_uncertainty_cap_overwrite",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_B8_model_AdamW_all_RNG_and_LR_continue_without_step",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_orders_initial_identity_and_single_B8_engine_hook",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_reader_refuses_B7_and_E1_E6_before_source_IO",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_controller_one_worker_hidden_console_failure_stops_no_retry",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_close_inherits_six_seals_without_old_weight_reads",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    },
+    {
+      "name": "test_controller_success_seals_one_B8_without_B7_worker",
+      "status": "PASS",
+      "scope": "CPU_SYNTHETIC_NO_REAL_OPTIMIZER_STEP"
+    }
+  ],
+  "affected_existing_regression": {
+    "name": "test_multiseed_recovery.RecoveryPreparationTests.test_B4_offset_ledger_no_overwrite_uncertainty_or_extra_update",
+    "status": "PASS"
+  },
+  "test_runs": {
+    "new_unique_cases": 10,
+    "affected_old_cases": 1,
+    "initial_new_cases_passed": 9,
+    "changed_closure_retested": true,
+    "added_success_controller_fixture_first_result": "FAILED_TEST_FIXTURE_MISSING_PARENT",
+    "fixture_fixed_and_targeted_retest": "PASS",
+    "unchanged_checks_inherited_within_this_preparation": true
+  },
+  "code_sha256": {
+    "tests\\research_readiness\\test_dynamic_recovery.py": "1dab69074c986b25a4be64ddf73d7e6e3537efc40809c5030511ccb29c250628",
+    "tools/research_readiness/probe_b8_source.py": "2bec44a9875cf366076f90d06399cd4ed44ff153298dd6cca8394b3a4da26507",
+    "tools/research_readiness/start_b8_recovery.py": "a98628266c9214dfbcdaa57a0bfe1f1fc56905262f9c9cdd4c6c04edc2a4cef6",
+    "src/yuntapr/experimental/research_readiness/dynamic_recovery.py": "f7a7add1e7b8b44cb2054f0f7d5353068814c68aa184cb0078c5fc923f31b7d7",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "2b823ed130c6d5625aa308cf2283e83576a1678c94d638e4ec2e577d61cbe5b7",
+    "src/yuntapr/experimental/core_innovation/stage4/recovery.py": "6fa093143821239c936eb89eb8dbbb9ae7d8c78bacb39dafb1444a93f2540978"
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "torch": "2.11.0+cu128",
+    "restoration_test_device": "CPU; CUDA RNG setter mocked and argument checked"
+  },
+  "verification_limits": {
+    "real_checkpoint_payload_restore": "NOT_STARTED_APPROVAL_BOUNDARY; E6 SHA inherited, one rehash+load during authorized execution",
+    "checkpoint_budget_fields_scope": "E6 restore source only; new E7-E9 output-weight seal hashes are output verification, not weather reads",
+    "GPU_forward_backward": "INHERIT_UNCHANGED_B8; no repeat pressure test",
+    "historical_failure_underlying_cause": "NOT_VERIFIED"
+  },
+  "preparation_activity": {
+    "actual_optimizer_updates": 0,
+    "real_checkpoint_deserializations": 0,
+    "model_inference": 0,
+    "raw_weather_bytes": 4096,
+    "raw_weather_files": 1,
+    "source_reprobes_after_case_interpretation": 0,
+    "normalization_fits": 0,
+    "old_129_or_126_audits": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  }
+}

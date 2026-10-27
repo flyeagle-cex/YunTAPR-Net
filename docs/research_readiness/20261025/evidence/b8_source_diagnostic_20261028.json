@@ -1,0 +1,74 @@
+{
+  "status": "BLOCKED_SOURCE_DIAGNOSTIC",
+  "checked_at": "2026-10-27T23:36:26.270432+00:00",
+  "source_basename": "NC_H09_20231025_2300_R21_FLDK.06001_06001.nc",
+  "source_year": 2023,
+  "inherited_full_source_sha256": "812dc3ab82d892b4186b3b139c6846e77d543621782295b7273f6aabb95b935d",
+  "expected_bytes": 3543995,
+  "checks": [
+    {
+      "operation": "volume",
+      "elapsed_seconds": 0.1778209999902174,
+      "status": "PASS",
+      "result": {
+        "drive_type": 3,
+        "filesystem": "exFAT",
+        "volume_query_ok": true,
+        "device_category": "LOCAL_DISK_DEVICE"
+      }
+    },
+    {
+      "operation": "stat",
+      "elapsed_seconds": 0.181237599987071,
+      "status": "PASS",
+      "result": {
+        "bytes": 3543995,
+        "mtime_ns": 1788808002000000000,
+        "is_regular_file": true
+      }
+    },
+    {
+      "operation": "resolve",
+      "elapsed_seconds": 0.1628428999974858,
+      "status": "PASS",
+      "result": {
+        "same_basename": false,
+        "same_path": true
+      }
+    },
+    {
+      "operation": "access",
+      "elapsed_seconds": 0.1592147999908775,
+      "status": "PASS",
+      "result": {
+        "os_access_read": true,
+        "advisory_only": true
+      }
+    },
+    {
+      "operation": "prefix",
+      "elapsed_seconds": 0.15719169998192228,
+      "status": "PASS",
+      "result": {
+        "delivered_bytes": 4096,
+        "prefix_sha256": "fa76c45c68551c68bdd46da3140fa52898e2461fb71a366d7d906741eb73a0a1",
+        "stable_metadata": true,
+        "signature": "HDF5",
+        "read_permission_proven_for_prefix": true
+      }
+    }
+  ],
+  "limits": {
+    "max_operations": 5,
+    "max_seconds_per_operation": 15,
+    "max_payload_files": 1,
+    "max_payload_bytes": 4096,
+    "retries": 0
+  },
+  "actual_payload_files": 1,
+  "actual_payload_bytes": 4096,
+  "original_failure_cause": "NOT_VERIFIED_HISTORICAL_TRANSIENT_OR_STORAGE_CAUSE",
+  "full_payload_sha_reverified": false,
+  "scope": "ONE_FAILED_SOURCE_ONLY; no scan, reconnect, repair or payload decoding",
+  "final_2025": "FROZEN_NO_ACCESS"
+}

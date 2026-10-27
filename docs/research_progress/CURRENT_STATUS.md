@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+B8恢复准备（2026-10-28）：出错单源当前元数据/4KiB读取通过，历史WinError121原因仍未验证；E6→E9入口和新限额提案就绪，但尚无恢复/62重放批准，B8仍FAILED_INCOMPLETE_NO_FIXED_E9。B7保持完成；2025冻结。详见[恢复申请](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。
+
 2026-10-28终态：B7 seed2029九轮Train/2024 Dev及固定E9完成；B8第七轮源文件路径解析WinError121停止，六轮封口、2,942次RETURNED、E6/2,880已保存，62次更新未保存，无固定E9。整包未完成，不自动恢复。[新终态核查](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。B0–B6继承、2025冻结。下文IN_PROGRESS是历史快照。
 
 最新B7/B8获批执行：b1f072e/64e8提案已被研究者明确批准并单次启动，B7真实训练进行中、B8同控制器串行等待；整包IN_PROGRESS，非COMPLETE。批准已消费，零重放/额外重试，2025冻结。[新启动收据](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。以下NOT_STARTED和待批准记录保留历史时点。

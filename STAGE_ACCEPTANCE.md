@@ -32,16 +32,24 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 
 五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含31条历史/当前记录；不是31个独立seed或31个已完成模型。B7九轮完整，B8仅六轮封口且失败，无固定E9；部分轨迹不冒充完成。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
-本轮只核对新B7九轮、新B8六轮及第七轮部分读取、两个新权重SHA和实际预算；不运行训练、推理或原始数据读取，旧B0–B6检查直接继承。
+本轮仅新增一次4KiB源诊断、B8恢复入口检查、资源/限额绑定；停止收口和所有旧模型证据继承，不重跑训练/推理或旧审查。
 
-本轮出版基线：`6a89e43c51f51c360fb4e89a1fd896fa84796433`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
+本轮出版基线：`64586162a02ca18664cd803097b96ffdbd89b45a`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
 
 ## B7完成、B8停止：整包未完成
 
-停止于`2026-10-28T03:32:59.573567+08:00`，本次核查`2026-10-28T07:13:06.463449+08:00`。B8第七轮Train加载卫星数据时，`Path.resolve(strict=True)`抛出OSError WinError121（信号灯超时）；底层存储/连接原因NOT_VERIFIED，未重新探测或读取源。不是模型指标触发的停止。
+停止于`2026-10-28T03:32:59.573567+08:00`，停止收口核查`2026-10-28T07:13:06.463449+08:00`。B8第七轮Train加载卫星数据时，`Path.resolve(strict=True)`抛出OSError WinError121（信号灯超时）；底层存储/连接原因NOT_VERIFIED，未重新探测或读取源。不是模型指标触发的停止。
 
 B7九轮完整，E9 SHA `019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35`。B8六轮完整、2,942更新已RETURNED且无不确定优化器INTENT；最后E6/2,880已保存，62次更新未进检查点，E7–E9 Dev和E9权重不存在。**不得以E6替代E9，不得自动恢复。** 原批准零重放/额外重试，剩余上限不是恢复授权。
 
-实际消耗7,262更新、799,430,612,283源字节/239,130次，均未超上限；失败pass和原件保留。B7可与B4/B5/B6作同人口固定E9比较，B8的固定终点比较及B7/B8整体验收仍NOT_VERIFIED。[完整新核查收据](docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)；[全部正负结果](SCIENTIFIC_ANALYSIS.md)。2025冻结，无新训练、推理或原始读取。
+实际消耗7,262更新、799,430,612,283源字节/239,130次，均未超上限；失败pass和原件保留。B7可与B4/B5/B6作同人口固定E9比较，B8的固定终点比较及B7/B8整体验收仍NOT_VERIFIED。[完整新核查收据](docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)；[全部正负结果](SCIENTIFIC_ANALYSIS.md)。该次停止收口无新训练、推理或原始读取；后续恢复源诊断单列，2025冻结。
+
+## B8限额恢复准备：待新批准，未启动
+
+仅对原WinError121源做五项有界操作，合计读取4,096字节/1文件；路径、大小及4KiB读取当前通过，卷报告本地exFAT，原故障原因仍NOT_VERIFIED。[原始诊断](docs/research_readiness/20261025/evidence/b8_source_diagnostic_20261028.json)保留；其BLOCKED汇总来自大小写敏感的文件名判断，same_path=true及五项PASS支持Windows大小写等价解释，[提案](docs/research_readiness/20261025/evidence/b8_recovery_proposal_20261028.json)明确修正且未重读。
+
+冻结提案SHA `60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69`：仅B8/2029从E6/2880继续E7–E9，新执行1,440更新含62次重放；训练源159,190,547,004字节/47,604次，另静态包312,828字节/1次，新增合计159,190,859,832字节/47,605次；4KiB诊断已单列，后续额外诊断载荷0。最长8,316秒（2小时18分36秒），至少24GiB空闲，真实E6重哈希1次/反序列化1次，额外重试0。B8累计4,382尝试、B7/B8累计8,702；含已做诊断累计源958,621,476,211字节/286,736次。
+
+恢复沿用原模型、E0/f006、959/963、全部RNG/AdamW/原24,000步轨迹及固定E9；代码与[针对性检查](docs/research_readiness/20261025/evidence/b8_recovery_checks_20261028.json)已就绪，B7及E1–E6不重训。原停止状态及62次未保存账本保留；这不是新独立seed。研究者尚未批准本恢复包，不能填写批准或启动；2025、main不变。
