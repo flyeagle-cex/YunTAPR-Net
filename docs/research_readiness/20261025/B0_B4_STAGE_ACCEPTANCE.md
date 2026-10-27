@@ -39,7 +39,7 @@ B2后来取得独立明确授权并完成4,320更新和477,571,641,012字节源�
 |E0 vs E1 vs E2|人口可相同，损失目标不同|须明确损失臂；训练loss不能直接同口径比较|
 |Phase-A BEST/旧FinalFit vs 固定九轮V2|版本、训练人口、轮数或选择规则不同|单独列示历史，不能算额外seed或当成当前固定九轮终点|
 
-全矩阵见[B0_B4_EXPERIMENT_MATRIX.csv](B0_B4_EXPERIMENT_MATRIX.csv)：保留22条原历史记录，增加1条已完成B2及4条已完成多seed行，共27行；历史失败仍单列。旧B0 FinalFit十一轮训练完成与旧B0-Matched FinalFit第五轮溢出失败均按原状态保留。
+全矩阵见[B0_B4_EXPERIMENT_MATRIX.csv](B0_B4_EXPERIMENT_MATRIX.csv)：保留22条原历史记录、1条已完成B2及4条已完成多seed行；这27条B0–B4记录保持原状。另附B5/B6各1条IN_PROGRESS状态，共29行；历史失败仍单列。旧B0 FinalFit十一轮训练完成与旧B0-Matched FinalFit第五轮溢出失败均按原状态保留。
 
 逐行另列源码快照、执行commit绑定状态、数据版本、评价脚本与源SHA清单。B0/B1各结果原JSON本身未直接给出执行commit，本轮标记NOT_VERIFIED_EXECUTION_COMMIT_BINDING；可核对的0ccb3e是源码/证据快照，不能冒充历史执行提交。B3保留轨迹E1–3来自5b5298首次段、E4–9来自7fa609恢复段；B4全九轮来自7fa609恢复段。当前核心评价脚本为 `src/yuntapr/experimental/core_innovation/stage4/evaluation.py`，其中精确数值口径继承 `src/yuntapr/experimental/phase_b_v2_formal_integration_candidate/metrics.py`。未核实的历史脚本绑定逐行保留NOT_VERIFIED。
 
