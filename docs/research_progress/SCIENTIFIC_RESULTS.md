@@ -1,5 +1,7 @@
 # 已有真实实验结果与科学边界
 
+B7/B8状态更新：已获整包新批准并开始B7，B8依序等待。科学参数按b1f072e/64e8冻结，仍无固定E9科研结果；新增物理代理量、初始预测等价及部分更新不构成创新有效性结论。[启动收据](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。B0–B6既有全部正负结果继续保留。
+
 B7/B8目前仅完成新增工程与少量真实缓存检查，没有正式训练结果。M推荐PWAT加权windward_W，单SP04尺度的B7拼接与B8 DTFM共享输入、活跃参数均4,411,058；科学选择与预算待新批准。不能将初始预测等价、有限梯度或物理启发量当成创新有效性证据，B0–B6混合/负面结果全部继承。[新协议与边界](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。
 
 最新B5/B6首轮结果：相同959/963、seed2029/E0/f006、固定E9，训练及Dev完成；收益混合，不支持地形全面有效。B6−B4的Brier −0.0015459815848104935、AUROC +0.0008426207465719315、AP −0.0007624694473549187、条件Pinball +0.000005766171316340385、q32覆盖 −0.004754548575351847。B5总体仅AUROC略改善，但20–50 mm/h条件Pinball略改善；B6同强雨层退化。全部原值、B5−B4/B6−B4/B6−B5与分层反例见[统一科学分析](../../SCIENTIFIC_ANALYSIS.md)、[指标CSV](../../METRICS.csv)及[完整新收据](../research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。仅单seed同年Dev，未声明显著性或最终泛化。以下为历史结果。

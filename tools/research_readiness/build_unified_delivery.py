@@ -25,6 +25,7 @@ B34 = READY + 'evidence/b3_b4_three_seed_completion.json'
 FULL = READY + 'evidence/b3_b4_full_endpoint_metrics_20261027.json'
 STATIC = READY + 'evidence/b5_b6_completion_and_paired_evidence.json'
 INNOVATION = READY + 'evidence/b7_b8_training_proposal.json'
+INNOVATION_LAUNCH = READY + 'evidence/b7_b8_approved_launch.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -108,8 +109,14 @@ def main():
         matrix = list(reader)
     assert len(matrix) == 29
     innovation = read(INNOVATION) if (ROOT / INNOVATION).is_file() else None
+    innovation_launch = read(INNOVATION_LAUNCH) if (ROOT / INNOVATION_LAUNCH).is_file() else None
     if innovation:
         assert innovation['authorized'] is False and innovation['formal_training_started'] is False
+        if innovation_launch:
+            assert innovation_launch['status']=='APPROVED_PACKAGE_IN_PROGRESS'
+            assert innovation_launch['proposal_sha256']==innovation['proposal_sha256']
+            assert innovation_launch['authorization']['approved_by_researcher'] is True
+            assert innovation_launch['budget']==innovation['budget']
         for model in ('B7', 'B8'):
             row = dict(next(r for r in matrix if r['model_id'] == 'B6'))
             row.update(model_id=model, experiment_id=f'{model}__E0__s2029__f006__dynamic',
@@ -173,6 +180,16 @@ def main():
                          verified_at=static['verified_at'], status_as_of=static['verified_at'],
                          authorization_status='CORRECTED_START_APPROVED_CONSUMED_COMPLETE_NO_RETRY',
                          notes='Nine Train/Dev epochs and E9 LAST verified; mixed single-seed terrain results; not final generalization.')
+        if innovation_launch and r['model_id'] in ('B7','B8'):
+            run=next(s for s in innovation_launch['models'] if s['model']==r['model_id'])
+            r.update(status='IN_PROGRESS',phase='DYNAMIC_TERRAIN_FORMAL_IN_PROGRESS',execution_state=run['execution_state'],
+                     epochs=str(run['sealed_train_dev_epochs']),global_steps=str(run['returned_updates']),
+                     verified_at=innovation_launch['as_of'],status_as_of=innovation_launch['as_of'],
+                     metrics_path='NOT_AVAILABLE_FIXED_E9_IN_PROGRESS',checkpoint_reference='NOT_AVAILABLE_FIXED_E9',
+                     evidence_path=INNOVATION_LAUNCH,authorization_status='APPROVED_EXACT_PACKAGE_CONSUMED_NO_REPLAY',
+                     source_snapshot_commit=innovation_launch['training_commit'],
+                     executed_commit=innovation_launch['training_commit'] if run['training_started'] else 'NOT_STARTED_PENDING_SERIAL_QUEUE',
+                     notes='Dated approved launch snapshot; B7 running, B8 pending serial queue; neither fixed E9 or scientific result complete.')
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -331,13 +348,15 @@ def main():
     static_text = ''
     innovation_text = ''
     if innovation:
-        innovation_text = f'''\n## B7/B8核心创新：准备通过，正式训练NOT_STARTED
+        innovation_text = f'''\n## B7/B8核心创新：{'已获批准，正式训练IN_PROGRESS' if innovation_launch else '准备通过，正式训练NOT_STARTED'}
 
 模型代码、DOTE原物理变量接入、单SP04尺度的B7 concat/B8 DTFM匹配活跃参数对照、13项新增及2项受影响旧入口检查、真实Train2/Dev1零更新检查已完成。初始输出与B6逐位相同、梯度有限、公共完整B6初始化保持；这些都是准备证据，不是科研训练结果。
 
-待研究者集中批准：M采用windward_W、既有Train正PWAT均值31.85768219039871 kg/m²、1m/s显式尺度、width16/SP04单尺度、λ=0.1、上述配对关系及额外海拔诊断、两模型新预算。完整候选与反例边界见[核心创新协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)，规范化机器提案SHA `{innovation['proposal_sha256']}`。旧B0–B6结果直接继承，不把其混合结果当工程失败。
+{'研究者已集中明确批准' if innovation_launch else '待研究者集中批准'}：M采用windward_W、既有Train正PWAT均值31.85768219039871 kg/m²、1m/s显式尺度、width16/SP04单尺度、λ=0.1、上述配对关系及额外海拔诊断、两模型新预算。完整协议与反例边界见[核心创新协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)，规范化机器提案SHA `{innovation['proposal_sha256']}`。旧B0–B6结果直接继承，不把其混合结果当工程失败。
 
-尚无B7/B8固定E9、Dev科研指标、权重或创新有效性结论；CSV仅增加缺失状态行，不把少量未训练模型的前向/E0值充当正式结果。2025冻结，新增训练必须取得该新提案及准确代码提交的明确批准。
+{f"已单次启动的冻结执行提交为`{innovation_launch['training_commit']}`；[获批启动收据]({INNOVATION_LAUNCH})时点`{innovation_launch['as_of']}`记录B7 RUNNING、B8 PENDING，批准已消费。原提案authorized=false是准备时点，文件原字节不改写，实际批准见新收据。正式包8,640更新、955,143,907,680字节/285,626次、12小时；零重放/额外重试。" if innovation_launch else ''}
+
+尚无B7/B8固定E9、完整Dev科研终点或创新有效性结论；CSV保留缺失状态，不把部分训练或少量未训练模型的前向/E0值充当完成。2025冻结；{'B8仅由同一控制器在B7完整封口后串行启动，不额外询问或重启失败任务。' if innovation_launch else '新增训练必须取得该新提案及准确代码提交的明确批准。'}
 '''
     if static:
         v, d = static['summary']['values'], static['summary']['differences']
@@ -381,7 +400,7 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列�
 |B2|seed2029/E0/f006，九轮、4,320更新及2024 Dev，固定E9 LAST|仅一seed；B2/B3指标方向混合，未证明时序增量全面改善|当前探索性配对条目完成|
 |B3/B4|2029/2030/2031三个独立seed的九轮Train/Dev及固定E9配对|强雨和q32缺陷、同一开发年，未证明最终泛化或统计显著性|描述性随机性复现完成|
 {static_stage}
-|B7/B8|{'完整新模型、原物理DOTE接入、等活跃参数单尺度对照、必要及真实零更新检查通过' if innovation else '保留既有候选实现与工程证据'}|没有正式科研训练/消融结果；{'科学选择及精确预算待新批准' if innovation else '创新有效性未核实'}|NOT_STARTED（正式训练未启动）|
+|B7/B8|{'已获明确批准并启动B7，B8同控制器串行等待' if innovation_launch else ('完整新模型、原物理DOTE接入、等活跃参数单尺度对照、必要及真实零更新检查通过' if innovation else '保留既有候选实现与工程证据')}|固定E9和完整Dev科研终点未齐备；{'批准已消费、零重放/额外重试' if innovation_launch else ('科学选择及精确预算待新批准' if innovation else '创新有效性未核实')}|{'IN_PROGRESS（B7运行，B8排队）' if innovation_launch else 'NOT_STARTED（正式训练未启动）'}|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -401,7 +420,7 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续准备状态另由下列�
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含{len(matrix)}条历史/当前记录；不是{len(matrix)}个独立seed或{len(matrix)}个已完成模型。{'其中B7/B8是待批准新行，均0更新/0轮，无正式指标。' if innovation else ''}`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含{len(matrix)}条历史/当前记录；不是{len(matrix)}个独立seed或{len(matrix)}个已完成模型。{'B7/B8为获批进行中状态，B8排队不等于已训练，两者都没有固定E9终点。' if innovation_launch else ('其中B7/B8是待批准新行，均0更新/0轮，无正式指标。' if innovation else '')}`epochs`表示该记录已封口轮数，`global_steps`的当前运行值为快照中的已返回更新；最终训练完成必须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
 {'本轮直接继承B0–B6既有完成核查；仅对B7/B8新增路径做13项新检查、2项受影响入口检查及真实小缓存零更新检查。没有重跑历史模型、129来源、126轮或15项旧地形检查。' if innovation else ('本轮核对新增18轮Train/Dev、36气象读取账本、2静态账本、8,640次RETURNED和两份实际E9权重SHA，再导出数值及配对差值；没有重跑训练、模型推理、129来源、126轮或全量归一化。' if static else '本轮仅核对新CSV及差值，不重跑训练或历史审查。')}
 
@@ -466,6 +485,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names += [INNOVATION, READY+'evidence/b7_b8_physical_cache_preparation.json',
                         READY+'evidence/b7_b8_physical_cache_correction.json',READY+'evidence/b7_b8_cached_real_check.json',
                         READY+'evidence/b7_b8_preparation_checks.json']
+    if innovation_launch:
+        input_names.append(INNOVATION_LAUNCH)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -495,7 +516,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 |2030/2031完整终点字段|[本轮4份既有E9数值摘录]({FULL})|groups包含六评价分组的完整summary，sources字节SHA与既有三seed收口一致；仅补足数值出版，不重新推理或读取原始气象|
 |B5/B6，2029|[一次纠正启动]({READY}evidence/b5_b6_corrected_start_launch.json)、[原失败]({READY}evidence/b5_b6_initial_start_stop.json)|[冻结纠正提案]({READY}evidence/b5_b6_corrected_start_proposal.json)、[地形源/网格/静态包SHA]({READY}evidence/b5_b6_terrain_production.json)；{'E9及18轮完整收据见下一行' if static else '当前E9身份NOT_AVAILABLE'}|
 {f'|B5/B6本轮完整收口|[18轮、36读取账本、2静态账本及E9]({STATIC})|sources中B5或B6/train、development、tail、LAST receipt、reads.sqlite、updates.sqlite均有字节SHA；完整endpoint_groups和epochs仅公开脱敏统计，原件及权重LOCAL_ONLY|' if static else ''}
-{f'|B7/B8准备，未训练|[科学协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)、[精确提案]({INNOVATION})、[真实零更新]({READY}evidence/b7_b8_cached_real_check.json)|code/data SHA、3份新GFS原件身份及缓存纠正均已记录；正式批准、E9权重、训练日志与Dev科研结果NOT_STARTED/NOT_AVAILABLE，不复用B6授权|' if innovation else ''}
+{f"|B7/B8{'历史准备时点' if innovation_launch else '准备，未训练'}|[科学协议]({READY}B7_B8_INNOVATION_PROTOCOL.md)、[精确提案]({INNOVATION})、[真实零更新]({READY}evidence/b7_b8_cached_real_check.json)|code/data SHA、3份新GFS原件身份及缓存纠正均已记录；准备时无正式批准或E9结果，实际新批准另列，不复用B6授权|" if innovation else ''}
+{f'|B7/B8最新获批启动|[新批准、真实更新和资源入场]({INNOVATION_LAUNCH})|按新b1f072e/64e8提案单次启动；B7 RUNNING，B8 PENDING；旧准备状态保留当时时点，固定E9结果仍未产生|' if innovation_launch else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 

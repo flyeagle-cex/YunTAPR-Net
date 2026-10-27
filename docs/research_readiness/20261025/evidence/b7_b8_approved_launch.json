@@ -1,0 +1,128 @@
+{
+  "status": "APPROVED_PACKAGE_IN_PROGRESS",
+  "as_of": "2026-10-27T12:11:28.740225+00:00",
+  "training_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+  "proposal_sha256": "64e8d0f3c4b458b56e7cfaa1b81459eb4f61db0d947aceff62aa6e2ec579f5c8",
+  "proposal_file_sha256": "1e3eb1f34df503344984532d0f9cc5416373bf74504ff3368e6ab9c28c56bc0e",
+  "authorization": {
+    "decision_id": "RESEARCHER_B7_B8_B1F072E_20261027",
+    "approved_by_researcher": true,
+    "researcher_answer": "批准整包科学方案与正式训练",
+    "approved_at": "2026-10-27T20:07:38.828262+08:00",
+    "approval_consumed": true,
+    "replay": 0,
+    "additional_retry": 0
+  },
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828,
+      "B8": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840,
+      "B8": 477571953840
+    },
+    "total_source_bytes": 955143907680,
+    "total_source_files": 285626,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43200,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "models": [
+    {
+      "model": "B7",
+      "seed": 2029,
+      "status": "IN_PROGRESS",
+      "execution_state": "RUNNING",
+      "returned_updates": 125,
+      "reserved_updates": 125,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "TRAINING",
+      "training_started": true,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2029,
+      "status": "IN_PROGRESS",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    }
+  ],
+  "actual_io_snapshot": {
+    "files": 2179,
+    "bytes": 7036149872,
+    "reserved_bytes": 7036149872,
+    "sealed": 0
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 16058494976,
+    "workspace_free_bytes": 70330621952,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 16303042560
+  },
+  "frozen_execution_checkout_clean": true,
+  "launch_binding_sha256": "00fc8b1ce85e7dd4f1e93f38eb7ea667798fb5752d5217de95f473519e5775dd",
+  "runtime": {
+    "controller": "Direct Python3.12.14 base interpreter",
+    "dependencies": "Existing torch2.11.0+cu128 runtime",
+    "child_console": "CREATE_NO_WINDOW",
+    "serial_order": [
+      "B7 seed2029",
+      "B8 seed2029"
+    ]
+  },
+  "read_only_progress": {
+    "status": "PASS_NEW_FAMILY_BUDGET_AND_STATE",
+    "url": "http://127.0.0.1:51282/",
+    "read_only": true,
+    "requires_page_refresh": true,
+    "completion_summary": "NOT_AVAILABLE_UNTIL_BOTH_FIXED_E9_COMPLETE"
+  },
+  "historical_data_and_weights": "PRESERVED_UNCHANGED",
+  "final_2025": "FROZEN_NO_ACCESS",
+  "scope": "DATED_LAUNCH_SNAPSHOT_NOT_FINAL_TRAINING_OR_SCIENTIFIC_RESULTS"
+}
