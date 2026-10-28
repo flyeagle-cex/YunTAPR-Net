@@ -1,6 +1,6 @@
 # YunTAPR-Net 当前科研进度
 
-2026-10-28原因追踪：研究者确认“发生过更新”。Codex本地执行器在14:09:46停止，Windows在14:09:51.644销毁旧应用容器，与最后训练journal写入相差约0.137秒；高置信归因为更新期间旧后台进程与宿主Job/包生命周期耦合，历史逐PID终止调用未捕获，不臆测具体点击或更新组件。新独立WMI监督器及实际页面均已验证不在任何Job且无包身份；仅启动方式修复，B7/2030仍3,321 RETURNED/E6 2,880/441未保存，后三项未启动，没有训练恢复或新授权。见[原因与修复收据](../research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)。初核原因未知及原中断证据保留历史时点。
+2026-10-28恢复准备：已收到“继续训练”指令，B7/2030从E6恢复E7–E9，再接B8/2030→B7/2031→B8/2031的最小入口已完成；执行代码e81c6e1，提案SHA3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e。10项新CPU检查通过，旧模型/数据检查继承，0次真实权重加载/训练更新/原始气象读取。新14,400更新含441重放、1,591,906,721,352逻辑源字节/476,044次，76,406秒；加旧耗时仍24小时，96GiB/每任务24GiB，额外重试0。原零replay批准已消费，新准确限额待一次明确批准，当前仍STOPPED。见[唯一提案](../research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)。
 
 B7/B8最新完成（2026-10-28）：B8于北京时间09:36:32完成固定E9及2024 Dev，恢复三轮、1440新更新（含62重放）全部核验；状态COMPLETE_TRAIN_AND_DEV_EVALUATION。B7不重训；首轮单seed核心创新消融COMPLETE_WITH_LIMITATIONS。B8对B7的Brier退化而AUROC/AP/条件Pinball/q32方向改善，强雨及欠覆盖反例保留。详见[完成收据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)和[统一分析](../../SCIENTIFIC_ANALYSIS.md)。2025冻结，旧停止/启动段为历史快照。
 

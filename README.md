@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-28）：新增四模型仍停止，B7/2030为3,321实际更新/E6保存2,880/441未保存，后三项未启动。研究者确认发生更新；日志与Job探针支持宿主生命周期耦合归因。独立监督器和页面均已验证无Job/包身份，训练未恢复。[原因与修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)。既有结果及2025冻结不变。
+> 最新状态（2026-10-28）：B7/2030 E6最小恢复及后三任务入口、10项CPU检查、精确新增预算已冻结，待一次441必要重放限额批准；训练仍停止。新增14,400更新、1,591,906,721,352逻辑源字节/476,044次、新包最长21小时13分26秒，零额外重试。[唯一恢复提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)。现有指标和2025冻结不变。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

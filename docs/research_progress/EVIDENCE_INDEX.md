@@ -1,6 +1,6 @@
 # 证据索引与可核验边界
 
-最新[原因追踪与独立启动修复](../research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)记录研究者更新确认、宿主停止/容器销毁时间线与SHA、Job关闭纯探针、新监督器及实际页面无Job/无包身份的核验。3项新增门控检查与真实已消费批准拒绝通过；原账本/全部指标未改，0新训练，历史逐PID终止调用未捕获。原中断NOT_VERIFIED收据保持原文，后续高置信归因单独索引。
+新增[唯一恢复提案](../research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)与[10项针对性检查](../research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)：拟执行e81c6e1，E6/2880恢复，441未保存重放及后三任务共14,400新更新。仅检查点元数据，实际payload未加载/重哈希；正式恢复前只核对SHA及加载各1次。原E1–E6、3321实际尝试和441未保存账本保留；恢复NOT_STARTED，待准确新授权，未虚填批准。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 

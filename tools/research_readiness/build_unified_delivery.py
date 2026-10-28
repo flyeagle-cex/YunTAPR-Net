@@ -38,6 +38,8 @@ INNOVATION_MULTI_SOURCE = READY + 'evidence/b7_b8_multiseed_source_admission_202
 INNOVATION_MULTI_LAUNCH = READY + 'evidence/b7_b8_multiseed_approved_launch_20261028.json'
 INNOVATION_MULTI_STOP = READY + 'evidence/b7_b8_multiseed_interruption_20261028.json'
 INNOVATION_MULTI_CAUSE = READY + 'evidence/b7_b8_multiseed_exit_cause_20261028.json'
+INNOVATION_MULTI_RECOVERY = READY + 'evidence/b7_b8_multiseed_recovery_proposal_20261028.json'
+INNOVATION_MULTI_RECOVERY_CHECKS = READY + 'evidence/b7_b8_multiseed_recovery_checks_20261028.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -246,6 +248,7 @@ def main():
     innovation_multi_launch=read(INNOVATION_MULTI_LAUNCH) if (ROOT/INNOVATION_MULTI_LAUNCH).exists() else None
     innovation_multi_stop=read(INNOVATION_MULTI_STOP) if (ROOT/INNOVATION_MULTI_STOP).exists() else None
     innovation_multi_cause=read(INNOVATION_MULTI_CAUSE) if (ROOT/INNOVATION_MULTI_CAUSE).exists() else None
+    innovation_multi_recovery=read(INNOVATION_MULTI_RECOVERY) if (ROOT/INNOVATION_MULTI_RECOVERY).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -730,6 +733,16 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         if innovation_multi_cause:
             multi_text=multi_text.replace('退出原因NOT_VERIFIED，训练未恢复。','后续诊断支持更新引发的宿主生命周期耦合归因，训练未恢复；历史逐PID终止调用仍未捕获。')
             multi_text+=f'''\n研究者直接确认“发生过更新”。[原因追踪与独立启动修复]({INNOVATION_MULTI_CAUSE})保留证据分级：14:09:46 Codex记录执行器停止，14:09:51.644 Windows记录容器销毁，与最后journal写入相差约0.137秒；旧进程的宿主生命周期耦合为高置信归因，具体哪个历史终止调用未捕获。纯探针复现Job关闭会结束无窗口子进程；新WMI监督器及实际页面均已验证不属于任何Job/应用包，3项新门控测试通过，旧消耗批准被拒绝，0次训练恢复。旧初核NOT_VERIFIED收据原样保留，不把后续诊断倒写到历史。\n'''
+        if innovation_multi_recovery:
+            rp=innovation_multi_recovery;rb=rp['budget']
+            multi_text+=f'''\n### 最小限额恢复已准备，尚未执行
+
+[唯一恢复提案]({INNOVATION_MULTI_RECOVERY})绑定执行代码`{rp['execution_code_commit']}`、规范化SHA256 `{rp['proposal_sha256']}`；[10项新恢复检查]({INNOVATION_MULTI_RECOVERY_CHECKS})仅用CPU夹具验证状态/LR/RNG、441重放账本、读范围、串行与失败即停，实际权重未加载、原始气象未读取。继续训练指令已收到，但旧零replay批准已消费，准确新增限额仍待一次明确批准。
+
+顺序B7/2030从E6恢复E7–E9→B8/2030→B7/2031→B8/2031。新增14,400更新含441必要重放，1,591,906,721,352逻辑天气/静态源字节、476,044次；累计17,721更新、1,934,666,227,950字节/578,566次。恢复B7≤11,606秒、其余各21,600秒，新包≤76,406秒（21小时13分26秒）；对旧包保守计9,994秒后仍≤24小时、B7≤6小时，不加总时间预算。额外重试/额外重放0，初始96GiB/每任务24GiB，仍用D盘全新独立目录`{rp['output']['directory_alias']}`，入场实测约{rp['resources']['output_free_bytes']/1024**3:.2f}GiB。
+
+旧E6只安排SHA核对1次、反序列化1次；文件53,902,917字节，107,805,834字节是两次逻辑归档体积，和天气/静态源账本分列，不声称torch/zip内部物理读取流量上限。恢复将保留模型、AdamW、学习率进度、全部必要RNG及九轮样本顺序，旧E1–E6和441未保存尝试原样保留。冻结E0/f006/959/963/固定E9及评价口径不变，2025继续冻结；目前没有恢复批准文件、新输出目录或新增科研结果。
+'''
         innovation_text=multi_text+innovation_text;innovation_analysis_text=multi_text+innovation_analysis_text
         innovation_analysis_text+='''\n### B6与独立DOTE验证：仅后续建议，不在本包内
 
@@ -766,6 +779,11 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
             latest_status_text='新增四模型包仍停止；研究者确认发生更新，日志/事件及纯探针支持宿主生命周期耦合归因；独立页面修复已验证，训练未恢复。'
             current_checks_text='仅新增退出时间线、Windows Job纯探针和独立启动防重试门控；实际页面监督器/目标均无Job及包身份，0新训练/推理/原始气象读取，历史PID终止调用未捕获。'
             input_checks_text='新增宿主更新/容器时间线与独立启动修复证据；不重复模型测试或改写原中断账本'
+        if innovation_multi_recovery:
+            latest_status_text='最小恢复入口与精确441重放限额已准备，待一次准确新批准；当前训练仍停止，B7/2030为3,321次RETURNED、E6/2,880保存、441未保存，后三项未启动。'
+            innovation_stage_rows+='\n|B7/2030 E6恢复及后三任务|10项新恢复检查通过，代码/检查点身份/准确新增预算冻结|原零replay批准不覆盖441重放，新限额未批准；没有实际恢复|NOT_STARTED（恢复包）；原科学验证NOT_VERIFIED|'
+            current_checks_text='仅新增B7/2030恢复入口10项CPU夹具检查及实际资源/身份绑定；原独立启动和所有模型/数据检查继承，0真实权重加载/优化器更新/原始气象读取。'
+            input_checks_text='新增恢复代码/CPU检查/准确预算身份；继承旧E1–E6、441未保存及所有模型结果，不重复旧审查'
         publication_base=m['execution_code_commit']
     stage = f'''# 阶段验收统一入口
 
@@ -881,6 +899,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names.append(INNOVATION_MULTI_STOP)
     if innovation_multi_cause:
         input_names.append(INNOVATION_MULTI_CAUSE)
+    if innovation_multi_recovery:
+        input_names += [INNOVATION_MULTI_RECOVERY,INNOVATION_MULTI_RECOVERY_CHECKS]
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -920,6 +940,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|B7/B8追加两seed最新获批启动|[新批准、24次RETURNED快照与资源入场]({INNOVATION_MULTI_LAUNCH})|整包IN_PROGRESS，B7/2030运行、其余三任务排队；零重放/额外重试，无新增E9或三seed结果；只读页面身份已核实|" if innovation_multi_launch else ''}
 {f"|B7/B8追加两seed最新中断|[进程退出、部分账本、E6及页面修复]({INNOVATION_MULTI_STOP})|上一行仅历史启动；当前B7/2030为3,321 RETURNED/E6保存2,880/441未保存，后三项未启动。无终态收据、原因未验证；原账本SHA不变，0新训练或重放|" if innovation_multi_stop else ''}
 {f"|中断原因的后续追踪与工程修复|[宿主日志/事件SHA、研究者更新确认、Job探针与独立监督器]({INNOVATION_MULTI_CAUSE})|高置信归因为更新期间宿主生命周期耦合；实际监督器/页面均已核验无Job/包身份。具体历史PID终止调用未捕获，旧初核收据不改写，未恢复训练|" if innovation_multi_cause else ''}
+{f"|B7/2030恢复及后三任务准备|[唯一限额提案]({INNOVATION_MULTI_RECOVERY})、[10项针对性检查]({INNOVATION_MULTI_RECOVERY_CHECKS})|拟执行e81c6e1，尚未执行；E6记录SHA仍84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11，正式恢复前重哈希/加载各1次；新14,400更新含441重放待新批准，原E1–E6及失败段保留|" if innovation_multi_recovery else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 

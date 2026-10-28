@@ -57,6 +57,7 @@
 |B7/B8追加两seed最新获批启动|[新批准、24次RETURNED快照与资源入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)|整包IN_PROGRESS，B7/2030运行、其余三任务排队；零重放/额外重试，无新增E9或三seed结果；只读页面身份已核实|
 |B7/B8追加两seed最新中断|[进程退出、部分账本、E6及页面修复](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)|上一行仅历史启动；当前B7/2030为3,321 RETURNED/E6保存2,880/441未保存，后三项未启动。无终态收据、原因未验证；原账本SHA不变，0新训练或重放|
 |中断原因的后续追踪与工程修复|[宿主日志/事件SHA、研究者更新确认、Job探针与独立监督器](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)|高置信归因为更新期间宿主生命周期耦合；实际监督器/页面均已核验无Job/包身份。具体历史PID终止调用未捕获，旧初核收据不改写，未恢复训练|
+|B7/2030恢复及后三任务准备|[唯一限额提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)、[10项针对性检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)|拟执行e81c6e1，尚未执行；E6记录SHA仍84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11，正式恢复前重哈希/加载各1次；新14,400更新含441重放待新批准，原E1–E6及失败段保留|
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -90,7 +91,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮新增宿主更新/容器时间线与独立启动修复证据；不重复模型测试或改写原中断账本，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮新增恢复代码/CPU检查/准确预算身份；继承旧E1–E6、441未保存及所有模型结果，不重复旧审查，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
@@ -123,6 +124,8 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)|`5e31b40c283f3707edde756b133063bfc1ddd5e0a9f87143cf7ffe755e5ae8f6`|
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)|`6a1abef5a63f691b8e34401496bb3e5b2f7e34f8c13222b1b91401864017151a`|
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)|`8469581557c8e84189b398248b97f9ea1a2c88ce02c172af83a325500f034b69`|
+|[docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)|`7715f455e6bfb3d603fddc1b77228bf25f4d64e63fd5b296f6c04c5d5a711549`|
+|[docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)|`61639fae54534a4c33f6eefa7d93730dd4e602b3b607ea5edd7fc9d0fb7b8840`|
 
 五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查35个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
@@ -130,9 +133,9 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`1883e6e9e01f9a6ef3f720bfbea85dfcf591ed44dbfc9cd28eac2533a402951d`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`5eb44a7028645f495b4fe1d97fbef9aa97e44e5806ae8599c3151dc067fae025`|
 |[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`3f498e4d13112aa14993bf4b59e0ecdfc895482e25fbd6b4ece26daef947b0fd`|
 |[METRICS.csv](METRICS.csv)|`933913a3298b8484cff74a6c91d406fc68e01a4c48d363fe7ecfb142492fe1c3`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`ec76288c5a3279fb0ddb5e9cf89006daf06225aee7566ae8ad591eccdd9cd863`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`a68d02573c27c12493bff9f3ee247f2402d5799c159817e6801fee5abc5f48de`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。
