@@ -1,0 +1,195 @@
+{
+  "status": "APPROVED_FOUR_MODEL_PACKAGE_IN_PROGRESS",
+  "as_of": "2026-10-28T03:29:18.303844+00:00",
+  "approved_at": "2026-10-28T11:28:13.069427+08:00",
+  "started_at": "2026-10-28T11:28:13.080481+08:00",
+  "training_commit": "56aae5bc4568df5d91354805aa5d4cb6d34b62b3",
+  "proposal_sha256": "27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41",
+  "proposal_file_sha256": "250aa997767b771059e14682cd5e031bf5dc3f5020d28a7f65c5cf715c0fe0e5",
+  "authorization": {
+    "decision_id": "researcher_20261028_b7_b8_multiseed_four_model_package",
+    "approved_by_researcher": true,
+    "researcher_answer": "批准",
+    "context": "Direct response to consolidated exact code/proposal/output/budget question in current chat",
+    "approval_consumed": true,
+    "replay": 0,
+    "additional_retry": 0
+  },
+  "tasks": [
+    {
+      "model": "B7",
+      "seed": 2030
+    },
+    {
+      "model": "B8",
+      "seed": 2030
+    },
+    {
+      "model": "B7",
+      "seed": 2031
+    },
+    {
+      "model": "B8",
+      "seed": 2031
+    }
+  ],
+  "models": [
+    {
+      "model": "B7",
+      "seed": 2030,
+      "status": "IN_PROGRESS",
+      "execution_state": "RUNNING",
+      "returned_updates": 24,
+      "reserved_updates": 24,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "TRAINING",
+      "training_started": true,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    }
+  ],
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "models": 4,
+    "updates_per_model": 4320,
+    "total_updates": 17280,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828,
+      "B8": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840,
+      "B8": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 1910287815360,
+    "total_source_files": 571252,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 86400,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 103079215104,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "scientific_choices_sha256": "00dfd7532979e3ecaee8e834f8cad249b3a8cd7b44e100e0b1eb2f2e02449af7",
+  "actual_io_snapshot": {
+    "files": 442,
+    "bytes": 1379437590,
+    "reserved_bytes": 1379437590,
+    "sealed": 0
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 15362838528,
+    "workspace_free_bytes": 63630962688,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 14886633472
+  },
+  "output": {
+    "volume_alias": "NEW_D_VOLUME_NAMESPACE",
+    "directory_alias": "B7_B8_s2030_s2031_20261028_v1",
+    "initial_96GiB_gate": "PASSED_BY_FROZEN_EXECUTOR_BEFORE_OUTPUT_CREATION",
+    "per_task_24GiB_gate": "ENFORCED_BY_FROZEN_WORKER",
+    "historical_overwrite": false
+  },
+  "source_admission": {
+    "source_basename": "NC_H09_20231025_2300_R21_FLDK.06001_06001.nc",
+    "status": "PASS",
+    "bytes": 3543995,
+    "same_path": true,
+    "payload_bytes": 0
+  },
+  "source_admission_sha256": "a072ee7276dfc699cdd2090225ae11b842d0cac343652dd12e668378675fffb7",
+  "monitor": {
+    "read_only": true,
+    "identity_matches_current_package": true,
+    "syntax_checks": "Python AST and JavaScript node --check PASS",
+    "payload_and_model_access": false
+  },
+  "scope": {
+    "final_2025": "FROZEN_NO_ACCESS",
+    "seed2029": "INHERIT_COMPLETED_DO_NOT_RETRAIN",
+    "B6_or_other_models": "NOT_INCLUDED",
+    "main": "NOT_MODIFIED",
+    "automatic_retry": false
+  },
+  "limitations": [
+    "Startup snapshot only; not live counts or fixed E9 results",
+    "Three seed comparison NOT_VERIFIED until all four new models close",
+    "Original WinError121 root cause remains NOT_VERIFIED; source metadata/read-only admission passed; no controlled retry"
+  ],
+  "private_originals": "LOCAL_ONLY: approval binding, first snapshot, launch command, process ids and raw ledgers; no private paths or weights published"
+}

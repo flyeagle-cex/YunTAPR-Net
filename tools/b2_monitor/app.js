@@ -10,7 +10,7 @@ function render(s){
   lastGood=s;
   let view=s;
   if(s.runs){
-    put('page-title',s.innovation?'B7/B8 核心创新消融':s.static?'B5/B6 地形消融':s.recovery?'B3/B4 限额恢复':'B3/B4 多seed复现');put('subtitle',s.innovation?'Seed 2029 · DOTE / DTFM · E0 · 每模型九轮 LAST':s.static?'Seed 2029 · 海拔 / 完整静态地形 · E0 · 每模型九轮 LAST':s.recovery?`B4从E1恢复 · 必要重放 ${s.replay_returned} / 390 · 累计预算包含原失败段`:'Seed 2030 / 2031 · 固定串行 · E0 · 每模型九轮 LAST');
+    put('page-title',s.innovation_multiseed?'B7/B8 多seed配对复现':s.innovation?'B7/B8 核心创新消融':s.static?'B5/B6 地形消融':s.recovery?'B3/B4 限额恢复':'B3/B4 多seed复现');put('subtitle',s.innovation_multiseed?'Seed 2030 / 2031 · 2029结果继承 · concat / DTFM · 固定九轮 LAST':s.innovation?'Seed 2029 · DOTE / DTFM · E0 · 每模型九轮 LAST':s.static?'Seed 2029 · 海拔 / 完整静态地形 · E0 · 每模型九轮 LAST':s.recovery?`B4从E1恢复 · 必要重放 ${s.replay_returned} / 390 · 累计预算包含原失败段`:'Seed 2030 / 2031 · 固定串行 · E0 · 每模型九轮 LAST');
     put('time-label',s.static||s.innovation?'整包剩余时间额度':s.recovery?'恢复包剩余时间额度':'距离整包 24 小时时限');put('campaign-title',s.innovation?'B7 → B8 串行队列':s.static?'B5 → B6 串行队列':'四模型串行队列');$('campaign-section').hidden=false;
     if(s.b8_recovery){put('page-title','B8 限额恢复 · B7 固定E9对照');put('subtitle',`B8继承E1–E6 · 本次 ${number.format(s.segment_returned)} / 1,440 次更新 · 已重放 ${s.replay_returned} / 62 · 总计数包含原失败段`);put('time-label','本次恢复剩余时间额度');put('campaign-title','B7已完成 · B8恢复E7–E9');}
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
@@ -59,7 +59,7 @@ function render(s){
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');
   put('commit',s.source_commit.slice(0,12));
   put('updated',`快照：${new Date(s.snapshot_utc).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})} 北京时间 · 本地只读`);
-  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'?'已停止':`${percent.toFixed(1)}%`} · ${s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
+  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'?'已停止':`${percent.toFixed(1)}%`} · ${s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
 }
 async function refresh(){
   if(loading)return;loading=true;$('refresh').disabled=true;

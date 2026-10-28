@@ -109,6 +109,7 @@ class CampaignReader(base.Reader):
         listed=[(x['model'],x['seed']) for x in self.approval['tasks']]
         self.static=listed==[('B5',2029),('B6',2029)]
         self.innovation=listed==[('B7',2029),('B8',2029)]
+        self.innovation_multiseed=listed==[('B7',2030),('B8',2030),('B7',2031),('B8',2031)]
         self.terrain=self.static or self.innovation
         if self.recovery_parent:
             if listed!=[('B4',2030),('B3',2031),('B4',2031)] or self.budget['replay_allowance']!=390 or self.budget['cumulative_updates']!=17670:
@@ -118,9 +119,13 @@ class CampaignReader(base.Reader):
                 'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
         else:
             self.tasks=self.approval['tasks'];self.extra_io=(0,0,0)
-        if (not self.recovery_parent and not self.terrain and (listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)]
+        if (not self.recovery_parent and not self.terrain and ((not self.innovation_multiseed and listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)])
                 or self.budget['total_updates']!=17280 or self.budget['replay_allowance']!=0)) or binding['controller_pid']!=pid:
             raise ValueError('Not the approved four-model package')
+        if self.innovation_multiseed and (self.approval['code_commit']!='56aae5bc4568df5d91354805aa5d4cb6d34b62b3'
+                or self.approval['proposal_sha256']!='27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41'
+                or self.budget['total_source_bytes']!=1910287815360 or self.budget['total_source_files']!=571252):
+            raise ValueError('Not the approved B7/B8 multiseed identity/budget')
         if self.terrain:
             if self.budget['total_updates']!=8640 or self.budget['replay_allowance']!=0:raise ValueError('Not the approved two-model terrain package')
             self.extra_io=(self.budget.get('prior_source_files',0),self.budget.get('prior_source_bytes',0),self.budget.get('prior_source_bytes',0))
@@ -168,8 +173,8 @@ class CampaignReader(base.Reader):
                 claim=self.folder/f'task_{index if self.recovery_parent else index+1}_claim.json'
                 state='COMPLETE' if completion and completion.get('status')=='COMPLETE_TRAIN_AND_DEV_EVALUATION' and returned==4320 and sealed==9 else 'FAILED' if failure else 'RUNNING' if folder.exists() or claim.exists() else 'PENDING'
                 current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
-                if self.terrain:
-                    static_db=self.folder/f'{kind}_static_source.sqlite'
+                if self.terrain or self.innovation_multiseed:
+                    static_db=self.folder/(f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
                     if static_db.exists():
                         counts=base.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
@@ -200,12 +205,13 @@ class CampaignReader(base.Reader):
             result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,
                 returned=returned,reserved=reserved,uncertain=reserved-returned,io=io,
                 sealed_epochs=sum(r['sealed_epochs'] for r in runs),completed_models=sum(r['state']=='COMPLETE' for r in runs),
-                limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,replay_returned=replay_returned,
+                limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,replay_returned=replay_returned,
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
                 message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else None)
             if self.static and completion:result['paired_summary']=self.document('static_paired_summary.json')
             if self.innovation and state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
+            if self.innovation_multiseed and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_innovation_summary.json')
             self.cache,self.cached_at=result,time.monotonic()
             return result
 
@@ -295,7 +301,7 @@ def main():
     with ThreadingHTTPServer(('127.0.0.1',a.port),base.handler_for(reader)) as server:
         service=dict(url=f'http://127.0.0.1:{server.server_port}/',pid=base.os.getpid(),read_only=True,training_pid=a.training_pid)
         (a.service_dir/'service.json').write_text(json.dumps(service,indent=2),encoding='utf-8')
-        shortcut='B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
+        shortcut='B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
         (a.service_dir/shortcut).write_text('[InternetShortcut]\nURL='+service['url']+'\n',encoding='utf-8')
         print(service['url'],flush=True)
         server.serve_forever(poll_interval=1)

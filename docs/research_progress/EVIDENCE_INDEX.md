@@ -1,6 +1,6 @@
 # 证据索引与可核验边界
 
-B7/B8多seed新增[唯一提案](../research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[11项检查及两seed初始身份/九轮顺序SHA](../research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](../research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。代码56aae5b已推送；正式训练未批准、未开始。旧seed2029全部完成/失败/62重放证据不变。
+B7/B8新增2030/2031最新[批准与启动收据](../research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)绑定56aae5b/27f7e3ed、研究者原文“批准”、全部资源上限和24次RETURNED启动快照。整包IN_PROGRESS，后三项排队，尚无新增固定E9。原[唯一提案](../research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)的authorized=false保留准备时点、SHA不变；旧2029完成/失败/62重放证据不变。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 
