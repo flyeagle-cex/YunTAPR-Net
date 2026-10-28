@@ -1,5 +1,26 @@
 # B7 DOTE / B8 DTFM 首轮科学协议与审批入口
 
+## 2026-10-28 B8恢复已获明确批准并启动
+
+研究者对提交`ef11531a7cdeb35b767caebdb61e0e81c6123187`和提案`60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69`的完整恢复申请直接回复“是，以及列出之前停止的原因”。批准已绑定独立干净副本并单次消费，原E6权重SHA核对和恢复路径已经通过，新增真实RETURNED更新已发生。启动快照`2026-10-27T23:58:47.969878+00:00`为新94次RETURNED（含62次必要重放）、当前有效2,974更新，含原失败段的B8累计3,036次尝试；此数为启动时点，不是实时值。
+
+当前状态 **IN_PROGRESS**，不是COMPLETE；继承E1–E6，仅继续E7–E9 Train/2024 Dev，固定E9 LAST仍未取得。B7保持既有固定E9完成，不重训。额度保持1,440新更新（含62重放）、159,190,859,832字节/47,605次、8,316秒、至少24GiB、额外重试0；原失败段、所有历史权重和2025冻结边界保留。新任务与旧失败使用不同目录，不修改冻结执行代码。
+
+[独立获批启动收据](evidence/b8_recovery_approved_launch_20261028.json)绑定批准、代码、提案、资源入场及实际更新；旧准备提案authorized=false和下方READY/待批准文字均保留其当时时点，不代表当前缺少批准。只读进度服务已切换本次恢复，页面区分B7完成、B8六轮继承、本次1,440更新及62次重放；无训练控制接口。原E1–E6指标执行commit仍为b1f072e，不能改记为ef11531。
+
+### 近期三次已经核实的停止原因
+
+|时点及任务|日志直接原因|已知工程因素与原因边界|后续状态|
+|---|---|---|---|
+|2026-10-26，B4 seed2030|forrtl error(200)：window-CLOSE event，原生运行时退出2|子worker的Popen遗漏CREATE_NO_WINDOW，存在控制台暴露；日志不能确定是谁或什么关闭窗口，也未见数值/OOM故障|已隔离控制台，390次必要重放经新批准恢复；三seed整体已完成|
+|2026-10-27，B5首包|PermissionError：Unlisted/repeated model-role-epoch pass|ReaderFactory仍硬编码只允许B3/B4，漏接B5；属于此前AI工程接线遗漏，首遍气象读取前即停，0优化器更新，不是GPU或数据故障|显式B5/B6读取臂修复后，经一次纠正启动批准完成两模型|
+|2026-10-28 03:32:59，B8 E7|Himawari源Path.resolve(strict=True)抛OSError WinError121（信号灯超时）|发生在下一优化器INTENT之前；源目前可解析并读4KiB、卷报告本地exFAT，但历史底层存储/连接原因仍NOT_VERIFIED，不归因于网络或DTFM性能|E6/2880可恢复，62更新未保存；本轮新批准后已单次恢复，仍IN_PROGRESS|
+
+原始依据：[B4停止](evidence/b3_b4_multiseed_stop.json)、[B5初次停止](evidence/b5_b6_initial_start_stop.json)、[B8停止收口](evidence/b7_b8_terminal_20261028.json)及[单源诊断](evidence/b8_source_diagnostic_20261028.json)。本次仅继承这些既有收据，没有重跑历史审查。失败后未自动继续，是零额外重试和重放授权边界的落实；并非训练指标退化触发的停止，也不能把所有停止统称为网络问题。
+
+---
+
+
 ## 2026-10-28 B8最小恢复申请：READY，未获批准、未启动
 
 原WinError121源现在可解析、stat与只读4KiB；大小3,543,995字节与冻结清单一致，头为HDF5，源卷报告本地exFAT。只有单文件五项有界操作、实际4,096字节/1次；不扫描磁盘、不全文件哈希、不重新解码。原故障可能涉及存储等因素，但原因仍NOT_VERIFIED，不能定性为网络或模型问题。原始诊断错误汇总BLOCKED来自大小写敏感的basename判断，五项操作均PASS且Windows normcase的same_path=true；已用元数据解释修正，未重新读取源。[诊断原件](evidence/b8_source_diagnostic_20261028.json)完整保留。

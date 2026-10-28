@@ -210,6 +210,73 @@ class CampaignReader(base.Reader):
             return result
 
 
+class B8RecoveryReader(base.Reader):
+    """Only new recovery metadata plus inherited seals; no training controls."""
+    def __init__(self,folder,pid,parent):
+        self.folder,self.parent=Path(folder).resolve(),Path(parent).resolve()
+        self.pid,self.token=pid,base.process_token(pid)
+        self.cache,self.cached_at=None,0
+        self.lock,self.fixed=threading.Lock(),{}
+        binding=self.document('authorization_binding.json');self.approval=binding['approval'];self.budget=self.approval['budget']
+        if (binding['controller_pid']!=pid or self.approval['tasks']!=[dict(model='B8',seed=2029)]
+                or self.budget['new_updates']!=1440 or self.budget['replayed_updates']!=62):raise ValueError('Not the approved B8 recovery')
+        self.stop=json.loads((ROOT/'docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json').read_text(encoding='utf-8'))
+        if self.stop['tasks'][1]['last_saved_sha256']!=self.approval['approved_checkpoint_sha256']:raise ValueError('E6 identity differs')
+        self.started=datetime.fromtimestamp((self.folder/'authorization_binding.json').stat().st_mtime,timezone.utc)
+
+    def snapshot(self,include_resources=True):
+        with self.lock:
+            if self.cache and time.monotonic()-self.cached_at<10:return self.cache
+            cost=self.stop['budget_closure'];caps=self.budget
+            io=dict(files=cost['actual_source_files']+caps['diagnostic_files_already_spent'],bytes=cost['actual_source_bytes']+caps['diagnostic_bytes_already_spent'],reserved_bytes=cost['reserved_source_bytes']+caps['diagnostic_bytes_already_spent'],sealed=0)
+            folder=self.folder/'B8_s2029';n=reserved=0
+            if (folder/'updates.sqlite').exists():
+                rows=base.query(folder/'updates.sqlite','SELECT model,state,COUNT(*),MIN(u),MAX(u) FROM updates GROUP BY model,state')
+                if any(k!='B8' or state not in ('RETURNED','INTENT') or lo<2881 or hi>4320 for k,state,count,lo,hi in rows):raise ValueError('Unexpected B8 segment ledger')
+                n=sum(count for k,state,count,lo,hi in rows if state=='RETURNED');reserved=sum(count for k,state,count,lo,hi in rows)
+            runs=[]
+            for kind,effective in (('B7',4320),('B8',2880+n)):
+                epochs=[]
+                for e in range(1,10):
+                    inherited=kind=='B7' or e<=6
+                    source=(self.parent if inherited else self.folder)/f'{kind}_s2029';active=False
+                    if not inherited:
+                        for role in ('train','dev'):
+                            sub=source/f'{kind}_{role}_reads_{e:02d}';r=self.document(str(sub/'pass_receipt.json'))
+                            if r:
+                                a=r['actual_reads'];counts=(a['opened_files'],a['delivered_bytes'],a['reserved_bytes']);io['sealed']+=1
+                            elif (sub/'reads.sqlite').exists():
+                                counts=base.query(sub/'reads.sqlite','SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0];active=True
+                            else:continue
+                            for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
+                    train=self.document(str(source/f'{kind}_train_{e:02d}.json'));dev=self.document(str(source/f'{kind}_development_{e:02d}.json'));last=self.document(str(source/f'{kind}_LAST_epoch_{e:02d}.receipt.json'))
+                    done=min(480,max(0,effective-(e-1)*480));phase='SEALED' if last else 'VALIDATED' if dev else 'VALIDATION' if train else 'TRAINING' if done or active else 'PENDING'
+                    epochs.append(dict(epoch=e,phase=phase,updates=done,inherited=inherited,training_loss=train.get('weighted_mean') if train else None,metrics=base.metric_summary(dev).get('all') if dev else None,checkpoint_sha256=last.get('checkpoint_sha256') if last else None))
+                complete=self.document(str((self.parent if kind=='B7' else self.folder)/f'{kind}_s2029/completion.json'))
+                sealed=sum(e['phase']=='SEALED' for e in epochs)
+                run_state='COMPLETE' if complete and sealed==9 and effective==4320 else 'FAILED' if self.document(str(source/'failure.json')) else 'RUNNING'
+                current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
+                runs.append(dict(model=kind,seed=2029,name=f'{kind}_s2029',state=run_state,returned=effective,reserved=effective+reserved-n if kind=='B8' else 4320,sealed_epochs=sealed,epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
+            static=self.folder/'B8_static_source.sqlite'
+            if static.exists():
+                counts=base.query(static,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
+                for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
+            failure=self.document('failure.json');completion=self.document('completion.json');live=self.token is not None and base.process_token(self.pid)==self.token
+            if failure:runs[1]['state']='FAILED'
+            state='FAILED' if failure else 'COMPLETE' if completion and n==1440 and all(x['state']=='COMPLETE' for x in runs) else 'RUNNING' if live else 'UNKNOWN'
+            if reserved>1440 or io['reserved_bytes']>caps['cumulative_source_bytes'] or io['files']>caps['cumulative_source_files']:state='BUDGET_ALERT'
+            now=datetime.now(timezone.utc);terminal=self.folder/('failure.json' if failure else 'completion.json')
+            stopped=datetime.fromtimestamp(terminal.stat().st_mtime,timezone.utc) if (failure or completion) else now;elapsed=max(0,(stopped-self.started).total_seconds())
+            result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,returned=7262+n,reserved=7262+reserved,uncertain=reserved-n,
+                        io=io,sealed_epochs=sum(x['sealed_epochs'] for x in runs),completed_models=sum(x['state']=='COMPLETE' for x in runs),
+                        limits=dict(updates=8702,bytes=caps['cumulative_source_bytes'],files=caps['cumulative_source_files'],epochs=18,seconds=caps['max_wall_seconds']),
+                        recovery=True,b8_recovery=True,innovation=True,static=False,replay_returned=min(62,n),segment_returned=n,segment_limit=1440,
+                        elapsed_seconds=elapsed,remaining_limit_seconds=max(0,caps['max_wall_seconds']-elapsed),started_at=self.started.isoformat(),source_commit=self.approval['code_commit'],
+                        resources=base.resources(self.folder) if include_resources else {},message='B8恢复已停止；保留新旧账本，不自动重试。' if failure else None)
+            if state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
+            self.cache,self.cached_at=result,time.monotonic();return result
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--experiment',type=Path,required=True)
@@ -217,8 +284,13 @@ def main():
     p.add_argument('--port',type=int,default=0)
     p.add_argument('--service-dir',type=Path,required=True)
     p.add_argument('--campaign',action='store_true')
+    p.add_argument('--b8-recovery',action='store_true')
+    p.add_argument('--parent-experiment',type=Path)
     a=p.parse_args()
-    reader=(CampaignReader if a.campaign else B2Reader)(a.experiment,a.training_pid)
+    if a.b8_recovery:
+        if a.parent_experiment is None:p.error('--parent-experiment required for B8 recovery')
+        reader=B8RecoveryReader(a.experiment,a.training_pid,a.parent_experiment)
+    else:reader=(CampaignReader if a.campaign else B2Reader)(a.experiment,a.training_pid)
     a.service_dir.mkdir(parents=True,exist_ok=True)
     with ThreadingHTTPServer(('127.0.0.1',a.port),base.handler_for(reader)) as server:
         service=dict(url=f'http://127.0.0.1:{server.server_port}/',pid=base.os.getpid(),read_only=True,training_pid=a.training_pid)

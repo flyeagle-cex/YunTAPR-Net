@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+B8最新[获批恢复启动收据](../research_readiness/20261025/evidence/b8_recovery_approved_launch_20261028.json)：实际执行ef11531，原E1–E6指标仍绑定b1f072e，新任务IN_PROGRESS；原失败段、62未保存更新和所有旧权重未覆盖。[近期停止原因](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)来自三份既有失败收据。
+
 B8恢复准备新增：[单源有界诊断](../research_readiness/20261025/evidence/b8_source_diagnostic_20261028.json)、[限额提案（未批准）](../research_readiness/20261025/evidence/b8_recovery_proposal_20261028.json)、[恢复入口检查](../research_readiness/20261025/evidence/b8_recovery_checks_20261028.json)。旧停止证据、权重及各模型指标不变。
 
 最新B7/B8终态索引：[B7九轮完整、B8六轮/第七轮部分读取、两份实际权重SHA及精确额度](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。B7固定E9 SHA019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35；B8仅E6，E9不存在。失败原日志/账本保留，公开只含脱敏错误摘要与原件SHA，没有原始源重试或额外模型推理。

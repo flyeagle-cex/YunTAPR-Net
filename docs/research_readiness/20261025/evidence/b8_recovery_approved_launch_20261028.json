@@ -1,0 +1,121 @@
+{
+  "status": "APPROVED_B8_RECOVERY_IN_PROGRESS",
+  "training_commit": "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+  "proposal_sha256": "60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69",
+  "proposal_file_sha256": "d45e725eb611e5ba168be66b854c282c0618c938ffe46c0f1ee33c7fc96ce16c",
+  "authorization": {
+    "approved_by_researcher": true,
+    "decision_id": "RESEARCHER_B8_E6_RECOVERY_EF11531_20261028",
+    "approved_at": "2026-10-28T07:55:28.665494+08:00",
+    "researcher_answer": "是，以及列出之前停止的原因",
+    "researcher_source": "Direct human reply to the immediately preceding request approving ef11531a7cdeb35b767caebdb61e0e81c6123187, canonical proposal60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69, B8 E6-to-E9 recovery with 62 replay and all listed caps; no B7 retraining, extra retry,2025 access or main merge",
+    "approved_checkpoint_sha256": "d4b20c3e486cdf89c763c642d36ef0527b36342f19a30883aefd1c9b1c774f24",
+    "approved_replay_updates": 62
+  },
+  "budget": {
+    "new_updates": 1440,
+    "replayed_updates": 62,
+    "prior_B8_returned": 2942,
+    "saved_B8_updates": 2880,
+    "cumulative_B8_attempts": 4382,
+    "cumulative_package_attempts": 8702,
+    "new_training_source_bytes": 159190547004,
+    "new_training_source_files": 47604,
+    "new_static_source_bytes": 312828,
+    "new_static_source_files": 1,
+    "new_source_bytes": 159190859832,
+    "new_source_files": 47605,
+    "diagnostic_bytes_already_spent": 4096,
+    "diagnostic_files_already_spent": 1,
+    "additional_diagnostic_payload_bytes": 0,
+    "cumulative_source_bytes": 958621476211,
+    "cumulative_source_files": 286736,
+    "max_wall_seconds": 8316,
+    "prior_B8_wall_seconds_ceil": 13284,
+    "minimum_initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "checkpoint_deserializations": 1,
+    "checkpoint_SHA_reads": 1,
+    "additional_retry_allowance": 0,
+    "wall_accounting": "B8 prior elapsed ceil plus new controller time <=21600s; approval waiting excluded"
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "tasks": [
+    {
+      "model": "B8",
+      "seed": 2029,
+      "execution_state": "RUNNING",
+      "inherited_epochs": 6,
+      "sealed_epochs": 6,
+      "segment_returned": 94,
+      "effective_updates": 2974,
+      "cumulative_B8_attempts": 3036,
+      "replayed_returned": 62,
+      "fixed_E9_sha256": "NOT_AVAILABLE_IN_PROGRESS"
+    }
+  ],
+  "snapshot_utc": "2026-10-27T23:58:47.969878+00:00",
+  "package_cumulative_returned": 7356,
+  "io_snapshot": {
+    "files": 240787,
+    "bytes": 804688367717,
+    "reserved_bytes": 804688367717,
+    "sealed": 0
+  },
+  "resources": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 16641265664,
+    "workspace_free_bytes": 65311436800,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 17288429568
+  },
+  "restoration": {
+    "checkpoint_epoch": 6,
+    "checkpoint_updates": 2880,
+    "checkpoint_sha256": "d4b20c3e486cdf89c763c642d36ef0527b36342f19a30883aefd1c9b1c774f24",
+    "status": "APPROVED_RESTORE_PATH_PASSED_BEFORE_REAL_RETURNED_UPDATE",
+    "proof": "Frozen engine calls restore_last before its E7 loop; new durable RETURNED entries exist; no separate checkpoint audit or extra load"
+  },
+  "preserved": {
+    "B7": "COMPLETE_FIXED_E9_NO_RETRAIN",
+    "B8_E1_E6": "INHERITED_ORIGINAL_B1F072E",
+    "original_failed_E7_and_62_updates": "PRESERVED_SEPARATE_LEDGERS"
+  },
+  "observation_scope": "One startup observation, not terminal verification or a live counter",
+  "sources": {
+    "approval_file_sha256": "05b442496e622aefdb5ae60c9410da8cfea4a08783cc47878506131c233ba345",
+    "authorization_binding_sha256": "bb422c92194fb91ae4c41dd316d32a8d4701ff644740afa3d44f161aa9da0742"
+  },
+  "read_only_monitor": {
+    "source_commit": "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+    "counts": "B7 complete; B8 6 inherited +3 new epochs; cumulative attempts include62 prior unsaved updates; only62 new replay",
+    "python_snapshot_check": "PASS",
+    "javascript_syntax": "PASS",
+    "javascript_render_fixture": "PASS",
+    "controls": "NONE"
+  },
+  "final_2025": "FROZEN_NO_ACCESS",
+  "additional_retry": "NOT_AUTHORIZED",
+  "new_training_budget_expansion": false
+}
