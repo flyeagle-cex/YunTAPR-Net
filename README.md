@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-28）：B7/B8新增2030/2031四模型包意外中断。B7/2030为3,321实际更新、六轮Train/Dev封口、E6保存2,880，441未保存；后三项未启动，无新增固定E9。退出原因未核实，只读页面已修复，训练未恢复。[中断收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)。seed2029与2025冻结不变。
+> 最新状态（2026-10-28）：新增四模型仍停止，B7/2030为3,321实际更新/E6保存2,880/441未保存，后三项未启动。研究者确认发生更新；日志与Job探针支持宿主生命周期耦合归因。独立监督器和页面均已验证无Job/包身份，训练未恢复。[原因与修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)。既有结果及2025冻结不变。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

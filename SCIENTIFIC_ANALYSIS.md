@@ -74,13 +74,15 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 
 ## 追加两seed：四模型包意外中断，未恢复训练
 
-执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；这是历史启动快照。最新[中断与页面修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。退出原因NOT_VERIFIED，训练未恢复。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
+执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；这是历史启动快照。最新[中断与页面修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。后续诊断支持更新引发的宿主生命周期耦合归因，训练未恢复；历史逐PID终止调用仍未捕获。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
 
 原模型、E0/f006、959/963、Train2/Dev8、九轮固定E9、AdamW和学习率轨迹、全部归一化/掩膜及lambda0.1不变；只变任务seed及seed+10000/20000派生初始化流。两seed公共路径/4,411,058活跃参数已实查，旧seed+epoch−1规则的八轮移位重叠已记录，不能视为独立天气年份。准备阶段11项针对性检查通过，真实缓存静态读取625,656字节/2次，当时正式更新/检查点加载/原始气象载荷为0；没有重跑历史来源、逐轮总结或GPU压力测试。
 
 预算逐冻结清单重算：每模型4,320更新、477,571,953,840字节/142,813次（含静态312,828字节/1次）；四模型17,280更新、1,910,287,815,360字节/571,252次，每模型6小时/整包24小时，Replay=0、额外重试=0。F盘约93.02GiB不足初始96GiB；D盘约98.71GiB且全新命名空间权限通过，拟输出`B7_B8_s2030_s2031_20261028_v1`。保持初始96GiB/每任务24GiB，D盘具体新位置已随本次整包批准确认，不删除或迁移历史文件。启动重核资源及一次15秒有界源元数据；路径异常留账并停止，不当缺测。
 
 全部完成后公布B8−B7逐seed原值/差值、三seed均值及样本标准差ddof1，覆盖总体/四UTC/强雨场景/全部雨强层和已有海拔充分量。q32以距98.4375%的偏差及绝对误差评价，不简单看覆盖率高低；不按Dev结果改方案。研究者已对完整提案直接回复“批准”，该批准已消费并单次执行；启动有界源元数据/只读权限检查通过，0载荷，无重复模型测试。旧authorized=false提案保留准备时点，不改写其SHA，2029混合/负面结果、原WinError121及62次重放证据保留，2025与main不变。
+
+研究者直接确认“发生过更新”。[原因追踪与独立启动修复](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)保留证据分级：14:09:46 Codex记录执行器停止，14:09:51.644 Windows记录容器销毁，与最后journal写入相差约0.137秒；旧进程的宿主生命周期耦合为高置信归因，具体哪个历史终止调用未捕获。纯探针复现Job关闭会结束无窗口子进程；新WMI监督器及实际页面均已验证不属于任何Job/应用包，3项新门控测试通过，旧消耗批准被拒绝，0次训练恢复。旧初核NOT_VERIFIED收据原样保留，不把后续诊断倒写到历史。
 
 ## B7/B8固定E9完成，首轮探索性消融带局限交接
 

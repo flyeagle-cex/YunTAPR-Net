@@ -1,0 +1,179 @@
+{
+  "status": "EXIT_CAUSE_INVESTIGATED_INDEPENDENT_HOST_FIX_VERIFIED_NO_TRAINING_RESTART",
+  "verified_at": "2026-10-28T06:45:43.494502+00:00",
+  "inherited_interruption_receipt": "b7_b8_multiseed_interruption_20261028.json",
+  "training_commit": "56aae5bc4568df5d91354805aa5d4cb6d34b62b3",
+  "researcher_confirmation": {
+    "source": "DIRECT_CURRENT_CHAT",
+    "verbatim": "发生过更新",
+    "scope": "Researcher confirms an update occurred; no exact click or updater command timestamp supplied"
+  },
+  "diagnosis": {
+    "classification": "UPDATE_ASSOCIATED_HOST_LIFECYCLE_COUPLING",
+    "confidence": "HIGH_SUPPORTED_ATTRIBUTION_NOT_RECORDED_PER_PID_TERMINATION_CALL",
+    "conclusion_zh": "更新期间Codex本地执行器停止、应用容器销毁；旧后台启动仍依附宿主Job/包生命周期，训练与网页随宿主退出而中断。研究者确认发生过更新。",
+    "verified_facts": [
+      "Desktop log explicitly records lifecycle_stop reason=disposed and Stopping app-server transport at14:09:46",
+      "Windows AppModel event217 record115827 records old package container destruction at14:09:51.6444087",
+      "Last training-source journal write at14:09:51.507189 precedes container destruction by about0.137s",
+      "Old direct BREAKAWAY page was still in an outer Job when queried",
+      "Current tool job flags0x2800 include KILL_ON_JOB_CLOSE and BREAKAWAY_OK",
+      "New supervisor and page both verified outside every Job and without package identity"
+    ],
+    "not_verified": [
+      "Historical exact per-PID OS termination code/caller was not captured",
+      "Exact manual click or automatic updater component causing host shutdown was not logged; do not attribute to a researcher action",
+      "Current-job flags establish the reproduced vulnerability, not a retained handle to the destroyed historical Job"
+    ]
+  },
+  "desktop_shutdown": {
+    "first_lifecycle_stop_utc": "2026-10-28T06:09:46.260Z",
+    "selected_lines": [
+      "2026-10-28T06:09:46.260Z info [tpp-local-executor] Local Work executor connection observation event=lifecycle_stop observationSequence=3383 reason=disposed",
+      "2026-10-28T06:09:46.262Z info [AppServerConnection] Stopping app-server transport connectionId=1 transport=stdio",
+      "2026-10-28T06:09:46.263Z info [AppServerConnection] app_server_connection.state_changed cause=stop_process connectionError=null currentConnectionId=null currentState=connected hasConnection=false hostId=local initialized=false initializeInFlight=false next=disconnected pendingClientRequests=0 pendingInternalRequests=0 previous=connected reconnectAttempt=0 reconnectTimerScheduled=false restartInFlight=false targetConnectionId=null targetReadyState=null transport=stdio",
+      "2026-10-28T06:09:46.263Z info [AppServerConnection] Stopping app-server transport connectionId=1611 transport=websocket",
+      "2026-10-28T06:09:46.263Z info [AppServerConnection] app_server_connection.state_changed cause=stop_process connectionError=null currentConnectionId=null currentState=connected hasConnection=false hostId=durable initialized=false initializeInFlight=false next=disconnected pendingClientRequests=0 pendingInternalRequests=0 previous=connected reconnectAttempt=0 reconnectTimerScheduled=false restartInFlight=false targetConnectionId=null targetReadyState=null transport=websocket"
+    ],
+    "source_id": "CODEX_DESKTOP_OLD_SHUTDOWN_LOG_LOCAL_ONLY",
+    "source_bytes": 1018051,
+    "source_sha256": "c1e5a4a5c489aae3564e5fa0dab169b2d4b7a9878fcf9d3d66cc87caea4bc04b"
+  },
+  "windows_events": [
+    {
+      "time_beijing": "2026-10-28T14:09:49.9966839+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 201,
+      "record_id": 115825,
+      "action": "APP_PROCESS_CREATED",
+      "package_version": "26.1021.3705.0",
+      "exported_xml_sha256": "d88d16fdd045de5d78111ff8b3fce63768003f3aebe6359bd95c4dc4e3c935a0"
+    },
+    {
+      "time_beijing": "2026-10-28T14:09:51.6444087+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 217,
+      "record_id": 115827,
+      "action": "APPX_CONTAINER_DESTROYED",
+      "package_version": "26.1021.3705.0",
+      "exported_xml_sha256": "10a2ee053d5c5ac4b6ceb078e95ebdb1e1c81f9251cee375e6f5803bcdfd2632"
+    },
+    {
+      "time_beijing": "2026-10-28T14:10:16.9747787+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 201,
+      "record_id": 115831,
+      "action": "APP_PROCESS_CREATED",
+      "package_version": "26.1021.3705.0",
+      "exported_xml_sha256": "35d1f368d2ddf83780e234fbb7bbb0f38d6bdb712e4d0047f86d1ced0f8395d9"
+    },
+    {
+      "time_beijing": "2026-10-28T14:10:50.0107972+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 217,
+      "record_id": 115832,
+      "action": "APPX_CONTAINER_DESTROYED",
+      "package_version": "26.1021.3705.0",
+      "exported_xml_sha256": "687948f84e7ab4ce742486a79df630edf34c5a415dca9350f589cb63fc221b75"
+    },
+    {
+      "time_beijing": "2026-10-28T14:12:08.7212933+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 217,
+      "record_id": 115834,
+      "action": "APPX_CONTAINER_DESTROYED",
+      "package_version": "26.1021.3705.0",
+      "exported_xml_sha256": "91ef325a68bcceaa7c64b9266356c4b745e3593e3df78b7b45c170b7fc32b7dc"
+    },
+    {
+      "time_beijing": "2026-10-28T14:12:10.1515094+08:00",
+      "provider": "Microsoft-Windows-AppModel-Runtime",
+      "event_id": 201,
+      "record_id": 115847,
+      "action": "APP_PROCESS_CREATED",
+      "package_version": "26.1023.6123.0",
+      "exported_xml_sha256": "27570481c1b4620ddae76908401c7a92a1114ff6141e805ab862e1e062ccefcf"
+    }
+  ],
+  "last_source_journal_write_beijing": "2026-10-28T14:09:51.507189+08:00",
+  "journal_to_container_teardown_seconds": 0.137219,
+  "engineering_reproduction": {
+    "scope": "ONLY_OWN_DUMMY_JOB_AND_DUMMY_SLEEP_PROCESS",
+    "kill_on_job_close_reproduced": true,
+    "dummy_exit_code": 0,
+    "dummy_requested_seconds": 15,
+    "dummy_actual_seconds": 0.10408190000453033,
+    "exit_code_alone_is_not_completion_proof": true,
+    "wmi_supervisor_in_any_job": false,
+    "wmi_target_in_any_job": false,
+    "wmi_target_exit_code": 0,
+    "model_imports": 0,
+    "scientific_data_reads": 0,
+    "training_updates": 0,
+    "host_app_interrupted": false
+  },
+  "earlier_repair_limit": "CREATE_BREAKAWAY_FROM_JOB alone left an outer nested Job; flag requested was not proof of full lifetime isolation. Old receipt is preserved.",
+  "fix": {
+    "method": "Win32_Process.Create with SW_HIDE and supported BREAKAWAY flag -> independent supervisor -> verify no Job/package -> single target",
+    "before_any_target_work": "Require in_any_job=false AND package_status=15700; unknown/coupled state stops without fallback",
+    "target_exit": "Record actual target exit time/code, never equate exit0 with scientific completion",
+    "once_only": "Exclusive claim, immutable specification SHA, no retries/replays; consumed training output rejected",
+    "monitor_verification": {
+      "at": "2026-10-28T06:45:43.494502+00:00",
+      "identities": [
+        {
+          "role": "SUPERVISOR",
+          "in_any_job": false,
+          "package_status": 15700
+        },
+        {
+          "role": "READ_ONLY_PAGE",
+          "in_any_job": false,
+          "package_status": 15700
+        }
+      ],
+      "html": "HTTP200",
+      "snapshot": "HTTP200",
+      "training_state": "STOPPED",
+      "training_returned": 3321,
+      "training_restarted": false
+    },
+    "unit_tests": {
+      "new_targeted_tests": 3,
+      "passed": 3,
+      "historical_model_tests_rerun": 0
+    },
+    "consumed_real_grant_test": "REJECTED_BEFORE_ANY_TRAINING_CONTROLLER_STARTED",
+    "diagnostic_attempts": {
+      "wmi_create_no_window_flag": "Return21 invalid parameter, no process created; unsupported argument removed",
+      "wmi_hidden_probe": "PASS: no Job/no package",
+      "wmi_hidden_breakaway_probe": "PASS: no Job/no package",
+      "first_dummy_assertion": "Exit-code-nonzero assumption corrected: job teardown can yield0; readiness and shortened lifetime are the relevant evidence"
+    }
+  },
+  "code_sha256": {
+    "tools/research_readiness/start_independent_process.py": "afd96a398ee6096ce257934fb0783dc4ce983192deafc0c12080d0ed08932d3d",
+    "tests/research_readiness/test_independent_process.py": "1bded6c453409c8e9b5bb83f7379accfe1bde85b2648a90f4c4855230f60ef9d"
+  },
+  "references": {
+    "windows_job_objects": "https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects",
+    "wmi_create": "https://learn.microsoft.com/en-us/windows/win32/cimwin32prov/create-method-in-class-win32-process",
+    "openai_troubleshooting": "https://learn.chatgpt.com/docs/reference/troubleshooting"
+  },
+  "training_state": {
+    "status": "STOPPED_UNEXPECTED",
+    "B7_s2030_returned": 3321,
+    "last_saved_epoch": 6,
+    "last_saved_updates": 2880,
+    "unsaved_returned": 441,
+    "remaining_models": "NOT_STARTED",
+    "new_updates": 0,
+    "replay": 0,
+    "restart": false,
+    "new_training_approval": "NOT_GRANTED"
+  },
+  "scientific_results": "UNCHANGED_NO_NEW_E9_NO_THREE_SEED_STATISTICS",
+  "final_2025": "FROZEN_NO_ACCESS",
+  "main": "NOT_MODIFIED",
+  "privacy": "Only sanitized event summaries/log lines and source hashes; raw logs/process ids/commands/specifications LOCAL_ONLY"
+}
