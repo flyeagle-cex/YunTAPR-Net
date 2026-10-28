@@ -1,0 +1,147 @@
+{
+  "status": "PASS_NEW_MULTI_SEED_PREPARATION_ONLY",
+  "checked_at": "2026-10-28T02:37:04.651976+00:00",
+  "initialization": {
+    "2030": {
+      "seed": 2030,
+      "initialization": {
+        "B3": {
+          "full_state_sha256": "40bd2059745d641e7c124808e886cb46868c30376f37c48caab7858c86a92fbe",
+          "common_sha256": "f8a5b7c84e56d8e8fbf6a57c0a1c1b02b62f483807f156092198033662784343"
+        },
+        "B4": {
+          "full_state_sha256": "45b06b33537477a6a040e5033e5e5e2bfc2b1eef62429bfa06c19cc995fb2f46",
+          "common_sha256": "f8a5b7c84e56d8e8fbf6a57c0a1c1b02b62f483807f156092198033662784343"
+        },
+        "B6": {
+          "full_state_sha256": "156d37f9bc83df5b9926767e28dd037a2c3a45b8061618d5799ba845172fd87d",
+          "common_sha256": "f8a5b7c84e56d8e8fbf6a57c0a1c1b02b62f483807f156092198033662784343"
+        },
+        "B7": {
+          "full_state_sha256": "50dcc3295f13b4cd1dfe79ee9b549d767dd6e708195bfb8c6afdc782d2d0c56e",
+          "common_sha256": "f8a5b7c84e56d8e8fbf6a57c0a1c1b02b62f483807f156092198033662784343"
+        },
+        "B8": {
+          "full_state_sha256": "fa142fe04f6db3a8ef77d349ca936a2b66b7051eeb3cdb667772f8e52f12149f",
+          "common_sha256": "f8a5b7c84e56d8e8fbf6a57c0a1c1b02b62f483807f156092198033662784343"
+        }
+      },
+      "counts": {
+        "B7": 4411058,
+        "B8": 4411058
+      },
+      "static_cache_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+      "CPU_training_rng_sha256": "c5e764bed8204ad90e96899a69589b9c1d93377b8a05f494a44fdf4459667fe6",
+      "static_auxiliary_seed": 12030,
+      "fusion_auxiliary_seed": 22030,
+      "formal_optimizer_updates": 0,
+      "checkpoint_loads": 0,
+      "forward_backward_runs": 0,
+      "weather_payload_bytes": 0,
+      "cached_static_bytes": 312828
+    },
+    "2031": {
+      "seed": 2031,
+      "initialization": {
+        "B3": {
+          "full_state_sha256": "1ee77366bd0780a5745d4b1af3267232a163c2655222846774fa0c849e8278c4",
+          "common_sha256": "108ce3fb0ae5df971e32392dd574ad414ae965f6d1e51ab87d21baacb9226063"
+        },
+        "B4": {
+          "full_state_sha256": "690d8447fd6154807410f3ca7d5742346f629d77a74d7f3111b63acfe77c2770",
+          "common_sha256": "108ce3fb0ae5df971e32392dd574ad414ae965f6d1e51ab87d21baacb9226063"
+        },
+        "B6": {
+          "full_state_sha256": "89b9527c0ad2e5c9f8616b8a96b89e9dcd9d9eb07b727a6aace1dd6b83da4093",
+          "common_sha256": "108ce3fb0ae5df971e32392dd574ad414ae965f6d1e51ab87d21baacb9226063"
+        },
+        "B7": {
+          "full_state_sha256": "65c4889632e0dd1770473016ced5cb5deeff2eade8b64db3ce2d6a347315fa91",
+          "common_sha256": "108ce3fb0ae5df971e32392dd574ad414ae965f6d1e51ab87d21baacb9226063"
+        },
+        "B8": {
+          "full_state_sha256": "896f722352602b4bb62786e38b18a2f4b34be37eaa60392dddb6218c2956be73",
+          "common_sha256": "108ce3fb0ae5df971e32392dd574ad414ae965f6d1e51ab87d21baacb9226063"
+        }
+      },
+      "counts": {
+        "B7": 4411058,
+        "B8": 4411058
+      },
+      "static_cache_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+      "CPU_training_rng_sha256": "b67cf0be0b985f1e5bf645db31260c04f9523ffb1712d1b20e18b01bdf01e958",
+      "static_auxiliary_seed": 12031,
+      "fusion_auxiliary_seed": 22031,
+      "formal_optimizer_updates": 0,
+      "checkpoint_loads": 0,
+      "forward_backward_runs": 0,
+      "weather_payload_bytes": 0,
+      "cached_static_bytes": 312828
+    }
+  },
+  "seed_references": {
+    "2030": {
+      "paired_initial_identity.json": "12f2240dcdc6e2867e0531e959c6c5933742043f9cbe25a8123087d9780fe257",
+      "paired_orders.json": "3cad8775b2ac64057a1c5a88f9301cefa008b975e821396b4a1995dab502545d"
+    },
+    "2031": {
+      "paired_initial_identity.json": "b317abf55a06666cfddd3c27a79f596d85253e5254bcfd73ce484c1d6fd66ad9",
+      "paired_orders.json": "1d10a8057e6f69f721f29ce32cab8801cbc23f61ef2fd07324be1deaa18ae26c"
+    }
+  },
+  "order_overlap": {
+    "rule": "epoch_order seed+epoch-1",
+    "observed_2030_E2_E9_equals_2031_E1_E8": true,
+    "seed2029_shift": "By inherited rule,2029 E2-E9 equals2030 E1-E8; no new old-seed execution",
+    "independent_weather_years": 1
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 15953575936,
+    "workspace_free_bytes": 65103417344,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 15562461184
+  },
+  "storage": {
+    "candidate_volume": "D",
+    "free_bytes": 105988202496,
+    "initial_required_bytes": 103079215104,
+    "namespace_write_probe_bytes": 17,
+    "namespace_write_probe_sha256": "b5c13b99d92b208af0641e339840a97bef598e3c9954b67d04154ba5f35b3d2b",
+    "F_volume_free_bytes": 99878469632,
+    "F_96GiB_admission": "INSUFFICIENT_NO_DELETION_OR_MIGRATION"
+  },
+  "source_admission_sha256": "b53a210f8c23ea2d81135ace4b7ed1e84ceafa45cfbf716d3aa3fd061d33c4ea",
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/dynamic_multiseed.py": "227bddeea6e05df1c222f0d0eec202d3f835d7ba30289a6703b80b6db7ce72b3",
+    "tools/research_readiness/start_dynamic_multiseed.py": "e7bd1d7e61efb9bcbf237ab7e798bc178f46b99029559696b71a1c2c7253e0b8",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": "e20f1d6f79fa7ac6a3dd72d927c76bcbcb7a225f555a77196c64777582764d19",
+    "tools/research_readiness/check_dynamic_multiseed.py": "b7043d0c0e43677d2dff168bf2088a9989af59457c028568674ac2d43b82d47c",
+    "tests/research_readiness/test_dynamic_multiseed.py": "8cfea07100a427984300e303daa3ec3a6e200be37ab90c022d4a71bcd33acdc5"
+  },
+  "unchanged_runtime_dependencies": 627,
+  "tests": {
+    "status": "PASS_NEW_CONTROLLER_AND_AFFECTED_LEGACY_WORKER_ONLY",
+    "unique_cases": 11,
+    "receipt": "SEE_TEST_RUN_LOG_AND_THIS_COMMIT"
+  },
+  "formal_optimizer_updates": 0,
+  "checkpoint_loads": 0,
+  "weather_payload_bytes": 0,
+  "original_DEM_tile_reads": 0,
+  "normalization_fits": 0,
+  "cached_static_payload_bytes": 625656,
+  "cached_static_instances": 2,
+  "extra_forward_backward_checks": 0,
+  "seed_checks_reused_after_private_storage_locator_parameterization": true,
+  "inherited_real_path": "B7/B8 seed2029 completed Train/Dev; unchanged model/loss/reader/normalization/grid/masks/GPU tensor shapes",
+  "final_2025": "FROZEN_NO_ACCESS"
+}

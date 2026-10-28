@@ -141,8 +141,15 @@ def worker(root,proposal,private,approval,commit,index):
     package=Path(v['output_root']);binding=read(package/'authorization_binding.json');claim=read(package/f'task_{index+1}_claim.json')
     if binding['controller_pid']!=os.getppid() or binding['approval']!=a or claim!=dict(index=index,controller_pid=os.getppid(),code_commit=commit):raise PermissionError('Live once-only parent binding required')
     kind,seed=TASKS[index]
-    if os.environ.get('PYTHONHASHSEED')!='2029' or shutil.disk_usage(package).free<p['budget']['minimum_task_free_bytes']:raise RuntimeError('Seed/storage admission differs')
-    db=sqlite3.connect(package/f'{kind}_static_source.sqlite');db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)');db.execute("INSERT INTO jobs VALUES ('static','PENDING')");db.commit()
+    return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=Path(v['historical_pair']),static_name=f'{kind}_static_source.sqlite')
+
+
+def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name):
+    """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
+    package=Path(v['output_root'])
+    if kind not in ('B7','B8') or type(seed)!=int:raise PermissionError('Explicit dynamic model/seed required')
+    if os.environ.get('PYTHONHASHSEED')!=str(seed) or shutil.disk_usage(package).free<p['budget']['minimum_task_free_bytes']:raise RuntimeError('Seed/storage admission differs')
+    db=sqlite3.connect(package/static_name);db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)');db.execute("INSERT INTO jobs VALUES ('static','PENDING')");db.commit()
     path=Path(v['terrain'])/'B6_static.npz';meter=SourceMeter(db,{str(path):dict(bytes=312828,sha=p['static_source_sha256'][kind],job_id='static')},max_files=1,max_bytes=312828);meter.active={path_key(path)}
     try:
         with meter.open(path,'rb') as f:raw=f.read()
@@ -157,7 +164,7 @@ def worker(root,proposal,private,approval,commit,index):
     folder=package/f'{kind}_s{seed}'
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:TerrainTail(pack),code_commit=commit,
-                   pair_reference=Path(v['historical_pair']),model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit'])).run(
+                   pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit'])).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
     deadline();write(folder/'completion.json',result);return result
