@@ -1,7 +1,7 @@
 # 科学分析统一入口
 
 B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6九轮及固定E9配对完成，地形收益混合、校准退化，仅支持单seed探索性消融；最终泛化未验证。
-B7/B8仍仅seed2029完成固定E9；新增四模型包意外中断，没有三seed创新结果。
+seed2029固定E9与混合结果完整继承；新增两seed恢复包进行中，尚无新增E9或三seed创新结论。
 
 ## B3/B4：全部三个seed
 
@@ -72,7 +72,13 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 
 
-## 追加两seed：四模型包意外中断，未恢复训练
+## 当前恢复包已明确批准并单次启动：IN_PROGRESS
+
+研究者对完整e81c6e1/3314231a恢复包直接回复“是”，批准已消费。[真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)记录UTC `2026-10-28T08:11:15.867544+00:00` 的一次启动快照：新增259次RETURNED，其中259次属于批准的441必要重放；累计3580次实际尝试，旧E1–E6六轮封口保留，后三项仍PENDING。该快照不是实时计数，不冒充E9或三seed结果。
+
+真实E6 SHA/状态恢复已跨过并产生新更新；训练与页面的监督器及目标共四角色均核实无Job/包身份，原网页已切新包。批准后仅核对必要身份/资源和两项只读页面计数，未重复模型检查。源读取由正式账本计量，导出器不另跑模型或读取气象。原authorized=false提案、原包停止及下文待批准文字保留历史时点，当前新批准以本段和独立启动收据为准。
+
+## 历史原包：意外中断，当前已另批限额恢复
 
 执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；这是历史启动快照。最新[中断与页面修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。后续诊断支持更新引发的宿主生命周期耦合归因，训练未恢复；历史逐PID终止调用仍未捕获。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
 
@@ -84,7 +90,7 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 
 研究者直接确认“发生过更新”。[原因追踪与独立启动修复](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)保留证据分级：14:09:46 Codex记录执行器停止，14:09:51.644 Windows记录容器销毁，与最后journal写入相差约0.137秒；旧进程的宿主生命周期耦合为高置信归因，具体哪个历史终止调用未捕获。纯探针复现Job关闭会结束无窗口子进程；新WMI监督器及实际页面均已验证不属于任何Job/应用包，3项新门控测试通过，旧消耗批准被拒绝，0次训练恢复。旧初核NOT_VERIFIED收据原样保留，不把后续诊断倒写到历史。
 
-### 最小限额恢复已准备，尚未执行
+### 历史准备时点：最小限额恢复已准备
 
 [唯一恢复提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)绑定执行代码`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`、规范化SHA256 `3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e`；[10项新恢复检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)仅用CPU夹具验证状态/LR/RNG、441重放账本、读范围、串行与失败即停，实际权重未加载、原始气象未读取。继续训练指令已收到，但旧零replay批准已消费，准确新增限额仍待一次明确批准。
 
@@ -189,4 +195,4 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
-`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。只更新中断状态、六轮封口/3,321实际更新及441未保存说明；全部既有原值和差值保留，新终点继续空值，没有新增三seed均值或标准差。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
+`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。仅更新四任务批准/恢复启动状态及带时点实际尝试和执行版本，旧全部指标与配对差值不变；新E9终点占位仍为空值，没有三seed统计。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。

@@ -40,6 +40,7 @@ INNOVATION_MULTI_STOP = READY + 'evidence/b7_b8_multiseed_interruption_20261028.
 INNOVATION_MULTI_CAUSE = READY + 'evidence/b7_b8_multiseed_exit_cause_20261028.json'
 INNOVATION_MULTI_RECOVERY = READY + 'evidence/b7_b8_multiseed_recovery_proposal_20261028.json'
 INNOVATION_MULTI_RECOVERY_CHECKS = READY + 'evidence/b7_b8_multiseed_recovery_checks_20261028.json'
+INNOVATION_MULTI_RECOVERY_LAUNCH = READY + 'evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -249,6 +250,7 @@ def main():
     innovation_multi_stop=read(INNOVATION_MULTI_STOP) if (ROOT/INNOVATION_MULTI_STOP).exists() else None
     innovation_multi_cause=read(INNOVATION_MULTI_CAUSE) if (ROOT/INNOVATION_MULTI_CAUSE).exists() else None
     innovation_multi_recovery=read(INNOVATION_MULTI_RECOVERY) if (ROOT/INNOVATION_MULTI_RECOVERY).exists() else None
+    innovation_multi_recovery_launch=read(INNOVATION_MULTI_RECOVERY_LAUNCH) if (ROOT/INNOVATION_MULTI_RECOVERY_LAUNCH).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -279,6 +281,14 @@ def main():
                          epochs=str(run['sealed_train_dev_epochs']),global_steps=str(run['returned_updates']),
                          verified_at=innovation_multi_stop['observed_at'],status_as_of=innovation_multi_stop['observed_at'],evidence_path=INNOVATION_MULTI_STOP,
                          notes='Controller and workers gone, no terminal receipt. B7/2030:3321 RETURNED, E6/2880 saved,441 unsaved. Remaining three NOT_STARTED. Original ledgers/journals preserved; monitor recovered private copies only. No restart/replay authorized, no fixed E9.')
+            if innovation_multi_recovery_launch:
+                ml=innovation_multi_recovery_launch;run=next(x for x in ml['models'] if (x['model'],x['seed'])==(kind,seed))
+                r.update(phase='DYNAMIC_MULTI_SEED_APPROVED_E6_RECOVERY_IN_PROGRESS',status=run['status'],execution_state=run['execution_state'],
+                         epochs=str(run['sealed_train_dev_epochs']),global_steps=str(run['returned_updates']),verified_at=ml['as_of'],status_as_of=ml['as_of'],
+                         evidence_path=INNOVATION_MULTI_RECOVERY_LAUNCH,authorization_status='APPROVED_EXACT_E6_441_RECOVERY_CONSUMED_ONCE',
+                         executed_commit=ml['training_commit'] if run['training_started'] else 'NOT_STARTED_PENDING_SERIAL_QUEUE',source_snapshot_commit=ml['training_commit'],
+                         training_config_reference=INNOVATION_MULTI_RECOVERY+f'#/training_configs/{kind}_s{seed}',
+                         notes=f"Startup snapshot only; effective_updates={run['effective_updates']},new_segment_returned={run['new_segment_returned']},replay_returned={run['replayed_updates']}. B7 E1-E6 inherited56aae5b; E7-E9 recoverye81c6e1. Original3321 attempts incl441 unsaved retained. No new fixedE9 results; queued tasks not yet started.")
             matrix.append(r);experiments[r['experiment_id']]=r
         assert len(matrix)==len(experiments)==35
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
@@ -743,6 +753,16 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
 
 旧E6只安排SHA核对1次、反序列化1次；文件53,902,917字节，107,805,834字节是两次逻辑归档体积，和天气/静态源账本分列，不声称torch/zip内部物理读取流量上限。恢复将保留模型、AdamW、学习率进度、全部必要RNG及九轮样本顺序，旧E1–E6和441未保存尝试原样保留。冻结E0/f006/959/963/固定E9及评价口径不变，2025继续冻结；目前没有恢复批准文件、新输出目录或新增科研结果。
 '''
+        if innovation_multi_recovery_launch:
+            ml=innovation_multi_recovery_launch
+            multi_text=multi_text.replace('## 追加两seed：四模型包意外中断，未恢复训练','## 历史原包：意外中断，当前已另批限额恢复')
+            multi_text=multi_text.replace('### 最小限额恢复已准备，尚未执行','### 历史准备时点：最小限额恢复已准备')
+            multi_text=f'''\n## 当前恢复包已明确批准并单次启动：IN_PROGRESS
+
+研究者对完整e81c6e1/3314231a恢复包直接回复“是”，批准已消费。[真实启动收据]({INNOVATION_MULTI_RECOVERY_LAUNCH})记录UTC `{ml['as_of']}` 的一次启动快照：新增{ml['new_segment_returned']}次RETURNED，其中{ml['replay_returned']}次属于批准的441必要重放；累计{ml['cumulative_returned']}次实际尝试，旧E1–E6六轮封口保留，后三项仍PENDING。该快照不是实时计数，不冒充E9或三seed结果。
+
+真实E6 SHA/状态恢复已跨过并产生新更新；训练与页面的监督器及目标共四角色均核实无Job/包身份，原网页已切新包。批准后仅核对必要身份/资源和两项只读页面计数，未重复模型检查。源读取由正式账本计量，导出器不另跑模型或读取气象。原authorized=false提案、原包停止及下文待批准文字保留历史时点，当前新批准以本段和独立启动收据为准。
+'''+multi_text
         innovation_text=multi_text+innovation_text;innovation_analysis_text=multi_text+innovation_analysis_text
         innovation_analysis_text+='''\n### B6与独立DOTE验证：仅后续建议，不在本包内
 
@@ -784,6 +804,15 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
             innovation_stage_rows+='\n|B7/2030 E6恢复及后三任务|10项新恢复检查通过，代码/检查点身份/准确新增预算冻结|原零replay批准不覆盖441重放，新限额未批准；没有实际恢复|NOT_STARTED（恢复包）；原科学验证NOT_VERIFIED|'
             current_checks_text='仅新增B7/2030恢复入口10项CPU夹具检查及实际资源/身份绑定；原独立启动和所有模型/数据检查继承，0真实权重加载/优化器更新/原始气象读取。'
             input_checks_text='新增恢复代码/CPU检查/准确预算身份；继承旧E1–E6、441未保存及所有模型结果，不重复旧审查'
+        if innovation_multi_recovery_launch:
+            latest_status_text='准确441重放限额已明确批准并单次执行，B7/2030从E6真实恢复，后三任务串行等待，整包IN_PROGRESS；尚无新增固定E9或三seed汇总。'
+            innovation_stage_rows=innovation_stage_rows.replace('|B7/B8追加2030/2031|','|B7/B8追加2030/2031原包（历史中断）|')
+            innovation_stage_rows=innovation_stage_rows.replace('|原零replay批准不覆盖441重放，新限额未批准；没有实际恢复|NOT_STARTED（恢复包）；原科学验证NOT_VERIFIED|','|新准确限额已批准并单次消费，B7/2030真实恢复，后三项排队|IN_PROGRESS；固定E9/三seed科学验证尚未完成|')
+            latest_science_text='seed2029固定E9与混合结果完整继承；新增两seed恢复包进行中，尚无新增E9或三seed创新结论。'
+            completion_scope_text='B7/2030继承六轮封口、E6/2880恢复，旧3321实际尝试及441未保存历史仍计入；新增实际RETURNED与重放见启动收据，后三项未启动，无新增固定E9。'
+            current_checks_text='批准后仅核对冻结身份、实时资源、实际E6恢复与独立宿主证明，并验证两项只读页面计数；正式源读取由训练账本计量，不重复旧模型或源数据检查。'
+            input_checks_text='新增准确批准和真实恢复启动快照；旧E1–E6及所有历史结果继承，不重新推理或重查旧证据'
+            csv_scope_text='仅更新四任务批准/恢复启动状态及带时点实际尝试和执行版本，旧全部指标与配对差值不变；新E9终点占位仍为空值，没有三seed统计。'
         publication_base=m['execution_code_commit']
     stage = f'''# 阶段验收统一入口
 
@@ -901,6 +930,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names.append(INNOVATION_MULTI_CAUSE)
     if innovation_multi_recovery:
         input_names += [INNOVATION_MULTI_RECOVERY,INNOVATION_MULTI_RECOVERY_CHECKS]
+    if innovation_multi_recovery_launch:
+        input_names.append(INNOVATION_MULTI_RECOVERY_LAUNCH)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -941,6 +972,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|B7/B8追加两seed最新中断|[进程退出、部分账本、E6及页面修复]({INNOVATION_MULTI_STOP})|上一行仅历史启动；当前B7/2030为3,321 RETURNED/E6保存2,880/441未保存，后三项未启动。无终态收据、原因未验证；原账本SHA不变，0新训练或重放|" if innovation_multi_stop else ''}
 {f"|中断原因的后续追踪与工程修复|[宿主日志/事件SHA、研究者更新确认、Job探针与独立监督器]({INNOVATION_MULTI_CAUSE})|高置信归因为更新期间宿主生命周期耦合；实际监督器/页面均已核验无Job/包身份。具体历史PID终止调用未捕获，旧初核收据不改写，未恢复训练|" if innovation_multi_cause else ''}
 {f"|B7/2030恢复及后三任务准备|[唯一限额提案]({INNOVATION_MULTI_RECOVERY})、[10项针对性检查]({INNOVATION_MULTI_RECOVERY_CHECKS})|拟执行e81c6e1，尚未执行；E6记录SHA仍84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11，正式恢复前重哈希/加载各1次；新14,400更新含441重放待新批准，原E1–E6及失败段保留|" if innovation_multi_recovery else ''}
+{f"|当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份]({INNOVATION_MULTI_RECOVERY_LAUNCH})|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|" if innovation_multi_recovery_launch else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 

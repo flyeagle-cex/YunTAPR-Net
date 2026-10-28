@@ -130,8 +130,13 @@ class CampaignReader(base.Reader):
         self.static=listed==[('B5',2029),('B6',2029)]
         self.innovation=listed==[('B7',2029),('B8',2029)]
         self.innovation_multiseed=listed==[('B7',2030),('B8',2030),('B7',2031),('B8',2031)]
+        self.innovation_recovery=self.innovation_multiseed and self.recovery_parent is not None
         self.terrain=self.static or self.innovation
-        if self.recovery_parent:
+        if self.innovation_recovery:
+            if (self.budget['replay_allowance'],self.budget['cumulative_updates'],self.budget['total_updates'])!=(441,17721,14400):raise ValueError('Not the approved B7 E6 recovery')
+            self.tasks=self.approval['tasks']
+            self.extra_io=(self.budget['prior_source_files'],self.budget['prior_source_bytes'],self.budget['prior_source_bytes'])
+        elif self.recovery_parent:
             if listed!=[('B4',2030),('B3',2031),('B4',2031)] or self.budget['replay_allowance']!=390 or self.budget['cumulative_updates']!=17670:
                 raise ValueError('Not the approved bounded recovery')
             self.tasks=[dict(model=k,seed=s) for k,s in [('B3',2030),('B4',2030),('B3',2031),('B4',2031)]]
@@ -142,10 +147,9 @@ class CampaignReader(base.Reader):
         if (not self.recovery_parent and not self.terrain and ((not self.innovation_multiseed and listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)])
                 or self.budget['total_updates']!=17280 or self.budget['replay_allowance']!=0)) or binding['controller_pid']!=pid:
             raise ValueError('Not the approved four-model package')
-        if self.innovation_multiseed and (self.approval['code_commit']!='56aae5bc4568df5d91354805aa5d4cb6d34b62b3'
-                or self.approval['proposal_sha256']!='27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41'
-                or self.budget['total_source_bytes']!=1910287815360 or self.budget['total_source_files']!=571252):
-            raise ValueError('Not the approved B7/B8 multiseed identity/budget')
+        if self.innovation_multiseed:
+            expected=('e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c','3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e',1591906721352,476044) if self.innovation_recovery else ('56aae5bc4568df5d91354805aa5d4cb6d34b62b3','27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41',1910287815360,571252)
+            if (self.approval['code_commit'],self.approval['proposal_sha256'],self.budget['total_source_bytes'],self.budget['total_source_files'])!=expected:raise ValueError('Not the approved B7/B8 multiseed identity/budget')
         if self.terrain:
             if self.budget['total_updates']!=8640 or self.budget['replay_allowance']!=0:raise ValueError('Not the approved two-model terrain package')
             self.extra_io=(self.budget.get('prior_source_files',0),self.budget.get('prior_source_bytes',0),self.budget.get('prior_source_bytes',0))
@@ -183,20 +187,23 @@ class CampaignReader(base.Reader):
             replay_returned=0
             for index,task in enumerate(self.tasks):
                 kind,seed=task['model'],task['seed'];name=f'{kind}_s{seed}'
-                task_root=self.recovery_parent if self.recovery_parent and index==0 else self.folder
+                task_root=self.recovery_parent if self.recovery_parent and not self.innovation_recovery and index==0 else self.folder
                 folder=task_root/name
-                offset=480 if self.recovery_parent and index==1 else 0
+                offset=2880 if self.innovation_recovery and index==0 else 480 if self.recovery_parent and not self.innovation_recovery and index==1 else 0
                 returned=reserved=offset
                 if (folder/'updates.sqlite').exists():
                     rows=self.query(folder/'updates.sqlite','SELECT model,state,COUNT(*) FROM updates GROUP BY model,state')
                     if any(k!=kind or s not in ('RETURNED','INTENT') for k,s,n in rows):raise ValueError('Unexpected task ledger identity')
                     returned+=sum(n for k,s,n in rows if s=='RETURNED');reserved+=sum(n for k,s,n in rows)
-                if self.recovery_parent and index==1:replay_returned=min(390,returned-offset)
+                if self.innovation_recovery and index==0:replay_returned=min(441,returned-offset)
+                elif self.recovery_parent and not self.innovation_recovery and index==1:replay_returned=min(390,returned-offset)
                 epochs=[]
                 for epoch in range(1,10):
                     active=False
+                    inherited=self.innovation_recovery and index==0 and epoch<=6
+                    legacy_inherited=self.recovery_parent and not self.innovation_recovery and index==1 and epoch==1
+                    source=self.recovery_parent if inherited or legacy_inherited else task_root
                     for role in ('train','dev'):
-                        source=self.recovery_parent if self.recovery_parent and index==1 and epoch==1 else task_root
                         sub=source/name/f'{kind}_{role}_reads_{epoch:02d}'
                         receipt=self.document(str(sub/'pass_receipt.json'))
                         if receipt:
@@ -204,8 +211,8 @@ class CampaignReader(base.Reader):
                         elif (sub/'reads.sqlite').exists():
                             counts=self.query(sub/'reads.sqlite','SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0];active=True
                         else:continue
-                        for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
-                    source=self.recovery_parent if self.recovery_parent and index==1 and epoch==1 else task_root
+                        if not inherited:
+                            for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
                     train=self.document(str(source/name/f'{kind}_train_{epoch:02d}.json'))
                     dev=self.document(str(source/name/f'{kind}_development_{epoch:02d}.json'))
                     last=self.document(str(source/name/f'{kind}_LAST_epoch_{epoch:02d}.receipt.json'))
@@ -215,7 +222,7 @@ class CampaignReader(base.Reader):
                         metrics=base.metric_summary(dev).get('all') if dev else None,checkpoint_sha256=last.get('checkpoint_sha256') if last else None))
                 completion=self.document(str(folder/'completion.json'));failure=self.document(str(folder/'failure.json'))
                 sealed=sum(e['phase']=='SEALED' for e in epochs)
-                claim=self.folder/f'task_{index if self.recovery_parent else index+1}_claim.json'
+                claim=self.folder/f'task_{index if self.recovery_parent and not self.innovation_recovery else index+1}_claim.json'
                 state='COMPLETE' if completion and completion.get('status')=='COMPLETE_TRAIN_AND_DEV_EVALUATION' and returned==4320 and sealed==9 else 'FAILED' if failure else 'RUNNING' if folder.exists() or claim.exists() else 'PENDING'
                 current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
                 if self.terrain or self.innovation_multiseed:
@@ -235,9 +242,12 @@ class CampaignReader(base.Reader):
             if stopped and not failure and not completion:
                 for run in runs:
                     if run['state']=='RUNNING':run['state']='STOPPED'
-            returned=sum(r['returned'] for r in runs)+(390 if self.recovery_parent else 0)
-            reserved=sum(r['reserved'] for r in runs)+(390 if self.recovery_parent else 0)
-            if self.recovery_parent:
+            prior_replay=441 if self.innovation_recovery else 390 if self.recovery_parent else 0
+            returned=sum(r['returned'] for r in runs)+prior_replay
+            reserved=sum(r['reserved'] for r in runs)+prior_replay
+            if self.innovation_recovery:
+                limits=dict(updates=self.budget['cumulative_updates'],bytes=self.budget['cumulative_source_bytes'],files=self.budget['cumulative_source_files'],epochs=36,seconds=self.budget['max_package_seconds'])
+            elif self.recovery_parent:
                 verification=self.document('interrupted_source_verification/source_verification_receipt.json')
                 if verification:
                     for key,value in zip(('files','bytes','reserved_bytes'),(verification['opened_files'],verification['delivered_bytes'],verification['reserved_bytes'])):io[key]+=value
@@ -254,13 +264,14 @@ class CampaignReader(base.Reader):
             result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,
                 returned=returned,reserved=reserved,uncertain=reserved-returned,io=io,
                 sealed_epochs=sum(r['sealed_epochs'] for r in runs),completed_models=sum(r['state']=='COMPLETE' for r in runs),
-                limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,replay_returned=replay_returned,
+                limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,innovation_recovery=self.innovation_recovery,replay_returned=replay_returned,
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
                 message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else '控制器进程已退出，未留下完成或失败收据；页面按现有账本显示，训练未自动恢复，退出原因尚未核实。' if stopped and not completion else None)
             if self.static and completion:result['paired_summary']=self.document('static_paired_summary.json')
             if self.innovation and state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
             if self.innovation_multiseed and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_innovation_summary.json')
+            if self.innovation_recovery:result.update(segment_returned=returned-self.budget['prior_updates'],segment_limit=self.budget['total_updates'],prior_attempts=self.budget['prior_updates'])
             self.cache,self.cached_at=result,time.monotonic()
             return result
 

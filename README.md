@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-28）：B7/2030 E6最小恢复及后三任务入口、10项CPU检查、精确新增预算已冻结，待一次441必要重放限额批准；训练仍停止。新增14,400更新、1,591,906,721,352逻辑源字节/476,044次、新包最长21小时13分26秒，零额外重试。[唯一恢复提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)。现有指标和2025冻结不变。
+> 最新状态（2026-10-28）：e81c6e1/3314231a准确恢复包已明确获批并单次启动，B7/2030从E6真实恢复，后三项依序等待，整包IN_PROGRESS。启动快照新增259次RETURNED（259次在441重放内），累计3,580次实际尝试；尚无新增固定E9或三seed结果。[真实恢复启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)。旧证据及2025冻结不变。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

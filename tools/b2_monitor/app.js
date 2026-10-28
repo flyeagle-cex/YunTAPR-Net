@@ -13,6 +13,7 @@ function render(s){
     put('page-title',s.innovation_multiseed?'B7/B8 多seed配对复现':s.innovation?'B7/B8 核心创新消融':s.static?'B5/B6 地形消融':s.recovery?'B3/B4 限额恢复':'B3/B4 多seed复现');put('subtitle',s.innovation_multiseed?'Seed 2030 / 2031 · 2029结果继承 · concat / DTFM · 固定九轮 LAST':s.innovation?'Seed 2029 · DOTE / DTFM · E0 · 每模型九轮 LAST':s.static?'Seed 2029 · 海拔 / 完整静态地形 · E0 · 每模型九轮 LAST':s.recovery?`B4从E1恢复 · 必要重放 ${s.replay_returned} / 390 · 累计预算包含原失败段`:'Seed 2030 / 2031 · 固定串行 · E0 · 每模型九轮 LAST');
     put('time-label',s.static||s.innovation?'整包剩余时间额度':s.recovery?'恢复包剩余时间额度':'距离整包 24 小时时限');put('campaign-title',s.innovation?'B7 → B8 串行队列':s.static?'B5 → B6 串行队列':'四模型串行队列');$('campaign-section').hidden=false;
     if(s.b8_recovery){put('page-title','B8 限额恢复 · B7 固定E9对照');put('subtitle',`B8继承E1–E6 · 本次 ${number.format(s.segment_returned)} / 1,440 次更新 · 已重放 ${s.replay_returned} / 62 · 总计数包含原失败段`);put('time-label','本次恢复剩余时间额度');put('campaign-title','B7已完成 · B8恢复E7–E9');}
+    if(s.innovation_recovery){put('page-title','B7/B8 多seed限额恢复');put('subtitle',`B7/2030继承E1–E6 · 本包 ${number.format(s.segment_returned)} / 14,400 次更新 · 已重放 ${s.replay_returned} / 441 · 累计计数保留原中断段`);put('time-label','本恢复包剩余时间额度');put('campaign-title','B7/2030 E6 → B8/2030 → B7/2031 → B8/2031');}
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
     view=chosen;
     $('task').replaceChildren();$('campaign-runs').replaceChildren();
@@ -53,7 +54,7 @@ function render(s){
   }
   put('bytes',`${(s.io.bytes/1e9).toFixed(3)} / ${(s.limits.bytes/1e9).toFixed(3)} GB`);
   put('files',`${number.format(s.io.files)} / ${number.format(s.limits.files)}`);put('uncertain',String(s.uncertain));
-  put('replay',s.b8_recovery?'62（额外重试0）':s.recovery?'390（额外重试0）':'0');
+  put('replay',s.innovation_recovery?'441（额外重试0）':s.b8_recovery?'62（额外重试0）':s.recovery?'390（额外重试0）':'0');
   const r=s.resources||{},g=r.gpu;
   put('gpu',g?.name||'暂不可用');put('gpu-use',g?`${fmt(g.used_mib/1024,2)} / ${fmt(g.total_mib/1024,2)} GiB · ${fmt(g.utilization,0)}%`:'—');
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');

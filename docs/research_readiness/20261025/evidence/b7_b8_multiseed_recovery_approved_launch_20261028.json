@@ -1,0 +1,278 @@
+{
+  "status": "APPROVED_B7_E6_RECOVERY_AND_REMAINING_TASKS_IN_PROGRESS",
+  "as_of": "2026-10-28T08:11:15.867544+00:00",
+  "approved_at": "2026-10-28T16:03:38.829530+08:00",
+  "started_at": "2026-10-28T08:03:40.111422+00:00",
+  "training_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+  "proposal_sha256": "3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e",
+  "proposal_file_sha256": "7715f455e6bfb3d603fddc1b77228bf25f4d64e63fd5b296f6c04c5d5a711549",
+  "authorization": {
+    "decision_id": "RESEARCHER_B7_B8_E6_441_REPLAY_E81C6E1_20261028",
+    "approved_by_researcher": true,
+    "researcher_answer": "是",
+    "context": "Direct affirmative to exact e81c6e1/3314231a bounded recovery package question",
+    "approval_consumed": true,
+    "approved_replay_updates": 441,
+    "additional_replay": 0,
+    "additional_retry": 0
+  },
+  "tasks": [
+    {
+      "model": "B7",
+      "seed": 2030
+    },
+    {
+      "model": "B8",
+      "seed": 2030
+    },
+    {
+      "model": "B7",
+      "seed": 2031
+    },
+    {
+      "model": "B8",
+      "seed": 2031
+    }
+  ],
+  "models": [
+    {
+      "model": "B7",
+      "seed": 2030,
+      "status": "IN_PROGRESS",
+      "execution_state": "RUNNING",
+      "returned_updates": 3580,
+      "reserved_updates": 3580,
+      "effective_updates": 3139,
+      "new_segment_returned": 259,
+      "replayed_updates": 259,
+      "sealed_train_dev_epochs": 6,
+      "current_epoch": 7,
+      "phase": "TRAINING",
+      "training_started": true,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "effective_updates": 0,
+      "new_segment_returned": 0,
+      "replayed_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "effective_updates": 0,
+      "new_segment_returned": 0,
+      "replayed_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "effective_updates": 0,
+      "new_segment_returned": 0,
+      "replayed_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "current_epoch": 1,
+      "phase": "PENDING",
+      "training_started": false,
+      "complete": false,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    }
+  ],
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "updates_per_model": 4320,
+    "new_task_updates": [
+      1440,
+      4320,
+      4320,
+      4320
+    ],
+    "total_updates": 14400,
+    "replay_allowance": 441,
+    "prior_updates": 3321,
+    "saved_updates": 2880,
+    "cumulative_B7_attempts": 4761,
+    "cumulative_updates": 17721,
+    "new_source_bytes_per_task": [
+      159190859832,
+      477571953840,
+      477571953840,
+      477571953840
+    ],
+    "new_source_files_per_task": [
+      47605,
+      142813,
+      142813,
+      142813
+    ],
+    "total_source_bytes": 1591906721352,
+    "total_source_files": 476044,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840,
+      "B8": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "prior_source_bytes": 342759506598,
+    "prior_source_files": 102522,
+    "cumulative_source_bytes": 1934666227950,
+    "cumulative_source_files": 578566,
+    "static_source_bytes_per_task": 312828,
+    "static_source_files_per_task": 1,
+    "dynamic_extra_raw_source_bytes": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "prior_wall_seconds_ceil": 9994,
+    "task_wall_seconds": [
+      11606,
+      21600,
+      21600,
+      21600
+    ],
+    "max_model_seconds": 21600,
+    "max_package_seconds": 76406,
+    "cumulative_wall_seconds": 86400,
+    "initial_free_bytes": 103079215104,
+    "minimum_task_free_bytes": 25769803776,
+    "checkpoint_SHA_reads": 1,
+    "checkpoint_deserializations": 1,
+    "checkpoint_source_bytes": 53902917,
+    "checkpoint_read_byte_cap": 107805834,
+    "additional_retry_allowance": 0,
+    "additional_replay_allowance": 0,
+    "wall_accounting": "Prior elapsed charged through first confirmed-gone observation; new+prior<=24h, B7<=6h; approval waiting excluded"
+  },
+  "new_segment_returned": 259,
+  "new_segment_reserved": 259,
+  "cumulative_returned": 3580,
+  "replay_returned": 259,
+  "cumulative_io_snapshot": {
+    "files": 106911,
+    "bytes": 357147057987,
+    "reserved_bytes": 357152519613,
+    "sealed": 12
+  },
+  "new_source_delivered_bytes": 14387551389,
+  "new_source_opened_files": 4389,
+  "checkpoint": {
+    "model": "B7",
+    "seed": 2030,
+    "epoch": 6,
+    "updates": 2880,
+    "sha256": "84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11",
+    "bytes": 53902917,
+    "parent_commit": "56aae5bc4568df5d91354805aa5d4cb6d34b62b3",
+    "preparation": "METADATA_ONLY_NO_WEIGHT_LOAD_OR_REHASH",
+    "execution": "ONE_SHA_CHECK_AND_ONE_DESERIALIZATION",
+    "observed_restore": "Real E6 SHA check, model/AdamW/RNG/scheduler restoration crossed successfully: post-restore updates RETURNED. No additional manual weight reads."
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 16759828480,
+    "workspace_free_bytes": 57102270464,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 16366886912
+  },
+  "independent_processes": [
+    {
+      "role": "TRAINING_SUPERVISOR",
+      "in_any_job": false,
+      "package_status": 15700
+    },
+    {
+      "role": "TRAINING_TARGET",
+      "in_any_job": false,
+      "package_status": 15700
+    },
+    {
+      "role": "PAGE_SUPERVISOR",
+      "in_any_job": false,
+      "package_status": 15700
+    },
+    {
+      "role": "PAGE_TARGET",
+      "in_any_job": false,
+      "package_status": 15700
+    }
+  ],
+  "source_admission": {
+    "source_basename": "NC_H09_20231025_2300_R21_FLDK.06001_06001.nc",
+    "status": "PASS",
+    "bytes": 3543995,
+    "same_path": true,
+    "payload_bytes": 0
+  },
+  "output": {
+    "volume_alias": "APPROVED_D_PARENT_NEW_DIRECTORY",
+    "directory_alias": "B7_B8_s2030_s2031_E6_recovery_20261028_v1",
+    "initial_96GiB_gate": "PASSED_BY_EXECUTOR",
+    "per_task_24GiB_gate": "ENFORCED"
+  },
+  "monitor": {
+    "read_only": true,
+    "html": "HTTP200",
+    "snapshot": "HTTP200",
+    "new_counter_tests_passed": 2,
+    "prior_IO": "COUNTED_ONCE_NO_DOUBLE_COUNT",
+    "replay_counter": "MIN_NEW_B7_SEGMENT_RETURNED_441",
+    "pre_cutover_correction": "First private display candidate let legacy queued-B8 branch overwrite replay count; one-line monitor fix and isolated counter fixtures passed before page switch. Training ledger/runtime unaffected; original private candidate preserved."
+  },
+  "scope": {
+    "frozen_2025": "NO_ACCESS",
+    "historical_E1_E6": "INHERIT_56aae5b_NO_RETRAIN",
+    "old_E7_441_unsaved": "PRESERVED_AND_COUNTED",
+    "seed2029": "NO_RETRAIN",
+    "other_models": "NOT_INCLUDED",
+    "main": "NOT_MODIFIED"
+  },
+  "scientific_results": "NO_NEW_FIXED_E9_OR_THREE_SEED_STATISTICS_YET",
+  "privacy": "Process ids, commands, private locators and raw ledgers LOCAL_ONLY"
+}
