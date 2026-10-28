@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+B7/B8最新完成（2026-10-28）：B8于北京时间09:36:32完成固定E9及2024 Dev，恢复三轮、1440新更新（含62重放）全部核验；状态COMPLETE_TRAIN_AND_DEV_EVALUATION。B7不重训；首轮单seed核心创新消融COMPLETE_WITH_LIMITATIONS。B8对B7的Brier退化而AUROC/AP/条件Pinball/q32方向改善，强雨及欠覆盖反例保留。详见[完成收据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)和[统一分析](../../SCIENTIFIC_ANALYSIS.md)。2025冻结，旧停止/启动段为历史快照。
+
 B8最新获批恢复（2026-10-28）：研究者明确批准ef11531/60e81408的E6→E9及62次重放，已单次启动并有真实新更新返回；状态IN_PROGRESS，不是COMPLETE。B7保持完成。固定代码、资源、启动时点及计数见[启动收据](../research_readiness/20261025/evidence/b8_recovery_approved_launch_20261028.json)，此前待批准/失败段为历史快照。2025和main不变。
 
 B8恢复准备（2026-10-28）：出错单源当前元数据/4KiB读取通过，历史WinError121原因仍未验证；E6→E9入口和新限额提案就绪，但尚无恢复/62重放批准，B8仍FAILED_INCOMPLETE_NO_FIXED_E9。B7保持完成；2025冻结。详见[恢复申请](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。

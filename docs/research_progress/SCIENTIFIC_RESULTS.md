@@ -1,5 +1,7 @@
 # 已有真实实验结果与科学边界
 
+B7/B8固定E9首轮结果已完成（2026-10-28）：B8−B7的Brier +0.001319191800730174、AUROC +0.00023383897029272127、AP +0.0006938316577447257、条件Pinball −0.0005184234368824647、q32覆盖 +0.005718209013780617。B8 q32仍欠名义水平约4.3833个百分点；20–50 mm/h对B7改善但对B4略差、06 UTC AP退化等反例完整保留。只有seed2029、同一Dev年，不声明物理机制或统计显著性。主指标、UTC、强雨和已有海拔充分量见[统一分析](../../SCIENTIFIC_ANALYSIS.md)及[完成证据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。
+
 最新B7固定E9仅支持收益混合的单seed探索性结论：相对B6，AUROC/AP/q32欠覆盖方向改善，Brier和条件Pinball退化，20–50 mm/h反例保留。B7总体q32=0.9348241871413859，仍低于0.984375。B8源路径WinError121失败、缺少E9，不是DTFM性能被否定，也不能用E6补作最终对照。完整同人口B4–B7数值、UTC/雨强/海拔和B8缺失状态见[统一分析](../../SCIENTIFIC_ANALYSIS.md)及[新终态证据](../research_readiness/20261025/evidence/b7_b8_terminal_20261028.json)。
 
 B7/B8状态更新：已获整包新批准并开始B7，B8依序等待。科学参数按b1f072e/64e8冻结，仍无固定E9科研结果；新增物理代理量、初始预测等价及部分更新不构成创新有效性结论。[启动收据](../research_readiness/20261025/evidence/b7_b8_approved_launch.json)。B0–B6既有全部正负结果继续保留。
