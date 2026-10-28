@@ -1,0 +1,131 @@
+{
+  "status": "STOPPED_WITHOUT_TERMINAL_RECEIPT",
+  "observed_at": "2026-10-28T06:20:21.897077+00:00",
+  "first_process_observation_beijing": "2026-10-28T14:14:46.579+08:00",
+  "training_commit": "56aae5bc4568df5d91354805aa5d4cb6d34b62b3",
+  "proposal_sha256": "27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41",
+  "process_observation": {
+    "web_service": "EXITED",
+    "training_controller": "EXITED",
+    "project_training_workers": "NOT_FOUND_BY_PROCESS_QUERY",
+    "os_last_boot_beijing": "2026-10-26T07:44:15.500000+08:00",
+    "os_reboot_during_run": false
+  },
+  "termination_reason": "NOT_VERIFIED: no Python traceback or completion/failure receipt; do not attribute to model, WinError121, network or user action",
+  "models": [
+    {
+      "model": "B7",
+      "seed": 2030,
+      "status": "STOPPED_UNEXPECTED",
+      "execution_state": "STOPPED",
+      "returned_updates": 3321,
+      "reserved_updates": 3321,
+      "sealed_train_dev_epochs": 6,
+      "last_saved_updates": 2880,
+      "unsaved_returned_updates": 441,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "status": "NOT_STARTED",
+      "execution_state": "BLOCKED_NOT_STARTED",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "last_saved_updates": 0,
+      "unsaved_returned_updates": 0,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "BLOCKED_NOT_STARTED",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "last_saved_updates": 0,
+      "unsaved_returned_updates": 0,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "BLOCKED_NOT_STARTED",
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0,
+      "last_saved_updates": 0,
+      "unsaved_returned_updates": 0,
+      "fixed_E9_results": "NOT_AVAILABLE"
+    }
+  ],
+  "optimizer_ledger": {
+    "returned": 3321,
+    "reserved": 3321,
+    "last_saved": 2880,
+    "unsaved_returned": 441,
+    "extra_updates_after_interruption": 0,
+    "actual_replay": 0
+  },
+  "logical_io_committed_snapshot": {
+    "files": 102522,
+    "bytes": 342759506598,
+    "reserved_bytes": 342759506598,
+    "sealed": 12
+  },
+  "logical_io_scope": "Committed SQLite metadata snapshot; interrupted hot transaction parsed only in isolated copy; not a full physical storage traffic measurement",
+  "last_saved_E6": {
+    "model": "B7",
+    "epoch": 6,
+    "updates": 2880,
+    "checkpoint_sha256": "84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "validation_receipt_sha256": "e6ef805d7839d25bc42feb3f79a556480c60be37dc01d8a8cbcd11e28df3c0e3",
+    "code_commit": "56aae5bc4568df5d91354805aa5d4cb6d34b62b3"
+  },
+  "last_saved_identity_scope": "SHA recorded in existing E6 checkpoint receipt; no new checkpoint payload hash/load or inference",
+  "source_metadata": [
+    {
+      "source_id": "B7_s2030/updates.sqlite",
+      "sha256": "6333eb5cd49057552b097d34c17ecca0fc9684db9faf3b24f1e0bc37b833eeec"
+    },
+    {
+      "source_id": "B7_s2030/B7_train_reads_07/reads.sqlite",
+      "sha256": "5d081fe1281e1001af4853de3153c75ef297d26aaa691f7b42d849542b569bc9"
+    },
+    {
+      "source_id": "B7_s2030/B7_train_reads_07/reads.sqlite-journal",
+      "sha256": "017b77b78338ed8d23d10ff85598c3d5eaa43ca5f47dbe0183719b692aa47926"
+    }
+  ],
+  "original_ledger_bytes_unchanged": true,
+  "isolated_copy_query_count": 1,
+  "sqlite_issue": "Read-only SQLite cannot recover a hot rollback journal. Recover only temporary private copies, then query copies; never recover original ledgers.",
+  "page_repair": {
+    "status": "VERIFIED_HTML_AND_SNAPSHOT_HTTP_200",
+    "controller_state": "STOPPED",
+    "background_service_breakaway_from_parent_job": true,
+    "scope": "READ_ONLY_MONITOR_ONLY",
+    "checks": [
+      "Live process not misclassified as exited",
+      "Confirmed gone controller detected",
+      "Actual partial ledger/queued tasks displayed",
+      "Original ledger SHA unchanged",
+      "Python AST and JavaScript syntax PASS"
+    ]
+  },
+  "authorization": {
+    "original_training_grant_consumed": true,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "training_restarted": false,
+    "automatic_recovery": false,
+    "new_training_approval": "NOT_GRANTED"
+  },
+  "scientific_status": "INCOMPLETE_NO_NEW_E9_OR_THREE_SEED_COMPARISON",
+  "final_2025": "FROZEN_NO_ACCESS",
+  "main": "NOT_MODIFIED"
+}

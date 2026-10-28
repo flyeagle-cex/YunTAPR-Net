@@ -1,7 +1,7 @@
 # 科学分析统一入口
 
 B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6九轮及固定E9配对完成，地形收益混合、校准退化，仅支持单seed探索性消融；最终泛化未验证。
-B7/B8目前仅seed2029完成固定E9对照且收益混合；追加四模型获批进行中，三seed创新统计尚未产生。
+B7/B8仍仅seed2029完成固定E9；新增四模型包意外中断，没有三seed创新结果。
 
 ## B3/B4：全部三个seed
 
@@ -72,9 +72,9 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 
 
-## 追加两seed：四模型已获批准并单次启动，IN_PROGRESS
+## 追加两seed：四模型包意外中断，未恢复训练
 
-执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；不把此快照当实时计数。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
+执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；这是历史启动快照。最新[中断与页面修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。退出原因NOT_VERIFIED，训练未恢复。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
 
 原模型、E0/f006、959/963、Train2/Dev8、九轮固定E9、AdamW和学习率轨迹、全部归一化/掩膜及lambda0.1不变；只变任务seed及seed+10000/20000派生初始化流。两seed公共路径/4,411,058活跃参数已实查，旧seed+epoch−1规则的八轮移位重叠已记录，不能视为独立天气年份。准备阶段11项针对性检查通过，真实缓存静态读取625,656字节/2次，当时正式更新/检查点加载/原始气象载荷为0；没有重跑历史来源、逐轮总结或GPU压力测试。
 
@@ -179,4 +179,4 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
-`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。仅更新四任务批准/启动状态及24次RETURNED带时点快照；既有原始指标与差值不变，四条终点缺失占位保持空值，没有新增三seed均值或标准差。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
+`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。只更新中断状态、六轮封口/3,321实际更新及441未保存说明；全部既有原值和差值保留，新终点继续空值，没有新增三seed均值或标准差。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。

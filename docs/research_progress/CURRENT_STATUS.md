@@ -1,6 +1,6 @@
 # YunTAPR-Net 当前科研进度
 
-B7/B8多seed最新（2026-10-28）：研究者对56aae5b/27f7e3ed及D盘新目录明确回复“批准”，四模型已单次串行调度。UTC `2026-10-28T03:29:18.303844+00:00`（北京时间11:29:18）启动快照：B7/2030有24次RETURNED，B8/2030、B7/2031、B8/2031均排队未启动；整包IN_PROGRESS，新固定E9与三seed科学统计尚未产生。批准已消费、零重放/额外重试，2025冻结。见[真实启动收据](../research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)。以下历史准备/启动记录按原时点保留。
+2026-10-28最新中断：网页服务、四模型控制器及训练子进程均已退出，原目录无completion/failure终态收据，系统未重启；底层退出原因NOT_VERIFIED。B7/2030已有3,321 RETURNED、E1–E6封口，E6/2,880以外441未保存；B8/2030、B7/2031、B8/2031均未启动。只读页面恢复为STOPPED；热日志仅在私有副本解析，原账本SHA不变，未重启训练、未使用2025。见[中断与页面修复收据](../research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)。下方启动为历史时点，零replay旧批准不覆盖恢复。
 
 B7/B8最新完成（2026-10-28）：B8于北京时间09:36:32完成固定E9及2024 Dev，恢复三轮、1440新更新（含62重放）全部核验；状态COMPLETE_TRAIN_AND_DEV_EVALUATION。B7不重训；首轮单seed核心创新消融COMPLETE_WITH_LIMITATIONS。B8对B7的Brier退化而AUROC/AP/条件Pinball/q32方向改善，强雨及欠覆盖反例保留。详见[完成收据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)和[统一分析](../../SCIENTIFIC_ANALYSIS.md)。2025冻结，旧停止/启动段为历史快照。
 

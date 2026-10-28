@@ -36,6 +36,7 @@ INNOVATION_MULTI = READY + 'evidence/b7_b8_multiseed_proposal_20261028.json'
 INNOVATION_MULTI_CHECKS = READY + 'evidence/b7_b8_multiseed_checks_20261028.json'
 INNOVATION_MULTI_SOURCE = READY + 'evidence/b7_b8_multiseed_source_admission_20261028.json'
 INNOVATION_MULTI_LAUNCH = READY + 'evidence/b7_b8_multiseed_approved_launch_20261028.json'
+INNOVATION_MULTI_STOP = READY + 'evidence/b7_b8_multiseed_interruption_20261028.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -242,6 +243,7 @@ def main():
                          notes='Nine fixed E9 Train/Dev epochs verified; effective updates4320, actual B8 attempts4382 incl62 approved replay; E1-E6 b1f072e, E7-E9 ef11531; single-seed mixed DTFM results, not an independent extra seed.')
     innovation_multi=read(INNOVATION_MULTI) if (ROOT/INNOVATION_MULTI).exists() else None
     innovation_multi_launch=read(INNOVATION_MULTI_LAUNCH) if (ROOT/INNOVATION_MULTI_LAUNCH).exists() else None
+    innovation_multi_stop=read(INNOVATION_MULTI_STOP) if (ROOT/INNOVATION_MULTI_STOP).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -265,6 +267,13 @@ def main():
                          executed_commit=innovation_multi_launch['training_commit'] if run['training_started'] else 'NOT_STARTED_PENDING_SERIAL_QUEUE',
                          metrics_path='NOT_AVAILABLE_NO_FIXED_E9_RESULTS',checkpoint_reference='NOT_AVAILABLE_NO_FIXED_E9_RESULTS',
                          notes='Approved startup snapshot only; queued tasks remain NOT_STARTED, no E9 metrics. Frozen controller serially dispatches four tasks; zero replay/extra retry. Seed2029 including62 historical replay remains inherited.')
+            if innovation_multi_stop:
+                assert innovation_multi_stop['training_commit']==innovation_multi['execution_code_commit']
+                run=next(x for x in innovation_multi_stop['models'] if (x['model'],x['seed'])==(kind,seed))
+                r.update(phase='DYNAMIC_MULTI_SEED_STOPPED_WITHOUT_TERMINAL_RECEIPT',status=run['status'],execution_state=run['execution_state'],
+                         epochs=str(run['sealed_train_dev_epochs']),global_steps=str(run['returned_updates']),
+                         verified_at=innovation_multi_stop['observed_at'],status_as_of=innovation_multi_stop['observed_at'],evidence_path=INNOVATION_MULTI_STOP,
+                         notes='Controller and workers gone, no terminal receipt. B7/2030:3321 RETURNED, E6/2880 saved,441 unsaved. Remaining three NOT_STARTED. Original ledgers/journals preserved; monitor recovered private copies only. No restart/replay authorized, no fixed E9.')
             matrix.append(r);experiments[r['experiment_id']]=r
         assert len(matrix)==len(experiments)==35
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
@@ -713,6 +722,9 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
             multi_text=multi_text.replace('目前只有seed2029完成，新四任务均0更新/0轮，三seed汇总尚无。',f"[明确批准与真实启动收据]({INNOVATION_MULTI_LAUNCH})记录UTC `{ml['as_of']}`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；不把此快照当实时计数。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。")
             multi_text=multi_text.replace('D盘具体位置随集中批准确认','D盘具体新位置已随本次整包批准确认')
             multi_text=multi_text.replace('新增训练尚无批准','研究者已对完整提案直接回复“批准”，该批准已消费并单次执行；启动有界源元数据/只读权限检查通过，0载荷，无重复模型测试。旧authorized=false提案保留准备时点，不改写其SHA')
+        if innovation_multi_stop:
+            multi_text=multi_text.replace('四模型已获批准并单次启动，IN_PROGRESS','四模型包意外中断，未恢复训练')
+            multi_text=multi_text.replace('；不把此快照当实时计数。',f"；这是历史启动快照。最新[中断与页面修复收据]({INNOVATION_MULTI_STOP})记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。退出原因NOT_VERIFIED，训练未恢复。")
         innovation_text=multi_text+innovation_text;innovation_analysis_text=multi_text+innovation_analysis_text
         innovation_analysis_text+='''\n### B6与独立DOTE验证：仅后续建议，不在本包内
 
@@ -737,6 +749,14 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
             csv_scope_text='仅更新四任务批准/启动状态及24次RETURNED带时点快照；既有原始指标与差值不变，四条终点缺失占位保持空值，没有新增三seed均值或标准差。'
             current_checks_text='批准后仅核对固定执行版本、真实资源与源路径有界元数据入场、实际优化器返回及独立只读页面；不重复旧模型或数据测试。'
             input_checks_text='继承已通过准备检查，仅新增精确批准/启动身份、实时资源及只读页面验证，不再次推理或重复旧审查'
+        if innovation_multi_stop:
+            innovation_stage_rows=innovation_stage_rows.replace('|整包已批准并单次启动；B7/2030运行、其余三项排队，无新增固定E9|IN_PROGRESS；三seed科学验证NOT_VERIFIED|','|B7/2030意外停止，六轮封口/3,321实际更新，441未保存；后三项未启动|STOPPED_UNEXPECTED；三seed科学验证NOT_VERIFIED|')
+            latest_status_text='新增四模型包已意外中断：B7/2030有3,321 RETURNED，最新E6/2,880、441未保存，后三项未启动；训练未恢复，退出原因NOT_VERIFIED。'
+            latest_science_text='B7/B8仍仅seed2029完成固定E9；新增四模型包意外中断，没有三seed创新结果。'
+            completion_scope_text='新增B7/2030仅E1–E6 Train/Dev封口，E7有441未保存更新；后三项未启动。无新增固定E9，不能用E6替代终点。'
+            csv_scope_text='只更新中断状态、六轮封口/3,321实际更新及441未保存说明；全部既有原值和差值保留，新终点继续空值，没有新增三seed均值或标准差。'
+            current_checks_text='仅核对服务/训练进程退出、现有部分账本与E6收据，修复只读页面；热日志仅在私有副本解析，原账本SHA不变，0新训练/推理/原始气象读取。'
+            input_checks_text='新增中断元数据及页面修复核对；不重复已完成模型审查，原训练目录和失败前账本不改写'
         publication_base=m['execution_code_commit']
     stage = f'''# 阶段验收统一入口
 
@@ -848,6 +868,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names += [INNOVATION_MULTI,INNOVATION_MULTI_CHECKS,INNOVATION_MULTI_SOURCE]
     if innovation_multi_launch:
         input_names.append(INNOVATION_MULTI_LAUNCH)
+    if innovation_multi_stop:
+        input_names.append(INNOVATION_MULTI_STOP)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -885,6 +907,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|B8恢复完成的最新收口|[三轮、六气象账本、静态账本与实际E9 SHA]({B8_COMPLETE})|B8九轮Train/Dev及固定E9已验证；4382实际尝试含62必要重放，旧E1–E6不复核；前面停止/启动状态为历史时点|" if b8_complete else ''}
 {f"|B7/B8追加两seed准备时点|[唯一四模型提案]({INNOVATION_MULTI})、[新初始化/顺序及检查]({INNOVATION_MULTI_CHECKS})、[0载荷源入场]({INNOVATION_MULTI_SOURCE})|执行代码56aae5b；准备时2030/2031四任务均NOT_STARTED；实际新批准/启动另列，不改写旧提案|" if innovation_multi else ''}
 {f"|B7/B8追加两seed最新获批启动|[新批准、24次RETURNED快照与资源入场]({INNOVATION_MULTI_LAUNCH})|整包IN_PROGRESS，B7/2030运行、其余三任务排队；零重放/额外重试，无新增E9或三seed结果；只读页面身份已核实|" if innovation_multi_launch else ''}
+{f"|B7/B8追加两seed最新中断|[进程退出、部分账本、E6及页面修复]({INNOVATION_MULTI_STOP})|上一行仅历史启动；当前B7/2030为3,321 RETURNED/E6保存2,880/441未保存，后三项未启动。无终态收据、原因未验证；原账本SHA不变，0新训练或重放|" if innovation_multi_stop else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 

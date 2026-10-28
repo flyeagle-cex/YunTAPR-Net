@@ -1,6 +1,6 @@
 # 阶段验收统一入口
 
-B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。当前完成范围仍仅B7/B8 seed2029；追加2030/2031四模型已批准并单次启动，整包IN_PROGRESS，三seed创新验证尚未完成。不能把训练完成等同于全部科学假设通过。
+B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。新增四模型包已意外中断：B7/2030有3,321 RETURNED，最新E6/2,880、441未保存，后三项未启动；训练未恢复，退出原因NOT_VERIFIED。不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
@@ -9,7 +9,7 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 |B3/B4|2029/2030/2031三个独立seed的九轮Train/Dev及固定E9配对|强雨和q32缺陷、同一开发年，未证明最终泛化或统计显著性|描述性随机性复现完成|
 |B5/B6|seed2029/E0/f006各九轮Train/Dev、4,320更新、固定E9权重身份与B4公平配对均完成|仅单seed；总体收益混合、q32和强雨仍有退化、DEM发布链未验证|训练/评价完成；探索性地形消融COMPLETE_WITH_LIMITATIONS|
 |B7/B8|seed2029各九轮Train/2024 Dev和固定E9身份均完成；B8继承六轮并恢复三轮，4320有效更新/4382实际尝试|单seed、同Dev年；DTFM收益混合，Brier、强雨及上尾仍有反例；机制和最终泛化未证明|COMPLETE_TRAIN_AND_DEV_EVALUATION；首轮探索性消融COMPLETE_WITH_LIMITATIONS|
-|B7/B8追加2030/2031|新seed初始化/顺序、入口及资源检查通过，四任务配置和预算冻结|整包已批准并单次启动；B7/2030运行、其余三项排队，无新增固定E9|IN_PROGRESS；三seed科学验证NOT_VERIFIED|
+|B7/B8追加2030/2031|新seed初始化/顺序、入口及资源检查通过，四任务配置和预算冻结|B7/2030意外停止，六轮封口/3,321实际更新，441未保存；后三项未启动|STOPPED_UNEXPECTED；三seed科学验证NOT_VERIFIED|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -30,17 +30,17 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含35条历史/当前记录；不是35个独立seed或35个已完成模型。seed2029完整继承；新增四模型启动快照为B7/2030有24次RETURNED、其余三项排队，无新增固定E9或指标，不冒充科研完成。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含35条历史/当前记录；不是35个独立seed或35个已完成模型。新增B7/2030仅E1–E6 Train/Dev封口，E7有441未保存更新；后三项未启动。无新增固定E9，不能用E6替代终点。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
-批准后仅核对固定执行版本、真实资源与源路径有界元数据入场、实际优化器返回及独立只读页面；不重复旧模型或数据测试。
+仅核对服务/训练进程退出、现有部分账本与E6收据，修复只读页面；热日志仅在私有副本解析，原账本SHA不变，0新训练/推理/原始气象读取。
 
 本轮出版基线：`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
 
-## 追加两seed：四模型已获批准并单次启动，IN_PROGRESS
+## 追加两seed：四模型包意外中断，未恢复训练
 
-执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；不把此快照当实时计数。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
+执行代码`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`，规范化提案SHA256 `27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41`；[唯一四模型提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[新初始化/顺序及必要检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](docs/research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。顺序B7/2030→B8/2030→B7/2031→B8/2031。[明确批准与真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)记录UTC `2026-10-28T03:29:18.303844+00:00`（北京时间加8小时）的启动快照：B7/2030有24次RETURNED，其余三任务排队未启动；这是历史启动快照。最新[中断与页面修复收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录控制器/子进程已退出且无终态收据，B7/2030为3,321 RETURNED、E6/2,880已保存、441未保存；其余三项未启动。退出原因NOT_VERIFIED，训练未恢复。仅seed2029已完成固定E9，新增四模型均无固定E9，三seed汇总尚无。
 
 原模型、E0/f006、959/963、Train2/Dev8、九轮固定E9、AdamW和学习率轨迹、全部归一化/掩膜及lambda0.1不变；只变任务seed及seed+10000/20000派生初始化流。两seed公共路径/4,411,058活跃参数已实查，旧seed+epoch−1规则的八轮移位重叠已记录，不能视为独立天气年份。准备阶段11项针对性检查通过，真实缓存静态读取625,656字节/2次，当时正式更新/检查点加载/原始气象载荷为0；没有重跑历史来源、逐轮总结或GPU压力测试。
 

@@ -5,6 +5,9 @@ from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer
 import importlib.util
 import json
+import shutil
+import sqlite3
+import tempfile
 import threading
 import time
 
@@ -14,6 +17,22 @@ spec = importlib.util.spec_from_file_location('existing_receipt_monitor', ROOT/'
 base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(base)
 base.HERE = HERE
+
+
+def process_exited(pid):
+    """Distinguish a gone Windows PID from an unavailable query; never control it."""
+    if base.os.name!='nt':return None
+    from ctypes import wintypes as w
+    kernel=base.ctypes.WinDLL('kernel32',use_last_error=True)
+    kernel.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD];kernel.OpenProcess.restype=w.HANDLE
+    kernel.CloseHandle.argtypes=[w.HANDLE]
+    kernel.GetExitCodeProcess.argtypes=[w.HANDLE,base.ctypes.POINTER(w.DWORD)]
+    handle=kernel.OpenProcess(0x1000,False,pid)
+    if not handle:return True if base.ctypes.get_last_error()==87 else None
+    try:
+        code=w.DWORD()
+        return code.value!=259 if kernel.GetExitCodeProcess(handle,base.ctypes.byref(code)) else None
+    finally:kernel.CloseHandle(handle)
 
 
 class B2Reader(base.Reader):
@@ -102,6 +121,7 @@ class CampaignReader(base.Reader):
         self.pid,self.token=pid,base.process_token(pid)
         self.cache,self.cached_at=None,0
         self.lock,self.fixed=threading.Lock(),{}
+        self.stopped_queries={}
         self.parent=None
         binding=self.document('authorization_binding.json')
         self.approval=binding['approval'];self.budget=self.approval['budget']
@@ -131,6 +151,31 @@ class CampaignReader(base.Reader):
             self.extra_io=(self.budget.get('prior_source_files',0),self.budget.get('prior_source_bytes',0),self.budget.get('prior_source_bytes',0))
         self.started=datetime.fromtimestamp(self.token/10**7-11644473600,timezone.utc) if self.token else datetime.fromtimestamp((self.folder/'authorization_binding.json').stat().st_mtime,timezone.utc)
 
+    def query(self,path,sql):
+        try:return base.query(path,sql)
+        except sqlite3.OperationalError as exc:
+            if 'readonly database' not in str(exc) or process_exited(self.pid) is not True:raise
+        # Abrupt exit can leave a hot journal. SQLite recovery may write ONLY
+        # inside a fresh private copy; original databases and journals stay intact.
+        source=Path(path)
+        files=[p for p in (source,Path(str(source)+'-journal'),Path(str(source)+'-wal'),Path(str(source)+'-shm')) if p.exists()]
+        stamps=lambda:tuple((str(p),p.stat().st_size,p.stat().st_mtime_ns) for p in files)
+        before=stamps();key=(before,sql)
+        if key in self.stopped_queries:return self.stopped_queries[key]
+        private=(ROOT/'docs/research_readiness/.local').resolve();private.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='monitor_ledger_copy_',dir=private) as temporary:
+            copied=Path(temporary).resolve()
+            if copied.parent!=private or not copied.name.startswith('monitor_ledger_copy_'):raise ValueError('Private copy path differs')
+            for p in files:shutil.copyfile(p,copied/p.name)
+            if stamps()!=before:raise ValueError('Ledger changed during isolated snapshot')
+            from contextlib import closing
+            with closing(sqlite3.connect(copied/source.name,timeout=.08)) as db:
+                db.execute('SELECT COUNT(*) FROM sqlite_master').fetchone()
+                db.execute('PRAGMA query_only=ON');rows=db.execute(sql).fetchall()
+            if stamps()!=before:raise ValueError('Original ledger changed during snapshot')
+        self.stopped_queries[key]=rows
+        return rows
+
     def snapshot(self, include_resources=True):
         with self.lock:
             if self.cache and time.monotonic()-self.cached_at<10:return self.cache
@@ -143,7 +188,7 @@ class CampaignReader(base.Reader):
                 offset=480 if self.recovery_parent and index==1 else 0
                 returned=reserved=offset
                 if (folder/'updates.sqlite').exists():
-                    rows=base.query(folder/'updates.sqlite','SELECT model,state,COUNT(*) FROM updates GROUP BY model,state')
+                    rows=self.query(folder/'updates.sqlite','SELECT model,state,COUNT(*) FROM updates GROUP BY model,state')
                     if any(k!=kind or s not in ('RETURNED','INTENT') for k,s,n in rows):raise ValueError('Unexpected task ledger identity')
                     returned+=sum(n for k,s,n in rows if s=='RETURNED');reserved+=sum(n for k,s,n in rows)
                 if self.recovery_parent and index==1:replay_returned=min(390,returned-offset)
@@ -157,7 +202,7 @@ class CampaignReader(base.Reader):
                         if receipt:
                             a=receipt['actual_reads'];counts=(a['opened_files'],a['delivered_bytes'],a['reserved_bytes']);io['sealed']+=1
                         elif (sub/'reads.sqlite').exists():
-                            counts=base.query(sub/'reads.sqlite','SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0];active=True
+                            counts=self.query(sub/'reads.sqlite','SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0];active=True
                         else:continue
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
                     source=self.recovery_parent if self.recovery_parent and index==1 and epoch==1 else task_root
@@ -176,7 +221,7 @@ class CampaignReader(base.Reader):
                 if self.terrain or self.innovation_multiseed:
                     static_db=self.folder/(f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
                     if static_db.exists():
-                        counts=base.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
+                        counts=self.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
                 runs.append(dict(model=kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
@@ -186,6 +231,10 @@ class CampaignReader(base.Reader):
                 for run in runs:
                     if run['state']=='RUNNING':run['state']='FAILED'
             live=self.token is not None and base.process_token(self.pid)==self.token
+            stopped=not live and process_exited(self.pid) is True
+            if stopped and not failure and not completion:
+                for run in runs:
+                    if run['state']=='RUNNING':run['state']='STOPPED'
             returned=sum(r['returned'] for r in runs)+(390 if self.recovery_parent else 0)
             reserved=sum(r['reserved'] for r in runs)+(390 if self.recovery_parent else 0)
             if self.recovery_parent:
@@ -195,7 +244,7 @@ class CampaignReader(base.Reader):
                 limits=dict(updates=17670,bytes=self.budget['cumulative_source_bytes'],files=self.budget['cumulative_source_files'],epochs=36,seconds=self.budget['max_wall_seconds'])
             elif self.terrain:limits=dict(updates=8640,bytes=self.budget.get('cumulative_source_bytes',self.budget['total_source_bytes']),files=self.budget.get('cumulative_source_files',self.budget['total_source_files']),epochs=18,seconds=self.budget['max_package_seconds'])
             else:limits=dict(updates=17280,bytes=self.budget['total_source_bytes'],files=4*self.budget['source_files_per_model'],epochs=36,seconds=86400)
-            state='FAILED' if failure else 'COMPLETE' if completion and all(r['state']=='COMPLETE' for r in runs) and returned==limits['updates'] else 'RUNNING' if live else 'UNKNOWN'
+            state='FAILED' if failure else 'COMPLETE' if completion and all(r['state']=='COMPLETE' for r in runs) and returned==limits['updates'] else 'RUNNING' if live else 'STOPPED' if stopped else 'UNKNOWN'
             over=reserved>limits['updates'] or any(r['reserved']>4320 for r in runs) or io['reserved_bytes']>limits['bytes'] or io['files']>limits['files']
             if over:state='BUDGET_ALERT'
             now=datetime.now(timezone.utc)
@@ -208,7 +257,7 @@ class CampaignReader(base.Reader):
                 limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,replay_returned=replay_returned,
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
-                message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else None)
+                message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else '控制器进程已退出，未留下完成或失败收据；页面按现有账本显示，训练未自动恢复，退出原因尚未核实。' if stopped and not completion else None)
             if self.static and completion:result['paired_summary']=self.document('static_paired_summary.json')
             if self.innovation and state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
             if self.innovation_multiseed and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_innovation_summary.json')

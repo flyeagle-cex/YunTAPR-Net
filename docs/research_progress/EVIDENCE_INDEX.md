@@ -1,6 +1,6 @@
 # 证据索引与可核验边界
 
-B7/B8新增2030/2031最新[批准与启动收据](../research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)绑定56aae5b/27f7e3ed、研究者原文“批准”、全部资源上限和24次RETURNED启动快照。整包IN_PROGRESS，后三项排队，尚无新增固定E9。原[唯一提案](../research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)的authorized=false保留准备时点、SHA不变；旧2029完成/失败/62重放证据不变。
+最新[中断与页面修复收据](../research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)记录真实进程消失、B7/2030为3,321 RETURNED/E6保存2,880/441未保存、后三项未启动，以及原账本SHA保持不变。原启动收据、冻结提案及seed2029全部证据原样保留。页面仅在隔离副本解析SQLite热日志，已恢复HTTP200并明确STOPPED；无训练恢复或额外重放，原因未验证。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 

@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 核心创新最新状态（2026-10-28）：B7/B8 seed2029固定E9首轮完成、结果混合；新增2030/2031四模型整包已明确获批并单次启动，B7/2030真实训练进行中，其余三项串行排队，整包IN_PROGRESS。新增固定E9与三seed统计尚无。[真实启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_approved_launch_20261028.json)；2025继续冻结。
+> 最新状态（2026-10-28）：B7/B8新增2030/2031四模型包意外中断。B7/2030为3,321实际更新、六轮Train/Dev封口、E6保存2,880，441未保存；后三项未启动，无新增固定E9。退出原因未核实，只读页面已修复，训练未恢复。[中断收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_interruption_20261028.json)。seed2029与2025冻结不变。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

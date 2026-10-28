@@ -1,6 +1,6 @@
 const $=id=>document.getElementById(id);
 const phases={SEALED:'已保存 LAST',VALIDATED:'评估完成',VALIDATION:'开发集评估',TRAINING:'训练中',PENDING:'等待'};
-const states={RUNNING:'运行中',COMPLETE:'已完成',FAILED:'已停止',UNKNOWN:'进程未确认',BUDGET_ALERT:'预算异常'};
+const states={RUNNING:'运行中',COMPLETE:'已完成',FAILED:'已停止',STOPPED:'意外中断',UNKNOWN:'进程未确认',BUDGET_ALERT:'预算异常'};
 const number=new Intl.NumberFormat('zh-CN');
 const fmt=(v,n=6)=>Number.isFinite(v)?v.toFixed(n):'—';
 const duration=seconds=>{const n=Math.max(0,Math.floor(seconds||0));return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,'0')).join(':');};
@@ -20,15 +20,15 @@ function render(s){
       const option=document.createElement('option');option.value=r.name;option.textContent=`${r.model} · Seed ${r.seed}`;$('task').append(option);
       const row=document.createElement('div');row.className='campaign-run';
       const title=document.createElement('strong');title.textContent=`${r.model} · ${r.seed}`;
-      const detail=document.createElement('span');detail.textContent=`${r.state==='PENDING'?(s.state==='FAILED'?'未启动（整包已停）':'等待'):states[r.state]||r.state} · ${number.format(r.returned)} / 4,320 步 · ${r.sealed_epochs} / 9 轮`;
+      const detail=document.createElement('span');detail.textContent=`${r.state==='PENDING'?(s.state==='FAILED'||s.state==='STOPPED'?'未启动（整包已停）':'等待'):states[r.state]||r.state} · ${number.format(r.returned)} / 4,320 步 · ${r.sealed_epochs} / 9 轮`;
       const progress=document.createElement('progress');progress.max=4320;progress.value=r.returned;progress.setAttribute('aria-label',`${r.model}种子${r.seed}更新进度`);
       row.append(title,detail,progress);$('campaign-runs').append(row);
     }
     $('task').value=chosen.name;put('timeline-title',`${chosen.model} · Seed ${chosen.seed} 九轮记录`);
   }
   const percent=Math.min(100,100*s.io.bytes/s.limits.bytes);
-  put('state-title',s.state==='COMPLETE'?(s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
-  put('state',states[s.state]||s.state);$('state').className='state '+(s.state==='FAILED'||s.state==='BUDGET_ALERT'?'failed':s.state==='UNKNOWN'?'unknown':'');
+  put('state-title',s.state==='COMPLETE'?(s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'||s.state==='STOPPED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
+  put('state',states[s.state]||s.state);$('state').className='state '+(s.state==='FAILED'||s.state==='STOPPED'||s.state==='BUDGET_ALERT'?'failed':s.state==='UNKNOWN'?'unknown':'');
   const current=view.epochs[view.current_epoch-1];
   put('stage',s.state==='COMPLETE'?'固定第九轮 LAST 已绑定完成收据':`${s.runs?`${view.model} / Seed ${view.seed} · `:''}第 ${view.current_epoch} / 9 轮 · ${phases[view.phase]||view.phase} · 本轮已确认 ${current.updates} / 480 步`);
   put('percent',`${percent.toFixed(1)}%`);$('overall').value=percent;
@@ -59,7 +59,7 @@ function render(s){
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');
   put('commit',s.source_commit.slice(0,12));
   put('updated',`快照：${new Date(s.snapshot_utc).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})} 北京时间 · 本地只读`);
-  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'?'已停止':`${percent.toFixed(1)}%`} · ${s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
+  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'||s.state==='STOPPED'?'已停止':`${percent.toFixed(1)}%`} · ${s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
 }
 async function refresh(){
   if(loading)return;loading=true;$('refresh').disabled=true;
