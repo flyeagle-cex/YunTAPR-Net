@@ -59,7 +59,7 @@ def validate_spec(path):
     elif spec['kind']=='ENGINEERING_PROBE':
         if not entry.is_relative_to(PRIVATE.resolve()):raise PermissionError('Probe must be an ignored local script')
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name!='start_dynamic_multiseed.py' or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):return Path(command[command.index(flag)+1])
         approval=read(argument('--researcher-approval'));proposal=read(argument('--proposal'));private=read(argument('--private-preparation'))
         if approval.get('approved_by_researcher') is not True or not approval.get('decision_id'):raise PermissionError('Explicit research decision required')

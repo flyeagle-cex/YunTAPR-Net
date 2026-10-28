@@ -1,0 +1,47 @@
+{
+  "status": "PASS_NEW_B7_2030_E6_RECOVERY_ENTRY_ONLY",
+  "at": "2026-10-28T07:09:56.771193+00:00",
+  "targeted_tests": {
+    "unique_tests_passed": 10,
+    "first_run_passed": 6,
+    "first_run_fixture_errors": 2,
+    "affected_rerun_plus_new_checks_passed": 4,
+    "initial_fixture_fix": "Missing parent field in synthetic controller fixture; no scientific code change required",
+    "model_state": "PASS_B7_seed2030",
+    "AdamW": "PASS",
+    "LR_progress": "PASS_2881_NOT_RESET",
+    "RNG": "PASS_PYTHON_NUMPY_TORCH_CPU_AND_MOCKED_CUDA",
+    "ledger": "PASS_1440_NEW_WITH441_REPLAY_AND4761_CUMULATIVE_B7",
+    "read_scope": "PASS_ONLY_B7_E7_E8_E9",
+    "serial_controller": "PASS_B7_2030_B8_2030_B7_2031_B8_2031",
+    "failure": "PASS_STOP_AND_KEEP_PARTIAL_LEDGER_NO_RETRY",
+    "new_epoch_closure": "PASS_INHERIT_SIX_AND_SEAL_NEW_THREE",
+    "untouched_task_pairing": "PASS_MATCHED_SEED_B7_REFERENCE",
+    "legacy_consumed_approval": "REJECTED_FOR_NEW_RECOVERY_ENTRY_BEFORE_EXECUTION"
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/dynamic_multiseed_recovery.py": "22fa5da213b1d33ed94c5bef6e40d1f3eb682c36d903a40c7215f53fba131240",
+    "tools/research_readiness/start_dynamic_multiseed_recovery.py": "4ec7276cdae4d6d0ad141c7b7154da43b35c60bdfd9208dbca6ee1406d77cece",
+    "tools/research_readiness/start_independent_process.py": "eb279f7280328a78e5048e8721865e3f19d5a755d5f8214c7fe13a1845685736",
+    "tests/research_readiness/test_dynamic_multiseed_recovery.py": "8bfa153aa978321d0e835de0af1e398f0e67a0146e7c14619990585763410946"
+  },
+  "inherited_checks": {
+    "docs/research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json": "e858701311bf00e35edaf3ec1affe4ee4ccdec82adef328d3215fc840b9710ef",
+    "docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json": "8469581557c8e84189b398248b97f9ea1a2c88ce02c172af83a325500f034b69",
+    "docs/research_readiness/20261025/evidence/b8_recovery_completion_20261028.json": "3fb57ebd6301d57598bca0f1bdf903160bb0f54acb3b82225616dd8a47fe0ab3"
+  },
+  "preparation_activity": {
+    "raw_weather_payload_bytes": 0,
+    "actual_checkpoint_payload_reads": 0,
+    "actual_checkpoint_deserializations": 0,
+    "formal_optimizer_updates": 0,
+    "model_inference": 0,
+    "synthetic_CPU_fixture_only": true
+  },
+  "researcher_instruction": {
+    "verbatim": "继续训练",
+    "interpretation": "Recovery intent received; exact new bound code/441 replay/resource package not yet approved"
+  },
+  "formal_recovery": "NOT_STARTED",
+  "final_2025": "FROZEN_NO_ACCESS"
+}
