@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+B7/B8多seed准备（2026-10-28）：新增B7/2030→B8/2030→B7/2031→B8/2031入口及初始化/顺序检查通过，执行代码56aae5b、唯一提案27f7e3ed；新四任务NOT_STARTED、0正式更新，待一次明确四模型与D盘新位置批准。仅seed2029已完成，三seed统计尚未产生。详见[集中审批](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)及[提案](../research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)。2025冻结，历史结果不重训。
+
 B7/B8最新完成（2026-10-28）：B8于北京时间09:36:32完成固定E9及2024 Dev，恢复三轮、1440新更新（含62重放）全部核验；状态COMPLETE_TRAIN_AND_DEV_EVALUATION。B7不重训；首轮单seed核心创新消融COMPLETE_WITH_LIMITATIONS。B8对B7的Brier退化而AUROC/AP/条件Pinball/q32方向改善，强雨及欠覆盖反例保留。详见[完成收据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)和[统一分析](../../SCIENTIFIC_ANALYSIS.md)。2025冻结，旧停止/启动段为历史快照。
 
 B8最新获批恢复（2026-10-28）：研究者明确批准ef11531/60e81408的E6→E9及62次重放，已单次启动并有真实新更新返回；状态IN_PROGRESS，不是COMPLETE。B7保持完成。固定代码、资源、启动时点及计数见[启动收据](../research_readiness/20261025/evidence/b8_recovery_approved_launch_20261028.json)，此前待批准/失败段为历史快照。2025和main不变。

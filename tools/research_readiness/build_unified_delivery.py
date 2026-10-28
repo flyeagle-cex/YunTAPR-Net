@@ -32,6 +32,9 @@ B8_DIAGNOSTIC = READY + 'evidence/b8_source_diagnostic_20261028.json'
 B8_CHECKS = READY + 'evidence/b8_recovery_checks_20261028.json'
 B8_LAUNCH = READY + 'evidence/b8_recovery_approved_launch_20261028.json'
 B8_COMPLETE = READY + 'evidence/b8_recovery_completion_20261028.json'
+INNOVATION_MULTI = READY + 'evidence/b7_b8_multiseed_proposal_20261028.json'
+INNOVATION_MULTI_CHECKS = READY + 'evidence/b7_b8_multiseed_checks_20261028.json'
+INNOVATION_MULTI_SOURCE = READY + 'evidence/b7_b8_multiseed_source_admission_20261028.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -236,6 +239,22 @@ def main():
                          evidence_path=B8_COMPLETE,source_manifest_reference=B8_COMPLETE,executed_commit=b8_complete['training_commit'],
                          verified_at=b8_complete['verified_at'],status_as_of=b8_complete['completed_at'],
                          notes='Nine fixed E9 Train/Dev epochs verified; effective updates4320, actual B8 attempts4382 incl62 approved replay; E1-E6 b1f072e, E7-E9 ef11531; single-seed mixed DTFM results, not an independent extra seed.')
+    innovation_multi=read(INNOVATION_MULTI) if (ROOT/INNOVATION_MULTI).exists() else None
+    if innovation_multi:
+        assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
+        for task in innovation_multi['tasks']:
+            kind,seed=task['model'],task['seed'];r=dict(next(x for x in matrix if x['model_id']==kind))
+            r.update(seed=str(seed),experiment_id=f'{kind}__E0__s{seed}__f006__dynamic',phase='DYNAMIC_MULTI_SEED_PREPARED_NOT_TRAINED',
+                     config=json.dumps(innovation_multi['training_configs'][f'{kind}_s{seed}']['config'],sort_keys=True),epochs='0',global_steps='0',
+                     status='NOT_STARTED',execution_state='NOT_STARTED',metrics_path='NOT_AVAILABLE_NO_FORMAL_TRAINING',
+                     checkpoint_reference='NOT_AVAILABLE_NO_FORMAL_TRAINING',checkpoint_selection='FIXED_EPOCH_9_LAST_PLANNED',
+                     verified_at='NOT_STARTED_NO_TRAINING_VERIFICATION',status_as_of='NOT_STARTED_NO_APPROVAL',
+                     authorization_status='WAITING_EXPLICIT_FOUR_MODEL_PACKAGE_APPROVAL',executed_commit='NOT_STARTED_NOT_EXECUTED',
+                     evidence_path=INNOVATION_MULTI,source_manifest_reference=INNOVATION_MULTI,source_snapshot_commit=innovation_multi['execution_code_commit'],
+                     training_config_reference=INNOVATION_MULTI+f'#/training_configs/{kind}_s{seed}',
+                     notes='New independent initialization seed planned; no formal optimizer updates, E9 weight or Dev metric. Seed2029 including62 historical replay remains separate inherited evidence.')
+            matrix.append(r);experiments[r['experiment_id']]=r
+        assert len(matrix)==len(experiments)==35
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -664,6 +683,35 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
     csv_scope_text = ('本轮补入B8 E7–E9轨迹、完整固定E9和B8对B4/B5/B6/B7全部配对差值；旧E1–E6执行身份保持b1f072e，新E7–E9及E9为ef11531。地形比较各单seed，不计算伪造样本标准差。' if b8_complete else ('本轮新增B7九轮、B8六轮轨迹与B7固定E9；B8固定E9缺失单列。地形比较各仅一个seed，不计算伪造的样本标准差。' if innovation_terminal else ''))
     publication_base = '651c250a90a60630176a9dfeb466a9b993642862' if b8_complete else 'ef11531a7cdeb35b767caebdb61e0e81c6123187'
     latest_science_text = (f'B7/B8固定E9及2024 Dev均已核实完成；DTFM对concat收益混合，仅单seed探索性结论，见[完成收据]({B8_COMPLETE})。' if b8_complete else (f'最新B7完成但收益混合；B8已获批从E6恢复E7–E9，状态IN_PROGRESS，固定E9与最终DTFM对照尚未获得，见[启动收据]({B8_LAUNCH})。' if b8_launch else (f'最新B7九轮完成但收益混合，B8因源路径超时停止且缺少固定E9；B7/B8整包未完成，DTFM融合对照NOT_VERIFIED。停止与核查证据见[本轮终态]({INNOVATION_TERMINAL})。' if innovation_terminal else '')))
+    if innovation_multi:
+        m=innovation_multi
+        multi_text=f'''\n## 追加两seed：四模型准备就绪，正式训练NOT_STARTED
+
+执行代码`{m['execution_code_commit']}`，规范化提案SHA256 `{m['proposal_sha256']}`；[唯一四模型提案]({INNOVATION_MULTI})、[新初始化/顺序及必要检查]({INNOVATION_MULTI_CHECKS})、[0载荷源路径入场]({INNOVATION_MULTI_SOURCE})。顺序B7/2030→B8/2030→B7/2031→B8/2031。目前只有seed2029完成，新四任务均0更新/0轮，三seed汇总尚无。
+
+原模型、E0/f006、959/963、Train2/Dev8、九轮固定E9、AdamW和学习率轨迹、全部归一化/掩膜及lambda0.1不变；只变任务seed及seed+10000/20000派生初始化流。两seed公共路径/4,411,058活跃参数已实查，旧seed+epoch−1规则的八轮移位重叠已记录，不能视为独立天气年份。11项针对性检查通过，真实缓存静态读取625,656字节/2次，正式更新/检查点加载/原始气象载荷为0；没有重跑历史来源、逐轮总结或GPU压力测试。
+
+预算逐冻结清单重算：每模型4,320更新、477,571,953,840字节/142,813次（含静态312,828字节/1次）；四模型17,280更新、1,910,287,815,360字节/571,252次，每模型6小时/整包24小时，Replay=0、额外重试=0。F盘约93.02GiB不足初始96GiB；D盘约98.71GiB且全新命名空间权限通过，拟输出`{m['output']['directory_alias']}`。保持初始96GiB/每任务24GiB，D盘具体位置随集中批准确认，不删除或迁移历史文件。启动重核资源及一次15秒有界源元数据；路径异常留账并停止，不当缺测。
+
+全部完成后公布B8−B7逐seed原值/差值、三seed均值及样本标准差ddof1，覆盖总体/四UTC/强雨场景/全部雨强层和已有海拔充分量。q32以距98.4375%的偏差及绝对误差评价，不简单看覆盖率高低；不按Dev结果改方案。新增训练尚无批准，2029混合/负面结果、原WinError121及62次重放证据保留，2025与main不变。
+'''
+        innovation_text=multi_text+innovation_text;innovation_analysis_text=multi_text+innovation_analysis_text
+        innovation_analysis_text+='''\n### B6与独立DOTE验证：仅后续建议，不在本包内
+
+本轮三seed只检验共享气象/地形信息下concat与DTFM的差异。B6仅seed2029，不能由此声称DOTE独立稳定增益。等本轮结果齐备后再决定是否补B6/2030、2031；两模型参考8,640更新、955,143,907,680字节/285,626次、12小时，仍混合了DOTE与融合/参数增量，须另案批准。
+
+若论文需隔离动态地形值的贡献，可另案设计同结构/同总参数的DOTE空间对应关系对照：在同一有效性模式类别内，对8通道向量作预注册联合空间置乱，保留有效集合、跨通道关系和非零值分布，只破坏正确空间对应；不得根据Dev选择置乱规则。它检验正确对应信息的预测价值，仍不证明真实抬升机制，且实现/活跃响应尚未验证。最小单seed先导参考4,320更新、477,571,953,840字节/142,813次、6小时；三个seed控样则12,960更新、1,432,715,861,520字节/428,439次、18小时。这些仅预算估算，均NOT_STARTED、未授权，不追加到本轮四模型包。
+
+最终测试准备仅可先冻结选模/报告规则及访问流程；2025载荷、推理和模型选择继续禁止。三个训练seed不是独立年份，大量像元也不是大量独立暴雨事件；不宣称显著性、物理因果或最终泛化。
+'''
+        innovation_stage_rows+='\n|B7/B8追加2030/2031|新seed初始化/顺序、入口及资源检查通过，四任务配置和预算冻结|尚无新增训练授权，四任务0轮/0更新，三seed统计尚无|NOT_STARTED；新增seed科学验证NOT_VERIFIED|'
+        latest_status_text='当前完成范围仅B7/B8 seed2029；2030/2031四任务准备就绪但NOT_STARTED，三seed创新验证尚未完成。'
+        latest_science_text='B7/B8目前仅seed2029完成固定E9对照且收益混合；追加2030/2031四模型NOT_STARTED，三seed创新统计尚未产生。'
+        completion_scope_text='已完成条目仅seed2029；追加四任务均0轮/0更新、无E9，不把准备文件或CPU初始化记为训练完成。'
+        csv_scope_text='本轮仅增加四条NOT_STARTED的终点缺失占位，已有全部原值及配对差值不变；没有新增B7/B8三seed均值或标准差。'
+        current_checks_text='本轮仅检查新seed初始化/顺序、入口和资源，正式更新/检查点加载/原始气象载荷为0；旧结果直接继承。'
+        input_checks_text='只新增多seed初始化/顺序、调度及资源元数据检查，继承全部B0–B8已完成结果'
+        publication_base=m['execution_code_commit']
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -770,6 +818,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names.append(B8_LAUNCH)
     if b8_complete:
         input_names.append(B8_COMPLETE)
+    if innovation_multi:
+        input_names += [INNOVATION_MULTI,INNOVATION_MULTI_CHECKS,INNOVATION_MULTI_SOURCE]
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -805,6 +855,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|B8恢复准备（未获批准）|[精确限额提案]({B8_RECOVERY})、[一次有界源诊断]({B8_DIAGNOSTIC})、[新增检查]({B8_CHECKS})|当前路径/4KiB可读，历史故障原因未验证；E6恢复入口就绪，1440新更新含62重放待新批准，0次正式恢复|" if b8_recovery else ''}
 {f"|B8{'历史获批恢复启动' if b8_complete else '最新获批恢复启动'}|[明确批准与真实更新]({B8_LAUNCH})|实际执行ef11531，E1–E6指标仍绑定b1f072e；本轮恢复IN_PROGRESS，E9未完成；前一行仅历史准备时点|" if b8_launch else ''}
 {f"|B8恢复完成的最新收口|[三轮、六气象账本、静态账本与实际E9 SHA]({B8_COMPLETE})|B8九轮Train/Dev及固定E9已验证；4382实际尝试含62必要重放，旧E1–E6不复核；前面停止/启动状态为历史时点|" if b8_complete else ''}
+{f"|B7/B8追加两seed准备|[唯一四模型提案]({INNOVATION_MULTI})、[新初始化/顺序及检查]({INNOVATION_MULTI_CHECKS})、[0载荷源入场]({INNOVATION_MULTI_SOURCE})|执行代码56aae5b；2030/2031四任务均NOT_STARTED，无新E9或指标，不复用旧批准|" if innovation_multi else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 

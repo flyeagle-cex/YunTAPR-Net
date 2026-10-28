@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+B7/B8多seed新增[唯一提案](../research_readiness/20261025/evidence/b7_b8_multiseed_proposal_20261028.json)、[11项检查及两seed初始身份/九轮顺序SHA](../research_readiness/20261025/evidence/b7_b8_multiseed_checks_20261028.json)、[0载荷源路径入场](../research_readiness/20261025/evidence/b7_b8_multiseed_source_admission_20261028.json)。代码56aae5b已推送；正式训练未批准、未开始。旧seed2029全部完成/失败/62重放证据不变。
+
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 
 B8最新[获批恢复启动收据](../research_readiness/20261025/evidence/b8_recovery_approved_launch_20261028.json)：实际执行ef11531，原E1–E6指标仍绑定b1f072e，新任务IN_PROGRESS；原失败段、62未保存更新和所有旧权重未覆盖。[近期停止原因](../research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)来自三份既有失败收据。

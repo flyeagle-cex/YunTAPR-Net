@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 核心创新首轮完成（2026-10-28）：B7/B8 seed2029九轮Train/2024 Dev及固定E9均已核验；B8收益混合、q32与强雨反例保留，仅单seed探索性消融。详见[统一分析](SCIENTIFIC_ANALYSIS.md)和[完成证据](docs/research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。2025冻结。
+> 核心创新最新状态（2026-10-28）：B7/B8 seed2029固定E9首轮完成，结果混合；新增2030/2031四任务入口、初始化/顺序和预算已准备，正式训练NOT_STARTED，三seed统计尚无。详见[集中审批](docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md)。2025冻结。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 
