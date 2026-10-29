@@ -33,6 +33,24 @@ class ControlMonitorTests(unittest.TestCase):
             out=self.workspace;self.fixture(out);f=out/'authorization_binding.json';a=json.loads(f.read_bytes());a['approval']['proposal_sha256']='WRONG';f.write_text(json.dumps(a))
             with patch.object(m.base,'query',side_effect=AssertionError('No ledger reads')):
                 with self.assertRaises(ValueError):m.CampaignReader(out,123)
+    def multi_fixture(self,out):
+        p=self.fixture(out);f=out/'authorization_binding.json';a=json.loads(f.read_bytes());a['control']='ZERO_NUMERIC_RETAIN_REAL_MASKS_TWO_SEEDS'
+        a['approval'].update(approved_by_researcher=True,tasks=[dict(model='B7_ZERO_DOTE',seed=s) for s in (2030,2031)])
+        a['approval']['budget'].update(total_updates=8640,total_source_bytes=955143907680,total_source_files=285626,max_package_seconds=43200)
+        f.write_text(json.dumps(a));(out/'B7_s2029').rename(out/'B7_s2030');(out/'B7_ZERO_DOTE_static_source.sqlite').rename(out/'B7_ZERO_DOTE_s2030_static_source.sqlite')
+        return a
+    def test_two_control_budget_labels_static_and_queue(self):
+        with patch.object(m.base,'process_token',return_value=134000000000000000):
+            out=self.workspace;self.multi_fixture(out);s=m.CampaignReader(out,123).snapshot(include_resources=False)
+            self.assertTrue(s['dote_control_multiseed']);self.assertEqual(len(s['runs']),2)
+            self.assertEqual([r['model'] for r in s['runs']],['B7_ZERO_DOTE']*2);self.assertEqual(s['runs'][1]['state'],'PENDING')
+            self.assertEqual(s['io']['bytes'],312828+1234);self.assertEqual(s['limits']['updates'],8640)
+            self.assertEqual(s['limits']['epochs'],18);self.assertEqual(s['limits']['seconds'],43200)
+    def test_two_control_wrong_budget_rejected_without_ledger_read(self):
+        with patch.object(m.base,'process_token',return_value=None):
+            out=self.workspace;a=self.multi_fixture(out);a['approval']['budget']['total_updates']=17280;(out/'authorization_binding.json').write_text(json.dumps(a))
+            with patch.object(m.base,'query',side_effect=AssertionError('No ledger reads')):
+                with self.assertRaises(ValueError):m.CampaignReader(out,123)
 
 
 if __name__=='__main__':unittest.main()

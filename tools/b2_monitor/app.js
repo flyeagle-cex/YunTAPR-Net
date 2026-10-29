@@ -14,7 +14,7 @@ function render(s){
     put('time-label',s.static||s.innovation?'整包剩余时间额度':s.recovery?'恢复包剩余时间额度':'距离整包 24 小时时限');put('campaign-title',s.innovation?'B7 → B8 串行队列':s.static?'B5 → B6 串行队列':'四模型串行队列');$('campaign-section').hidden=false;
     if(s.b8_recovery){put('page-title','B8 限额恢复 · B7 固定E9对照');put('subtitle',`B8继承E1–E6 · 本次 ${number.format(s.segment_returned)} / 1,440 次更新 · 已重放 ${s.replay_returned} / 62 · 总计数包含原失败段`);put('time-label','本次恢复剩余时间额度');put('campaign-title','B7已完成 · B8恢复E7–E9');}
     if(s.innovation_recovery){put('page-title','B7/B8 多seed限额恢复');put('subtitle',`B7/2030继承E1–E6 · 本包 ${number.format(s.segment_returned)} / 14,400 次更新 · 已重放 ${s.replay_returned} / 441 · 累计计数保留原中断段`);put('time-label','本恢复包剩余时间额度');put('campaign-title','B7/2030 E6 → B8/2030 → B7/2031 → B8/2031');}
-    if(s.dote_control){put('page-title','DOTE 零数值主对照');put('subtitle','B7_ZERO_DOTE · Seed 2029 · 零数值/真实mask保留 · 固定九轮 LAST');put('time-label','距本任务六小时时限');put('campaign-title','仅B7零数值控制 · 原B7结果继承');}
+    if(s.dote_control){put('page-title','DOTE 零数值主对照');put('subtitle',s.dote_control_multiseed?'B7_ZERO_DOTE · Seed 2030 → 2031 · 真实mask保留 · 各固定九轮 LAST':'B7_ZERO_DOTE · Seed 2029 · 零数值/真实mask保留 · 固定九轮 LAST');put('time-label',s.dote_control_multiseed?'距整包十二小时时限':'距本任务六小时时限');put('campaign-title','仅B7零数值控制 · 原B7结果继承');}
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
     view=chosen;
     $('task').replaceChildren();$('campaign-runs').replaceChildren();
@@ -29,7 +29,7 @@ function render(s){
     $('task').value=chosen.name;put('timeline-title',`${chosen.model} · Seed ${chosen.seed} 九轮记录`);
   }
   const percent=Math.min(100,100*s.io.bytes/s.limits.bytes);
-  put('state-title',s.state==='COMPLETE'?(s.dote_control?'DOTE零数值控制九轮训练与评价已完成':s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'||s.state==='STOPPED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
+  put('state-title',s.state==='COMPLETE'?(s.dote_control_multiseed?'两个DOTE控制及三seed汇总已完成':s.dote_control?'DOTE零数值控制九轮训练与评价已完成':s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'||s.state==='STOPPED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
   put('state',states[s.state]||s.state);$('state').className='state '+(s.state==='FAILED'||s.state==='STOPPED'||s.state==='BUDGET_ALERT'?'failed':s.state==='UNKNOWN'?'unknown':'');
   const current=view.epochs[view.current_epoch-1];
   put('stage',s.state==='COMPLETE'?'固定第九轮 LAST 已绑定完成收据':`${s.runs?`${view.model} / Seed ${view.seed} · `:''}第 ${view.current_epoch} / 9 轮 · ${phases[view.phase]||view.phase} · 本轮已确认 ${current.updates} / 480 步`);
