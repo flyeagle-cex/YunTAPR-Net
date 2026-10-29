@@ -1,0 +1,149 @@
+{
+  "status": "APPROVED_DOTE_NUMERIC_CONTROL_IN_PROGRESS",
+  "as_of": "2026-10-29T09:22:01.185653+08:00",
+  "approved_at": "2026-10-29T09:18:00.401513+08:00",
+  "started_at": "2026-10-29T01:18:09.938966+00:00",
+  "training_commit": "0c91ff0f36d5cce3f4516d38663482650f61b03a",
+  "proposal_sha256": "d7604c03d38585deca056994b119128cd2b6c2c7cbc50451a491e38b5cd4ea75",
+  "proposal_file_sha256": "a2a86f0611f9c5f805d9929788179deb13d2daa399ba4e4a831cdbaf70c7379d",
+  "authorization": {
+    "approved_by_researcher": true,
+    "decision_id": "RESEARCHER_DOTE_ZERO_S2029_0C91FF0_D7604C03_20261029",
+    "researcher_statement": "批准该单模型科学方案与预算",
+    "source_question_call": "call_06f3ff14c90645048ae018d683803712",
+    "approval_consumed": true,
+    "replay": 0,
+    "additional_retry": 0
+  },
+  "model": "B7_ZERO_DOTE",
+  "seed": 2029,
+  "execution_state": "RUNNING",
+  "returned_updates": 130,
+  "reserved_updates": 130,
+  "sealed_train_dev_epochs": 0,
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "io_snapshot": {
+    "files": 2263,
+    "bytes": 7313893968,
+    "reserved_bytes": 7313893968,
+    "sealed": 0
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 14630428672,
+    "workspace_free_bytes": 53811474432,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 13620797440
+  },
+  "isolation": {
+    "TRAINING_SUPERVISOR": {
+      "in_any_job": false,
+      "package_status": 15700
+    },
+    "PAGE_SUPERVISOR": {
+      "in_any_job": false,
+      "package_status": 15700
+    }
+  },
+  "controller_and_worker_isolation": "Frozen code requires no Job/package before binding and before actual updates; both gates crossed",
+  "source_admission": {
+    "source_basename": "NC_H09_20231025_2300_R21_FLDK.06001_06001.nc",
+    "status": "PASS",
+    "bytes": 3543995,
+    "same_path": true,
+    "payload_bytes": 0
+  },
+  "monitor": {
+    "read_only": true,
+    "html": "HTTP200",
+    "snapshot": "HTTP200",
+    "new_counter_tests_passed": 2,
+    "correct_single_control_identity": true,
+    "source_commit_verified": true
+  },
+  "accepted_scientific_limitations": {
+    "zero_numeric_channels": 8,
+    "real_validity_masks_retained": true,
+    "nominal_parameters": 4411058,
+    "loss_inactive_input_weights": 128,
+    "effective_capacity_equivalence": false,
+    "interpretation": "Explicit numeric feature utility conditional on masks; not independent new observations or uplift causality"
+  },
+  "startup_setup": {
+    "fresh_checkout_initial_longpath_failure": true,
+    "correction": "Local Git core.longpaths enabled in new execution checkout; exact approved code unchanged",
+    "scientific_payload_reads_before_dispatch": 0,
+    "optimizer_updates_before_dispatch": 0,
+    "monitor_test_harness_initial_failure": "OS temp ACL denied synthetic fixture; fixtures moved to ignored workspace directory; two tests then passed",
+    "training_affected": false
+  },
+  "output": {
+    "parent_alias": "APPROVED_F_RESEARCH_PARENT",
+    "directory_alias": "YunTAPR_DOTE_ZERO_s2029_20261029_v1"
+  },
+  "fixed_E9_results": "NOT_AVAILABLE_IN_PROGRESS",
+  "scientific_result": "NO_NEW_CONTROL_RESULT_YET",
+  "evidence": {
+    "authorization_binding_sha256": "1b06a3c6fc9e576ff510bc0e01b6c0189282fea21a4e6f554c63ad6cfee50cb7",
+    "source_admission_sha256": "a072ee7276dfc699cdd2090225ae11b842d0cac343652dd12e668378675fffb7"
+  },
+  "scope": {
+    "existing_B7": "NO_RETRAIN",
+    "other_seeds": "NOT_INCLUDED",
+    "negative_B": "NOT_INCLUDED",
+    "final_2025": "FROZEN_NO_ACCESS",
+    "main": "NOT_MODIFIED",
+    "periodic_automation": "NOT_AUTHORIZED_NOT_CREATED"
+  },
+  "privacy": "All private locators,process ids,commands and raw ledgers LOCAL_ONLY"
+}

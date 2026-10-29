@@ -47,6 +47,7 @@ OFFLINE_DIAGNOSTICS = READY + 'evidence/scientific_attribution_diagnostics_20261
 EXACT_BRIER = READY + 'evidence/brier_exact_score_decomposition_20261029.json'
 CONTROL_CHECKS = READY + 'evidence/dote_control_checks_20261029.json'
 CONTROL_PROPOSAL = READY + 'evidence/dote_control_proposal_20261029.json'
+CONTROL_LAUNCH = READY + 'evidence/dote_control_approved_launch_20261029.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -348,6 +349,7 @@ def main():
     offline=read(OFFLINE_DIAGNOSTICS) if paper_audit else None
     exact_brier=read(EXACT_BRIER) if paper_audit else None
     control_proposal=read(CONTROL_PROPOSAL) if (ROOT/CONTROL_PROPOSAL).exists() else None
+    control_launch=read(CONTROL_LAUNCH) if (ROOT/CONTROL_LAUNCH).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -408,6 +410,15 @@ def main():
                  training_config_reference=CONTROL_PROPOSAL+'#/protocol' if control_proposal else PAPER_AUDIT+'#/control',
                  verified_at=paper_audit['created_at'],status_as_of=paper_audit['created_at'],
                  notes='Candidate only. Full B7 initial state bitwise matched, but128 input weights permanently lack loss gradients. Actual mask information retained. Tests7PASS; no new training/2025. Existing real B7 reused, no retrain.')
+        if control_launch:
+            c=control_launch
+            assert c['authorization']['approved_by_researcher'] and c['authorization']['approval_consumed']
+            assert c['proposal_sha256']==control_proposal['proposal_sha256'] and c['training_commit']==control_proposal['execution_code_commit']
+            r.update(phase='DOTE_NUMERIC_CONTROL_APPROVED_IN_PROGRESS',status='IN_PROGRESS',execution_state=c['execution_state'],
+                     epochs=str(c['sealed_train_dev_epochs']),global_steps=str(c['returned_updates']),executed_commit=c['training_commit'],
+                     verified_at=c['as_of'],status_as_of=c['as_of'],evidence_path=CONTROL_LAUNCH,
+                     authorization_status='APPROVED_EXACT_SINGLE_CONTROL_CONSUMED_ONCE',
+                     notes='Actual single approved control running; startup snapshot130 RETURNED,0sealed epochs,not a live counter or E9 result. Real B7 not retrained. Exact0c91ff0 code,zero8 numeric/real masks,128 loss-inactive weights; replay/retry0.')
         matrix.append(r);experiments[r['experiment_id']]=r
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
@@ -992,6 +1003,19 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         innovation_analysis_text+=paper_audit['markdown']
         current_checks_text+=' 本轮再追加7项新控制/诊断CPU测试、一次成功真实静态缓存CPU初始化及离线算术；准备缓存两次共625656字节含一次环境门控失败，0正式更新。六套既有Dev元数据和精确分数计数用于诊断，无原始气象载荷/权重/新推理。'
         csv_scope_text+=' OFFLINE_DERIVED为由冻结a2ffa75统计或已存分数计数计算的派生量，不是新训练/推理；零数值控制仍为空值占位。'
+        if control_launch:
+            latest_status_text=latest_status_text.replace('DOTE零数值主对照NOT_STARTED','DOTE零数值主对照已获准确批准并单次启动IN_PROGRESS')
+            innovation_stage_rows=innovation_stage_rows.replace('新科学选择/预算未批准|NOT_STARTED|','精确方案已批准并消费，正在单次训练，无新固定E9|IN_PROGRESS|')
+            completion_scope_text+=' 新B7_ZERO_DOTE/2029仅为获批启动快照130更新、0完整轮，不能记为已完成或填入终点指标。'
+            control_text=f'''\n## DOTE零数值控制已明确批准并启动：IN_PROGRESS
+
+[真实批准与启动收据]({CONTROL_LAUNCH})记录`{control_launch['as_of']}`一次快照130次RETURNED、0轮封口；研究者原文“批准该单模型科学方案与预算”，批准已单次消费。固定执行0c91ff0/d7604c03、原B7不重训，8数值0/真实mask与128无损失梯度权重限制保持。4320更新/477571953840字节/142813次/6小时、24GiB、零重放重试；2025冻结。原提案authorized=false及报告NOT_STARTED为准备时点，不改写原字节。
+'''
+            innovation_text+=control_text
+            innovation_analysis_text=control_text+'\n'+innovation_analysis_text
+            status_table+='\n|B7_ZERO_DOTE|2029|IN_PROGRESS|RUNNING|130|0|'
+            latest_science_text+=' 新DOTE零数值主对照已单次启动，尚无固定E9或独立归因结果。'
+            current_checks_text+=' 获批后仅固定身份/资源/有界源元数据入场、实际RETURNED确认及两项只读页面计数检查；网页已切当前单模型，不另加训练审查或周期自动化。'
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1115,6 +1139,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
     if paper_audit:
         input_names += [PAPER_AUDIT,OFFLINE_DIAGNOSTICS,EXACT_BRIER,CONTROL_CHECKS]
         if control_proposal:input_names.append(CONTROL_PROPOSAL)
+        if control_launch:input_names.append(CONTROL_LAUNCH)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1158,6 +1183,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份]({INNOVATION_MULTI_RECOVERY_LAUNCH})|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|" if innovation_multi_recovery_launch else ''}
 {f"|最新B7/B8三seed全部完成|[新增30轮、64读取账本、四份E9实际SHA及三seed原值/差值]({INNOVATION_MULTI_COMPLETE})|前述中断/排队是历史时点；新增四任务已九轮完成，新段14400更新含441必要重放，三seed分析完成但收益混合，带局限验收；2025冻结|" if innovation_multi_complete else ''}
 {f"|本轮科学归因与论文级验收|[主张矩阵及2025预注册草案]({PAPER_AUDIT})、[27终点离线诊断]({OFFLINE_DIAGNOSTICS})、[精确经验Brier分解]({EXACT_BRIER})、[7项检查与真实初值]({CONTROL_CHECKS})|从a2ffa75已保存统计计算；35周块不等于独立天气事件，未新增训练或2025访问；零数值控制NOT_STARTED。可编辑[LaTeX](docs/research_readiness/20261029/paper_acceptance/main.tex)与[PDF](docs/research_readiness/20261029/paper_acceptance/YunTAPR_Scientific_Acceptance_20261029.pdf)|" if paper_audit else ''}
+{f"|最新DOTE单模型获批启动|[明确批准、130实际更新、资源/独立宿主与页面身份]({CONTROL_LAUNCH})|前一行只记录准备时点；B7_ZERO_DOTE/2029当前IN_PROGRESS，固定0c91ff0/d7604c03；原B7和所有成功模型不重训，0完整轮，无新增固定E9或归因结论；2025冻结|" if control_launch else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -1204,7 +1230,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 

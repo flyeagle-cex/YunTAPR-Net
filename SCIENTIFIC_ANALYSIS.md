@@ -1,7 +1,7 @@
 # 科学分析统一入口
 
 B0–B4在已限定范围内可作基线交接；当前证据支持开发集上的局部描述性结论。B5/B6九轮及固定E9配对完成，地形收益混合、q32覆盖退化，仅支持单seed探索性消融；最终泛化未验证。
-B7/B8三seed完整：DTFM总体AUROC改善3/3，AP改善2/3，条件Pinball及q32距名义误差仅改善1/3，Brier退化2/3；没有稳健全面优势结论。
+B7/B8三seed完整：DTFM总体AUROC改善3/3，AP改善2/3，条件Pinball及q32距名义误差仅改善1/3，Brier退化2/3；没有稳健全面优势结论。 新DOTE零数值主对照已单次启动，尚无固定E9或独立归因结果。
 
 ## B3/B4：全部三个seed
 
@@ -70,6 +70,11 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 四UTC：B5的Brier全部退化、AP全部下降，06UTC AUROC也下降；B6的Brier/AUROC四时次均改善，但00/12UTC AP下降，12/18UTC条件Pinball退化；两模型q32四时次均下降。强雨场景子集（scene_max_ge20）中B6仍有AP和条件Pinball退化。全部分组原值和配对差值保存在CSV。
 
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
+
+
+## DOTE零数值控制已明确批准并启动：IN_PROGRESS
+
+[真实批准与启动收据](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)记录`2026-10-29T09:22:01.185653+08:00`一次快照130次RETURNED、0轮封口；研究者原文“批准该单模型科学方案与预算”，批准已单次消费。固定执行0c91ff0/d7604c03、原B7不重训，8数值0/真实mask与128无损失梯度权重限制保持。4320更新/477571953840字节/142813次/6小时、24GiB、零重放重试；2025冻结。原提案authorized=false及报告NOT_STARTED为准备时点，不改写原字节。
 
 
 ## B7/B8三seed固定E9完成：COMPLETE_WITH_LIMITATIONS（带局限完成）

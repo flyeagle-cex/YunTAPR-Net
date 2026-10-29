@@ -127,12 +127,17 @@ class CampaignReader(base.Reader):
         self.approval=binding['approval'];self.budget=self.approval['budget']
         self.recovery_parent=Path(binding['recovery_parent']) if binding.get('recovery_parent') else None
         listed=[(x['model'],x['seed']) for x in self.approval['tasks']]
+        self.control=listed==[('B7_ZERO_DOTE',2029)]
         self.static=listed==[('B5',2029),('B6',2029)]
         self.innovation=listed==[('B7',2029),('B8',2029)]
         self.innovation_multiseed=listed==[('B7',2030),('B8',2030),('B7',2031),('B8',2031)]
         self.innovation_recovery=self.innovation_multiseed and self.recovery_parent is not None
         self.terrain=self.static or self.innovation
-        if self.innovation_recovery:
+        if self.control:
+            expected=('0c91ff0f36d5cce3f4516d38663482650f61b03a','d7604c03d38585deca056994b119128cd2b6c2c7cbc50451a491e38b5cd4ea75',4320,477571953840,142813,0)
+            if (self.approval['code_commit'],self.approval['proposal_sha256'],self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],self.budget['replay_allowance'])!=expected:raise ValueError('Not the approved single DOTE control')
+            self.tasks=[dict(model='B7',seed=2029)];self.extra_io=(0,0,0)
+        elif self.innovation_recovery:
             if (self.budget['replay_allowance'],self.budget['cumulative_updates'],self.budget['total_updates'])!=(441,17721,14400):raise ValueError('Not the approved B7 E6 recovery')
             self.tasks=self.approval['tasks']
             self.extra_io=(self.budget['prior_source_files'],self.budget['prior_source_bytes'],self.budget['prior_source_bytes'])
@@ -144,7 +149,7 @@ class CampaignReader(base.Reader):
                 'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
         else:
             self.tasks=self.approval['tasks'];self.extra_io=(0,0,0)
-        if (not self.recovery_parent and not self.terrain and ((not self.innovation_multiseed and listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)])
+        if (not self.recovery_parent and not self.terrain and not self.control and ((not self.innovation_multiseed and listed!=[('B3',2030),('B4',2030),('B3',2031),('B4',2031)])
                 or self.budget['total_updates']!=17280 or self.budget['replay_allowance']!=0)) or binding['controller_pid']!=pid:
             raise ValueError('Not the approved four-model package')
         if self.innovation_multiseed:
@@ -225,12 +230,12 @@ class CampaignReader(base.Reader):
                 claim=self.folder/f'task_{index if self.recovery_parent and not self.innovation_recovery else index+1}_claim.json'
                 state='COMPLETE' if completion and completion.get('status')=='COMPLETE_TRAIN_AND_DEV_EVALUATION' and returned==4320 and sealed==9 else 'FAILED' if failure else 'RUNNING' if folder.exists() or claim.exists() else 'PENDING'
                 current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
-                if self.terrain or self.innovation_multiseed:
-                    static_db=self.folder/(f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
+                if self.terrain or self.innovation_multiseed or self.control:
+                    static_db=self.folder/('B7_ZERO_DOTE_static_source.sqlite' if self.control else f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
                     if static_db.exists():
                         counts=self.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
-                runs.append(dict(model=kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
+                runs.append(dict(model='B7_ZERO_DOTE' if self.control else kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
             failure=self.document('failure.json');completion=self.document('completion.json')
             if failure:
@@ -245,7 +250,9 @@ class CampaignReader(base.Reader):
             prior_replay=441 if self.innovation_recovery else 390 if self.recovery_parent else 0
             returned=sum(r['returned'] for r in runs)+prior_replay
             reserved=sum(r['reserved'] for r in runs)+prior_replay
-            if self.innovation_recovery:
+            if self.control:
+                limits=dict(updates=4320,bytes=self.budget['total_source_bytes'],files=self.budget['total_source_files'],epochs=9,seconds=self.budget['max_package_seconds'])
+            elif self.innovation_recovery:
                 limits=dict(updates=self.budget['cumulative_updates'],bytes=self.budget['cumulative_source_bytes'],files=self.budget['cumulative_source_files'],epochs=36,seconds=self.budget['max_package_seconds'])
             elif self.recovery_parent:
                 verification=self.document('interrupted_source_verification/source_verification_receipt.json')
@@ -264,7 +271,7 @@ class CampaignReader(base.Reader):
             result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,
                 returned=returned,reserved=reserved,uncertain=reserved-returned,io=io,
                 sealed_epochs=sum(r['sealed_epochs'] for r in runs),completed_models=sum(r['state']=='COMPLETE' for r in runs),
-                limits=limits,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,innovation_recovery=self.innovation_recovery,replay_returned=replay_returned,
+                limits=limits,dote_control=self.control,recovery=bool(self.recovery_parent),static=self.static,innovation=self.innovation,innovation_multiseed=self.innovation_multiseed,innovation_recovery=self.innovation_recovery,replay_returned=replay_returned,
                 elapsed_seconds=elapsed,remaining_limit_seconds=max(0,limits['seconds']-elapsed),started_at=self.started.isoformat(),
                 source_commit=self.approval['code_commit'],resources=base.resources(self.folder) if include_resources else {},
                 message='整包已停止，后续任务不会自动启动；请查看本地失败收据。' if failure else '控制器进程已退出，未留下完成或失败收据；页面按现有账本显示，训练未自动恢复，退出原因尚未核实。' if stopped and not completion else None)

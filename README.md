@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新科研审计（2026-10-29）：B0–B8既定结果与B7/B8三seed完整继承。新增27终点可靠性/32分位覆盖诊断、六组精确经验Brier分解及35周块探索性配对区间完成；周块不是独立暴雨，DOTE独立归因与最终泛化仍未验收。B7零DOTE数值、保留真实mask的最小主对照入口与7项检查就绪，正式训练NOT_STARTED，等待精确新批准；2025预注册仅DRAFT，仍冻结。[科学分析](SCIENTIFIC_ANALYSIS.md) · [可编辑LaTeX/PDF报告](docs/research_readiness/20261029/paper_acceptance/main.tex)。旧日期的完成/启动文字保留历史时点。
+> 最新状态（2026-10-29）：DOTE零数值主对照B7_ZERO_DOTE/2029已按0c91ff0/d7604c03明确批准并单次启动，当前IN_PROGRESS。北京时间09:22:01启动快照130次RETURNED、0轮封口，无新E9或归因结论；真实mask保留与128无损失梯度权重的限制已接受。所有旧成功模型不重训，2025冻结。[真实启动收据](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)。原只读页面已切当前控制；旧准备NOT_STARTED属于历史时点。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

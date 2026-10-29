@@ -61,6 +61,7 @@
 |当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|
 |最新B7/B8三seed全部完成|[新增30轮、64读取账本、四份E9实际SHA及三seed原值/差值](docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)|前述中断/排队是历史时点；新增四任务已九轮完成，新段14400更新含441必要重放，三seed分析完成但收益混合，带局限验收；2025冻结|
 |本轮科学归因与论文级验收|[主张矩阵及2025预注册草案](docs/research_readiness/20261025/evidence/paper_acceptance_20261029.json)、[27终点离线诊断](docs/research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)、[精确经验Brier分解](docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)、[7项检查与真实初值](docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json)|从a2ffa75已保存统计计算；35周块不等于独立天气事件，未新增训练或2025访问；零数值控制NOT_STARTED。可编辑[LaTeX](docs/research_readiness/20261029/paper_acceptance/main.tex)与[PDF](docs/research_readiness/20261029/paper_acceptance/YunTAPR_Scientific_Acceptance_20261029.pdf)|
+|最新DOTE单模型获批启动|[明确批准、130实际更新、资源/独立宿主与页面身份](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)|前一行只记录准备时点；B7_ZERO_DOTE/2029当前IN_PROGRESS，固定0c91ff0/d7604c03；原B7和所有成功模型不重训，0完整轮，无新增固定E9或归因结论；2025冻结|
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -83,7 +84,7 @@
 |B8|2030|`f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
 |B7|2031|`4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
 |B8|2031|`bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
-|B7_ZERO_DOTE|2029|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`NOT_STARTED_NO_RESEARCHER_APPROVAL`|
+|B7_ZERO_DOTE|2029|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`0c91ff0f36d5cce3f4516d38663482650f61b03a`|
 
 B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执行；累计4,710实际尝试含390必要重放，有效轨迹4,320，成本见三seed收口。历史原始失败段仍保留。B5/B6本次纠正批准已消费，不允许额外重试。
 
@@ -137,6 +138,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json](docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)|`527ba7121b04727faab376d90e1692095fed77b88b58c84a37a2346226640c0c`|
 |[docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json](docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json)|`db89994d6cb50a30bf6d474ffd75e0e0d503bd7d0bdb7f51e9c9485d4900c772`|
 |[docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json](docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json)|`a2a86f0611f9c5f805d9929788179deb13d2daa399ba4e4a831cdbaf70c7379d`|
+|[docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)|`b830940b501804a21c2958161c3534b5feca41bfda7ba73b37db9cd88dd937dd`|
 
 五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查36个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
@@ -144,9 +146,9 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`cefc09372e5d72d0c3c185419f45952080eb319cf3d8a9ae25a7193588a0b326`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`4fe2b72c92548b6e5e8851a03d39252c810e0d6989c4b1f51aec701ee4c54ab8`|
-|[METRICS.csv](METRICS.csv)|`495fd16908524a262b7e6212bce686f699fbe1c4bd97e9d5f5203b79f00aca9d`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`0973aeb0def96ebfba01730aca582af93074f01c3ea94686b1f25a52958424f7`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`c8929445c745765bf7c505585c12a35a6c569f322cfe05bfd3cdfadf8dd05bf3`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`3136ed52322144f19f78cebf88342c265f70277b81f79e5a1e9e9437f967171e`|
+|[METRICS.csv](METRICS.csv)|`e5200ed68dc3280c6d686d13e28f9d33c4e0ec0a3628291cbaec80c15c402108`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`52bc0443276a051c91d2ff4f33eea405eb25ec745240c0b5febbeb2eecdd2cac`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。

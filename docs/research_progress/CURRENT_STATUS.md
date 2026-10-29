@@ -1,6 +1,6 @@
 # YunTAPR-Net 当前科研进度
 
-2026-10-29科学归因阶段：既定B0–B8训练状态不变，B7/B8三seed已完整完成。当前A–E准备与离线诊断已完成：H1–H5主张分级、27固定终点十箱可靠性/32覆盖率、六组精确原生score经验Brier分解、35周块探索性区间、数据/消融论文验收及2025预注册草案。35周块无独立暴雨ID，不能宣称事件级显著性；强物理归因与最终泛化NOT_VERIFIED。新B7_ZERO_DOTE/2029候选保留同架构、真实mask和逐位公共初值，128权重失去损失梯度的容量限制明确记录；7项检查与CPU初值核对通过，训练NOT_STARTED、未生成批准或新E9。预算待精确commit/提案SHA集中冻结：4320更新、477571953840字节/142813次、6小时、24GiB、重放/额外重试0；B7原模型不重训。2025 DRAFT未解封，全部工作无新训练/原始气象载荷/模型推理。[统一验收](../../STAGE_ACCEPTANCE.md)、[诊断收据](../research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)、[可修改LaTeX报告](../research_readiness/20261029/paper_acceptance/main.tex)。
+2026-10-29最新获批启动：研究者对0c91ff0/d7604c03唯一主对照直接回复“批准该单模型科学方案与预算”。B7_ZERO_DOTE seed2029已通过独立WMI监督器单次启动，资源/有界源入场通过，当前IN_PROGRESS；09:22:01快照130 RETURNED、0完整轮，不是实时计数或固定E9。全B7初值、8数值0/真实mask及128无损失梯度限制保持；原B7/B0–B8不重训。4320更新/477571953840逻辑源字节/142813次/6h/24GiB，重放/额外重试0。准确批准已消费，不再询问、重启或扩展。原网页已切单模型，用户自行查看，无周期自动化。2025及main不变。[真实启动收据](../research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)。下面科学审计/NOT_STARTED字段保留准备时点。
 
 B7/B8最新完成（2026-10-28）：B8于北京时间09:36:32完成固定E9及2024 Dev，恢复三轮、1440新更新（含62重放）全部核验；状态COMPLETE_TRAIN_AND_DEV_EVALUATION。B7不重训；首轮单seed核心创新消融COMPLETE_WITH_LIMITATIONS。B8对B7的Brier退化而AUROC/AP/条件Pinball/q32方向改善，强雨及欠覆盖反例保留。详见[完成收据](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)和[统一分析](../../SCIENTIFIC_ANALYSIS.md)。2025冻结，旧停止/启动段为历史快照。
 
