@@ -1,6 +1,6 @@
 # 统一证据索引
 
-出版基线commit：`56aae5bc4568df5d91354805aa5d4cb6d34b62b3`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
@@ -59,6 +59,7 @@
 |中断原因的后续追踪与工程修复|[宿主日志/事件SHA、研究者更新确认、Job探针与独立监督器](docs/research_readiness/20261025/evidence/b7_b8_multiseed_exit_cause_20261028.json)|高置信归因为更新期间宿主生命周期耦合；实际监督器/页面均已核验无Job/包身份。具体历史PID终止调用未捕获，旧初核收据不改写，未恢复训练|
 |B7/2030恢复及后三任务准备|[唯一限额提案](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)、[10项针对性检查](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)|拟执行e81c6e1，尚未执行；E6记录SHA仍84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11，正式恢复前重哈希/加载各1次；新14,400更新含441重放待新批准，原E1–E6及失败段保留|
 |当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|
+|最新B7/B8三seed全部完成|[新增30轮、64读取账本、四份E9实际SHA及三seed原值/差值](docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)|前述中断/排队是历史时点；新增四任务已九轮完成，新段14400更新含441必要重放，三seed分析完成但收益混合，带局限验收；2025冻结|
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -77,10 +78,10 @@
 |B6|2029|`3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98`|`b251fd9ea06c0c90f48d2ac0decba0454114669d`|
 |B7|2029|`019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35`|`b1f072e45fdd17b80106a774083995c350b28f04`|
 |B8|2029|`8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`|`ef11531a7cdeb35b767caebdb61e0e81c6123187`|
-|B7|2030|`NOT_AVAILABLE_NO_FIXED_E9_RESULTS`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
-|B8|2030|`NOT_AVAILABLE_NO_FIXED_E9_RESULTS`|`NOT_STARTED_PENDING_SERIAL_QUEUE`|
-|B7|2031|`NOT_AVAILABLE_NO_FIXED_E9_RESULTS`|`NOT_STARTED_PENDING_SERIAL_QUEUE`|
-|B8|2031|`NOT_AVAILABLE_NO_FIXED_E9_RESULTS`|`NOT_STARTED_PENDING_SERIAL_QUEUE`|
+|B7|2030|`820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
+|B8|2030|`f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
+|B7|2031|`4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
+|B8|2031|`bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
 
 B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执行；累计4,710实际尝试含390必要重放，有效轨迹4,320，成本见三seed收口。历史原始失败段仍保留。B5/B6本次纠正批准已消费，不允许额外重试。
 
@@ -92,7 +93,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮新增准确批准和真实恢复启动快照；旧E1–E6及所有历史结果继承，不重新推理或重查旧证据，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮新增四任务的终态、账本、E9身份及汇总；未重复旧来源或旧逐轮审查，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
@@ -128,16 +129,17 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_proposal_20261028.json)|`7715f455e6bfb3d603fddc1b77228bf25f4d64e63fd5b296f6c04c5d5a711549`|
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_checks_20261028.json)|`61639fae54534a4c33f6eefa7d93730dd4e602b3b607ea5edd7fc9d0fb7b8840`|
 |[docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)|`135628ffd596b4d44ef0fe72584f14f0d3664ae9a009bb19d99382125dd4b504`|
+|[docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json](docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)|`d12a7919da8aac7775300204a2f12d4dfe938e5efbd68f52118ae0bab9edd3f3`|
 
 五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查35个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
-导出构成：`{"MISSING_OR_NULL": 949, "PAIRED_DELTA": 4247, "PAIRED_MEAN": 427, "PAIRED_SAMPLE_SD": 427, "RAW_ENDPOINT": 17062, "RAW_EPOCH": 11563}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
+导出构成：`{"MISSING_OR_NULL": 1555, "PAIRED_DELTA": 4843, "PAIRED_MEAN": 725, "PAIRED_SAMPLE_SD": 725, "RAW_ENDPOINT": 22550, "RAW_EPOCH": 18907}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`26d9f599e223fab5f2a48f11930c0a3feb12dbc2f66af265b7335b2ed2580005`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`909a2dabc1bd06d74ed9c5cc697af7a6991d0891c6da64516b32d589026cb9f2`|
-|[METRICS.csv](METRICS.csv)|`457e264158e846e869a01755f2699e5c9b5a743c3aef063e7fa8e72e97cf7766`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`5066cb21179b76f3f45893582a883386dfd1faa71adcabb63a94c203cbe9bf3d`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`61051920f07f7f62acc2c138f4759904416c3aba8300e55f9945cc9e355fd03d`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`a9b3c3b7cff330b9b82c37430475d5a8d843d3c50dcc776b92ba4dc8bb3d51b7`|
+|[METRICS.csv](METRICS.csv)|`84b534d795723791a7691e5650ca74d0aa145b5f27dd2348af8918152b90b9a6`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`3f8b576dfc80f8e3e0e07b3c8b0403622746f3c3aa074bce22e7e476ae31a5a3`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。

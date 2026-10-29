@@ -1,6 +1,6 @@
 # 证据索引与可核验边界
 
-最新[准确批准与真实E6恢复启动](../research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)绑定e81c6e1/3314231a、研究者原文“是”、259新增RETURNED/259必要重放和累计3,580实际尝试启动快照；仅B7/2030运行，后三项未启动。真实E6 SHA/模型/AdamW/RNG/学习率恢复已跨过并发生实际更新，四个宿主角色均核实无Job/包身份。原提案authorized=false、旧停止及未批准记录保留历史；当前IN_PROGRESS，无新增固定E9或三seed数值。
+最新[三seed完整核验收据](../research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)记录e81c6e1/3314231a恢复包于2026-10-29北京时间07:19:48完成。新增四任务各九轮固定E9，核对30轮新Train/Dev、60气象/4静态账本及4份实际权重SHA，旧六轮和seed2029有效证据继承；新段14,400更新含441必要重放、累计17,721尝试，额外重试0。全部总体/UTC/强雨/海拔原值、三seed差值与ddof1统计见[根METRICS.csv](../../METRICS.csv)。DTFM收益混合，限定验收COMPLETE_WITH_LIMITATIONS，2025冻结。此前启动、排队和中断记录只代表各自历史时点，原件不改写。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 

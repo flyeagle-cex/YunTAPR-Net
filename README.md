@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-28）：e81c6e1/3314231a准确恢复包已明确获批并单次启动，B7/2030从E6真实恢复，后三项依序等待，整包IN_PROGRESS。启动快照新增259次RETURNED（259次在441重放内），累计3,580次实际尝试；尚无新增固定E9或三seed结果。[真实恢复启动收据](docs/research_readiness/20261025/evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json)。旧证据及2025冻结不变。
+> 最新状态（2026-10-29）：B7/B8 seed2029/2030/2031三组配对均完成九轮Train/2024 Dev与固定E9。新增四模型于北京时间07:19:48封口，精确恢复包14,400次更新含441次必要重放，累计17,721实际尝试，额外重试0。DTFM仅总体AUROC三seed同向改善，AP/条件Pinball/q32不稳定、Brier和强雨仍有反例，限定科学验收COMPLETE_WITH_LIMITATIONS。[核验收据](docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)。2025继续冻结，无新训练授权；下面较早日期为历史状态。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 
