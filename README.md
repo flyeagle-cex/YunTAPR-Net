@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-29）：ZERO_DOTE/2029固定E9已完成；ZERO_DOTE/2030、2031的配对入口和精确两模型预算准备就绪，正式训练NOT_STARTED，等待一次新批准。真实B7三seed及其他成功模型均不重训。2025冻结。[集中提案](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json) · [已有结果与科学限制](SCIENTIFIC_ANALYSIS.md)。
+> 最新状态（2026-10-29）：ZERO_DOTE/2030→2031两控制已获准确批准并单次启动，整包IN_PROGRESS。16:11:42启动快照2030为89次真实更新/0轮封口，2031排队；未取得新E9或三seed归因结果。执行8a46683/a53d3829，零重放/额外重试；2025冻结。[真实启动收据](docs/research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json) · [科学边界](SCIENTIFIC_ANALYSIS.md)。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

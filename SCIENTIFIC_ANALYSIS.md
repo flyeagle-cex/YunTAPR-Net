@@ -72,6 +72,13 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 
 
+## ZERO_DOTE/2030→2031准确批准并单次启动：IN_PROGRESS
+
+研究者对上方完整两模型审批对象直接回复“是”，批准已单次消费。执行`8a4668377dbd40013245b54550c0963d10c286fb`/提案`a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`；[真实批准与启动收据](docs/research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json)记录`2026-10-29T08:11:42.113959+00:00`一次快照：2030为RUNNING、89次RETURNED、0轮封口；2031为PENDING、0更新。同一独立控制器在2030完整九轮Train/Dev封口后自动接续2031，不重复询问或重启。快照不是实时计数，没有新增E9或三seed归因结论。
+
+冻结副本清洁且逐文件身份匹配，训练与页面监督器均证明无Job/包身份；控制器和worker通过自身门控并产生实际更新。资源入场与单源元数据检查PASS/0诊断载荷，原只读页面已切两控制。仍为每模型4320更新/477571953840字节/142813次/6小时，整包8640更新/955143907680字节/285626次/12小时，初始48GiB/每任务24GiB，零重放/额外重试；失败保留部分账本并阻断依赖任务。没有新增周期自动化，研究者自行查看原网页。2025冻结，原B7和ZERO_DOTE/2029不重训。下文“等待批准/未启动”仅是冻结准备时点，不修改原提案字节。
+
+
 ## DOTE独立贡献三seed复现：新增两控制准备就绪，NOT_STARTED
 
 仅新增B7_ZERO_DOTE seed2030→2031，从头训练；真实B7三seed、ZERO_DOTE/2029及其他已完成模型均继承。[集中机器提案](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)绑定执行`8a4668377dbd40013245b54550c0963d10c286fb`、规范化提案SHA `a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`与[本轮定向检查](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)。两seed完整B7初始状态和九轮排列均与各自真实B7匹配，名义参数4,411,058，128权重无损失梯度现象均延续；8数值置零发生在原PhysicalDote之后，真实mask/GFS/DEM/监督口径不变。

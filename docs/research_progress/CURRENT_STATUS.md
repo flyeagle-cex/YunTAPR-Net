@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-10-29 ZERO_DOTE两控制准确批准已消费并启动：研究者对8a4668377dbd40013245b54550c0963d10c286fb/a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6明确回复“是”。独立WMI监督器单次调度；北京时间16:11:42启动快照2030为IN_PROGRESS/RUNNING、89次RETURNED、0轮封口，2031为NOT_STARTED/PENDING、0更新。新E9及三seed控制结论尚无。 每模型4320更新/477571953840逻辑源字节/142813次/6小时，整包8640更新/955143907680字节/285626次/12小时，初始48GiB/每任务24GiB，重放和额外重试均0。批准已消费，不得重复派发、重用批准或自动恢复失败任务；失败保留所有部分账本并阻断后续。原B7三seed与ZERO_DOTE/2029不重训，真实mask和128无损失梯度权重限制不变，2025冻结。 [真实启动收据](../research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json)。原页面已切本包，无新增周期自动化；下列准备记录为历史时点。
+
 2026-10-29最新准备：ZERO_DOTE/2029九轮已完成；仅新增ZERO_DOTE/2030→2031已完成入口、配对初值/九轮顺序、128梯度局限及资源检查，正式训练NOT_STARTED。执行8a4668377dbd40013245b54550c0963d10c286fb，提案SHA a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6；8,640更新/955,143,907,680字节/285,626次/12小时、初始48GiB/每任务24GiB、零重放重试，等待一次新整包批准。2025冻结，原成功模型不重训，PR草稿/main不变。 [集中审批对象](../research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)。
 
 2026-10-29 13:03:27（北京时间）B7_ZERO_DOTE seed2029已完成9轮Train/2024 Dev及固定E9，4,320更新、477,571,953,840逻辑源字节/142,813次，零重放/额外重试。仅核对本次9轮、18气象/1静态账本和一份实际E9 SHA，原成功B7及旧结果继承。真实B7相对零数值控制总体Brier/AUROC/AP/条件Pinball改善，q32距名义误差退化；06 UTC AP/Pinball和弱雨仍有反例。单seed、真实mask保留、128权重无损失梯度，不声称等有效容量、因果机制或跨年泛化。2025继续冻结，不追加任务或合并main。 [新增完成与公平配对收据](../research_readiness/20261025/evidence/dote_control_completion_20261029.json)。E9 SHA `445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21`；实际执行0c91ff0，原启动快照不替代本终态。

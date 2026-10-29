@@ -51,6 +51,7 @@ CONTROL_LAUNCH = READY + 'evidence/dote_control_approved_launch_20261029.json'
 CONTROL_COMPLETE = READY + 'evidence/dote_control_completion_20261029.json'
 CONTROL_MULTI = READY + 'evidence/dote_control_multiseed_proposal_20261029.json'
 CONTROL_MULTI_CHECKS = READY + 'evidence/dote_control_multiseed_checks_20261029.json'
+CONTROL_MULTI_LAUNCH = READY + 'evidence/dote_control_multiseed_approved_launch_20261029.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -409,6 +410,7 @@ def main():
     control_launch=read(CONTROL_LAUNCH) if (ROOT/CONTROL_LAUNCH).exists() else None
     control_complete=read(CONTROL_COMPLETE) if (ROOT/CONTROL_COMPLETE).exists() else None
     control_multi=read(CONTROL_MULTI) if (ROOT/CONTROL_MULTI).exists() else None
+    control_multi_launch=read(CONTROL_MULTI_LAUNCH) if (ROOT/CONTROL_MULTI_LAUNCH).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -502,6 +504,17 @@ def main():
                      evidence_path=CONTROL_MULTI,verified_at=control_multi['prepared_at'],status_as_of=control_multi['prepared_at'],
                      authorization_status='WAITING_EXACT_TWO_CONTROL_PACKAGE_APPROVAL',
                      notes='Preparation only, no formal updates. Full initial B7 state and all9 orders match corresponding completed realB7; nominal4411058,128 loss-inactive zero-input weights; actual masks retained. New exact training budget not approved;2025 frozen.')
+            if control_multi_launch:
+                c=control_multi_launch
+                assert c['authorization']['approved_by_researcher'] and c['authorization']['approval_consumed']
+                assert c['training_commit']==control_multi['execution_code_commit'] and c['proposal_sha256']==control_multi['proposal_sha256']
+                run=next(x for x in c['models'] if x['seed']==seed)
+                r.update(phase='DOTE_NUMERIC_MULTI_SEED_APPROVED_IN_PROGRESS',status=run['status'],execution_state=run['execution_state'],
+                         epochs=str(run['sealed_train_dev_epochs']),global_steps=str(run['returned_updates']),
+                         executed_commit=c['training_commit'] if run['training_started'] else 'NOT_STARTED_APPROVED_SERIAL_QUEUE',
+                         evidence_path=CONTROL_MULTI_LAUNCH,verified_at=c['as_of'],status_as_of=c['as_of'],
+                         authorization_status='APPROVED_EXACT_TWO_CONTROL_PACKAGE_CONSUMED_ONCE',
+                         notes='Approved single-dispatch startup snapshot only; no fixedE9 or new science metrics.2030 RUNNING/89returned,2031 PENDING/0. Exact8a46683/a53d3829; zero numeric/real masks,128 loss-inactive weights;replay/retry0;2025 frozen.')
             matrix.append(r);experiments[r['experiment_id']]=r
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
@@ -1142,6 +1155,20 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         latest_status_text+=' ZERO_DOTE/2030、2031仅准备就绪NOT_STARTED，等待一次准确两模型批准。'
         status_table+='\n|B7_ZERO_DOTE|2030|NOT_STARTED|NOT_STARTED|0|0|\n|B7_ZERO_DOTE|2031|NOT_STARTED|NOT_STARTED|0|0|'
         csv_scope_text+=' 新2030/2031控制只有缺失占位，不填零或预造结果。'
+        if control_multi_launch:
+            c=control_multi_launch
+            new_text=f'''\n## ZERO_DOTE/2030→2031准确批准并单次启动：IN_PROGRESS
+
+研究者对上方完整两模型审批对象直接回复“是”，批准已单次消费。执行`{c['training_commit']}`/提案`{c['proposal_sha256']}`；[真实批准与启动收据]({CONTROL_MULTI_LAUNCH})记录`{c['as_of']}`一次快照：2030为RUNNING、89次RETURNED、0轮封口；2031为PENDING、0更新。同一独立控制器在2030完整九轮Train/Dev封口后自动接续2031，不重复询问或重启。快照不是实时计数，没有新增E9或三seed归因结论。
+
+冻结副本清洁且逐文件身份匹配，训练与页面监督器均证明无Job/包身份；控制器和worker通过自身门控并产生实际更新。资源入场与单源元数据检查PASS/0诊断载荷，原只读页面已切两控制。仍为每模型4320更新/477571953840字节/142813次/6小时，整包8640更新/955143907680字节/285626次/12小时，初始48GiB/每任务24GiB，零重放/额外重试；失败保留部分账本并阻断依赖任务。没有新增周期自动化，研究者自行查看原网页。2025冻结，原B7和ZERO_DOTE/2029不重训。下文“等待批准/未启动”仅是冻结准备时点，不修改原提案字节。
+'''
+            innovation_text=new_text+innovation_text
+            innovation_analysis_text=new_text+'\n'+innovation_analysis_text
+            latest_status_text=latest_status_text.replace('ZERO_DOTE/2030、2031仅准备就绪NOT_STARTED，等待一次准确两模型批准。','ZERO_DOTE/2030→2031已获准确批准并单次启动，整包IN_PROGRESS；2030运行、2031串行排队。')
+            innovation_stage_rows=innovation_stage_rows.replace('|未获新增正式训练批准，无新E9或2030/2031指标|NOT_STARTED；准备完成不等于实验完成|','|2030 RUNNING、2031 PENDING，无新固定E9或三seed控制指标；批准已消费，零重放重试|IN_PROGRESS；启动不等于实验完成|')
+            status_table=status_table.replace('|B7_ZERO_DOTE|2030|NOT_STARTED|NOT_STARTED|0|0|','|B7_ZERO_DOTE|2030|IN_PROGRESS|RUNNING|89|0|').replace('|B7_ZERO_DOTE|2031|NOT_STARTED|NOT_STARTED|0|0|','|B7_ZERO_DOTE|2031|NOT_STARTED|PENDING|0|0|')
+            completion_scope_text+=' 新两控制仅批准启动；2030快照89实际更新，2031未启动，不标完成。'
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1268,6 +1295,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         if control_launch:input_names.append(CONTROL_LAUNCH)
         if control_complete:input_names.append(CONTROL_COMPLETE)
     if control_multi:input_names += [CONTROL_MULTI,CONTROL_MULTI_CHECKS]
+    if control_multi_launch:input_names.append(CONTROL_MULTI_LAUNCH)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1314,6 +1342,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|DOTE单模型获批启动（历史快照）|[明确批准、130实际更新、资源/独立宿主与页面身份]({CONTROL_LAUNCH})|仅记录09:22:01启动时点，IN_PROGRESS和0完整轮不是当前终态；固定0c91ff0/d7604c03，2025冻结|" if control_launch else ''}
 {f"|最新DOTE主对照已完成|[九轮Train/Dev、18气象/1静态账本、E9实际SHA及同人口对照]({CONTROL_COMPLETE})|B7_ZERO_DOTE/2029为COMPLETE_TRAIN_AND_DEV_EVALUATION；4320更新、477571953840字节/142813次、零重放重试。原B7不重训，真实B7总体四指标更好但q32更差；单seed限定结论，2025冻结|" if control_complete else ''}
 {f"|DOTE控制2030/2031集中准备|[精确提案]({CONTROL_MULTI})、[新入口/两seed初始化与梯度检查]({CONTROL_MULTI_CHECKS})|两控制NOT_STARTED，正式批准尚无；真实B7三seed和ZERO/2029均不重训，不预填E9或指标，2025冻结|" if control_multi else ''}
+{f"|最新DOTE两控制已批准并启动|[真实批准、89更新及独立宿主/页面身份]({CONTROL_MULTI_LAUNCH})|前一行仅为历史准备；固定8a46683/a53d3829已单次启动，2030 IN_PROGRESS、2031 PENDING；新E9及三seed控制结果尚无。批准已消费、零重放重试，无新周期自动化；2025冻结|" if control_multi_launch else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -1360,7 +1389,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 

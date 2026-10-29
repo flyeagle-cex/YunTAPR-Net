@@ -1,0 +1,203 @@
+{
+  "status": "APPROVED_TWO_DOTE_CONTROLS_IN_PROGRESS",
+  "as_of": "2026-10-29T08:11:42.113959+00:00",
+  "approved_at": "2026-10-29T16:08:55.852647+08:00",
+  "started_at": "2026-10-29T08:08:57.023797+00:00",
+  "training_commit": "8a4668377dbd40013245b54550c0963d10c286fb",
+  "proposal_sha256": "a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6",
+  "proposal_file_sha256": "31decb3796f806b591d2fee87132b55590a03e8939294b11e730ad337d9ce46c",
+  "authorization": {
+    "approved_by_researcher": true,
+    "decision_id": "RESEARCHER_ZERO_DOTE_S2030_S2031_8A46683_A53D3829_20261029",
+    "researcher_statement": "是",
+    "source": "DIRECT_HUMAN_REPLY_IN_CURRENT_CHAT_TO_PRECEDING_EXACT_TWO_CONTROL_APPROVAL_QUESTION",
+    "approval_consumed": true,
+    "replay": 0,
+    "additional_retry": 0
+  },
+  "models": [
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2030,
+      "status": "IN_PROGRESS",
+      "execution_state": "RUNNING",
+      "training_started": true,
+      "returned_updates": 89,
+      "reserved_updates": 89,
+      "sealed_train_dev_epochs": 0
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2031,
+      "status": "NOT_STARTED",
+      "execution_state": "PENDING",
+      "training_started": false,
+      "returned_updates": 0,
+      "reserved_updates": 0,
+      "sealed_train_dev_epochs": 0
+    }
+  ],
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 955143907680,
+    "total_source_files": 285626,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43200,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "actual_io_snapshot": {
+    "files": 1577,
+    "bytes": 5033106858,
+    "reserved_bytes": 5033106858,
+    "sealed": 0
+  },
+  "resources": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 16331898880,
+    "workspace_free_bytes": 51922829312,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 15166283776
+  },
+  "source_admission": {
+    "source_basename": "NC_H09_20231025_2300_R21_FLDK.06001_06001.nc",
+    "status": "PASS",
+    "bytes": 3543995,
+    "same_path": true,
+    "payload_bytes": 0
+  },
+  "host_isolation": {
+    "training_supervisor": {
+      "in_any_job": false,
+      "package_status": 15700
+    },
+    "page_supervisor": {
+      "in_any_job": false,
+      "package_status": 15700
+    }
+  },
+  "controller_and_worker_identity_gate_crossed_before_updates": true,
+  "nominal_parameters_per_model": 4411058,
+  "loss_inactive_zero_input_weights_per_model": 128,
+  "scientific_choices": {
+    "DOTE": {
+      "pwat_reference_kg_m2": 31.85768219039871,
+      "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "moisture_basis": "windward_W",
+      "velocity_reference_m_s": 1.0
+    },
+    "channels": [
+      "O850",
+      "O700",
+      "W850",
+      "W700",
+      "L850",
+      "L700",
+      "M850",
+      "M700"
+    ],
+    "normalization": "Physical channels divided by explicit1m/s; no refit, clipping or hidden coefficient",
+    "spatial_operator": "Inherited native PS mask then conservative bilinear GFS to frozen SP04; use frozen B6 area-mean gradients",
+    "scales": [
+      "SINGLE_TARGET_SP04_100x100_48_CHANNELS"
+    ],
+    "condition_channels": {
+      "GFS_values_and_masks": 26,
+      "static_and_DOTE_values_and_masks": 28
+    },
+    "projection_width": 16,
+    "modulation_limit": 0.1,
+    "modulation_candidates_not_a_sweep": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "B7": "B6 feature then explicit concat residual",
+    "B8": "Replace additional B7 concat by matched-active-parameter DTFM branch; not B7 plus a module",
+    "initialization": {
+      "B6": "FRESH_MATCHING_TASK_SEED_NOT_E9_FINETUNING",
+      "auxiliary_seed": "MAIN_SEED_PLUS_20000",
+      "training_rng": "UNCHANGED_B6",
+      "condition_projections": "SHARED",
+      "output": "ZERO_RESIDUAL",
+      "static_auxiliary_seed": "MAIN_SEED_PLUS_10000"
+    },
+    "condition_mask": "Per-channel missing indicators; use any valid DOTE channel plus any GFS channel inside original region; B6 path remains on every supervised pixel",
+    "precision": "Physical numpyFP64, stored tensorFP32, learned fusionFP32 under disabled AMP, return inheritedBF16; quantile/lossFP64 unchanged",
+    "elevation_bins_m": [
+      1000,
+      2000
+    ],
+    "elevation_metrics": "SUPPLEMENTAL_Brier_Pinball_q32_ONLY; no historical baseline bins",
+    "static_DEM_release": "INHERIT_RESEARCHER_ACCEPTED_NOT_VERIFIED_VENDOR_CHAIN",
+    "numeric_control": {
+      "type": "ZERO_ALL_8_VALUES_KEEP_REAL_MASKS",
+      "seed": "PER_TASK_2030_2031",
+      "baseline": "EXISTING_REAL_B7_MATCHING_SEED_FIXED_E9",
+      "new_observations": false,
+      "loss_inactive_weights": 128,
+      "effective_capacity_equivalence": false,
+      "mask_information_retained": true,
+      "negative_control_B": "NOT_INCLUDED"
+    }
+  },
+  "endpoint_results": "NOT_AVAILABLE_IN_PROGRESS",
+  "page": {
+    "read_only": true,
+    "local_port": 51282,
+    "dote_control_multiseed": true,
+    "training_commit": "8a4668377dbd40013245b54550c0963d10c286fb"
+  },
+  "inherited_results_unchanged": true,
+  "formal_training_dispatches": 1,
+  "raw_weather_reads_for_report": 0,
+  "model_inference_for_report": 0,
+  "new_periodic_automation": false,
+  "final_2025": "FROZEN_NO_ACCESS",
+  "sources_sha256": {
+    "authorization_binding.json": "0c388bf0d431311bf986a4262fdeb2682dcc6653d1dbd68e3c8621a9352e16e0",
+    "source_admission.json": "a072ee7276dfc699cdd2090225ae11b842d0cac343652dd12e668378675fffb7"
+  }
+}

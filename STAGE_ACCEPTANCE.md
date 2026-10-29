@@ -1,6 +1,6 @@
 # 阶段验收统一入口
 
-B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。最新B7/B8三seed固定E9训练/评价及三seed描述性分析已完成，创新收益混合，限定验收COMPLETE_WITH_LIMITATIONS。 本轮论文级审计/离线诊断完成；DOTE零数值主对照九轮固定E9及2024 Dev已核验完成，单seed限定验收COMPLETE_WITH_LIMITATIONS，2025方案DRAFT，论文强物理归因与最终泛化验收仍未通过。 ZERO_DOTE/2030、2031仅准备就绪NOT_STARTED，等待一次准确两模型批准。不能把训练完成等同于全部科学假设通过。
+B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。最新B7/B8三seed固定E9训练/评价及三seed描述性分析已完成，创新收益混合，限定验收COMPLETE_WITH_LIMITATIONS。 本轮论文级审计/离线诊断完成；DOTE零数值主对照九轮固定E9及2024 Dev已核验完成，单seed限定验收COMPLETE_WITH_LIMITATIONS，2025方案DRAFT，论文强物理归因与最终泛化验收仍未通过。 ZERO_DOTE/2030→2031已获准确批准并单次启动，整包IN_PROGRESS；2030运行、2031串行排队。不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
@@ -11,7 +11,7 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 |B7/B8|2029/2030/2031各九轮Train/2024 Dev、固定E9及三组配对完成；原62/441重放保留|仅总体AUROC三seed同向改善，AP/Pinball/q32不稳定，Brier/强雨仍退化；DOTE单独增量及最终泛化未验证|COMPLETE_TRAIN_AND_DEV_EVALUATION；科学验收COMPLETE_WITH_LIMITATIONS|
 |DOTE零数值主对照|同B7架构、真实mask、全初值逐位匹配；7项新CPU检查通过|128权重无损失梯度，不能称有效容量完全匹配；九轮固定E9已核验；真实B7总体四指标改善、q32退化，单seed归因有限|COMPLETE_TRAIN_AND_DEV_EVALUATION；COMPLETE_WITH_LIMITATIONS|
 |论文/最终测试|主张分级、精确经验Brier分解、35周块探索性区间和预注册草案完成|无独立暴雨ID；2025全模态人口/新适配器未核实，未解封|PREPARATION_COMPLETE；强归因/最终泛化NOT_VERIFIED|
-|ZERO_DOTE/2030、2031|新入口、配对初值/顺序、128梯度局限及精确两模型预算准备就绪|未获新增正式训练批准，无新E9或2030/2031指标|NOT_STARTED；准备完成不等于实验完成|
+|ZERO_DOTE/2030、2031|新入口、配对初值/顺序、128梯度局限及精确两模型预算准备就绪|2030 RUNNING、2031 PENDING，无新固定E9或三seed控制指标；批准已消费，零重放重试|IN_PROGRESS；启动不等于实验完成|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -32,18 +32,24 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 |B7|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
 |B8|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
 |B7_ZERO_DOTE|2029|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
-|B7_ZERO_DOTE|2030|NOT_STARTED|NOT_STARTED|0|0|
-|B7_ZERO_DOTE|2031|NOT_STARTED|NOT_STARTED|0|0|
+|B7_ZERO_DOTE|2030|IN_PROGRESS|RUNNING|89|0|
+|B7_ZERO_DOTE|2031|NOT_STARTED|PENDING|0|0|
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含38条历史/当前记录；不是38个独立seed或38个已完成模型。新增四任务全部九轮/有效4320；B7/2030实际4761尝试含441重放，其余各4320。新段14400、累计17721；三seed含旧2029，恢复不是独立seed。 新B7_ZERO_DOTE/2029九轮Train/Dev、4320更新及实际E9已核验，零重放/额外重试。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含38条历史/当前记录；不是38个独立seed或38个已完成模型。新增四任务全部九轮/有效4320；B7/2030实际4761尝试含441重放，其余各4320。新段14400、累计17721；三seed含旧2029，恢复不是独立seed。 新B7_ZERO_DOTE/2029九轮Train/Dev、4320更新及实际E9已核验，零重放/额外重试。 新两控制仅批准启动；2030快照89实际更新，2031未启动，不标完成。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
 仅核对新增30轮Train/Dev、60气象账本、4静态账本、4份实际E9 SHA、初始化/顺序及已生成三seed汇总算术；旧六轮和全部既有结果继承。0新模型推理/权重加载/原始载荷/2025读取。 本轮再追加7项新控制/诊断CPU测试、一次成功真实静态缓存CPU初始化及离线算术；准备缓存两次共625656字节含一次环境门控失败，0正式更新。六套既有Dev元数据和精确分数计数用于诊断，无原始气象载荷/权重/新推理。 控制仅新增9轮Train/9轮Dev、18气象账本、1静态账本、1实际E9 SHA及初始化/顺序/人口核对，原B7及旧来源不重审；封口0训练/推理/原始载荷/2025访问。
 
 本轮出版基线：`0c91ff0f36d5cce3f4516d38663482650f61b03a`。文件所属最终提交由Git历史标识；实际训练代码另见[矩阵](EXPERIMENT_MATRIX.csv)和[证据索引](EVIDENCE_INDEX.md)，不得用本次文档commit替代执行commit。
 
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
+
+## ZERO_DOTE/2030→2031准确批准并单次启动：IN_PROGRESS
+
+研究者对上方完整两模型审批对象直接回复“是”，批准已单次消费。执行`8a4668377dbd40013245b54550c0963d10c286fb`/提案`a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`；[真实批准与启动收据](docs/research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json)记录`2026-10-29T08:11:42.113959+00:00`一次快照：2030为RUNNING、89次RETURNED、0轮封口；2031为PENDING、0更新。同一独立控制器在2030完整九轮Train/Dev封口后自动接续2031，不重复询问或重启。快照不是实时计数，没有新增E9或三seed归因结论。
+
+冻结副本清洁且逐文件身份匹配，训练与页面监督器均证明无Job/包身份；控制器和worker通过自身门控并产生实际更新。资源入场与单源元数据检查PASS/0诊断载荷，原只读页面已切两控制。仍为每模型4320更新/477571953840字节/142813次/6小时，整包8640更新/955143907680字节/285626次/12小时，初始48GiB/每任务24GiB，零重放/额外重试；失败保留部分账本并阻断依赖任务。没有新增周期自动化，研究者自行查看原网页。2025冻结，原B7和ZERO_DOTE/2029不重训。下文“等待批准/未启动”仅是冻结准备时点，不修改原提案字节。
 
 ## B7/B8三seed固定E9完成：COMPLETE_WITH_LIMITATIONS（带局限完成）
 
