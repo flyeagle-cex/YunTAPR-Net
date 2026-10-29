@@ -1,5 +1,7 @@
 # 证据索引与可核验边界
 
+2026-10-29 13:03:27（北京时间）B7_ZERO_DOTE seed2029已完成9轮Train/2024 Dev及固定E9，4,320更新、477,571,953,840逻辑源字节/142,813次，零重放/额外重试。仅核对本次9轮、18气象/1静态账本和一份实际E9 SHA，原成功B7及旧结果继承。真实B7相对零数值控制总体Brier/AUROC/AP/条件Pinball改善，q32距名义误差退化；06 UTC AP/Pinball和弱雨仍有反例。单seed、真实mask保留、128权重无损失梯度，不声称等有效容量、因果机制或跨年泛化。2025继续冻结，不追加任务或合并main。 [新增完成与公平配对收据](../research_readiness/20261025/evidence/dote_control_completion_20261029.json)。E9 SHA `445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21`；实际执行0c91ff0，原启动快照不替代本终态。
+
 最新[DOTE主对照准确批准与单次启动](../research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)绑定执行0c91ff0、提案d7604c03、研究者原文“批准该单模型科学方案与预算”及09:22:01启动快照130 RETURNED/0轮封口。准确批准已消费，源入场PASS/0诊断载荷，训练监督器与页面监督器均无Job/包身份，控制器/worker隔离门控已跨过并实际更新。状态IN_PROGRESS，无新E9或归因结论；旧原件/完整已训B7不动，2025冻结。下列待批准/NOT_STARTED均为历史准备时点。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。

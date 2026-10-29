@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-29）：DOTE零数值主对照B7_ZERO_DOTE/2029已按0c91ff0/d7604c03明确批准并单次启动，当前IN_PROGRESS。北京时间09:22:01启动快照130次RETURNED、0轮封口，无新E9或归因结论；真实mask保留与128无损失梯度权重的限制已接受。所有旧成功模型不重训，2025冻结。[真实启动收据](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)。原只读页面已切当前控制；旧准备NOT_STARTED属于历史时点。
+> 最新状态（2026-10-29）：DOTE零数值主对照B7_ZERO_DOTE/2029九轮Train/2024 Dev、4,320更新及固定E9已核验完成，零重放/额外重试，未超读取和6小时额度。真实B7总体Brier/AUROC/AP/条件Pinball更好、q32欠覆盖更差；单seed带局限结论，全部反例保留。原B7不重训，2025继续冻结。[完成与配对收据](docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json) · [完整科学分析](SCIENTIFIC_ANALYSIS.md)。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

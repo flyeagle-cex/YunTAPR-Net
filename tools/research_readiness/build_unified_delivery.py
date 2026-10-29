@@ -48,6 +48,7 @@ EXACT_BRIER = READY + 'evidence/brier_exact_score_decomposition_20261029.json'
 CONTROL_CHECKS = READY + 'evidence/dote_control_checks_20261029.json'
 CONTROL_PROPOSAL = READY + 'evidence/dote_control_proposal_20261029.json'
 CONTROL_LAUNCH = READY + 'evidence/dote_control_approved_launch_20261029.json'
+CONTROL_COMPLETE = READY + 'evidence/dote_control_completion_20261029.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -103,6 +104,60 @@ def unit(metric):
     if metric in ('scenes', 'n_valid', 'n_rain', 'q32_covered') or metric.startswith('covered/'):
         return 'COUNT'
     return 'AS_RECORDED_SEE_SOURCE'
+
+
+def control_completion_text(c):
+    a, b = c['summary']['values']['B7'], c['summary']['values']['B7_ZERO_DOTE']
+    labels = dict(brier='Brier（布里尔分数）↓', auroc='AUROC（ROC曲线下面积）↑', average_precision='AP（平均精确率）↑',
+                  conditional_pinball='条件Pinball（分位数损失）↓', q32_coverage='q32覆盖率',
+                  q32_signed_bias='q32−名义覆盖率', q32_absolute_error='q32距名义绝对误差↓')
+    raw = '\n'.join(f"|{labels[k]}|{b[k]:.12g}|{a[k]:.12g}|{a[k]-b[k]:.12g}|" for k in HEADLINE)
+    utc = '\n'.join(f"|{g}|"+'|'.join(f"{d[k]:.12g}" for k in HEADLINE)+'|' for g,d in c['summary']['group_deltas'].items() if g!='all')
+    rain=[]
+    for key,v in c['summary']['tail_pairs']['strata'].items():
+        s,z,d=v['B7'],v['B7_ZERO_DOTE'],v['B7_minus_B7_ZERO_DOTE']
+        label=f"{s['lower']:g}–{s['upper']:g}" if s['upper'] is not None else f">{s['lower']:g}"
+        rain.append(f"|{label}|{s['n_rain']}|{z['conditional_pinball']:.12g}|{s['conditional_pinball']:.12g}|{d['conditional_pinball']:.12g}|{z['q32_coverage']:.12g}|{s['q32_coverage']:.12g}|")
+    elevation='\n'.join(f"|{key}|{v['B7']['n_valid']}|{v['B7']['n_rain']}|"+'|'.join(f"{v['B7_minus_B7_ZERO_DOTE'][k]:.12g}" for k in ('brier','conditional_pinball','q32_coverage'))+'|' for key,v in c['summary']['tail_pairs']['elevation'].items())
+    return f'''
+## DOTE零数值主对照固定E9已完成：COMPLETE_WITH_LIMITATIONS（带局限完成）
+
+北京时间`{c['completed_at']}`完成B7_ZERO_DOTE seed2029九轮Train/2024 Dev，[新增完成收据]({CONTROL_COMPLETE})核对9轮Train、9轮Dev、18气象读取账本、1静态账本及实际E9 SHA。执行`{c['training_commit']}`，提案`{c['proposal_sha256']}`；4,320次RETURNED、477,571,953,840逻辑源字节/142,813实例，零重放/额外重试。绑定至完成的文件mtime区间{c['budget_closure']['wall_seconds_mtime_proxy']:.3f}秒（约3小时45分，非精确GPU计费），低于21,600秒。固定E9 SHA `{c['endpoint_sha256']}`。原B7结果继承，不重训；本次封口不读取原始气象、加载权重或另跑推理，2025冻结。
+
+完整公共初始状态与九轮样本顺序和原B7相同，输入数值置零发生在原PhysicalDote之后，真实有效性mask保留。以下所有差值统一为 **真实B7−零数值控制**；不是B8−B7。单seed结果显示显式数值通道改善总体Brier、AUROC、AP和条件Pinball，但q32更欠覆盖；不能据此称DOTE所有指标均有收益或已经证实地形抬升。
+
+|指标|零数值控制|真实B7|真实−控制|
+|---|---|---|---|
+{raw}
+
+名义q32=0.984375。真实B7覆盖率93.4824%，控制93.9093%，分别欠覆盖4.9551和4.5282个百分点；真实B7的距名义绝对误差增加0.4269个百分点。完整32分位数覆盖率与未舍入原值均在METRICS.csv中。
+
+### UTC及既有强雨场景组
+
+|分组|ΔBrier|ΔAUROC|ΔAP|Δ条件Pinball|Δq32覆盖|Δq32偏差|Δq32绝对误差|
+|---|---|---|---|---|---|---|---|
+{utc}
+
+06 UTC是反例：真实B7的AP下降0.0009368462、条件Pinball增加0.0004101864，四个UTC的总体q32距名义误差均变差；不能把总体四项改善推广到全部时次。
+
+### 全部雨强分层
+
+|雨强mm/h|有雨像元时次|控制Pinball|真实Pinball|ΔPinball|控制q32覆盖|真实q32覆盖|
+|---|---|---|---|---|---|---|
+{chr(10).join(rain)}
+
+20–30和30–50 mm/h的条件Pinball分别降低0.0279660和0.0283435，但真实B7的q32覆盖仍仅6.7376%和0.6803%；>50层两者均为0。0.1–1 mm/h条件Pinball反而增加0.0004740664。这些数量是像元时次，>50 mm/h的6个观测不是6场独立暴雨。强雨结果不能由总体均值代替，损失改善也不代表尾部校准已解决。
+
+### 既有补充海拔组
+
+|分组|有效像元时次|有雨像元时次|ΔBrier|Δ条件Pinball|Δq32覆盖|
+|---|---|---|---|---|---|
+{elevation}
+
+### 归因边界
+
+这是同一2024 Dev年的单seed表征对照；128个零输入投影权重无损失梯度，4,411,058名义参数相同不等于有效容量完全相等。保留的真实mask仍提供条件信息；DOTE是已有GFS/DEM的确定性函数，不是独立新增观测、真实垂直速度或因果机制证据。当前支持“在该模型及该seed下，显式数值表征具有混合的预测效用”，尚不支持跨seed稳定DOTE增益、独立年份泛化或统计显著性。原B7/B8三seed对照结论不变：DTFM仅总体AUROC三seed同向改善，其余指标混合。没有批准额外控制seed、负对照B、训练延长或2025解封。早先NOT_STARTED/IN_PROGRESS报告为历史时点，冻结提案和原启动收据保持原字节。
+'''
 
 
 def innovation_completion_text(mc, full=False):
@@ -350,6 +405,7 @@ def main():
     exact_brier=read(EXACT_BRIER) if paper_audit else None
     control_proposal=read(CONTROL_PROPOSAL) if (ROOT/CONTROL_PROPOSAL).exists() else None
     control_launch=read(CONTROL_LAUNCH) if (ROOT/CONTROL_LAUNCH).exists() else None
+    control_complete=read(CONTROL_COMPLETE) if (ROOT/CONTROL_COMPLETE).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -419,6 +475,16 @@ def main():
                      verified_at=c['as_of'],status_as_of=c['as_of'],evidence_path=CONTROL_LAUNCH,
                      authorization_status='APPROVED_EXACT_SINGLE_CONTROL_CONSUMED_ONCE',
                      notes='Actual single approved control running; startup snapshot130 RETURNED,0sealed epochs,not a live counter or E9 result. Real B7 not retrained. Exact0c91ff0 code,zero8 numeric/real masks,128 loss-inactive weights; replay/retry0.')
+        if control_complete:
+            c=control_complete
+            assert c['status']=='VERIFIED_COMPLETE_DOTE_NUMERIC_CONTROL_TRAIN_AND_DEV'
+            assert c['training_commit']==control_proposal['execution_code_commit'] and c['proposal_sha256']==control_proposal['proposal_sha256']
+            r.update(phase='DOTE_NUMERIC_CONTROL_COMPLETE_FIXED_E9',status='COMPLETE_TRAIN_AND_DEV_EVALUATION',execution_state='COMPLETE',
+                     epochs='9',global_steps='4320',executed_commit=c['training_commit'],checkpoint_reference=c['endpoint_sha256'],
+                     checkpoint_selection='FIXED_EPOCH_9_LAST',metrics_path=CONTROL_COMPLETE+'#/endpoint_groups/B7_ZERO_DOTE',
+                     evidence_path=CONTROL_COMPLETE,verified_at=c['verified_at'],status_as_of=c['completed_at'],
+                     authorization_status='APPROVED_EXACT_SINGLE_CONTROL_COMPLETE_NO_RETRY',
+                     notes='Verified9Train/9Dev,4320updates,zero replay/retry. RealB7 improves overallBrier/AUROC/AP/Pinball versus zero control, worsens q32 nominal error. Single2029;real masks retained,128 loss-inactive weights; not capacity equivalence/causality/final generalization.')
         matrix.append(r);experiments[r['experiment_id']]=r
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
@@ -548,6 +614,18 @@ def main():
             add(eid,item['development'],INNOVATION_MULTI_COMPLETE,f'/epochs/{i}/development',epoch=item['epoch'],kind='RAW_EPOCH')
             add(eid,item['train'],INNOVATION_MULTI_COMPLETE,f'/epochs/{i}/train',epoch=item['epoch'],kind='RAW_EPOCH',split='2023_Train')
             add(eid,item['elevation_diagnostics'],INNOVATION_MULTI_COMPLETE,f'/epochs/{i}/elevation_diagnostics',epoch=item['epoch'],kind='RAW_EPOCH',group='elevation_diagnostics')
+    if control_complete:
+        c=control_complete;eid='B7_ZERO_DOTE__E0__s2029__f006'
+        for group,obj in c['endpoint_groups']['B7_ZERO_DOTE'].items():
+            pointer='/endpoint_groups/B7_ZERO_DOTE/'+group+'/summary'
+            add(eid,obj['summary'],CONTROL_COMPLETE,pointer,group=group,ids=obj['ids_sha256'])
+            add(eid,{'q32_coverage':obj['summary']['coverage'][-1]},CONTROL_COMPLETE,pointer,group=group,ids=obj['ids_sha256'])
+            seen[(eid,'ENDPOINT','2024_Development',group,'q32_coverage')]['source_pointer']=pointer+'/coverage/31'
+        add(eid,c['tail_diagnostics']['B7_ZERO_DOTE'],CONTROL_COMPLETE,'/tail_diagnostics/B7_ZERO_DOTE',group='tail_diagnostics')
+        for i,item in enumerate(c['epochs']):
+            add(eid,item['development'],CONTROL_COMPLETE,f'/epochs/{i}/development',epoch=item['epoch'],kind='RAW_EPOCH')
+            add(eid,item['train'],CONTROL_COMPLETE,f'/epochs/{i}/train',epoch=item['epoch'],kind='RAW_EPOCH',split='2023_Train')
+            add(eid,item['elevation_diagnostics'],CONTROL_COMPLETE,f'/epochs/{i}/elevation_diagnostics',epoch=item['epoch'],kind='RAW_EPOCH',group='elevation_diagnostics')
     epoch_source = PROGRESS + 'epoch_metrics.csv'
     with (ROOT / epoch_source).open(encoding='utf-8-sig', newline='') as f:
         for i, item in enumerate(csv.DictReader(f)):
@@ -579,12 +657,14 @@ def main():
         pairs += [('B8__E0__s2029__f006__dynamic',f'{base}__E0__s2029__f006'+('__static' if base in ('B5','B6') else '__dynamic' if base=='B7' else ''),'B8_MINUS_'+base) for base in ('B4','B5','B6','B7')]
     if innovation_multi_complete:
         pairs += [(f'B8__E0__s{seed}__f006__dynamic',f'B7__E0__s{seed}__f006__dynamic','B8_MINUS_B7') for seed in (2030,2031)]
+    if control_complete:
+        pairs += [('B7__E0__s2029__f006__dynamic','B7_ZERO_DOTE__E0__s2029__f006','B7_MINUS_B7_ZERO_DOTE')]
     aggregates = defaultdict(list)
     for target, base, comparison in pairs:
         for key in sorted(by_exp[target].keys() & by_exp[base].keys()):
             group, metric = key
             eligible = metric in HEADLINE or metric.startswith('coverage/') or metric.endswith('/conditional_pinball') or metric.endswith('/q32_coverage')
-            if comparison=='B8_MINUS_B7' and metric.endswith('/brier'):eligible=True
+            if comparison in ('B8_MINUS_B7','B7_MINUS_B7_ZERO_DOTE') and metric.endswith('/brier'):eligible=True
             if not eligible:
                 continue
             t, b = by_exp[target][key], by_exp[base][key]
@@ -1003,7 +1083,20 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         innovation_analysis_text+=paper_audit['markdown']
         current_checks_text+=' 本轮再追加7项新控制/诊断CPU测试、一次成功真实静态缓存CPU初始化及离线算术；准备缓存两次共625656字节含一次环境门控失败，0正式更新。六套既有Dev元数据和精确分数计数用于诊断，无原始气象载荷/权重/新推理。'
         csv_scope_text+=' OFFLINE_DERIVED为由冻结a2ffa75统计或已存分数计数计算的派生量，不是新训练/推理；零数值控制仍为空值占位。'
-        if control_launch:
+        if control_complete:
+            c=control_complete
+            latest_status_text=latest_status_text.replace('DOTE零数值主对照NOT_STARTED','DOTE零数值主对照九轮固定E9及2024 Dev已核验完成，单seed限定验收COMPLETE_WITH_LIMITATIONS')
+            innovation_stage_rows=innovation_stage_rows.replace('新科学选择/预算未批准|NOT_STARTED|','九轮固定E9已核验；真实B7总体四指标改善、q32退化，单seed归因有限|COMPLETE_TRAIN_AND_DEV_EVALUATION；COMPLETE_WITH_LIMITATIONS|')
+            completion_scope_text+=' 新B7_ZERO_DOTE/2029九轮Train/Dev、4320更新及实际E9已核验，零重放/额外重试。'
+            control_text=control_completion_text(c)
+            innovation_text+=control_text
+            innovation_analysis_text=control_text+'\n'+innovation_analysis_text
+            status_table+='\n|B7_ZERO_DOTE|2029|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|'
+            latest_science_text+=' 单seed真实B7相对零数值控制总体Brier/AUROC/AP/Pinball更好，但q32距名义误差更差；不支持全面收益、等有效容量或因果机制结论。'
+            current_checks_text+=' 控制仅新增9轮Train/9轮Dev、18气象账本、1静态账本、1实际E9 SHA及初始化/顺序/人口核对，原B7及旧来源不重审；封口0训练/推理/原始载荷/2025访问。'
+            csv_scope_text=csv_scope_text.replace('零数值控制仍为空值占位','零数值控制新增完整E9、9轮原值、UTC/强雨/海拔及真实B7−控制的未舍入差值，旧指标保持原值')
+            publication_base=c['training_commit']
+        elif control_launch:
             latest_status_text=latest_status_text.replace('DOTE零数值主对照NOT_STARTED','DOTE零数值主对照已获准确批准并单次启动IN_PROGRESS')
             innovation_stage_rows=innovation_stage_rows.replace('新科学选择/预算未批准|NOT_STARTED|','精确方案已批准并消费，正在单次训练，无新固定E9|IN_PROGRESS|')
             completion_scope_text+=' 新B7_ZERO_DOTE/2029仅为获批启动快照130更新、0完整轮，不能记为已完成或填入终点指标。'
@@ -1140,6 +1233,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names += [PAPER_AUDIT,OFFLINE_DIAGNOSTICS,EXACT_BRIER,CONTROL_CHECKS]
         if control_proposal:input_names.append(CONTROL_PROPOSAL)
         if control_launch:input_names.append(CONTROL_LAUNCH)
+        if control_complete:input_names.append(CONTROL_COMPLETE)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1183,7 +1277,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份]({INNOVATION_MULTI_RECOVERY_LAUNCH})|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|" if innovation_multi_recovery_launch else ''}
 {f"|最新B7/B8三seed全部完成|[新增30轮、64读取账本、四份E9实际SHA及三seed原值/差值]({INNOVATION_MULTI_COMPLETE})|前述中断/排队是历史时点；新增四任务已九轮完成，新段14400更新含441必要重放，三seed分析完成但收益混合，带局限验收；2025冻结|" if innovation_multi_complete else ''}
 {f"|本轮科学归因与论文级验收|[主张矩阵及2025预注册草案]({PAPER_AUDIT})、[27终点离线诊断]({OFFLINE_DIAGNOSTICS})、[精确经验Brier分解]({EXACT_BRIER})、[7项检查与真实初值]({CONTROL_CHECKS})|从a2ffa75已保存统计计算；35周块不等于独立天气事件，未新增训练或2025访问；零数值控制NOT_STARTED。可编辑[LaTeX](docs/research_readiness/20261029/paper_acceptance/main.tex)与[PDF](docs/research_readiness/20261029/paper_acceptance/YunTAPR_Scientific_Acceptance_20261029.pdf)|" if paper_audit else ''}
-{f"|最新DOTE单模型获批启动|[明确批准、130实际更新、资源/独立宿主与页面身份]({CONTROL_LAUNCH})|前一行只记录准备时点；B7_ZERO_DOTE/2029当前IN_PROGRESS，固定0c91ff0/d7604c03；原B7和所有成功模型不重训，0完整轮，无新增固定E9或归因结论；2025冻结|" if control_launch else ''}
+{f"|DOTE单模型获批启动（历史快照）|[明确批准、130实际更新、资源/独立宿主与页面身份]({CONTROL_LAUNCH})|仅记录09:22:01启动时点，IN_PROGRESS和0完整轮不是当前终态；固定0c91ff0/d7604c03，2025冻结|" if control_launch else ''}
+{f"|最新DOTE主对照已完成|[九轮Train/Dev、18气象/1静态账本、E9实际SHA及同人口对照]({CONTROL_COMPLETE})|B7_ZERO_DOTE/2029为COMPLETE_TRAIN_AND_DEV_EVALUATION；4320更新、477571953840字节/142813次、零重放重试。原B7不重训，真实B7总体四指标更好但q32更差；单seed限定结论，2025冻结|" if control_complete else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -1230,7 +1325,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 
