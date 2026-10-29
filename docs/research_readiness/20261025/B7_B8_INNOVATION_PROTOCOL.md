@@ -1,5 +1,20 @@
 # B7 DOTE / B8 DTFM 冻结科学协议与三seed证据
 
+## DOTE数值主对照三seed完成：COMPLETE_WITH_LIMITATIONS（2026-10-29）
+
+2026-10-29 23:39:52（北京时间）ZERO_DOTE seed2030、2031各九轮Train/2024 Dev及固定E9已封口；新18轮Train/18轮Dev、36气象/2静态账本、2份实际E9 SHA核验通过。新增8640更新、955143907680逻辑源字节/285626次，零重放/额外重试；包mtime区间27052.308秒、两任务各低于6小时，总体低于12小时。
+
+继承2029形成三seed真实B7−零控制：Brier改善3/3（均值−0.000892628018339），AUROC/AP各仅1/3，条件Pinball2/3、q32距名义误差1/3；20–30与30–50 Pinball的2029收益在两个新seed均未复现。06 UTC AP三seed均退化、q32误差三seed均加重。128个无损失梯度权重及真实mask、同Dev年/非独立像元局限保留，科学验收COMPLETE_WITH_LIMITATIONS，不证明等有效容量、显著性、物理因果或最终泛化。
+
+- ZERO_DOTE/2030 E9 SHA256：`b03ee41cd190dc7579a1fb993afb1f5598997fca91af3b1c2addc6eed430f0ba`；任务mtime 13570.225秒。
+- ZERO_DOTE/2031 E9 SHA256：`f99952905157d8e649e567af671d0ee3ff02f11530a9996b80306ef758acdac0`；任务mtime 13479.642秒。
+
+执行`8a4668377dbd40013245b54550c0963d10c286fb`，提案`a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`；[完整新增封口与三seed证据](evidence/dote_control_three_seed_completion_20261029.json)、[全部原始指标/差值](../../../METRICS.csv)及[当前科学分析](../../../SCIENTIFIC_ANALYSIS.md)已整理。正式终态为COMPLETE_TRAIN_AND_DEV_EVALUATION，控制器正常退出rc0。仅哈希两份新E9，不加载权重/另跑推理或读取原始气象；原真实B7/2030的441重放、B8等旧失败与恢复原样继承，不计为新seed。
+
+较早自动汇总把雨强分层q32套用了通用方向提示；本次仅将新报告标签澄清为按真实雨强条件化的描述性覆盖，不假设每层有98.4375%名义目标。原汇总文件、历史权重、日志和所有数值未改写。这不是训练协议变更或重跑。
+
+全部本轮批准已消费，不再启动任何任务；不因混合结果追加seed、置乱或损失变体。2025继续冻结，最终全模态适配与一次性推理预算仍是未获批准的独立准备事项。原只读页面已自然显示整包完成，没有新周期自动化，不合并main。以下NOT_STARTED/IN_PROGRESS/待批准均为历史时点，由本段和新完成收据给出当前状态。
+
 ## ZERO_DOTE/2030→2031批准已消费并单次启动：IN_PROGRESS（2026-10-29）
 
 2026-10-29 ZERO_DOTE两控制准确批准已消费并启动：研究者对8a4668377dbd40013245b54550c0963d10c286fb/a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6明确回复“是”。独立WMI监督器单次调度；北京时间16:11:42启动快照2030为IN_PROGRESS/RUNNING、89次RETURNED、0轮封口，2031为NOT_STARTED/PENDING、0更新。新E9及三seed控制结论尚无。

@@ -52,6 +52,7 @@ CONTROL_COMPLETE = READY + 'evidence/dote_control_completion_20261029.json'
 CONTROL_MULTI = READY + 'evidence/dote_control_multiseed_proposal_20261029.json'
 CONTROL_MULTI_CHECKS = READY + 'evidence/dote_control_multiseed_checks_20261029.json'
 CONTROL_MULTI_LAUNCH = READY + 'evidence/dote_control_multiseed_approved_launch_20261029.json'
+CONTROL_MULTI_COMPLETE = READY + 'evidence/dote_control_three_seed_completion_20261029.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -161,6 +162,86 @@ def control_completion_text(c):
 
 这是同一2024 Dev年的单seed表征对照；128个零输入投影权重无损失梯度，4,411,058名义参数相同不等于有效容量完全相等。保留的真实mask仍提供条件信息；DOTE是已有GFS/DEM的确定性函数，不是独立新增观测、真实垂直速度或因果机制证据。当前支持“在该模型及该seed下，显式数值表征具有混合的预测效用”，尚不支持跨seed稳定DOTE增益、独立年份泛化或统计显著性。原B7/B8三seed对照结论不变：DTFM仅总体AUROC三seed同向改善，其余指标混合。没有批准额外控制seed、负对照B、训练延长或2025解封。早先NOT_STARTED/IN_PROGRESS报告为历史时点，冻结提案和原启动收据保持原字节。
 '''
+
+
+def control_three_seed_text(c, full=False):
+    s,cost=c['summary'],c['budget_closure']
+    labels=dict(brier='Brier（布里尔分数）↓',auroc='AUROC（ROC曲线下面积）↑',average_precision='AP（平均精确率）↑',
+                conditional_pinball='条件Pinball（分位数损失）↓',q32_coverage='q32覆盖率',q32_signed_bias='q32−名义覆盖率',q32_absolute_error='q32距名义绝对误差↓')
+    stats='\n'.join(f"|{labels[k]}|{d['by_seed']['2029']:.12g}|{d['by_seed']['2030']:.12g}|{d['by_seed']['2031']:.12g}|{d['mean']:.12g}|{d['sample_sd']:.12g}|{d['improvement_seeds']}/3|{'一致' if d['direction_consistent'] else '不一致'}|" for k,d in s['groups']['all'].items())
+    identity='\n'.join(f"|{t['seed']}|{t['completed_at']}|{t['optimizer_updates']}|{t['wall_seconds_mtime_proxy']:.3f}|`{t['fixed_E9_sha256']}`|" for t in c['tasks'])
+    text=f'''\n## DOTE数值主对照三seed已完成：COMPLETE_WITH_LIMITATIONS（带局限完成）
+
+新增ZERO_DOTE/2030、2031于北京时间`{c['completed_at']}`全部封口。[新增两模型完成收据与三seed配对]({CONTROL_MULTI_COMPLETE})已核对18轮Train、18轮2024 Dev、36气象账本、2静态账本及2份实际固定E9权重SHA；2029真实B7/零控制及2030/2031真实B7直接继承，未重训。新增实际8,640更新、955,143,907,680逻辑源字节/285,626次，均等于批准上限；重放/额外重试0。文件mtime区间{cost['wall_seconds_mtime_proxy']:.3f}秒（约7小时31分），小于43,200秒/12小时；两任务分别小于21,600秒/6小时，这不是精确GPU计费。
+
+执行`{c['training_commit']}`，提案SHA `{c['proposal_sha256']}`。E0/f006、959 Train/963 Dev、Train2/Dev8、AdamW/原LR前4320步、固定E9 LAST、精确AUROC/AP与全部掩膜继承。实际E9身份如下：
+
+|控制seed|完成时刻（北京时间）|更新|任务mtime秒|E9权重SHA256|
+|---|---|---|---|---|
+{identity}
+
+下表差值一律 **真实B7−B7_ZERO_DOTE**，保留全部三个seed。均值和样本标准差（ddof=1）描述训练随机性，不是独立年份或独立暴雨的置信区间，也不构成显著性证明。q32名义水平0.984375，以距名义绝对误差判定改善；覆盖率、偏差、误差均采用0–1概率单位。
+
+|指标|Δ2029|Δ2030|Δ2031|均值|样本标准差|改善seed|差值符号|
+|---|---|---|---|---|---|---|---|
+{stats}
+
+有限结论：**Brier在三个seed均下降；AUROC/AP仅2029改善，条件Pinball改善2/3，q32距名义误差改善1/3、退化2/3；20–30和30–50 mm/h的2029 Pinball收益在两个新seed均未复现。** 因此不支持全面预测优势、稳定强雨收益或极端尾部已校准。当前三组对照的实际训练/评价完成，科学验收为COMPLETE_WITH_LIMITATIONS。原始指标和完整分层在METRICS.csv保留，2025继续冻结。
+'''
+    if not full:return text
+    raw=[]
+    for seed in ('2029','2030','2031'):
+        for arm,v in s['group_endpoints'][seed]['all'].items():
+            raw.append(f"|{seed}|{arm}|"+'|'.join(f'{v[k]:.12g}' for k in HEADLINE)+'|')
+    text+=f'''
+### 三seed总体原始值
+
+|seed|模型|Brier|AUROC|AP|条件Pinball|q32覆盖|q32偏差|q32绝对误差|
+|---|---|---|---|---|---|---|---|---|
+{chr(10).join(raw)}
+
+真实B7的q32覆盖93.4824%/95.0593%/94.7354%，零控制为93.9093%/95.1604%/94.5493%，全部低于98.4375%；真实DOTE在2029、2030更欠覆盖，2031改善，不能写成三个seed持续同向退化。总体距名义绝对误差平均增加0.00113939（0.113939个百分点），尚不支持尾部校准解决。
+
+### 全部UTC与既有强雨场景组
+
+以下保留全部分组的五项主要比较；q32覆盖/偏差及所有分组原值另在METRICS.csv完整保留。
+
+|分组|指标|Δ2029|Δ2030|Δ2031|均值|样本标准差|改善seed|
+|---|---|---|---|---|---|---|---|
+'''
+    for group,items in s['groups'].items():
+        if group=='all':continue
+        for metric in ('brier','auroc','average_precision','conditional_pinball','q32_absolute_error'):
+            d=items[metric];text+=f"|{group}|{labels[metric]}|{d['by_seed']['2029']:.12g}|{d['by_seed']['2030']:.12g}|{d['by_seed']['2031']:.12g}|{d['mean']:.12g}|{d['sample_sd']:.12g}|{d['improvement_seeds']}/3|\n"
+    text+='\n四个UTC的Brier均在三个seed下降；06 UTC的AP却在三个seed均下降、q32距名义误差均增加。强雨场景组Brier也3/3改善，但AUROC/AP/Pinball仅2029改善，不能用总体概率误差掩盖排序与强雨反例。\n\n### 全部七个雨强层：条件Pinball\n\n|雨强mm/h|有雨像元时次|Δ2029|Δ2030|Δ2031|均值|样本标准差|改善seed|\n|---|---|---|---|---|---|---|---|\n'
+    for key,items in s['tail_comparisons']['strata'].items():
+        ref=s['tail_endpoints']['2029']['B7']['strata'][int(key)];label=f"({ref['lower']:g},{ref['upper']:g}]" if ref['upper'] is not None else '(50,∞)'
+        d=items['conditional_pinball'];text+=f"|{label}|{ref['n_rain']}|{d['by_seed']['2029']:.12g}|{d['by_seed']['2030']:.12g}|{d['by_seed']['2031']:.12g}|{d['mean']:.12g}|{d['sample_sd']:.12g}|{d['improvement_seeds']}/3|\n"
+    text+='\n20–30的差值为−0.0279660/+0.00682629/+0.00447645；30–50为−0.0283435/+0.00187795/+0.00839919，均只有2029改善。两层均值为负由2029驱动，不能表述为跨seed稳定收益。0.1–1层在2029和2031退化、2030改善；1–20各层也并非全seed改善。>50仅6个有雨像元时次，不是6场独立暴雨，结论不稳定。\n\n### 按结果条件化的雨强层q32覆盖：仅描述\n\n每格为真实B7/零控制，单位0–1。覆盖条件同时依赖真实雨强，不能假定每个结果分层具有98.4375%的名义目标。原自动汇总的通用方向标签在新封口报告中仅作描述性澄清，原文件与全部数值不改写。\n\n|雨强mm/h|2029真实/控制|2030真实/控制|2031真实/控制|\n|---|---|---|---|\n'
+    for i,ref in enumerate(s['tail_endpoints']['2029']['B7']['strata']):
+        label=f"({ref['lower']:g},{ref['upper']:g}]" if ref['upper'] is not None else '(50,∞)'
+        cells=[f"{s['tail_endpoints'][seed]['B7']['strata'][i]['q32_coverage']:.12g}/{s['tail_endpoints'][seed]['B7_ZERO_DOTE']['strata'][i]['q32_coverage']:.12g}" for seed in ('2029','2030','2031')]
+        text+='|'+label+'|'+'|'.join(cells)+'|\n'
+    text+='\n### 三个既有海拔区间\n\n所有海拔组的原值、Brier/Pinball/q32覆盖差值及均值/样本标准差保留在METRICS.csv。分组Brier九个差值均为负；分组Pinball各改善2/3；q32变化继续混合。以下q32为覆盖差值，其改善不能单按正负确定，应同时查看源原值与名义距离。\n\n|海拔组|指标|Δ2029|Δ2030|Δ2031|均值|样本标准差|\n|---|---|---|---|---|---|---|\n'
+    for name,items in s['tail_comparisons']['elevation'].items():
+        for metric,d in items.items():
+            text+=f"|{name}|{labels[metric]}|{d['by_seed']['2029']:.12g}|{d['by_seed']['2030']:.12g}|{d['by_seed']['2031']:.12g}|{d['mean']:.12g}|{d['sample_sd']:.12g}|\n"
+    text+='''
+### A–F判断及论文主张边界
+
+A：Brier的下降在三个训练seed重复出现，均值−0.000892628，样本标准差0.000658271；这是当前固定协议内的描述性复现。Brier同时受概率可靠性与分辨能力影响，新零控制未另作原生分数Brier分解，不能直接把下降命名为“可靠性改善”。
+
+B：总体AUROC/AP收益都只在2029出现，两个新增seed均更差；AP均值为正亦由2029驱动，不支持稳定判别优势。C：总体Pinball改善2/3，20–50层仅1/3，强雨收益没有复现。D：q32总体误差退化2/3、改善1/3，仍普遍欠覆盖；“三个seed持续加重”不成立。E：2029有排序改善与q32退化同时出现，但其他seed不遵循同一方向，不能宣称普遍性能—覆盖权衡规律。F：Brier改善不再只依赖2029这一次初始化；其他收益仍不稳定，不能证明其差异纯属偶然，也不能筛选最佳seed。
+
+第一层预测性能：支持固定网络/数据/损失下的Brier一致降低及其他指标混合。第二层显式物理表征：支持给定真实mask与现有GFS/DEM信息时，显式DOTE数值表征对Brier具有有限预测效用；名义参数4,411,058相同，但128零输入权重无损失梯度，有效容量不相等，保留mask仍携带条件信息。第三层物理机制：没有迎风抬升、背风效应或地形阻挡的因果证明，DOTE仍是确定性代理量而非独立观测或真实垂直速度。
+
+适合论文的有限主张：“在相同人口、配对初始化/顺序和固定E9协议的三个训练seed中，显式DOTE数值相对零数值控制均降低Brier，但排序、条件分位数与强雨收益未稳定复现，q32覆盖仍不足。”不写全面优于控制、统计显著性、跨年泛化或物理机制验证。seed+epoch−1排列存在已记录的移位重叠，像元和相邻时次不是独立事件，2024开发年被重复使用。
+
+若后续论文坚持物理因果主张，才需另行冻结保持mask、有效容量及空间/气象联合结构的对应关系控制，并结合独立事件/观测；当前证据不足以把全部增量归因于抬升机制。现阶段无需为追求漂亮结果自动追加控制、第四seed或重训；物理置乱、B6/B8补训及2025解封均未授权。2025全模态人口/适配器/一次性推理预算和独立最终验证仍未完成；原预注册DRAFT不自动变为可执行或已批准。
+
+本轮仅封口新两控制及已保存汇总，0新训练、0模型推理、0权重反序列化、0原始气象载荷；只对两份新E9文件作字节SHA。全部旧B0–B8收据、2029控制与原失败/62及441重放历史保留。本次新增两控制没有重放或额外重试，批准已消费，不追加实验。以下单seed结论、准备与启动状态是历史时点，由本三seed新结果限定其当前解释。
+'''
+    return text
 
 
 def innovation_completion_text(mc, full=False):
@@ -411,6 +492,7 @@ def main():
     control_complete=read(CONTROL_COMPLETE) if (ROOT/CONTROL_COMPLETE).exists() else None
     control_multi=read(CONTROL_MULTI) if (ROOT/CONTROL_MULTI).exists() else None
     control_multi_launch=read(CONTROL_MULTI_LAUNCH) if (ROOT/CONTROL_MULTI_LAUNCH).exists() else None
+    control_multi_complete=read(CONTROL_MULTI_COMPLETE) if (ROOT/CONTROL_MULTI_COMPLETE).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -515,6 +597,15 @@ def main():
                          evidence_path=CONTROL_MULTI_LAUNCH,verified_at=c['as_of'],status_as_of=c['as_of'],
                          authorization_status='APPROVED_EXACT_TWO_CONTROL_PACKAGE_CONSUMED_ONCE',
                          notes='Approved single-dispatch startup snapshot only; no fixedE9 or new science metrics.2030 RUNNING/89returned,2031 PENDING/0. Exact8a46683/a53d3829; zero numeric/real masks,128 loss-inactive weights;replay/retry0;2025 frozen.')
+            if control_multi_complete:
+                c=control_multi_complete;run=next(x for x in c['tasks'] if x['seed']==seed)
+                assert c['status']=='VERIFIED_COMPLETE_THREE_SEED_DOTE_NUMERIC_CONTROL_TRAIN_AND_DEV'
+                assert c['training_commit']==control_multi['execution_code_commit'] and c['proposal_sha256']==control_multi['proposal_sha256']
+                r.update(phase='DOTE_NUMERIC_MULTI_SEED_COMPLETE_FIXED_E9',status=run['status'],execution_state='COMPLETE',epochs='9',global_steps='4320',
+                         checkpoint_reference=run['fixed_E9_sha256'],checkpoint_selection='FIXED_EPOCH_9_LAST',executed_commit=c['training_commit'],
+                         evidence_path=CONTROL_MULTI_COMPLETE,metrics_path=CONTROL_MULTI_COMPLETE+f'#/endpoint_groups/{seed}/B7_ZERO_DOTE',
+                         verified_at=c['verified_at'],status_as_of=run['completed_at'],authorization_status='APPROVED_TWO_CONTROLS_COMPLETE_NO_REPLAY_OR_RETRY',
+                         notes='Verified9Train/9Dev,4320updates,zero replay/retry;matching realB7 initial state/orders/population. Three-seed Brier improves3/3;AUROC/AP1/3,Pinball2/3,q32absolute error1/3.128 loss-inactive weights;no equal effective capacity,causal uplift or final-year claim.')
             matrix.append(r);experiments[r['experiment_id']]=r
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
@@ -656,6 +747,21 @@ def main():
             add(eid,item['development'],CONTROL_COMPLETE,f'/epochs/{i}/development',epoch=item['epoch'],kind='RAW_EPOCH')
             add(eid,item['train'],CONTROL_COMPLETE,f'/epochs/{i}/train',epoch=item['epoch'],kind='RAW_EPOCH',split='2023_Train')
             add(eid,item['elevation_diagnostics'],CONTROL_COMPLETE,f'/epochs/{i}/elevation_diagnostics',epoch=item['epoch'],kind='RAW_EPOCH',group='elevation_diagnostics')
+    if control_multi_complete:
+        c=control_multi_complete
+        for seed in ('2030','2031'):
+            eid=f'B7_ZERO_DOTE__E0__s{seed}__f006'
+            for group,obj in c['endpoint_groups'][seed]['B7_ZERO_DOTE'].items():
+                pointer=f'/endpoint_groups/{seed}/B7_ZERO_DOTE/{group}/summary'
+                add(eid,obj['summary'],CONTROL_MULTI_COMPLETE,pointer,group=group,ids=obj['ids_sha256'])
+                add(eid,{'q32_coverage':obj['summary']['coverage'][-1]},CONTROL_MULTI_COMPLETE,pointer,group=group,ids=obj['ids_sha256'])
+                seen[(eid,'ENDPOINT','2024_Development',group,'q32_coverage')]['source_pointer']=pointer+'/coverage/31'
+            add(eid,c['tail_diagnostics'][seed]['B7_ZERO_DOTE'],CONTROL_MULTI_COMPLETE,f'/tail_diagnostics/{seed}/B7_ZERO_DOTE',group='tail_diagnostics')
+        for i,item in enumerate(c['epochs']):
+            eid=f"B7_ZERO_DOTE__E0__s{item['seed']}__f006"
+            add(eid,item['development'],CONTROL_MULTI_COMPLETE,f'/epochs/{i}/development',epoch=item['epoch'],kind='RAW_EPOCH')
+            add(eid,item['train'],CONTROL_MULTI_COMPLETE,f'/epochs/{i}/train',epoch=item['epoch'],kind='RAW_EPOCH',split='2023_Train')
+            add(eid,item['elevation_diagnostics'],CONTROL_MULTI_COMPLETE,f'/epochs/{i}/elevation_diagnostics',epoch=item['epoch'],kind='RAW_EPOCH',group='elevation_diagnostics')
     epoch_source = PROGRESS + 'epoch_metrics.csv'
     with (ROOT / epoch_source).open(encoding='utf-8-sig', newline='') as f:
         for i, item in enumerate(csv.DictReader(f)):
@@ -689,6 +795,8 @@ def main():
         pairs += [(f'B8__E0__s{seed}__f006__dynamic',f'B7__E0__s{seed}__f006__dynamic','B8_MINUS_B7') for seed in (2030,2031)]
     if control_complete:
         pairs += [('B7__E0__s2029__f006__dynamic','B7_ZERO_DOTE__E0__s2029__f006','B7_MINUS_B7_ZERO_DOTE')]
+    if control_multi_complete:
+        pairs += [(f'B7__E0__s{seed}__f006__dynamic',f'B7_ZERO_DOTE__E0__s{seed}__f006','B7_MINUS_B7_ZERO_DOTE') for seed in (2030,2031)]
     aggregates = defaultdict(list)
     for target, base, comparison in pairs:
         for key in sorted(by_exp[target].keys() & by_exp[base].keys()):
@@ -744,6 +852,13 @@ def main():
             assert len(actual)==3
             assert math.isclose(statistics.mean(float(r['value']) for r in actual),result['mean'],abs_tol=1e-15)
             assert math.isclose(statistics.stdev(float(r['value']) for r in actual),result['sample_sd'],abs_tol=1e-15)
+    if control_multi_complete:
+        for group,items in control_multi_complete['summary']['groups'].items():
+            for metric,d in items.items():
+                actual=aggregates[('B7_MINUS_B7_ZERO_DOTE','E0',group,metric)]
+                assert len(actual)==3 and {r['seed']:float(r['value']) for r in actual}==d['by_seed']
+                assert math.isclose(statistics.mean(float(r['value']) for r in actual),d['mean'],abs_tol=1e-15)
+                assert math.isclose(statistics.stdev(float(r['value']) for r in actual),d['sample_sd'],abs_tol=1e-15)
     if b8_complete:
         for comparison,differences in b8_complete['summary']['differences'].items():
             for metric,expected in differences.items():
@@ -765,6 +880,14 @@ def main():
                 rows.append(dict(template,record_type='OFFLINE_DERIVED',group='EXPLORATORY_35_WEEK_BLOCK_INTERVAL',metric=key+'/'+label,value=repr(value),
                                  status='NOT_INDEPENDENT_STORM_CI_NO_SIGNIFICANCE',unit=unit(key),source_file=OFFLINE_DIAGNOSTICS,
                                  source_pointer=f'/temporal_block_bootstrap/metrics/{key}/{pointer}',improvement_direction='DESCRIPTIVE_ONLY'))
+    if control_multi_complete:
+        template=next(r for r in rows if r['record_type']=='PAIRED_MEAN' and r['comparison']=='B7_MINUS_B7_ZERO_DOTE' and r['group']=='all')
+        for group,items in control_multi_complete['summary']['groups'].items():
+            for metric,d in items.items():
+                for key in ('improvement_seeds','direction_consistent'):
+                    rows.append(dict(template,record_type='OFFLINE_DERIVED',group=group,metric=metric+'/'+key,value=str(int(d[key])),
+                                     status='DESCRIPTIVE_TRAINING_SEED_REPLICATION',unit='COUNT' if key=='improvement_seeds' else 'BOOLEAN_0_1',
+                                     source_file=CONTROL_MULTI_COMPLETE,source_pointer=f'/summary/groups/{group}/{metric}/{key}',improvement_direction='DESCRIPTIVE_ONLY'))
     write_csv('METRICS.csv', FIELDS, rows)
     counts = Counter(r['record_type'] for r in rows)
     summary_table = '\n'.join(f"|{metric}|{data['B4_minus_B3_by_seed']['2029']:.12g}|{data['B4_minus_B3_by_seed']['2030']:.12g}|{data['B4_minus_B3_by_seed']['2031']:.12g}|{data['mean']:.12g}|{data['sample_sd']:.12g}|" for metric, data in b34['summary']['metrics'].items())
@@ -1169,6 +1292,22 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
             innovation_stage_rows=innovation_stage_rows.replace('|未获新增正式训练批准，无新E9或2030/2031指标|NOT_STARTED；准备完成不等于实验完成|','|2030 RUNNING、2031 PENDING，无新固定E9或三seed控制指标；批准已消费，零重放重试|IN_PROGRESS；启动不等于实验完成|')
             status_table=status_table.replace('|B7_ZERO_DOTE|2030|NOT_STARTED|NOT_STARTED|0|0|','|B7_ZERO_DOTE|2030|IN_PROGRESS|RUNNING|89|0|').replace('|B7_ZERO_DOTE|2031|NOT_STARTED|NOT_STARTED|0|0|','|B7_ZERO_DOTE|2031|NOT_STARTED|PENDING|0|0|')
             completion_scope_text+=' 新两控制仅批准启动；2030快照89实际更新，2031未启动，不标完成。'
+    if control_multi_complete:
+        c=control_multi_complete
+        innovation_text=control_three_seed_text(c)+innovation_completion_text(innovation_multi_complete)
+        innovation_analysis_text=control_three_seed_text(c,full=True)+'\n## 以下保留此前单seed、准备及启动时点的科学记录；当前DOTE判断以本三seed新收口为准\n'+innovation_analysis_text
+        innovation_stage_rows=innovation_stage_rows.replace('DOTE单独增量及最终泛化未验证','DOTE数值主对照另列；物理因果与最终泛化未验证')
+        innovation_stage_rows=innovation_stage_rows.replace('|DOTE零数值主对照|','|DOTE零数值主对照/2029（历史单seed）|')
+        innovation_stage_rows=innovation_stage_rows.replace('|新入口、配对初值/顺序、128梯度局限及精确两模型预算准备就绪|2030 RUNNING、2031 PENDING，无新固定E9或三seed控制指标；批准已消费，零重放重试|IN_PROGRESS；启动不等于实验完成|',
+            '|2030/2031各九轮Train/Dev、实际E9 SHA与账本均封口；连同2029形成三seed配对|Brier改善3/3；排序与强雨增益不稳定、q32退化2/3，128无损失梯度权重/同Dev年局限|COMPLETE_TRAIN_AND_DEV_EVALUATION；科学验收COMPLETE_WITH_LIMITATIONS|')
+        latest_status_text='B7/B8三seed及DOTE真实数值对零控制三seed均已完成固定E9/2024 Dev与描述性分析。DOTE仅Brier三seed一致降低，排序/强雨收益未稳定复现，q32仍不足；限定科学验收COMPLETE_WITH_LIMITATIONS，物理因果与最终泛化NOT_VERIFIED。'
+        latest_science_text='DOTE真实B7−零控制：Brier改善3/3；AUROC/AP各1/3，条件Pinball2/3，q32绝对误差1/3；20–30和30–50 Pinball仅2029改善。06UTC AP和q32误差均为三seed反例。不声称有效容量完全匹配、显著性或物理因果。'
+        status_table=status_table.replace('|B7_ZERO_DOTE|2030|IN_PROGRESS|RUNNING|89|0|','|B7_ZERO_DOTE|2030|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|').replace('|B7_ZERO_DOTE|2031|NOT_STARTED|PENDING|0|0|','|B7_ZERO_DOTE|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|')
+        completion_scope_text=completion_scope_text.replace(' 新两控制仅批准启动；2030快照89实际更新，2031未启动，不标完成。',' 新两控制均已完整九轮Train/Dev、4320更新及实际E9核验；2029继承形成三seed，不重训成功任务。')
+        current_checks_text='本次只核对新增18轮Train、18轮Dev、36气象读取账本、2静态账本、2份实际E9 SHA、初始化/九轮顺序及已保存三seed汇总算术。旧B0–B8和ZERO/2029有效收据直接继承；封口0新训练/推理/权重反序列化/原始气象/2025载荷，只哈希两份新E9文件。'
+        input_checks_text='新增两控制终态、账本、E9身份与三seed汇总；旧129来源和旧逐轮核验均未重跑'
+        csv_scope_text=csv_scope_text.replace(' 新2030/2031控制只有缺失占位，不填零或预造结果。',' 新2030/2031控制追加完整E9、18轮数值与全部分层；三seed真实B7−零控制差值、均值、样本标准差、改善seed数和方向一致性均由新收据计算，不另跑推理。')
+        publication_base=c['training_commit']
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1296,6 +1435,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         if control_complete:input_names.append(CONTROL_COMPLETE)
     if control_multi:input_names += [CONTROL_MULTI,CONTROL_MULTI_CHECKS]
     if control_multi_launch:input_names.append(CONTROL_MULTI_LAUNCH)
+    if control_multi_complete:input_names.append(CONTROL_MULTI_COMPLETE)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1343,6 +1483,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|最新DOTE主对照已完成|[九轮Train/Dev、18气象/1静态账本、E9实际SHA及同人口对照]({CONTROL_COMPLETE})|B7_ZERO_DOTE/2029为COMPLETE_TRAIN_AND_DEV_EVALUATION；4320更新、477571953840字节/142813次、零重放重试。原B7不重训，真实B7总体四指标更好但q32更差；单seed限定结论，2025冻结|" if control_complete else ''}
 {f"|DOTE控制2030/2031集中准备|[精确提案]({CONTROL_MULTI})、[新入口/两seed初始化与梯度检查]({CONTROL_MULTI_CHECKS})|两控制NOT_STARTED，正式批准尚无；真实B7三seed和ZERO/2029均不重训，不预填E9或指标，2025冻结|" if control_multi else ''}
 {f"|最新DOTE两控制已批准并启动|[真实批准、89更新及独立宿主/页面身份]({CONTROL_MULTI_LAUNCH})|前一行仅为历史准备；固定8a46683/a53d3829已单次启动，2030 IN_PROGRESS、2031 PENDING；新E9及三seed控制结果尚无。批准已消费、零重放重试，无新周期自动化；2025冻结|" if control_multi_launch else ''}
+{f"|最新DOTE三seed已完整收口|[新增18轮Train/18轮Dev、38读取账本、两份实际E9及完整三seed原值/差值]({CONTROL_MULTI_COMPLETE})|前述待批准/运行状态均为历史；新两控制均COMPLETE_TRAIN_AND_DEV_EVALUATION。Brier改善3/3，AUROC/AP仅1/3，20–50未稳定改善、q32误差退化2/3；三seed带局限验收，不证明物理因果或最终泛化，2025冻结|" if control_multi_complete else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -1389,7 +1530,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=control_multi_complete['verified_at'] if control_multi_complete else control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 
