@@ -1,6 +1,6 @@
 # 阶段验收统一入口
 
-B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。最新B7/B8三seed固定E9训练/评价及三seed描述性分析已完成，创新收益混合，限定验收COMPLETE_WITH_LIMITATIONS。 本轮论文级审计/离线诊断完成；DOTE零数值主对照九轮固定E9及2024 Dev已核验完成，单seed限定验收COMPLETE_WITH_LIMITATIONS，2025方案DRAFT，论文强物理归因与最终泛化验收仍未通过。不能把训练完成等同于全部科学假设通过。
+B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **COMPLETE_TRAIN_AND_DEV_EVALUATION**，地形单seed消融带局限完成；最终泛化验收为 **NOT_VERIFIED（未核实）**。最新B7/B8三seed固定E9训练/评价及三seed描述性分析已完成，创新收益混合，限定验收COMPLETE_WITH_LIMITATIONS。 本轮论文级审计/离线诊断完成；DOTE零数值主对照九轮固定E9及2024 Dev已核验完成，单seed限定验收COMPLETE_WITH_LIMITATIONS，2025方案DRAFT，论文强物理归因与最终泛化验收仍未通过。 ZERO_DOTE/2030、2031仅准备就绪NOT_STARTED，等待一次准确两模型批准。不能把训练完成等同于全部科学假设通过。
 
 |模型|已经完成|尚未完成或限制|本阶段判断|
 |---|---|---|---|
@@ -11,6 +11,7 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 |B7/B8|2029/2030/2031各九轮Train/2024 Dev、固定E9及三组配对完成；原62/441重放保留|仅总体AUROC三seed同向改善，AP/Pinball/q32不稳定，Brier/强雨仍退化；DOTE单独增量及最终泛化未验证|COMPLETE_TRAIN_AND_DEV_EVALUATION；科学验收COMPLETE_WITH_LIMITATIONS|
 |DOTE零数值主对照|同B7架构、真实mask、全初值逐位匹配；7项新CPU检查通过|128权重无损失梯度，不能称有效容量完全匹配；九轮固定E9已核验；真实B7总体四指标改善、q32退化，单seed归因有限|COMPLETE_TRAIN_AND_DEV_EVALUATION；COMPLETE_WITH_LIMITATIONS|
 |论文/最终测试|主张分级、精确经验Brier分解、35周块探索性区间和预注册草案完成|无独立暴雨ID；2025全模态人口/新适配器未核实，未解封|PREPARATION_COMPLETE；强归因/最终泛化NOT_VERIFIED|
+|ZERO_DOTE/2030、2031|新入口、配对初值/顺序、128梯度局限及精确两模型预算准备就绪|未获新增正式训练批准，无新E9或2030/2031指标|NOT_STARTED；准备完成不等于实验完成|
 |2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|
 
 ## 同人口比较范围
@@ -31,10 +32,12 @@ B5/B6终态元数据时点：`2026-10-27T07:30:47.980516+00:00`。B7/B8后续状
 |B7|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
 |B8|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
 |B7_ZERO_DOTE|2029|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE|4320|9|
+|B7_ZERO_DOTE|2030|NOT_STARTED|NOT_STARTED|0|0|
+|B7_ZERO_DOTE|2031|NOT_STARTED|NOT_STARTED|0|0|
 
 ## 本轮交付核对
 
-五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含36条历史/当前记录；不是36个独立seed或36个已完成模型。新增四任务全部九轮/有效4320；B7/2030实际4761尝试含441重放，其余各4320。新段14400、累计17721；三seed含旧2029，恢复不是独立seed。 新B7_ZERO_DOTE/2029九轮Train/Dev、4320更新及实际E9已核验，零重放/额外重试。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
+五个根目录文件为统一入口，旧报告和实验收据保留。矩阵含38条历史/当前记录；不是38个独立seed或38个已完成模型。新增四任务全部九轮/有效4320；B7/2030实际4761尝试含441重放，其余各4320。新段14400、累计17721；三seed含旧2029，恢复不是独立seed。 新B7_ZERO_DOTE/2029九轮Train/Dev、4320更新及实际E9已核验，零重放/额外重试。`epochs`表示该记录已封口轮数，`global_steps`为实际RETURNED计数，失败时可高于最新保存更新；训练完成须同时具备全部Train/Dev收据、账本、预算和固定E9身份。
 
 仅核对新增30轮Train/Dev、60气象账本、4静态账本、4份实际E9 SHA、初始化/顺序及已生成三seed汇总算术；旧六轮和全部既有结果继承。0新模型推理/权重加载/原始载荷/2025读取。 本轮再追加7项新控制/诊断CPU测试、一次成功真实静态缓存CPU初始化及离线算术；准备缓存两次共625656字节含一次环境门控失败，0正式更新。六套既有Dev元数据和精确分数计数用于诊断，无原始气象载荷/权重/新推理。 控制仅新增9轮Train/9轮Dev、18气象账本、1静态账本、1实际E9 SHA及初始化/顺序/人口核对，原B7及旧来源不重审；封口0训练/推理/原始载荷/2025访问。
 
@@ -105,3 +108,11 @@ DTFM仅总体AUROC在三seed同向改善；AP、条件Pinball、q32未稳定复�
 ### 归因边界
 
 这是同一2024 Dev年的单seed表征对照；128个零输入投影权重无损失梯度，4,411,058名义参数相同不等于有效容量完全相等。保留的真实mask仍提供条件信息；DOTE是已有GFS/DEM的确定性函数，不是独立新增观测、真实垂直速度或因果机制证据。当前支持“在该模型及该seed下，显式数值表征具有混合的预测效用”，尚不支持跨seed稳定DOTE增益、独立年份泛化或统计显著性。原B7/B8三seed对照结论不变：DTFM仅总体AUROC三seed同向改善，其余指标混合。没有批准额外控制seed、负对照B、训练延长或2025解封。早先NOT_STARTED/IN_PROGRESS报告为历史时点，冻结提案和原启动收据保持原字节。
+
+## DOTE独立贡献三seed复现：新增两控制准备就绪，NOT_STARTED
+
+仅新增B7_ZERO_DOTE seed2030→2031，从头训练；真实B7三seed、ZERO_DOTE/2029及其他已完成模型均继承。[集中机器提案](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)绑定执行`8a4668377dbd40013245b54550c0963d10c286fb`、规范化提案SHA `a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`与[本轮定向检查](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)。两seed完整B7初始状态和九轮排列均与各自真实B7匹配，名义参数4,411,058，128权重无损失梯度现象均延续；8数值置零发生在原PhysicalDote之后，真实mask/GFS/DEM/监督口径不变。
+
+正式GPU训练未获本轮批准：两模型各4,320更新、477,571,953,840逻辑源字节/142,813实例、6小时；合计8,640更新、955,143,907,680字节/285,626实例、串行12小时，初始48GiB/每任务24GiB，零重放/自动重试，任一失败阻断后续并保留部分账本。使用已确认F盘父目录下全新独立目录，正式输出未创建。当前没有2030/2031控制E9或新指标，不能用准备检查替代训练完成。批准一次后由独立WMI监督器串行执行；不增加本轮周期自动化。
+
+三seed比较预先固定为真实B7−零控制，保留原值、均值、样本标准差、改善seed数、全部UTC/七雨强层/已有海拔组和q32距98.4375%名义误差。按seed+epoch−1的跨seed移位重叠不更改，像元不是独立天气事件；雨强分层覆盖是按结果条件化的描述量，不假定每层具有名义覆盖目标。禁止新控制seed、物理置乱、B6/B8补训、2025访问或main合并。

@@ -72,6 +72,15 @@ B4/B5/B6的q32覆盖约93.6227%/93.4599%/93.1472%，较名义98.4375%分别欠4.
 证据：[本轮18轮、账本、预算、E9身份与完整分组](docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json)。这是单seed、同一开发年的探索性消融；不追加seed、E0变体或训练轮数，不据此决定解封2025。
 
 
+## DOTE独立贡献三seed复现：新增两控制准备就绪，NOT_STARTED
+
+仅新增B7_ZERO_DOTE seed2030→2031，从头训练；真实B7三seed、ZERO_DOTE/2029及其他已完成模型均继承。[集中机器提案](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)绑定执行`8a4668377dbd40013245b54550c0963d10c286fb`、规范化提案SHA `a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6`与[本轮定向检查](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)。两seed完整B7初始状态和九轮排列均与各自真实B7匹配，名义参数4,411,058，128权重无损失梯度现象均延续；8数值置零发生在原PhysicalDote之后，真实mask/GFS/DEM/监督口径不变。
+
+正式GPU训练未获本轮批准：两模型各4,320更新、477,571,953,840逻辑源字节/142,813实例、6小时；合计8,640更新、955,143,907,680字节/285,626实例、串行12小时，初始48GiB/每任务24GiB，零重放/自动重试，任一失败阻断后续并保留部分账本。使用已确认F盘父目录下全新独立目录，正式输出未创建。当前没有2030/2031控制E9或新指标，不能用准备检查替代训练完成。批准一次后由独立WMI监督器串行执行；不增加本轮周期自动化。
+
+三seed比较预先固定为真实B7−零控制，保留原值、均值、样本标准差、改善seed数、全部UTC/七雨强层/已有海拔组和q32距98.4375%名义误差。按seed+epoch−1的跨seed移位重叠不更改，像元不是独立天气事件；雨强分层覆盖是按结果条件化的描述量，不假定每层具有名义覆盖目标。禁止新控制seed、物理置乱、B6/B8补训、2025访问或main合并。
+
+
 ## DOTE零数值主对照固定E9已完成：COMPLETE_WITH_LIMITATIONS（带局限完成）
 
 北京时间`2026-10-29T13:03:27.707489+08:00`完成B7_ZERO_DOTE seed2029九轮Train/2024 Dev，[新增完成收据](docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json)核对9轮Train、9轮Dev、18气象读取账本、1静态账本及实际E9 SHA。执行`0c91ff0f36d5cce3f4516d38663482650f61b03a`，提案`d7604c03d38585deca056994b119128cd2b6c2c7cbc50451a491e38b5cd4ea75`；4,320次RETURNED、477,571,953,840逻辑源字节/142,813实例，零重放/额外重试。绑定至完成的文件mtime区间13514.117秒（约3小时45分，非精确GPU计费），低于21,600秒。固定E9 SHA `445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21`。原B7结果继承，不重训；本次封口不读取原始气象、加载权重或另跑推理，2025冻结。
@@ -454,8 +463,8 @@ q32_absolute_error：均值差+0.001053569385，探索性周块95%百分位区�
 
 ## CSV读取规范
 
-`METRICS.csv`为长表（一个数值一行），共55602行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。此前为补齐新seed的完整终点字段，已摘录4份既有E9评价JSON的summary并核对原有字节SHA；本次继承该[完整终点摘录](docs/research_readiness/20261025/evidence/b3_b4_full_endpoint_metrics_20261027.json)，不重做历史逐轮审查。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
+`METRICS.csv`为长表（一个数值一行），共55604行。`RAW_ENDPOINT`保存现有完整终点指标对象的数值叶子，包括总体、四UTC、强雨场景、七雨强层、已保存的32分位数及可靠性分箱/充分量；`RAW_EPOCH`继承已有逐轮公开数值与B2九轮摘要。此前为补齐新seed的完整终点字段，已摘录4份既有E9评价JSON的summary并核对原有字节SHA；本次继承该[完整终点摘录](docs/research_readiness/20261025/evidence/b3_b4_full_endpoint_metrics_20261027.json)，不重做历史逐轮审查。未扩展发布的新seed逐轮完整数值仍按原收据ID索引。这里的“原始指标”指未舍入的已保存统计量，不是逐像元预测或原始气象载荷。
 
 `PAIRED_DELTA`为目标值减reference_value；`PAIRED_MEAN`、`PAIRED_SAMPLE_SD`只对同口径seed差值计算，样本数在n_seeds，非独立事件数。不同E臂不混合聚合。`metric`中`/数字/`为源数组的零起始下标，32分位数中31即q32；雨强层upper=null表示无穷上界，其他null保持原含义。计数、分子、tau和边界只是充分量/元数据，不全是性能指标，不能对它们解释“提升”。coverage数组方向应看对应tau偏差。
 
-`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。旧原始指标与2029配对差值保留；追加四模型完整终点、30轮新数值、UTC/强雨/海拔差值及三seed均值/样本标准差，没有重新推理。 OFFLINE_DERIVED为由冻结a2ffa75统计或已存分数计数计算的派生量，不是新训练/推理；零数值控制新增完整E9、9轮原值、UTC/强雨/海拔及真实B7−控制的未舍入差值，旧指标保持原值。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
+`MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；继承B5/B6完整终点和18轮Train/Dev数值。旧原始指标与2029配对差值保留；追加四模型完整终点、30轮新数值、UTC/强雨/海拔差值及三seed均值/样本标准差，没有重新推理。 OFFLINE_DERIVED为由冻结a2ffa75统计或已存分数计数计算的派生量，不是新训练/推理；零数值控制新增完整E9、9轮原值、UTC/强雨/海拔及真实B7−控制的未舍入差值，旧指标保持原值。 新2030/2031控制只有缺失占位，不填零或预造结果。源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。

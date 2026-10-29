@@ -63,6 +63,7 @@
 |本轮科学归因与论文级验收|[主张矩阵及2025预注册草案](docs/research_readiness/20261025/evidence/paper_acceptance_20261029.json)、[27终点离线诊断](docs/research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)、[精确经验Brier分解](docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)、[7项检查与真实初值](docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json)|从a2ffa75已保存统计计算；35周块不等于独立天气事件，未新增训练或2025访问；零数值控制NOT_STARTED。可编辑[LaTeX](docs/research_readiness/20261029/paper_acceptance/main.tex)与[PDF](docs/research_readiness/20261029/paper_acceptance/YunTAPR_Scientific_Acceptance_20261029.pdf)|
 |DOTE单模型获批启动（历史快照）|[明确批准、130实际更新、资源/独立宿主与页面身份](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)|仅记录09:22:01启动时点，IN_PROGRESS和0完整轮不是当前终态；固定0c91ff0/d7604c03，2025冻结|
 |最新DOTE主对照已完成|[九轮Train/Dev、18气象/1静态账本、E9实际SHA及同人口对照](docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json)|B7_ZERO_DOTE/2029为COMPLETE_TRAIN_AND_DEV_EVALUATION；4320更新、477571953840字节/142813次、零重放重试。原B7不重训，真实B7总体四指标更好但q32更差；单seed限定结论，2025冻结|
+|DOTE控制2030/2031集中准备|[精确提案](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)、[新入口/两seed初始化与梯度检查](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)|两控制NOT_STARTED，正式批准尚无；真实B7三seed和ZERO/2029均不重训，不预填E9或指标，2025冻结|
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -86,6 +87,8 @@
 |B7|2031|`4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
 |B8|2031|`bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07`|`e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c`|
 |B7_ZERO_DOTE|2029|`445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21`|`0c91ff0f36d5cce3f4516d38663482650f61b03a`|
+|B7_ZERO_DOTE|2030|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`NOT_STARTED_NO_RESEARCHER_APPROVAL`|
+|B7_ZERO_DOTE|2031|`NOT_AVAILABLE_NO_FORMAL_TRAINING`|`NOT_STARTED_NO_RESEARCHER_APPROVAL`|
 
 B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执行；累计4,710实际尝试含390必要重放，有效轨迹4,320，成本见三seed收口。历史原始失败段仍保留。B5/B6本次纠正批准已消费，不允许额外重试。
 
@@ -141,16 +144,18 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json](docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json)|`a2a86f0611f9c5f805d9929788179deb13d2daa399ba4e4a831cdbaf70c7379d`|
 |[docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json](docs/research_readiness/20261025/evidence/dote_control_approved_launch_20261029.json)|`b830940b501804a21c2958161c3534b5feca41bfda7ba73b37db9cd88dd937dd`|
 |[docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json](docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json)|`063501c8b563f0c8bb9dd46662ec3ddec3ad4c60bfc004f83f0ffde4c807c611`|
+|[docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json](docs/research_readiness/20261025/evidence/dote_control_multiseed_proposal_20261029.json)|`31decb3796f806b591d2fee87132b55590a03e8939294b11e730ad337d9ce46c`|
+|[docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)|`a13d812ef62c0cf96540b338bbf351021fd3f1e52bce67229d9c156f38affc54`|
 
-五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查36个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
+五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查38个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
-导出构成：`{"MISSING_OR_NULL": 1850, "OFFLINE_DERIVED": 2133, "PAIRED_DELTA": 5141, "PAIRED_MEAN": 725, "PAIRED_SAMPLE_SD": 725, "RAW_ENDPOINT": 23919, "RAW_EPOCH": 21109}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
+导出构成：`{"MISSING_OR_NULL": 1852, "OFFLINE_DERIVED": 2133, "PAIRED_DELTA": 5141, "PAIRED_MEAN": 725, "PAIRED_SAMPLE_SD": 725, "RAW_ENDPOINT": 23919, "RAW_EPOCH": 21109}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`d960afbcbb1a813a977ec5d3a712e6920eb3602bf4eaf00dbba9824cbaff6cdd`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`d3c202122cb88079a21b480beac01e930ca14f3109403819c4dde3ed9737a12e`|
-|[METRICS.csv](METRICS.csv)|`92d6c782357e178466293c09cde0f916d09f460cf15d5b942c345edcabb1c1c0`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`d01de3bed7760d4df5e5f531c10588110a5495392578d53a34d9364902462c53`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`6880c0b0ed1696a7ba0248707510ce348a8846c3fda18b65bbed2579a914e521`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`9106018be4d1ada74992ceb460b4e6d7b4eade01a6db5d0664068e722e29f2cf`|
+|[METRICS.csv](METRICS.csv)|`1ff729b3f3ebebe5808703e78c3c558dafa24b5ddd841ead0da1ec69f77eb037`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`184f83d10f19dcc1a0e8885b675010f9a5bfbb3a1f79d45854d33ea99a0ebde9`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。
