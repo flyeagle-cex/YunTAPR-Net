@@ -42,6 +42,11 @@ INNOVATION_MULTI_RECOVERY = READY + 'evidence/b7_b8_multiseed_recovery_proposal_
 INNOVATION_MULTI_RECOVERY_CHECKS = READY + 'evidence/b7_b8_multiseed_recovery_checks_20261028.json'
 INNOVATION_MULTI_RECOVERY_LAUNCH = READY + 'evidence/b7_b8_multiseed_recovery_approved_launch_20261028.json'
 INNOVATION_MULTI_COMPLETE = READY + 'evidence/b7_b8_three_seed_completion_20261029.json'
+PAPER_AUDIT = READY + 'evidence/paper_acceptance_20261029.json'
+OFFLINE_DIAGNOSTICS = READY + 'evidence/scientific_attribution_diagnostics_20261029.json'
+EXACT_BRIER = READY + 'evidence/brier_exact_score_decomposition_20261029.json'
+CONTROL_CHECKS = READY + 'evidence/dote_control_checks_20261029.json'
+CONTROL_PROPOSAL = READY + 'evidence/dote_control_proposal_20261029.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -339,6 +344,10 @@ def main():
     innovation_multi_recovery=read(INNOVATION_MULTI_RECOVERY) if (ROOT/INNOVATION_MULTI_RECOVERY).exists() else None
     innovation_multi_recovery_launch=read(INNOVATION_MULTI_RECOVERY_LAUNCH) if (ROOT/INNOVATION_MULTI_RECOVERY_LAUNCH).exists() else None
     innovation_multi_complete=read(INNOVATION_MULTI_COMPLETE) if (ROOT/INNOVATION_MULTI_COMPLETE).exists() else None
+    paper_audit=read(PAPER_AUDIT) if (ROOT/PAPER_AUDIT).exists() else None
+    offline=read(OFFLINE_DIAGNOSTICS) if paper_audit else None
+    exact_brier=read(EXACT_BRIER) if paper_audit else None
+    control_proposal=read(CONTROL_PROPOSAL) if (ROOT/CONTROL_PROPOSAL).exists() else None
     if innovation_multi:
         assert innovation_multi['authorized'] is False and innovation_multi['status']=='READY_WAITING_EXPLICIT_FOUR_MODEL_TRAINING_APPROVAL'
         for task in innovation_multi['tasks']:
@@ -388,6 +397,18 @@ def main():
                          notes=f"Verified fixed E9; effective updates4320, cumulative attempts{run['cumulative_attempt_updates']},new segment{run['new_segment_updates']},approved replay{run['replay_updates']}. B7/2030 E1-E6 inherited56aae5b, new epochs e81c6e1. Three-seed DTFM gains mixed; no significance or independent-year claim.")
             matrix.append(r);experiments[r['experiment_id']]=r
         assert len(matrix)==len(experiments)==35
+    if paper_audit:
+        r=dict(next(x for x in matrix if x['experiment_id']=='B7__E0__s2029__f006__dynamic'))
+        r.update(model_id='B7_ZERO_DOTE',experiment_id='B7_ZERO_DOTE__E0__s2029__f006',phase='DOTE_NUMERIC_ATTRIBUTION_CONTROL_PREPARED',
+                 status='NOT_STARTED',execution_state='NOT_STARTED',epochs='0',global_steps='0',config='B7_same_architecture_zero_8_numeric_channels_keep_real_validity_masks',
+                 metrics_path='NOT_AVAILABLE_NO_FORMAL_TRAINING',checkpoint_reference='NOT_AVAILABLE_NO_FORMAL_TRAINING',checkpoint_selection='FIXED_EPOCH_9_LAST_PLANNED',
+                 executed_commit='NOT_STARTED_NO_RESEARCHER_APPROVAL',authorization_status='WAITING_EXPLICIT_NEW_CONTROL_SCIENCE_AND_BUDGET_APPROVAL',
+                 source_snapshot_commit=control_proposal['execution_code_commit'] if control_proposal else 'CODE_CANDIDATE_PENDING_COMMIT_BINDING',
+                 evidence_path=PAPER_AUDIT,source_manifest_reference=CONTROL_PROPOSAL if control_proposal else PAPER_AUDIT,
+                 training_config_reference=CONTROL_PROPOSAL+'#/protocol' if control_proposal else PAPER_AUDIT+'#/control',
+                 verified_at=paper_audit['created_at'],status_as_of=paper_audit['created_at'],
+                 notes='Candidate only. Full B7 initial state bitwise matched, but128 input weights permanently lack loss gradients. Actual mask information retained. Tests7PASS; no new training/2025. Existing real B7 reused, no retrain.')
+        matrix.append(r);experiments[r['experiment_id']]=r
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -417,7 +438,7 @@ def main():
                        unit=unit(metric), source_file=source, source_pointer=pointer + sub,
                        executed_commit=exp['executed_commit'], evaluation_script=exp['evaluation_script'],
                        checkpoint_sha256=exp['checkpoint_reference'] if epoch == 'ENDPOINT' else '')
-            if b8_launch and exp['model_id']=='B8' and exp['seed']=='2029' and source!=B8_COMPLETE:
+            if b8_launch and exp['model_id']=='B8' and exp['seed']=='2029' and source not in (B8_COMPLETE,OFFLINE_DIAGNOSTICS):
                 # All currently exported B8 metrics still come from the old E1-E6.
                 row['executed_commit']=innovation_terminal['training_commit']
             rows.append(row)
@@ -607,6 +628,22 @@ def main():
             for metric,expected in differences.items():
                 actual=[r for r in aggregates[(comparison.upper(),'E0','all',metric)] if r['seed']=='2029']
                 assert len(actual)==1 and math.isclose(float(actual[0]['value']),expected,abs_tol=1e-15)
+    if offline:
+        for eid,diag in offline['models'].items():
+            add(eid,diag['brier'],OFFLINE_DIAGNOSTICS,f'/models/{eid}/brier',group='offline_reliability',kind='OFFLINE_DERIVED')
+            add(eid,{'mean_absolute_32_coverage_error':diag['mean_absolute_32_coverage_error']},OFFLINE_DIAGNOSTICS,f'/models/{eid}',group='offline_quantile_diagnostic',kind='OFFLINE_DERIVED')
+        for seed,models in exact_brier['models'].items():
+            for model,diag in models.items():
+                eid=f'{model}__E0__s{seed}__f006__dynamic'
+                add(eid,diag,EXACT_BRIER,f'/models/{seed}/{model}',group='empirical_exact_score_brier',kind='OFFLINE_DERIVED')
+                for row in rows:
+                    if row['source_file']==EXACT_BRIER and row['experiment_id']==eid:row['executed_commit']=experiments[eid]['executed_commit']
+        template=next(r for r in rows if r['record_type']=='PAIRED_MEAN' and r['comparison']=='B8_MINUS_B7' and r['group']=='all')
+        for key,v in offline['temporal_block_bootstrap']['metrics'].items():
+            for label,value,pointer in [('point',v['point_estimate'],'point_estimate'),('lower',v['percentile_interval_95'][0],'percentile_interval_95/0'),('upper',v['percentile_interval_95'][1],'percentile_interval_95/1')]:
+                rows.append(dict(template,record_type='OFFLINE_DERIVED',group='EXPLORATORY_35_WEEK_BLOCK_INTERVAL',metric=key+'/'+label,value=repr(value),
+                                 status='NOT_INDEPENDENT_STORM_CI_NO_SIGNIFICANCE',unit=unit(key),source_file=OFFLINE_DIAGNOSTICS,
+                                 source_pointer=f'/temporal_block_bootstrap/metrics/{key}/{pointer}',improvement_direction='DESCRIPTIVE_ONLY'))
     write_csv('METRICS.csv', FIELDS, rows)
     counts = Counter(r['record_type'] for r in rows)
     summary_table = '\n'.join(f"|{metric}|{data['B4_minus_B3_by_seed']['2029']:.12g}|{data['B4_minus_B3_by_seed']['2030']:.12g}|{data['B4_minus_B3_by_seed']['2031']:.12g}|{data['mean']:.12g}|{data['sample_sd']:.12g}|" for metric, data in b34['summary']['metrics'].items())
@@ -949,6 +986,12 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         csv_scope_text='旧原始指标与2029配对差值保留；追加四模型完整终点、30轮新数值、UTC/强雨/海拔差值及三seed均值/样本标准差，没有重新推理。'
         status_table='\n'.join(f"|{r['model']}|{r['seed']}|{r['status']}|COMPLETE|{r['cumulative_attempt_updates']}|9|" for r in mc['tasks'])
         publication_base=mc['training_commit']
+    if paper_audit:
+        latest_status_text+=' 本轮论文级审计/离线诊断完成；DOTE零数值主对照NOT_STARTED，2025方案DRAFT，论文强物理归因与最终泛化验收仍未通过。'
+        innovation_stage_rows+='\n|DOTE零数值主对照|同B7架构、真实mask、全初值逐位匹配；7项新CPU检查通过|128权重无损失梯度，不能称有效容量完全匹配；新科学选择/预算未批准|NOT_STARTED|\n|论文/最终测试|主张分级、精确经验Brier分解、35周块探索性区间和预注册草案完成|无独立暴雨ID；2025全模态人口/新适配器未核实，未解封|PREPARATION_COMPLETE；强归因/最终泛化NOT_VERIFIED|'
+        innovation_analysis_text+=paper_audit['markdown']
+        current_checks_text+=' 本轮再追加7项新控制/诊断CPU测试、一次成功真实静态缓存CPU初始化及离线算术；准备缓存两次共625656字节含一次环境门控失败，0正式更新。六套既有Dev元数据和精确分数计数用于诊断，无原始气象载荷/权重/新推理。'
+        csv_scope_text+=' OFFLINE_DERIVED为由冻结a2ffa75统计或已存分数计数计算的派生量，不是新训练/推理；零数值控制仍为空值占位。'
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1034,7 +1077,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 `MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；{'继承B5/B6完整终点和18轮Train/Dev数值' if static else 'B5/B6不填最终数值'}。{csv_scope_text}源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
 '''
-    (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis, encoding='utf-8')
+    (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis.replace('地形收益混合、校准退化','地形收益混合、q32覆盖退化'), encoding='utf-8')
     input_names = [BASE, OLD, GROUPS, B2, B34, FULL, epoch_source,
                    READY + 'evidence/b5_b6_corrected_start_launch.json',
                    READY + 'evidence/b5_b6_initial_start_stop.json',
@@ -1069,6 +1112,9 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         input_names.append(INNOVATION_MULTI_RECOVERY_LAUNCH)
     if innovation_multi_complete:
         input_names.append(INNOVATION_MULTI_COMPLETE)
+    if paper_audit:
+        input_names += [PAPER_AUDIT,OFFLINE_DIAGNOSTICS,EXACT_BRIER,CONTROL_CHECKS]
+        if control_proposal:input_names.append(CONTROL_PROPOSAL)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1111,6 +1157,7 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 {f"|B7/2030恢复及后三任务准备|[唯一限额提案]({INNOVATION_MULTI_RECOVERY})、[10项针对性检查]({INNOVATION_MULTI_RECOVERY_CHECKS})|拟执行e81c6e1，尚未执行；E6记录SHA仍84dbedbc2e0af537355aca71c6ad60c763a19821e7712fabb10aa45753399e11，正式恢复前重哈希/加载各1次；新14,400更新含441重放待新批准，原E1–E6及失败段保留|" if innovation_multi_recovery else ''}
 {f"|当前准确限额恢复已批准并启动|[新研究者批准、实际RETURNED与四角色无Job/包身份]({INNOVATION_MULTI_RECOVERY_LAUNCH})|e81c6e1/3314231a已单次启动；上一行只记录历史准备。B7/2030恢复IN_PROGRESS，后三项PENDING，旧E1–E6和441未保存历史不变，没有新E9或三seed结果|" if innovation_multi_recovery_launch else ''}
 {f"|最新B7/B8三seed全部完成|[新增30轮、64读取账本、四份E9实际SHA及三seed原值/差值]({INNOVATION_MULTI_COMPLETE})|前述中断/排队是历史时点；新增四任务已九轮完成，新段14400更新含441必要重放，三seed分析完成但收益混合，带局限验收；2025冻结|" if innovation_multi_complete else ''}
+{f"|本轮科学归因与论文级验收|[主张矩阵及2025预注册草案]({PAPER_AUDIT})、[27终点离线诊断]({OFFLINE_DIAGNOSTICS})、[精确经验Brier分解]({EXACT_BRIER})、[7项检查与真实初值]({CONTROL_CHECKS})|从a2ffa75已保存统计计算；35周块不等于独立天气事件，未新增训练或2025访问；零数值控制NOT_STARTED。可编辑[LaTeX](docs/research_readiness/20261029/paper_acceptance/main.tex)与[PDF](docs/research_readiness/20261029/paper_acceptance/YunTAPR_Scientific_Acceptance_20261029.pdf)|" if paper_audit else ''}
 
 本地原件由研究者保存，公开源ID不是可下载原件的承诺。旧缺口保留：seed2027历史未核验尝试、旧恢复授权边界，以及未直接绑定的B0/B1历史执行commit。原始validation规范化digest、文件字节SHA和权重SHA互不替代。旧记录中的状态是当时快照，由此统一入口给出当前判断；原件未改写。
 
@@ -1157,7 +1204,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 

@@ -1,6 +1,6 @@
 # YunTAPR-Net
 
-> 最新状态（2026-10-29）：B7/B8 seed2029/2030/2031三组配对均完成九轮Train/2024 Dev与固定E9。新增四模型于北京时间07:19:48封口，精确恢复包14,400次更新含441次必要重放，累计17,721实际尝试，额外重试0。DTFM仅总体AUROC三seed同向改善，AP/条件Pinball/q32不稳定、Brier和强雨仍有反例，限定科学验收COMPLETE_WITH_LIMITATIONS。[核验收据](docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)。2025继续冻结，无新训练授权；下面较早日期为历史状态。
+> 最新科研审计（2026-10-29）：B0–B8既定结果与B7/B8三seed完整继承。新增27终点可靠性/32分位覆盖诊断、六组精确经验Brier分解及35周块探索性配对区间完成；周块不是独立暴雨，DOTE独立归因与最终泛化仍未验收。B7零DOTE数值、保留真实mask的最小主对照入口与7项检查就绪，正式训练NOT_STARTED，等待精确新批准；2025预注册仅DRAFT，仍冻结。[科学分析](SCIENTIFIC_ANALYSIS.md) · [可编辑LaTeX/PDF报告](docs/research_readiness/20261029/paper_acceptance/main.tex)。旧日期的完成/启动文字保留历史时点。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。
 

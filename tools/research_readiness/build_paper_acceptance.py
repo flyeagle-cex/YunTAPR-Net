@@ -1,0 +1,149 @@
+"""One source for the concise scientific audit, preregistration draft and TeX."""
+import argparse,hashlib,json,subprocess
+from datetime import datetime,timedelta,timezone
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[2]
+E=ROOT/'docs/research_readiness/20261025/evidence'
+
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,required=True);parser.add_argument('--tex-output',type=Path);args=parser.parse_args()
+    if args.output.exists():raise PermissionError('Never overwrite an audit receipt')
+    d=json.loads((E/'scientific_attribution_diagnostics_20261029.json').read_text())
+    checks=json.loads((E/'dote_control_checks_20261029.json').read_text())
+    exact=json.loads((E/'brier_exact_score_decomposition_20261029.json').read_text())
+    multi=json.loads((E/'b7_b8_three_seed_completion_20261029.json').read_text())
+    claims=[
+      dict(id='H1a',grade='已有相对充分的重复性证据（限定人口）',claim='单B13通道时序增量在B0/B1同人口、同seed、同损失臂中改善；不能代替多光谱检验',experiments='B0_MATCHED_V2/B1_V2；2026/2027；E0/E1/E2各自配对',
+           evidence='E0的Brier差值−0.0016141558304/−0.0035743783015，AUROC+0.007111784535/+0.008393610696；各损失臂原值全部保留',confounds='仅两训练seed；10,455/10,501人口；参数/时序结构变化；历史commit绑定局限',missing='独立年份泛化；不能跨959/963人口推导光谱增量'),
+      dict(id='H1b',grade='证据混合；多光谱独立贡献尚未验证',claim='B2/B3仅检验七通道下单时次与六时次的整体差异',experiments='B2/B3 seed2029，959/963，固定E9',
+           evidence='B2−B3：Brier−0.0009406648155，AUROC−0.0026810498852，AP−0.012892029279，Pinball+0.0002321528279',confounds='7×1对7×6，4,332,290对4,349,090参数；单seed',missing='同人口单/多光谱控制；不机械扩充旧实验'),
+      dict(id='H2',grade='已有相对充分的重复性证据；有明确反例',claim='GFS MEE的整体增量在三seed总体四指标同向改善',experiments='B3/B4 2029/2030/2031，959/963',
+           evidence='B4−B3均值：Brier−0.0019908379814，AUROC+0.005838836201，AP+0.018472015337，Pinball−0.0011820303622；30–50层三seed退化',confounds='同时增加环境信息、结构和参数；同Dev年',missing='独立泛化；不可将全部增量唯一归因于GFS物理变量'),
+      dict(id='H3',grade='仅探索性支持、证据混合且有反例',claim='静态地形的总体收益混合，尚无稳定增益证据',experiments='B4/B5/B6 seed2029',
+           evidence='B6−B4：Brier−0.0015459815848、AUROC+0.000842620747，但AP−0.000762469447、Pinball+0.0000057661713、q32覆盖−0.0047545485754',confounds='单seed；新增参数与固定地理编码；DEM发布链未独立核实',missing='稳定地形增量与来源独立验证；普通局限不视作工程失败'),
+      dict(id='H4',grade='尚未验证',claim='显式风场—梯度的确定性特征可能改善有限网络的表征/优化，并非新观测或真实垂直速度',experiments='B6→B7原结果仅整体参考；建议新增B7_ZERO_DOTE/2029',
+           evidence='B7−B6/2029 Brier+0.0003586251534、Pinball+0.0002018411744；额外50,192参数及融合路径混杂',confounds='GFS已有风/PWAT，DEM已有梯度；DOTE是确定性函数',missing='同B7架构真实数值对零值控制；保留mask信息与128零损失梯度权重限制'),
+      dict(id='H5',grade='证据混合或未稳定复现；总体AUROC描述性复现，有明确反例',claim='DTFM在本人口/Dev年仅总体AUROC取得三seed同向微小改善',experiments='B7/B8三seed，同输入、4,411,058参数、同seed公共初始化和顺序',
+           evidence='B8−B7均值：AUROC+0.0002931426433；Brier+0.0005465394793，AP−0.0004122468696，Pinball+0.0002947181206，q32距名义误差+0.0010535693852',confounds='只替换融合而非叠加模块；单尺度SP04、同Dev年、排列有移位重叠',missing='独立年份；不支持全面优越、显著性或物理机制主张')]
+    prereg=dict(status='DRAFT_WAITING_RESEARCHER_FREEZE_NO_2025_ACCESS',models=['B4','B7','B8'],seeds=[2029,2030,2031],
+        weights='Existing fixedE9 LAST only; all nine SHA values in current matrix; no BEST, fine-tuning, new ensemble or best seed',
+        primary_comparison='B8_MINUS_B7 paired within each seed; report all three and mean, not best seed',
+        co_primary_metrics=['Brier','Conditional Pinball'],secondary_metrics=['AUROC','AP','32-quantile coverage','q32 signed bias and absolute nominal error'],
+        secondary_comparisons=['B7_MINUS_B4','B8_MINUS_B4'],multiplicity='Co-primary two-sided97.5% intervals each if inferential assumptions hold (Bonferroni2); secondary intervals descriptive; no claim from any selected favourable subgroup',
+        population='2025 Mar-Oct at analysis00/06/12/18UTC; all-nine-model common inputs; prospective metadata eligibility/QC manifest before predictions; exact count NOT_VERIFIED',
+        modality='Full seven-channel six-frame Himawari,13GFS f006 physical inputs,PS/PWAT masks,frozen DEM/gradients and label window; old B13-only catalogue is insufficient',
+        missing='Frozen source/validity rules; no older-scene fallback, no zero-wind substitution, no label/model-dependent exclusions; missing PS levels mask features only, supervision unchanged',
+        normalization='Reuse2023 Train scalers/PWAT reference unchanged; no2024/2025 refit',
+        evaluation='Frozen rate>float32(0.1),32taus,SP04+Yunnan mask; complete raw sufficient statistics,exact native-score AUROC/AP; no threshold optimization',
+        groups='All fourUTC,all sevenrain strata,existing elevation<1000/[1000,2000)/>=2000m; no adaptive thresholds; new slope/windward strata DESIGN_ONLY',
+        uncertainty='Paired fixed7-day blocks since2025-03-01UTC; B=5000,PCG64 seed20261029; same sampled blocks for all seeds/arms; pooled exact score counts forAUROC/AP; invalid draws counted, never silently zero-filled',
+        events='Independent storm ids/spatial tracking NOT_AVAILABLE. Weekly temporal intervals are not independent-weather-event confidence intervals; no significance claim without justified dependence assumptions',
+        blind_stop='One frozen manifest/weight set/evaluator run after separate authorization; log any read/failure; no post-unblinding model,seed,loss,epoch,mask,threshold selection or protocol changes; preserve negative results and stop',
+        execution_readiness='NOT_IMPLEMENTED_2025_WRAPPER: existing NumericEnvelope/block_id deliberately accepts2024 only; future versioned adapter and resource authorization required',
+        authorization='Researcher must separately approve protocol freeze, full-modality admission scope, exact inference budget and unblinding; current raw/prediction reads0')
+    control=dict(status='READY_CANDIDATE_NOT_STARTED_NO_APPROVAL',recommended='A_ZERO_NUMERIC_B7_SEED2029_ONLY',
+        identification='Utility of explicit DOTE numerical features conditional on actual validity masks and existing GFS/DEM; not independent observations or causal uplift',
+        neutral_rule='All8 numeric channels exactly0 after unchanged PhysicalDote; real per-channel masks copied; no clipping or normalization refit',
+        architecture='Identical full B7 state_dict,parameter groups,48-channel SP04 feature,GFS26 and terrain28 conditioning,concat width16; no trained-weight fine-tuning',
+        initialization=checks['initial_B7_seed2029'],nominal_parameters=4411058,loss_inactive_numeric_input_weights=128,
+        effective_capacity='NOT_EQUAL: these128 columns always have zero loss gradient; AdamW decay is not input information; report as feature-availability ablation',
+        mask_confound='Retained pressure/PWAT validity indicators are informative; contrast does not identify their contribution',
+        training='E0,f006,seed2029,959/963,Train2/Dev8,9epochs,AdamW,same first4320LR steps and nine orders,fixedE9LAST',
+        budget=dict(models=1,updates=4320,source_bytes=477571953840,source_files=142813,weather_bytes=477571641012,static_bytes=312828,
+                    hard_seconds=21600,initial_free_bytes=24*1024**3,replay=0,additional_retry=0,extra_raw_DOTE_bytes=0),
+        optional_not_in_package='A_ZERO seeds2030/2031 only after separate decision; no automatic expansion or outcome-based seed selection',
+        negative_control_B='DESIGN_ONLY_NOT_APPROVED: fixed label-independent joint(hx,hy) permutation on frozen valid terrain support; keep real static branch/wind/PS masks. Marginal gradient vectors preserved only on support, spatial autocorrelation/climate/altitude pairing destroyed; DOTE distribution changes after wind multiplication. Not a clean replacement for A, do not train now',
+        resource_status='D parent currently has enough24GiB; GPU/RAM/systemcommit and same bounded source metadata must pass existing gates at actual start; no new output created')
+    data_review=[
+      ['产品与标签','IMERG V07 Final；窗口[T,T+30min)，分析T+30min；不是业务可用性证明','继承science_contract_v1.1及现存人口SHA'],
+      ['卫星/GFS时序','观测完成时刻不晚于分析；B2 t−10，B3–B8六时次；GFS f006回顾有效时刻对应','真实发布时间/业务回放仍NOT_VERIFIED'],
+      ['DEM与网格','已冻结米制梯度、WGS84面积聚合、SP04 footprint；EGM96来自产品规范','本地发布链/垂直基准独立验证NOT_VERIFIED，已获探索性接受'],
+      ['归一化与mask','2023 Train-only；B13历史统计来源保持；原生/目标PS地下层和缺测掩膜传递','不重新拟合；无场景删减或零风伪观测'],
+      ['人口与独立性','B0/B1 10455/10501；核心959/963；4UTC；训练seed不是天气年份','2024反复分析；事件独立性及2025全模态人口未核实']]
+    # Machine proposal comes after code commit, never fabricates a current approval.
+    audit=dict(status='COMPLETE_PREPARATION_AND_OFFLINE_DIAGNOSTICS_WITH_LIMITATIONS',created_at=datetime.now(timezone(timedelta(hours=8))).isoformat(),
+        evidence_base='a2ffa75c5ed82d53b47e2dbe271b0eec4f697c22',claims=claims,data_review=data_review,control=control,final_test_preregistration=prereg,
+        paper_acceptance='NOT_READY_FOR_STRONG_PHYSICAL_ATTRIBUTION_OR_FINAL_GENERALIZATION_CLAIMS; descriptive architecture comparison evidence complete',
+        attachment_boundary='Supplied request ends mid-sentence after full-modality final; no missing text treated as authorization',
+        diagnostics='scientific_attribution_diagnostics_20261029.json',exact_score_decomposition='brier_exact_score_decomposition_20261029.json',checks='dote_control_checks_20261029.json',new_training='NOT_STARTED',final_2025='FROZEN_NO_ACCESS')
+    sections=[]
+    sections.append(('科学主张与证据等级', ['证据基线a2ffa75；B0–B8既有任务全部继承。本轮无新训练、无原始气象载荷、无模型推理或2025访问。准备报告不是论文已达投稿要求。']+
+        [f"{c['id']}：{c['grade']}。{c['claim']}。实验：{c['experiments']}。数值：{c['evidence']}。混杂：{c['confounds']}。缺口：{c['missing']}。" for c in claims]))
+    sections.append(('DOTE最小可归因主对照',[
+        'O=u∂h/∂x+v∂h/∂y，u/v为m/s、梯度m/m，O为m/s。850/700hPa、PS地下层mask、windward_W、PWAT参考31.85768219039871kg/m²、显式1m/s尺度、8通道及SP04全部保持。O不是实测垂直速度，DOTE是既有输入的确定性表征。',
+        '推荐仅A-zero seed2029作为最小主对照（先验按最早seed，而非Dev最好seed）；全B7权重逐位同初值、同样本顺序，真实DOTE对照直接复用已完成B7，零值只作用于8数值通道，真实mask保持。其余输入与全部输出头/监督不变。',
+        '名义参数4,411,058相同，但地形投影中8×16=128个权重始终无损失梯度；AdamW衰减不等于有效训练路径。不能宣称有效容量相等，更不能证明地形抬升因果。此控制识别的是“在给定mask和有限架构中，显式数值特征是否有用”。',
+        '负对照B只保留设计：先固定、与标签无关的(hx,hy)联合空间置换。它会破坏空间自相关和气候/海拔关联，并改变风乘梯度后的DOTE分布，即使梯度边际保持也不保证可比，因此不列入当前训练。',
+        '新入口复用Stage4、SourceMeter和ReaderFactory；默认原PhysicalDote路径不变。7项新增CPU检查通过、真实冻结静态缓存CPU初始化与B7/2029全state逐位匹配。第一次CPU检查因缺少既有cuBLAS环境被门控拒绝，修正后通过；准备缓存总625,656字节/2次，未消耗训练更新。',
+        '唯一候选预算：4,320更新；477,571,953,840源字节/142,813次（天气477,571,641,012、静态312,828）；最多6小时；初始/每任务24GiB；DOTE额外原始读取0；重放/重试0，独立新目录、超时/IO异常即停。当前NOT_STARTED，待绑定执行commit/提案SHA的明确批准。']))
+    rows=[]
+    for seed in ('2029','2030','2031'):
+        a,b=[d['models'][f'{m}__E0__s{seed}__f006__dynamic'] for m in ('B7','B8')]
+        rows.append(f"seed{seed}，B8−B7：原Brier{b['brier']['original_brier']-a['brier']['original_brier']:+.10g}；分箱可靠性项{b['brier']['binned_reliability']-a['brier']['binned_reliability']:+.10g}；分箱分辨项{b['brier']['binned_resolution']-a['brier']['binned_resolution']:+.10g}；分箱残差{b['brier']['binning_residual']-a['brier']['binning_residual']:+.10g}。")
+    sections.append(('概率可靠性与强雨诊断',[
+        '27个既定九轮终点均用已保存十箱充分量和32个覆盖率离线诊断；B0/B1的不同人口单列，不与核心959/963横向归因。所有七雨强层Pinball、已存q32 covered/n、seed原值保留；缺少的旧B3/B4 2029分层covered标记NOT_AVAILABLE，不补推理。',
+        '固定概率箱[0,.1),…,[.9,1]；用箱均概率p̄k和观测频率ōk计算REL=Σwk(p̄k−ōk)²、RES=Σwk(ōk−ō)²、UNC=ō(1−ō)。BS_bin=REL−RES+UNC严格成立于箱均概率替代预测。原BS=BS_bin+残差；残差为箱内Var(p)−2Cov(p,y)加权和。缺少独立Σp²/Σpy时，不能将此称为原始概率的精确校准分解。',
+        *rows,
+        '补充严格分解：六组B7/B8已有精确原生概率分数的正负计数，因此无需推理即可恢复原始BS的经验REL−RES+UNC。B8−B7的经验REL三seed分别+0.0014507262841/+0.0000592186131/+0.0002485440836，RES分别+0.0001315344834/+0.0000718298103/−0.0000844937508，UNC差均0，和原BS差严格一致。箱内Var/Cov也由精确计数重建，验证上述分箱残差。仅聚合十箱表原本不足，精确分数表补足该信息；经验校准仍有稀疏分数组和有限样本偏差，不等于总体真实校准或因果解释。',
+        '十箱REL在三seed都上升；2030仍因RES和残差共同变化而原Brier略改善。这说明“Brier上升必然是校准变坏”不是有效归因。B7/B8 2029、2030、2031的p≥.8计数分别18/7、3/0、200/15；p≥.9均0，不能宣称高概率尾部可靠。',
+        '所有六个B7/B8 q32均欠覆盖；距名义0.984375的误差已逐seed报告。32分位平均绝对覆盖误差B7/B8：2029为0.01465427/0.01807037，2030为0.03860055/0.04508672，2031为0.04787954/0.04670103。2029最高分位改善却整体覆盖曲线指标退化，必须同时看全部32条而非仅q32。该指标是描述性汇总，不是条件校准充分证明。',
+        '20–30/30–50mm/h各564/147个像元时次，>50仅6。B8−B7的强雨Pinball仅2029改善、2030/2031退化，三seed均值分别+0.00466719335/+0.00400147655；不能把它们叫独立暴雨数。发生概率排序（AUROC/AP）与有雨条件下的强度分位损失针对不同问题，方向分化本身不证明具体优化原因。',
+        '既有<1000、[1000,2000)、≥2000m海拔分层可复用，分层AUROC/AP没有保存则保持NOT_COMPUTED。坡度、迎/背风、850可用/仅700、水汽新分层没有联合误差统计，NOT_AVAILABLE；不能从聚合表重建。候选静态坡度用物理5°预声明，风向用O>0/O<0/≈0、压力层用真实PS掩膜；这些仅设计，阈值和联合提取范围待冻结，不据Dev寻找最佳边界。']))
+    boot=d['temporal_block_bootstrap'];events=d['event_evidence']
+    intervals=[f"{k}：均值差{v['point_estimate']:+.10g}，探索性周块95%百分位区间[{v['percentile_interval_95'][0]:+.10g},{v['percentile_interval_95'][1]:+.10g}]。" for k,v in boot['metrics'].items()]
+    sections.append(('天气事件与不确定性边界',[
+        f"六份E9 Dev元数据和六份精确分数计数SQLite保留共同963场景、208个scene_max_ge20场景、35个非空周块及相同grid身份。scene_id是标签窗口开始T，真正分析时刻=T+30min；已核对为00/06/12/18UTC。相邻样本946个6小时间隔、16个12小时间隔，四UTC采样无法完整跟踪天气系统。",
+        '没有独立天气事件ID或空间连通追踪，故事件级验收仍NOT_VERIFIED。继承原2024-03-01UTC起每7天的35块，未按模型效果调阈值；使用PCG64 seed20261029、2000次成对周块重采样，同一次抽样用于全部模型/seed，先每seed配对再取三seed均值，不把seed或像元当气象样本。AUROC/AP从合并加权原始精确分数计数重算，不平均各周AUROC/AP。',
+        *intervals,
+        '以上只是探索性时间块区间，不是独立暴雨置信区间；跨周同天气系统、区域相关、35块有限、反复Dev分析及多指标选择均限制解释。区间不跨零也不据此宣称统计显著。空间相邻系统、风向/水汽误差联合统计仍缺失，不能凭空构造事件。',
+        '后续最小获取先读已保存tail的逐场景充分量/时间目录（不需新推理）；若必须辨认空间天气系统或新增坡向误差，需要经授权提取冻结标签空间连通信息，以及仅指定固定E9模型的联合预测充分量。全Dev每模型至少一遍963场景、7,950源实例/26,639,253,112字节，已有静态启动另加312,828字节/1次；GPU时间必须另测预算，不将训练6小时自动当推理额度。本轮均未执行。']))
+    sections.append(('论文验收与2025预注册草案',[
+        '数据：标签产品/时间窗、GFS f006、卫星真实时序规则、Train-only统计、PS掩膜、SP04与共同人口有冻结证据；DEM厂商发布链、垂直基准独立确认、业务近实时可用性仍未核实。当前始终是回顾估计。',
+        '方法：DOTE是物理启发确定性代理，DTFM为单SP04尺度、width16、λ=.1的有界替换融合；不能称为多尺度抬升机制，也不是在已训B7后叠加模块。消融：GFS整体随机性复现较强，地形/DTFM收益混合，DOTE独立归因与负对照、独立年份验证仍缺。结论为“描述性对照可交接，强物理归因与最终泛化投稿主张尚未通过”，不机械增加旧模型训练。',
+        '2025候选模型集合固定为B4/B7/B8各2029/2030/2031九份既有E9 LAST；全部seed报告，不按Dev选最好seed，不临时集成。主要对照B8−B7，共同主要指标Brier和条件Pinball；AUROC/AP、q32/32曲线及B4参考为次要。若未来满足推断假设，两共同主要区间各97.5%（Bonferroni2）；次要指标仅描述。',
+        '最终全模态人口须在预测前按2025年3–10月四UTC、七通道六时次卫星、GFS f006及真实PS/PWAT、冻结DEM、标签QC建立共同清单，数量NOT_VERIFIED。旧B13 catalogue/QC不证明全模态可用。掩膜/缺测规则与统计量全继承，不用模型效果删样本，地下层只屏蔽特征、不缩小监督。',
+        '拟沿用7天块、B=5000/seed20261029，同块配对且精确聚合分数；真正事件ID不存在时不叫事件级CI，不做显著性通过判定。四UTC、七雨强层、三海拔分组和全部负面结果预先锁定；揭盲仅一次，失败保留账本，不据2025改模型、seed、超参、掩膜或评价阈值。',
+        '2025方案状态DRAFT_WAITING_RESEARCHER_FREEZE；当前没有解封授权，未读其载荷或推理。现有NumericEnvelope/block_id明确只接受2024，新2025适配器及具体推理预算尚未实施；需研究者另行冻结、批准全模态入场与一次揭盲，不把准备文档等同最终测试可执行。']))
+    md='\n## 2026-10-29科学归因与论文级验收\n\n'
+    md+='|主张|等级|可支持的表述|主要缺口|\n|---|---|---|---|\n'+'\n'.join(f"|{c['id']}|{c['grade']}|{c['claim']}|{c['missing']}|" for c in claims)+'\n'
+    for title,paragraphs in sections:md+='\n### '+title+'\n\n'+'\n\n'.join(paragraphs)+'\n'
+    md+='\n来源：[离线诊断](docs/research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)、[精确概率分数Brier分解](docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)、[新增检查](docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json)、[完整审计与预注册草案](docs/research_readiness/20261025/evidence/paper_acceptance_20261029.json)。原结果见METRICS.csv，未重训成功模型。\n'
+    audit['markdown']=md
+    with args.output.open('x',encoding='utf-8') as f:json.dump(audit,f,ensure_ascii=False,indent=2);f.write('\n')
+    def tex(s):
+        for a,b in [('\\','\\textbackslash{}'),('&','\\&'),('%','\\%'),('$','\\$'),('#','\\#'),('_','\\_')]:s=s.replace(a,b)
+        return s.replace('−','-').replace('Σ','求和').replace('∂','偏导').replace('≤','小于等于').replace('≥','大于等于').replace('≈','约等于').replace('λ','lambda').replace('×','乘').replace('²','平方').replace('∞','无穷').replace(',',',\\allowbreak{}')
+    source=r'''\documentclass[UTF8,a4paper,10pt,fontset=none]{ctexart}
+\setCJKmainfont{Microsoft YaHei}
+\setCJKmonofont{Microsoft YaHei}
+\usepackage[margin=20mm]{geometry}
+\usepackage{amsmath,booktabs,longtable,array,hyperref}
+\hypersetup{unicode=true,colorlinks=true,linkcolor=black,urlcolor=blue,pdftitle={YunTAPR-Net 科学归因与论文验收}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\emergencystretch=3em
+\raggedright
+\title{YunTAPR-Net V1.3\\科学归因、误差诊断与论文级验收}
+\author{研究者主导；AI辅助证据整理}\date{2026年10月29日}
+\begin{document}\maketitle
+\textbf{状态：既定训练完成；新DOTE控制未启动；2025冻结。}
+
+'''
+    for title,paragraphs in sections:
+        source+='\\section{'+tex(title)+'}\n'
+        if title=='DOTE最小可归因主对照':
+            source+=r'\[O=u\frac{\partial h}{\partial x}+v\frac{\partial h}{\partial y},\quad W=\max(O,0),\quad L=\max(-O,0),\quad M=\frac{\mathrm{PWAT}}{31.85768219039871\,\mathrm{kg/m^2}}W.\]'+'\n'
+            source+=r'\[\widetilde F=F\{1+0.1\tanh(\gamma)\}+0.1\tanh(\beta)\quad\text{（DTFM分支中间量，之后仍有投影和残差输出）}.\]'+'\n'
+        source+='\n\n'.join(tex(s) for s in paragraphs)+'\n'
+    source+='\\section{可核验证据}\n'
+    for name in ['b7_b8_three_seed_completion_20261029.json','scientific_attribution_diagnostics_20261029.json','brier_exact_score_decomposition_20261029.json','dote_control_checks_20261029.json','paper_acceptance_20261029.json']:
+        path=E/name;source+='\\texttt{'+tex(name)+'}\\par\n SHA256：\\texttt{\\small '+hashlib.sha256(path.read_bytes()).hexdigest()+'}\\par\n'
+    source+='\\end{document}\n'
+    if args.tex_output:
+        args.tex_output.write_text(source,encoding='utf-8')
+        print(json.dumps(dict(status=audit['status'],claims=len(claims)),ensure_ascii=False))
+    else:print(json.dumps(dict(latex=source,status=audit['status'],claims=len(claims)),ensure_ascii=False))
+
+
+if __name__=='__main__':main()

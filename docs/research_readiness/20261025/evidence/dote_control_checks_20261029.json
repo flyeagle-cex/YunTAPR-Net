@@ -1,0 +1,51 @@
+{
+  "status": "PASS_MINIMUM_NEW_CONTROL_AND_DIAGNOSTIC_CHECKS",
+  "checked_at": "2026-10-29T08:51:42.597047+08:00",
+  "new_targeted_CPU_tests": 7,
+  "CPU_test_seconds": 0.107,
+  "initial_B7_seed2029": {
+    "full_state_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+    "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+  },
+  "all_B7_initial_parameters_bitwise_match": true,
+  "nominal_parameters": 4411058,
+  "permanently_zero_loss_gradient_weights": 128,
+  "effective_capacity_equivalence": "NOT_CLAIMED",
+  "inherited_physical_mask_and_default_path": "UNCHANGED",
+  "frozen_static_cache_read": {
+    "bytes": 625656,
+    "files": 2,
+    "single_payload_bytes": 312828,
+    "sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "preparation_failure": {
+    "stage": "FIRST_CPU_INITIALIZATION",
+    "cause": "CUBLAS_WORKSPACE_CONFIG absent; existing gate rejected before model creation",
+    "optimizer_updates": 0,
+    "correction": "Set inherited cuBLAS/hash-seed environment; one successful CPU identity run",
+    "prior_cache_reads": 1,
+    "prior_cache_bytes": 312828
+  },
+  "resources": {
+    "D_free_bytes": 103556763648,
+    "F_free_bytes": 99110178816,
+    "required_new_control_bytes": 25769803776,
+    "GPU_RAM_commit": "RECHECK_BY_EXISTING_RESOURCE_GATE_AFTER_EXACT_APPROVAL"
+  },
+  "activity": {
+    "optimizer_updates": 0,
+    "model_inference": 0,
+    "checkpoint_loads": 0,
+    "raw_weather_reads": 0,
+    "normalization_refits": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/dote_numeric_control.py": "6ba77e06864892d34b4f397a9a19e862432dc538fd494023cb375d8ad9773e89",
+    "src/yuntapr/experimental/research_readiness/scientific_diagnostics.py": "6ab60d4bcdd1049d420a71833add1aefdbf804ba57f69c1644893b6588e26f96",
+    "tools/research_readiness/start_dote_numeric_control.py": "3b8573a2cf7e6067e67b958a47e04683c89fa009d7efd4848c8882c7a64f6a58",
+    "tools/research_readiness/start_independent_process.py": "f28c53cac352adf726c0aff01764f5389f47ad21d3c852675c8d6c53f9010d10",
+    "tests/research_readiness/test_scientific_attribution.py": "8a68396a77e9f126be842d8936d13a8f39406d4599614632d535bca27b4f04cc",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": "4b9403bf3d32bd6920c659ef8b5ead5d4e198b3ca41ee68e9ceb8090fdd0b03e"
+  }
+}

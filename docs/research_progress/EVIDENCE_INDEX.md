@@ -1,6 +1,6 @@
 # 证据索引与可核验边界
 
-最新[三seed完整核验收据](../research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json)记录e81c6e1/3314231a恢复包于2026-10-29北京时间07:19:48完成。新增四任务各九轮固定E9，核对30轮新Train/Dev、60气象/4静态账本及4份实际权重SHA，旧六轮和seed2029有效证据继承；新段14,400更新含441必要重放、累计17,721尝试，额外重试0。全部总体/UTC/强雨/海拔原值、三seed差值与ddof1统计见[根METRICS.csv](../../METRICS.csv)。DTFM收益混合，限定验收COMPLETE_WITH_LIMITATIONS，2025冻结。此前启动、排队和中断记录只代表各自历史时点，原件不改写。
+本轮最新为[科学审计/预注册草案](../research_readiness/20261025/evidence/paper_acceptance_20261029.json)、[27终点离线诊断及35周块区间](../research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)、[六组精确经验Brier分解](../research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)、[7项新检查/真实初值](../research_readiness/20261025/evidence/dote_control_checks_20261029.json)。原始指标来自固定a2ffa75及已存Dev score计数，未重跑成功模型。DOTE零数值主对照NOT_STARTED、待新批准，2025预注册仅DRAFT。周块不是独立天气事件；LaTeX/PDF报告仅为带局限科学验收，不是投稿完成证明。训练和历史权重/停止段全部继承。
 
 B8恢复完成最新证据：[新增三轮、六气象账本、静态账本与实际E9 SHA](../research_readiness/20261025/evidence/b8_recovery_completion_20261028.json)。固定E9 SHA `8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0`；B8九轮完成，E1–E6 b1f072e、E7–E9 ef11531。旧启动/失败记录原样保留；全部未舍入指标与差值在[根目录METRICS.csv](../../METRICS.csv)。
 

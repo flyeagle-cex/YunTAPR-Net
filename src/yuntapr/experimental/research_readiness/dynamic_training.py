@@ -144,7 +144,7 @@ def worker(root,proposal,private,approval,commit,index):
     return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=Path(v['historical_pair']),static_name=f'{kind}_static_source.sqlite')
 
 
-def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name):
+def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     package=Path(v['output_root'])
     if kind not in ('B7','B8') or type(seed)!=int:raise PermissionError('Explicit dynamic model/seed required')
@@ -158,7 +158,7 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     finally:db.close()
     plan=PopulationPlan(prepared['private_inputs']['stage3_run'],prepared['private_inputs']['request'],root=root)
     if plan.identity!=p['data']:raise ValueError('Population changed')
-    transform=PhysicalDote(pack,DoteDefinition(**p['scientific_choices']['DOTE']))
+    transform=dynamic_transform_factory(pack,DoteDefinition(**p['scientific_choices']['DOTE']))
     def deadline():
         if time.monotonic()-started>p['budget']['max_model_seconds']:raise RuntimeError('Task6h cap; no retry')
     folder=package/f'{kind}_s{seed}'
