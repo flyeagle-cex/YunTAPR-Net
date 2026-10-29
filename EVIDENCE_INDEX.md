@@ -136,6 +136,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json](docs/research_readiness/20261025/evidence/scientific_attribution_diagnostics_20261029.json)|`d2ca1c4f8ab385303631cd1656457ff1426cecb6616ceed0fbfb0471e63954b8`|
 |[docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json](docs/research_readiness/20261025/evidence/brier_exact_score_decomposition_20261029.json)|`527ba7121b04727faab376d90e1692095fed77b88b58c84a37a2346226640c0c`|
 |[docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json](docs/research_readiness/20261025/evidence/dote_control_checks_20261029.json)|`db89994d6cb50a30bf6d474ffd75e0e0d503bd7d0bdb7f51e9c9485d4900c772`|
+|[docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json](docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json)|`a2a86f0611f9c5f805d9929788179deb13d2daa399ba4e4a831cdbaf70c7379d`|
 
 五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查36个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
@@ -144,7 +145,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |统一交付|SHA256|
 |---|---|
 |[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`cefc09372e5d72d0c3c185419f45952080eb319cf3d8a9ae25a7193588a0b326`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`0ef9b1e9e014565fad209fba503e5fdb886d48d4adf5966c1943508157307791`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`4fe2b72c92548b6e5e8851a03d39252c810e0d6989c4b1f51aec701ee4c54ab8`|
 |[METRICS.csv](METRICS.csv)|`495fd16908524a262b7e6212bce686f699fbe1c4bd97e9d5f5203b79f00aca9d`|
 |[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`0973aeb0def96ebfba01730aca582af93074f01c3ea94686b1f25a52958424f7`|
 
