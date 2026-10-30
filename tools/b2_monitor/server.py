@@ -289,6 +289,77 @@ class CampaignReader(base.Reader):
             return result
 
 
+class PipelineReader(base.Reader):
+    """Display saved metric gates and the queued physical control; no execution."""
+    def __init__(self,folder,pid,config):
+        self.folder=Path(folder).resolve();self.parent=None
+        self.pid,self.token=pid,base.process_token(pid)
+        self.cache,self.cached_at=None,0
+        self.lock,self.fixed=threading.Lock(),{}
+        self.config=base.read_json(config)
+        self.manifest=base.read_json(self.config['metric_private'])
+        if Path(self.manifest['new_output_root']).resolve()!=self.folder:raise ValueError('Wrong metric namespace')
+        self.registry=base.read_json(self.manifest['registry'])['runs']
+        if len(self.registry)!=19:raise ValueError('Expected the existing19-run matrix')
+        self.training=base.read_json(self.config['training_private'])
+        self.proposal=base.read_json(self.config['training_proposal'])
+        if self.proposal['tasks']!=[dict(model='B7_PERP_GRADIENT',seed=2029)]:raise ValueError('Wrong queued candidate')
+
+    def snapshot(self,include_resources=True):
+        with self.lock:
+            if self.cache and time.monotonic()-self.cached_at<10:return self.cache
+            failure=self.document('failure.json');complete=self.document('completion.json')
+            exited=Path(self.config['metric_service_dir'],'target_exit.json').exists()
+            live=not exited and self.token is not None and base.process_token(self.pid)==self.token
+            rows=[];recorded_bytes=recorded_files=0
+            for run in self.registry:
+                key=run['run_id'];old=self.manifest['inherited'].get(key)
+                path=Path(old['result']) if old else self.folder/'runs'/key/'result.json'
+                result=self.document(str(path)) if path.exists() else None
+                problems=[]
+                if result:
+                    identity=result.get('checkpoint_identity',{})
+                    passed=(result.get('status')=='COMPLETE' and result.get('gate',{}).get('passed') is True
+                        and identity.get('sha256_actual')==identity.get('expected_sha256')==run['checkpoint_sha256'])
+                    state='COMPLETE' if passed else 'GATE_FAILED'
+                    for kind in ('metrics','counts'):
+                        for name,values in result.get('gate',{}).get(kind,{}).items():
+                            if values.get('passed') is False:problems.append(dict(metric=name,stored=values.get('stored'),recomputed=values.get('recomputed'),abs_diff=values.get('abs_diff')))
+                    io=result.get('read_scope_actual',{});meter=io.get('meter_totals',{})
+                    recorded_bytes+=io.get('content_bytes_read',meter.get('delivered_bytes',0)) or 0
+                    recorded_files+=io.get('read_events',meter.get('opened_files',0)) or 0
+                elif (self.folder/(key+'_claim.json')).exists():state='FAILED' if failure else 'RUNNING' if live else 'UNKNOWN'
+                else:state='BLOCKED' if failure or exited else 'PENDING'
+                rows.append(dict(name=key,model=run['model'],seed=run['seed'],arm=run.get('arm','E0'),state=state,inherited=bool(old),gate_failures=problems))
+            done=sum(r['state']=='COMPLETE' for r in rows)
+            metric_state='FAILED' if failure else 'COMPLETE' if complete and done==19 else 'RUNNING' if live else 'STOPPED' if exited else 'UNKNOWN'
+            training=Path(self.training['output_root']);binding=self.document(str(training/'authorization_binding.json'))
+            training_failure=self.document(str(training/'failure.json'));training_complete=self.document(str(training/'completion.json'))
+            returned=reserved=0;epochs=[]
+            if binding:
+                if binding['code_commit']!=self.proposal['execution_code_commit'] or binding.get('control')!='PERPENDICULAR_GRADIENT_REAL_MASKS':raise ValueError('Candidate identity mismatch')
+                db=training/'B7_s2029/updates.sqlite'
+                if db.exists():
+                    updates=base.query(db,'SELECT state,COUNT(*) FROM updates GROUP BY state')
+                    returned=sum(n for state,n in updates if state=='RETURNED');reserved=sum(n for _,n in updates)
+                for e in range(1,10):
+                    sub=training/'B7_s2029';train=self.document(str(sub/f'B7_train_{e:02d}.json'));dev=self.document(str(sub/f'B7_development_{e:02d}.json'));last=self.document(str(sub/f'B7_LAST_epoch_{e:02d}.receipt.json'))
+                    epochs.append(dict(epoch=e,phase='SEALED' if last else 'VALIDATED' if dev else 'VALIDATION' if train else 'TRAINING' if returned>(e-1)*480 else 'PENDING',updates=min(480,max(0,returned-(e-1)*480)),training_loss=train.get('weighted_mean') if train else None,metrics=base.metric_summary(dev).get('all') if dev else None,checkpoint_sha256=last.get('checkpoint_sha256') if last else None))
+            sealed=sum(bool(e['checkpoint_sha256']) for e in epochs)
+            candidate_state=('FAILED' if training_failure else 'COMPLETE' if training_complete and returned==4320 and sealed==9
+                else 'STOPPED' if binding and process_exited(binding['controller_pid']) is True else 'RUNNING' if binding else 'BLOCKED' if metric_state in ('FAILED','STOPPED') else 'PENDING')
+            candidate=dict(model='B7_PERP_GRADIENT',seed=2029,state=candidate_state,returned=returned,reserved=reserved,sealed_epochs=sealed,epochs=epochs,source_commit=self.proposal['execution_code_commit'])
+            state='FAILED' if metric_state=='FAILED' or candidate_state=='FAILED' else 'STOPPED' if metric_state=='STOPPED' or candidate_state=='STOPPED' else 'COMPLETE' if candidate_state=='COMPLETE' else 'RUNNING' if live or binding else 'UNKNOWN'
+            message='指标补算未通过冻结一致性检查；保留现有结果，后续训练未启动，不自动重试。' if failure else '候选训练已停止；原账本保留，不自动重试。' if training_failure else '指标全部通过后，已有独立控制器才会单次启动候选；本页面不控制计算。'
+            if state=='STOPPED':message='执行进程已退出，完成收据不足；不据此判完成，不自动恢复。'
+            started=self.document('binding.json')['at'];now=datetime.now(timezone.utc)
+            end=datetime.fromisoformat(failure['at']) if failure and failure.get('at') else now
+            result=dict(pipeline=True,read_only=True,state=state,snapshot_utc=now.isoformat(),metric_runs=rows,metric_completed=done,metric_required=19,metric_state=metric_state,
+                candidate=candidate,recorded_metric_io=dict(bytes=recorded_bytes,files=recorded_files,scope='仅已有result.json记录，缺失段不视作零；不是整包源账本封口'),
+                elapsed_seconds=max(0,(end-datetime.fromisoformat(started)).total_seconds()),message=message,source_commit=self.proposal['execution_code_commit'],resources=base.resources(training if training.exists() else self.folder) if include_resources else {})
+            self.cache,self.cached_at=result,time.monotonic();return result
+
+
 class B8RecoveryReader(base.Reader):
     """Only new recovery metadata plus inherited seals; no training controls."""
     def __init__(self,folder,pid,parent):
@@ -365,8 +436,11 @@ def main():
     p.add_argument('--campaign',action='store_true')
     p.add_argument('--b8-recovery',action='store_true')
     p.add_argument('--parent-experiment',type=Path)
+    p.add_argument('--pipeline-config',type=Path)
     a=p.parse_args()
-    if a.b8_recovery:
+    if a.pipeline_config:
+        reader=PipelineReader(a.experiment,a.training_pid,a.pipeline_config)
+    elif a.b8_recovery:
         if a.parent_experiment is None:p.error('--parent-experiment required for B8 recovery')
         reader=B8RecoveryReader(a.experiment,a.training_pid,a.parent_experiment)
     else:reader=(CampaignReader if a.campaign else B2Reader)(a.experiment,a.training_pid)

@@ -1,0 +1,145 @@
+{
+  "status": "READ_ONLY_PIPELINE_PANEL_STARTED_METRIC_PACKAGE_STOPPED",
+  "recorded_at": "2026-10-30T16:54:33.558893+08:00",
+  "panel": {
+    "loopback_url": "http://127.0.0.1:51282/",
+    "read_only": true,
+    "request_driven": true,
+    "refresh_seconds_while_viewed": 15,
+    "independent_of_codex_job": true,
+    "packaged_identity_absent": true,
+    "resource_automation_reenabled": false
+  },
+  "snapshot": {
+    "metric_complete": 15,
+    "metric_required": 19,
+    "failed_metric_task": "B0_s2026_E0",
+    "remaining_metric_tasks": [
+      "B1_s2026_E0",
+      "B0_s2027_E0",
+      "B1_s2027_E0"
+    ],
+    "candidate": "B7_PERP_GRADIENT_s2029",
+    "candidate_status": "BLOCKED_NOT_STARTED",
+    "candidate_optimizer_updates": 0
+  },
+  "failure": {
+    "at_utc": "2026-10-30T08:32:11.757666+00:00",
+    "controller_exit_code": 1,
+    "reason": "Frozen probability-metric consistency gate failed; fail-stop controller blocked later work",
+    "underlying_numerical_difference_origin": "NOT_VERIFIED_NO_NEW_INFERENCE",
+    "gate": {
+      "tolerance": {
+        "abs": 1e-12,
+        "rel": 1e-12
+      },
+      "counts": {
+        "n_valid": {
+          "stored": 36018430,
+          "recomputed": 36018430,
+          "exact": 1,
+          "passed": true
+        },
+        "n_rain": {
+          "stored": 4496600,
+          "recomputed": 4496600,
+          "exact": 1,
+          "passed": true
+        },
+        "q32_covered_count": {
+          "stored": 4305233,
+          "recomputed": 4305197,
+          "exact": 0,
+          "passed": false
+        }
+      },
+      "metrics": {
+        "brier": {
+          "stored": 0.09686762633953126,
+          "recomputed": 0.09686762633953126,
+          "abs_diff": 0.0,
+          "passed": true
+        },
+        "auroc": {
+          "stored": 0.8863570372722712,
+          "recomputed": 0.8863570372722712,
+          "abs_diff": 0.0,
+          "passed": true
+        },
+        "average_precision": {
+          "stored": 0.5672326912158884,
+          "recomputed": 0.5672326912158884,
+          "abs_diff": 0.0,
+          "passed": true
+        },
+        "conditional_pinball": {
+          "stored": 0.12488545829163124,
+          "recomputed": 0.12488579518887946,
+          "abs_diff": 3.36897248223722e-07,
+          "passed": false
+        },
+        "q32_coverage": {
+          "stored": 0.9574418449495175,
+          "recomputed": 0.9574338389005026,
+          "abs_diff": 8.006049014852579e-06,
+          "passed": false
+        }
+      },
+      "passed": false,
+      "stored_scope": {
+        "source_sha": "9fcb344a4613e6d025654755d57f51bf47debe30d8631c832757eb90720312ef",
+        "ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+        "scope": "FORMAL_PHASE_B_V2_SEED2026"
+      }
+    },
+    "partial_source_bytes": 46758323515,
+    "partial_source_read_instances": 22838,
+    "partial_accounting": "PRESERVED_NOT_ZERO_NOT_A_SUCCESSFUL_COMPLETION",
+    "prior_B4_2031_partial_bytes_preserved": 25621522638
+  },
+  "sources": [
+    {
+      "source_id": "METRIC_COMPLETION_FAILURE",
+      "sha256": "d3cdbbf46fa360602a0c1cbfd8a6f78c1a2d0682fb814b1c3593a92a3f789591"
+    },
+    {
+      "source_id": "B0_2026_E0_GATE_FAILED_RESULT",
+      "sha256": "849a9952171d5dea8a80390f2b0c36a6163d9b33e3a892c07646b6ee36d26b51"
+    },
+    {
+      "source_id": "METRIC_CONTROLLER_EXIT",
+      "sha256": "da3e557f62c7fb8788a42a90dca16f8e5f215a394a00467edc666279869ff1bf"
+    }
+  ],
+  "verification": {
+    "new_cpu_monitor_checks": 3,
+    "js_syntax": "PASS",
+    "page_http": 200,
+    "snapshot_http": 200,
+    "post_control_rejected": 405,
+    "private_config_route": 404,
+    "visible_browser_snapshot": "PASS_15_OF_19_BLOCKED_CANDIDATE",
+    "layout": "EXISTING_STYLES_REUSED_HIDDEN_CONTROL_CORRECTED"
+  },
+  "activity": {
+    "new_training": 0,
+    "new_inference": 0,
+    "new_optimization_updates": 0,
+    "weather_payload_reads": 0,
+    "checkpoint_loads": 0,
+    "process_restarts_of_training_or_evaluation": 0,
+    "old_result_overwrites": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "frozen_candidate": {
+    "execution_code_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+    "proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+    "launch": "NOT_CALLED_DEPENDENCY_NOT_COMPLETE"
+  },
+  "code_sha256": {
+    "tools/b2_monitor/server.py": "7b75357ef66645385d055a6edb207590f17b7f32c4e12230c8cab50997d15aeb",
+    "tools/b2_monitor/app.js": "fe2e1877f0bcc9e2e9450f423488d43fceec3d2360b8cd17daccd97949f66afa",
+    "tools/b2_monitor/style.css": "5e039c8bbedeff1794137f92659e7c9e049ab621c4b962f8210757d53064f9f5",
+    "tests/research_readiness/test_metric_pipeline_monitor.py": "c769c41b967bb77202af8a633f2ef073532f4c36257f2aeb4d16a259865cb6dd"
+  }
+}
