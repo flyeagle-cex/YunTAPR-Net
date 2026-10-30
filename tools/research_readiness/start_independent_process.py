@@ -69,7 +69,10 @@ def validate_spec(path):
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
         if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
-        def argument(flag):return Path(command[command.index(flag)+1])
+        def argument(flag):
+            path=Path(command[command.index(flag)+1])
+            if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
+            return path
         approval=read(argument('--researcher-approval'));proposal=read(argument('--proposal'));private=read(argument('--private-preparation'))
         if approval.get('approved_by_researcher') is not True or not approval.get('decision_id'):raise PermissionError('Explicit research decision required')
         if any(approval.get(k)!=proposal[k] for k in ('proposal_sha256','tasks','budget','scientific_choices')):raise PermissionError('Exact approved grant required')

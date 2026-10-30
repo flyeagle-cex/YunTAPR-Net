@@ -26,6 +26,7 @@ def write(p,x):
 
 
 def prepare(previous_path,workspace):
+    workspace=workspace.resolve()  # Follow-on runs from a different frozen checkout.
     previous=read(previous_path);old=Path(previous['new_output_root']);registry=read(previous['registry'])
     failure=read(old/'failure.json')
     if 'B0_s2026_E0' not in failure['error']:raise ValueError('Wrong failed package')

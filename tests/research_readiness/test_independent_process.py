@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -12,6 +13,19 @@ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 
 class IndependentHostTests(unittest.TestCase):
+    def test_cross_checkout_configuration_must_be_absolute_before_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp);entry=p/'start_dote_physical_control.py';entry.write_text('')
+            folder=p/'service';folder.mkdir();configuration=p/'spec.json'
+            flags=('--researcher-approval','--proposal','--private-preparation')
+            for relative_flag in flags:
+                command=[sys.executable,'-B',str(entry),'execute']
+                for flag in flags:command.extend([flag,'relative.json' if flag==relative_flag else str(p/'absolute.json')])
+                configuration.write_text(json.dumps(dict(kind='APPROVAL_BOUND_EXECUTION',command=command,service_dir=str(folder))))
+                with self.subTest(flag=relative_flag),patch.object(module,'PRIVATE',p),patch.object(module,'read',side_effect=lambda path:json.loads(configuration.read_text()) if Path(path).name=='spec.json' else {}),patch.object(module.subprocess,'check_output') as run:
+                    with self.assertRaisesRegex(ValueError,'requires absolute '+relative_flag):module.validate_spec(configuration)
+                    run.assert_not_called()
+
     def test_nested_or_unknown_job_and_package_fail_closed(self):
         for job,package in ((True,15700),(None,15700),(False,0)):
             with self.assertRaises(PermissionError):module.require_independent(dict(in_any_job=job,package_status=package))

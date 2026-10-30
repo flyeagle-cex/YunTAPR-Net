@@ -1,0 +1,2058 @@
+{
+  "status": "VERIFIED_19_METRIC_BACKFILL_COMPLETE_CANDIDATE_TRAINING_IN_PROGRESS",
+  "at": "2026-10-30T13:45:17.273604+00:00",
+  "metrics": {
+    "status": "COMPLETE_19_E9_DEV_METRIC_BACKFILL",
+    "completed_at": "2026-10-30T13:20:46.261531+00:00",
+    "results": [
+      {
+        "run_id": "B2_s2029",
+        "result_sha256": "5d3720775c1f71d138c5f829399b7cf4a54a935a135412b842ac93e42bf7b486",
+        "checkpoint_sha256": "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 379434,
+              "recomputed": 379434,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09863818096858105,
+              "recomputed": 0.09863818096858105,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8853437282496801,
+              "recomputed": 0.8853437282496801,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5578497386306888,
+              "recomputed": 0.5578497386306888,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12949021947909664,
+              "recomputed": 0.12949021947909664,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9303957628365456,
+              "recomputed": 0.9303957628365456,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1345.9803309440613,
+        "inference_execution_commit": "a35302186b4b5d3d7ec735885a8d93762e6d3567",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B3_s2029",
+        "result_sha256": "bf8e29e55db68634014ad7a67c41a3ea4f4464c355df44675348b4597434acbb",
+        "checkpoint_sha256": "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 381332,
+              "recomputed": 381332,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09957884578407393,
+              "recomputed": 0.09957884578407393,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8880247781349105,
+              "recomputed": 0.8880247781349105,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5707417679094422,
+              "recomputed": 0.5707417679094422,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12925806665118195,
+              "recomputed": 0.12925806665118195,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9350497768623413,
+              "recomputed": 0.9350497768623413,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 2535.4869084358215,
+        "inference_execution_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35 (E4-E9); 5b5298f41025db5b7b718fd736fc3fe6de516875 (E1-E3)",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B4_s2029",
+        "result_sha256": "97f7bf855607b4faeb6f25b624854cf41fe9f37135286e6d2d2633b376c56205",
+        "checkpoint_sha256": "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 381812,
+              "recomputed": 381812,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09791899181978897,
+              "recomputed": 0.09791899181978897,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8948784047582392,
+              "recomputed": 0.8948784047582392,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5926382833862388,
+              "recomputed": 0.5926382833862388,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12719368687787683,
+              "recomputed": 0.12719368687787683,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9362267667108037,
+              "recomputed": 0.9362267667108037,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 2228.461345911026,
+        "inference_execution_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35 (E4-E9); 5b5298f41025db5b7b718fd736fc3fe6de516875 (E1-E3)",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B3_s2030",
+        "result_sha256": "46fe7c6ffc8090b6c74850a3f4b37475a606c4f146e22e7efbe4557860fe7e2c",
+        "checkpoint_sha256": "8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 383076,
+              "recomputed": 383076,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09535216057777933,
+              "recomputed": 0.09535216057777933,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8880760332745852,
+              "recomputed": 0.8880760332745852,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.570395915597846,
+              "recomputed": 0.570395915597846,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.1293714618770597,
+              "recomputed": 0.1293714618770597,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9393261733117552,
+              "recomputed": 0.9393261733117552,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 2536.5501520633698,
+        "inference_execution_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B4_s2030",
+        "result_sha256": "456a2354767ed2285fd053f4ad6ffb5b4bc18e3ca2a67490b094c849984e4a29",
+        "checkpoint_sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 385032,
+              "recomputed": 385032,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09499175845511126,
+              "recomputed": 0.09499175845511126,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8935437295751268,
+              "recomputed": 0.8935437295751268,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5858597411919294,
+              "recomputed": 0.5858597411919294,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.128547013741039,
+              "recomputed": 0.128547013741039,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9441224069442401,
+              "recomputed": 0.9441224069442401,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 2228.1315643787384,
+        "inference_execution_commit": "943da957a3af846746c21b52d05a148bcb135064",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B3_s2031",
+        "result_sha256": "3a0843041aff6d2900f2e69b341ee8872f52d6200d04885d085a7967bf3467a4",
+        "checkpoint_sha256": "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 385836,
+              "recomputed": 385836,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.10021539556138473,
+              "recomputed": 0.10021539556138473,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8891386888261764,
+              "recomputed": 0.8891386888261764,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5699960794013148,
+              "recomputed": 0.5699960794013148,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12972735512703976,
+              "recomputed": 0.12972735512703976,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9460938649404149,
+              "recomputed": 0.9460938649404149,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 2536.3617794513702,
+        "inference_execution_commit": "943da957a3af846746c21b52d05a148bcb135064",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B4_s2031",
+        "result_sha256": "6b44298aabe27b443bba9041c09e9375e0e3c5caba4e163adf8faa7f80836cb9",
+        "checkpoint_sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 385207,
+              "recomputed": 385207,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09626313770420312,
+              "recomputed": 0.09626313770420312,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8943338745051606,
+              "recomputed": 0.8943338745051606,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.58805178434059,
+              "recomputed": 0.58805178434059,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12907009194980418,
+              "recomputed": 0.12907009194980418,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.944551517826492,
+              "recomputed": 0.944551517826492,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 983.7482583522797,
+        "inference_execution_commit": "943da957a3af846746c21b52d05a148bcb135064",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B5_s2029",
+        "result_sha256": "0b23d550a2ac7a14365e1ca6909cda6893a4dcd13904a2a7d6a4cc9177fc5d07",
+        "checkpoint_sha256": "1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 381148,
+              "recomputed": 381148,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09818115425527373,
+              "recomputed": 0.09818115425527373,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8950869439563437,
+              "recomputed": 0.8950869439563437,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5907729607715951,
+              "recomputed": 0.5907729607715951,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12731034235976943,
+              "recomputed": 0.12731034235976943,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9345985974204306,
+              "recomputed": 0.9345985974204306,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 996.9558169841766,
+        "inference_execution_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B6_s2029",
+        "result_sha256": "d375d87b970aaea30928a65bfc713cb158305624c76b79fa2d7eb3d8cc6fb853",
+        "checkpoint_sha256": "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 379873,
+              "recomputed": 379873,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09637301023497848,
+              "recomputed": 0.09637301023497848,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8957210255048111,
+              "recomputed": 0.8957210255048111,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5918758139388839,
+              "recomputed": 0.5918758139388839,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12719945304919317,
+              "recomputed": 0.12719945304919317,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9314722181354519,
+              "recomputed": 0.9314722181354519,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 908.1070394515991,
+        "inference_execution_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B7_s2029",
+        "result_sha256": "e2cae84bf9661158de4e2626290a4077a01e1aaebb43829e1556d6282e53e008",
+        "checkpoint_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 381240,
+              "recomputed": 381240,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09673163538839748,
+              "recomputed": 0.09673163538839748,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8959240618810312,
+              "recomputed": 0.8959240618810312,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5934546324623617,
+              "recomputed": 0.5934546324623617,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12740129422354954,
+              "recomputed": 0.12740129422354954,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9348241871413859,
+              "recomputed": 0.9348241871413859,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1030.299242258072,
+        "inference_execution_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B8_s2029",
+        "result_sha256": "f7ab24b7f82ab27d89bb18f3f54545414734085c2422139f1a6f05e3d916932d",
+        "checkpoint_sha256": "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 383572,
+              "recomputed": 383572,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09805082718912765,
+              "recomputed": 0.09805082718912765,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.896157900851324,
+              "recomputed": 0.896157900851324,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5941484641201065,
+              "recomputed": 0.5941484641201065,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12688287078666707,
+              "recomputed": 0.12688287078666707,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9405423961551665,
+              "recomputed": 0.9405423961551665,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1029.4493470191956,
+        "inference_execution_commit": "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B7_s2030",
+        "result_sha256": "6e467023fdc3a98376788b3ca46ec32dfb6b99bf706d3ac57e365b5355ec04c1",
+        "checkpoint_sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 387671,
+              "recomputed": 387671,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09427110457976932,
+              "recomputed": 0.09427110457976932,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8948893401186548,
+              "recomputed": 0.8948893401186548,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5867448571634674,
+              "recomputed": 0.5867448571634674,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12814951925126827,
+              "recomputed": 0.12814951925126827,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9505933990485999,
+              "recomputed": 0.9505933990485999,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1034.4799916744232,
+        "inference_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B8_s2030",
+        "result_sha256": "9fc269669a9ec3ac0949ea93c448ab4a085558d5b57b101ed1c2ffc087a93153",
+        "checkpoint_sha256": "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 386672,
+              "recomputed": 386672,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09425849338249301,
+              "recomputed": 0.09425849338249301,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8955205451281905,
+              "recomputed": 0.8955205451281905,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5870065768744974,
+              "recomputed": 0.5870065768744974,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12906699369635802,
+              "recomputed": 0.12906699369635802,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9481437889264872,
+              "recomputed": 0.9481437889264872,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1038.0921189785004,
+        "inference_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B7_s2031",
+        "result_sha256": "1a112ff02825d599247c9925265339d6b26a0bc07a8a97b2782534c973546cc6",
+        "checkpoint_sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 386350,
+              "recomputed": 386350,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09493943784545833,
+              "recomputed": 0.09493943784545833,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8961514871279781,
+              "recomputed": 0.8961514871279781,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5933823974392998,
+              "recomputed": 0.5933823974392998,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12831781093549394,
+              "recomputed": 0.12831781093549394,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9473542249031436,
+              "recomputed": 0.9473542249031436,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1053.2326664924622,
+        "inference_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B8_s2031",
+        "result_sha256": "7fd97e27fe27b4b63bda9207f52aa521ca35e74fa3c3e3f47268f4990697993d",
+        "checkpoint_sha256": "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+        "scenes": 963,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 3303090,
+              "recomputed": 3303090,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 407820,
+              "recomputed": 407820,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 383728,
+              "recomputed": 383728,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09527247567984089,
+              "recomputed": 0.09527247567984089,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8961658710781962,
+              "recomputed": 0.8961658710781962,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5911901054616281,
+              "recomputed": 0.5911901054616281,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12880291428917948,
+              "recomputed": 0.12880291428917948,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9409249178559168,
+              "recomputed": 0.9409249178559168,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_identity": {
+              "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+              "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+              "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+              "lead": 6,
+              "mode": "retrospective",
+              "train": 959,
+              "dev": 963,
+              "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+              "candidate_manifest_sha256": {
+                "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+                "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+              }
+            },
+            "scope": "2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
+            "groups": [
+              "all",
+              "analysis_UTC_00",
+              "analysis_UTC_06",
+              "analysis_UTC_12",
+              "analysis_UTC_18",
+              "scene_max_ge20"
+            ]
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1064.5138528347015,
+        "inference_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B0_s2026_E0",
+        "result_sha256": "1a51061929b4b79620615233b3a7411e129cb1b5fd5d765d5465b8faab7dda8e",
+        "checkpoint_sha256": "a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94",
+        "scenes": 10501,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 36018430,
+              "recomputed": 36018430,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 4496600,
+              "recomputed": 4496600,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 4305233,
+              "recomputed": 4305233,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09686762633953126,
+              "recomputed": 0.09686762633953126,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8863570372722712,
+              "recomputed": 0.8863570372722712,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5672326912158884,
+              "recomputed": 0.5672326912158884,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12488545829163124,
+              "recomputed": 0.12488545829163124,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9574418449495175,
+              "recomputed": 0.9574418449495175,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_sha": "9fcb344a4613e6d025654755d57f51bf47debe30d8631c832757eb90720312ef",
+            "ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+            "scope": "FORMAL_PHASE_B_V2_SEED2026"
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 797.4953849315643,
+        "inference_execution_commit": "db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B1_s2026_E0",
+        "result_sha256": "dcd87a2d9c9ed0a78bf0e89f2061f8e16883e69b33fc078fe4ad9b4e0bbb6495",
+        "checkpoint_sha256": "ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051",
+        "scenes": 10501,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 36018430,
+              "recomputed": 36018430,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 4496600,
+              "recomputed": 4496600,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 4275232,
+              "recomputed": 4275232,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09525347050913102,
+              "recomputed": 0.09525347050913102,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.893468821807229,
+              "recomputed": 0.893468821807229,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.585904924452039,
+              "recomputed": 0.585904924452039,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12411322286781483,
+              "recomputed": 0.12411322286781483,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9507699150469243,
+              "recomputed": 0.9507699150469243,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_sha": "3615ba1a1b0023a91a1325303252165597431740f86b1761c831d2a62f988744",
+            "ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+            "scope": "FORMAL_PHASE_B_V2_SEED2026"
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1424.8060891628265,
+        "inference_execution_commit": "db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B0_s2027_E0",
+        "result_sha256": "f3b576849b69ba268023d978235fe0fc7bf98dbd642e9f975aa5102424fe2198",
+        "checkpoint_sha256": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673",
+        "scenes": 10501,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 36018430,
+              "recomputed": 36018430,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 4496600,
+              "recomputed": 4496600,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 4321659,
+              "recomputed": 4321659,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09705489099741127,
+              "recomputed": 0.09705489099741127,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8856824184138391,
+              "recomputed": 0.8856824184138391,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5622563003246116,
+              "recomputed": 0.5622563003246116,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12518697518141356,
+              "recomputed": 0.12518697518141356,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9610948272027754,
+              "recomputed": 0.9610948272027754,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_sha": "7d9a77926728f97a99ffa314d96ba556219f572b7944a8ce1a03729cf4a1a748",
+            "ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+            "scope": "FORMAL_PHASE_B_V2_SEED2027"
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 774.60001039505,
+        "inference_execution_commit": "8e8fd2545e41b2f4834366c02bd89bd37cd9891d",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      },
+      {
+        "run_id": "B1_s2027_E0",
+        "result_sha256": "3b75040603b06730b10338bd29a5ef19eba7f561479f00db051150760ba78849",
+        "checkpoint_sha256": "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43",
+        "scenes": 10501,
+        "status": "COMPLETE",
+        "gate": {
+          "tolerance": {
+            "abs": 1e-12,
+            "rel": 1e-12
+          },
+          "counts": {
+            "n_valid": {
+              "stored": 36018430,
+              "recomputed": 36018430,
+              "exact": 1,
+              "passed": true
+            },
+            "n_rain": {
+              "stored": 4496600,
+              "recomputed": 4496600,
+              "exact": 1,
+              "passed": true
+            },
+            "q32_covered_count": {
+              "stored": 4301356,
+              "recomputed": 4301356,
+              "exact": 1,
+              "passed": true
+            }
+          },
+          "metrics": {
+            "brier": {
+              "stored": 0.09348051269595507,
+              "recomputed": 0.09348051269595507,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "auroc": {
+              "stored": 0.8940760291098631,
+              "recomputed": 0.8940760291098631,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "average_precision": {
+              "stored": 0.5856579585923968,
+              "recomputed": 0.5856579585923968,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "conditional_pinball": {
+              "stored": 0.12365568429795556,
+              "recomputed": 0.12365568429795556,
+              "abs_diff": 0.0,
+              "passed": true
+            },
+            "q32_coverage": {
+              "stored": 0.9565796379486723,
+              "recomputed": 0.9565796379486723,
+              "abs_diff": 0.0,
+              "passed": true
+            }
+          },
+          "passed": true,
+          "stored_scope": {
+            "source_sha": "1b24a42266369caf09ec359cbc149281834485a14354fdd4132eed0c27e05eae",
+            "ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+            "scope": "FORMAL_PHASE_B_V2_SEED2027"
+          }
+        },
+        "new_metric_categories": [
+          "N_valid",
+          "N_rain",
+          "event_definition",
+          "point_estimates",
+          "contingency",
+          "candidate_D",
+          "sums",
+          "N_dry",
+          "truth_mean_mm_h",
+          "truth_rmse_scale",
+          "semantics"
+        ],
+        "elapsed_seconds": 1433.0521366596222,
+        "inference_execution_commit": "8e8fd2545e41b2f4834366c02bd89bd37cd9891d",
+        "historical_training_execution_commit": "INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE"
+      }
+    ],
+    "inherited": 15,
+    "new_passes": 4,
+    "correction_execution_commit": "3d632954e37a6003d77babd06172922d63b0c77a",
+    "proposal_sha256": "daa745a02e8e51ff25155dddd1b65721c958a649277787d4fe53a11b563381b2",
+    "exact_four_pass_content": [
+      {
+        "run_id": "B0_s2026_E0",
+        "verified_receipt_sha256": "f89c5ccf2e7c44efe6c1075fa8a4e3c2c68a370a7d283a47ccaf1bc6f940bc21",
+        "source_bytes": 46758323515,
+        "content_read_instances": 10775
+      },
+      {
+        "run_id": "B1_s2026_E0",
+        "verified_receipt_sha256": "a68f4ad2e45ed03228d1948ab0cfaca9c72e364cb9c1030adc27cc11b82265ae",
+        "source_bytes": 148229626033,
+        "content_read_instances": 33571
+      },
+      {
+        "run_id": "B0_s2027_E0",
+        "verified_receipt_sha256": "89704842fc1ef81a854f546fd8572e3b6f5449ef3d65ca248b11067e67766035",
+        "source_bytes": 46758323515,
+        "content_read_instances": 10775
+      },
+      {
+        "run_id": "B1_s2027_E0",
+        "verified_receipt_sha256": "d3c4303471f439251dcf4cb78825ab6669d47da513db0dce90d67d11f2a688f3",
+        "source_bytes": 148229626033,
+        "content_read_instances": 33571
+      }
+    ],
+    "source_bytes": 389975899096,
+    "content_read_instances": 88692,
+    "elapsed_seconds": 4441.910898,
+    "maximum_seconds": 43200,
+    "optimizer_updates": 0,
+    "automatic_retries": 0,
+    "legacy_read_events": "LOG_EVENTS_NOT_CONTENT_INSTANCES"
+  },
+  "training": {
+    "model": "B7_PERP_GRADIENT",
+    "seed": 2029,
+    "status": "IN_PROGRESS",
+    "first_formal_start": "2026-10-30T13:43:11.614534+00:00",
+    "execution_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+    "proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+    "researcher_authorization": "INHERIT_EXPLICIT_PREPARE_AND_START_INSTRUCTION_NOT_A_NEW_GRANT",
+    "original_user_quote": "是，准备并启动该候选",
+    "source_call": "call_1d3841a0003e4b0896ccd4b6c27c2bbe",
+    "returned_updates_snapshot": 68,
+    "maximum_updates": 4320,
+    "maximum_source_bytes": 477571953840,
+    "maximum_source_instances": 142813,
+    "maximum_seconds": 21600,
+    "replay": 0,
+    "additional_training_retry": 0,
+    "independent_supervisor_no_job_or_package": true,
+    "admission": {
+      "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+      "host_available_bytes": 20877533184,
+      "workspace_free_bytes": 54884786176,
+      "minimum_host_bytes": 8589934592,
+      "minimum_workspace_bytes": 1073741824,
+      "full_backward": true,
+      "cuda_free_bytes": 7283408896,
+      "cuda_total_bytes": 8546484224,
+      "minimum_cuda_free_bytes": 5368709120,
+      "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "torch_version": "2.11.0+cu128",
+      "cuda_build": "12.8",
+      "available_commit_bytes": 24519069696
+    },
+    "source_admission_status": "PASS",
+    "initial_weight_identity_sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359",
+    "sample_order_receipt_sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502",
+    "final_E9_status": "NOT_AVAILABLE_TRAINING_IN_PROGRESS"
+  },
+  "historical_dispatch_failure": {
+    "reason": "RELATIVE_PRIVATE_CONFIG_RESOLVED_IN_ANOTHER_FROZEN_CHECKOUT",
+    "stage": "BEFORE_PRIVATE_JSON_LOAD_APPROVAL_VALIDATION_TORCH_IMPORT_OR_BUDGET_BINDING",
+    "failed_invocations": 1,
+    "formal_training_attempts_before_path_fix": 0,
+    "optimizer_updates": 0,
+    "weather_source_bytes": 0,
+    "evidence_preserved": true,
+    "fix": "ABSOLUTE_CONFIG_ARGUMENTS_NEW_PRIVATE_SERVICE_ORIGINAL_FROZEN_TRAINING_CODE_UNCHANGED",
+    "targeted_host_tests": "4_PASS_INCLUDING_REJECTION_OF_EACH_RELATIVE_CONFIG_ARGUMENT"
+  },
+  "final_workbook": {
+    "status": "IN_PROGRESS_WAITING_CANDIDATE_E9",
+    "worksheets": 1,
+    "tables": 1,
+    "no_partial_export_as_complete": true
+  },
+  "final_2025": "FROZEN_NO_ACCESS",
+  "historical_evidence": "PRESERVED_NOT_OVERWRITTEN",
+  "main": "NOT_CHANGED"
+}
