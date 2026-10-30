@@ -1,0 +1,58 @@
+{
+  "status": "PASS_CACHED_2023_TRAIN_NONZERO_CONTROL_ZERO_OPTIMIZER",
+  "created_at": "2026-10-30T13:34:34.327762+08:00",
+  "seed": 2029,
+  "scenes": 2,
+  "n_valid": 6860,
+  "initial_B7_full_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+  "initial_matches_completed_B7": true,
+  "weights_and_buffers_unchanged": true,
+  "GFS_DEM_labels_supervision_unchanged": true,
+  "real_dynamic_reproduces_frozen_Train_cache": true,
+  "real_masks_unchanged": true,
+  "nominal_parameters": 4411058,
+  "finite_forward_loss_backward": true,
+  "strict_32_quantile_order": true,
+  "initial_zero_residual": "Condition-projection loss gradients initially zero for both real/control; not evidence of permanent dead inputs",
+  "real_input_nonzero_output_probe": {
+    "zero_numeric_columns": 0,
+    "nonzero_loss_gradients_of_128": 128,
+    "finite": true,
+    "only_probe_copy_modified": true
+  },
+  "training_objective_engineering_only": 0.10200403583955105,
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 22198235136,
+    "workspace_free_bytes": 57401921536,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 27795255296
+  },
+  "peak_cuda_allocated_bytes": 3022305280,
+  "elapsed_seconds": 5.969000000000051,
+  "cache_payload_reads": {
+    "Train_tensor_bytes": 106844049,
+    "static_bytes": 312828,
+    "derived_pair_bytes": 1440762,
+    "old_Train_dynamic_bytes": 800508
+  },
+  "activity": {
+    "optimizer_constructions": 0,
+    "optimizer_updates": 0,
+    "checkpoint_loads": 0,
+    "raw_weather_reads": 0,
+    "Dev_inference": 0,
+    "final_2025_access": 0,
+    "formal_performance_evaluation": 0
+  },
+  "interpretation": "One untrained cached Train batch,not a scientific model-performance result",
+  "code_sha256": "e23d17775923288046dcb76ce3a7c1f407a5bb615c37cf4790403562065f37c3"
+}

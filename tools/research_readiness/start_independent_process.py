@@ -58,8 +58,12 @@ def validate_spec(path):
         if entry!=(ROOT/'tools/b2_monitor/server.py').resolve():raise PermissionError('Only existing read-only monitor')
     elif spec['kind']=='ENGINEERING_PROBE':
         if not entry.is_relative_to(PRIVATE.resolve()):raise PermissionError('Probe must be an ignored local script')
+    elif spec['kind']=='METRIC_BACKFILL_COMPLETION':
+        if entry!=(ROOT/'tools/research_readiness/resume_metric_backfill.py').resolve() or command[3]!='execute':raise PermissionError('Only the once-only 2024 metric completion controller')
+        private=read(command[command.index('--private')+1])
+        if private.get('authorization_basis')!='CURRENT_USER_FINISH_EXISTING_METRIC_BACKFILL_20261030' or Path(private['new_output_root']).exists():raise PermissionError('Consumed or unrequested metric completion')
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):return Path(command[command.index(flag)+1])
         approval=read(argument('--researcher-approval'));proposal=read(argument('--proposal'));private=read(argument('--private-preparation'))
         if approval.get('approved_by_researcher') is not True or not approval.get('decision_id'):raise PermissionError('Explicit research decision required')
