@@ -1,0 +1,65 @@
+{
+  "status": "RESEARCHER_DIRECT_START_INSTRUCTION_BOUND_QUEUED_WAITING_19_METRICS",
+  "recorded_at": "2026-10-30T13:51:49.372173+08:00",
+  "authorization": {
+    "approved_by_researcher": true,
+    "decision_id": "20261030_DIRECT_USER_START_PERP_AFTER_METRICS",
+    "researcher_statement": "是，准备并启动该候选",
+    "source_question_call": "call_1d3841a0003e4b0896ccd4b6c27c2bbe",
+    "authorization_form": "EXPLICIT_CURRENT_USER_START_INSTRUCTION; NOT_A_QUOTED_SHA_REPLY",
+    "researcher_quoted_execution_sha": false,
+    "scope_basis": "Current user requested complete metric process then start training, and explicitly confirmed B7_PERP_GRADIENT seed2029. Same previously disclosed single-run source/update/time limits; implementation identity bound during preparation."
+  },
+  "execution_code_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+  "proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+  "proposal_file_sha256": "be00f3f7da32e622b98e9d1838a17f051316766b1329f661fcff590c062cc8a2",
+  "tasks": [
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": 2029
+    }
+  ],
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "scientific_limits": "Directional representation probe only; scalar/spatial confounds remain; no physical causal claim",
+  "queue": {
+    "prerequisite": "All19 existing metric inference results COMPLETE and exact metric gate passed",
+    "live_metric_completion_tasks": 13,
+    "inherited_COMPLETE": 6,
+    "formal_training_started": false,
+    "optimizer_updates": 0
+  },
+  "fixed_checkout_clean": true,
+  "code_file_hashes_match": true,
+  "cached_Train_check": "PASS_6860_VALID_PIXELS_ZERO_OPTIMIZER_128_GRADIENT_RESPONSE",
+  "additional_retry": 0,
+  "replay": 0,
+  "final_2025": "FROZEN_NO_ACCESS"
+}

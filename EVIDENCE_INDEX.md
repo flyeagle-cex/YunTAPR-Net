@@ -1,6 +1,6 @@
 # 统一证据索引
 
-出版基线commit：`6c26c9eb3f9b3452a10b62649774a1f617b2efc3`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`9b4046a655e2ec91633104eaa64bd507cca81aad`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
@@ -158,6 +158,12 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json](docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json)|`55f20b918c7ca6ab342a0101bf5576b0de211cf319c7e0d2d8e0363ed1869830`|
 |[docs/research_readiness/20261025/evidence/physical_negative_cached_train_check_20261030.json](docs/research_readiness/20261025/evidence/physical_negative_cached_train_check_20261030.json)|`b918b4b65d10753484c93f76be32941196131f4aa7b3c59a69b0e7a84ae29817`|
 |[docs/research_readiness/20261025/evidence/physical_attribution_publication_20261030.json](docs/research_readiness/20261025/evidence/physical_attribution_publication_20261030.json)|`d71eaea9fcc11d7484c1fcb4fad3041559336eb9792b7428f5ef16847e098b2d`|
+|[docs/research_readiness/20261025/evidence/dote_physical_control_training_proposal_20261030.json](docs/research_readiness/20261025/evidence/dote_physical_control_training_proposal_20261030.json)|`be00f3f7da32e622b98e9d1838a17f051316766b1329f661fcff590c062cc8a2`|
+|[docs/research_readiness/20261025/evidence/dote_physical_control_queued_start_20261030.json](docs/research_readiness/20261025/evidence/dote_physical_control_queued_start_20261030.json)|`c44f50130c8b9d0ad863856151edb5525ed58e5a872063f048a8e7ade67143d5`|
+|[docs/research_readiness/20261025/evidence/physical_negative_cached_train_pass_20261030.json](docs/research_readiness/20261025/evidence/physical_negative_cached_train_pass_20261030.json)|`8466b5839d9afb8a2b38bd60a9375723fad9daf9993ab462dd86dc19f766ac08`|
+|[docs/research_readiness/20261025/evidence/metric_backfill_completion_preparation_20261030.json](docs/research_readiness/20261025/evidence/metric_backfill_completion_preparation_20261030.json)|`a430c48f064614262cd00b5b66a59aa1ab6a520a9ec624d8be540cc838ca04c4`|
+|[docs/research_readiness/20261025/evidence/metric_backfill_completion_started_20261030.json](docs/research_readiness/20261025/evidence/metric_backfill_completion_started_20261030.json)|`53de7a1bc8b1f712fb142db805959c99377255ae725ebce6864c48933576a10d`|
+|[docs/research_readiness/20261025/evidence/single_metric_table_preparation_20261030.json](docs/research_readiness/20261025/evidence/single_metric_table_preparation_20261030.json)|`f00c93bb3e0c83dc79637c9ac55dfeb96fbd49881a93d9ab2abe8f3b7ddc4b8e`|
 
 五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查39个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
@@ -165,10 +171,10 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`005b41daa0fa1ea794c567847485fcfe0966d5c8514acc5cbfe1c515506d15c6`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`e4f9e4d8072a5e4ecd218011595447a3f6bd8be02c64f49e515f6d6e3f7a3afa`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`901a02a47672fcb55a3c8badafcae519bdff769859b31a430de1d09967fea8c0`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`1991718fa15fa2213b8e3ec8df325e4dd6c3a1b13832fa16a3c986a0e7690577`|
 |[METRICS.csv](METRICS.csv)|`e820ed9cbb9887ac85ddbc5ceed30b072d26ae892edf8c6e1a6d624717dcf191`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`5c25bb3f1e5abbc5f5615d41d691c4336e0ac0b50af79aa1baf81df245f0d248`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`fced0284c35ca58bed6cdbc6cfc9c9044e87deaf6930880ee6d07ffc3472df83`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。
 
@@ -179,3 +185,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 [最终测试增量草案](docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json)登记12份既有E9/执行身份；新增ZERO范围、主比较及共同指标尚待研究者冻结。真实2025适配器未实现，元数据检查仅使用2001合成记录，原年份保护未放开。没有2025新增访问。
 
 [可编辑LaTeX](docs/research_readiness/20261030/research_decision/main.tex) / [科研决策PDF](docs/research_readiness/20261030/research_decision/YunTAPR_Physical_Attribution_Decision_20261030.pdf)。原20261029冻结PDF/TeX及已批准提案均保留原字节。新增候选未训练，所有现有完成模型状态不变。
+
+## 后续缓存通过与真实启动队列
+
+此前RAM受阻是历史时点；[后续缓存通过](docs/research_readiness/20261025/evidence/physical_negative_cached_train_pass_20261030.json)记录两场景6860有效像元、0优化器更新及128列梯度探针响应。[研究者直接启动指令及队列](docs/research_readiness/20261025/evidence/dote_physical_control_queued_start_20261030.json)与[精确执行包](docs/research_readiness/20261025/evidence/dote_physical_control_training_proposal_20261030.json)绑定新代码9b4046a和单模型限额；先19项指标回填全部通过，再一次启动，当前未训练完成。新增[指标续算启动收据](docs/research_readiness/20261025/evidence/metric_backfill_completion_started_20261030.json)只记录一次启动时点，旧6项完成及旧部分读取账本保留。最终交付按最新要求为一个工作表的一张大表，不覆盖原Excel。

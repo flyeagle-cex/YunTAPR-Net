@@ -1,0 +1,256 @@
+{
+  "status": "PREPARED_SINGLE_SCOPE_PENDING_EXECUTION_NOT_STARTED",
+  "authorized": false,
+  "formal_training_started": false,
+  "execution_code_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+  "created_at": "2026-10-30T13:47:56.596716+08:00",
+  "tasks": [
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": 2029
+    }
+  ],
+  "scientific_choices": {
+    "DOTE": {
+      "pwat_reference_kg_m2": 31.85768219039871,
+      "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "moisture_basis": "windward_W",
+      "velocity_reference_m_s": 1.0
+    },
+    "channels": [
+      "O850",
+      "O700",
+      "W850",
+      "W700",
+      "L850",
+      "L700",
+      "M850",
+      "M700"
+    ],
+    "normalization": "Physical channels divided by explicit1m/s; no refit, clipping or hidden coefficient",
+    "spatial_operator": "Inherited native PS mask then conservative bilinear GFS to frozen SP04; use frozen B6 area-mean gradients",
+    "scales": [
+      "SINGLE_TARGET_SP04_100x100_48_CHANNELS"
+    ],
+    "condition_channels": {
+      "GFS_values_and_masks": 26,
+      "static_and_DOTE_values_and_masks": 28
+    },
+    "projection_width": 16,
+    "modulation_limit": 0.1,
+    "modulation_candidates_not_a_sweep": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "B7": "B6 feature then explicit concat residual",
+    "B8": "Replace additional B7 concat by matched-active-parameter DTFM branch; not B7 plus a module",
+    "initialization": {
+      "B6": "FRESH_SEED2029_NOT_E9_FINETUNING",
+      "auxiliary_seed": 22029,
+      "training_rng": "UNCHANGED_B6",
+      "condition_projections": "SHARED",
+      "output": "ZERO_RESIDUAL"
+    },
+    "condition_mask": "Per-channel missing indicators; use any valid DOTE channel plus any GFS channel inside original region; B6 path remains on every supervised pixel",
+    "precision": "Physical numpyFP64, stored tensorFP32, learned fusionFP32 under disabled AMP, return inheritedBF16; quantile/lossFP64 unchanged",
+    "elevation_bins_m": [
+      1000,
+      2000
+    ],
+    "elevation_metrics": "SUPPLEMENTAL_Brier_Pinball_q32_ONLY; no historical baseline bins",
+    "static_DEM_release": "INHERIT_RESEARCHER_ACCEPTED_NOT_VERIFIED_VENDOR_CHAIN",
+    "negative_control": {
+      "model": "B7_PERP_GRADIENT",
+      "rotation_matrix_east_north": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "boundary": "Only gradient pack inside unchanged PhysicalDote; real GFS13/DEM6 and all masks retained",
+      "interpretation": "Directional-representation exploratory probe,not identifiable physical mechanism",
+      "distribution_and_spatial_confounds_accepted_as_limitations": true,
+      "no_clipping_rescaling_or_refitting": true
+    }
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "protocol": {
+    "seed": 2029,
+    "models": [
+      "B7_PERP_GRADIENT"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 4320,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "BEST_selection": false
+  },
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "static_source_sha256": {
+    "B7": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "source_scope_summary": {
+    "Train": {
+      "file_count": 7918,
+      "bytes_per_pass": 26424262556,
+      "by_kind": {
+        "satellite": {
+          "files": 5754,
+          "bytes": 25882115518
+        },
+        "GFS_main": {
+          "files": 959,
+          "bytes": 272589016
+        },
+        "GFS_thermo": {
+          "files": 959,
+          "bytes": 89508928
+        },
+        "IMERG": {
+          "files": 245,
+          "bytes": 180028178
+        },
+        "static_mask": {
+          "files": 1,
+          "bytes": 20916
+        }
+      },
+      "source_manifest_sha256": "f0c0a9188e771bfbba7c1e8a8ffdbfabd2d4e927bd1428d353b290be236a13dc"
+    },
+    "Development": {
+      "file_count": 7950,
+      "bytes_per_pass": 26639253112,
+      "by_kind": {
+        "satellite": {
+          "files": 5778,
+          "bytes": 26067197976
+        },
+        "GFS_main": {
+          "files": 963,
+          "bytes": 287429347
+        },
+        "GFS_thermo": {
+          "files": 963,
+          "bytes": 89772072
+        },
+        "IMERG": {
+          "files": 245,
+          "bytes": 194832801
+        },
+        "static_mask": {
+          "files": 1,
+          "bytes": 20916
+        }
+      },
+      "source_manifest_sha256": "65e8b3754775ece7bbf60db0ca2b5320638c193fe20a9f21ee49828272514060"
+    }
+  },
+  "baseline_metadata_sha256": {
+    "paired_initial_identity.json": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359",
+    "paired_orders.json": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+  },
+  "baseline_E9_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+  "baseline_execution_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+  "initial_B7_full_state": {
+    "full_state_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+    "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+  },
+  "code_sha256": {
+    "tools/research_readiness/start_dote_physical_control.py": "c722190f1b9f775e7ffe84af1247933400b4beeb895ec1d2a5fde15874bd298b",
+    "tools/research_readiness/start_independent_process.py": "5b92ee38facd1b738f8f88f58b5d199e753537c628e7c2e36b937048f078a96b",
+    "src/yuntapr/experimental/research_readiness/dote_physical_controls.py": "9b1a732a40e6ea9f05d51c9d9f301ef8acce44b3e190c2ca247607734d12391a",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": "4b9403bf3d32bd6920c659ef8b5ead5d4e198b3ca41ee68e9ceb8090fdd0b03e",
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07",
+    "src/yuntapr/experimental/research_readiness/static_training.py": "31cfc8c1f51fd7421da8bfa2f041e8b0bc3de53ba92862139871f34a9287336b",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "2b823ed130c6d5625aa308cf2283e83576a1678c94d638e4ec2e577d61cbe5b7",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": "f0ae14926c98caae6fe226f86303cf3326821623833fe60651cf99f62e2a3404",
+    "src/yuntapr/experimental/core_innovation/stage4/evaluation.py": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce"
+  },
+  "cached_Train_check_sha256": "8466b5839d9afb8a2b38bd60a9375723fad9daf9993ab462dd86dc19f766ac08",
+  "feature_diagnostic_sha256": "55f20b918c7ca6ab342a0101bf5576b0de211cf319c7e0d2d8e0363ed1869830",
+  "previous_candidate_protocol_sha256": "ea8cd17768147d4c570efe7769169cd316c43f07b94a8922aecbd9a9690507b5",
+  "metric_dependency": {
+    "registry_sha256": "30d04e866d554eea2af57696e750206f6b4b053ccfdf65aa9235287c98a4dc34",
+    "required_runs": 19,
+    "required_status": "COMPLETE_19_E9_DEV_METRIC_BACKFILL",
+    "required_gate": "All19 COMPLETE and gate passed; every result hash and E9 identity verified"
+  },
+  "output": {
+    "parent": "RESEARCHER_CONFIRMED_STORAGE_PARENT",
+    "namespace": "YunTAPR_PERP_GRADIENT_s2029_20261030_v1",
+    "overwrites_allowed": false
+  },
+  "resources": {
+    "storage_parent_free_bytes": 95010750464,
+    "cached_Train": "PASS_TWO_SCENES_ZERO_OPTIMIZER",
+    "admission_at_start": "Recheck8GiB RAM/5GiB free CUDA/24GiB disk only; no repeated benchmark"
+  },
+  "limits": [
+    "Single seed exploratory directional probe; no clean causal attribution",
+    "No re-training successful B0-B8 or ZERO controls",
+    "No extra seed,loss or epoch change",
+    "2025 remains frozen",
+    "Previous negative-control scalar/spatial distribution confounds preserved,not fixed by model training"
+  ],
+  "approval_form": "Direct current user instruction must be recorded verbatim; do not claim researcher quoted a SHA not present in reply",
+  "proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67"
+}

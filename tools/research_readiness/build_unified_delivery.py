@@ -57,6 +57,8 @@ PHYSICAL_DECISION = READY + 'evidence/physical_attribution_decision_20261030.jso
 PHYSICAL_PROTOCOL = READY + 'evidence/dote_physical_negative_protocol_20261030.json'
 RELIABILITY_INCREMENT = READY + 'evidence/dote_reliability_increment_20261030.json'
 FINAL_DRAFT_INCREMENT = READY + 'evidence/final_test_preregistration_increment_20261030.json'
+PHYSICAL_TRAINING_PROPOSAL = READY + 'evidence/dote_physical_control_training_proposal_20261030.json'
+PHYSICAL_QUEUED = READY + 'evidence/dote_physical_control_queued_start_20261030.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -340,6 +342,7 @@ def main():
     args = parser.parse_args()
     decision = read(PHYSICAL_DECISION) if (ROOT / PHYSICAL_DECISION).is_file() else None
     reliability_increment = read(RELIABILITY_INCREMENT) if decision else None
+    physical_queued = read(PHYSICAL_QUEUED) if (ROOT / PHYSICAL_QUEUED).is_file() else None
     if args.status_json:
         snapshot = json.loads(args.status_json.read_text(encoding='utf-8'))
     else:
@@ -628,6 +631,13 @@ def main():
                          verified_at=decision['created_at'],status_as_of=decision['created_at'],
                          authorization_status='NO_TRAINING_REQUEST_NOT_APPROVED',
                          notes='Nonzero physical probe;CPU synthetic/Train feature diagnostics pass;full cached forward/backward NOT_VERIFIED_RAM. Scalar distribution/spatial confounds;not causal. No formal launcher or GPU training.')
+        if physical_queued:
+            candidate.update(phase='DIRECTIONAL_PROBE_AUTHORIZED_QUEUED_AFTER_METRIC_COMPLETION',execution_state='QUEUED_WAITING_19_E9_METRIC_GATES',
+                authorization_status='CURRENT_RESEARCHER_DIRECT_START_INSTRUCTION_RECORDED_NOT_YET_EXECUTED',
+                protocol_reference=PHYSICAL_TRAINING_PROPOSAL,training_config_reference=PHYSICAL_TRAINING_PROPOSAL,
+                source_manifest_reference=PHYSICAL_TRAINING_PROPOSAL,evidence_path=PHYSICAL_QUEUED,
+                source_snapshot_commit=physical_queued['execution_code_commit'],verified_at=physical_queued['recorded_at'],status_as_of=physical_queued['recorded_at'],
+                notes='Researcher explicitly chose prepare/start after19 metric runs. Cached Train forward/backward PASS,zero optimizer;4320/477571953840B/142813/6h,zero replay/retry. Queued,NOT training COMPLETE;distribution/spatial confounds retained,no causal claim.')
         matrix.append(candidate);experiments[candidate['experiment_id']]=candidate
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
@@ -1365,6 +1375,11 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         input_checks_text='ZERO三seed经验Brier分解、非零负对照Train特征诊断与受阻的整模缓存检查、非执行最终测试草案；原18轮两控制收口等历史有效证据均继承'
         csv_scope_text+=' 本次仅增加一个未训练候选占位和385行既有统计离线派生数值；全部旧模型数值原样继承，未预造候选性能。'
         latest_science_text+=' 2026-10-30增量：经验REL三seed改善、RES两seed变差；非零控制有实质混杂，不申请新正式GPU。'
+    if physical_queued:
+        publication_base=physical_queued['execution_code_commit']
+        latest_status_text+=' 后续研究者直接指令已选择单seed方向性探针；候选等待19项指标评价全部通过后串行启动，当前NOT_STARTED/QUEUED，不写成训练完成。'
+        latest_science_text+=' 上述暂不训练是早先建议；研究者后续明确选择方向性探索，分布/空间混杂不消除，尚无新控制性能。'
+        current_checks_text='本次继承6份完整指标补算结果，新13项由独立WMI控制器串行继续，旧B4/2031部分25,621,522,638字节账本保留。候选2场景缓存前向/E0/反向已通过、0优化器更新，128列梯度探针响应；新增续算4项与训练入口4项CPU检查通过。旧125项公式测试及原模型检查继承。只在19项指标全过后启动一份新候选；训练尚未开始、旧成功模型不重训、2025冻结。'
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1408,6 +1423,10 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终�
         stage=stage.replace('|2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|',
             '|非零物理负对照|两方案、固定90°候选、6项CPU及Train特征诊断已完成|标量分布/空间混杂；整模缓存检查因RAM不足NOT_VERIFIED；未申请训练|NOT_STARTED / NOT_TRAINING_READY|\n|2025最终测试|继续冻结；12模型身份目录及合成元数据检查完成|全模态人口未核实、适配器未实现、预注册未冻结、揭盲预算未批准|DRAFT / NOT_STARTED|')
         stage+='\n## 2026-10-30物理归因增量\n\nZERO三seed经验Brier分解补齐：真实B7的REL项3/3下降、RES项2/3下降，不能等同总体校准或物理机制证明。非零方向性探针有实质混杂，不建议立即投入正式GPU；本轮新正式训练/推理/优化器更新均0，2025无新增访问。详见[科学决策](docs/research_readiness/20261025/evidence/physical_attribution_decision_20261030.json)。\n'
+    if physical_queued:
+        stage=stage.replace('|非零物理负对照|两方案、固定90°候选、6项CPU及Train特征诊断已完成|标量分布/空间混杂；整模缓存检查因RAM不足NOT_VERIFIED；未申请训练|NOT_STARTED / NOT_TRAINING_READY|',
+            '|非零方向性探针|缓存2场景零更新前/反向PASS；研究者已选择单模型启动，精确代码/预算绑定|待19项指标回填完成；标量分布/空间混杂仍在；没有新E9|NOT_STARTED / AUTHORIZED_QUEUED|')
+        stage+='\n## 后续执行指令：先指标补算，再单候选\n\n研究者回复“是，准备并启动该候选”，按此前披露的同一单模型上限绑定至`'+physical_queued['execution_code_commit']+'`/`'+physical_queued['proposal_sha256']+'`；该直接启动原文不包含SHA，不伪称研究者逐字批准过SHA。13项剩余评价在新目录进行，前段报告中的0新推理/缓存RAM阻塞均为较早时点。候选仅在19个COMPLETE且gate全过后启动，至多4320更新、477571953840源字节/142813次、6小时，零重放重试。按最新要求，最终Excel只有一个工作表内的一张分类大表，模型解释位于表格下方；待全部终态后更新，不交付半成品冒充完整。\n'
     (ROOT / 'STAGE_ACCEPTANCE.md').write_text(stage.rstrip()+'\n', encoding='utf-8')
     analysis = f'''# 科学分析统一入口
 
@@ -1458,6 +1477,8 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
         analysis=analysis.replace('新零控制未另作原生分数Brier分解，不能直接把下降命名为“可靠性改善”。',
             '该2026-10-29完成时点尚无零控制分解；2026-10-30增量已补齐三seed经验REL/RES，见文末。经验REL下降仍不等同总体校准改善。')
         analysis+='\n'+decision['markdown']
+    if physical_queued:
+        analysis+='\n## 研究者后续方向性探针指令（排队，未训练）\n\n早先“不申请GPU”是当时科学建议。研究者现明确要求完成指标补算后启动B7_PERP_GRADIENT/2029，已原文记录于[排队收据]('+PHYSICAL_QUEUED+')；[精确执行包]('+PHYSICAL_TRAINING_PROPOSAL+')绑定新代码和同一已披露单模型预算。缓存前/反向已通过，旧RAM受阻收据保留。该决定不改变负对照混杂判断、不新增因果主张；当前仅QUEUED，不能声称有新科研结果。19项指标补算为冻结E9前向评价，不是训练；A/B/C保持候选未冻结，概率与点估计分类分列、不同人口不混排。\n'
     (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis.replace('地形收益混合、校准退化','地形收益混合、q32覆盖退化'), encoding='utf-8')
     input_names = [BASE, OLD, GROUPS, B2, B34, FULL, epoch_source,
                    READY + 'evidence/b5_b6_corrected_start_launch.json',
@@ -1507,6 +1528,11 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
                         READY+'evidence/physical_negative_cached_train_check_20261030.json']
         publication_receipt=READY+'evidence/physical_attribution_publication_20261030.json'
         if (ROOT/publication_receipt).is_file():input_names.append(publication_receipt)
+    if physical_queued:
+        input_names += [PHYSICAL_TRAINING_PROPOSAL,PHYSICAL_QUEUED,READY+'evidence/physical_negative_cached_train_pass_20261030.json',
+                        READY+'evidence/metric_backfill_completion_preparation_20261030.json',READY+'evidence/metric_backfill_completion_started_20261030.json']
+        table_preparation=READY+'evidence/single_metric_table_preparation_20261030.json'
+        if (ROOT/table_preparation).is_file():input_names.append(table_preparation)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1592,6 +1618,8 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 '''
     if decision:
         evidence+='\n## 2026-10-30增量定位\n\n[候选科学协议]('+PHYSICAL_PROTOCOL+')绑定准备代码`'+decision['preparation_code_commit']+'`及规范化协议SHA，不是可执行训练批准包。[ZERO三seed经验分解]('+RELIABILITY_INCREMENT+')新增3份既有score计数表，真实B7/B8分解直接继承。[2023 Train特征诊断]('+READY+'evidence/physical_negative_train_diagnostics_20261030.json)记录959 GFS主文件272,589,016字节、真实mask/全部分布和地理相关；不读取卫星、降水标签、Dev或2025。[整模缓存检查]('+READY+'evidence/physical_negative_cached_train_check_20261030.json)在RAM门槛停止，NOT_VERIFIED而非PASS，无模型/缓存加载。失败初始缺少psutil发生在原始读取前，原命名空间保留，已改原生RSS，仅完成特征诊断。\n\n[最终测试增量草案]('+FINAL_DRAFT_INCREMENT+')登记12份既有E9/执行身份；新增ZERO范围、主比较及共同指标尚待研究者冻结。真实2025适配器未实现，元数据检查仅使用2001合成记录，原年份保护未放开。没有2025新增访问。\n\n[可编辑LaTeX](docs/research_readiness/20261030/research_decision/main.tex) / [科研决策PDF](docs/research_readiness/20261030/research_decision/YunTAPR_Physical_Attribution_Decision_20261030.pdf)。原20261029冻结PDF/TeX及已批准提案均保留原字节。新增候选未训练，所有现有完成模型状态不变。\n'
+    if physical_queued:
+        evidence+='\n## 后续缓存通过与真实启动队列\n\n此前RAM受阻是历史时点；[后续缓存通过]('+READY+'evidence/physical_negative_cached_train_pass_20261030.json)记录两场景6860有效像元、0优化器更新及128列梯度探针响应。[研究者直接启动指令及队列]('+PHYSICAL_QUEUED+')与[精确执行包]('+PHYSICAL_TRAINING_PROPOSAL+')绑定新代码9b4046a和单模型限额；先19项指标回填全部通过，再一次启动，当前未训练完成。新增[指标续算启动收据]('+READY+'evidence/metric_backfill_completion_started_20261030.json)只记录一次启动时点，旧6项完成及旧部分读取账本保留。最终交付按最新要求为一个工作表的一张大表，不覆盖原Excel。\n'
     (ROOT / 'EVIDENCE_INDEX.md').write_text(evidence, encoding='utf-8')
     # Publication-only checks: no private absolute paths or accidental data blobs.
     for name in ['STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv']:
@@ -1603,7 +1631,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=decision['created_at'] if decision else control_multi_complete['verified_at'] if control_multi_complete else control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=physical_queued['recorded_at'] if physical_queued else decision['created_at'] if decision else control_multi_complete['verified_at'] if control_multi_complete else control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 

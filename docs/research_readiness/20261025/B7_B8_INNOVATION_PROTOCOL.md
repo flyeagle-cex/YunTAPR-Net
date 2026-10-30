@@ -1,5 +1,12 @@
 # B7 DOTE / B8 DTFM 冻结科学协议与三seed证据
 
+## 后续研究者指令：单候选授权排队，尚未训练
+
+研究者当前要求“先指标补算完成，再训练”，并明确回复“是，准备并启动该候选”。该直接指令绑定至执行9b4046a655e2ec91633104eaa64bd507cca81aad/[提案0444d92e](evidence/dote_physical_control_training_proposal_20261030.json)，不伪称研究者原文逐字引用SHA。继承此前披露单模型上限：4320更新、477571953840逻辑源字节/142813次、6小时、24GiB，零重放和额外重试。
+
+[后续缓存检查通过](evidence/physical_negative_cached_train_pass_20261030.json)：6860有效像元、0优化器更新，前向/E0/反向有限、128列梯度探针响应；此前RAM失败原件保留。当前仅[QUEUED](evidence/dote_physical_control_queued_start_20261030.json)，19份既有E9指标评价全部COMPLETE且gate通过后才由已配置的独立WMI链启动。不能把排队或初始检查称为新E9结果。旋转引入的标量分布/空间混杂仍在，只作单seed方向性表征探索，不提升为物理因果证明。原B0–B8/ZERO三seed均不重训；2025冻结。最新表格交付为一个工作表一张大表，模型解释附下方，原Excel不覆盖。
+
+
 ## 2026-10-30物理归因增量：不申请新正式GPU
 
 B0–B8及ZERO_DOTE三seed固定E9完成状态继承。新增[ZERO三seed经验Brier分解](evidence/dote_reliability_increment_20261030.json)：真实B7的REL可靠性项3/3下降，但RES分辨能力项2/3下降；不能由此宣称总体校准或因果机制已验证。06 UTC的AP和q32、20–50强雨反例保留。

@@ -1,0 +1,32 @@
+{
+  "status": "SINGLE_TABLE_CONSOLIDATION_PREPARED_FINAL_EXPORT_NOT_STARTED",
+  "recorded_at": "2026-10-30T14:52:46.825429+08:00",
+  "delivery": {
+    "workbooks": 1,
+    "worksheets": 1,
+    "tables": 1,
+    "metric_categories": "Probability/coverage/reliability,continuous A/B/C,point thresholds and OCC/D probability methods clearly separated",
+    "model_explanations": "BELOW_TABLE",
+    "audience_wording": "ABSENCE_REQUIRED_AT_FINAL_EXPORT"
+  },
+  "checks": {
+    "new_consolidation_CPU_tests": 4,
+    "JS_syntax": "PASS",
+    "old125_formula_tests": "INHERITED_NOT_RERUN",
+    "final_layout": "NOT_VERIFIED_NEW_SINGLE_TABLE",
+    "final_xlsx": "NOT_EXPORTED"
+  },
+  "preparation_correction": "Obsolete six-sheet layout preview failed lookup recalculation before export; revised single table uses direct references and no selector. No erroneous workbook delivered.",
+  "xlsx_authoring_marker": "One successful create/count1/xlsx marker recorded locally; do not repeat; original failed old-bundle path is preserved",
+  "activity": {
+    "new_training_by_preparation": 0,
+    "new_inference_by_assembler": 0,
+    "raw_data_reads_by_assembler": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "code_sha256": {
+    "tools/research_readiness/assemble_complete_metrics.py": "7522df953ca92252de4a64fb8b819cbef0bf66ff850768677193ecf6016d4e58",
+    "tools/research_readiness/build_complete_metric_workbook.mjs": "fb1643c8b62e982412baab1b146f08775443d9ce611cd54094c115687b5f7a91",
+    "tests/research_readiness/test_complete_metric_table.py": "59f9d811eb3cd7b936ead5b39c9ed6cc61a495384bf2da4907d3937c37f579ef"
+  }
+}
