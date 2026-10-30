@@ -78,9 +78,9 @@ class CorrectiveGateTests(unittest.TestCase):
     def grant_fixture(self):
         tasks=['B0_s2026_E0','B1_s2026_E0','B0_s2027_E0','B1_s2027_E0']
         budget=dict(caps={t:dict(source_bytes=10,content_reads=1,seconds=2) for t in tasks},maximum_seconds=8)
-        p=dict(execution_code_commit='SYNTHETIC_TEST_ONLY',tasks=tasks,budget=budget,engine_sha256='e'*64,registry_sha256='f'*64,code_sha256={})
+        p=dict(execution_code_commit='SYNTHETIC_TEST_ONLY',tasks=tasks,budget=budget,engine_sha256='e'*64,registry_sha256='f'*64,code_sha256={},inherited_metrics_sha256={'saved':'a'*64})
         p['proposal_sha256']=m.digest(p)
-        s=dict(correction_proposal='NO_REAL_PROPOSAL',researcher_approval='NO_REAL_APPROVAL_FILE',new_output_root='NO_REAL_OUTPUT',remaining=tasks,caps=budget['caps'],maximum_seconds=8,engine_sha256='e'*64,registry_sha256='f'*64)
+        s=dict(correction_proposal='NO_REAL_PROPOSAL',researcher_approval='NO_REAL_APPROVAL_FILE',new_output_root='NO_REAL_OUTPUT',remaining=tasks,caps=budget['caps'],maximum_seconds=8,engine_sha256='e'*64,registry_sha256='f'*64,inherited={'saved':{'sha256':'a'*64}})
         a=dict(approved_by_researcher=True,decision_id='SYNTHETIC_UNIT_TEST_NOT_RESEARCH_AUTHORIZATION',proposal_sha256=p['proposal_sha256'],execution_code_commit=p['execution_code_commit'],tasks=tasks,budget=budget,output_root=s['new_output_root'])
         return s,p,a
 
@@ -106,6 +106,11 @@ class CorrectiveGateTests(unittest.TestCase):
         for status in [dict(normal,memory=dict(available=1024**3)),dict(normal,gpu=dict(total_mib=8192,used_mib=7000)),dict(normal,disk_free=1024**3)]:
             with patch.object(m,'module',return_value=SimpleNamespace(resources=lambda folder:status)):
                 with self.assertRaises(RuntimeError):m.resource_admission('NOT_OPENED')
+
+    def test_inherited_metric_hashes_cannot_be_rebound_after_approval(self):
+        s,p,a=self.grant_fixture();s['inherited']['saved']['sha256']='b'*64
+        with patch.object(m,'read',side_effect=[p,a]):
+            with self.assertRaises(ValueError):m.correction_grant(s)
 
 
 if __name__=='__main__':unittest.main()

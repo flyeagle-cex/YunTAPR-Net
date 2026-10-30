@@ -73,6 +73,7 @@ def correction_grant(s):
     if approval.get('approved_by_researcher') is not True or not approval.get('decision_id') or any(approval.get(k)!=v for k,v in expected.items()):raise PermissionError('Exact corrective metric-read grant required')
     if p['tasks']!=s['remaining'] or p['budget']['caps']!=s['caps'] or p['budget']['maximum_seconds']!=s['maximum_seconds']:raise ValueError('Correction scope changed')
     if p['engine_sha256']!=s['engine_sha256'] or p['registry_sha256']!=s['registry_sha256']:raise ValueError('Correction source identity changed')
+    if {key:info['sha256'] for key,info in s['inherited'].items()}!=p['inherited_metrics_sha256']:raise ValueError('Inherited metric identities changed')
     for name,expected_sha in p['code_sha256'].items():
         if sha(ROOT/name)!=expected_sha:raise ValueError('Correction execution code changed: '+name)
     return p

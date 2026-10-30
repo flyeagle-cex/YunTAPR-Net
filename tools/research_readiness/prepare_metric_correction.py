@@ -34,7 +34,10 @@ def prepare(previous_path,workspace):
         p=old/'runs'/key/'result.json'
         if p.exists():
             r=read(p)
-            if r['status']=='COMPLETE' and r['gate']['passed'] is True:inherited[key]=dict(result=str(p),sha256=sha(p))
+            if r['status']=='COMPLETE' and r['gate']['passed'] is True:
+                sealed=read(old/(key+'_verified.json'))
+                if sealed['gate_passed'] is not True or sealed['result_sha256']!=sha(p):raise ValueError('Previously sealed metric result changed')
+                inherited[key]=dict(result=str(p),sha256=sealed['result_sha256'])
     if len(inherited)!=15 or set(inherited)&set(TASKS) or set(inherited)|set(TASKS)!=set(expected):raise ValueError('Must inherit exactly15 successes')
     # Only these15 small saved results are checked. No historical weights/data audit.
     for key,info in inherited.items():
@@ -104,10 +107,10 @@ def prepare(previous_path,workspace):
         optimizer_updates=0,repeated_inference_tasks=['B0_s2026_E0'],automatic_retries=0,further_repeat_allowance=0,minimum_output_free_bytes=2*1024**3,minimum_host_available_at_start_bytes=8*1024**3,minimum_gpu_free_MiB=5120,
         runtime_working_set_cap_bytes=6*1024**3,runtime_private_commit_cap_bytes=12*1024**3,runtime_gpu_reserved_cap_bytes=6*1024**3)
     code=['tools/research_readiness/resume_metric_backfill.py','tools/research_readiness/prepare_metric_correction.py','tools/research_readiness/start_independent_process.py','tools/core_stage4/monitor/server.py']
-    proposal=dict(status='PREPARED_NOT_APPROVED_NOT_STARTED',execution_code_commit=commit,tasks=TASKS,budget=budget,engine_sha256=sha(engine),registry_sha256=sha(previous['registry']),inherited_complete=15,
+    proposal=dict(status='PREPARED_NOT_APPROVED_NOT_STARTED',execution_code_commit=commit,tasks=TASKS,budget=budget,engine_sha256=sha(engine),registry_sha256=sha(previous['registry']),inherited_complete=15,inherited_metrics_sha256={key:info['sha256'] for key,info in inherited.items()},
         public_output_id='metric_b01_correction_20261030_v1',ordering='B0/2026 -> B1/2026 -> B0/2027 -> B1/2027; serial; stop on any failed gate',
         evaluation=dict(year=2024,batch=8,checkpoint='FIXED_E9_LAST',population='10455/10501_B0_B1',process_hash_seed=2026,precision='Historical deterministic=True, TF32=False, highest, inference_mode',gate='UNCHANGED_ABS_REL_1E-12_AND_EXACT_COUNTS',scientific_metric_formulas='UNCHANGED_AST_IDENTICAL_TO_TESTED_ARCHIVE'),
-        compatibility=dict(all_executable_definitions_match_tested_archive_at_batch8=True,matched_definition_count=len(normalized),legacy_formula_tests='INHERITED_NOT_RERUN_UNCHANGED_AST',new_cpu_approval_resource_checks=4,new_counter_semantics_check=1,previous_context_checks='INHERITED3_PASS'),
+        compatibility=dict(all_executable_definitions_match_tested_archive_at_batch8=True,matched_definition_count=len(normalized),legacy_formula_tests='INHERITED_NOT_RERUN_UNCHANGED_AST',new_cpu_approval_resource_checks=5,new_counter_semantics_check=1,previous_context_checks='INHERITED3_PASS'),
         content_accounting=dict(weather_only_bytes=sum(volumes[m+'_dev_2024']['total_unique_bytes']*2 for m in ('B0','B1')),metadata_and_mask_bytes=overhead*4,metadata_and_mask_instances=overhead_reads*4,failed_B0_delivered_bytes_preserved=delivered,failed_B0_actual_content_instances=instances,failed_B0_legacy_read_events=read(old/'runs/B0_s2026_E0/result.json')['read_scope_actual']['read_events'],read_events_meaning='Budget.emit log events, NOT file reads'),
         data_identity={key:dict(checkpoint_sha256=expected[key]['checkpoint_sha256'],population=expected[key]['population_detail']) for key in TASKS},
         source_sha256=dict(frozen_2024_manifest=sha(manifest),existing_read_volume_metadata=sha(backfill/'phaseB_inference/outputs/probe_b01_read_volume.json'),failed_B0_journal=sha(journal),archived_public_engine=sha(archived)),
