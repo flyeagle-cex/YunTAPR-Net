@@ -1,0 +1,38 @@
+{
+  "status": "NOT_VERIFIED_RESOURCE_ADMISSION_BLOCKED",
+  "checked_at": "2026-10-30T00:35:14.238514+08:00",
+  "intended": "Single frozen2023 Train2 forward/E0/backward,zero optimizer",
+  "actual_failure": "Existing Stage4 full-backward admission raised ResourceLimit: host_available_bytes before any tensor cache or model was loaded",
+  "post_failure_resource_snapshot": {
+    "scope": "SYNTHETIC_ENGINEERING_ONLY",
+    "host_available_bytes": 5162868736,
+    "workspace_free_bytes": 35426541568,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 6769176528,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8"
+  },
+  "output_parent_free_bytes": 95000305664,
+  "threshold_preserved": true,
+  "no_process_stopped": true,
+  "no_precision_or_batch_fallback": true,
+  "completed_checks": "Six new synthetic/control/count tests passed; one native Windows RSS probe passed",
+  "activity": {
+    "full_real_model_forward": 0,
+    "backward": 0,
+    "Train_tensor_payload_reads": 0,
+    "checkpoint_loads": 0,
+    "optimizer_constructions": 0,
+    "optimizer_updates": 0,
+    "raw_weather_reads": 0,
+    "Dev_inference": 0,
+    "final_2025_access": 0
+  },
+  "code_sha256": "e23d17775923288046dcb76ce3a7c1f407a5bb615c37cf4790403562065f37c3",
+  "recovery_rule": "Only rerun this cache-only engineering check after existing RAM>=8GiB/GPU>=5GiB gates pass; no raw-source replay or formal training authorized"
+}

@@ -1,0 +1,5690 @@
+{
+  "status": "PASS_FULL_2023_TRAIN_NEGATIVE_CONTROL_FEATURE_DIAGNOSTICS_NOT_A_TRAINING_GRANT",
+  "created_at": "2026-10-30T00:24:27.186879+08:00",
+  "design_lock": {
+    "locked_at": "2026-10-30T00:15:34.799997+08:00",
+    "evidence_base": "f3a3b50526f0a991a4680ca3399fa6f04474225a",
+    "selected_candidate": "B7_PERP_GRADIENT",
+    "rotation_matrix_east_north": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "angle_selection": "Fixed90CCW before new feature diagnostics; no angle search or label/Dev selection",
+    "alternative": "Joint8-vector derangement within exact real mask classes,seed20261030",
+    "pilot_seed": 2029,
+    "seed_choice": "Inherited default earliest core-experiment anchor,not metric-selected; prior Dev outcomes already known, exploratory only",
+    "unchanged": "GFS/DEM static branch,real masks,PhysicalDote units/formulas,PWAT reference,loss,scalers,populations",
+    "no_formal_training_authorized": true,
+    "no_2025_access": true
+  },
+  "scenes": 959,
+  "supervision_points_per_scene": 3430,
+  "channel_order": [
+    "O850",
+    "O700",
+    "W850",
+    "W700",
+    "L850",
+    "L700",
+    "M850",
+    "M700"
+  ],
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "definition": {
+    "pwat_reference_kg_m2": 31.85768219039871,
+    "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "moisture_basis": "windward_W",
+    "velocity_reference_m_s": 1.0
+  },
+  "mask_valid_counts": [
+    613436,
+    3065987,
+    613436,
+    3065987,
+    613436,
+    3065987,
+    613436,
+    3065987
+  ],
+  "mask_valid_fraction": [
+    0.18649042217810705,
+    0.9320894274587535,
+    0.18649042217810705,
+    0.9320894274587535,
+    0.18649042217810705,
+    0.9320894274587535,
+    0.18649042217810705,
+    0.9320894274587535
+  ],
+  "all_real_masks_preserved": true,
+  "real_static_pack_unchanged": true,
+  "global_distribution": {
+    "real": {
+      "0": {
+        "n": 613436,
+        "mean": 0.0015918711139635668,
+        "std": 0.09226707540335888,
+        "minimum": -1.5375163555145264,
+        "p05": -0.1374354362487793,
+        "median": 0.00317368027754128,
+        "p95": 0.13432703912258148,
+        "maximum": 1.079314947128296,
+        "nonzero_fraction": 1.0
+      },
+      "1": {
+        "n": 3065987,
+        "mean": -0.0006990308872744512,
+        "std": 0.26651395651946075,
+        "minimum": -3.564147710800171,
+        "p05": -0.4041522741317749,
+        "median": 0.0004903358058072627,
+        "p95": 0.4049828052520752,
+        "maximum": 4.034977912902832,
+        "nonzero_fraction": 1.0
+      },
+      "2": {
+        "n": 613436,
+        "mean": 0.029650078777874973,
+        "std": 0.05581162078278508,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.00317368027754128,
+        "p95": 0.13432703912258148,
+        "maximum": 1.079314947128296,
+        "nonzero_fraction": 0.5306323724072275
+      },
+      "3": {
+        "n": 3065987,
+        "mean": 0.08249956178636689,
+        "std": 0.16727910086421227,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0004903358058072627,
+        "p95": 0.4049828052520752,
+        "maximum": 4.034977912902832,
+        "nonzero_fraction": 0.5020249596622556
+      },
+      "4": {
+        "n": 613436,
+        "mean": 0.02805820766391142,
+        "std": 0.061109901439012376,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.1374354362487793,
+        "maximum": 1.5375163555145264,
+        "nonzero_fraction": 0.4693676275927725
+      },
+      "5": {
+        "n": 3065987,
+        "mean": 0.08319859267364124,
+        "std": 0.1712299522866313,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.4041522741317749,
+        "maximum": 3.564147710800171,
+        "nonzero_fraction": 0.4979750403377444
+      },
+      "6": {
+        "n": 613436,
+        "mean": 0.0304545851747713,
+        "std": 0.054266967718816145,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.003220581915229559,
+        "p95": 0.1386311948299408,
+        "maximum": 1.6867609024047852,
+        "nonzero_fraction": 0.5306323724072275
+      },
+      "7": {
+        "n": 3065987,
+        "mean": 0.06473032890128684,
+        "std": 0.12643094957125378,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0004088549758307636,
+        "p95": 0.31263187527656555,
+        "maximum": 3.275758981704712,
+        "nonzero_fraction": 0.5020249596622556
+      }
+    },
+    "perpendicular": {
+      "0": {
+        "n": 613436,
+        "mean": -0.00249537064435942,
+        "std": 0.0880249123183214,
+        "minimum": -1.0347102880477905,
+        "p05": -0.1407497078180313,
+        "median": -0.0008321754867210984,
+        "p95": 0.1313609778881073,
+        "maximum": 1.2353533506393433,
+        "nonzero_fraction": 1.0
+      },
+      "1": {
+        "n": 3065987,
+        "mean": -0.009561923842384005,
+        "std": 0.2118363448710883,
+        "minimum": -2.7032265663146973,
+        "p05": -0.3393695056438446,
+        "median": -0.006315601523965597,
+        "p95": 0.30997931957244873,
+        "maximum": 3.1163785457611084,
+        "nonzero_fraction": 1.0
+      },
+      "2": {
+        "n": 613436,
+        "mean": 0.027363700674149168,
+        "std": 0.05388360531994155,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.1313609778881073,
+        "maximum": 1.2353533506393433,
+        "nonzero_fraction": 0.4920317685952569
+      },
+      "3": {
+        "n": 3065987,
+        "mean": 0.06346933798097439,
+        "std": 0.13123955815139443,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.30997931957244873,
+        "maximum": 3.1163785457611084,
+        "nonzero_fraction": 0.4720519036773476
+      },
+      "4": {
+        "n": 613436,
+        "mean": 0.029859071318508568,
+        "std": 0.05666421168989695,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0008321754867210984,
+        "p95": 0.1407497078180313,
+        "maximum": 1.0347102880477905,
+        "nonzero_fraction": 0.5079682314047431
+      },
+      "5": {
+        "n": 3065987,
+        "mean": 0.07303126182335842,
+        "std": 0.13557405247643028,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.006315601523965597,
+        "p95": 0.3393695056438446,
+        "maximum": 2.7032265663146973,
+        "nonzero_fraction": 0.5279480963226524
+      },
+      "6": {
+        "n": 613436,
+        "mean": 0.02886648786973325,
+        "std": 0.056324948752967494,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.13960528373718262,
+        "maximum": 2.264200210571289,
+        "nonzero_fraction": 0.4920317685952569
+      },
+      "7": {
+        "n": 3065987,
+        "mean": 0.05128214337501568,
+        "std": 0.1039800719746128,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.2508847117424011,
+        "maximum": 3.213843822479248,
+        "nonzero_fraction": 0.4720519036773476
+      }
+    },
+    "permuted": {
+      "0": {
+        "n": 613436,
+        "mean": 0.0015918711139635668,
+        "std": 0.09226707540335888,
+        "minimum": -1.5375163555145264,
+        "p05": -0.1374354362487793,
+        "median": 0.00317368027754128,
+        "p95": 0.13432703912258148,
+        "maximum": 1.079314947128296,
+        "nonzero_fraction": 1.0
+      },
+      "1": {
+        "n": 3065987,
+        "mean": -0.0006990308872744512,
+        "std": 0.26651395651946075,
+        "minimum": -3.564147710800171,
+        "p05": -0.4041522741317749,
+        "median": 0.0004903358058072627,
+        "p95": 0.4049828052520752,
+        "maximum": 4.034977912902832,
+        "nonzero_fraction": 1.0
+      },
+      "2": {
+        "n": 613436,
+        "mean": 0.029650078777874973,
+        "std": 0.05581162078278508,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.00317368027754128,
+        "p95": 0.13432703912258148,
+        "maximum": 1.079314947128296,
+        "nonzero_fraction": 0.5306323724072275
+      },
+      "3": {
+        "n": 3065987,
+        "mean": 0.08249956178636689,
+        "std": 0.16727910086421227,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0004903358058072627,
+        "p95": 0.4049828052520752,
+        "maximum": 4.034977912902832,
+        "nonzero_fraction": 0.5020249596622556
+      },
+      "4": {
+        "n": 613436,
+        "mean": 0.02805820766391142,
+        "std": 0.061109901439012376,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.1374354362487793,
+        "maximum": 1.5375163555145264,
+        "nonzero_fraction": 0.4693676275927725
+      },
+      "5": {
+        "n": 3065987,
+        "mean": 0.08319859267364124,
+        "std": 0.1712299522866313,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0,
+        "p95": 0.4041522741317749,
+        "maximum": 3.564147710800171,
+        "nonzero_fraction": 0.4979750403377444
+      },
+      "6": {
+        "n": 613436,
+        "mean": 0.0304545851747713,
+        "std": 0.054266967718816145,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.003220581915229559,
+        "p95": 0.1386311948299408,
+        "maximum": 1.6867609024047852,
+        "nonzero_fraction": 0.5306323724072275
+      },
+      "7": {
+        "n": 3065987,
+        "mean": 0.06473032890128684,
+        "std": 0.12643094957125378,
+        "minimum": 0.0,
+        "p05": 0.0,
+        "median": 0.0004088549758307636,
+        "p95": 0.31263187527656555,
+        "maximum": 3.275758981704712,
+        "nonzero_fraction": 0.5020249596622556
+      }
+    }
+  },
+  "spatial_and_geographic_associations": [
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.010756355046080399
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.002486958507257248
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.003959180071054137
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": -0.005252413158467183
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.011989442933615358
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": -0.016205284601725017
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": -0.009814428173628584
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": 0.006890929982722855
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": 0.009461443072765202
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.004004457199016694
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.004315013054708576
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.0012098215179411683
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.0006518002326596705
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": -0.002711376405752333
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.023467754877823245
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.015101628613796372
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": -0.0002919770532725405
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.08611003767047128
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.07924312647999393
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.0734414376162988
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.06243743336998097
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": 0.003055080037442291
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": 0.005749635255587873
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.005628090820884189
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.08892732778462087
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.07510265368945883
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.08203280368726655
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.07011440803374835
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.005192546646127461
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.010037358379545813
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": -0.0062444492584821844
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.08284864606797265
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.10453943774525727
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.0949670355835686
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.09579303155259776
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.007740923561341661
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.009109462398530917
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.0007345780224158762
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.07814556592538661
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.08642862436548031
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.0812128926617455
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.08384637396183417
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.026573258954470817
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.021233928131580045
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": -0.0016967484444941237
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.05367144043221553
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.0535251422378686
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.04845527156861941
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.03563822652658636
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.038043828792175764
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.02728784391959867
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.011104575432667404
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.06163928681813773
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.045871605072894735
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.05658073313508519
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.03604602256234151
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.01249212504494976
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": 0.012631659915914414
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": -0.010153116203941789
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.007170901703560891
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.02098360462425082
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.019840958747945336
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": -0.05125164134133583
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": 0.0003442576312474772
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": 0.022410386593627117
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.011507373994227932
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": -0.025533315435256967
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.11405570518662345
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": -0.018778365473128472
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": -0.03307501717012674
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.047762505921868675
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.028946140629841348
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.03338277234310365
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.15055180573916147
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.16331078886059475
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.07991265573876541
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.09472597405337727
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.03902004168972801
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.035501670726081146
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.005719820649963477
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.1479364233666125
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.20911538072495345
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.0920948329366894
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.07397948054804677
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.026012852953827718
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.04714833391466187
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.04751696375421499
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.17065468814037063
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.17057114414257785
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.17630458090746245
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.07960023937489033
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.038310423077520826
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.0693831731886978
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.012443482217814564
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.12409657924248009
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.24418799322922916
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.11309635028744117
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.11836268626445996
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.08701668022393713
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.03319133167681563
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.05425219189618388
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.21238809874979153
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.12177276073688963
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.10917454182163161
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.10078817188914785
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.11182134606567797
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.09911291286332732
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": 0.016110056455562117
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.15448064620537869
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.18957876241033475
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.09371886804609857
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.07390221656561055
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.043647014785555306
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.00151826486835619
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.0017082536426779999
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.10594639964231099
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": -0.0016928147372287346
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.03868680098933231
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": -0.05165372790034335
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": 0.0020315537175835414
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.013285679514379253
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.0257712189471936
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.29470005041163105
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": -0.19092246090737858
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": -0.00123057470494679
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": -0.0023991661298722934
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.058218816277850194
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.04830259695608091
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.049155029521549994
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.18422588771898318
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.12948496221248912
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.1352999895655036
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.14406291887403327
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.029712078410662705
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.0732682029369242
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.06470483427486544
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.36923529142127604
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.04579461816223866
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.1673849486961553
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.14552918080851018
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": 0.012729457739426103
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.04182236110456424
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.04231403158370504
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.27977984312223664
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.21227581464516368
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.18544257844120102
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.08645018607212886
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.032188569271293314
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.050898922649981526
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.023099796036314787
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.36335979522365164
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.05512519441575473
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.12185370184772022
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.1240106413677002
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "association_elevation",
+      "n": 613436,
+      "pearson": -0.10215414861163213
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "association_latitude",
+      "n": 613436,
+      "pearson": -0.04823962071364603
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "association_longitude",
+      "n": 613436,
+      "pearson": 0.08496918036784211
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "lag1_axis0",
+      "n": 477879,
+      "pearson": 0.1456219972834029
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "lag1_axis1",
+      "n": 503956,
+      "pearson": 0.1770592944813431
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "lag3_axis0",
+      "n": 305407,
+      "pearson": 0.14342162186262442
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "kind": "lag3_axis1",
+      "n": 363778,
+      "pearson": 0.11151978309019396
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "association_elevation",
+      "n": 3065987,
+      "pearson": -0.11380324470913465
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "association_latitude",
+      "n": 3065987,
+      "pearson": -0.14621429637145095
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "association_longitude",
+      "n": 3065987,
+      "pearson": -0.044143458943789335
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "lag1_axis0",
+      "n": 2923959,
+      "pearson": 0.313176460888105
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "lag1_axis1",
+      "n": 2936341,
+      "pearson": 0.07798312399566501
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "lag3_axis0",
+      "n": 2725388,
+      "pearson": 0.1362193555999716
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "kind": "lag3_axis1",
+      "n": 2740555,
+      "pearson": 0.1314813688111764
+    }
+  ],
+  "group_statistics": [
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.0005577823281250701,
+      "std": 0.05818572351941428,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.002985889443484225,
+      "std": 0.11708595279037182,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.0022003857405463166,
+      "std": 0.10977324494690356,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.0006637133400443682,
+      "std": 0.07158224036633451,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.001166149127114413,
+      "std": 0.09115043809182197,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.006970875086057815,
+      "std": 0.07874902642685339,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.002698202063538005,
+      "std": 0.09526645401773465,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.0012454818265363317,
+      "std": 0.09357562954134281,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.002122975824769688,
+      "std": 0.09018520628685855,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.004481932554593304,
+      "std": 0.08018770580961723,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.0022286716474552003,
+      "std": 0.08996896431165025,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0014429002199766409,
+      "std": 0.12495968324620461,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_04",
+      "n": 73927,
+      "mean": -0.0009575919630895082,
+      "std": 0.14025693503438721,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_05",
+      "n": 73883,
+      "mean": -0.0009481354270960109,
+      "std": 0.11621050417730724,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.0023018373675612117,
+      "std": 0.06837777976452175,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.0008834888684265849,
+      "std": 0.0744879245892459,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.0033440476151776637,
+      "std": 0.05491479502227709,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.002576080783880223,
+      "std": 0.05867536735759234,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 0,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.0036785520501352,
+      "std": 0.05318467585955504,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": -0.0018907461546407308,
+      "std": 0.2520736205426318,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": -0.0010416656789010391,
+      "std": 0.24345220727822034,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.00042780174805758816,
+      "std": 0.28687891149382605,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": -0.0002667168710612047,
+      "std": 0.2817587128074017,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": -0.0008208534462859023,
+      "std": 0.26660391984481346,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.0005854558025656186,
+      "std": 0.26704166967375675,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": -0.006010470637919005,
+      "std": 0.2628780336097743,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": -0.004782296708348987,
+      "std": 0.26642929137986116,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.0014153979166897904,
+      "std": 0.2674337694300608,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.0011496944164202632,
+      "std": 0.2639939262065278,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.0015979003922049104,
+      "std": 0.26867384091378455,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_03",
+      "n": 389594,
+      "mean": -0.004104032953729716,
+      "std": 0.39661591018035475,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_04",
+      "n": 376782,
+      "mean": -0.004937624705327116,
+      "std": 0.4136430098192511,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_05",
+      "n": 380446,
+      "mean": -0.0034750294720561196,
+      "std": 0.33212913414296147,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.0013227931175533495,
+      "std": 0.1831233279447581,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.0011949977641527753,
+      "std": 0.19376850214878294,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.001756446391622687,
+      "std": 0.12282488847112244,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0015544841201624963,
+      "std": 0.14360965391806507,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 1,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.001051185656261713,
+      "std": 0.15414803005698086,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.019519800503202324,
+      "std": 0.034793711939187705,
+      "nonzero_fraction": 0.5201378855853801
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03811795930794534,
+      "std": 0.07094017095373271,
+      "nonzero_fraction": 0.5410343255389826
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.03727618118816935,
+      "std": 0.06524024083635949,
+      "nonzero_fraction": 0.5369409654119837
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.02414519174934515,
+      "std": 0.042108773685260587,
+      "nonzero_fraction": 0.5248482387840767
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.029051970327274964,
+      "std": 0.05488715218097569,
+      "nonzero_fraction": 0.5292375436920849
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.029422735097950473,
+      "std": 0.049746042743665495,
+      "nonzero_fraction": 0.5527039413382218
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.03125545475627263,
+      "std": 0.05822394507679076,
+      "nonzero_fraction": 0.5342279619542345
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.029929585424877878,
+      "std": 0.05600936810418164,
+      "nonzero_fraction": 0.5317780030357302
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.029255436439101175,
+      "std": 0.05456387687853482,
+      "nonzero_fraction": 0.5343002260964607
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.024143048488314365,
+      "std": 0.04430959507925833,
+      "nonzero_fraction": 0.5665374677002584
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.02910439712648462,
+      "std": 0.059508639417754784,
+      "nonzero_fraction": 0.5041625416254163
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.04085166902862174,
+      "std": 0.07418279413231875,
+      "nonzero_fraction": 0.5320658787243527
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.04615833624804823,
+      "std": 0.08247587755654923,
+      "nonzero_fraction": 0.5195124920529711
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.0384641931002291,
+      "std": 0.06774631637010972,
+      "nonzero_fraction": 0.5191722047020288
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.024820612181565012,
+      "std": 0.04060144257141809,
+      "nonzero_fraction": 0.5392338738228422
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.02549545609802786,
+      "std": 0.04487681167071921,
+      "nonzero_fraction": 0.5215972146665216
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.020779595552551343,
+      "std": 0.034028060310152965,
+      "nonzero_fraction": 0.5417253711932373
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.020720005698158916,
+      "std": 0.037282582438935286,
+      "nonzero_fraction": 0.5258944442216965
+    },
+    {
+      "method": "permuted",
+      "channel": 2,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.02039070383523166,
+      "std": 0.0332676476051758,
+      "nonzero_fraction": 0.5433478401211002
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.07700209627743325,
+      "std": 0.15745492829739094,
+      "nonzero_fraction": 0.49821139646016094
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.07544099253025727,
+      "std": 0.15312019430170884,
+      "nonzero_fraction": 0.5006037108263759
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.08981060574756639,
+      "std": 0.1805998504828388,
+      "nonzero_fraction": 0.5056702013661076
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.08798879171274669,
+      "std": 0.17624085541071519,
+      "nonzero_fraction": 0.5037018857119483
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.08251461983830141,
+      "std": 0.16731351068061076,
+      "nonzero_fraction": 0.5015842637571318
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.08285222114185595,
+      "std": 0.16929246448171759,
+      "nonzero_fraction": 0.5034939095404666
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08057105794361544,
+      "std": 0.15633676581792166,
+      "nonzero_fraction": 0.4988724913574793
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.08101533090554759,
+      "std": 0.1628263591621649,
+      "nonzero_fraction": 0.49950772364624
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.08352763114837139,
+      "std": 0.17019549687546537,
+      "nonzero_fraction": 0.502359659965886
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.08252827621488865,
+      "std": 0.16788247616589083,
+      "nonzero_fraction": 0.5030646747403446
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.08384379272161152,
+      "std": 0.17065375102938335,
+      "nonzero_fraction": 0.5048049278425566
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.13518046701465974,
+      "std": 0.24093051450748704,
+      "nonzero_fraction": 0.49262052290333014
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.141616918147994,
+      "std": 0.2511817973516266,
+      "nonzero_fraction": 0.4913371657881746
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.11175827200397855,
+      "std": 0.2034108988198002,
+      "nonzero_fraction": 0.4916151043774938
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.06305132158160325,
+      "std": 0.11299531513097498,
+      "nonzero_fraction": 0.5077884034574738
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.06624800992869109,
+      "std": 0.12043472347899035,
+      "nonzero_fraction": 0.503553136838406
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.03992863219936643,
+      "std": 0.0777173945888582,
+      "nonzero_fraction": 0.5146941223510596
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0491599596316453,
+      "std": 0.08946298835003492,
+      "nonzero_fraction": 0.508840759428718
+    },
+    {
+      "method": "permuted",
+      "channel": 3,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.05384826773834048,
+      "std": 0.09442145416610875,
+      "nonzero_fraction": 0.5056069900052069
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.018962018175077245,
+      "std": 0.03787751849236348,
+      "nonzero_fraction": 0.4798621144146199
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.035132069864461116,
+      "std": 0.07744860790801547,
+      "nonzero_fraction": 0.4589656744610174
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.035075795447623036,
+      "std": 0.07196452507268547,
+      "nonzero_fraction": 0.46305903458801634
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.023481478409300784,
+      "std": 0.04708437869491155,
+      "nonzero_fraction": 0.4751517612159233
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.027885821200160546,
+      "std": 0.06062612299723581,
+      "nonzero_fraction": 0.47076245630791513
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.022451860011892658,
+      "std": 0.04904640797602085,
+      "nonzero_fraction": 0.4472960586617782
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.028557252692734635,
+      "std": 0.062454220368247056,
+      "nonzero_fraction": 0.46577203804576556
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.028684103598341552,
+      "std": 0.06246873194377863,
+      "nonzero_fraction": 0.46822199696426975
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.027132460614331493,
+      "std": 0.05973785080758547,
+      "nonzero_fraction": 0.46569977390353934
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.019661115933721062,
+      "std": 0.05930741434489865,
+      "nonzero_fraction": 0.4334625322997416
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.026875725479029416,
+      "std": 0.0546693039936536,
+      "nonzero_fraction": 0.49583745837458376
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0394087688086451,
+      "std": 0.08301811568158675,
+      "nonzero_fraction": 0.46793412127564726
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.047115928211137734,
+      "std": 0.09230466798867883,
+      "nonzero_fraction": 0.4804875079470288
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.039412328527325104,
+      "std": 0.0767032663542795,
+      "nonzero_fraction": 0.4808277952979711
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.0225187748140038,
+      "std": 0.04369421098635967,
+      "nonzero_fraction": 0.46076612617715784
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.024611967229601274,
+      "std": 0.047744486843060596,
+      "nonzero_fraction": 0.4784027853334784
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.017435547937373674,
+      "std": 0.03366182637819595,
+      "nonzero_fraction": 0.4582746288067628
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.018143924914278693,
+      "std": 0.036068314709877466,
+      "nonzero_fraction": 0.4741055557783035
+    },
+    {
+      "method": "permuted",
+      "channel": 4,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.016712151785096458,
+      "std": 0.032254120575596186,
+      "nonzero_fraction": 0.45665215987889984
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.07889284243207403,
+      "std": 0.16309269521111122,
+      "nonzero_fraction": 0.5017886035398391
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.07648265820915831,
+      "std": 0.15583108814463784,
+      "nonzero_fraction": 0.49939628917362416
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.08938280399950876,
+      "std": 0.18337981438597611,
+      "nonzero_fraction": 0.49432979863389237
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.08825550858380787,
+      "std": 0.18109705133551154,
+      "nonzero_fraction": 0.4962981142880517
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.0833354732845873,
+      "std": 0.17126310001311895,
+      "nonzero_fraction": 0.49841573624286817
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.08226676533929034,
+      "std": 0.17035065700730978,
+      "nonzero_fraction": 0.4965060904595335
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08658152858153445,
+      "std": 0.1752476690166083,
+      "nonzero_fraction": 0.5011275086425206
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.0857976276138964,
+      "std": 0.17484363781123766,
+      "nonzero_fraction": 0.5004922763537599
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.08211223323168158,
+      "std": 0.16981470258665662,
+      "nonzero_fraction": 0.4976403400341139
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.08137858179846844,
+      "std": 0.16755953902140805,
+      "nonzero_fraction": 0.4969353252596554
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.08224589232940663,
+      "std": 0.17108861725323898,
+      "nonzero_fraction": 0.49519507215744335
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.13928449996838946,
+      "std": 0.2481926265626929,
+      "nonzero_fraction": 0.5073794770966699
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.14655454285332115,
+      "std": 0.2578740755729131,
+      "nonzero_fraction": 0.5086628342118255
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.11523330147603465,
+      "std": 0.20779128636043415,
+      "nonzero_fraction": 0.5083848956225062
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.06172852846404988,
+      "std": 0.11393893714671544,
+      "nonzero_fraction": 0.49221159654252616
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.0650530121645383,
+      "std": 0.12009348281229436,
+      "nonzero_fraction": 0.4964468631615941
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.03817218580774375,
+      "std": 0.07744438954202446,
+      "nonzero_fraction": 0.4853058776489404
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0476054755114828,
+      "std": 0.08910409589445592,
+      "nonzero_fraction": 0.49115924057128196
+    },
+    {
+      "method": "permuted",
+      "channel": 5,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.052797082082078756,
+      "std": 0.0957086273022838,
+      "nonzero_fraction": 0.4943930099947931
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.020849400058318555,
+      "std": 0.038781071224579564,
+      "nonzero_fraction": 0.5201378855853801
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03785744712039975,
+      "std": 0.06396357986828989,
+      "nonzero_fraction": 0.5410343255389826
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.037725763581162045,
+      "std": 0.06245578138471485,
+      "nonzero_fraction": 0.5369409654119837
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.025825017116265975,
+      "std": 0.046073384279360745,
+      "nonzero_fraction": 0.5248482387840767
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.029873225026852027,
+      "std": 0.053698465236744236,
+      "nonzero_fraction": 0.5292375436920849
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.030995433022973223,
+      "std": 0.054049935534365406,
+      "nonzero_fraction": 0.5527039413382218
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.032010010104201646,
+      "std": 0.05573439690299734,
+      "nonzero_fraction": 0.5342279619542345
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.03084851431369224,
+      "std": 0.05464723856019621,
+      "nonzero_fraction": 0.5317780030357302
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.030042417217308555,
+      "std": 0.05368807127358316,
+      "nonzero_fraction": 0.5343002260964607
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.024011505260837167,
+      "std": 0.04126289701934185,
+      "nonzero_fraction": 0.5665374677002584
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.02903473007740299,
+      "std": 0.05376111804511015,
+      "nonzero_fraction": 0.5041625416254163
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0254808891326126,
+      "std": 0.04807992682055681,
+      "nonzero_fraction": 0.5320658787243527
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.03029166263431968,
+      "std": 0.05435648608024498,
+      "nonzero_fraction": 0.5195124920529711
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.0388676482526678,
+      "std": 0.06797677934236213,
+      "nonzero_fraction": 0.5191722047020288
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.034843508250892136,
+      "std": 0.05749358755867215,
+      "nonzero_fraction": 0.5392338738228422
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.036093439260088615,
+      "std": 0.06326244671397847,
+      "nonzero_fraction": 0.5215972146665216
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.03178453960461309,
+      "std": 0.052542345851466415,
+      "nonzero_fraction": 0.5417253711932373
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.02686703737327371,
+      "std": 0.0489671849474159,
+      "nonzero_fraction": 0.5258944442216965
+    },
+    {
+      "method": "permuted",
+      "channel": 6,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.02209561994889657,
+      "std": 0.03738601629024683,
+      "nonzero_fraction": 0.5433478401211002
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.060352459368937024,
+      "std": 0.12155494331485465,
+      "nonzero_fraction": 0.49821139646016094
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.05968154340992392,
+      "std": 0.11665702618654664,
+      "nonzero_fraction": 0.5006037108263759
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.06980769542076076,
+      "std": 0.13301442206932818,
+      "nonzero_fraction": 0.5056702013661076
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.06926241617112618,
+      "std": 0.13358075859002638,
+      "nonzero_fraction": 0.5037018857119483
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.06554674565768877,
+      "std": 0.12824333180456957,
+      "nonzero_fraction": 0.5015842637571318
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.06043403333765828,
+      "std": 0.11802847115036998,
+      "nonzero_fraction": 0.5034939095404666
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.07853120471435676,
+      "std": 0.14697675376275085,
+      "nonzero_fraction": 0.4988724913574793
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.06747504040770427,
+      "std": 0.13105335873420992,
+      "nonzero_fraction": 0.49950772364624
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.06686960487178732,
+      "std": 0.1315444701786482,
+      "nonzero_fraction": 0.502359659965886
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.060447695027418015,
+      "std": 0.11789345611760262,
+      "nonzero_fraction": 0.5030646747403446
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.06262126684038959,
+      "std": 0.12174807592221194,
+      "nonzero_fraction": 0.5048049278425566
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.06269158598942104,
+      "std": 0.12256711774981877,
+      "nonzero_fraction": 0.49262052290333014
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.07109519084035845,
+      "std": 0.13336880504811777,
+      "nonzero_fraction": 0.4913371657881746
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.0838769182577362,
+      "std": 0.15889460068666655,
+      "nonzero_fraction": 0.4916151043774938
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.07213697244778142,
+      "std": 0.13440065226357603,
+      "nonzero_fraction": 0.5077884034574738
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.079878138463599,
+      "std": 0.14985830193444324,
+      "nonzero_fraction": 0.503553136838406
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.051649005141433633,
+      "std": 0.10631745832563161,
+      "nonzero_fraction": 0.5146941223510596
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.05223684418553031,
+      "std": 0.09983327740709413,
+      "nonzero_fraction": 0.508840759428718
+    },
+    {
+      "method": "permuted",
+      "channel": 7,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.04506407283148135,
+      "std": 0.08308244772175422,
+      "nonzero_fraction": 0.5056069900052069
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": -7.53763219160476e-05,
+      "std": 0.060756391931637524,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": -0.004107585553668429,
+      "std": 0.10275452993741924,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": -0.00495959023792996,
+      "std": 0.10763048015533445,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": -0.0009647166243243146,
+      "std": 0.07311852443321164,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": -0.003222742151961086,
+      "std": 0.0822862925164634,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": -0.050866771357380845,
+      "std": 0.05558987708513938,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": -0.00022756698992840128,
+      "std": 0.10187193416741797,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": -0.0019069226088676366,
+      "std": 0.07973174271932396,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": -0.00607999138777581,
+      "std": 0.10823913796963835,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.019298458448719774,
+      "std": 0.0640762660885384,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.006757586803674257,
+      "std": 0.054545683033505654,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_03",
+      "n": 83001,
+      "mean": -0.004611820393054875,
+      "std": 0.11376763723508464,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_04",
+      "n": 73927,
+      "mean": -0.006124484883348087,
+      "std": 0.12160463500935338,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_05",
+      "n": 73883,
+      "mean": -0.004602878073745633,
+      "std": 0.10600803716472577,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_06",
+      "n": 70615,
+      "mean": -0.0019408093042111096,
+      "std": 0.0748898322529628,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_07",
+      "n": 73528,
+      "mean": -0.0019880116010349822,
+      "std": 0.07687599391296342,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_08",
+      "n": 73816,
+      "mean": -0.0011929770292653246,
+      "std": 0.05832871462909418,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.00046731789907737757,
+      "std": 0.06445751175778555,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 0,
+      "group": "month_10",
+      "n": 89843,
+      "mean": -0.00020931865819423493,
+      "std": 0.06328320121076683,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": -0.008560222727765125,
+      "std": 0.2036941437540158,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": -0.009171679633233787,
+      "std": 0.18907004882747308,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": -0.010499952165920945,
+      "std": 0.22915000554368217,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": -0.010039280172605256,
+      "std": 0.22362210232936308,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": -0.00865206395229574,
+      "std": 0.22302113687265143,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": -0.009318794645614473,
+      "std": 0.1864478753308698,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": -0.019611534901960086,
+      "std": 0.22073353955125558,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": -0.011537736022641867,
+      "std": 0.22421726918774898,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": -0.012697352571628654,
+      "std": 0.23905833109293456,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": -0.012103128827249506,
+      "std": 0.17404496678107223,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.001328985150811697,
+      "std": 0.19583005108198545,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_03",
+      "n": 389594,
+      "mean": -0.020483497998843764,
+      "std": 0.30391693585026636,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_04",
+      "n": 376782,
+      "mean": -0.021459643350897256,
+      "std": 0.3164978235475946,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_05",
+      "n": 380446,
+      "mean": -0.015614053164552052,
+      "std": 0.2586815286520551,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_06",
+      "n": 374146,
+      "mean": -0.007231389242998934,
+      "std": 0.15315365773622502,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_07",
+      "n": 386982,
+      "mean": -0.005110203137820912,
+      "std": 0.16195053042622484,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_08",
+      "n": 390156,
+      "mean": -0.002538239926671126,
+      "std": 0.10823105685606028,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0015231500696805758,
+      "std": 0.13554766058744236,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 1,
+      "group": "month_10",
+      "n": 393705,
+      "mean": -0.005605820445130611,
+      "std": 0.14105908785772137,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.019750438994428385,
+      "std": 0.03806924652098958,
+      "nonzero_fraction": 0.503973081894913
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.032040859587471125,
+      "std": 0.06346107648355045,
+      "nonzero_fraction": 0.479111574285156
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.03436915033415214,
+      "std": 0.06363828571939928,
+      "nonzero_fraction": 0.4841585947907114
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.02367596360825767,
+      "std": 0.04484799219223259,
+      "nonzero_fraction": 0.5003830865644666
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.02521088728695161,
+      "std": 0.05040092098267732,
+      "nonzero_fraction": 0.4838045016019497
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.005124413002926133,
+      "std": 0.018656351778188397,
+      "nonzero_fraction": 0.15857011915673694
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.03328255122664105,
+      "std": 0.061995390075853425,
+      "nonzero_fraction": 0.5162812789341413
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.025130480483475548,
+      "std": 0.04821622524255763,
+      "nonzero_fraction": 0.5041045383641721
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.033243800585336464,
+      "std": 0.06580753973282633,
+      "nonzero_fraction": 0.46194400094296156
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.03552949985469922,
+      "std": 0.04482515627896392,
+      "nonzero_fraction": 0.6227390180878553
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.021519672166660488,
+      "std": 0.04091924106003097,
+      "nonzero_fraction": 0.5103951039510395
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.03575937355848239,
+      "std": 0.06964520953933659,
+      "nonzero_fraction": 0.47686172455753545
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.03815411356493801,
+      "std": 0.07368919890602127,
+      "nonzero_fraction": 0.4731153705682633
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.033841850023505975,
+      "std": 0.06337601997294452,
+      "nonzero_fraction": 0.48212714697562364
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.0247784701589681,
+      "std": 0.04439688305212514,
+      "nonzero_fraction": 0.49976633859661546
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.024782784397607522,
+      "std": 0.04723383623716208,
+      "nonzero_fraction": 0.48985420520073986
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.019367036817153856,
+      "std": 0.03564442600681599,
+      "nonzero_fraction": 0.493090928795925
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.02126008006506356,
+      "std": 0.04057676616417443,
+      "nonzero_fraction": 0.5121820830493298
+    },
+    {
+      "method": "perpendicular",
+      "channel": 2,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.021198739594089744,
+      "std": 0.03813355040522501,
+      "nonzero_fraction": 0.5078080651803702
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.060085264422913884,
+      "std": 0.1265206151094542,
+      "nonzero_fraction": 0.4744943967469084
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.05717708798237232,
+      "std": 0.11615118667471835,
+      "nonzero_fraction": 0.471441517283636
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.06915832115107959,
+      "std": 0.14236064579226448,
+      "nonzero_fraction": 0.4707535944146051
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.06765162409514666,
+      "std": 0.13831621086835147,
+      "nonzero_fraction": 0.47149660160162143
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.06756653467173097,
+      "std": 0.1385490976966459,
+      "nonzero_fraction": 0.47800469662673684
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.055833300549111446,
+      "std": 0.11549130216750694,
+      "nonzero_fraction": 0.46344199886585136
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.0623452045705213,
+      "std": 0.13147930323133736,
+      "nonzero_fraction": 0.4578609697087997
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.06950896042441246,
+      "std": 0.13566648526036001,
+      "nonzero_fraction": 0.4763780100395276
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.06895832009323652,
+      "std": 0.14456191320941775,
+      "nonzero_fraction": 0.4739125330607904
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.05042874283639756,
+      "std": 0.10678812094398946,
+      "nonzero_fraction": 0.454921665566527
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.06255452398434642,
+      "std": 0.13294236376548765,
+      "nonzero_fraction": 0.48420132691621226
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.09621950548306012,
+      "std": 0.18370588244646022,
+      "nonzero_fraction": 0.4538083235368101
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.1005826350894148,
+      "std": 0.1919606727704184,
+      "nonzero_fraction": 0.45171478467655035
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.08123190179980798,
+      "std": 0.15819979619505947,
+      "nonzero_fraction": 0.45680595932142803
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.04967934920075981,
+      "std": 0.09271209276386802,
+      "nonzero_fraction": 0.4734996498693024
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.0534275897785727,
+      "std": 0.0995757533022067,
+      "nonzero_fraction": 0.4778981968153558
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.0336795566677703,
+      "std": 0.06715119216706078,
+      "nonzero_fraction": 0.4896554198833287
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.04661822119518795,
+      "std": 0.08588644431736632,
+      "nonzero_fraction": 0.5024266655263833
+    },
+    {
+      "method": "perpendicular",
+      "channel": 3,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.04689043477668937,
+      "std": 0.08662536984839106,
+      "nonzero_fraction": 0.47086524174191335
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.019825815316344433,
+      "std": 0.03819600133566789,
+      "nonzero_fraction": 0.4960269181050871
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03614844514113955,
+      "std": 0.06492095720230591,
+      "nonzero_fraction": 0.520888425714844
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.0393287405720821,
+      "std": 0.06950610084600073,
+      "nonzero_fraction": 0.5158414052092887
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.024640680232581983,
+      "std": 0.046563854164759194,
+      "nonzero_fraction": 0.4996169134355334
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.0284336294389127,
+      "std": 0.05288768331394507,
+      "nonzero_fraction": 0.5161954983980503
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.05599118436030698,
+      "std": 0.046565341900377054,
+      "nonzero_fraction": 0.8414298808432631
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.03351011821656945,
+      "std": 0.06560379659780356,
+      "nonzero_fraction": 0.4837187210658586
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.027037403092343176,
+      "std": 0.05170513087641713,
+      "nonzero_fraction": 0.4958954616358279
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.039323791973112275,
+      "std": 0.06906905316779799,
+      "nonzero_fraction": 0.5380559990570385
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.016231041405979443,
+      "std": 0.03071012331243409,
+      "nonzero_fraction": 0.3772609819121447
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.01476208536298623,
+      "std": 0.02579722414616151,
+      "nonzero_fraction": 0.4896048960489605
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.04037119395153726,
+      "std": 0.0721479234576144,
+      "nonzero_fraction": 0.5231382754424645
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.04427859844828609,
+      "std": 0.0773224926716832,
+      "nonzero_fraction": 0.5268846294317368
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.03844472809725161,
+      "std": 0.06796398009963446,
+      "nonzero_fraction": 0.5178728530243764
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.02671927946317921,
+      "std": 0.04809654886203168,
+      "nonzero_fraction": 0.5002336614033845
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.026770795998642506,
+      "std": 0.04849714861364076,
+      "nonzero_fraction": 0.5101457947992601
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.02056001384641918,
+      "std": 0.036542314577450344,
+      "nonzero_fraction": 0.506909071204075
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.020792762165986182,
+      "std": 0.04030118227568011,
+      "nonzero_fraction": 0.4878179169506702
+    },
+    {
+      "method": "perpendicular",
+      "channel": 4,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.02140805825228398,
+      "std": 0.04053329723528575,
+      "nonzero_fraction": 0.4921919348196298
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.06864548715067895,
+      "std": 0.1312808960139687,
+      "nonzero_fraction": 0.5255056032530916
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.06634876761560604,
+      "std": 0.12111616965012884,
+      "nonzero_fraction": 0.5285584827163641
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.07965827331700057,
+      "std": 0.14568838894532324,
+      "nonzero_fraction": 0.5292464055853949
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.07769090426775198,
+      "std": 0.14270122199532118,
+      "nonzero_fraction": 0.5285033983983786
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.0762185986240266,
+      "std": 0.14227762243688633,
+      "nonzero_fraction": 0.5219953033732632
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.0651520951947259,
+      "std": 0.11895064654816376,
+      "nonzero_fraction": 0.5365580011341486
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08195673947248137,
+      "std": 0.14566148745615043,
+      "nonzero_fraction": 0.5421390302912003
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.08104669644705421,
+      "std": 0.1435306425380193,
+      "nonzero_fraction": 0.5236219899604724
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.08165567266486513,
+      "std": 0.15807929304013038,
+      "nonzero_fraction": 0.5260874669392096
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.06253187166364704,
+      "std": 0.11216568252664032,
+      "nonzero_fraction": 0.545078334433473
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.0612255388335347,
+      "std": 0.11408710684553333,
+      "nonzero_fraction": 0.5157986730837878
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.11670300348190385,
+      "std": 0.19015636219792656,
+      "nonzero_fraction": 0.5461916764631899
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.12204227844031205,
+      "std": 0.19690430290932534,
+      "nonzero_fraction": 0.5482852153234496
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.09684595496435998,
+      "std": 0.16172506157939337,
+      "nonzero_fraction": 0.543194040678572
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.05691073844375876,
+      "std": 0.0959475577411301,
+      "nonzero_fraction": 0.5265003501306976
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.05853779291639359,
+      "std": 0.10028747322907994,
+      "nonzero_fraction": 0.5221018031846443
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.036217796594441416,
+      "std": 0.06902956173375066,
+      "nonzero_fraction": 0.5103445801166713
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.04509507112550737,
+      "std": 0.0824147011895641,
+      "nonzero_fraction": 0.4975733344736167
+    },
+    {
+      "method": "perpendicular",
+      "channel": 5,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.052496255221819964,
+      "std": 0.08643244242113868,
+      "nonzero_fraction": 0.5291347582580866
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.0212389545060369,
+      "std": 0.04287059909367897,
+      "nonzero_fraction": 0.503973081894913
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03265736910651011,
+      "std": 0.06141970948689884,
+      "nonzero_fraction": 0.479111574285156
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.03622213150292789,
+      "std": 0.0669026305387014,
+      "nonzero_fraction": 0.4841585947907114
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.02574197336468273,
+      "std": 0.05036095610380569,
+      "nonzero_fraction": 0.5003830865644666
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.025366012651733435,
+      "std": 0.04879851021426472,
+      "nonzero_fraction": 0.4838045016019497
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.005570202013592658,
+      "std": 0.021400368510069868,
+      "nonzero_fraction": 0.15857011915673694
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.038406155174460783,
+      "std": 0.07200398668600846,
+      "nonzero_fraction": 0.5162812789341413
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.025916030769035685,
+      "std": 0.0478194634750299,
+      "nonzero_fraction": 0.5041045383641721
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.035982372453449776,
+      "std": 0.07120474277819483,
+      "nonzero_fraction": 0.46194400094296156
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.03960422665006418,
+      "std": 0.054652445621867045,
+      "nonzero_fraction": 0.6227390180878553
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.023888419950264438,
+      "std": 0.049832814934029364,
+      "nonzero_fraction": 0.5103951039510395
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.022373516174123392,
+      "std": 0.04608551972756658,
+      "nonzero_fraction": 0.47686172455753545
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.02574923889097525,
+      "std": 0.0515755302664407,
+      "nonzero_fraction": 0.4731153705682633
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.034677380381039596,
+      "std": 0.06622509358709984,
+      "nonzero_fraction": 0.48212714697562364
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.034784583746127064,
+      "std": 0.06317713478740011,
+      "nonzero_fraction": 0.49976633859661546
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.035286766771129206,
+      "std": 0.06822907334596698,
+      "nonzero_fraction": 0.48985420520073986
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.029544038138199134,
+      "std": 0.05505977861149188,
+      "nonzero_fraction": 0.493090928795925
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.02775168089810544,
+      "std": 0.05426125731234058,
+      "nonzero_fraction": 0.5121820830493298
+    },
+    {
+      "method": "perpendicular",
+      "channel": 6,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.023117218384016494,
+      "std": 0.04293666642903811,
+      "nonzero_fraction": 0.5078080651803702
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.0484134225957912,
+      "std": 0.10182541570193472,
+      "nonzero_fraction": 0.4744943967469084
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.046937304832188075,
+      "std": 0.09517249221367252,
+      "nonzero_fraction": 0.471441517283636
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.05513148738338587,
+      "std": 0.10851502898402376,
+      "nonzero_fraction": 0.4707535944146051
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.05479027554993852,
+      "std": 0.10972179635273638,
+      "nonzero_fraction": 0.47149660160162143
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.05740440281694875,
+      "std": 0.11316420697279693,
+      "nonzero_fraction": 0.47800469662673684
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.036580475557432886,
+      "std": 0.07304705321850904,
+      "nonzero_fraction": 0.46344199886585136
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.06623921594800687,
+      "std": 0.1322006165545275,
+      "nonzero_fraction": 0.4578609697087997
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.0619223093620346,
+      "std": 0.11600061622891972,
+      "nonzero_fraction": 0.4763780100395276
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.06031268414330816,
+      "std": 0.12189095788868401,
+      "nonzero_fraction": 0.4739125330607904
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.032392826148401124,
+      "std": 0.0673183692160795,
+      "nonzero_fraction": 0.454921665566527
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.04515289450188669,
+      "std": 0.09084479802776739,
+      "nonzero_fraction": 0.48420132691621226
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.04543303793080997,
+      "std": 0.09587197773210773,
+      "nonzero_fraction": 0.4538083235368101
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.051265341463498114,
+      "std": 0.10404970844032128,
+      "nonzero_fraction": 0.45171478467655035
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.061988485481774165,
+      "std": 0.12708430644179974,
+      "nonzero_fraction": 0.45680595932142803
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.056321217522337104,
+      "std": 0.10826265623951542,
+      "nonzero_fraction": 0.4734996498693024
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.06370980810871339,
+      "std": 0.12181009075769728,
+      "nonzero_fraction": 0.4778981968153558
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.043317060394396034,
+      "std": 0.09127904622305598,
+      "nonzero_fraction": 0.4896554198833287
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.049130161058034694,
+      "std": 0.09463306633407956,
+      "nonzero_fraction": 0.5024266655263833
+    },
+    {
+      "method": "perpendicular",
+      "channel": 7,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.039674810666599857,
+      "std": 0.07823843172076984,
+      "nonzero_fraction": 0.47086524174191335
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.0005577823281250701,
+      "std": 0.05818572351941428,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.002985889443484225,
+      "std": 0.11708595279037182,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.0022003857405463166,
+      "std": 0.10977324494690356,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.0006637133400443682,
+      "std": 0.07158224036633451,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": -0.00013210380876675214,
+      "std": 0.09036085726470205,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": -0.023054243744808522,
+      "std": 0.09353967962127507,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.0063765378670399015,
+      "std": 0.09700698426783115,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.0022301900481875823,
+      "std": 0.08694833121401323,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": -0.0014182776159291275,
+      "std": 0.10898405931010163,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.009099813281718338,
+      "std": 0.06569587848347394,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.008502575637616493,
+      "std": 0.05105406651082969,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0014429002199766409,
+      "std": 0.12495968324620461,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_04",
+      "n": 73927,
+      "mean": -0.0009575919630895082,
+      "std": 0.14025693503438721,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_05",
+      "n": 73883,
+      "mean": -0.0009481354270960109,
+      "std": 0.11621050417730726,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.0023018373675612117,
+      "std": 0.06837777976452175,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.0008834888684265849,
+      "std": 0.0744879245892459,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.0033440476151776637,
+      "std": 0.05491479502227709,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.002576080783880223,
+      "std": 0.05867536735759234,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 0,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.0036785520501352,
+      "std": 0.05318467585955504,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": -0.0018907461546407308,
+      "std": 0.2520736205426318,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": -0.0010416656789010391,
+      "std": 0.24345220727822034,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.00042780174805758816,
+      "std": 0.28687891149382605,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": -0.0002667168710612047,
+      "std": 0.2817587128074017,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": -0.002432343930761295,
+      "std": 0.279180927324233,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.0024662845964023615,
+      "std": 0.24124355838124426,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.00010557572481750577,
+      "std": 0.2622843635092747,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.004926216366038454,
+      "std": 0.30639592715406505,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": -0.004625518238448129,
+      "std": 0.2740497647752688,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.0005294377591782104,
+      "std": 0.23375524240773699,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": -0.00750098630521484,
+      "std": 0.21375111457966123,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_03",
+      "n": 389594,
+      "mean": -0.004104032953729716,
+      "std": 0.39661591018035475,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_04",
+      "n": 376782,
+      "mean": -0.004937624705327116,
+      "std": 0.4136430098192511,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_05",
+      "n": 380446,
+      "mean": -0.0034750294720561196,
+      "std": 0.3321291341429615,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.0013227931175533495,
+      "std": 0.18312332794475814,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.0011949977641527753,
+      "std": 0.19376850214878294,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.001756446391622687,
+      "std": 0.12282488847112244,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0015544841201624963,
+      "std": 0.1436096539180651,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 1,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.001051185656261713,
+      "std": 0.15414803005698086,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.019519800503202324,
+      "std": 0.034793711939187705,
+      "nonzero_fraction": 0.5201378855853801
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03811795930794534,
+      "std": 0.07094017095373271,
+      "nonzero_fraction": 0.5410343255389826
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.03727618118816935,
+      "std": 0.06524024083635949,
+      "nonzero_fraction": 0.5369409654119837
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.02414519174934515,
+      "std": 0.042108773685260587,
+      "nonzero_fraction": 0.5248482387840767
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.027717650192224275,
+      "std": 0.053769108966815735,
+      "nonzero_fraction": 0.5225360354603727
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.02631726331102272,
+      "std": 0.040174366829258755,
+      "nonzero_fraction": 0.42529789184234645
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.03485393125444319,
+      "std": 0.06072734224660447,
+      "nonzero_fraction": 0.5530344023183387
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.02776914243106274,
+      "std": 0.0541968352575869,
+      "nonzero_fraction": 0.5270983566090158
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.0353722623451996,
+      "std": 0.06235852231182053,
+      "nonzero_fraction": 0.5256260514556969
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.025889306254146843,
+      "std": 0.04735616054685646,
+      "nonzero_fraction": 0.5284237726098191
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.021866256456600338,
+      "std": 0.03448840959675796,
+      "nonzero_fraction": 0.5820133201332013
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.04085166902862174,
+      "std": 0.07418279413231874,
+      "nonzero_fraction": 0.5320658787243527
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.04615833624804823,
+      "std": 0.08247587755654923,
+      "nonzero_fraction": 0.5195124920529711
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.0384641931002291,
+      "std": 0.06774631637010972,
+      "nonzero_fraction": 0.5191722047020288
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.024820612181565012,
+      "std": 0.04060144257141809,
+      "nonzero_fraction": 0.5392338738228422
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.02549545609802786,
+      "std": 0.04487681167071921,
+      "nonzero_fraction": 0.5215972146665216
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.020779595552551343,
+      "std": 0.034028060310152965,
+      "nonzero_fraction": 0.5417253711932373
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.020720005698158916,
+      "std": 0.037282582438935286,
+      "nonzero_fraction": 0.5258944442216965
+    },
+    {
+      "method": "real",
+      "channel": 2,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.02039070383523166,
+      "std": 0.0332676476051758,
+      "nonzero_fraction": 0.5433478401211002
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.07700209627743325,
+      "std": 0.15745492829739094,
+      "nonzero_fraction": 0.49821139646016094
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.07544099253025727,
+      "std": 0.15312019430170884,
+      "nonzero_fraction": 0.5006037108263759
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.08981060574756639,
+      "std": 0.1805998504828388,
+      "nonzero_fraction": 0.5056702013661076
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.08798879171274669,
+      "std": 0.17624085541071519,
+      "nonzero_fraction": 0.5037018857119483
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.0863606006079653,
+      "std": 0.1716571944317314,
+      "nonzero_fraction": 0.5019117135905458
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.07493569953026004,
+      "std": 0.15909520139427094,
+      "nonzero_fraction": 0.5010528476683895
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08330006945710232,
+      "std": 0.16328778576972752,
+      "nonzero_fraction": 0.5080363884793787
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.10095831825182497,
+      "std": 0.1862593064700996,
+      "nonzero_fraction": 0.5215733443266969
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.08188637341146336,
+      "std": 0.1717456439019095,
+      "nonzero_fraction": 0.48848897513276107
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.07491225314560547,
+      "std": 0.15258668727701336,
+      "nonzero_fraction": 0.5032680883165169
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.0597219517672369,
+      "std": 0.13715828393134427,
+      "nonzero_fraction": 0.4821984676984
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.13518046701465974,
+      "std": 0.24093051450748704,
+      "nonzero_fraction": 0.49262052290333014
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.141616918147994,
+      "std": 0.2511817973516266,
+      "nonzero_fraction": 0.4913371657881746
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.11175827200397855,
+      "std": 0.2034108988198002,
+      "nonzero_fraction": 0.4916151043774938
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.06305132158160325,
+      "std": 0.11299531513097494,
+      "nonzero_fraction": 0.5077884034574738
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.06624800992869109,
+      "std": 0.12043472347899035,
+      "nonzero_fraction": 0.503553136838406
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.03992863219936643,
+      "std": 0.0777173945888582,
+      "nonzero_fraction": 0.5146941223510596
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0491599596316453,
+      "std": 0.08946298835003492,
+      "nonzero_fraction": 0.508840759428718
+    },
+    {
+      "method": "real",
+      "channel": 3,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.05384826773834048,
+      "std": 0.09442145416610875,
+      "nonzero_fraction": 0.5056069900052069
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.018962018175077245,
+      "std": 0.03787751849236348,
+      "nonzero_fraction": 0.4798621144146199
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.035132069864461116,
+      "std": 0.07744860790801547,
+      "nonzero_fraction": 0.4589656744610174
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.035075795447623036,
+      "std": 0.07196452507268547,
+      "nonzero_fraction": 0.46305903458801634
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.023481478409300784,
+      "std": 0.04708437869491154,
+      "nonzero_fraction": 0.4751517612159233
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.027849754000991028,
+      "std": 0.06107460984606148,
+      "nonzero_fraction": 0.47746396453962725
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.04937150705583124,
+      "std": 0.06735759801995823,
+      "nonzero_fraction": 0.5747021081576535
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.02847739338740329,
+      "std": 0.06113466019814339,
+      "nonzero_fraction": 0.44696559768166133
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.02553895238287516,
+      "std": 0.05660676405204044,
+      "nonzero_fraction": 0.47290164339098417
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.036790539961128736,
+      "std": 0.0733908074362228,
+      "nonzero_fraction": 0.4743739485443031
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.016789492972428505,
+      "std": 0.0346987875457577,
+      "nonzero_fraction": 0.4715762273901809
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.013363680818983844,
+      "std": 0.028855501499616482,
+      "nonzero_fraction": 0.41798667986679866
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0394087688086451,
+      "std": 0.08301811568158675,
+      "nonzero_fraction": 0.46793412127564726
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.047115928211137734,
+      "std": 0.09230466798867881,
+      "nonzero_fraction": 0.4804875079470288
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.039412328527325104,
+      "std": 0.0767032663542795,
+      "nonzero_fraction": 0.4808277952979711
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.0225187748140038,
+      "std": 0.04369421098635968,
+      "nonzero_fraction": 0.46076612617715784
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.024611967229601274,
+      "std": 0.047744486843060596,
+      "nonzero_fraction": 0.4784027853334784
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.017435547937373674,
+      "std": 0.03366182637819595,
+      "nonzero_fraction": 0.4582746288067628
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.018143924914278693,
+      "std": 0.036068314709877466,
+      "nonzero_fraction": 0.4741055557783035
+    },
+    {
+      "method": "real",
+      "channel": 4,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.016712151785096458,
+      "std": 0.03225412057559619,
+      "nonzero_fraction": 0.45665215987889984
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.07889284243207403,
+      "std": 0.1630926952111112,
+      "nonzero_fraction": 0.5017886035398391
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.07648265820915831,
+      "std": 0.15583108814463784,
+      "nonzero_fraction": 0.49939628917362416
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.08938280399950876,
+      "std": 0.1833798143859761,
+      "nonzero_fraction": 0.49432979863389237
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.08825550858380787,
+      "std": 0.18109705133551152,
+      "nonzero_fraction": 0.4962981142880517
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.08879294453872685,
+      "std": 0.18204223065326625,
+      "nonzero_fraction": 0.4980882864094543
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.07246941493385778,
+      "std": 0.14841185514818767,
+      "nonzero_fraction": 0.4989471523316104
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08319449373228481,
+      "std": 0.16813676619701426,
+      "nonzero_fraction": 0.49196361152062135
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.09603210188578638,
+      "std": 0.19948798440187554,
+      "nonzero_fraction": 0.4784266556733031
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.08651189164991147,
+      "std": 0.17730881886061178,
+      "nonzero_fraction": 0.5115110248672389
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.07438281538642733,
+      "std": 0.14217752152539756,
+      "nonzero_fraction": 0.4967319116834831
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.06722293807245179,
+      "std": 0.1372871953338196,
+      "nonzero_fraction": 0.5178015323016
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.13928449996838946,
+      "std": 0.2481926265626929,
+      "nonzero_fraction": 0.5073794770966699
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.14655454285332115,
+      "std": 0.2578740755729131,
+      "nonzero_fraction": 0.5086628342118255
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.11523330147603465,
+      "std": 0.2077912863604342,
+      "nonzero_fraction": 0.5083848956225062
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.06172852846404988,
+      "std": 0.11393893714671544,
+      "nonzero_fraction": 0.49221159654252616
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.0650530121645383,
+      "std": 0.12009348281229436,
+      "nonzero_fraction": 0.4964468631615941
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.03817218580774375,
+      "std": 0.07744438954202446,
+      "nonzero_fraction": 0.4853058776489404
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.0476054755114828,
+      "std": 0.08910409589445592,
+      "nonzero_fraction": 0.49115924057128196
+    },
+    {
+      "method": "real",
+      "channel": 5,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.052797082082078756,
+      "std": 0.0957086273022838,
+      "nonzero_fraction": 0.4943930099947931
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "UTC_00",
+      "n": 157812,
+      "mean": 0.020849400058318555,
+      "std": 0.038781071224579564,
+      "nonzero_fraction": 0.5201378855853801
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "UTC_06",
+      "n": 153530,
+      "mean": 0.03785744712039975,
+      "std": 0.06396357986828989,
+      "nonzero_fraction": 0.5410343255389826
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "UTC_12",
+      "n": 149387,
+      "mean": 0.037725763581162045,
+      "std": 0.06245578138471485,
+      "nonzero_fraction": 0.5369409654119837
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "UTC_18",
+      "n": 152707,
+      "mean": 0.025825017116265975,
+      "std": 0.046073384279360745,
+      "nonzero_fraction": 0.5248482387840767
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "elevation_1000_to_2000m",
+      "n": 446019,
+      "mean": 0.02720276919235736,
+      "std": 0.04888280633564237,
+      "nonzero_fraction": 0.5225360354603727
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "elevation_ge_2000m",
+      "n": 1091,
+      "mean": 0.02792285681032735,
+      "std": 0.04287750611893798,
+      "nonzero_fraction": 0.42529789184234645
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "elevation_lt_1000m",
+      "n": 166326,
+      "mean": 0.03919124587908634,
+      "std": 0.06585381519403383,
+      "nonzero_fraction": 0.5530344023183387
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "grid_quadrant_0_0",
+      "n": 380798,
+      "mean": 0.02721674947390965,
+      "std": 0.04826707460437648,
+      "nonzero_fraction": 0.5270983566090158
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "grid_quadrant_0_1",
+      "n": 186646,
+      "mean": 0.03877266129041053,
+      "std": 0.06661064619691713,
+      "nonzero_fraction": 0.5256260514556969
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "grid_quadrant_1_0",
+      "n": 1548,
+      "mean": 0.023948521047537908,
+      "std": 0.03919533722771237,
+      "nonzero_fraction": 0.5284237726098191
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "grid_quadrant_1_1",
+      "n": 44444,
+      "mean": 0.023490700551562008,
+      "std": 0.03960457735541734,
+      "nonzero_fraction": 0.5820133201332013
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_03",
+      "n": 83001,
+      "mean": 0.0254808891326126,
+      "std": 0.04807992682055681,
+      "nonzero_fraction": 0.5320658787243527
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_04",
+      "n": 73927,
+      "mean": 0.03029166263431968,
+      "std": 0.05435648608024498,
+      "nonzero_fraction": 0.5195124920529711
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_05",
+      "n": 73883,
+      "mean": 0.0388676482526678,
+      "std": 0.06797677934236213,
+      "nonzero_fraction": 0.5191722047020288
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_06",
+      "n": 70615,
+      "mean": 0.034843508250892136,
+      "std": 0.05749358755867215,
+      "nonzero_fraction": 0.5392338738228422
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_07",
+      "n": 73528,
+      "mean": 0.036093439260088615,
+      "std": 0.06326244671397847,
+      "nonzero_fraction": 0.5215972146665216
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_08",
+      "n": 73816,
+      "mean": 0.03178453960461309,
+      "std": 0.052542345851466415,
+      "nonzero_fraction": 0.5417253711932373
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_09",
+      "n": 74823,
+      "mean": 0.02686703737327371,
+      "std": 0.04896718494741589,
+      "nonzero_fraction": 0.5258944442216965
+    },
+    {
+      "method": "real",
+      "channel": 6,
+      "group": "month_10",
+      "n": 89843,
+      "mean": 0.02209561994889657,
+      "std": 0.03738601629024683,
+      "nonzero_fraction": 0.5433478401211002
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "UTC_00",
+      "n": 770713,
+      "mean": 0.060352459368937024,
+      "std": 0.12155494331485465,
+      "nonzero_fraction": 0.49821139646016094
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "UTC_06",
+      "n": 776862,
+      "mean": 0.05968154340992392,
+      "std": 0.11665702618654664,
+      "nonzero_fraction": 0.5006037108263759
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "UTC_12",
+      "n": 760555,
+      "mean": 0.06980769542076076,
+      "std": 0.13301442206932815,
+      "nonzero_fraction": 0.5056702013661076
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "UTC_18",
+      "n": 757857,
+      "mean": 0.06926241617112618,
+      "std": 0.13358075859002638,
+      "nonzero_fraction": 0.5037018857119483
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "elevation_1000_to_2000m",
+      "n": 1887312,
+      "mean": 0.07172745125067964,
+      "std": 0.13617763080554054,
+      "nonzero_fraction": 0.5019117135905458
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "elevation_ge_2000m",
+      "n": 983998,
+      "mean": 0.04670774942536532,
+      "std": 0.09221448524263634,
+      "nonzero_fraction": 0.5010528476683895
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "elevation_lt_1000m",
+      "n": 194677,
+      "mean": 0.08799157282671462,
+      "std": 0.16225786708733247,
+      "nonzero_fraction": 0.5080363884793787
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "grid_quadrant_0_0",
+      "n": 1030925,
+      "mean": 0.085697967590129,
+      "std": 0.14825315936008607,
+      "nonzero_fraction": 0.5215733443266969
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "grid_quadrant_0_1",
+      "n": 724045,
+      "mean": 0.07250618141664147,
+      "std": 0.14633754537649885,
+      "nonzero_fraction": 0.48848897513276107
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "grid_quadrant_1_0",
+      "n": 742330,
+      "mean": 0.0459765951724975,
+      "std": 0.08723939928307928,
+      "nonzero_fraction": 0.5032680883165169
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "grid_quadrant_1_1",
+      "n": 568687,
+      "mean": 0.041299740737881875,
+      "std": 0.08517079704314749,
+      "nonzero_fraction": 0.4821984676984
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_03",
+      "n": 389594,
+      "mean": 0.06269158598942104,
+      "std": 0.12256711774981877,
+      "nonzero_fraction": 0.49262052290333014
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_04",
+      "n": 376782,
+      "mean": 0.07109519084035845,
+      "std": 0.13336880504811777,
+      "nonzero_fraction": 0.4913371657881746
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_05",
+      "n": 380446,
+      "mean": 0.0838769182577362,
+      "std": 0.15889460068666655,
+      "nonzero_fraction": 0.4916151043774938
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_06",
+      "n": 374146,
+      "mean": 0.07213697244778142,
+      "std": 0.13440065226357603,
+      "nonzero_fraction": 0.5077884034574738
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_07",
+      "n": 386982,
+      "mean": 0.079878138463599,
+      "std": 0.14985830193444324,
+      "nonzero_fraction": 0.503553136838406
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_08",
+      "n": 390156,
+      "mean": 0.051649005141433633,
+      "std": 0.10631745832563161,
+      "nonzero_fraction": 0.5146941223510596
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_09",
+      "n": 374176,
+      "mean": 0.05223684418553031,
+      "std": 0.09983327740709413,
+      "nonzero_fraction": 0.508840759428718
+    },
+    {
+      "method": "real",
+      "channel": 7,
+      "group": "month_10",
+      "n": 393705,
+      "mean": 0.04506407283148135,
+      "std": 0.08308244772175422,
+      "nonzero_fraction": 0.5056069900052069
+    }
+  ],
+  "joint_permutation_moved_fraction": 1.0,
+  "grid": {
+    "sha256": "47216db2c4461e193a1ad5b06f2df3a02a09d2081d6a5d7383739ac2e33cc540",
+    "latitude_step_degrees": 0.10000038146972656,
+    "longitude_step_degrees": 0.09999847412109375,
+    "median_east_spacing_m": 10095.236170300412,
+    "median_north_spacing_m": 11077.33088462755
+  },
+  "source_reads": {
+    "opened_files": 959,
+    "delivered_bytes": 272589016,
+    "reserved_bytes": 272589016,
+    "states": {
+      "READ_COMPLETE": 959
+    }
+  },
+  "static_cache_read": {
+    "bytes": 312828,
+    "instances": 1,
+    "sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd"
+  },
+  "source_manifest_sha256": "41c8cf46b85d301846ecf0fd16d328fe33dba7c9e1873dac085377e5ce20f3f1",
+  "source_ledger_sha256": "20a4a866b322f39da97f331ae93ec9f9c2596f67188889b058cb3826e24c6ca7",
+  "derived_train_pair_sha256": "fca29b0d3c4efe00ab7e4573b6fa383b0c5d3fd19595f338b62938cc57078b91",
+  "elapsed_seconds": 62.96899999998277,
+  "observed_peak_RSS_bytes": 685457408,
+  "activity": {
+    "raw_GFS_main_files": 959,
+    "raw_GFS_main_bytes": 272589016,
+    "raw_satellite_reads": 0,
+    "raw_precipitation_label_reads": 0,
+    "Dev_payload_reads": 0,
+    "final_2025_payload_reads": 0,
+    "checkpoint_reads": 0,
+    "model_inference": 0,
+    "optimizer_updates": 0
+  },
+  "prior_zero_source_setup": {
+    "reason": "Missing optional psutil before source I/O; replaced by native Windows RSS",
+    "raw_GFS_bytes": 0,
+    "raw_GFS_files": 0,
+    "static_cache_bytes": 312828,
+    "static_cache_instances": 1,
+    "optimizer_updates": 0,
+    "old_namespace_preserved": true
+  },
+  "cumulative_static_cache_bytes": 625656,
+  "limitations": [
+    "One Train year and frozen population only; regional/monthly/UTC associations are not independent climate validation",
+    "Gradient rotation preserves point geography/elevation/magnitude but changes scalar DOTE distribution and can be nonintegrable",
+    "Joint mask-class permutation preserves marginal/joint vectors but changes spatial/autocorrelation and local covariate relations",
+    "Neither control identifies physical causality while all original GFS/DEM information is retained"
+  ],
+  "code_sha256": "5042bc84a24e2cdff6bfc217e637b37b1fc5d4e8483a8799a89c59b496548b4c"
+}
