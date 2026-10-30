@@ -21,6 +21,7 @@ const empty=()=>Array(headers.length).fill('n.a.');
 const records=new Map(d.records.map(r=>[r.run_id,r]));
 const diag=new Map(),strata=new Map();
 const fieldToColumn={brier:11,auroc:12,average_precision:13,conditional_pinball:14,q32_coverage:15,q32_signed_bias:16,q32_absolute_error:17,mean_absolute_32_coverage_error:18,empirical_score_reliability:19,empirical_score_resolution:20,uncertainty:21};
+const archivedFields={Brier:11,AUROC:12,AP:13,conditional_pinball:14,q32_coverage:15,POD_r01_Pge05:30,FAR_r01_Pge05:31,CSI_r01_Pge05:32,HSS_r01_Pge05:33};
 for(const x of d.details){
   const [eid,model,seed,arm,group,metric,value]=x;if(!/^\d+$/.test(seed)||typeof value!=='number')continue;
   const rid=runid(canonical(model),seed,arm);if(!records.has(rid))continue;
@@ -37,7 +38,19 @@ for(const x of d.details){
     const key=`${rid}|RAIN_${rain[1]}`;if(!strata.has(key))strata.set(key,{rid,group:`RAIN_${rain[1]}`,values:{}});strata.get(key).values[rain[2]]=value;
   }
 }
+// Supplement existing group rows with saved occurrence counts/rates. No inference.
+for(const a of d.archive_groups||[]){
+  if(a.group==='all')continue;
+  const key=`${a.run_id}|${a.group}`;
+  if(!strata.has(key))strata.set(key,{rid:a.run_id,group:a.group,values:{}});
+  const target=strata.get(key);target.archive=a;
+  for(const [old,k]of Object.entries({Brier:'brier',AUROC:'auroc',AP:'average_precision',conditional_pinball:'conditional_pinball',q32_coverage:'q32_coverage'})){
+    const val=a.values[old];if(typeof target.values[k]==='number'&&Math.abs(target.values[k]-val)>1e-12)throw Error('Saved group identity/value drift');target.values[k]=val;
+  }
+  target.values.n_valid=a.n_valid;target.values.n_rain=a.n_rain;
+}
 const rows=[],rawIndices=new Map();
+function savedRates(x,rates){for(let i=0;i<4;i++)if(typeof rates?.[i]==='number')x[30+i]=rates[i];}
 function base(r,method,threshold,type='RAW'){
   const x=empty();Object.assign(x,{0:type,1:r.model,2:r.seed,3:r.arm,4:r.population,5:method,6:threshold??'n.a.',7:r.scenes,8:r.n_valid,9:r.n_valid,35:1,36:r.status,37:r.checkpoint,38:r.training_commit,39:r.source_id});return x;
 }
@@ -50,26 +63,30 @@ for(const r of d.records){
   [r.brier,r.auroc,r.ap,r.pinball,r.coverage,r.q32_bias,r.q32_error].forEach((v,i)=>x[11+i]=v);
   for(const [k,v] of Object.entries(diag.get(r.run_id)||{}))if(k in fieldToColumn&&fieldToColumn[k]>=18)x[fieldToColumn[k]]=v;
   const c=classification.get(`${r.run_id}|OCC_P|0.1`);
-  if(c){x[9]=c[7];x[10]=c[8]+c[10];for(let i=0;i<4;i++)x[26+i]=c[8+i];x[34]=0;}
+  if(c){x[9]=c[7];x[10]=c[8]+c[10];for(let i=0;i<4;i++)x[26+i]=c[8+i];x[34]=0;savedRates(x,c.slice(16,20));}
   x[41]='概率指标与发生分类；q32名义0.984375';append(r,x,'RAW','OCC_P',0.1);
   for(const method of ['A','B','C']){
     const c=d.continuous.find(a=>a[0]===`${r.run_id}|${method}`);if(!c||typeof c[7]!=='number')continue;
     const x=base(r,`${method}：连续误差`,null);for(let i=0;i<4;i++)x[22+i]=c[7+i]??'n.a.';x[36]=c[12];x[39]=c[13];x[41]='全部监督像元；候选NOT_FROZEN';append(r,x,'RAW',`CONT_${method}`,null);
   }
   for(const c of d.classifications.filter(a=>a[0]===r.run_id&&a[5]!=='OCC_P')){
-    const x=base(r,c[5],c[6]);x[9]=c[7];x[10]=c[8]+c[10];for(let i=0;i<4;i++)x[26+i]=c[8+i];x[34]=c[13];x[36]=c[14];x[39]=c[15];x[41]=c[5].startsWith('D_')?'仅当前模型支持子集；不作公平配对/跨seed汇总':'点估计Pred>r，Truth>r；候选NOT_FROZEN';append(r,x,'RAW',c[5],c[6]);
+    const x=base(r,c[5],c[6]);x[9]=c[7];x[10]=c[8]+c[10];for(let i=0;i<4;i++)x[26+i]=c[8+i];savedRates(x,c.slice(16,20));x[34]=c[13];x[36]=c[14];x[39]=c[15];x[41]=c[5].startsWith('D_')?'仅当前模型支持子集；不作公平配对/跨seed汇总':'点估计Pred>r，Truth>r；候选NOT_FROZEN';append(r,x,'RAW',c[5],c[6]);
   }
   if(!d.continuous.some(c=>c[1]===r.run_id&&typeof c[7]==='number')){
     const x=base(r,'A/B/C未在原19项回填范围',null,'GAP');x[35]=0;x[36]='NOT_COMPUTED_NO_EXTRA_INFERENCE';x[41]='概率结果已完成；连续/五阈值点估计缺口不填零';rows.push(x);
   }
 }
 const rainLabels=['(0.1,1]','(1,5]','(5,10]','(10,20]','(20,30]','(30,50]','(50,∞)'];
-for(const {rid,group,values:v} of strata.values()){
+for(const {rid,group,values:v,archive} of strata.values()){
   if(!Object.keys(v).some(k=>k in fieldToColumn))continue;const r=records.get(rid),rain=group.startsWith('RAIN_'),x=base(r,group,rain?rainLabels[Number(group.slice(5))]:0.1,'STRATIFIED');
   for(const [k,val]of Object.entries(v))if(k in fieldToColumn)x[fieldToColumn[k]]=val;
   x[7]=v.scenes??r.scenes;x[9]=v.n_valid??v.n_rain??'n.a.';x[10]=v.n_rain??'n.a.';x[39]='UNIFIED_METRICS_SAVED';
+  if(archive){for(let i=0;i<4;i++)x[26+i]=archive.counts[['TP','FP','FN','TN'][i]];savedRates(x,archive.rates);x[39]=archive.source_id;}
   if(rain){x[16]='n.a.';x[17]='n.a.';x[41]='按真实雨强条件化的覆盖仅描述，不要求各层达到名义覆盖';}
   else x[41]='既有固定分组；非独立天气事件';rows.push(x);
+}
+for(const a of d.historical_proxies||[]){
+  const x=empty();Object.assign(x,{0:'HISTORICAL_NOT_MAIN',1:a.model,2:a.seed,4:a.population,5:'旧phase-A诊断代理',22:a.mae,23:a.rmse,24:a.bias,25:a.cc??'n.a.',35:0,36:a.status,37:'NOT_MAIN_E9',38:'NOT_VERIFIED',39:a.source_id,41:`${a.generation}；仅继承旧值，不进入主E9配对或seed汇总`});rows.push(x);
 }
 const b9=empty();b9[0]='NOT_STARTED';b9[1]='B9';b9[35]=0;b9[36]='ERA5教师—学生蒸馏可选，未正式训练';rows.push(b9);
 const performance=[...Array.from({length:15},(_,i)=>i+11),30,31,32,33];
@@ -79,10 +96,19 @@ for(let i=0;i<rawCount;i++){
   const key=[x[1],x[3],x[4],x[5],x[6]].join('|');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);
 }
 const formulaRows=[];
+function archivedPair(x,mode,seedCount){
+  if(x[5]!=='OCC_P：P≥0.5'||x[6]!==0.1)return;
+  const key=x[1].replace('−','-')+'|'+(mode?`seed-${mode==='MEAN'?'mean':'sample-sd'}`:`${x[3]}|s${x[2]}`);
+  const a=(d.archive_pairs||[]).find(v=>v.comparison===key&&v.population===x[4]);
+  if(!a||mode&&(x[3]!=='E0'||seedCount!==3))return;
+  for(const [k,c]of Object.entries(archivedFields)){const value=a[k];if(value!==''&&value!=null)x[c]=Number(value);}
+  x[39]='TIER0_ARCHIVED_PAIRS';x[41]+='；已有配对值直接复用';
+}
 function statistics(indices,type){
   if(indices.length<2)return;for(const mode of ['MEAN','SAMPLE_SD']){
     const x=[...rows[indices[0]]];x[0]=type+mode;x[2]=mode;x[35]=indices.length;x[37]='n.a.';x[39]='SAVED_MATCHED_SEED_ROWS';x[41]='同协议训练seed描述性统计；非独立年份或显著性';
     for(let c=11;c<=34;c++)x[c]='n.a.';
+    if(type==='PAIR_')archivedPair(x,mode,indices.length);
     const index=rows.length;rows.push(x);formulaRows.push({index,indices,mode});
   }
 }
@@ -96,6 +122,7 @@ for(const [newer,older]of pairs)for(const [key,ni]of rawIndices){
   const b=rows[oi];if(a[9]!==b[9])throw Error('Paired evaluation denominators differ');
   const x=[...a];x[0]='PAIR_DELTA';x[1]=`${newer}−${older}`;x[37]='n.a.';x[40]=b[39];x[41]='实验/新增−参考；保留所有正负差值';
   for(let c=11;c<=34;c++)x[c]='n.a.';
+  archivedPair(x,null,1);
   const index=rows.length;rows.push(x);pairMeta.push({index,ni,oi});
   const g=[x[1],x[3],x[4],x[5],x[6]].join('|');if(!pairGroups.has(g))pairGroups.set(g,[]);pairGroups.get(g).push(index);
 }
@@ -114,13 +141,15 @@ sheet.getRange(`A5:B${end}`).format.columnWidth=30;sheet.getRange(`F5:F${end}`).
 const formulas=rows.map(()=>Array(23).fill(''));
 for(let i=0;i<rawCount;i++){
   const x=rows[i],r=i+start;if(x[0]!=='RAW'||typeof x[26]!=='number')continue;
+  // Previously saved rates remain source values; only missing rates are built.
+  if(x.slice(30,34).every(v=>typeof v==='number'))continue;
   formulas[i][19]=`=IF(SUM(AA${r},AC${r})=0,"n.a.",AA${r}/SUM(AA${r},AC${r}))`;
   formulas[i][20]=`=IF(SUM(AA${r}:AB${r})=0,"n.a.",AB${r}/SUM(AA${r}:AB${r}))`;
   formulas[i][21]=`=IF(SUM(AA${r}:AC${r})=0,"n.a.",AA${r}/SUM(AA${r}:AC${r}))`;
   formulas[i][22]=`=IF((AA${r}+AC${r})*(AC${r}+AD${r})+(AA${r}+AB${r})*(AB${r}+AD${r})=0,"n.a.",2*(AA${r}*AD${r}-AB${r}*AC${r})/((AA${r}+AC${r})*(AC${r}+AD${r})+(AA${r}+AB${r})*(AB${r}+AD${r})))`;
 }
-for(const {index,ni,oi}of pairMeta)for(const c of performance)formulas[index][c-11]=`=IF(AND(ISNUMBER(${col(c)}${ni+start}),ISNUMBER(${col(c)}${oi+start})),${col(c)}${ni+start}-${col(c)}${oi+start},"n.a.")`;
-for(const {index,indices,mode}of formulaRows)for(const c of performance){const refs=indices.map(i=>`${col(c)}${i+start}`).join(',');formulas[index][c-11]=`=IF(COUNT(${refs})<${mode==='MEAN'?1:2},"n.a.",${mode==='MEAN'?'AVERAGE':'STDEV'}(${refs}))`;}
+for(const {index,ni,oi}of pairMeta)for(const c of performance)if(typeof rows[index][c]!=='number')formulas[index][c-11]=`=IF(AND(ISNUMBER(${col(c)}${ni+start}),ISNUMBER(${col(c)}${oi+start})),${col(c)}${ni+start}-${col(c)}${oi+start},"n.a.")`;
+for(const {index,indices,mode}of formulaRows)for(const c of performance){if(typeof rows[index][c]==='number')continue;const refs=indices.map(i=>`${col(c)}${i+start}`).join(',');formulas[index][c-11]=`=IF(COUNT(${refs})<${mode==='MEAN'?1:2},"n.a.",${mode==='MEAN'?'AVERAGE':'STDEV'}(${refs}))`;}
 // Only rectangular formula blocks with real formulas are written; blank entries
 // must not erase archived numeric probability/continuous source cells.
 for(let c=0;c<23;c++){
@@ -146,6 +175,7 @@ const definitions=[
  'TP/FP/FN/TN保留RAW逐seed计数；原始分类行的四计数之和等于当前评价分母。均值/SD不把seed计数合并成新人口。',
  '不同训练人口不得直接归因排名；同一2024 Dev被重复使用。>50mm/h的6个像元时次不是6场独立暴雨；没有统计显著性或独立年份结论。',
  'ZERO控制与新方向性探针未纳入原19-run点估计回填；其缺失明确保留，不新增未批准推理，也不以旧phase-A代理替代主表E9。',
+ '既有Tier0总体、分组、分类及配对指标直接复用；HISTORICAL_NOT_MAIN是不同旧BEST权重的代理记录，不进入当前E9比较。新增推理只补缺失点估计；同次前向中的冻结概率gate不是额外推理轮次。',
  'DOTE是既有GFS与DEM的确定性物理启发代理量，不是新增观测或实测垂直速度；训练结果不能单独证明迎风抬升因果。',
  `数据状态：${d.status}；19项主回填完成${d.metric_runs_complete}/19；新方向性探针封口=${d.candidate_closed}。2025最终测试继续冻结。`
 ];

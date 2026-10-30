@@ -21,6 +21,26 @@ def csvrows(p):
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def num(x):return None if x in ('',None,'None','null') else float(x)
 def rid(model,seed,arm):return f'{model}_s{int(seed)}'+('_'+arm if model in ('B0','B1') else '')
+RATE_FIELDS=('POD_r01_Pge05','FAR_r01_Pge05','CSI_r01_Pge05','HSS_r01_Pge05')
+
+
+def archived_group(x,known):
+    key=rid(x['model'],x['seed'],x['arm'])
+    if key not in known:raise ValueError('Archived group has no matching final-E9 record')
+    c={k:int(x[k]) for k in ('TP','FP','FN','TN')};c['N']=int(x['N_valid'])
+    if sum(c[k] for k in ('TP','FP','FN','TN'))!=c['N']:raise ValueError('Archived group denominator changed')
+    if x['group']=='all' and c['N']!=known[key]['n_valid']:raise ValueError('Archived all population changed')
+    return dict(run_id=key,group=x['group'],n_valid=c['N'],n_rain=int(x['N_rain']),
+        values={k:num(x[k]) for k in ('Brier','AUROC','AP','conditional_pinball','q32_coverage')},
+        counts=c,rates=[num(x[k]) for k in RATE_FIELDS],source_id='TIER0_ARCHIVED_GROUPS')
+
+
+def historical_proxy(x):
+    # These are old BEST weights, not the current campaign's fixed E9 LAST.
+    return dict(model=x['model'],seed=int(x['seed']),generation=x['artifact_generation'],population=x['population'],
+        mae=num(x['MAE_mm_h']),rmse=num(x['RMSE_mm_h']),bias=num(x['Bias_mm_h']),
+        cc=None if x['Pearson_CC']=='NOT_AVAILABLE' else num(x['Pearson_CC']),
+        status='HISTORICAL_DIFFERENT_WEIGHT_NOT_MAIN_E9',source_id='TIER0_HISTORICAL_PROXY',eligible_for_main_comparison=False)
 def counts(summary):
     bins=summary.get('reliability') or summary.get('reliability_bins') or summary.get('sufficient_statistics',{}).get('reliability_bins')
     if bins is None:return None
@@ -50,8 +70,16 @@ def main():
         d=normalize(x);known[d['run_id']]=d
         prov=provenance[(d['model'],d['seed'],d['arm'])]
         sources.append([d['source_id'],prov['artifact_sha256'],int(prov['artifact_bytes']),d['checkpoint'],d['training_commit'],'Inherited Tier0 provenance,not rehashed old observations/weights'])
-        classify.append([d['run_id'],d['model'],d['seed'],d['arm'],d['population'],'OCC_P',.1,d['n_valid'],*[int(float(x[k])) for k in ('TP','FP','FN','TN')],d['n_valid'],0,'FULL_POPULATION_EXPLORATORY',d['source_id']])
+        classify.append([d['run_id'],d['model'],d['seed'],d['arm'],d['population'],'OCC_P',.1,d['n_valid'],*[int(float(x[k])) for k in ('TP','FP','FN','TN')],d['n_valid'],0,'FULL_POPULATION_EXPLORATORY',d['source_id'],*[num(x[k]) for k in RATE_FIELDS]])
     addsource('TIER0_ARCHIVED_ROWS',backfill/'outputs/tier0_runs_all.csv',note='Original28 rows retained; paths not exported')
+    archive_groups=[archived_group(x,known) for x in csvrows(backfill/'outputs/tier0_groups.csv')]
+    archive_pairs=csvrows(backfill/'outputs/tier0_pairwise_deltas.csv')
+    if any(x['direction']!='new-minus-old' for x in archive_pairs):raise ValueError('Archived pair direction changed')
+    archive_proxies=[historical_proxy(x) for x in csvrows(backfill/'outputs/tier0_proxy_continuous.csv')]
+    validation=read(backfill/'outputs/tier0_validation.json')
+    if validation.get('all_checks_pass') is not True:raise ValueError('Prior Tier0 validation not passed')
+    for sid,filename in [('TIER0_ARCHIVED_GROUPS','tier0_groups.csv'),('TIER0_ARCHIVED_PAIRS','tier0_pairwise_deltas.csv'),('TIER0_HISTORICAL_PROXY','tier0_proxy_continuous.csv'),('TIER0_ARCHIVED_VALIDATION','tier0_validation.json'),('TIER0_ARCHIVED_PROVENANCE','tier0_provenance.csv')]:
+        addsource(sid,backfill/'outputs'/filename,note='Reuse saved statistics/identity only; no new inference or weight access')
     addsource('UNIFIED_METRICS_SAVED',ROOT/'METRICS.csv',note='Existing full endpoints and diagnostics; no model/raw-source reads')
     control=read(E/'dote_control_three_seed_completion_20261029.json')
     for seed in ('2030','2031'):
@@ -92,10 +120,10 @@ def main():
                     if value is not None and not math.isclose(value,c[name],abs_tol=1e-12):raise ValueError('Formula mismatch')
                 if method=='OCC_P':
                     old=next(z for z in classify if z[0]==key and z[5]=='OCC_P');assert [c[k] for k in ('TP','FP','FN','TN')]==old[8:12];continue
-                classify.append([key,d['model'],d['seed'],d['arm'],d['population'],method,float(threshold),c['N'],*[c[k] for k in ('TP','FP','FN','TN')],d['n_valid'],0,'FULL_POPULATION_NOT_FROZEN',sid])
+                classify.append([key,d['model'],d['seed'],d['arm'],d['population'],method,float(threshold),c['N'],*[c[k] for k in ('TP','FP','FN','TN')],d['n_valid'],0,'FULL_POPULATION_NOT_FROZEN',sid,*[c[k] for k in ('POD','FAR','CSI','HSS')]])
         for threshold,block in n['candidate_D'].items():
             c=block['supported_contingency'];support=block['support'];assert c['N']==support['N_supported'];ratios(c)
-            classify.append([key,d['model'],d['seed'],d['arm'],d['population'],'D_PROB_SUPPORTED_ONLY',float(threshold),c['N'],*[c[k] for k in ('TP','FP','FN','TN')],d['n_valid'],support['N_not_established'],'MODEL_SPECIFIC_SUPPORT_NOT_FAIR_PAIRED_COMPARISON' if support['N_not_established'] else 'FULL_POPULATION_NOT_FROZEN',sid])
+            classify.append([key,d['model'],d['seed'],d['arm'],d['population'],'D_PROB_SUPPORTED_ONLY',float(threshold),c['N'],*[c[k] for k in ('TP','FP','FN','TN')],d['n_valid'],support['N_not_established'],'MODEL_SPECIFIC_SUPPORT_NOT_FAIR_PAIRED_COMPARISON' if support['N_not_established'] else 'FULL_POPULATION_NOT_FROZEN',sid,*[c[k] for k in ('POD','FAR','CSI','HSS')]])
     if infer_count!=19 and not a.allow_in_progress:raise RuntimeError('All19 metric runs must finish before final export')
     records=sorted(known.values(),key=lambda d:((0 if d['model'] in ('B0','B1') else 1),d['model'],d['seed'],d['arm']))
     completekeys={r[0] for r in continuous}
@@ -111,8 +139,9 @@ def main():
     for d in records:
         if d['coverage'] is None or not 0<=d['coverage']<=1:raise ValueError('Invalid q32')
     data=dict(status='COMPLETE_WITH_EXPLICIT_UNCOMPUTED_SUPPLEMENTAL_METHODS' if infer_count==19 and perp.exists() else 'IN_PROGRESS_NOT_FINAL',metric_runs_complete=infer_count,required_metric_runs=19,candidate_closed=perp.exists(),records=records,continuous=continuous,classifications=classify,details=details,sources=sources,
-        invariants=dict(old_Tier0_records=28,new_ZERO_records=2,candidate_records=int(perp.exists()),optimizer_updates_by_assembler=0,new_inference_by_assembler=0,raw_reads_by_assembler=0,final_2025='FROZEN_NO_ACCESS'),
-        notes=['A/B/C are displayable candidates, none scientifically frozen; default A display is not model selection.',
+        archive_groups=archive_groups,archive_pairs=archive_pairs,historical_proxies=archive_proxies,
+        invariants=dict(old_Tier0_records=28,archived_groups=len(archive_groups),archived_pairs=len(archive_pairs),historical_not_main_proxies=len(archive_proxies),prior_Tier0_validation='INHERITED_PASS_NOT_RERUN',new_ZERO_records=2,candidate_records=int(perp.exists()),optimizer_updates_by_assembler=0,new_inference_by_assembler=0,raw_reads_by_assembler=0,final_2025='FROZEN_NO_ACCESS'),
+        notes=['A/B/C are displayed separately, none scientifically frozen; no default selection.',
                'OCC_P columns are probability classification P>=0.5, not point Pred>r; D has model-specific partial support and must not enter fair paired ranking.',
                'ZERO controls and new physical probe lack A/B/C point backfill in the authorized19-run matrix; unavailable fields remain explicit, not zero.',
                'B8 is single-SP04 matched DTFM fusion replacement, not multi-scale proof. B0/B1 population differs from core.',

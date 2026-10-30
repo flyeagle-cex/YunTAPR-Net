@@ -20,5 +20,19 @@ class TableTests(unittest.TestCase):
         x=m.counts(dict(reliability=bins,n_valid=100,n_rain=45))
         self.assertEqual(x,dict(TP=35,FP=15,FN=10,TN=40,N=100));m.ratios(x)
 
+    def test_archived_group_retains_saved_values(self):
+        x=dict(model='B7',seed='2030',arm='E0',group='all',N_valid='10',N_rain='3',TP='2',FP='1',FN='1',TN='6',Brier='.12',AUROC='.8',AP='.6',conditional_pinball='.1',q32_coverage='.95',**dict.fromkeys(m.RATE_FIELDS,'.5'))
+        known={'B7_s2030':dict(n_valid=10)}
+        y=m.archived_group(x,known)
+        self.assertEqual(y['values']['Brier'],.12);self.assertEqual(y['rates'],[.5]*4)
+        with self.assertRaises(ValueError):m.archived_group(x,{})
+        with self.assertRaises(ValueError):m.archived_group(x,{'B7_s2030':dict(n_valid=11)})
+
+    def test_old_best_proxy_cannot_enter_main_comparison(self):
+        x=dict(model='B0',seed='2026',artifact_generation='PHASE_A_BEST_NOT_MAIN_LAST',population='old',MAE_mm_h='.25',RMSE_mm_h='.8',Bias_mm_h='.02',Pearson_CC='NOT_AVAILABLE')
+        y=m.historical_proxy(x)
+        self.assertFalse(y['eligible_for_main_comparison']);self.assertIsNone(y['cc'])
+        self.assertEqual(y['status'],'HISTORICAL_DIFFERENT_WEIGHT_NOT_MAIN_E9')
+
 
 if __name__=='__main__':unittest.main()

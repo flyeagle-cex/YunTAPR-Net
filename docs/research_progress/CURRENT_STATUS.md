@@ -7,6 +7,8 @@
 按最新要求，最终交付仅一个Excel工作表中的一张分类大表，B0等模型解释在表格下方；全部结束后才交付完整版本。A/B/C未冻结、D部分支持不公平混排，原19项范围外的点估计缺口不填零。公开[队列与原文授权](../research_readiness/20261025/evidence/dote_physical_control_queued_start_20261030.json)和[指标续算启动](../research_readiness/20261025/evidence/metric_backfill_completion_started_20261030.json)给出真实状态；2025、旧原件与main保持本轮不操作。
 
 
+已接入既有 outputs 指标复用：28条总体、96条分组及20条配对记录直接读取；两条旧phase-A BEST连续误差仅保留为历史，不替代当前E9 LAST或进入主配对。汇总程序只读保存统计，未新增推理、原始载荷读取或权重加载。15/19为本次输入组装快照，并非最终完成状态；当前队列不停止、不重启。见[复用收据](../research_readiness/20261025/evidence/saved_metric_reuse_20261030.json)。
+
 ## 2026-10-30物理归因与论文决策增量
 
 继承B0–B8及DOTE零值控制三seed的固定E9完成证据。本次仅补齐ZERO三seed概率计数离线分解：真实B7的经验REL项3/3改善、RES项2/3下降；全面校准、排序与物理因果仍未验证。非零方向性候选及两方案Train混杂诊断已完成，CPU新增检查通过；整模Train缓存检查因RAM不足NOT_VERIFIED。分布/空间混杂尚不能干净识别物理对应关系，**不建议本轮申请正式GPU训练**。

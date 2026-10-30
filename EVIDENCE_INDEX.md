@@ -189,3 +189,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 ## 后续缓存通过与真实启动队列
 
 此前RAM受阻是历史时点；[后续缓存通过](docs/research_readiness/20261025/evidence/physical_negative_cached_train_pass_20261030.json)记录两场景6860有效像元、0优化器更新及128列梯度探针响应。[研究者直接启动指令及队列](docs/research_readiness/20261025/evidence/dote_physical_control_queued_start_20261030.json)与[精确执行包](docs/research_readiness/20261025/evidence/dote_physical_control_training_proposal_20261030.json)绑定新代码9b4046a和单模型限额；先19项指标回填全部通过，再一次启动，当前未训练完成。新增[指标续算启动收据](docs/research_readiness/20261025/evidence/metric_backfill_completion_started_20261030.json)只记录一次启动时点，旧6项完成及旧部分读取账本保留。最终交付按最新要求为一个工作表的一张大表，不覆盖原Excel。
+
+## 2026-10-30已有指标直接复用
+
+[保存统计复用收据](docs/research_readiness/20261025/evidence/saved_metric_reuse_20261030.json)（SHA256 `3d9006d048eca0176b2145b03ae6bdc67e3a94a44ab1cda78b88cdcd4e3dd868`）绑定6份既有CSV/JSON输出身份：28总体、96分组、20配对及2旧版代理。继承原Tier0有效检查；新增2项复用边界检查、全部6项当前汇总CPU检查与JS语法通过，80项已保存配对主指标身份核对一致，不重做模型推理。旧BEST代理明确排除当前E9主比较；已有分类率和配对值直接用保存值。冻结概率gate在所需新指标的同次前向中完成，不增加单独推理轮次。新单表最终布局仍NOT_VERIFIED、未导出；不以当前15/19快照冒充全部交付。训练代码9b4046a及已绑定单模型提案不变，未控制当前进程、读取权重或访问2025。

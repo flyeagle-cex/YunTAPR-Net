@@ -1,0 +1,88 @@
+{
+  "status": "SAVED_METRIC_REUSE_CONNECTED_FINAL_DELIVERY_IN_PROGRESS",
+  "recorded_at": "2026-10-30T16:26:45.959051+08:00",
+  "parent_commit": "74a285a4eeca48a74a3270eb30571105c74466b2",
+  "sources": [
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_RUNS_ALL",
+      "file": "tier0_runs_all.csv",
+      "bytes": 19303,
+      "sha256": "b3747c6edabd1f2af603ebfd5dffee08cf58c21db9b22bb40054de7da488a799"
+    },
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_GROUPS",
+      "file": "tier0_groups.csv",
+      "bytes": 23135,
+      "sha256": "fc5da8bab8b09c423e30d27c2bd648d299c75f725d2777c282da93ee0ec11a3f"
+    },
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_PAIRWISE_DELTAS",
+      "file": "tier0_pairwise_deltas.csv",
+      "bytes": 5113,
+      "sha256": "efc9a47ea8586a08ebbbf8d945cf0136fab3c4735ceafed9ee0f83d178dffab0"
+    },
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_PROVENANCE",
+      "file": "tier0_provenance.csv",
+      "bytes": 20580,
+      "sha256": "4cdf20339f9e175100473ede7d2c76936e4c09ad0612c2be19fccff5a50b82ba"
+    },
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_PROXY_CONTINUOUS",
+      "file": "tier0_proxy_continuous.csv",
+      "bytes": 744,
+      "sha256": "966ae1de7ca2cd46225574c0f6384fc57dc6c2cabf2e0a9751c8ac11a2d4a854"
+    },
+    {
+      "source_id": "SAVED_OUTPUT_TIER0_VALIDATION",
+      "file": "tier0_validation.json",
+      "bytes": 12409,
+      "sha256": "a4dc4e23a43803e5dc1c62859c273d2e541d067c4f2b160c4a12f30139e3b050"
+    }
+  ],
+  "reused": {
+    "overall_records": 28,
+    "group_records": 96,
+    "paired_records": 20,
+    "historical_proxy_records": 2,
+    "prior_validation": "INHERITED_ALL_CHECKS_PASS_NOT_RERUN"
+  },
+  "checks": {
+    "consolidation_cpu_tests": 6,
+    "added_reuse_boundary_tests": 2,
+    "js_syntax": "PASS",
+    "saved_pair_main_metric_identity_checks": 80,
+    "archived_group_population_binding": "PASS",
+    "final_workbook_layout": "NOT_VERIFIED_NOT_EXPORTED"
+  },
+  "current_scope": {
+    "backfill_complete_at_assembly_snapshot": 15,
+    "backfill_required": 19,
+    "physical_candidate": "QUEUED_AFTER_ALL_19_VALID",
+    "final_table": "ONE_WORKSHEET_ONE_TABLE_MODEL_EXPLANATIONS_BELOW"
+  },
+  "decisions": [
+    "Reuse saved probability, occurrence classification, subgroup and paired statistics directly.",
+    "Current forward-only backfill fills previously unavailable point estimates/multi-threshold methods; frozen probability gate uses the same required forward pass, not an extra inference pass.",
+    "Two phase-A BEST continuous proxies have different checkpoint generations; retain only as HISTORICAL_NOT_MAIN and exclude from fixed-E9 pairs and seed summaries.",
+    "Do not stop/restart the active inference or manually duplicate its queued training callback."
+  ],
+  "activity_by_this_reuse_change": {
+    "optimizer_updates": 0,
+    "new_inference": 0,
+    "meteorological_payload_reads": 0,
+    "checkpoint_loads": 0,
+    "process_terminations": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "frozen_training": {
+    "execution_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+    "proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+    "change": "NONE"
+  },
+  "code_sha256": {
+    "tools/research_readiness/assemble_complete_metrics.py": "615fdd045c233b8dab1defe8ad01660344ad6170d64babc7c8358ce045fabf4e",
+    "tools/research_readiness/build_complete_metric_workbook.mjs": "b4c668724b0c6a643870b3e457d45ed2c3aace03c946849d1d84404385959c28",
+    "tests/research_readiness/test_complete_metric_table.py": "93f4e7a0c6f7d5680228eff64cd679b3c07f163bd16f2d32604806226a3e2f46"
+  }
+}
