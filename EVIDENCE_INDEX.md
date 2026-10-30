@@ -1,6 +1,6 @@
 # 统一证据索引
 
-出版基线commit：`8a4668377dbd40013245b54550c0963d10c286fb`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
+出版基线commit：`6c26c9eb3f9b3452a10b62649774a1f617b2efc3`。本五文件的版本由所属Git提交标识，不伪造自引用commit。实际模型代码独立绑定如下。研究者为主体，AI辅助摘录；公开SHA约束原件身份，不等于外部已独立复现未公开数据。
 
 ## 当前训练状态快照
 
@@ -91,6 +91,7 @@
 |B7_ZERO_DOTE|2029|`445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21`|`0c91ff0f36d5cce3f4516d38663482650f61b03a`|
 |B7_ZERO_DOTE|2030|`b03ee41cd190dc7579a1fb993afb1f5598997fca91af3b1c2addc6eed430f0ba`|`8a4668377dbd40013245b54550c0963d10c286fb`|
 |B7_ZERO_DOTE|2031|`f99952905157d8e649e567af671d0ee3ff02f11530a9996b80306ef758acdac0`|`8a4668377dbd40013245b54550c0963d10c286fb`|
+|B7_PERP_GRADIENT|2029|`NOT_AVAILABLE_NO_TRAINING`|`NOT_EXECUTED`|
 
 B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执行；累计4,710实际尝试含390必要重放，有效轨迹4,320，成本见三seed收口。历史原始失败段仍保留。B5/B6本次纠正批准已消费，不允许额外重试。
 
@@ -102,7 +103,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 ## 本轮输入身份与交付校验
 
-本轮新增两控制终态、账本、E9身份与三seed汇总；旧129来源和旧逐轮核验均未重跑，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
+本轮ZERO三seed经验Brier分解、非零负对照Train特征诊断与受阻的整模缓存检查、非执行最终测试草案；原18轮两控制收口等历史有效证据均继承，不重复历史129来源/126轮审查；历史收据本身不被改为本轮重新核验。以下为直接采用的公开输入字节身份：
 
 |公开输入|SHA256|
 |---|---|
@@ -150,16 +151,31 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 |[docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json](docs/research_readiness/20261025/evidence/dote_control_multiseed_checks_20261029.json)|`a13d812ef62c0cf96540b338bbf351021fd3f1e52bce67229d9c156f38affc54`|
 |[docs/research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json](docs/research_readiness/20261025/evidence/dote_control_multiseed_approved_launch_20261029.json)|`203943775e61bcff4e027391b8e0139fceea2d983585aa6c53c1d641bebcf3c7`|
 |[docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json](docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json)|`188f0305ec0faa7bd0077cc950dd0d5ec50e104bb54978bcdf8a2878ce2d5adf`|
+|[docs/research_readiness/20261025/evidence/physical_attribution_decision_20261030.json](docs/research_readiness/20261025/evidence/physical_attribution_decision_20261030.json)|`50dfa8ff25bf481a13b709330201ebe58bf79270453133b378c7abce0653d796`|
+|[docs/research_readiness/20261025/evidence/dote_physical_negative_protocol_20261030.json](docs/research_readiness/20261025/evidence/dote_physical_negative_protocol_20261030.json)|`d1fc6df50d7fe0c0a3adc7fb477182c1d559a6c210d46c5d351452956e891f90`|
+|[docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json](docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json)|`ae10d7cdf9e519531dad2e9e8bb7a7c8374e130e74d67a2347d374922371c005`|
+|[docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json](docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json)|`d887fc502f70b8c4dd68090586f7c83e20557cd56c8ebd4b3260d4dc6dc38eb9`|
+|[docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json](docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json)|`55f20b918c7ca6ab342a0101bf5576b0de211cf319c7e0d2d8e0363ed1869830`|
+|[docs/research_readiness/20261025/evidence/physical_negative_cached_train_check_20261030.json](docs/research_readiness/20261025/evidence/physical_negative_cached_train_check_20261030.json)|`b918b4b65d10753484c93f76be32941196131f4aa7b3c59a69b0e7a84ae29817`|
+|[docs/research_readiness/20261025/evidence/physical_attribution_publication_20261030.json](docs/research_readiness/20261025/evidence/physical_attribution_publication_20261030.json)|`d71eaea9fcc11d7484c1fcb4fad3041559336eb9792b7428f5ef16847e098b2d`|
 
-五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查38个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
+五个统一文件及[生成器](tools/research_readiness/build_unified_delivery.py)不读取原始气象、权重或2025。运行`python tools/research_readiness/build_unified_delivery.py`可按本页嵌入快照重建四个表/报告及本索引；它继承源收据，检查39个唯一实验ID、原值一致性、人口/组ID配对和三seed均值/样本标准差。它不是训练或全量实验复核命令。
 
-导出构成：`{"MISSING_OR_NULL": 2192, "OFFLINE_DERIVED": 2217, "PAIRED_DELTA": 5737, "PAIRED_MEAN": 1023, "PAIRED_SAMPLE_SD": 1023, "RAW_ENDPOINT": 26669, "RAW_EPOCH": 25515}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
+导出构成：`{"MISSING_OR_NULL": 2205, "OFFLINE_DERIVED": 2589, "PAIRED_DELTA": 5737, "PAIRED_MEAN": 1023, "PAIRED_SAMPLE_SD": 1023, "RAW_ENDPOINT": 26669, "RAW_EPOCH": 25515}`。存在完整指标的每个源数值叶子都保留；旧逐轮摘要数值仅转录。缺失结果不补零，q32缺失分层不反推。公开输入与本索引嵌入快照足以重建本交付，不需要公开私有目录。
 
 |统一交付|SHA256|
 |---|---|
-|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`0bf55de41647db107fe82f5ca5c7a17efad9daf63e954fdc24fc4db77ad8e918`|
-|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`6811b834a4f8cb7bff6f6ea9672315907e26ebed4ce933784f6a1b63c6fecb65`|
-|[METRICS.csv](METRICS.csv)|`3cdb0874560c839df16bc70bca09d3d574f721c95e4ec48324b8c50a40acac2b`|
-|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`93d4f73046863a08262c61c6a7106dc32da87f1dfc607a7eddd0c5d75ada0865`|
+|[STAGE_ACCEPTANCE.md](STAGE_ACCEPTANCE.md)|`005b41daa0fa1ea794c567847485fcfe0966d5c8514acc5cbfe1c515506d15c6`|
+|[EXPERIMENT_MATRIX.csv](EXPERIMENT_MATRIX.csv)|`e4f9e4d8072a5e4ecd218011595447a3f6bd8be02c64f49e515f6d6e3f7a3afa`|
+|[METRICS.csv](METRICS.csv)|`e820ed9cbb9887ac85ddbc5ceed30b072d26ae892edf8c6e1a6d624717dcf191`|
+|[SCIENTIFIC_ANALYSIS.md](SCIENTIFIC_ANALYSIS.md)|`5c25bb3f1e5abbc5f5615d41d691c4336e0ac0b50af79aa1baf81df245f0d248`|
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。
+
+## 2026-10-30增量定位
+
+[候选科学协议](docs/research_readiness/20261025/evidence/dote_physical_negative_protocol_20261030.json)绑定准备代码`6c26c9eb3f9b3452a10b62649774a1f617b2efc3`及规范化协议SHA，不是可执行训练批准包。[ZERO三seed经验分解](docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json)新增3份既有score计数表，真实B7/B8分解直接继承。[2023 Train特征诊断](docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json)记录959 GFS主文件272,589,016字节、真实mask/全部分布和地理相关；不读取卫星、降水标签、Dev或2025。[整模缓存检查](docs/research_readiness/20261025/evidence/physical_negative_cached_train_check_20261030.json)在RAM门槛停止，NOT_VERIFIED而非PASS，无模型/缓存加载。失败初始缺少psutil发生在原始读取前，原命名空间保留，已改原生RSS，仅完成特征诊断。
+
+[最终测试增量草案](docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json)登记12份既有E9/执行身份；新增ZERO范围、主比较及共同指标尚待研究者冻结。真实2025适配器未实现，元数据检查仅使用2001合成记录，原年份保护未放开。没有2025新增访问。
+
+[可编辑LaTeX](docs/research_readiness/20261030/research_decision/main.tex) / [科研决策PDF](docs/research_readiness/20261030/research_decision/YunTAPR_Physical_Attribution_Decision_20261030.pdf)。原20261029冻结PDF/TeX及已批准提案均保留原字节。新增候选未训练，所有现有完成模型状态不变。

@@ -53,6 +53,10 @@ CONTROL_MULTI = READY + 'evidence/dote_control_multiseed_proposal_20261029.json'
 CONTROL_MULTI_CHECKS = READY + 'evidence/dote_control_multiseed_checks_20261029.json'
 CONTROL_MULTI_LAUNCH = READY + 'evidence/dote_control_multiseed_approved_launch_20261029.json'
 CONTROL_MULTI_COMPLETE = READY + 'evidence/dote_control_three_seed_completion_20261029.json'
+PHYSICAL_DECISION = READY + 'evidence/physical_attribution_decision_20261030.json'
+PHYSICAL_PROTOCOL = READY + 'evidence/dote_physical_negative_protocol_20261030.json'
+RELIABILITY_INCREMENT = READY + 'evidence/dote_reliability_increment_20261030.json'
+FINAL_DRAFT_INCREMENT = READY + 'evidence/final_test_preregistration_increment_20261030.json'
 GROUPS = PROGRESS + 'evidence/seed2029_groups.json'
 BASE = READY + 'B0_B4_EXPERIMENT_MATRIX.csv'
 FIELDS = ('record_type,experiment_id,model_id,seed,loss_arm,epoch,split,'
@@ -334,6 +338,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--status-json', type=Path)
     args = parser.parse_args()
+    decision = read(PHYSICAL_DECISION) if (ROOT / PHYSICAL_DECISION).is_file() else None
+    reliability_increment = read(RELIABILITY_INCREMENT) if decision else None
     if args.status_json:
         snapshot = json.loads(args.status_json.read_text(encoding='utf-8'))
     else:
@@ -607,6 +613,22 @@ def main():
                          verified_at=c['verified_at'],status_as_of=run['completed_at'],authorization_status='APPROVED_TWO_CONTROLS_COMPLETE_NO_REPLAY_OR_RETRY',
                          notes='Verified9Train/9Dev,4320updates,zero replay/retry;matching realB7 initial state/orders/population. Three-seed Brier improves3/3;AUROC/AP1/3,Pinball2/3,q32absolute error1/3.128 loss-inactive weights;no equal effective capacity,causal uplift or final-year claim.')
             matrix.append(r);experiments[r['experiment_id']]=r
+    if decision:
+        candidate = dict(next(r for r in matrix if r['model_id']=='B7' and r['seed']=='2029'))
+        candidate.update(experiment_id='B7_PERP_GRADIENT__E0__s2029__f006__candidate', model_id='B7_PERP_GRADIENT',
+                         phase='CANDIDATE_SCIENTIFIC_PROTOCOL_NO_TRAINING_REQUEST', status='NOT_STARTED',
+                         execution_state='NOT_TRAINING_READY', epochs='0', global_steps='0',
+                         config='B7_CONCAT_FIXED_90_CCW_DOTE_GRADIENT_ROTATION_CANDIDATE',
+                         input_spec='B7_SAME_BASE_INPUTS_AND_REAL_MASKS_PERPENDICULAR_DOTE',
+                         checkpoint_reference='NOT_AVAILABLE_NO_TRAINING', metrics_path='NOT_AVAILABLE_NO_TRAINING',
+                         executed_commit='NOT_EXECUTED', checkpoint_selection='PLANNED_FIXED_EPOCH_9_LAST_NOT_EXECUTED',
+                         evidence_path=PHYSICAL_PROTOCOL, protocol_reference=PHYSICAL_PROTOCOL,
+                         training_config_reference=PHYSICAL_PROTOCOL, source_manifest_reference=PHYSICAL_PROTOCOL,
+                         source_snapshot_commit=decision['preparation_code_commit'],
+                         verified_at=decision['created_at'],status_as_of=decision['created_at'],
+                         authorization_status='NO_TRAINING_REQUEST_NOT_APPROVED',
+                         notes='Nonzero physical probe;CPU synthetic/Train feature diagnostics pass;full cached forward/backward NOT_VERIFIED_RAM. Scalar distribution/spatial confounds;not causal. No formal launcher or GPU training.')
+        matrix.append(candidate);experiments[candidate['experiment_id']]=candidate
     matrix_fields = original_fields + [k for k in matrix[0] if k not in original_fields]
     write_csv('EXPERIMENT_MATRIX.csv', matrix_fields, matrix)
     rows, seen = [], {}
@@ -888,6 +910,35 @@ def main():
                     rows.append(dict(template,record_type='OFFLINE_DERIVED',group=group,metric=metric+'/'+key,value=str(int(d[key])),
                                      status='DESCRIPTIVE_TRAINING_SEED_REPLICATION',unit='COUNT' if key=='improvement_seeds' else 'BOOLEAN_0_1',
                                      source_file=CONTROL_MULTI_COMPLETE,source_pointer=f'/summary/groups/{group}/{metric}/{key}',improvement_direction='DESCRIPTIVE_ONLY'))
+    if reliability_increment:
+        for seed,models in reliability_increment['models'].items():
+            eid=f'B7_ZERO_DOTE__E0__s{seed}__f006'
+            add(eid,models['B7_ZERO_DOTE'],RELIABILITY_INCREMENT,f'/models/{seed}/B7_ZERO_DOTE',
+                group='empirical_exact_score_brier_increment',kind='OFFLINE_DERIVED')
+        template=next(r for r in rows if r['record_type']=='PAIRED_MEAN' and r['comparison']=='B7_MINUS_B7_ZERO_DOTE' and r['group']=='all')
+        for seed,delta in reliability_increment['real_B7_minus_ZERO_DOTE'].items():
+            real_exp=experiments[f'B7__E0__s{seed}__f006__dynamic']
+            for metric,value in delta.items():
+                rows.append(dict(template,record_type='OFFLINE_DERIVED',seed=seed,n_seeds='1',experiment_id=real_exp['experiment_id'],
+                    group='EMPIRICAL_EXACT_SCORE_BRIER_REAL_MINUS_ZERO',metric=metric,value=repr(value),
+                    reference_value=repr(reliability_increment['models'][seed]['B7_ZERO_DOTE'][metric]),
+                    reference_experiment_id=f'B7_ZERO_DOTE__E0__s{seed}__f006',
+                    reference_source_file=RELIABILITY_INCREMENT,reference_source_pointer=f'/models/{seed}/B7_ZERO_DOTE/{metric}',
+                    checkpoint_sha256=real_exp['checkpoint_reference'],executed_commit=real_exp['executed_commit'],
+                    status='FINITE_SAMPLE_EMPIRICAL_NOT_POPULATION_CALIBRATION',
+                    source_file=RELIABILITY_INCREMENT,source_pointer=f'/real_B7_minus_ZERO_DOTE/{seed}/{metric}',
+                    improvement_direction='LOWER' if metric in ('brier','empirical_score_reliability') else 'HIGHER' if metric=='empirical_score_resolution' else 'DESCRIPTIVE_ONLY'))
+        for seed,delta in decision['fixed_bin_deltas'].items():
+            real_exp=experiments[f'B7__E0__s{seed}__f006__dynamic']
+            for metric,value in delta.items():
+                rows.append(dict(template,record_type='OFFLINE_DERIVED',seed=seed,n_seeds='1',experiment_id=real_exp['experiment_id'],
+                    group='FIXED_10_BIN_REAL_MINUS_ZERO',metric=metric,value=repr(value),
+                    reference_value=repr(reliability_increment['models'][seed]['B7_ZERO_DOTE']['coarse_bin_diagnostic'][metric]),
+                    reference_experiment_id=f'B7_ZERO_DOTE__E0__s{seed}__f006',
+                    reference_source_file=RELIABILITY_INCREMENT,reference_source_pointer=f'/models/{seed}/B7_ZERO_DOTE/coarse_bin_diagnostic/{metric}',
+                    checkpoint_sha256=real_exp['checkpoint_reference'],executed_commit=real_exp['executed_commit'],
+                    status='BIN_MEAN_DIAGNOSTIC_WITH_RESIDUAL',source_file=PHYSICAL_DECISION,
+                    source_pointer=f'/fixed_bin_deltas/{seed}/{metric}',improvement_direction='DESCRIPTIVE_ONLY'))
     write_csv('METRICS.csv', FIELDS, rows)
     counts = Counter(r['record_type'] for r in rows)
     summary_table = '\n'.join(f"|{metric}|{data['B4_minus_B3_by_seed']['2029']:.12g}|{data['B4_minus_B3_by_seed']['2030']:.12g}|{data['B4_minus_B3_by_seed']['2031']:.12g}|{data['mean']:.12g}|{data['sample_sd']:.12g}|" for metric, data in b34['summary']['metrics'].items())
@@ -1308,6 +1359,12 @@ B8 q32覆盖94.05423961551665%，较98.4375%名义值仍欠4.383260384483345个�
         input_checks_text='新增两控制终态、账本、E9身份与三seed汇总；旧129来源和旧逐轮核验均未重跑'
         csv_scope_text=csv_scope_text.replace(' 新2030/2031控制只有缺失占位，不填零或预造结果。',' 新2030/2031控制追加完整E9、18轮数值与全部分层；三seed真实B7−零控制差值、均值、样本标准差、改善seed数和方向一致性均由新收据计算，不另跑推理。')
         publication_base=c['training_commit']
+    if decision:
+        publication_base=decision['preparation_code_commit']
+        current_checks_text='本轮只增量分析3份既有ZERO分数计数表、读取959份2023 Train GFS主文件作标签无关特征诊断、执行新增6项CPU合成及3项合成元数据检查。首次缺少psutil在原始读取前停止、修正后完成特征诊断；含该初始失败共读静态缓存625656字节。整模缓存检查因RAM不足在加载前停止，NOT_VERIFIED。新正式训练/推理/优化器更新/权重加载/Dev原始读取/2025载荷均0；此前完成证据继承。'
+        input_checks_text='ZERO三seed经验Brier分解、非零负对照Train特征诊断与受阻的整模缓存检查、非执行最终测试草案；原18轮两控制收口等历史有效证据均继承'
+        csv_scope_text+=' 本次仅增加一个未训练候选占位和385行既有统计离线派生数值；全部旧模型数值原样继承，未预造候选性能。'
+        latest_science_text+=' 2026-10-30增量：经验REL三seed改善、RES两seed变差；非零控制有实质混杂，不申请新正式GPU。'
     stage = f'''# 阶段验收统一入口
 
 B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终态收据和本次Git提交绑定，不把该旧时点冒充新训练时间。' if innovation else ''}B0–B4限定基线交接为 **COMPLETE_WITH_LIMITATIONS（带局限完成）**；B5/B6为 **{phase_status}**，地形单seed消融{'带局限完成' if static else '仍在进行'}；最终泛化验收为 **NOT_VERIFIED（未核实）**。{latest_status_text}不能把训练完成等同于全部科学假设通过。
@@ -1347,6 +1404,10 @@ B5/B6终态元数据时点：`{as_of}`。{'B7/B8后续状态由独立启动/终�
 [实验矩阵](EXPERIMENT_MATRIX.csv) · [完整数值与差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)
 {innovation_text}
 '''
+    if decision:
+        stage=stage.replace('|2025最终测试|继续冻结|没有当前最终模型推理与评价|NOT_STARTED，不得据此选模|',
+            '|非零物理负对照|两方案、固定90°候选、6项CPU及Train特征诊断已完成|标量分布/空间混杂；整模缓存检查因RAM不足NOT_VERIFIED；未申请训练|NOT_STARTED / NOT_TRAINING_READY|\n|2025最终测试|继续冻结；12模型身份目录及合成元数据检查完成|全模态人口未核实、适配器未实现、预注册未冻结、揭盲预算未批准|DRAFT / NOT_STARTED|')
+        stage+='\n## 2026-10-30物理归因增量\n\nZERO三seed经验Brier分解补齐：真实B7的REL项3/3下降、RES项2/3下降，不能等同总体校准或物理机制证明。非零方向性探针有实质混杂，不建议立即投入正式GPU；本轮新正式训练/推理/优化器更新均0，2025无新增访问。详见[科学决策](docs/research_readiness/20261025/evidence/physical_attribution_decision_20261030.json)。\n'
     (ROOT / 'STAGE_ACCEPTANCE.md').write_text(stage.rstrip()+'\n', encoding='utf-8')
     analysis = f'''# 科学分析统一入口
 
@@ -1393,6 +1454,10 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
 
 `MISSING_OR_NULL`原样保留缺失/不可估计状态，value为空，不是零；{'继承B5/B6完整终点和18轮Train/Dev数值' if static else 'B5/B6不填最终数值'}。{csv_scope_text}源文件和JSON Pointer（JSON定位指针）或CSV零起始row可回查；q32别名指向coverage/31。共享内容只保留一个数值行；新增来源不能改写旧值。详细配置、Git执行身份、评价脚本和数据版本由experiment_id连接[矩阵](EXPERIMENT_MATRIX.csv)。
 '''
+    if decision:
+        analysis=analysis.replace('新零控制未另作原生分数Brier分解，不能直接把下降命名为“可靠性改善”。',
+            '该2026-10-29完成时点尚无零控制分解；2026-10-30增量已补齐三seed经验REL/RES，见文末。经验REL下降仍不等同总体校准改善。')
+        analysis+='\n'+decision['markdown']
     (ROOT / 'SCIENTIFIC_ANALYSIS.md').write_text(analysis.replace('地形收益混合、校准退化','地形收益混合、q32覆盖退化'), encoding='utf-8')
     input_names = [BASE, OLD, GROUPS, B2, B34, FULL, epoch_source,
                    READY + 'evidence/b5_b6_corrected_start_launch.json',
@@ -1436,6 +1501,12 @@ B2相对B3（统一B2−B3）：Brier为−0.0009406648154928754，AUROC为−0.
     if control_multi:input_names += [CONTROL_MULTI,CONTROL_MULTI_CHECKS]
     if control_multi_launch:input_names.append(CONTROL_MULTI_LAUNCH)
     if control_multi_complete:input_names.append(CONTROL_MULTI_COMPLETE)
+    if decision:
+        input_names += [PHYSICAL_DECISION,PHYSICAL_PROTOCOL,RELIABILITY_INCREMENT,FINAL_DRAFT_INCREMENT,
+                        READY+'evidence/physical_negative_train_diagnostics_20261030.json',
+                        READY+'evidence/physical_negative_cached_train_check_20261030.json']
+        publication_receipt=READY+'evidence/physical_attribution_publication_20261030.json'
+        if (ROOT/publication_receipt).is_file():input_names.append(publication_receipt)
     source_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in input_names)
     identity_table = '\n'.join(f"|{r['model_id']}|{r['seed']}|`{r['checkpoint_reference']}`|`{r['executed_commit']}`|" for r in matrix if r['comparison_population'] == 'CORE_F006_959_963' and 'failed' not in r['experiment_id'])
     output_table = '\n'.join(f'|[{name}]({name})|`{digest(name)}`|' for name in ['STAGE_ACCEPTANCE.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv', 'SCIENTIFIC_ANALYSIS.md'])
@@ -1519,6 +1590,8 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 
 本索引自身身份由Git标识，不写自引用文件哈希。旧索引、历史PUBLICATION_MANIFEST与已批准实验收据保持原字节。当前工作分支提交/推送不构成main合并或新训练批准。
 '''
+    if decision:
+        evidence+='\n## 2026-10-30增量定位\n\n[候选科学协议]('+PHYSICAL_PROTOCOL+')绑定准备代码`'+decision['preparation_code_commit']+'`及规范化协议SHA，不是可执行训练批准包。[ZERO三seed经验分解]('+RELIABILITY_INCREMENT+')新增3份既有score计数表，真实B7/B8分解直接继承。[2023 Train特征诊断]('+READY+'evidence/physical_negative_train_diagnostics_20261030.json)记录959 GFS主文件272,589,016字节、真实mask/全部分布和地理相关；不读取卫星、降水标签、Dev或2025。[整模缓存检查]('+READY+'evidence/physical_negative_cached_train_check_20261030.json)在RAM门槛停止，NOT_VERIFIED而非PASS，无模型/缓存加载。失败初始缺少psutil发生在原始读取前，原命名空间保留，已改原生RSS，仅完成特征诊断。\n\n[最终测试增量草案]('+FINAL_DRAFT_INCREMENT+')登记12份既有E9/执行身份；新增ZERO范围、主比较及共同指标尚待研究者冻结。真实2025适配器未实现，元数据检查仅使用2001合成记录，原年份保护未放开。没有2025新增访问。\n\n[可编辑LaTeX](docs/research_readiness/20261030/research_decision/main.tex) / [科研决策PDF](docs/research_readiness/20261030/research_decision/YunTAPR_Physical_Attribution_Decision_20261030.pdf)。原20261029冻结PDF/TeX及已批准提案均保留原字节。新增候选未训练，所有现有完成模型状态不变。\n'
     (ROOT / 'EVIDENCE_INDEX.md').write_text(evidence, encoding='utf-8')
     # Publication-only checks: no private absolute paths or accidental data blobs.
     for name in ['STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'EXPERIMENT_MATRIX.csv', 'METRICS.csv']:
@@ -1530,7 +1603,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
         assert not any(r['model_id'] in ('B5', 'B6') and r['status'] == 'RECORDED' for r in raw_rows)
     print(json.dumps(dict(status='PASS_PUBLIC_EXPORT_ONLY', experiments=len(matrix), metrics=len(rows), records=counts,
                           historical_audits_rerun=False, optimizer_updates=0, raw_weather_reads=0,
-                          status_as_of=control_multi_complete['verified_at'] if control_multi_complete else control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
+                          status_as_of=decision['created_at'] if decision else control_multi_complete['verified_at'] if control_multi_complete else control_multi_launch['as_of'] if control_multi_launch else control_multi['prepared_at'] if control_multi else control_complete['verified_at'] if control_complete else control_launch['as_of'] if control_launch else paper_audit['created_at'] if paper_audit else innovation_multi_complete['verified_at'] if innovation_multi_complete else as_of,
                           inherited_B5_B6_status_as_of=as_of), ensure_ascii=False))
 
 

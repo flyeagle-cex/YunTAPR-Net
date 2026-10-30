@@ -1,0 +1,238 @@
+{
+  "status": "CANDIDATE_PROTOCOL_NOT_TRAINING_READY_NO_TRAINING_REQUEST",
+  "created_at": "2026-10-30T12:36:22.266341+08:00",
+  "preparation_code_commit": "6c26c9eb3f9b3452a10b62649774a1f617b2efc3",
+  "evidence_base": "f3a3b50526f0a991a4680ca3399fa6f04474225a",
+  "authorized": false,
+  "formal_training_started": false,
+  "model": "B7_PERP_GRADIENT",
+  "hypothetical_seed": 2029,
+  "selection": {
+    "locked_at": "2026-10-30T00:15:34.799997+08:00",
+    "evidence_base": "f3a3b50526f0a991a4680ca3399fa6f04474225a",
+    "selected_candidate": "B7_PERP_GRADIENT",
+    "rotation_matrix_east_north": [
+      [
+        0,
+        -1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "angle_selection": "Fixed90CCW before new feature diagnostics; no angle search or label/Dev selection",
+    "alternative": "Joint8-vector derangement within exact real mask classes,seed20261030",
+    "pilot_seed": 2029,
+    "seed_choice": "Inherited default earliest core-experiment anchor,not metric-selected; prior Dev outcomes already known, exploratory only",
+    "unchanged": "GFS/DEM static branch,real masks,PhysicalDote units/formulas,PWAT reference,loss,scalers,populations",
+    "no_formal_training_authorized": true,
+    "no_2025_access": true
+  },
+  "formula": "O_perp = -u*dh_dy + v*dh_dx; W=max(O_perp,0); L=max(-O_perp,0); M=PWAT/reference*W",
+  "physical_definition": {
+    "pwat_reference_kg_m2": 31.85768219039871,
+    "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "moisture_basis": "windward_W",
+    "velocity_reference_m_s": 1.0
+  },
+  "channel_order": [
+    "O850",
+    "O700",
+    "W850",
+    "W700",
+    "L850",
+    "L700",
+    "M850",
+    "M700"
+  ],
+  "transform_boundary": "Rotate only the gradient pack passed to unchanged PhysicalDote; real B6 static input remains untouched",
+  "rotation_matrix_east_north": [
+    [
+      0,
+      -1
+    ],
+    [
+      1,
+      0
+    ]
+  ],
+  "units": "Gradient m/m; raw east/north wind m/s; O/W/L/M m/s before unchanged explicit 1m/s scale",
+  "pressure_mask": "Unchanged true surface-pressure, underground 850/700 hPa invalid, real PWAT/finite masks",
+  "nonzero": "Eight varying channels, natural W/L/M zeros retained; no permanently all-zero input columns by construction",
+  "nominal_parameters": 4411058,
+  "effective_capacity": "No structural zero-input128 issue, but equal effective capacity not established by a tiny CPU gradient probe",
+  "unchanged": "GFS13,real DEM6,SP04 backbone/fusion,real masks,supervision,populations,scalers,loss,heads,optimizer,LR",
+  "paired_initialization": {
+    "inherited_initial_state": {
+      "full_state_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+      "common_sha256": "4404bc9d8d879e84c48ae7188baf6a778fc802050a1e590217550577af3f0b9f"
+    },
+    "main_seed": 2029,
+    "static_aux_seed": 12029,
+    "fusion_aux_seed": 22029,
+    "nine_epoch_order_rule": "seed+epoch-1; cross-seed shifted overlap inherited",
+    "full_model_check": "NOT_VERIFIED_RESOURCE_ADMISSION_BLOCKED; inherited identity is not a new measured candidate identity"
+  },
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "protocol": {
+    "seed": 2029,
+    "models": [
+      "B7"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 4320,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "BEST_selection": false
+  },
+  "source_scope_summary": {
+    "Train": {
+      "file_count": 7918,
+      "bytes_per_pass": 26424262556,
+      "by_kind": {
+        "satellite": {
+          "files": 5754,
+          "bytes": 25882115518
+        },
+        "GFS_main": {
+          "files": 959,
+          "bytes": 272589016
+        },
+        "GFS_thermo": {
+          "files": 959,
+          "bytes": 89508928
+        },
+        "IMERG": {
+          "files": 245,
+          "bytes": 180028178
+        },
+        "static_mask": {
+          "files": 1,
+          "bytes": 20916
+        }
+      },
+      "source_manifest_sha256": "f0c0a9188e771bfbba7c1e8a8ffdbfabd2d4e927bd1428d353b290be236a13dc"
+    },
+    "Development": {
+      "file_count": 7950,
+      "bytes_per_pass": 26639253112,
+      "by_kind": {
+        "satellite": {
+          "files": 5778,
+          "bytes": 26067197976
+        },
+        "GFS_main": {
+          "files": 963,
+          "bytes": 287429347
+        },
+        "GFS_thermo": {
+          "files": 963,
+          "bytes": 89772072
+        },
+        "IMERG": {
+          "files": 245,
+          "bytes": 194832801
+        },
+        "static_mask": {
+          "files": 1,
+          "bytes": 20916
+        }
+      },
+      "source_manifest_sha256": "65e8b3754775ece7bbf60db0ca2b5320638c193fe20a9f21ee49828272514060"
+    }
+  },
+  "alternatives": [
+    {
+      "name": "JOINT_MASK_CLASS_DERANGEMENT",
+      "seed": 20261030,
+      "preserves": "Exact8-vector joint/marginal distribution within real mask signatures; real mask unchanged",
+      "changes": "Spatial correlation, elevation/region climate associations and pairing with local GFS/PWAT/DEM",
+      "residual_confound": "Scene-dependent true mask classes encode weather and constrain mappings; singleton classes cannot move",
+      "question": "Value of aligned local representation versus distribution-preserving mislocation, with spatial/climate confounding"
+    },
+    {
+      "name": "PERPENDICULAR_GRADIENT_90_CCW",
+      "selected": true,
+      "preserves": "Point location,real base inputs,masks,gradient magnitude and vector inner-product autocorrelation",
+      "changes": "Scalar O/W/L/M distributions and spatial correlations; rotated field generally nonintegrable",
+      "question": "Narrow directional projection/representation sensitivity; not clean physical correspondence or causal uplift"
+    }
+  ],
+  "full_Train_feature_diagnostics": "physical_negative_train_diagnostics_20261030.json",
+  "targeted_checks": {
+    "synthetic_new_checks": 6,
+    "draft_metadata_checks": 3,
+    "status": "PASS_RECORDED_FROM_THIS_TURN_TOOL_RESULTS",
+    "old_tests_rerun": false,
+    "full_cached_model": "NOT_VERIFIED_RESOURCE_ADMISSION_BLOCKED"
+  },
+  "identifiability": "DOTE=f(GFS,DEM); breaking this deterministic relation cannot preserve its full joint distribution with unchanged base inputs. Prediction controls test inductive representation, not an observed uplift causal effect.",
+  "scientific_recommendation": "DO_NOT_START_GPU_NOW; resource recovery alone does not resolve distribution/spatial confounding",
+  "conditional_cost": {
+    "status": "CONDITIONAL_COST_ESTIMATE_NOT_A_FROZEN_EXECUTION_PACKAGE",
+    "hypothetical_models": 1,
+    "seed": 2029,
+    "optimizer_updates": 4320,
+    "train_pass_bytes": 26424262556,
+    "dev_pass_bytes": 26639253112,
+    "train_pass_instances": 7918,
+    "dev_pass_instances": 7950,
+    "epochs": 9,
+    "weather_bytes": 477571641012,
+    "static_bytes": 312828,
+    "logical_source_bytes": 477571953840,
+    "source_instances": 142813,
+    "dynamic_extra_raw_bytes": 0,
+    "additional_feature_cache_bytes": 0,
+    "maximum_seconds_if_later_approved": 21600,
+    "minimum_free_bytes": 25769803776,
+    "minimum_host_available_bytes": 8589934592,
+    "minimum_CUDA_free_bytes": 5368709120,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initialization": "FROM_SCRATCH_MATCH_REAL_B7_SEED2029_NOT_E9_FINETUNING",
+    "time_estimate": "INHERITED_SIMILAR_B7_RUNS_ABOUT_3_TO_4_HOURS_NOT_MEASURED_FOR_THIS_CANDIDATE",
+    "storage": "NEW_INDEPENDENT_NAMESPACE_UNDER_RESEARCHER_CONFIRMED_STORAGE_PARENT_NOT_CREATED",
+    "failure": "STOP_AND_PRESERVE_LEDGER_CHECKPOINTS_NO_AUTO_REPLAY_NO_AUTO_RETRY",
+    "not_included": "No launcher/WMI allowlist or approval file; code and exact future output must be rebound before any approval"
+  },
+  "code_sha256": {
+    "src/yuntapr/experimental/research_readiness/dote_physical_controls.py": "9b1a732a40e6ea9f05d51c9d9f301ef8acce44b3e190c2ca247607734d12391a",
+    "src/yuntapr/experimental/research_readiness/final_test_draft.py": "552dee517221d5b6adaed8d8195b27c9dd5e7562d80996aa0bf27ed4bc5ce134",
+    "tools/research_readiness/check_physical_negative_train.py": "5042bc84a24e2cdff6bfc217e637b37b1fc5d4e8483a8799a89c59b496548b4c",
+    "tools/research_readiness/check_physical_negative_cached_train.py": "e23d17775923288046dcb76ce3a7c1f407a5bb615c37cf4790403562065f37c3",
+    "tools/research_readiness/diagnose_dote_reliability_increment.py": "46f96a81c5d44533f2eeb1800eb8ff249a1fcbe9a6d757c988d8cf264d5d1739",
+    "tools/research_readiness/build_physical_attribution_decision.py": "b9a1e32caf6d245334ea52703ee37c155642f30eb984ee423642106b84b74294",
+    "tests/research_readiness/test_dote_physical_controls.py": "5cdb1a050dea8b60330d7c1181a6f7aa36d81005fe94e02528953671375bfebe",
+    "tests/research_readiness/test_final_test_draft.py": "11bbd67df8ea3382541cacf50e232c15fc0083395c046e7b606aa412a07b47df"
+  },
+  "final_2025": "FROZEN_NO_NEW_PAYLOAD_INFERENCE_OR_METRICS",
+  "protocol_sha256": "ea8cd17768147d4c570efe7769169cd316c43f07b94a8922aecbd9a9690507b5"
+}

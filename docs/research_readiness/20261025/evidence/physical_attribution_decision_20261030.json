@@ -1,0 +1,193 @@
+{
+  "status": "INCREMENTAL_SCIENTIFIC_CLOSEOUT_COMPLETE_WITH_LIMITATIONS",
+  "created_at": "2026-10-30T12:36:22.266341+08:00",
+  "preparation_code_commit": "6c26c9eb3f9b3452a10b62649774a1f617b2efc3",
+  "candidate_protocol_sha256": "ea8cd17768147d4c570efe7769169cd316c43f07b94a8922aecbd9a9690507b5",
+  "scientific_recommendation": "NO_FORMAL_GPU_TRAINING_REQUEST_THIS_ROUND",
+  "exact_Brier_deltas": {
+    "2029": {
+      "brier": -0.0016455233410925113,
+      "empirical_score_reliability": -0.0012660589275870215,
+      "empirical_score_resolution": 0.00037946441350557303,
+      "uncertainty": 0.0
+    },
+    "2030": {
+      "brier": -0.0004257229743570845,
+      "empirical_score_reliability": -0.0006158816724310852,
+      "empirical_score_resolution": -0.00019015869807396252,
+      "uncertainty": 0.0
+    },
+    "2031": {
+      "brier": -0.000606637739566554,
+      "empirical_score_reliability": -0.0006660772162172535,
+      "empirical_score_resolution": -5.9439476650754997e-05,
+      "uncertainty": 0.0
+    }
+  },
+  "fixed_bin_deltas": {
+    "2029": {
+      "binned_reliability": -0.0011457995249453332,
+      "binned_resolution": 0.0005664297719582753,
+      "binning_residual": 6.670595581100003e-05
+    },
+    "2030": {
+      "binned_reliability": -0.0006201454098312686,
+      "binned_resolution": -0.0001909602355576051,
+      "binning_residual": 3.4621999165374007e-06
+    },
+    "2031": {
+      "binned_reliability": -0.0006566602291461672,
+      "binned_resolution": -3.329802925507164e-05,
+      "binning_residual": 1.672446032463526e-05
+    }
+  },
+  "inherited_performance_summary": {
+    "brier": {
+      "by_seed": {
+        "2029": -0.0016455233410926084,
+        "2030": -0.00042572297435714,
+        "2031": -0.0006066377395664846
+      },
+      "mean": -0.0008926280183387444,
+      "sample_sd": 0.00065827126880654,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 3,
+      "negative_seeds": 3,
+      "positive_seeds": 0,
+      "zero_seeds": 0,
+      "direction_consistent": true
+    },
+    "auroc": {
+      "by_seed": {
+        "2029": 0.0008349697086184049,
+        "2030": -0.0007819477353661064,
+        "2031": -0.0003381248996572328
+      },
+      "mean": -9.503430880164476e-05,
+      "sample_sd": 0.0008354192251123028,
+      "improvement_direction": "HIGHER",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "average_precision": {
+      "by_seed": {
+        "2029": 0.004693578429989298,
+        "2030": -0.001451980631480665,
+        "2031": -0.0004859218162684975
+      },
+      "mean": 0.0009185586607467119,
+      "sample_sd": 0.0033047538640935945,
+      "improvement_direction": "HIGHER",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "conditional_pinball": {
+      "by_seed": {
+        "2029": -0.0008828710787321115,
+        "2030": -0.00036087624754133074,
+        "2031": 0.000651098343787071
+      },
+      "mean": -0.0001975496608287904,
+      "sample_sd": 0.0007799180904116376,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 2,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_coverage": {
+      "by_seed": {
+        "2029": -0.0042690402628610125,
+        "2030": -0.001010249619930348,
+        "2031": 0.0018611151978814577
+      },
+      "mean": -0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_signed_bias": {
+      "by_seed": {
+        "2029": -0.0042690402628610125,
+        "2030": -0.001010249619930348,
+        "2031": 0.0018611151978814577
+      },
+      "mean": -0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_absolute_error": {
+      "by_seed": {
+        "2029": 0.0042690402628610125,
+        "2030": 0.001010249619930348,
+        "2031": -0.0018611151978814577
+      },
+      "mean": 0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 1,
+      "negative_seeds": 1,
+      "positive_seeds": 2,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    }
+  },
+  "candidate_O700_std_ratio": 0.7948414696084409,
+  "candidate_O700_east_lag1_pearson": {
+    "permuted": 0.0012098215179411683,
+    "perpendicular": 0.11405570518662345,
+    "real": -0.19092246090737858
+  },
+  "full_cached_model_check": "NOT_VERIFIED_RESOURCE_ADMISSION_BLOCKED",
+  "sources": {
+    "dote_reliability_increment_20261030.json": "ae10d7cdf9e519531dad2e9e8bb7a7c8374e130e74d67a2347d374922371c005",
+    "physical_negative_train_diagnostics_20261030.json": "55f20b918c7ca6ab342a0101bf5576b0de211cf319c7e0d2d8e0363ed1869830",
+    "physical_negative_cached_train_check_20261030.json": "b918b4b65d10753484c93f76be32941196131f4aa7b3c59a69b0e7a84ae29817",
+    "final_test_preregistration_increment_20261030.json": "d887fc502f70b8c4dd68090586f7c83e20557cd56c8ebd4b3260d4dc6dc38eb9",
+    "dote_physical_negative_protocol_20261030.json": "d1fc6df50d7fe0c0a3adc7fb477182c1d559a6c210d46c5d351452956e891f90"
+  },
+  "additional_Dev_joint_error_advice": {
+    "status": "OPTIONAL_NOT_AUTHORIZED_NOT_AN_ENTRY_GATE",
+    "models": [
+      "B7_seed2029",
+      "B7_ZERO_DOTE_seed2029"
+    ],
+    "optimizer_updates": 0,
+    "inference_passes": 2,
+    "checkpoint_loads": 2,
+    "conditional_source_bytes": 53279131880,
+    "conditional_source_instances": 15902,
+    "time_and_storage": "NOT_VERIFIED_NOT_FROZEN",
+    "reason": "Archived marginal scores cannot recover co-located model errors, event tracks or paired spatial covariance; needs independent event IDs too"
+  },
+  "activity": {
+    "new_formal_training": 0,
+    "optimizer_updates": 0,
+    "model_inference": 0,
+    "checkpoints_loaded": 0,
+    "raw_GFS_2023_files": 959,
+    "raw_GFS_2023_bytes": 272589016,
+    "static_cache_bytes_including_failed_setup": 625656,
+    "archived_ZERO_score_SQLite_files": 3,
+    "archived_SQLite_file_bytes": 831488,
+    "full_model_cache_check": "BLOCKED_BEFORE_LOAD",
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "markdown": "## 2026-10-30增量科学收口：不申请新的正式GPU训练\n\n旧B0–B8及DOTE零数值三seed训练/评价状态均继承完成；本次不是重训或旧结果重审。[候选协议](docs/research_readiness/20261025/evidence/dote_physical_negative_protocol_20261030.json)为NOT_TRAINING_READY，不是获批提案。新增正式训练0次、模型推理0次、优化器更新0次；2025没有新增载荷、推理或指标。\n\n### 概率可靠性：补齐ZERO三seed，继承真实B7/B8\n\n此前真实B7/B8三seed已有原生概率分数精确分解，ZERO三seed没有。[本次增量](docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json)只读取3份既有ZERO分数计数SQLite，文件共831,488字节并校验原生表digest；继承真实B7分解，不加载权重或新增Dev推理。统一差值为真实B7−ZERO。\n\n|seed|ΔBrier|Δ经验REL（可靠性项，低优）|Δ经验RES（分辨能力项，高优）|\n|---|---|---|---|\n|2029|-0.00164552334109|-0.00126605892759|0.000379464413506|\n|2030|-0.000425722974357|-0.000615881672431|-0.000190158698074|\n|2031|-0.000606637739567|-0.000666077216217|-5.94394766508e-05|\n\n同一人口的UNC（不确定性项）相同，BS=REL−RES+UNC。经验REL在3/3下降，既有固定十箱REL也3/3下降；RES在2/3下降，且对应seed AUROC/AP较差。分辨能力项不等于AUROC/AP，前者按预测概率分组的有雨率差异，后者衡量排序；这里只能描述一致现象，不能把代数分解当作训练因果解释。各模型385–416个原生分数组，部分组只有1个像元时次；有限样本、空间/时间依赖和稀疏组使经验REL不能等同于总体校准改善。固定分箱还存在残差，不能用分箱恒等式替换原始Brier。\n\n条件Pinball来自有雨条件下的另一个输出头，q32是尾部分位数覆盖；发生概率Brier下降没有数学上保证它们改善。总体Brier含大量无雨/弱雨像元，强雨的少数损失不会决定总体趋势；具体训练梯度竞争尚未验证。06 UTC的AP下降和q32距名义误差上升均3/3；20–30及30–50 mm/h Pinball仅2029改善，>50仅6个像元时次，不能写成6场暴雨。按实际雨强条件化的覆盖率是描述值，不能要求每个结果分层都达到0.984375。\n\n### 非零负对照：实现完成，识别限制明确\n\n比较固定mask类内8向量联合错配与固定90°逆时针梯度旋转。前者精确保留类内数值联合分布，却破坏空间、海拔、区域气候和局部GFS/PWAT对应；后者保留地理位置、真实GFS/DEM输入、梯度模长和mask，工程代价更小，因此在读取新诊断前锁定为唯一候选B7_PERP_GRADIENT。旋转只作用于PhysicalDote使用的梯度，不修改真实静态分支；O'=-u·h_y+v·h_x，W/L/M按原规则计算，不添加裁剪、系数或重新归一化。\n\n[959个2023 Train场景诊断](docs/research_readiness/20261025/evidence/physical_negative_train_diagnostics_20261030.json)显示：全部真实mask保持，850/700有效率18.6490%/93.2089%；旋转后O700标准差比值0.794841470（降低约20.52%），东西相邻相关从-0.190922461变为0.114055705；联合置乱为0.001209822。因此候选不保留标量分布和空间相关，旋转场通常也不是另一真实DEM的可积梯度。月、UTC、海拔、四固定象限及经纬关联全部保留在诊断收据，不能视作独立区域气候验证。SP04实测约10.10 km×11.08 km，不是4 km。\n\n新增6项CPU合成检查及3项最终测试元数据检查通过；非零输入探针可使原128列有损失梯度，但它不是整模容量相等证明。整模Train缓存零优化器前/反向在8 GiB RAM入场门槛停止，**NOT_VERIFIED**：事后可用RAM约4.81 GiB；未加载缓存或模型，未降低门槛、停止其他进程或更改精度。保留失败元数据。DOTE是GFS/DEM的确定性函数，破坏关系时无法同时保持其与全部基础输入的联合分布。当前候选只回答方向性表征敏感性，不能无混杂地识别真实空间对应关系，更不能证明地形抬升。\n\n**决策：现在不值得立即投入正式GPU。** 不强行训练不可充分识别的控制。如果研究者日后接受较窄的方向性探针，应先恢复RAM并完成已有缓存检查，再绑定新可执行入口/输出目录及明确预算批准；不重复已通过的CPU或959场景诊断。本次条件成本按实际冻结清单计算：9×(26,424,262,556+26,639,253,112)+312,828=477,571,953,840逻辑源字节；9×(7,918+7,950)+1=142,813实例，单模型4,320更新/至多6小时/24 GiB/零重放零重试。相同字节数来自同一读取链路，无新增动态原始文件，不是复制成新授权；没有可直接执行的正式训练命令或批准文件。\n\n### 论文主线与三级证据\n\n当前最可信主张：相同人口、配对初始化/顺序及固定E9下，DOTE显式数值相对零控制跨三个训练seed均降低Brier及样本经验可靠性项；排序、强雨和分位数收益不稳定，q32仍欠覆盖。128个零输入权重的有效容量局限、真实mask信息及重复使用同一Dev年必须并列报告。DTFM相对concat是共享条件的融合替换，不能写成额外独立模块或将其增量全部归于DOTE。\n\n第一层预测收益：固定协议内Brier复现成立，全面优势不成立。第二层物理启发表征：支持有限、带容量混杂的表征增量，新增探针尚无性能结果。第三层真实地形机制及独立年份泛化：NOT_VERIFIED。分辨率限制、E0目标与尾部稀少可列待检验解释，不能写成已经定位的原因，也不宣称当前业务近实时可用。\n\n候选论文结构：①回顾估计问题与信息边界；②数据人口/时间网格/QC与掩膜；③配对初始化、DOTE/DTFM及控制方法；④全部三seed总体、可靠性、UTC/海拔/七雨强结果；⑤容量、依赖与归因限制；⑥冻结后独立年份验证。建议题目为“云南复杂地形概率降水回顾估计中物理启发表征的可重复增益与校准局限”。\n\n图表清单（仅设计，未生成图）：信息流及真实网格/mask；三seed全部有符号差值；BS/REL/RES与概率箱；七雨强及q32含样本数；UTC/海拔反例；Train负对照分布/相关混杂。事件轨迹图和物理空间误差归因需联合逐场景预测、地理索引及独立事件定义，不能从边际分数计数恢复。旧35周块区间只属于B7/B8，不转用于DOTE−ZERO，也不称独立暴雨置信区间。\n\n### 2025最终准入：DRAFT，不可执行\n\n[增量草案](docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json)建议在旧B4/B7/B8九模型集合中加入已有ZERO三seed，合计12份已登记E9身份，以便独立年比较DOTE。主比较建议真实B7−ZERO，Brier与Pinball为共同主要指标，保留表现混合的Pinball以避免只选有利指标；B8−B7等为次要比较。这是**待研究者冻结的范围变更**，并非原预注册已经批准。\n\n已有E9 SHA/执行身份可继承；2025全模态共同人口、实际文件/掩膜/时次一致性均NOT_VERIFIED；新代码仅验证12模型身份目录及2001合成样本，不是2025读取/评价适配器。真实适配器NOT_IMPLEMENTED，原年份硬保护未放开。事件目录/依赖方案、一次性盲态清单与精确源读取/权重加载/存储/GPU时间预算仍待冻结；不预造人口数或把训练9轮读取量用于一次最终推理。所有准入条件通过并获新的一次性揭盲批准后才可执行，目前2025仍严格冻结。\n\n最小缺口：①研究者接受有限论文主张并冻结最终模型/假设；②无2025载荷的适配器与失败即停工程准备；③独立事件定义或明确仅报告固定时块敏感性；④正式授权后核对全模态人口及一次性最终测试。物理因果主张另需可识别的对应关系控制和独立物理/事件证据，不能以本轮GPU探针代替。\n"
+}

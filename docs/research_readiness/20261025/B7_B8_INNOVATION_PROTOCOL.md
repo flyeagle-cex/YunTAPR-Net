@@ -1,5 +1,14 @@
 # B7 DOTE / B8 DTFM 冻结科学协议与三seed证据
 
+## 2026-10-30物理归因增量：不申请新正式GPU
+
+B0–B8及ZERO_DOTE三seed固定E9完成状态继承。新增[ZERO三seed经验Brier分解](evidence/dote_reliability_increment_20261030.json)：真实B7的REL可靠性项3/3下降，但RES分辨能力项2/3下降；不能由此宣称总体校准或因果机制已验证。06 UTC的AP和q32、20–50强雨反例保留。
+
+[唯一非零候选科学协议](evidence/dote_physical_negative_protocol_20261030.json)比较联合空间错配与固定90°梯度旋转，后者在新Train诊断前锁定。959个2023 Train GFS主文件诊断表明mask保持，但O700标准差下降约20.5%、空间相关改变符号，有实质混杂；候选仅作方向性表征探针，不强行训练。6项CPU合成/3项最终测试合成元数据检查通过；整模缓存前/反向因RAM不足在加载前停止，NOT_VERIFIED，不声称入口可训练。无新正式训练/推理/优化器更新及2025访问。
+
+[最终测试草案增量](evidence/final_test_preregistration_increment_20261030.json)仅建议将既有ZERO三seed纳入12模型身份目录，模型/主指标范围待研究者冻结；真实2025人口未核实、适配器未实现、揭盲预算未批准。[科研决策PDF](../20261030/research_decision/YunTAPR_Physical_Attribution_Decision_20261030.pdf)及[可编辑源](../20261030/research_decision/main.tex)给出条件成本与论文边界。以下均是历史冻结协议/收口时点，旧提案和原件不改写。
+
+
 ## DOTE数值主对照三seed完成：COMPLETE_WITH_LIMITATIONS（2026-10-29）
 
 2026-10-29 23:39:52（北京时间）ZERO_DOTE seed2030、2031各九轮Train/2024 Dev及固定E9已封口；新18轮Train/18轮Dev、36气象/2静态账本、2份实际E9 SHA核验通过。新增8640更新、955143907680逻辑源字节/285626次，零重放/额外重试；包mtime区间27052.308秒、两任务各低于6小时，总体低于12小时。

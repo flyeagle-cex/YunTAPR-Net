@@ -1,0 +1,166 @@
+\documentclass[UTF8,a4paper,10pt,fontset=none]{ctexart}
+\setCJKmainfont{Microsoft YaHei}
+\setCJKmonofont{Microsoft YaHei}
+\usepackage[margin=19mm]{geometry}
+\usepackage{amsmath,booktabs,array,tabularx,hyperref}
+\hypersetup{unicode=true,colorlinks=true,linkcolor=black,urlcolor=blue,pdftitle={YunTAPR-Net 物理归因与论文科研决策}}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\emergencystretch=3em
+\raggedright
+\newcommand{\smallid}[1]{{\footnotesize\texttt{#1}}}
+\begin{document}
+{\LARGE\bfseries YunTAPR-Net V1.3}\par
+{\Large 物理归因与论文级科研决策}\par
+2026年10月30日｜研究者主导，AI辅助证据整理
+
+\textbf{建议：本轮不申请新的正式GPU训练。} 已有B0--B8及ZERO\_DOTE三seed结果全部继承。非零方向性候选已实现，但实际分布/空间混杂使其不足以干净识别真实物理对应关系；整模Train缓存检查另因RAM入场门槛停止，状态为NOT\_VERIFIED。没有新增正式训练、推理、优化器更新或2025访问。
+
+\section*{1．现有证据支持DOTE什么价值？}
+下表差值统一为\textbf{真实B7减ZERO\_DOTE}，来自固定E9、同一2024 Dev的三个配对训练seed。Brier/条件Pinball低优，AUROC/AP高优，q32误差以距名义0.984375的绝对距离低优。完整原值、雨强、UTC和海拔结果继承根目录METRICS.csv，不重新推理。
+
+\begin{center}\small
+\begin{tabular}{lrrrc}
+\toprule
+指标 & $\Delta2029$ & $\Delta2030$ & $\Delta2031$ & 改善seed\\
+\midrule
+Brier & $-.00164552$ & $-.00042572$ & $-.00060664$ & 3/3\\
+AUROC & $+.00083497$ & $-.00078195$ & $-.00033812$ & 1/3\\
+AP & $+.00469358$ & $-.00145198$ & $-.00048592$ & 1/3\\
+条件Pinball & $-.00088287$ & $-.00036088$ & $+.00065110$ & 2/3\\
+q32绝对误差 & $+.00426904$ & $+.00101025$ & $-.00186112$ & 1/3\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{新增可靠性诊断，而非重复Brier分析。} 原真实B7/B8三seed已有精确分解，本次只补齐三份既有ZERO原生概率分数计数表，并核对原生表digest；文件共831,488字节，不读取模型或新增Dev推理。相同人口下：
+\[
+ BS=\mathrm{REL}-\mathrm{RES}+\mathrm{UNC},\quad
+ \mathrm{REL}=\sum_k w_k(p_k-\bar y_k)^2,\quad
+ \mathrm{RES}=\sum_k w_k(\bar y_k-\bar y)^2.
+\]
+这里$k$为相同原生预测分数分组，UNC为有雨频率方差。
+
+\begin{center}\small
+\begin{tabular}{lrrr}
+\toprule
+seed & $\Delta BS$ & $\Delta$经验REL（低优） & $\Delta$经验RES（高优）\\
+\midrule
+2029 & $-.001645523341$ & $-.001266058928$ & $+.000379464414$\\
+2030 & $-.000425722974$ & $-.000615881672$ & $-.000190158698$\\
+2031 & $-.000606637740$ & $-.000666077216$ & $-.000059439477$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+经验REL下降3/3，固定十箱REL也下降3/3；RES却在2/3下降。分辨能力项不等于AUROC/AP，但这种分化说明Brier与排序可以不同向；代数分解不证明训练原因。385--416个原生分数组中有计数仅1的稀疏组，像元/时次相关，故\textbf{不能把经验REL下降直接命名为总体真实校准改善}。十箱替代预测另有分箱残差，不替换原始BS。
+
+条件Pinball针对有雨强度分位数，来自另一输出头；概率Brier改善不保证它或q32改善。06 UTC的AP下降、q32距名义误差上升均3/3；20--30及30--50 mm/h的Pinball仅2029改善。大于50 mm/h仅6个像元时次，绝非6场独立暴雨；按真实雨强条件化的覆盖率仅描述，不能要求各结果分层都达到名义覆盖。
+\newpage
+
+\section*{2．新的物理负对照能补哪一项证据？}
+DOTE是现有GFS与DEM的确定性函数，不是新观测或实测垂直速度。破坏该函数关系时，不可能同时保持它与全部真实基础输入的完整联合分布。下面两种控制均保留真实GFS13、DEM6、全部监督/真实DOTE掩膜、959/963人口及B7网络。
+
+\begin{tabularx}{\linewidth}{@{}p{29mm}XX@{}}
+\toprule
+候选 & 可保留/回答的问题 & 混杂及不能回答的问题\\
+\midrule
+固定mask类内8向量联合错配 &
+在完全相同8通道有效性签名内，用固定种子20261030构造无固定点映射；精确保留类内联合与边际数值分布，检验局部对齐表征与错位表征差异。 &
+破坏空间自相关、海拔/区域气候与本地GFS/PWAT关系；真实mask随天气变化并约束映射。不是只改变物理关系，单元素类不能移动。\\
+\addlinespace
+固定90度梯度旋转（唯一选定候选） &
+只在PhysicalDote内部将$(h_x,h_y)$改为$(-h_y,h_x)$；保留点位置、真实基础输入、梯度模长及向量内积相关。工程成本最低，检验方向性投影敏感性。 &
+改变标量特征分布及空间相关；旋转场通常不可积，不是另一真实DEM。不能无混杂地检验真实空间对应，更不能证明抬升因果。\\
+\bottomrule
+\end{tabularx}
+
+选择在读取新增Train诊断前锁定，\textbf{没有角度搜索、Dev标签选型、重新归一化或隐式裁剪}。原方案与候选为：
+\begin{gather*}
+ O=u h_x+v h_y,\qquad O_\perp=-u h_y+v h_x,\\
+ W=\max(O_\perp,0),\quad L=\max(-O_\perp,0),\quad
+ M=\frac{\mathrm{PWAT}}{31.85768219039871\ \mathrm{kg/m^2}}W.
+\end{gather*}
+八通道顺序仍为$O_{850},O_{700},W_{850},W_{700},L_{850},L_{700},M_{850},M_{700}$。梯度m/m、原始风m/s、O/W/L/M为m/s，再用原显式1m/s尺度；地下850/700 hPa层与PWAT缺测继续严格无效。原B6静态分支不旋转，W/L/M自然零值保留，不宣称每个位置八值均非零。
+
+\textbf{2023 Train标签无关诊断：}959个既定场景、3430监督点/场景；只读GFS主文件，不读卫星/降水标签/Dev。真实mask逐项一致，850/700有效率18.6490\%/93.2089\%。O700标准差从0.266514降至0.211836（约减少20.5\%），东西相邻相关从$-0.190922$变为$+0.114056$；联合置乱为$+0.001210$。因此两方案都有实质分布/空间混杂。全部八通道分布、有效率、lag1/3相关、海拔/经纬、月/UTC/固定象限统计已保存；不把单年关联当作独立区域气候验证。SP04真实网格约10.10 km乘11.08 km，名称不代表4 km。
+
+新增6项CPU合成检查通过；非零投影探针可使原128输入权重列获得损失梯度，避免永久全零输入结构，\textbf{并未证明整模有效容量完全相同}。整模Train缓存零优化器前/反向因可用RAM不足8 GiB门槛而停止，未加载张量或模型，状态NOT\_VERIFIED；事后RAM约4.81 GiB、GPU空闲显存约6.30 GiB。没有降低阈值或关闭其他科研进程。
+
+\textbf{投入判断：暂不投入正式GPU。} 候选只能补充非零、方向性表征探针；单次训练好坏仍无法唯一分离真实物理对应与分布变化。资源恢复本身不消除这一科学问题。如研究者接受较窄问题，先补唯一受阻缓存检查，再绑定可执行入口、新目录及一次明确批准；本轮不伪造训练入口就绪或批准。
+\newpage
+
+\section*{3．论文主线、证据分级与最小缺口}
+\textbf{当前可信核心主张：}在既定网络、同人口、配对初始化/顺序、固定E9和同一开发年内，显式DOTE数值相对零数值控制跨三个训练seed均降低Brier及样本经验可靠性项；排序、强雨与分位数收益不稳定，尾部覆盖仍不足。三seed是训练随机性描述性复现，不是独立年份、显著性或物理因果证明。
+
+\begin{tabularx}{\linewidth}{@{}p{32mm}XX@{}}
+\toprule
+证据层级 & 已支持 & 仍不支持\\
+\midrule
+预测收益 & Brier在三个seed下降；其余全部正负结果保留。 & 全面优越、稳定20--50强雨改善、尾部校准解决。\\
+显式物理启发表征 & 已有GFS/DEM信息下的有限表征增量。 & 无混杂的机制归因；ZERO的128无损失梯度权重及真实mask信息局限仍在。\\
+真实地形机制及跨年泛化 & 当前NOT\_VERIFIED。 & 迎风抬升/背风因果、独立年份推广或业务近实时可用性。\\
+\bottomrule
+\end{tabularx}
+
+候选题目：\textbf{《云南复杂地形概率降水回顾估计中物理启发表征的可重复增益与校准局限》}。B8是同条件输入下对B7融合形式的替换，不能写成额外独立模块，更不能把其全部差异归于DOTE。
+
+建议论文结构：(1)回顾估计问题与信息边界；(2)数据人口、时序/网格、QC与mask；(3)配对实验、DOTE/DTFM、零控制及有效容量；(4)三seed总体、REL/RES、UTC/海拔与七雨强反例；(5)依赖、分辨率、来源与归因限制；(6)正式冻结后的独立年份验证。E0目标、约10km分辨率和尾部稀少只是待检验误差解释，不写成已定位的原因。
+
+图表清单仅作设计，不生成新图：信息流/实际网格与mask；三seed全部有符号差值；BS/REL/RES及概率箱；七雨强/q32与分母；UTC/海拔反例；Train控制分布和相关混杂。联合空间误差或天气事件轨迹图缺少联合预测/事件索引，暂不制作。既有35周块区间属于B7/B8，不能移作DOTE--ZERO区间或称独立暴雨置信区间。
+
+\section*{4．2025最终测试：准入仍未完成}
+本轮\textbf{不读取新增2025载荷、不推理、不计算最终指标}。原预注册草案不因代码创建而自动冻结；元数据检查仅采用2001合成样本。
+
+\begin{tabularx}{\linewidth}{@{}p{40mm}X@{}}
+\toprule
+准入事项 & 真实状态/下一步\\
+\midrule
+模型与权重身份 & 已登记既有E9 SHA及执行commit；建议旧B4/B7/B8九模型加ZERO三个seed，共12模型。这是待研究者确认的范围变更。\\
+假设与指标 & 建议真实B7--ZERO为主比较，Brier及Pinball共同主要指标；保留混合的Pinball以免只选有利指标。B8--B7等次要比较、全部32覆盖与反例保留，尚未正式冻结。\\
+全模态共同人口 & NOT\_VERIFIED；真实数目、源清单、时次、掩膜一致性不预造。需先批准相应盲态验证范围。\\
+真实执行适配器 & NOT\_IMPLEMENTED；当前只校验身份目录与合成张量元数据，原年份硬保护未放开。\\
+事件依赖 & 无独立事件目录/空间追踪。固定周块只能作敏感性分析；不能从边际分数表恢复成对空间误差。\\
+一次性揭盲 & LOCKED。需冻结模型/指标/QC、人口与源清单、代码/权重、精确IO/存储/时间和失败停止政策，另获明确批准；不以2025筛选模型。\\
+\bottomrule
+\end{tabularx}
+
+论文级收口最小缺口是研究者冻结有限主张与最终比较、完成无载荷适配器工程、明确事件依赖策略，并在独立授权后一次最终验证。若坚持物理因果主张，另需可识别对应关系控制及独立事件/物理观测；现有非零探针不能代替。
+\newpage
+
+\section*{5．资源、身份与可复核交付}
+\textbf{本轮真实新增消耗：}2023 Train GFS主文件959份，共272,589,016字节/959次，全部完成；无卫星、降水标签、Dev原始源或2025。首次因缺少psutil在原始读取前停止，改用原生Windows RSS后完成特征诊断；两次静态缓存累计625,656字节。特征诊断62.969秒，采样RSS峰值685,457,408字节（不是连续采样峰值保证）。原失败命名空间保留。
+
+另外只读取三份已保存ZERO概率计数SQLite，文件字节合计831,488；不是新Dev推理，也不把文件大小声称为物理磁盘总读量。新6项CPU合成检查和3项合成最终测试目录检查通过。整模缓存检查在入场前停止，无缓存读取、权重加载或前/反向执行。新增正式训练、模型推理和优化器更新均0。
+
+\textbf{条件成本估计，非待批准训练包：}假设日后仅开展B7\_PERP\_GRADIENT seed2029，从头初始化，继承E0/f006、959/963、Train2/Dev8、九轮固定E9，公共初始权重和九轮顺序规则与原B7相同；辅助seed12029/22029。不从训练后的E9微调。跨seed的seed+epoch$-1$排列移位重叠照实保留。此前Dev结果已知，不能声称盲态注册。
+\begin{align*}
+B_{\rm IO}&=9(26{,}424{,}262{,}556+26{,}639{,}253{,}112)+312{,}828\\
+&=477{,}571{,}953{,}840\ \text{字节},\\
+N_{\rm IO}&=9(7{,}918+7{,}950)+1=142{,}813\ \text{次}.
+\end{align*}
+同一冻结读取链路已包含所需GFS物理变量，因此新增动态原始源0；没有复制B6额度来冒充新授权。若以后批准：单模型4,320更新，至多6小时，至少24GiB独立存储、8GiB可用RAM及5GiB空闲显存，零重放/额外重试，失败保留账本并停止；约3--4小时仅参考相似旧运行。新正式入口、准确新目录、当前资源和执行代码仍须绑定，\textbf{本轮没有可直接启动的训练命令或批准文件}。
+
+可选联合误差数据建议：两份既有E9各一次2024 Dev推理需条件估计53,279,131,880源字节/15,902实例、2次检查点加载、0训练更新；时间/输出存储未核定。此建议未授权、未执行，也不是本轮交付关卡；仍须独立事件目录，不能仅靠追加推理自动取得机制证据。
+
+\textbf{准备代码commit：}\\
+\smallid{6c26c9eb3f9b3452a10b62649774a1f617b2efc3}
+
+\textbf{候选协议规范化SHA256（不含自身sha字段）：}\\
+\smallid{ea8cd17768147d4c570efe7769169cd316}\\
+\smallid{c43f07b94a8922aecbd9a9690507b5}
+
+\textbf{数据人口SHA256：}\\
+\smallid{2f2cc75cfb6c209fd8195d3419207216c5}\\
+\smallid{c3f2a4fc8315b40a1d77cc537dedb8}
+
+\textbf{主要公开证据}（下列文件均位于相对仓库目录\path{docs/research_readiness/20261025/evidence/}；原件/权重保持本地）：
+\begin{itemize}\setlength{\itemsep}{1pt}
+\item \path{dote_reliability_increment_20261030.json}
+\item \path{physical_negative_train_diagnostics_20261030.json}
+\item \path{physical_negative_cached_train_check_20261030.json}
+\item \path{dote_physical_negative_protocol_20261030.json}
+\item \path{physical_attribution_decision_20261030.json}
+\item \path{final_test_preregistration_increment_20261030.json}
+\end{itemize}
+根目录五个统一入口增量更新；旧指标与冻结提案、原PDF/TeX不覆盖。本报告的出版版本由Git历史标识，与实际模型训练commit区分。PR \#1保持草稿，main不合并。
+\end{document}
