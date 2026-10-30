@@ -201,3 +201,7 @@ B4/2030矩阵终点commit为943da95，其E1继承52a8e90，E2–9由943da95执�
 ## B0/B1补算上下文错误的增量定位
 
 [代码作用域与最小修复](docs/research_readiness/20261025/evidence/b01_metric_context_diagnosis_20261030.json)（SHA256 `8dade9603fc48defd457356e2943b54ad6ac134f9808bee70b79c4dff8e4c5f9`）以两份原Engine的AST调用位置证明历史评估未退出seeded_environment。外部补算器误置确定性且未继承TF32/FP32策略，包装层现已修正并恢复inference_mode；3项新CPU边界检查通过，15项有效结果不重算。观察时外部脚本SHA0ca882ba…与旧包pin0c279786…不同，mtime在B0运行期间，修改来源未验证；保留观察副本，不覆盖外部更改。真实B0数值是否恢复一致仍NOT_VERIFIED；未加载模型、读取原始气象、复算或恢复训练，2025冻结。
+
+## 四项指标修正的唯一审批对象
+
+[修正提案](docs/research_readiness/20261025/evidence/metric_b01_correction_proposal_20261030.json)（文件字节SHA256`dba3aebc4466e8605795d41a7bbc500ef1cf11729b0ab16a687f06dcacbbdf17`；规范化SHA`daa745a02e8e51ff25155dddd1b65721c958a649277787d4fe53a11b563381b2`；执行代码`3d632954e37a6003d77babd06172922d63b0c77a`）绑定15项继承、四项次序、四个E9和858232b9…的2024人口、外部脚本冻结快照、原LRU预算及资源上限。B0完整内容账本10775次/46758323515字节，与旧日志read_events22838严格区分；早先旧收据的“源实例22838”标注有误，原件保留，此处纠正解释。六项新增CPU检查通过，三项上下文/125项未变公式检查继承；缺少真实批准时入口已拒绝，研究者批准文件及新计算输出均未创建。现有只读面板已重载为区分已知内容实例与旧日志事件，未控制训练/评价或重开资源保护任务。
