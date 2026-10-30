@@ -58,10 +58,15 @@ def validate_spec(path):
         if entry!=(ROOT/'tools/b2_monitor/server.py').resolve():raise PermissionError('Only existing read-only monitor')
     elif spec['kind']=='ENGINEERING_PROBE':
         if not entry.is_relative_to(PRIVATE.resolve()):raise PermissionError('Probe must be an ignored local script')
-    elif spec['kind']=='METRIC_BACKFILL_COMPLETION':
+    elif spec['kind'] in ('METRIC_BACKFILL_COMPLETION','METRIC_BACKFILL_CORRECTION'):
         if entry!=(ROOT/'tools/research_readiness/resume_metric_backfill.py').resolve() or command[3]!='execute':raise PermissionError('Only the once-only 2024 metric completion controller')
         private=read(command[command.index('--private')+1])
         if private.get('authorization_basis')!='CURRENT_USER_FINISH_EXISTING_METRIC_BACKFILL_20261030' or Path(private['new_output_root']).exists():raise PermissionError('Consumed or unrequested metric completion')
+        if spec['kind']=='METRIC_BACKFILL_CORRECTION':
+            if private.get('correction_scope')!='B01_PRECISION_CORRECTION_4_20261030':raise PermissionError('Exact four-pass correction required')
+            import importlib.util
+            definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
+            gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
         if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):return Path(command[command.index(flag)+1])

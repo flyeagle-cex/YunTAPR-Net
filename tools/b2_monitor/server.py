@@ -311,7 +311,7 @@ class PipelineReader(base.Reader):
             failure=self.document('failure.json');complete=self.document('completion.json')
             exited=Path(self.config['metric_service_dir'],'target_exit.json').exists()
             live=not exited and self.token is not None and base.process_token(self.pid)==self.token
-            rows=[];recorded_bytes=recorded_files=0
+            rows=[];recorded_bytes=recorded_files=legacy_events=0
             for run in self.registry:
                 key=run['run_id'];old=self.manifest['inherited'].get(key)
                 path=Path(old['result']) if old else self.folder/'runs'/key/'result.json'
@@ -327,7 +327,12 @@ class PipelineReader(base.Reader):
                             if values.get('passed') is False:problems.append(dict(metric=name,stored=values.get('stored'),recomputed=values.get('recomputed'),abs_diff=values.get('abs_diff')))
                     io=result.get('read_scope_actual',{});meter=io.get('meter_totals',{})
                     recorded_bytes+=io.get('content_bytes_read',meter.get('delivered_bytes',0)) or 0
-                    recorded_files+=io.get('read_events',meter.get('opened_files',0)) or 0
+                    # Legacy B0/B1 read_events counts Budget.emit calls, not files.
+                    legacy_events+=io.get('read_events',0) or 0
+                    verified=self.document(str(self.folder/(key+'_verified.json')))
+                    actual_instances=(verified or {}).get('content_read_instances')
+                    if actual_instances is None:actual_instances=self.config.get('verified_content_read_counts',{}).get(key,meter.get('opened_files',0))
+                    recorded_files+=actual_instances or 0
                 elif (self.folder/(key+'_claim.json')).exists():state='FAILED' if failure else 'RUNNING' if live else 'UNKNOWN'
                 else:state='BLOCKED' if failure or exited else 'PENDING'
                 rows.append(dict(name=key,model=run['model'],seed=run['seed'],arm=run.get('arm','E0'),state=state,inherited=bool(old),gate_failures=problems))
@@ -355,7 +360,7 @@ class PipelineReader(base.Reader):
             started=self.document('binding.json')['at'];now=datetime.now(timezone.utc)
             end=datetime.fromisoformat(failure['at']) if failure and failure.get('at') else now
             result=dict(pipeline=True,read_only=True,state=state,snapshot_utc=now.isoformat(),metric_runs=rows,metric_completed=done,metric_required=19,metric_state=metric_state,
-                candidate=candidate,recorded_metric_io=dict(bytes=recorded_bytes,files=recorded_files,scope='仅已有result.json记录，缺失段不视作零；不是整包源账本封口'),
+                candidate=candidate,recorded_metric_io=dict(bytes=recorded_bytes,files=recorded_files,legacy_log_events=legacy_events,scope='仅已知内容实例；旧read_events为日志事件，缺失计数不视作零；不是整包源账本封口'),
                 elapsed_seconds=max(0,(end-datetime.fromisoformat(started)).total_seconds()),message=message,source_commit=self.proposal['execution_code_commit'],resources=base.resources(training if training.exists() else self.folder) if include_resources else {})
             self.cache,self.cached_at=result,time.monotonic();return result
 

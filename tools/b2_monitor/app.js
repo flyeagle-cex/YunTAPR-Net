@@ -37,8 +37,8 @@ function renderPipeline(s){
     const tr=document.createElement('tr'),m=e.metrics||{};
     for(const value of [e.epoch,phases[e.phase],fmt(e.training_loss),fmt(m.brier),fmt(m.auroc),fmt(m.average_precision),fmt(m.conditional_pinball),Number.isFinite(m.q32_coverage)?`${(100*m.q32_coverage).toFixed(3)}%`:'—']){const td=document.createElement('td');td.textContent=value;tr.append(td);}$('metrics').append(tr);
   }
-  const io=s.recorded_metric_io;put('bytes',`${(io.bytes/1e9).toFixed(3)} GB（已有结果记录）`);put('files',`${number.format(io.files)}（已有结果记录）`);put('uncertain',String(c.reserved-c.returned));put('replay','0');
-  $('bytes').previousElementSibling.textContent='指标已记录逻辑源载荷';$('files').previousElementSibling.textContent='指标已记录源读取实例';
+  const io=s.recorded_metric_io;put('bytes',`${(io.bytes/1e9).toFixed(3)} GB（已有结果记录）`);put('files',`${number.format(io.files)} 已知实例；${number.format(io.legacy_log_events||0)} 旧日志事件另列`);put('uncertain',String(c.reserved-c.returned));put('replay','0');
+  $('bytes').previousElementSibling.textContent='指标已记录内容读取';$('files').previousElementSibling.textContent='已知内容读取 / 日志事件';
   const r=s.resources||{},g=r.gpu;put('gpu',g?.name||'暂不可用');put('gpu-use',g?`${fmt(g.used_mib/1024,2)} / ${fmt(g.total_mib/1024,2)} GiB · ${fmt(g.utilization,0)}% · ${fmt(g.temperature,0)}°C`:'—');
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');put('commit',s.source_commit.slice(0,12));
   put('updated',`快照：${new Date(s.snapshot_utc).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})} 北京时间 · 本地只读`);

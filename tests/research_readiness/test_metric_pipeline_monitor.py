@@ -56,5 +56,13 @@ class PipelineMonitorTests(unittest.TestCase):
         self.assertNotEqual(s['state'],'COMPLETE')
         self.assertFalse((self.out/'NOT_STARTED_CANDIDATE').exists())
 
+    def test_log_events_are_never_added_as_content_file_instances(self):
+        self.result(0)
+        p=self.out/'runs/run0/result.json';x=json.loads(p.read_text(encoding='utf-8'))
+        x['read_scope_actual']=dict(read_events=900,content_bytes_read=123,meter_totals=dict(opened_files=4))
+        p.write_text(json.dumps(x),encoding='utf-8')
+        s=self.snapshot();self.assertEqual(s['recorded_metric_io']['files'],4)
+        self.assertEqual(s['recorded_metric_io']['legacy_log_events'],900)
+
 
 if __name__=='__main__':unittest.main()

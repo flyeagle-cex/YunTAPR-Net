@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from contextlib import contextmanager
 from types import SimpleNamespace
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[2]
 spec=importlib.util.spec_from_file_location('metric_completion',ROOT/'tools/research_readiness/resume_metric_backfill.py')
@@ -71,6 +72,40 @@ class HistoricalPrecisionTests(unittest.TestCase):
         self.assertFalse(torch.inside)
         iterator=adapter.batches();self.assertEqual(next(iterator),{'synthetic':True});self.assertTrue(torch.inside)
         iterator.close();self.assertFalse(torch.inside)
+
+
+class CorrectiveGateTests(unittest.TestCase):
+    def grant_fixture(self):
+        tasks=['B0_s2026_E0','B1_s2026_E0','B0_s2027_E0','B1_s2027_E0']
+        budget=dict(caps={t:dict(source_bytes=10,content_reads=1,seconds=2) for t in tasks},maximum_seconds=8)
+        p=dict(execution_code_commit='SYNTHETIC_TEST_ONLY',tasks=tasks,budget=budget,engine_sha256='e'*64,registry_sha256='f'*64,code_sha256={})
+        p['proposal_sha256']=m.digest(p)
+        s=dict(correction_proposal='NO_REAL_PROPOSAL',researcher_approval='NO_REAL_APPROVAL_FILE',new_output_root='NO_REAL_OUTPUT',remaining=tasks,caps=budget['caps'],maximum_seconds=8,engine_sha256='e'*64,registry_sha256='f'*64)
+        a=dict(approved_by_researcher=True,decision_id='SYNTHETIC_UNIT_TEST_NOT_RESEARCH_AUTHORIZATION',proposal_sha256=p['proposal_sha256'],execution_code_commit=p['execution_code_commit'],tasks=tasks,budget=budget,output_root=s['new_output_root'])
+        return s,p,a
+
+    def test_corrective_execution_rejects_false_or_missing_grant(self):
+        s,p,a=self.grant_fixture();a['approved_by_researcher']=False
+        with patch.object(m,'read',side_effect=[p,a]):
+            with self.assertRaises(PermissionError):m.correction_grant(s)
+        with patch.object(m,'read',side_effect=[p,FileNotFoundError('missing real grant')]):
+            with self.assertRaises(FileNotFoundError):m.correction_grant(s)
+
+    def test_corrective_execution_cannot_change_the_approved_budget(self):
+        s,p,a=self.grant_fixture();a['budget']=dict(maximum_seconds=999,caps=s['caps'])
+        with patch.object(m,'read',side_effect=[p,a]):
+            with self.assertRaises(PermissionError):m.correction_grant(s)
+
+    def test_observed_checkpoint_mismatch_is_not_a_complete_metric_result(self):
+        x=dict(run_id='synthetic',status='COMPLETE',gate=dict(passed=True),checkpoint_identity=dict(expected_sha256='a'*64,sha256_actual='b'*64))
+        with patch.object(m,'read',return_value=x):
+            with self.assertRaises(ValueError):m.valid_result('NOT_READ',dict(run_id='synthetic',checkpoint_sha256='a'*64))
+
+    def test_resource_admission_rejects_low_ram_or_gpu_or_disk(self):
+        normal=dict(gpu=dict(total_mib=8192,used_mib=1024),memory=dict(available=16*1024**3),disk_free=10*1024**3)
+        for status in [dict(normal,memory=dict(available=1024**3)),dict(normal,gpu=dict(total_mib=8192,used_mib=7000)),dict(normal,disk_free=1024**3)]:
+            with patch.object(m,'module',return_value=SimpleNamespace(resources=lambda folder:status)):
+                with self.assertRaises(RuntimeError):m.resource_admission('NOT_OPENED')
 
 
 if __name__=='__main__':unittest.main()
