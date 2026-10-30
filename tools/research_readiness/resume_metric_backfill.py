@@ -28,6 +28,32 @@ def module(path,name):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 
 
+def install_historical_b01_context(engine,torch):
+    """Match the actual seeded Engine.run_one -> inference_mode validate scope.
+
+    The pinned external adapter incorrectly assumed validate ran AFTER the
+    seeded_environment exited. Preserve that historical file and wrap only
+    B0/B1; the fifteen already-matched core-model results are unchanged.
+    """
+    original=engine._apply_historical_determinism
+    def configure(family,seed,dry_check):
+        if family!='b01' or dry_check:return original(family,seed,dry_check)
+        torch.use_deterministic_algorithms(True,warn_only=False)
+        torch.backends.cudnn.deterministic=True
+        torch.backends.cudnn.benchmark=False
+        torch.set_float32_matmul_precision('highest')
+        torch.backends.cuda.matmul.allow_tf32=False
+        torch.backends.cudnn.allow_tf32=False
+    engine._apply_historical_determinism=configure
+    batches=engine.B01Adapter.batches
+    def historical_batches(adapter):
+        # Model construction/state loading remains outside inference_mode, as
+        # in the original Engine. Inputs, forward and evaluation stay inside.
+        with torch.inference_mode():
+            yield from batches(adapter)
+    engine.B01Adapter.batches=historical_batches
+
+
 def valid_result(path,run):
     x=read(path)
     if x.get('status')!='COMPLETE' or x.get('gate',{}).get('passed') is not True or x.get('run_id')!=run['run_id']:
@@ -76,6 +102,7 @@ def worker(s,rid):
             super().account_bytes(size);self.record('DELIVERED',size)
     m.FrozenBudgetStub=BoundedBudget
     import torch
+    install_historical_b01_context(m,torch)
     torch.set_num_threads(1);torch.set_grad_enabled(False)
     def forbidden(*args,**kwargs):raise PermissionError('Metric backfill cannot construct an optimizer')
     torch.optim.Optimizer.__init__=forbidden

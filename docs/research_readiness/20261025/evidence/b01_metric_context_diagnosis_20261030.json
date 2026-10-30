@@ -1,0 +1,88 @@
+{
+  "status": "B01_CONTEXT_BUG_CONFIRMED_WRAPPER_FIXED_NUMERICAL_RECHECK_NOT_STARTED",
+  "recorded_at": "2026-10-30T17:05:13.318438+08:00",
+  "parent_commit": "602db3bee870b40ef740acae7fce31c5906b4dee",
+  "diagnosis": {
+    "immediate_stop": "B0_s2026_E0 full Development pass finished but frozen-metric gate failed; fail-stop controller exited1",
+    "verified_code_error": "External adapter assumed validate occurred after seeded_environment exit; both historical Engines validate inside that context",
+    "static_scope_proofs": [
+      {
+        "source": "src/yuntapr/training/phase_b_v2_seed2026_v2/engine.py",
+        "source_sha256": "8462b16f6836b6b26c8f66d27476c0bf2ff5735d1d247306a6f6a6a1f994ceab",
+        "seeded_context_line": 46,
+        "seeded_context_end_line": 96,
+        "validate_call_line": 67,
+        "validate_is_inside_seeded_context": true,
+        "inference_mode_decorated": true
+      },
+      {
+        "source": "src/yuntapr/training/phase_b_v2_seed2027/engine.py",
+        "source_sha256": "6ea4fc5aac125c4507e85f6c64a4881deaff20372d673eab2b4c7f27caf8145d",
+        "seeded_context_line": 60,
+        "seeded_context_end_line": 122,
+        "validate_call_line": 92,
+        "validate_is_inside_seeded_context": true,
+        "inference_mode_decorated": true
+      }
+    ],
+    "precision_mismatch": "Adapter explicitly used cudnn.deterministic=False and returned without restoring historical deterministic=True, both TF32=False and highest float32 matmul policy",
+    "execution_context_mismatch": "Historical B0/B1 validation uses inference_mode; stopped wrapper used grad-disabled regular execution",
+    "numerical_causal_confirmation": "NOT_VERIFIED_NO_NEW_FORWARD",
+    "observed_pattern": "Brier/AUROC/AP exact; Pinball differs3.36897248223722e-7; q32 covered count differs36"
+  },
+  "additional_code_identity_blocker": {
+    "old_package_engine_sha256": "0c279786ab53cf84cd9bd4408023abf6590a5fbd6eb812903e08ca4406fe8a29",
+    "observed_engine_sha256": "0ca882baf7d4fcc00aa72543bff4773e98a27130b56b86fba41c7a3905eb8e93",
+    "old_package_pin_matches_current": false,
+    "file_last_write_local": "2026-10-30T16:21:12.038028+08:00",
+    "failed_run_start": "2026-10-30T16:14:22+0800",
+    "changed_by": "NOT_VERIFIED_NOT_MODIFIED_BY_THIS_TURN",
+    "observed_code_snapshot": "LOCAL_ONLY_PRESERVED_NEW_NAMESPACE",
+    "policy": "Do not overwrite external edits or silently rebind old package; new execution identity required before any recovery"
+  },
+  "fix": {
+    "scope": "B0/B1 wrapper only; external script not edited by this turn; metric formulas unchanged",
+    "deterministic_algorithms": true,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "cuda_matmul_tf32": false,
+    "cudnn_tf32": false,
+    "float32_matmul_precision": "highest",
+    "inference_mode": "Reader batch creation,forward and consumer evaluation share generator scope; model creation/loading remains outside",
+    "core_models": "Original core precision callback delegated unchanged;15 matching results retained",
+    "gate": "UNCHANGED_1E-12_AND_EXACT_COUNTS_NO_FAILURE_RELABELED"
+  },
+  "verification": {
+    "three_new_cpu_context_tests": "PASS",
+    "historical_scope_ast_checks": 2,
+    "actual_B0_recomputation": "NOT_STARTED",
+    "recovery_dispatch": "NOT_STARTED_NO_AUTOMATIC_RETRY"
+  },
+  "sources": [
+    {
+      "source_id": "B0_GATE_FAILED_RESULT",
+      "sha256": "849a9952171d5dea8a80390f2b0c36a6163d9b33e3a892c07646b6ee36d26b51"
+    },
+    {
+      "source_id": "EXTERNAL_METRIC_ENGINE_OBSERVED",
+      "sha256": "0ca882baf7d4fcc00aa72543bff4773e98a27130b56b86fba41c7a3905eb8e93"
+    },
+    {
+      "source_id": "HISTORICAL_SEEDED_INITIALIZATION",
+      "sha256": "2a232472d55006aa44d7129d10a01d07357037ae2d4bb42a43da287f3c4d0774"
+    }
+  ],
+  "activity": {
+    "new_inference": 0,
+    "new_training": 0,
+    "optimizer_updates": 0,
+    "raw_weather_reads": 0,
+    "checkpoint_loads": 0,
+    "old_receipt_overwrites": 0,
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "code_sha256": {
+    "tools/research_readiness/resume_metric_backfill.py": "8f981cecf346843dec31181d75480c343f3737b47f56dfe03d96fefc1c9041a4",
+    "tests/research_readiness/test_metric_completion.py": "ba1fc5e0ca970ac28ab1c2ba6ef933b42950f8ae9e82c769765efb987f9624da"
+  }
+}
