@@ -56,6 +56,18 @@ def validate_spec(path):
     if set(spec.get('environment',{}))-ENVIRONMENT:raise PermissionError('Unexpected environment override')
     if spec['kind']=='READ_ONLY_MONITOR':
         if entry!=(ROOT/'tools/b2_monitor/server.py').resolve():raise PermissionError('Only existing read-only monitor')
+    elif spec['kind']=='BOUNDED_EXTREME_DIAGNOSTIC':
+        if entry.name!='start_extreme_diagnostic.py' or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve():
+            raise PermissionError('Only the fixed nontraining extreme diagnostic controller')
+        def diagnostic_argument(flag):
+            value=Path(command[command.index(flag)+1])
+            if not value.is_absolute():raise ValueError('Absolute diagnostic identity required')
+            return value
+        import importlib.util
+        definition=importlib.util.spec_from_file_location('bounded_extreme_gate',entry)
+        gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
+        gate.validate_only(diagnostic_argument('--proposal'),diagnostic_argument('--private-preparation'),
+                           diagnostic_argument('--researcher-approval'))
     elif spec['kind']=='ENGINEERING_PROBE':
         if not entry.is_relative_to(PRIVATE.resolve()):raise PermissionError('Probe must be an ignored local script')
     elif spec['kind'] in ('METRIC_BACKFILL_COMPLETION','METRIC_BACKFILL_CORRECTION'):
