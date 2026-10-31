@@ -1,0 +1,581 @@
+{
+  "status": "COMPLETE_AUTHORIZED_SCOPE_SINGLE_WORKSHEET_TABLE_WITH_EXPLICIT_GAPS",
+  "verified_at": "2026-10-31T02:44:03.214092+00:00",
+  "workbook_path": "outputs/01a17251-29bb-7172-89f8-380b42c4d290/YunTAPR-Net_V1.3_完整指标与消融对照_20261031.xlsx",
+  "workbook_sha256": "b77469a441e36feeb55b5fea282ae5bcc0760481e5c7b3209a8d1d587151b4b4",
+  "workbook_bytes": 1388820,
+  "workbook_checks": {
+    "status": "PASS_SAVED_XLSX_AND_BUNDLED_ENGINE",
+    "workbook_sha256": "b77469a441e36feeb55b5fea282ae5bcc0760481e5c7b3209a8d1d587151b4b4",
+    "workbook_bytes": 1388820,
+    "worksheets": 1,
+    "tables": 1,
+    "table_range": "A5:AP4723",
+    "rows": 4718,
+    "columns": 42,
+    "probability_records": 31,
+    "quantile_rows": 992,
+    "record_types": {
+      "RAW": 468,
+      "GAP": 12,
+      "STRATIFIED": 342,
+      "QUANTILE": 992,
+      "HISTORICAL_NOT_MAIN": 2,
+      "NOT_STARTED": 1,
+      "MEAN": 582,
+      "SAMPLE_SD": 582,
+      "PAIR_DELTA": 1107,
+      "PAIR_MEAN": 315,
+      "PAIR_SAMPLE_SD": 315
+    },
+    "formula_cells": 55435,
+    "formula_errors": 0,
+    "new_pair_matches_source": true,
+    "contingency_counts_exact": true,
+    "no_fake_single_seed_SD": true,
+    "no_forbidden_word": true,
+    "no_private_paths": true,
+    "source_scope": "19 approved metric passes+all saved probability endpoints+completed one physical probe",
+    "native_Excel_application_test": "NOT_RUN;bundled recalculation plus exported OOXML checked",
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "metric_backfill": {
+    "complete": 19,
+    "required": 19,
+    "evidence": "docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json",
+    "evidence_sha256": "4665133eac5a43753608f13e62a8abbb775bd6b64d61e49659a7615b2dad3c46",
+    "rerun": false
+  },
+  "physical_control": {
+    "status": "VERIFIED_COMPLETE_PHYSICAL_CONTROL_TRAIN_AND_DEV",
+    "execution_commit": "7d4970d726aba1316f27fc7eea25817db6eca305",
+    "proposal_sha256": "ebd2391e0d6e95b1aa0a573df21416822f5173e1a6a11a8eafd6b74679e1f0d6",
+    "E9_sha256": "5406e20e241a3697b867ba4f44519397c2943b2381bc047d938c4eb141ce34e6",
+    "closeout_evidence": "docs/research_readiness/20261025/evidence/dote_physical_control_completion_20261030.json",
+    "closeout_sha256": "05fd5a0a2f107d1d3928069265801b9afbcf6e5d436447c3333cd7e2a4295391",
+    "new_updates": 1920,
+    "replay_updates": 480,
+    "effective_updates": 4320,
+    "cumulative_attempts": 4800,
+    "new_source_bytes": 212259080749,
+    "new_source_instances": 63474,
+    "recovery_wall_seconds": 6364.61905169487,
+    "original_time_acceptance": "NOT_VERIFIED_RETAINED"
+  },
+  "sources": [
+    [
+      "TIER0_B0_s2026_E0",
+      "49b33c922d5a540cbaf86c1aa0ad77b84697b0599661315fa2374915fb8e93fd",
+      839002,
+      "a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2026_E0",
+      "be4ce32457eda7f3e56680cd080a3c40e1328d6ca97e57ae3d36a1c0bf2fb147",
+      839137,
+      "ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B0_s2027_E0",
+      "bf6ff0caee0908419a77ae35d6a20f788383c3662c84fb889743606ab806112e",
+      10372407,
+      "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2027_E0",
+      "cbbaff74979b54992c0cc721c3fda33ca358a5f3b95b677ab128f5aea6929de5",
+      10376028,
+      "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B0_s2026_E1",
+      "8e80dcd6b3b303aa2f9e9703ba7a3dbb2d06620e1f81b4a9a7b9b847aa510e6a",
+      841765,
+      "d36f6d541245b15b20e90cc93b95f15898d46f8c32568355af850d5389182cda",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2026_E1",
+      "f91a84391ea7d077140ce2f55c52bd3e25e5e3a017b6a6330860c6ccdf50a249",
+      841999,
+      "b9696c16d69b7b92163563d5d18aae0beba703e8b500c99bb1c216b8803bc17b",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B0_s2027_E1",
+      "abe0927775fec2c6cfae598712aaa03222e13f75f4754177abc50fd76d0bbb55",
+      10396567,
+      "bfe0e2edfcd5c6544f682148cafff36f2e458855452143fe6f74b141416f847a",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2027_E1",
+      "cda9dc81bc8304f2475a3c0852ae3b4ff906e09d4552473a70c1ee790aa8fb9e",
+      10400589,
+      "56f2c7af67a28dcb27e03cd65e09966d2d24b1d1df887676a04e9948f1b8ff69",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B0_s2026_E2",
+      "e6fb9d512886c5b7472dfa729c93a2810268337995dfbd1d32f33998b41c3b93",
+      838970,
+      "851876e761814b8ffed045c39fcb9cd9067153e2dbe471b8576d9d5dc70aaa5c",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2026_E2",
+      "aaa141cf8739c2939563a9fdc59d6442c1ff5b1f054e483f43cf516b917d153a",
+      839118,
+      "58bbeb40e5d91efab66d5335bd037e753492a700b95f3c2764d2adc29f3a67d3",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B0_s2027_E2",
+      "cdedd7ec9dc2668582918e67ba1e67c7e2fdd240c0d9533fb725295adaa38862",
+      10372487,
+      "8729e12690d4a154a371330473e5b2e4c7dfafc0dc43055e4e7b5b40ceaf8530",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B1_s2027_E2",
+      "1cd86c8e2742a1d242ab1a3bf958b419dc902dbae36d348a29ca7bd41f49fac2",
+      10375441,
+      "92d150d3b06e512ad5215b129877d5a87a57e440f08f859d03640cb6b262c9e4",
+      "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B2_s2029",
+      "411332948602665317ee1d333cfed71040669ff259bdf2be4b686cb3ed521da7",
+      1876367,
+      "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+      "a35302186b4b5d3d7ec735885a8d93762e6d3567",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B3_s2029",
+      "41567d338e39fd0ddb362f9dd1d3f3e1cce6aa017406b3c14e43b84187854beb",
+      1878272,
+      "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+      "5b5298f41025db5b7b718fd736fc3fe6de516875_E1_3;7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35_E4_9",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B4_s2029",
+      "5663b31c1789c95f07e385afdcd29ff3e7bf791c8b87fd0f6d51553e56d035a2",
+      1880560,
+      "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+      "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B3_s2030",
+      "2e816d8806e0ff5dd581f6b0737f13ba353be29bbc8e5e08ef2034d852ed9f27",
+      1881219,
+      "8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058",
+      "52a8e90dcea156382d7f2c510c5891c78e610329",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B4_s2030",
+      "bc5ee14ea4f353df212e9aeaef53ec49c1e0d899142bea1632f9cd73400b23a0",
+      1883210,
+      "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "943da957a3af846746c21b52d05a148bcb135064 (E1 inherited 52a8e90)",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B3_s2031",
+      "e8a07756b513c920bc83b43d83ea3c4d2f2ea37099a64f0a870778cb5b7cf5d9",
+      1880965,
+      "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+      "943da957a3af846746c21b52d05a148bcb135064",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B4_s2031",
+      "27f4827b1537c86b647dbdce68e030de60475c43ba5981fc502fe8c80ddf3a5f",
+      1884153,
+      "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "943da957a3af846746c21b52d05a148bcb135064",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B5_s2029",
+      "0b64d099e0342503c6c188fbff75ffa7aec062c56f82328ce3be4578ebcdeccd",
+      1880637,
+      "1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f",
+      "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B6_s2029",
+      "5f3e94c3c9656dac6fbb1dc59069a70d65da72e568d07c50b8f907058a9947df",
+      1882212,
+      "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+      "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B7_s2029",
+      "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060",
+      1882415,
+      "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "b1f072e45fdd17b80106a774083995c350b28f04",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B8_s2029",
+      "01aa1b9dcc4d038825b80dc58df0e85d00fb3be21c68d1ed760fcb21d87a70ff",
+      1881631,
+      "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+      "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B7_s2030",
+      "cdf74ce8cc8a83137dc6a414787cfb961e6cb88fa0d5587ec21d04e799135baf",
+      1884912,
+      "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B8_s2030",
+      "c2bdb7774969371c3420129e454c276c22537fc6e0c5edc49237f0b2b8138525",
+      1884167,
+      "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B7_s2031",
+      "1ea366686e54fda32db867deab8d6719dc8e9a86ca354a8e0bc2c5c923305a50",
+      1886836,
+      "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B8_s2031",
+      "65fa0ed65ada14485758ad3e8f42cbf6099a6ed9772651e0ff0c0f6751c53976",
+      1886133,
+      "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_B7_ZERO_DOTE_s2029",
+      "7bb65e76226523350b81bb857bfd3d50b704aaf3cf05a5b180915a62bd44e6fa",
+      1880465,
+      "445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21",
+      "0c91ff0f36d5cce3f4516d38663482650f61b03a",
+      "Inherited Tier0 provenance,not rehashed old observations/weights"
+    ],
+    [
+      "TIER0_ARCHIVED_ROWS",
+      "b3747c6edabd1f2af603ebfd5dffee08cf58c21db9b22bb40054de7da488a799",
+      19303,
+      "",
+      "",
+      "Original28 rows retained; paths not exported"
+    ],
+    [
+      "TIER0_ARCHIVED_GROUPS",
+      "fc5da8bab8b09c423e30d27c2bd648d299c75f725d2777c282da93ee0ec11a3f",
+      23135,
+      "",
+      "",
+      "Reuse saved statistics/identity only; no new inference or weight access"
+    ],
+    [
+      "TIER0_ARCHIVED_PAIRS",
+      "efc9a47ea8586a08ebbbf8d945cf0136fab3c4735ceafed9ee0f83d178dffab0",
+      5113,
+      "",
+      "",
+      "Reuse saved statistics/identity only; no new inference or weight access"
+    ],
+    [
+      "TIER0_HISTORICAL_PROXY",
+      "966ae1de7ca2cd46225574c0f6384fc57dc6c2cabf2e0a9751c8ac11a2d4a854",
+      744,
+      "",
+      "",
+      "Reuse saved statistics/identity only; no new inference or weight access"
+    ],
+    [
+      "TIER0_ARCHIVED_VALIDATION",
+      "a4dc4e23a43803e5dc1c62859c273d2e541d067c4f2b160c4a12f30139e3b050",
+      12409,
+      "",
+      "",
+      "Reuse saved statistics/identity only; no new inference or weight access"
+    ],
+    [
+      "TIER0_ARCHIVED_PROVENANCE",
+      "4cdf20339f9e175100473ede7d2c76936e4c09ad0612c2be19fccff5a50b82ba",
+      20580,
+      "",
+      "",
+      "Reuse saved statistics/identity only; no new inference or weight access"
+    ],
+    [
+      "UNIFIED_METRICS_SAVED",
+      "0bb37393ae563f2cb83d26ad07a9698726f4e8c917efc904b53ff5261804b949",
+      33090051,
+      "",
+      "",
+      "Existing full endpoints and diagnostics; no model/raw-source reads"
+    ],
+    [
+      "ZERO_THREE_SEED_PUBLIC",
+      "188f0305ec0faa7bd0077cc950dd0d5ec50e104bb54978bcdf8a2878ce2d5adf",
+      747110,
+      "",
+      "",
+      ""
+    ],
+    [
+      "PHYSICAL_CONTROL_PUBLIC",
+      "05fd5a0a2f107d1d3928069265801b9afbcf6e5d436447c3333cd7e2a4295391",
+      176670,
+      "5406e20e241a3697b867ba4f44519397c2943b2381bc047d938c4eb141ce34e6",
+      "7d4970d726aba1316f27fc7eea25817db6eca305",
+      ""
+    ],
+    [
+      "TIER1_B0_s2026_E0",
+      "1a51061929b4b79620615233b3a7411e129cb1b5fd5d765d5465b8faab7dda8e",
+      24630,
+      "a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94",
+      "db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B1_s2026_E0",
+      "dcd87a2d9c9ed0a78bf0e89f2061f8e16883e69b33fc078fe4ad9b4e0bbb6495",
+      24689,
+      "ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051",
+      "db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B0_s2027_E0",
+      "f3b576849b69ba268023d978235fe0fc7bf98dbd642e9f975aa5102424fe2198",
+      24944,
+      "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673",
+      "8e8fd2545e41b2f4834366c02bd89bd37cd9891d",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B1_s2027_E0",
+      "3b75040603b06730b10338bd29a5ef19eba7f561479f00db051150760ba78849",
+      25018,
+      "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43",
+      "8e8fd2545e41b2f4834366c02bd89bd37cd9891d",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B2_s2029",
+      "5d3720775c1f71d138c5f829399b7cf4a54a935a135412b842ac93e42bf7b486",
+      71598,
+      "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+      "a35302186b4b5d3d7ec735885a8d93762e6d3567",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B3_s2029",
+      "bf8e29e55db68634014ad7a67c41a3ea4f4464c355df44675348b4597434acbb",
+      71985,
+      "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+      "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35 (E4-E9); 5b5298f41025db5b7b718fd736fc3fe6de516875 (E1-E3)",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B4_s2029",
+      "97f7bf855607b4faeb6f25b624854cf41fe9f37135286e6d2d2633b376c56205",
+      71988,
+      "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+      "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35 (E4-E9); 5b5298f41025db5b7b718fd736fc3fe6de516875 (E1-E3)",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B3_s2030",
+      "46fe7c6ffc8090b6c74850a3f4b37475a606c4f146e22e7efbe4557860fe7e2c",
+      71481,
+      "8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058",
+      "52a8e90dcea156382d7f2c510c5891c78e610329",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B4_s2030",
+      "456a2354767ed2285fd053f4ad6ffb5b4bc18e3ca2a67490b094c849984e4a29",
+      71506,
+      "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "943da957a3af846746c21b52d05a148bcb135064",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B3_s2031",
+      "3a0843041aff6d2900f2e69b341ee8872f52d6200d04885d085a7967bf3467a4",
+      71928,
+      "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+      "943da957a3af846746c21b52d05a148bcb135064",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B4_s2031",
+      "6b44298aabe27b443bba9041c09e9375e0e3c5caba4e163adf8faa7f80836cb9",
+      71738,
+      "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "943da957a3af846746c21b52d05a148bcb135064",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B5_s2029",
+      "0b23d550a2ac7a14365e1ca6909cda6893a4dcd13904a2a7d6a4cc9177fc5d07",
+      71791,
+      "1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f",
+      "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B6_s2029",
+      "d375d87b970aaea30928a65bfc713cb158305624c76b79fa2d7eb3d8cc6fb853",
+      71902,
+      "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+      "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B7_s2029",
+      "e2cae84bf9661158de4e2626290a4077a01e1aaebb43829e1556d6282e53e008",
+      71855,
+      "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "b1f072e45fdd17b80106a774083995c350b28f04",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B8_s2029",
+      "f7ab24b7f82ab27d89bb18f3f54545414734085c2422139f1a6f05e3d916932d",
+      71843,
+      "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+      "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B7_s2030",
+      "6e467023fdc3a98376788b3ca46ec32dfb6b99bf706d3ac57e365b5355ec04c1",
+      71848,
+      "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B8_s2030",
+      "9fc269669a9ec3ac0949ea93c448ab4a085558d5b57b101ed1c2ffc087a93153",
+      71724,
+      "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B7_s2031",
+      "1a112ff02825d599247c9925265339d6b26a0bc07a8a97b2782534c973546cc6",
+      72109,
+      "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ],
+    [
+      "TIER1_B8_s2031",
+      "7fd97e27fe27b4b63bda9207f52aa521ca35e74fa3c3e3f47268f4990697993d",
+      71857,
+      "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+      "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "Forward-only2024; A/B/C NOT_FROZEN; original training binding kept separately"
+    ]
+  ],
+  "uncomputed_point_method_records": [
+    {
+      "run_id": "B0_s2026_E1",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B0_s2026_E2",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B0_s2027_E1",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B0_s2027_E2",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B1_s2026_E1",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B1_s2026_E2",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B1_s2027_E1",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B1_s2027_E2",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B7_PERP_GRADIENT_s2029",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B7_ZERO_DOTE_s2029",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B7_ZERO_DOTE_s2030",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    },
+    {
+      "run_id": "B7_ZERO_DOTE_s2031",
+      "scope": "A/B/C continuous and five-threshold point classification outside approved19-run matrix"
+    }
+  ],
+  "builder": {
+    "path": "tools/research_readiness/build_complete_metric_workbook.mjs",
+    "sha256": "4b3dbd6691363e5041cd5671141b7315bb0b218163cc506cfe1aeb5fea50133e",
+    "assembler_sha256": "615fdd045c233b8dab1defe8ad01660344ad6170d64babc7c8358ce045fabf4e",
+    "publication_commit": "SEE_CONTAINING_GIT_COMMIT;NOT_MODEL_EXECUTION_ID"
+  },
+  "scientific_limits": [
+    "Mixed positive and negative fixed-E9 results retained.",
+    "One-seed perpendicular-gradient probe changes scalar/spatial associations; no causal or significant-effect claim.",
+    "Final2025 remains frozen; preregistration/admission not complete."
+  ],
+  "authoring_marker": "INHERITED_ONE_SUCCESSFUL_MARKER_NOT_RERUN",
+  "source_data_reads": 0,
+  "new_model_inference": 0,
+  "checkpoint_deserialization": 0,
+  "final_2025": "FROZEN_NO_ACCESS"
+}
