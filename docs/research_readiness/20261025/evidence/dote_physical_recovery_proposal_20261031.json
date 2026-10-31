@@ -1,0 +1,261 @@
+{
+  "status": "READY_WAITING_EXPLICIT_E5_RECOVERY_AND_480_REPLAY_APPROVAL",
+  "authorized": false,
+  "execution_code_commit": "7d4970d726aba1316f27fc7eea25817db6eca305",
+  "tasks": [
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": 2029
+    }
+  ],
+  "data": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "protocol": {
+    "seed": 2029,
+    "models": [
+      "B7_PERP_GRADIENT"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 4320,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "BEST_selection": false
+  },
+  "scientific_choices": {
+    "DOTE": {
+      "pwat_reference_kg_m2": 31.85768219039871,
+      "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "moisture_basis": "windward_W",
+      "velocity_reference_m_s": 1.0
+    },
+    "channels": [
+      "O850",
+      "O700",
+      "W850",
+      "W700",
+      "L850",
+      "L700",
+      "M850",
+      "M700"
+    ],
+    "normalization": "Physical channels divided by explicit1m/s; no refit, clipping or hidden coefficient",
+    "spatial_operator": "Inherited native PS mask then conservative bilinear GFS to frozen SP04; use frozen B6 area-mean gradients",
+    "scales": [
+      "SINGLE_TARGET_SP04_100x100_48_CHANNELS"
+    ],
+    "condition_channels": {
+      "GFS_values_and_masks": 26,
+      "static_and_DOTE_values_and_masks": 28
+    },
+    "projection_width": 16,
+    "modulation_limit": 0.1,
+    "modulation_candidates_not_a_sweep": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "B7": "B6 feature then explicit concat residual",
+    "B8": "Replace additional B7 concat by matched-active-parameter DTFM branch; not B7 plus a module",
+    "initialization": {
+      "B6": "FRESH_SEED2029_NOT_E9_FINETUNING",
+      "auxiliary_seed": 22029,
+      "training_rng": "UNCHANGED_B6",
+      "condition_projections": "SHARED",
+      "output": "ZERO_RESIDUAL"
+    },
+    "condition_mask": "Per-channel missing indicators; use any valid DOTE channel plus any GFS channel inside original region; B6 path remains on every supervised pixel",
+    "precision": "Physical numpyFP64, stored tensorFP32, learned fusionFP32 under disabled AMP, return inheritedBF16; quantile/lossFP64 unchanged",
+    "elevation_bins_m": [
+      1000,
+      2000
+    ],
+    "elevation_metrics": "SUPPLEMENTAL_Brier_Pinball_q32_ONLY; no historical baseline bins",
+    "static_DEM_release": "INHERIT_RESEARCHER_ACCEPTED_NOT_VERIFIED_VENDOR_CHAIN",
+    "negative_control": {
+      "model": "B7_PERP_GRADIENT",
+      "rotation_matrix_east_north": [
+        [
+          0,
+          -1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "boundary": "Only gradient pack inside unchanged PhysicalDote; real GFS13/DEM6 and all masks retained",
+      "interpretation": "Directional-representation exploratory probe,not identifiable physical mechanism",
+      "distribution_and_spatial_confounds_accepted_as_limitations": true,
+      "no_clipping_rescaling_or_refitting": true
+    }
+  },
+  "budget": {
+    "new_updates": 1920,
+    "replayed_updates": 480,
+    "prior_returned": 2880,
+    "saved_updates": 2400,
+    "cumulative_attempts": 4800,
+    "training_source_bytes": 212254062672,
+    "training_source_instances": 63472,
+    "static_bytes": 312828,
+    "static_instances": 1,
+    "failed_source_verification_bytes": 4705249,
+    "failed_source_verification_instances": 1,
+    "total_source_bytes": 212259080749,
+    "total_source_files": 63474,
+    "cumulative_reserved_source_bytes": 509175755262,
+    "cumulative_delivered_bytes_if_complete": 509171050013,
+    "cumulative_source_instances": 152398,
+    "max_package_seconds": 10800,
+    "minimum_initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "checkpoint_deserializations": 1,
+    "checkpoint_rehashes_at_restore": 1,
+    "additional_retry_allowance": 0,
+    "clock_rule": "Both UTC wall and monotonic; earlier deadline wins, clock rollback stops; wait checks every2s",
+    "prior_time_acceptance": "NOT_VERIFIED_NO_RETROACTIVE_BUDGET_INCREASE",
+    "replay_allowance": 480
+  },
+  "checkpoint": {
+    "epoch": 5,
+    "updates": 2400,
+    "sha256": "9330e71c54209fd4baaf14ffe944f4830e6eb9d9036cd891dfc82f43f683b01d",
+    "bytes": 53903621,
+    "parent_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+    "actual_preparation_hash": "PASS_ONE_E5_WEIGHT_NO_DESERIALIZATION"
+  },
+  "parent_pins": {
+    "failure.json": "7843310f9b85b62534220593b8148e1f911506f6e6bfc52782033280c29bc771",
+    "B7_s2029/failure.json": "1e22af75f3afc35e4036cb2e204e86c7344352a5784993855cbc1f58926173e9",
+    "B7_s2029/updates.sqlite": "762d4f21213c30edce334a05bc9fb0855933c514db139e86c2ed887d117f2f20",
+    "B7_s2029/paired_initial_identity.json": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359",
+    "B7_s2029/paired_orders.json": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502",
+    "B7_s2029/B7_LAST_epoch_01.receipt.json": "8a157fa25417354c796241b448b426fa37d3d1da01edd0fcf74fd3bf53d9172a",
+    "B7_s2029/B7_LAST_epoch_02.receipt.json": "05afdb79c2b057d5af3686297dd9c63c5f632d95c8c4b68f9b41ff2c26271b90",
+    "B7_s2029/B7_LAST_epoch_03.receipt.json": "69735155588096008761297ef007225ce1b7997baf3dd4f0bc446963b40ed798",
+    "B7_s2029/B7_LAST_epoch_04.receipt.json": "1d78e78fae54967ef1cbf350802df7bf2eda3be07657e5a3d4606bd44de55a54",
+    "B7_s2029/B7_LAST_epoch_05.receipt.json": "12f13ff4b5d9ebe4aab08fc08844e2a3b1d77d721ea6b861dc62b0e34303574d",
+    "B7_s2029/B7_development_01.json": "56b77fabf5d494498fccab8a5db01cff35f87c1b5227255b64d27786f21678fb",
+    "B7_s2029/B7_development_02.json": "0e98cf2ac263da35102eae7c6f8633929d9c0f84c657139ee81add4dc3713958",
+    "B7_s2029/B7_development_03.json": "d9e75589c8934183ecba7c6c8ec28f380adcedd391dd7005bb629a4f7da8654c",
+    "B7_s2029/B7_development_04.json": "c283b3c096c81f49eb5f2223fdeb7865b0aa43d9ddb262533729f2857f23d4be",
+    "B7_s2029/B7_development_05.json": "05cacbb34c992cdbce7b15bb049f91d8aba6ae1634465016310093149a4d7b67"
+  },
+  "original_private_sha256": "d663067c7f91f93689d0d81b7223b321d7e2a601dc4d7d41b283cb088e2ba530",
+  "original_proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+  "stop_receipt_sha256": "b28da613ba7d513a7448a169698ff24e6499c592151f6e7e16d55561808e6528",
+  "code_sha256": {
+    "tools/research_readiness/start_dote_physical_control.py": "c722190f1b9f775e7ffe84af1247933400b4beeb895ec1d2a5fde15874bd298b",
+    "tools/research_readiness/start_independent_process.py": "2e493d1ad4032cb924eeaab745b4c3687153e697b9d41ba34c879ea40fe3f18b",
+    "src/yuntapr/experimental/research_readiness/dote_physical_controls.py": "9b1a732a40e6ea9f05d51c9d9f301ef8acce44b3e190c2ca247607734d12391a",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": "4b9403bf3d32bd6920c659ef8b5ead5d4e198b3ca41ee68e9ceb8090fdd0b03e",
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07",
+    "src/yuntapr/experimental/research_readiness/static_training.py": "31cfc8c1f51fd7421da8bfa2f041e8b0bc3de53ba92862139871f34a9287336b",
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": "2b823ed130c6d5625aa308cf2283e83576a1678c94d638e4ec2e577d61cbe5b7",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": "f0ae14926c98caae6fe226f86303cf3326821623833fe60651cf99f62e2a3404",
+    "src/yuntapr/experimental/core_innovation/stage4/evaluation.py": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+    "tools/research_readiness/start_dote_physical_recovery.py": "9b293d20bfcd37f6ff3305f60941e2579d61445e8c0bf45df2b55da818354b62",
+    "src/yuntapr/experimental/core_innovation/stage4/recovery.py": "6fa093143821239c936eb89eb8dbbb9ae7d8c78bacb39dafb1444a93f2540978",
+    "src/yuntapr/experimental/core_innovation/stage3/metered_io.py": "4003ea3def53c8f8acf7e1e4177be1a015f4546720bb4845e875bc7f4b4d9be4"
+  },
+  "source_scope_summary": {
+    "Train": {
+      "file_count": 7918,
+      "bytes_per_pass": 26424262556
+    },
+    "Development": {
+      "file_count": 7950,
+      "bytes_per_pass": 26639253112
+    }
+  },
+  "source_verification": {
+    "year": 2024,
+    "bytes": 4705249,
+    "expected_sha256": "324b76dceac0dad2d2fda4a5e150439131f94ef7ac6d12af5ae708aec3bf70c0",
+    "exact_source_path_sha256": "ad38fae25aa31ff9f48617922f2225293654bb80de17eabefb09da631343a977",
+    "expected_sha_origin": "Same source READ_COMPLETE in parent E5 Dev; not partial empty hash",
+    "metadata_preflight": "PASS_RESOLVE_SIZE_OPEN_CLOSE_0_PAYLOAD",
+    "full_payload_preflight": "WAITING_RECOVERY_GRANT"
+  },
+  "resources": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 19884085248,
+    "workspace_free_bytes": 53427814400,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 21904232448,
+    "output_free_bytes": 94668075008,
+    "minimum_RAM_bytes": 8589934592,
+    "minimum_GPU_free_bytes": 5368709120,
+    "recheck_at_start": true
+  },
+  "time_estimate": {
+    "hours": [
+      1.7,
+      2.5
+    ],
+    "hard_cap_hours": 3,
+    "basis": "4 epochs; first5 historical epochs about24.6min each, no new GPU benchmark"
+  },
+  "power_diagnostic": {
+    "system_resumed_utc": "2026-10-31T00:05:44.8258268Z",
+    "prior_sleep_utc": "2026-10-30T19:03:23.6951477Z",
+    "provider": "Microsoft-Windows-Power-Troubleshooter/Event1",
+    "raw_receipt_sha256": "2931c4d60a414d422a1fbb47c39b9869a33bbc68501429f767c84e0eae342575",
+    "inference": "Low-power/resume confirmed; source I/O causal link NOT_VERIFIED"
+  },
+  "inherited_metrics": "19_COMPLETE_NO_RERUN",
+  "failure_policy": "STOP_PRESERVE_ALL_NO_RETRY_NO_EXTRA_REPLAY",
+  "new_checks": {
+    "status": "PASS",
+    "new_cpu_checks": 8,
+    "tests": "tests/research_readiness/test_physical_recovery.py",
+    "actual_commands": "7 CPU checks in established project environment;1 new E9 synthetic closeout check after closing SQLite handles",
+    "real_training_updates": 0,
+    "real_weather_payload_reads": 0,
+    "real_checkpoint_deserializations": 0,
+    "old_model_tests": "INHERITED_UNCHANGED_NOT_RERUN",
+    "receipt_sha256": "93cb6af3586f32ed05e8890b7e20c3479bfef7179ea5b585b5bfd03368138eb5",
+    "test_code_sha256": "d42248937cfefe6a8f1a95da28157ee4ee81ba152f55bcea0dbc297a6d76a468"
+  },
+  "preparation_activity": {
+    "weather_payload_bytes": 0,
+    "checkpoint_deserializations": 0,
+    "checkpoint_files_hashed": 1,
+    "optimizer_updates": 0
+  },
+  "final_2025": "FROZEN_NO_ACCESS",
+  "proposal_sha256": "ebd2391e0d6e95b1aa0a573df21416822f5173e1a6a11a8eafd6b74679e1f0d6"
+}
