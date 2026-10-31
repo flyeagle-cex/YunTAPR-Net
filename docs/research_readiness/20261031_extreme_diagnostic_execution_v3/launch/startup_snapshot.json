@@ -1,0 +1,182 @@
+{
+  "status": "V3_RUNNING_LABEL_REFERENCE_SEALED_MODELS_IN_PROGRESS",
+  "observed_at": "2026-10-31T09:02:46.222060+00:00",
+  "source_snapshot": {
+    "state": "RUNNING",
+    "read_only": true,
+    "snapshot_utc": "2026-10-31T09:02:46.221929+00:00",
+    "controller_observed": true,
+    "proposal_sha256": "058015e41af83353d57b677a84d9d955ef44db42c7e02028608d618724f5350a",
+    "execution_code_commit": "d27ba876ae0f1341eec7570956d20cec7cfc9bed",
+    "tasks": [
+      {
+        "task": "TRAIN_LABELS",
+        "status": "COMPLETE",
+        "scenes": 959,
+        "required_scenes": 959,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": 180049094,
+        "metadata_archive_reserved_bytes": 111944720,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B7_s2029",
+        "status": "COMPLETE",
+        "scenes": 963,
+        "required_scenes": 963,
+        "original_metric_gate": true,
+        "payload_archive_reserved_bytes": 26747373950,
+        "metadata_archive_reserved_bytes": 115695502,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B8_s2029",
+        "status": "RUNNING",
+        "scenes": 24,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B4_s2029",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B7_s2030",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B8_s2030",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B4_s2030",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B7_s2031",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B8_s2031",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      },
+      {
+        "task": "B4_s2031",
+        "status": "PENDING",
+        "scenes": 0,
+        "required_scenes": 963,
+        "original_metric_gate": null,
+        "payload_archive_reserved_bytes": null,
+        "metadata_archive_reserved_bytes": null,
+        "journal_updating": false,
+        "error_type": null
+      }
+    ],
+    "tasks_complete": 2,
+    "models_complete": 1,
+    "remaining_seconds": 19452.655831336975,
+    "budget": {
+      "weather_static_label_bytes": 239935204070,
+      "weather_static_label_instances": 71802,
+      "checkpoint_archive_bytes": 482176887,
+      "checkpoint_sha_passes": 9,
+      "checkpoint_loads": 9,
+      "checkpoint_archive_reference_bytes": 964353774,
+      "payload_archive_reference_bytes": 240899557844,
+      "metadata_archive_cap_bytes": 1275068416,
+      "metadata_open_cap": 1920,
+      "worker_metadata_archive_cap_bytes": 134217728,
+      "worker_metadata_open_cap": 128,
+      "total_source_reservation_cap_bytes": 242174626260,
+      "prior_metadata_archive_charge_bytes": 67108864,
+      "prior_metadata_open_charge": 128,
+      "cumulative_metadata_archive_cap_bytes": 1342177280,
+      "cumulative_metadata_open_cap": 2048,
+      "cumulative_source_reservation_cap_bytes": 242241735124,
+      "prior_target_seconds_charge": 12,
+      "cumulative_maximum_seconds": 21600,
+      "maximum_seconds": 21588,
+      "per_model_seconds": 2400,
+      "label_seconds": 600,
+      "output_storage_cap_bytes": 17179869184,
+      "minimum_free_bytes": 34359738368,
+      "minimum_host_available_bytes": 8589934592,
+      "minimum_gpu_free_mib": 5120,
+      "optimizer_updates": 0,
+      "retries": 0,
+      "replay": 0
+    },
+    "known_sealed_or_failed_reservations": {
+      "payload_archive_bytes": 26927423044,
+      "metadata_archive_bytes": 227640222,
+      "metadata_opens": 82,
+      "prior_metadata_charge_bytes": 67108864,
+      "cumulative_known_archive_bytes": 27222172130
+    },
+    "unsealed_tasks": [
+      "B8_s2029"
+    ],
+    "accounting_note": "Only sealed or failed-task accounting is summed; active/unsealed reads remain uncounted here",
+    "final_2025": "FROZEN_NO_ACCESS",
+    "optimizer_updates": 0,
+    "automatic_retry": false,
+    "scientific_acceptance": "PENDING_RESEARCHER_REVIEW",
+    "independent_events": "NOT_IDENTIFIED",
+    "physics_causality": "NOT_VERIFIED"
+  },
+  "observer": {
+    "scope": "Request-driven saved output metadata only; finite terminal-marker checks every30s; one factual terminal receipt and routine GitHub push",
+    "scientific_source_reads": 0,
+    "scientific_libraries_imported": false,
+    "training_or_inference_controls": false
+  },
+  "scientific_acceptance": "PENDING_RESEARCHER_REVIEW"
+}
