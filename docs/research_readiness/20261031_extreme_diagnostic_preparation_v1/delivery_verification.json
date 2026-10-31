@@ -1,0 +1,110 @@
+{
+  "status": "PASS_PREPARATION_DELIVERY_NO_NEW_MODEL_COMPUTE",
+  "at": "2026-10-31T06:57:50.591296+00:00",
+  "baseline_commit": "7c19b9d36bc73b998fcf72b9cc630989f7e3b324",
+  "synthetic_checks": {
+    "passed": 14,
+    "run_count": 1,
+    "command": "python -B -m unittest discover -s tests/extreme_diagnostic_preparation -p test_*.py -v",
+    "scope": "analytic examples and brute-force endpoint oracles; no model or meteorological data",
+    "observed_run_seconds": 0.165
+  },
+  "PDF": {
+    "pages": 6,
+    "compiler": "MiKTeX XeLaTeX",
+    "embedded_preview_compiler": "UNAVAILABLE_WINDOWS_HELPER_RESTRICTED_TOKEN_ROOTS; local compiler used",
+    "visual_QA": "ALL_SIX_PAGES_INSPECTED; changed pages2/4/5 rerendered and inspected",
+    "overfull_underfull_missing_glyph_warnings": 0,
+    "source_links": [
+      "https://github.com/flyeagle-cex/YunTAPR-Net/blob/7c19b9d36bc73b998fcf72b9cc630989f7e3b324/docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md",
+      "https://github.com/flyeagle-cex/YunTAPR-Net/blob/7c19b9d36bc73b998fcf72b9cc630989f7e3b324/METRICS.csv",
+      "https://github.com/flyeagle-cex/YunTAPR-Net/blob/7c19b9d36bc73b998fcf72b9cc630989f7e3b324/EXPERIMENT_MATRIX.csv",
+      "https://github.com/flyeagle-cex/YunTAPR-Net/blob/7c19b9d36bc73b998fcf72b9cc630989f7e3b324/docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json",
+      "https://github.com/flyeagle-cex/YunTAPR-Net/blob/7c19b9d36bc73b998fcf72b9cc630989f7e3b324/config/science_v2/quantile_head_v2_frozen_v1.json"
+    ],
+    "text_checks": "PASS",
+    "replacement_characters": 0
+  },
+  "saved_evidence": {
+    "core_values_verified_against_source_JSON_pointers": 178,
+    "numeric_saved_pairs_independently_subtracted": 5737,
+    "indexed_reference_values_checked": 5737,
+    "PERP_pairs_independently_reconstructed": 65,
+    "ABC_strict_gt20_contingencies": 27,
+    "nine_checkpoint_identities_bound_to_matrix": 9,
+    "inherited_backfill_results_gate_passed": 19
+  },
+  "public_safety": {
+    "private_path_and_credential_patterns_absent": true,
+    "existing_tracked_files_changed": 0,
+    "only_new_preparation_artifacts_selected": true
+  },
+  "scope": {
+    "new_inference": 0,
+    "optimizer_updates": 0,
+    "raw_meteorological_reads": 0,
+    "checkpoint_reads": 0,
+    "final_2025_reads": 0,
+    "new_scientific_method_approval": false,
+    "new_compute_budget_approval": false
+  },
+  "temporary_files": {
+    "cleanup_command": "BLOCKED_BY_AUTOMATIC_APPROVAL_REVIEW",
+    "stated_reason": "blocked by policy",
+    "deletion_performed": false,
+    "publication": "EXCLUDED_FROM_EXPLICIT_SUBMISSION_LIST"
+  },
+  "publication": {
+    "branch": "prep/b2-stage-acceptance-20261025",
+    "state": "READY_FOR_SCOPED_PUSH",
+    "commit_identity": "OWNED_BY_GIT_HISTORY_NOT_SELF_REFERENCED",
+    "main_merge": false
+  },
+  "artifacts": [
+    {
+      "path": "docs/research_readiness/20261031_extreme_diagnostic_preparation_v1/latex/main.tex",
+      "bytes": 16488,
+      "sha256": "ae0e44e6ba68cb1c378ea28fc3d6157e3cca18e2e813b235e4ac2632c922c0fd"
+    },
+    {
+      "path": "docs/research_readiness/20261031_extreme_diagnostic_preparation_v1/proposal.json",
+      "bytes": 8159,
+      "sha256": "548a80b591282f9227c21f1474ca6925a755f58f162edf439ff33b0c973eba16"
+    },
+    {
+      "path": "docs/research_readiness/20261031_extreme_diagnostic_preparation_v1/README.md",
+      "bytes": 3169,
+      "sha256": "3b1ffc85fe29d992fefc0e6edc2c2cf501a032db2890d3ec2e13f3a9ecc28a76"
+    },
+    {
+      "path": "docs/research_readiness/20261031_extreme_diagnostic_preparation_v1/saved_evidence_audit.json",
+      "bytes": 14346,
+      "sha256": "4f4d1b6a6603edae92fe976e632e72c7b6ff93ff1a1f7b19dc0cc5ad113baec6"
+    },
+    {
+      "path": "docs/research_readiness/20261031_extreme_diagnostic_preparation_v1/source_manifest.json",
+      "bytes": 4276,
+      "sha256": "0072723d3762634f59d97440b66829839e29191bc6cef93e186767d0b61c40a8"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_极端降水诊断准备与预注册候选方案_20261031.pdf",
+      "bytes": 428464,
+      "sha256": "25f8ad6416af399031376e05256758df00c1fb896ecc18de5333665a0e7b9fed"
+    },
+    {
+      "path": "tests/extreme_diagnostic_preparation/test_probability_bounds.py",
+      "bytes": 5281,
+      "sha256": "80f640cb837098e7f4724ca29b733d0401bf47ff961c034df7813e3484f2fe43"
+    },
+    {
+      "path": "tools/research_readiness/extreme_diagnostic_candidates.py",
+      "bytes": 4559,
+      "sha256": "987eb893ba0e73217698463052bc6fd5077e2d75e628423e4c37d77f41f61334"
+    },
+    {
+      "path": "tools/research_readiness/prepare_extreme_diagnostic_v1.py",
+      "bytes": 17776,
+      "sha256": "9550f5e15d14131ac94dcb1295d475363721017a4292e70b9f7724fe68d312e0"
+    }
+  ]
+}

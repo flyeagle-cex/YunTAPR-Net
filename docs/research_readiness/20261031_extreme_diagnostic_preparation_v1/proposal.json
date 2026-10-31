@@ -1,0 +1,205 @@
+{
+  "protocol_id": "YUNTAPR_EXTREME_DIAGNOSTIC_V1_20261031",
+  "status": "PREPARED_METHOD_DRAFT_NO_NEW_COMPUTE_AUTHORIZATION",
+  "preparation_authorized": true,
+  "scientific_method_frozen": false,
+  "inference_authorized": false,
+  "training_authorized": false,
+  "budget_approved": false,
+  "final_2025_access": false,
+  "baseline_commit": "7c19b9d36bc73b998fcf72b9cc630989f7e3b324",
+  "purpose": "Distinguish point conversion, conditional-tail, and observation/event evidence gaps without training",
+  "models": [
+    {
+      "model": "B4",
+      "seed": 2029,
+      "experiment_id": "B4__E0__s2029__f006",
+      "checkpoint_sha256": "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+      "inherited_checkpoint_bytes": 52913659,
+      "training_execution_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "experiment_id": "B4__E0__s2030__f006",
+      "checkpoint_sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "inherited_checkpoint_bytes": 52914619,
+      "training_execution_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "experiment_id": "B4__E0__s2031__f006",
+      "checkpoint_sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "inherited_checkpoint_bytes": 52914939,
+      "training_execution_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B7",
+      "seed": 2029,
+      "experiment_id": "B7__E0__s2029__f006__dynamic",
+      "checkpoint_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "inherited_checkpoint_bytes": 53904005,
+      "training_execution_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B7",
+      "seed": 2030,
+      "experiment_id": "B7__E0__s2030__f006__dynamic",
+      "checkpoint_sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "inherited_checkpoint_bytes": 53905285,
+      "training_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "experiment_id": "B7__E0__s2031__f006__dynamic",
+      "checkpoint_sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "inherited_checkpoint_bytes": 53906245,
+      "training_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B8",
+      "seed": 2029,
+      "experiment_id": "B8__E0__s2029__f006__dynamic",
+      "checkpoint_sha256": "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+      "inherited_checkpoint_bytes": 53905021,
+      "training_execution_commit": "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "experiment_id": "B8__E0__s2030__f006__dynamic",
+      "checkpoint_sha256": "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+      "inherited_checkpoint_bytes": 53906237,
+      "training_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "effective_updates": 4320
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "experiment_id": "B8__E0__s2031__f006__dynamic",
+      "checkpoint_sha256": "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+      "inherited_checkpoint_bytes": 53906877,
+      "training_execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "effective_updates": 4320
+    }
+  ],
+  "population": {
+    "train_year": 2023,
+    "dev_year": 2024,
+    "train_scenes": 959,
+    "dev_scenes": 963,
+    "dev_pixel_times": 3303090,
+    "dev_rain_pixel_times": 407820,
+    "source_identity_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "mask_sha256": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+    "label_window": "[T,T+30min)",
+    "analysis": "T+30min",
+    "utc_hours": [
+      0,
+      6,
+      12,
+      18
+    ],
+    "mode": "f006_retrospective_not_operational_availability_proof"
+  },
+  "proposed_methods": {
+    "main_threshold_mm_h": 20,
+    "truth_comparison": "float32_truth_strictly_greater",
+    "secondary_thresholds_mm_h": [
+      5,
+      10,
+      50
+    ],
+    "equal_boundary_counts_required": [
+      20,
+      50
+    ],
+    "comparison_primary": "B8_MINUS_B7",
+    "secondary": [
+      "B7_MINUS_B4",
+      "B8_MINUS_B4"
+    ],
+    "comparison_policy": "each seed first; descriptive three-seed mean and sample SD; no pooled pixels-as-seeds",
+    "point_methods": "retain all A/B/C; none selected by development skill",
+    "mixture_probability": "occurrence_probability*(1-conditional_CDF(log1p(r)))",
+    "tail_policy": "monotone quantile-compatible probability intervals; no zero-tail filling or fitted extrapolation",
+    "main_probability_outputs": [
+      "full-population Brier bounds",
+      "tie-aware AUROC bounds",
+      "identification width and support fractions"
+    ],
+    "AP": "NOT_POINT_IDENTIFIED unless separately preregistered full-distribution completion exists",
+    "exact_risk_skill": "NOT_VERIFIED when interval comparisons cannot determine direction",
+    "probability_decision": "0.5 historical diagnostic only; no development-optimized cutoff",
+    "conditional_outputs": "all 32 coverages, existing log Pinball, q32 shortfall, physical point error by fixed truth stratum",
+    "positive_train_reference": "proposed R>0 primary P95/P99; R>.1 sensitivity; per-pixel linear quantile; no Dev fitting",
+    "climatology": "constant 2023 Train exceedance frequency on the exact shared supervision mask",
+    "event_policy": "sample windows stay sample windows; independent-event rules and external observations need a separate researcher decision",
+    "inference_gate_tolerance": {
+      "abs": 1e-12,
+      "rel": 1e-12,
+      "integer_counts": "EXACT"
+    }
+  },
+  "future_resource_reference": {
+    "authorization": "NOT_APPROVED_NOT_AN_EXECUTABLE_LAUNCH_PACKAGE",
+    "models": 9,
+    "forward_passes_per_model": 1,
+    "optimizer_updates": 0,
+    "weather_and_mask_logical_bytes": 239753278008,
+    "weather_and_mask_content_instances": 71550,
+    "static_bytes": 1876968,
+    "static_instances": 6,
+    "train_label_and_mask_bytes": 180049094,
+    "train_label_and_mask_instances": 246,
+    "total_weather_static_label_logical_bytes": 239935204070,
+    "total_weather_static_label_content_instances": 71802,
+    "inherited_checkpoint_archive_bytes": 482176887,
+    "proposed_checkpoint_hash_and_deserialization_each_once_logical_bytes": 964353774,
+    "checkpoint_accounting": "archive-length reference, not a claim about torch/zip physical internal reads",
+    "historical_nine_pass_elapsed_seconds": 11690.4,
+    "hard_time_cap_seconds": null,
+    "output_storage_cap_bytes": null,
+    "minimum_free_bytes": null,
+    "executable_adapter_commit": null,
+    "retry_allowance": 0,
+    "replay_allowance": 0,
+    "unresolved": "Exact adapter, output layout/resource admission, time/storage ceilings and researcher grant must be bound before real reads"
+  },
+  "stages": [
+    {
+      "id": "G0",
+      "status": "COMPLETE_PREPARATION_ONLY",
+      "scope": "saved public evidence, candidate methods and synthetic checks"
+    },
+    {
+      "id": "G1",
+      "status": "WAITING_RESEARCHER_METHOD_AND_EXACT_RESOURCE_APPROVAL",
+      "scope": "freeze method and executable package without weather access"
+    },
+    {
+      "id": "G2",
+      "status": "NOT_STARTED",
+      "scope": "one shared 2023 label reference pass and finite authorized nine-model extraction"
+    },
+    {
+      "id": "G3",
+      "status": "NOT_STARTED",
+      "scope": "report all prespecified diagnostics, failures, identification limits and negative results"
+    },
+    {
+      "id": "G4",
+      "status": "NOT_AUTHORIZED",
+      "scope": "independent observations/events or further training decided separately"
+    }
+  ]
+}

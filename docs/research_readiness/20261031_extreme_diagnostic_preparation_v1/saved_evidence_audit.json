@@ -1,0 +1,423 @@
+{
+  "status": "PASS_SAVED_EVIDENCE_AND_PREPARATION_ONLY",
+  "created_at": "2026-10-31T06:48:45.947115+00:00",
+  "baseline_commit": "7c19b9d36bc73b998fcf72b9cc630989f7e3b324",
+  "checks": {
+    "core_values_verified_against_source_JSON_pointers": 178,
+    "numeric_saved_pairs_independently_subtracted": 5737,
+    "indexed_reference_values_checked": 5737,
+    "PERP_pairs_independently_reconstructed": 65,
+    "ABC_strict_gt20_contingencies": 27,
+    "nine_checkpoint_identities_bound_to_matrix": 9,
+    "inherited_backfill_results_gate_passed": 19
+  },
+  "saved_extreme_result": {
+    "TP": 0,
+    "FP": 0,
+    "FN": 717,
+    "TN": 3302373,
+    "CSI": 0,
+    "POD": 0,
+    "FAR": null,
+    "independent_events": "NOT_IDENTIFIED"
+  },
+  "saved_q32_physical_maxima": [
+    {
+      "model": "B4",
+      "seed": 2029,
+      "maximum_mm_h": 63.00232440453564
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "maximum_mm_h": 41.42588516907368
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "maximum_mm_h": 69.48176017318947
+    },
+    {
+      "model": "B7",
+      "seed": 2029,
+      "maximum_mm_h": 77.66693750349373
+    },
+    {
+      "model": "B8",
+      "seed": 2029,
+      "maximum_mm_h": 72.49869955456005
+    },
+    {
+      "model": "B7",
+      "seed": 2030,
+      "maximum_mm_h": 71.27009887220773
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "maximum_mm_h": 100.317439459514
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "maximum_mm_h": 92.98344531068634
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "maximum_mm_h": 68.67392994133945
+    }
+  ],
+  "provenance_findings": [
+    {
+      "id": "P1_PERP_PAIR_JOIN",
+      "affected_rows": 65,
+      "issue": "target and reference experiment_id both identify PERP; numerical subtraction is valid",
+      "safe_handling": "use explicit B7 and PERP endpoints plus their source pointers; do not trust the ambiguous join",
+      "historical_files_changed": false,
+      "affected": [
+        {
+          "group": "all",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/all/brier"
+        },
+        {
+          "group": "all",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/all/auroc"
+        },
+        {
+          "group": "all",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/all/average_precision"
+        },
+        {
+          "group": "all",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/all/conditional_pinball"
+        },
+        {
+          "group": "all",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/all/q32_coverage"
+        },
+        {
+          "group": "all",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/all/q32_signed_bias"
+        },
+        {
+          "group": "all",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/all/q32_absolute_error"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/brier"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/auroc"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/average_precision"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/conditional_pinball"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/q32_coverage"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/q32_signed_bias"
+        },
+        {
+          "group": "analysis_UTC_00",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_00/q32_absolute_error"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/brier"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/auroc"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/average_precision"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/conditional_pinball"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/q32_coverage"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/q32_signed_bias"
+        },
+        {
+          "group": "analysis_UTC_06",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_06/q32_absolute_error"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/brier"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/auroc"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/average_precision"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/conditional_pinball"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/q32_coverage"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/q32_signed_bias"
+        },
+        {
+          "group": "analysis_UTC_12",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_12/q32_absolute_error"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/brier"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/auroc"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/average_precision"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/conditional_pinball"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/q32_coverage"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/q32_signed_bias"
+        },
+        {
+          "group": "analysis_UTC_18",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/analysis_UTC_18/q32_absolute_error"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "brier",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/brier"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "auroc",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/auroc"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "average_precision",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/average_precision"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/conditional_pinball"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/q32_coverage"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "q32_signed_bias",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/q32_signed_bias"
+        },
+        {
+          "group": "scene_max_ge20",
+          "metric": "q32_absolute_error",
+          "source_pointer": "/summary/group_deltas/scene_max_ge20/q32_absolute_error"
+        },
+        {
+          "group": "strata_0",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/0/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_0",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/0/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_1",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/1/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_1",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/1/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_2",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/2/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_2",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/2/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_3",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/3/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_3",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/3/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_4",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/4/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_4",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/4/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_5",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/5/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_5",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/5/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "strata_6",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/strata/6/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "strata_6",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/strata/6/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "elevation_elevation_lt_1000m",
+          "metric": "brier",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_lt_1000m/real_minus_perp/brier"
+        },
+        {
+          "group": "elevation_elevation_lt_1000m",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_lt_1000m/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "elevation_elevation_lt_1000m",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_lt_1000m/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "elevation_elevation_1000_to_2000m",
+          "metric": "brier",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_1000_to_2000m/real_minus_perp/brier"
+        },
+        {
+          "group": "elevation_elevation_1000_to_2000m",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_1000_to_2000m/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "elevation_elevation_1000_to_2000m",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_1000_to_2000m/real_minus_perp/q32_coverage"
+        },
+        {
+          "group": "elevation_elevation_ge_2000m",
+          "metric": "brier",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_ge_2000m/real_minus_perp/brier"
+        },
+        {
+          "group": "elevation_elevation_ge_2000m",
+          "metric": "conditional_pinball",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_ge_2000m/real_minus_perp/conditional_pinball"
+        },
+        {
+          "group": "elevation_elevation_ge_2000m",
+          "metric": "q32_coverage",
+          "source_pointer": "/summary/tail_pairs/elevation/elevation_ge_2000m/real_minus_perp/q32_coverage"
+        }
+      ]
+    },
+    {
+      "id": "P1_STALE_PROBE_TABLE",
+      "found": true,
+      "issue": "older current-core table says NOT_AVAILABLE_NO_TRAINING despite the completed receipt",
+      "historical_files_changed": false
+    }
+  ],
+  "activity": {
+    "new_model_inference": 0,
+    "model_deserialization": 0,
+    "weight_payload_reads": 0,
+    "optimizer_updates": 0,
+    "raw_meteorological_reads": 0,
+    "final_2025_reads": 0,
+    "original_result_files_modified": 0,
+    "new_research_conclusions_approved": 0
+  }
+}
