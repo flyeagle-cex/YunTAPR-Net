@@ -1,5 +1,7 @@
 # 统一证据索引
 
+2026-10-31单文件阅读汇总：[四页PDF](output/pdf/YunTAPR-Net_V1.3_极端降水审计结果汇总_20261031.pdf)，SHA256 `5eaa96a8d2f271076e54004ae21646b4af6dd611cfa5a7d488a6822dfdacbef5`；[可编辑LaTeX源码](output/pdf/YunTAPR-Net_V1.3_极端降水审计结果汇总_20261031.tex)。PDF内嵌三份附件：脱敏审计CSV、完整Markdown审计报告、同一LaTeX源码，逐附件内容一致性及四页渲染/文字检查通过。汇总只读取cfe525b已审计的1400行保存结果，未重算科研指标、读取权重、训练、推理或访问2025；原审计报告/CSV和全部历史证据保留。
+
 2026-10-31极端降水专项只读审计：[Markdown报告](docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md)与[可追溯CSV](docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv)登记109份源文件、九个B4/B7/B8固定E9实际SHA及1400行原值/同seed差值/统计/缺失。完整绝对路径仅保存在本地忽略目录的对应版本，公开文件按源ID脱敏。九模型三点估计在严格>20均TP=FP=0、FN=717；>=20与>20窗口数208/207不同，不篡改边界。峰值低估仅给由现有计数证明的下界，精确峰值及事件/联合分层仍缺失。核对108组分类、27组全人口概率决策界补全及1438个配对指标单元格；原权重未加载、原结果未覆盖、训练/推理及2025载荷读取为0。
 
 2026-10-31最新展示入口：[31条实际配置的阶段增量表](outputs/01a17251-29bb-7172-89f8-380b42c4d290/YunTAPR-Net_V1.3_逐阶段逐seed全方案对比_20261031.xlsx)及[脱敏交付核验](docs/research_readiness/20261025/evidence/compact_stage_comparison_delivery_20261031.json)。文件SHA256 `8cd976aa6e458e6f55b17dada9e7546a945260eeede39038341c6cacb142af86`；1工作表/1表、31配置、40列，20条有效配对和120个已核对缓存公式。E0/E1/E2全部实际结果保留；19条已有点估计、12条未补算明确区分。表下附模型解释及配对统计，来源ID和E9 SHA逐行绑定。旧完整明细SHA `b77469a441e36feeb55b5fea282ae5bcc0760481e5c7b3209a8d1d587151b4b4`未改变。未重新读取权重、推理或访问原始气象/2025。以下既有收据和历史状态保留。
