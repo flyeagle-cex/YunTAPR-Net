@@ -1,0 +1,42 @@
+{
+  "status": "CORRECTION_PREPARATION_PASS_NEW_LAUNCH_NOT_APPROVED",
+  "at": "2026-10-31T07:53:13.286895+00:00",
+  "execution_code_commit": "9d63713ad7777e1624f1cc87502f97b571e95df4",
+  "proposal_sha256": "0be1a2b4e383ec0a2613c93f862d2475faa910a97194fb7361f62d4beb9fef0b",
+  "tests_passed": 42,
+  "tests_failed": 0,
+  "checks": {
+    "model_receipts_identical": true,
+    "scientific_methods_identical": true,
+    "limits_identical": true,
+    "native_runtime_binary_and_venv_config_bound": true,
+    "actual_native_interpreter_version_abi_gate_passed": true,
+    "torch_not_imported": true,
+    "fixed_entry_rejects_without_new_approval": true,
+    "independent_host_rejects_without_new_approval": true,
+    "new_approval_absent": true,
+    "new_formal_output_absent": true,
+    "new_service_claim_absent": true
+  },
+  "runtime": {
+    "python_version": "3.12.14",
+    "cache_tag": "cpython-312",
+    "implementation": "cpython",
+    "executable_sha256": "4eb51b7d5963d9e0dc356bd209b1d55360c73db39d8d458ceee084610ca48fd1",
+    "inherited_venv_config_sha256": "d95703559f9012ebc19543766c3aaac335f2e07a51634446495d5b0828eb327e",
+    "direct_native_base_required": true
+  },
+  "resource_admission": {
+    "passed_at_snapshot": true,
+    "disk_free_bytes": 56418082816,
+    "host_available_bytes": 15837736960,
+    "gpu_free_mib": 6439.0
+  },
+  "independent_native_base_identity_proof": "../20261031_extreme_diagnostic_execution_v1/launch/identity_probe.json",
+  "raw_scientific_payload_reads": 0,
+  "model_loads": 0,
+  "inference": 0,
+  "optimizer_updates": 0,
+  "final_2025_access": false,
+  "scientific_acceptance": "PENDING_RESEARCHER_REVIEW"
+}

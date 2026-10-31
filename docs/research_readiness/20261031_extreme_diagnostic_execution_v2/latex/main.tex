@@ -1,0 +1,99 @@
+\documentclass[UTF8,a4paper,10pt,fontset=none]{ctexart}
+\usepackage[margin=18mm,headheight=15pt]{geometry}
+\usepackage{amsmath,booktabs,tabularx,array,xcolor,fancyhdr,hyperref,enumitem}
+\setmainfont{Arial}\setCJKmainfont{Microsoft YaHei}\setCJKmonofont{Microsoft YaHei}
+\definecolor{ink}{HTML}{18344C}
+\hypersetup{unicode=true,colorlinks=true,urlcolor=ink,linkcolor=ink,pdftitle={YunTAPR-Net 诊断预启动失败收据与纠正准备},pdfauthor={YunTAPR-Net Research}}
+\pagestyle{fancy}\fancyhf{}\lhead{\small YunTAPR-Net}\rhead{\small V1已停止／V2仅准备，未启动}\cfoot{\small 2026-10-31\quad|\quad\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{5pt}
+\setlist{nosep,leftmargin=1.7em,topsep=4pt}
+\ctexset{section={format=\large\bfseries,beforeskip=9pt,afterskip=4pt},subsection={format=\normalsize\bfseries,beforeskip=6pt,afterskip=3pt}}
+\emergencystretch=3em
+\newcommand{\key}[1]{\textcolor{ink}{\textbf{#1}}}
+\newcommand{\code}[1]{{\small\texttt{\detokenize{#1}}}}
+\begin{document}
+{\LARGE\bfseries 诊断预启动失败收据}\\[4pt]
+{\Large 原生解释器纠正准备与一次性限额}\\[6pt]
+2026年10月31日\quad V2\quad 研究者主导，AI辅助
+
+\section*{1. 本轮批准后的真实进度}
+研究者对绑定代码\code{721bfa9}、提案\code{b8ec5e70}的一次性九模型诊断明确回复“批准”。批准记录已原样绑定，身份与资源准入通过后只作一次后台调度。
+
+\key{目标解释器在进程独立性门槛退出，未进入科学诊断。}
+外层监督进程未处于Windows Job（作业对象），应用包状态为无应用包身份；目标执行\code{require_independent}被拒绝，退出码1，目标存在约2.858秒。原目标的两个独立身份字段没有保存，不能事后伪造其数值。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+\toprule
+V1实际活动 & 数量／状态\\
+\midrule
+正式运行目录／任务声明 & 未创建／0\\
+科学诊断计时器 & 未启动\\
+原始气象、标签、静态包载荷读取 & 0字节\\
+检查点散列读取／模型加载／推理 & 0／0／0\\
+优化器更新／重试／重放 & 0／0／0\\
+2025最终测试集 & 未访问\\
+原启动声明、批准、日志与失败证据 & 全部保留，不覆盖\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{2. 原因、准备缺口与针对性验证}
+随后仅执行标准库进程身份探针，不导入模型、训练库或读取科学数据。在独立监督进程下，以同一虚拟环境启动器启动的实际解释器成为额外子进程，处于作业对象中；改为该虚拟环境配置指向的同一原生基础解释器，则保持直接父子关系、无作业对象、无应用包身份。两个身份查询均成功，差异被复现。
+
+此前38项合成检查及无批准拒绝测试没有覆盖真实虚拟环境启动器行为。仓库2026年10月26日收据已经记录过同类重定向差异，这次准备没有继承该约束，是本轮执行准备的遗漏。
+
+\textbf{纠正准备：}
+使用同一虚拟环境的原生基础解释器，继续保留进程独立性门槛，并将解释器二进制SHA-256（安全散列算法256位）、Python版本、ABI（应用二进制接口）标签及原虚拟环境配置绑定到提案。后台规格、控制器和工作进程都必须匹配该身份，不能再用虚拟环境重定向器替换。
+
+\textbf{验证结果：}
+42项合成检查通过，其中新增4项反向检查覆盖解释器替换、配置漂移、版本／ABI漂移及旧提案缺少运行时绑定。实际原生解释器的版本／ABI／二进制身份检查通过，资源快照通过；新包无批准时两处入口均拒绝，未创建新启动声明或输出目录。真实模型端到端一致性仍未验证。
+
+\newpage
+\section*{3. 纠正包固定身份}
+\textbf{固定执行提交：}\\
+\code{9d63713ad7777e1624f1cc87502f97b571e95df4}\\
+\textbf{纠正提案规范化SHA-256：}\\
+\code{0be1a2b4e383ec0a2613c93f862d2475}\\
+\code{faa910a97194fb7361f62d4beb9fef0b}\\
+以上两行连接为完整提案身份。原失败包不改写、不恢复；纠正包使用全新准备和输出命名空间。
+
+九模型身份、全部科学方法与预算已逐项断言和V1相同。仅既有B4/B7/B8各2029／2030／2031种子，E0损失、固定第九轮末检查点；先一次2023共享标签／掩码统计，再各种子的B7、B8、B4串行九次2024开发人口前向。每模型963场景、3,303,090监督像元时次、有雨407,820。
+
+主比较B8减B7，次要B7减B4、B8减B4；严格大于20 mm/h为主，5／10／50为次要。A/B/C全报告，不选择开发最优点估计，不用开发集拟合尾部分布。有限分位数支持概率范围而非完整概率点值；无法识别的收益方向保持未验证。原冻结模型、评价器、损失与旁路导出器的数值代码没有改变。
+
+\section*{4. 拟议纠正包限额}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+\toprule
+项目 & 纠正包上限／固定参考\\
+\midrule
+气象、静态、共享标签与掩码逻辑源交付 & 239,935,204,070字节／71,802实例\\
+九检查点，各散列与加载一次的档案参考 & 964,353,774字节／18打开\\
+载荷与检查点档案参考合计 & 240,899,557,844字节\\
+受控冻结元数据档案预留 & 至多1,073,741,824字节／2,048打开\\
+上述源预留总上限 & \textbf{241,973,299,668字节}\\
+总时限／单模型／共享标签 & 21,600秒／2,400秒／600秒\\
+单工作进程元数据上限 & 64 MiB／128打开\\
+新输出总上限 & 16 GiB\\
+最低空闲磁盘／主机内存／显存 & 32 GiB／8 GiB／5,120 MiB\\
+优化器更新／额外重试／重放 & \textbf{0／0／0}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+字节口径为逻辑交付和档案长度预留，不是物理读盘实测。固定代码、库、批准身份检查单独绑定。旧包2.858秒预启动与零科学载荷已独立记账，不能抹除；旧包诊断时钟没有启动。本轮纠正准备未增加真实模型计算。
+
+\section*{5. 唯一待研究者决定的事项}
+\key{V2仅准备完成，尚未批准、未启动。}
+原批准明确约定零重试，不能自动挪作纠正启动授权。研究者需明确决定是否对上述新代码、新提案和相同限额批准一次纠正启动；不重新要求讨论已经确定的科学方法。
+
+如获批准，身份与资源检查后只调度一次；每模型原指标一致性、人口、时空关联、读取计数、时间或容量任一门槛失败即停，保留原件，不自动重试。工程结果完成后仍等待研究者科学审查，不批准论文结论。无新训练、B9、独立观测采集或2025解封。
+
+{\footnotesize
+可追溯材料：本目录proposal.json、engineering\_verification.json、preparation\_receipt.json及可修改main.tex；
+原失败收据在相邻V1目录的launch/下。\\
+代码：\href{https://github.com/flyeagle-cex/YunTAPR-Net/commit/9d63713ad7777e1624f1cc87502f97b571e95df4}{9d63713原生运行时绑定与预启动停止记录}。
+私有路径、进程编号、权重和输出数组不公开。}
+\end{document}
