@@ -304,6 +304,8 @@ class PipelineReader(base.Reader):
         self.training=base.read_json(self.config['training_private'])
         self.proposal=base.read_json(self.config['training_proposal'])
         if self.proposal['tasks']!=[dict(model='B7_PERP_GRADIENT',seed=2029)]:raise ValueError('Wrong queued candidate')
+        self.physical_recovery='parent' in self.training
+        if self.physical_recovery and (self.proposal['checkpoint']['epoch']!=5 or self.proposal['budget']['new_updates']!=1920 or self.proposal['budget']['replayed_updates']!=480):raise ValueError('Wrong physical recovery namespace')
 
     def snapshot(self,include_resources=True):
         with self.lock:
@@ -340,28 +342,34 @@ class PipelineReader(base.Reader):
             metric_state='FAILED' if failure else 'COMPLETE' if complete and done==19 else 'RUNNING' if live else 'STOPPED' if exited else 'UNKNOWN'
             training=Path(self.training['output_root']);binding=self.document(str(training/'authorization_binding.json'))
             training_failure=self.document(str(training/'failure.json'));training_complete=self.document(str(training/'completion.json'))
-            returned=reserved=0;epochs=[]
+            returned=reserved=segment_returned=0;epochs=[]
             if binding:
                 if binding['code_commit']!=self.proposal['execution_code_commit'] or binding.get('control')!='PERPENDICULAR_GRADIENT_REAL_MASKS':raise ValueError('Candidate identity mismatch')
                 db=training/'B7_s2029/updates.sqlite'
                 if db.exists():
                     updates=base.query(db,'SELECT state,COUNT(*) FROM updates GROUP BY state')
                     returned=sum(n for state,n in updates if state=='RETURNED');reserved=sum(n for _,n in updates)
+                segment_returned=returned
+                if self.physical_recovery:returned+=2400;reserved+=2400
                 for e in range(1,10):
-                    sub=training/'B7_s2029';train=self.document(str(sub/f'B7_train_{e:02d}.json'));dev=self.document(str(sub/f'B7_development_{e:02d}.json'));last=self.document(str(sub/f'B7_LAST_epoch_{e:02d}.receipt.json'))
-                    epochs.append(dict(epoch=e,phase='SEALED' if last else 'VALIDATED' if dev else 'VALIDATION' if train else 'TRAINING' if returned>(e-1)*480 else 'PENDING',updates=min(480,max(0,returned-(e-1)*480)),training_loss=train.get('weighted_mean') if train else None,metrics=base.metric_summary(dev).get('all') if dev else None,checkpoint_sha256=last.get('checkpoint_sha256') if last else None))
+                    inherited=self.physical_recovery and e<=5
+                    sub=(Path(self.training['parent']) if inherited else training)/'B7_s2029';train=self.document(str(sub/f'B7_train_{e:02d}.json'));dev=self.document(str(sub/f'B7_development_{e:02d}.json'));last=self.document(str(sub/f'B7_LAST_epoch_{e:02d}.receipt.json'))
+                    epochs.append(dict(epoch=e,inherited=inherited,phase='SEALED' if last else 'VALIDATED' if dev else 'VALIDATION' if train else 'TRAINING' if returned>(e-1)*480 else 'PENDING',updates=min(480,max(0,returned-(e-1)*480)),training_loss=train.get('weighted_mean') if train else None,metrics=base.metric_summary(dev).get('all') if dev else None,checkpoint_sha256=last.get('checkpoint_sha256') if last else None))
             sealed=sum(bool(e['checkpoint_sha256']) for e in epochs)
             candidate_state=('FAILED' if training_failure else 'COMPLETE' if training_complete and returned==4320 and sealed==9
                 else 'STOPPED' if binding and process_exited(binding['controller_pid']) is True else 'RUNNING' if binding else 'BLOCKED' if metric_state in ('FAILED','STOPPED') else 'PENDING')
             candidate=dict(model='B7_PERP_GRADIENT',seed=2029,state=candidate_state,returned=returned,reserved=reserved,sealed_epochs=sealed,epochs=epochs,source_commit=self.proposal['execution_code_commit'])
+            if self.physical_recovery:candidate.update(recovery=True,segment_returned=segment_returned,segment_limit=1920,replay_returned=min(480,segment_returned),replay_limit=480,cumulative_returned=2880+segment_returned,cumulative_limit=4800)
             state='FAILED' if metric_state=='FAILED' or candidate_state=='FAILED' else 'STOPPED' if metric_state=='STOPPED' or candidate_state=='STOPPED' else 'COMPLETE' if candidate_state=='COMPLETE' else 'RUNNING' if live or binding else 'UNKNOWN'
             message='指标补算未通过冻结一致性检查；保留现有结果，后续训练未启动，不自动重试。' if failure else '候选训练已停止；原账本保留，不自动重试。' if training_failure else '指标全部通过后，已有独立控制器才会单次启动候选；本页面不控制计算。'
             if state=='STOPPED':message='执行进程已退出，完成收据不足；不据此判完成，不自动恢复。'
             started=self.document('binding.json')['at'];now=datetime.now(timezone.utc)
+            if self.physical_recovery and binding:started=datetime.fromtimestamp(binding['wall_started'],timezone.utc).isoformat()
             end=datetime.fromisoformat(failure['at']) if failure and failure.get('at') else now
             result=dict(pipeline=True,read_only=True,state=state,snapshot_utc=now.isoformat(),metric_runs=rows,metric_completed=done,metric_required=19,metric_state=metric_state,
                 candidate=candidate,recorded_metric_io=dict(bytes=recorded_bytes,files=recorded_files,legacy_log_events=legacy_events,scope='仅已知内容实例；旧read_events为日志事件，缺失计数不视作零；不是整包源账本封口'),
                 elapsed_seconds=max(0,(end-datetime.fromisoformat(started)).total_seconds()),message=message,source_commit=self.proposal['execution_code_commit'],resources=base.resources(training if training.exists() else self.folder) if include_resources else {})
+            if self.physical_recovery:result['remaining_limit_seconds']=max(0,10800-result['elapsed_seconds'])
             self.cache,self.cached_at=result,time.monotonic();return result
 
 

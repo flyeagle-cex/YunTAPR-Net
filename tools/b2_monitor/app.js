@@ -18,6 +18,17 @@ function renderPipeline(s){
   document.querySelector('.live .note').textContent='此处为指标任务完成数；下方源读取量仅含已有result记录，未封口段保留在原账本。页面仅在查看时读取收据，不启动或恢复计算。';
   put('updates',`${number.format(c.returned)} / 4,320`);put('epochs',`${c.sealed_epochs} / 9 轮`);put('elapsed',duration(s.elapsed_seconds));
   put('time-label','候选状态');put('remaining',states[c.state]||c.state);
+  if(c.recovery){
+    put('page-title','DOTE方向性探针 · E5限额恢复');
+    put('subtitle',`E1–E5继承 · 本段 ${number.format(c.segment_returned)} / 1,920 更新 · 累计尝试 ${number.format(c.cumulative_returned)} / 4,800 · 2025冻结`);
+    put('stage',`指标 ${s.metric_completed} / ${s.metric_required} 全部通过；恢复：${states[c.state]||c.state}，有效训练位置 ${number.format(c.returned)} / 4,320`);
+    put('percent',`${(100*c.returned/4320).toFixed(1)}%`);$('overall').value=100*c.returned/4320;
+    document.querySelector('.overall span').textContent='固定九轮训练进度（含继承E1–E5）';
+    $('overall').setAttribute('aria-label','有效训练位置，包含继承E1至E5');
+    document.querySelector('.live .note').textContent='本段恢复E6–E9；原2880次尝试含480次未保存更新，均保留在累计账本中。指标不重算，页面不控制训练。';
+    $('updates').previousElementSibling.textContent='有效训练位置 / 目标';
+    put('time-label','本次恢复剩余限额');put('remaining',stopped?'已停止':c.state==='COMPLETE'?'已完成':duration(s.remaining_limit_seconds));
+  }
   const failures=s.metric_runs.flatMap(r=>r.gate_failures.map(f=>`${r.name} · ${f.metric}：原值 ${f.stored}，复算 ${f.recomputed}`));
   $('warning').hidden=!stopped;put('warning',[s.message,...failures].join('；'));
   $('campaign-section').hidden=false;put('campaign-title','指标补算队列（已完成项直接继承）');$('task-control').hidden=true;$('campaign-runs').replaceChildren();
@@ -33,11 +44,12 @@ function renderPipeline(s){
   put('timeline-title','B7_PERP_GRADIENT · Seed2029 九轮记录');
   for(const e of c.epochs){
     const li=document.createElement('li');li.className=e.phase;
-    const label=document.createElement('strong');label.textContent=`E${e.epoch}`;const note=document.createElement('span');note.textContent=phases[e.phase];li.append(label,note);$('timeline').append(li);
+    const label=document.createElement('strong');label.textContent=`E${e.epoch}`;const note=document.createElement('span');note.textContent=phases[e.phase]+(e.inherited?'（继承）':'');li.append(label,note);$('timeline').append(li);
     const tr=document.createElement('tr'),m=e.metrics||{};
     for(const value of [e.epoch,phases[e.phase],fmt(e.training_loss),fmt(m.brier),fmt(m.auroc),fmt(m.average_precision),fmt(m.conditional_pinball),Number.isFinite(m.q32_coverage)?`${(100*m.q32_coverage).toFixed(3)}%`:'—']){const td=document.createElement('td');td.textContent=value;tr.append(td);}$('metrics').append(tr);
   }
   const io=s.recorded_metric_io;put('bytes',`${(io.bytes/1e9).toFixed(3)} GB（已有结果记录）`);put('files',`${number.format(io.files)} 已知实例；${number.format(io.legacy_log_events||0)} 旧日志事件另列`);put('uncertain',String(c.reserved-c.returned));put('replay','0');
+  if(c.recovery)put('replay',`${number.format(c.replay_returned)} / 480（本段）`);
   $('bytes').previousElementSibling.textContent='指标已记录内容读取';$('files').previousElementSibling.textContent='已知内容读取 / 日志事件';
   const r=s.resources||{},g=r.gpu;put('gpu',g?.name||'暂不可用');put('gpu-use',g?`${fmt(g.used_mib/1024,2)} / ${fmt(g.total_mib/1024,2)} GiB · ${fmt(g.utilization,0)}% · ${fmt(g.temperature,0)}°C`:'—');
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');put('commit',s.source_commit.slice(0,12));

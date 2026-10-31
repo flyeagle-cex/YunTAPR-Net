@@ -1,6 +1,7 @@
 """Only the new read-only pipeline display; no training or inference fixtures."""
 import importlib.util
 import json
+import time
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -63,6 +64,22 @@ class PipelineMonitorTests(unittest.TestCase):
         p.write_text(json.dumps(x),encoding='utf-8')
         s=self.snapshot();self.assertEqual(s['recorded_metric_io']['files'],4)
         self.assertEqual(s['recorded_metric_io']['legacy_log_events'],900)
+
+    def test_recovery_separates_inherited_effective_segment_and_actual_attempts(self):
+        for i in range(19):self.result(i)
+        self.write('completion.json',dict(status='COMPLETE_19_E9_DEV_METRIC_BACKFILL'))
+        self.write('training.json',dict(output_root=str(self.out/'NOT_STARTED_CANDIDATE'),parent=str(self.out/'old_failed')))
+        self.write('proposal.json',dict(tasks=[dict(model='B7_PERP_GRADIENT',seed=2029)],execution_code_commit='b'*40,checkpoint=dict(epoch=5),budget=dict(new_updates=1920,replayed_updates=480)))
+        self.write('NOT_STARTED_CANDIDATE/authorization_binding.json',dict(code_commit='b'*40,control='PERPENDICULAR_GRADIENT_REAL_MASKS',controller_pid=123,wall_started=time.time()))
+        self.write('old_failed/failure.json',dict(status='HISTORICAL_FAILURE'))
+        for e in range(1,6):self.write(f'old_failed/B7_s2029/B7_LAST_epoch_{e:02d}.receipt.json',dict(checkpoint_sha256=str(e)*64))
+        self.write('old_failed/B7_s2029/B7_train_06.json',dict(weighted_mean=.1))
+        db=self.out/'NOT_STARTED_CANDIDATE/B7_s2029/updates.sqlite';db.parent.mkdir(exist_ok=True);db.write_bytes(b'SYNTHETIC_ONLY')
+        with patch.object(m.base,'process_token',return_value=None),patch.object(m,'process_exited',return_value=False),patch.object(m.base,'query',return_value=[('RETURNED',100)]):
+            s=m.PipelineReader(self.out,123,self.out/'config.json').snapshot(include_resources=False)
+        c=s['candidate'];self.assertEqual((c['returned'],c['segment_returned'],c['cumulative_returned'],c['replay_returned']),(2500,100,2980,100))
+        self.assertEqual((c['sealed_epochs'],c['state']),(5,'RUNNING'));self.assertEqual(c['epochs'][5]['phase'],'TRAINING')
+        self.assertTrue(all(e['inherited'] for e in c['epochs'][:5]));self.assertNotEqual(s['state'],'COMPLETE')
 
 
 if __name__=='__main__':unittest.main()

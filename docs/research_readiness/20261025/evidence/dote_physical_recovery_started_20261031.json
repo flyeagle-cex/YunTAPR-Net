@@ -1,0 +1,155 @@
+{
+  "status": "APPROVED_SINGLE_START_PHYSICAL_CONTROL_E5_RECOVERY_IN_PROGRESS",
+  "verified_at": "2026-10-31T00:28:25.992827+00:00",
+  "researcher_decision": {
+    "original_reply": "好",
+    "context": "Direct affirmative reply to the exact disclosed E5 recovery proposal and budgets",
+    "researcher_quoted_SHA": false,
+    "decision_id": "20261031_DIRECT_GOOD_TO_BOUND_E5_RECOVERY_PACKAGE",
+    "approved_at": "2026-10-31T00:23:19.638947+00:00"
+  },
+  "execution_code_commit": "7d4970d726aba1316f27fc7eea25817db6eca305",
+  "proposal_sha256": "ebd2391e0d6e95b1aa0a573df21416822f5173e1a6a11a8eafd6b74679e1f0d6",
+  "data_version": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "tasks": [
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": 2029
+    }
+  ],
+  "budget": {
+    "new_updates": 1920,
+    "replayed_updates": 480,
+    "prior_returned": 2880,
+    "saved_updates": 2400,
+    "cumulative_attempts": 4800,
+    "training_source_bytes": 212254062672,
+    "training_source_instances": 63472,
+    "static_bytes": 312828,
+    "static_instances": 1,
+    "failed_source_verification_bytes": 4705249,
+    "failed_source_verification_instances": 1,
+    "total_source_bytes": 212259080749,
+    "total_source_files": 63474,
+    "cumulative_reserved_source_bytes": 509175755262,
+    "cumulative_delivered_bytes_if_complete": 509171050013,
+    "cumulative_source_instances": 152398,
+    "max_package_seconds": 10800,
+    "minimum_initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "checkpoint_deserializations": 1,
+    "checkpoint_rehashes_at_restore": 1,
+    "additional_retry_allowance": 0,
+    "clock_rule": "Both UTC wall and monotonic; earlier deadline wins, clock rollback stops; wait checks every2s",
+    "prior_time_acceptance": "NOT_VERIFIED_NO_RETROACTIVE_BUDGET_INCREASE",
+    "replay_allowance": 480
+  },
+  "independent_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "training": {
+    "status": "IN_PROGRESS",
+    "inherited_epochs": 5,
+    "saved_parent_updates": 2400,
+    "prior_actual_attempts": 2880,
+    "original_unsaved_updates": 480,
+    "new_returned_snapshot": 157,
+    "effective_position": 2557,
+    "cumulative_actual_attempts": 3037,
+    "replay_returned_snapshot": 157,
+    "approved_new_updates": 1920,
+    "approved_cumulative_attempts": 4800,
+    "endpoint_status": "FIXED_E9_NOT_YET_AVAILABLE",
+    "checkpoint_restoration": "E5_MODEL_ADAMW_SCHEDULE_ALL_RNG_INHERITED_RESTORE_LAST; real u2401+ confirms successful restore"
+  },
+  "source_verification": {
+    "status": "PASS_FULL_PAYLOAD_SAME_PRIOR_SHA",
+    "actual": {
+      "opened_files": 1,
+      "delivered_bytes": 4705249,
+      "reserved_bytes": 4705249,
+      "states": {
+        "READ_COMPLETE": 1
+      }
+    },
+    "expected_sha256": "324b76dceac0dad2d2fda4a5e150439131f94ef7ac6d12af5ae708aec3bf70c0",
+    "source_is_2024": true,
+    "raw_source_reread_during_reporting": 0
+  },
+  "initial_static_read": {
+    "bytes": 312828,
+    "instances": 1,
+    "status": "READ_COMPLETE"
+  },
+  "resource_admission": {
+    "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+    "host_available_bytes": 19724664832,
+    "workspace_free_bytes": 51722682368,
+    "minimum_host_bytes": 8589934592,
+    "minimum_workspace_bytes": 1073741824,
+    "full_backward": true,
+    "cuda_free_bytes": 7283408896,
+    "cuda_total_bytes": 8546484224,
+    "minimum_cuda_free_bytes": 5368709120,
+    "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "available_commit_bytes": 22550351872
+  },
+  "identity": {
+    "initial_metadata_sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359",
+    "orders_sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502",
+    "actual_E5_hash_inherited_from_preparation": "9330e71c54209fd4baaf14ffe944f4830e6eb9d9036cd891dfc82f43f683b01d"
+  },
+  "readonly_panel": {
+    "status": "RUNNING",
+    "effective_position": 2552,
+    "segment_returned": 152,
+    "cumulative_returned": 3032,
+    "inherited_epochs": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "new_monitor_checks": "2_PASS_RECOVERY_ACCOUNTING_AND_INHERITED_METRIC_GUARD;JS_SYNTAX_PASS",
+    "does_not_control_training": true
+  },
+  "terminal_followup": {
+    "interval_minutes": 30,
+    "maximum_checks": 8,
+    "expires_at": "2026-10-31T04:23:19.638947+00:00",
+    "silent_while_running": true,
+    "resource_protection": "REMAINS_CANCELLED"
+  },
+  "inherited_metrics": {
+    "complete": 19,
+    "rerun": false,
+    "evidence": "docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json"
+  },
+  "historical_failure": {
+    "preserved": true,
+    "evidence": "docs/research_readiness/20261025/evidence/dote_physical_control_failure_20261031.json",
+    "prior_time_acceptance": "NOT_VERIFIED_NOT_RETROACTIVELY_PASSED",
+    "same_seed_not_a_new_replicate": true
+  },
+  "final_workbook": "WAITING_RECOVERED_E9_ONE_WORKSHEET_ONE_TABLE_NO_FALSE_COMPLETE",
+  "new_inference_during_reporting": 0,
+  "final_2025": "FROZEN_NO_ACCESS",
+  "main": "NOT_MODIFIED"
+}
