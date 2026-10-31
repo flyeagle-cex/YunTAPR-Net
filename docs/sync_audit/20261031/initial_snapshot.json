@@ -208,10 +208,10 @@
     "KEEP_LOCAL_LARGE_SOURCE_INVENTORY": 13,
     "KEEP_LOCAL_PRIVATE_RUNTIME": 867,
     "KEEP_LOCAL_PROTECTED_OR_AMBIGUOUS_YEAR": 3,
-    "KEEP_EXISTING_DELETION_UNSTAGED": 4,
     "KEEP_LOCAL_METRIC_DETAIL_OR_INTERMEDIATE": 101,
     "KEEP_LOCAL_PRIVATE_LOCATOR_OR_RUNTIME": 14,
-    "KEEP_LOCAL_SUPERSEDED_EXPORT_DRAFT": 27
+    "KEEP_LOCAL_SUPERSEDED_EXPORT_DRAFT": 27,
+    "LEGACY_GIT_LONG_PATH_FALSE_DELETION_STATUS": 4
   },
   "large_ignored": [
     {
@@ -291,5 +291,11 @@
     "Existing historical receipts/results are not retroactively scientifically accepted.",
     "Locator-redacted archives are not byte-identical executable releases; original hash retained.",
     "No existing tracked algorithm/config/experimental number modified."
-  ]
+  ],
+  "subsequent_status_correction": {
+    "reference": "path_length_reconciliation.json",
+    "initial_D_entries": 4,
+    "actual_deleted_files": 0,
+    "cause": "Windows Git default long-path handling; originals exist"
+  }
 }

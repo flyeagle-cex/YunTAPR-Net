@@ -58,7 +58,7 @@ GitHub远程 & \url{https://github.com/flyeagle-cex/YunTAPR-Net.git} \\
 \toprule
 检查项 & 实际发现及处理 \\
 \midrule
-旧副本改动 & 5个旧副本共1996项原有改动。逐路径分类，原件保留；未把旧main或detached副本切换、重置或整体提交。 \\
+旧副本改动 & 初始5个旧副本共1996项Git状态；4项D为已证实的长路径误报，其余1992项为可见修改/新增。原件保留，不整体提交旧main/执行副本。 \\
 重复公开内容 & 24项与当前Git树中其他路径的规范化blob相同，记录现有归档位置，不重复上传。 \\
 本轮公开归档 & 396份既有源码/历史记录；包括187份Python、197份JSON，以及PowerShell、设计材料等。归档约12.27 MB。 \\
 忽略项 & 主仓库10041项可见忽略文件；约8539项属于工作簿依赖目录。原有14个临时目录不可访问，未改权限或取消忽略。 \\
@@ -70,7 +70,7 @@ GitHub远程 & \url{https://github.com/flyeagle-cex/YunTAPR-Net.git} \\
 \end{tabular}\end{center}
 
 \subsection*{仍未直接提交的文件}
-完整文件名与原因见：\par\path{docs/sync_audit/20261031/uncommitted_dispositions.csv}；忽略文件另见\path{ignored_inventory.csv}。私有/不完整账本、临时输出、源读取清单、过期导出和来源/年份不明资料均保留本地。原有4处旧fixture删除保持未暂存，当前工作分支对应文件仍在。
+完整文件名与原因见：\par\path{docs/sync_audit/20261031/uncommitted_dispositions.csv}；忽略文件另见\path{ignored_inventory.csv}。私有/不完整账本、临时输出、源读取清单、过期导出和来源/年份不明资料均保留本地。旧副本4个D曾按删除记录；最终确认4份fixture实际均存在，路径长283字符。只读启用core.longpaths后该副本状态干净，因此是Git长路径误报，不是用户删除；未改持久配置或原件。
 
 以下4份原件未能完成可证明闭合的脱敏，明确不公开内容：
 \begin{enumerate}
@@ -83,7 +83,7 @@ GitHub远程 & \url{https://github.com/flyeagle-cex/YunTAPR-Net.git} \\
 
 \clearpage
 \section*{3. 提交内容与质量检查}
-源档提交6784e5d包含405个明确路径：396份归档、1份归档说明和8份审计文件。随后报告提交只更新当前文档入口、3个矩阵元数据字段及报告/核验材料。完整清单\path{docs/sync_audit/20261031/submitted_files.csv}逐文件说明本次改动；归档原件位置、双SHA和用途见\path{archive_manifest.csv}。不使用git add .或git add -A。
+源档提交6784e5d包含405个明确路径：396份归档、1份归档说明和8份审计文件。随后报告提交只更新当前文档入口、3个矩阵元数据字段及报告/核验材料；末次追加提交更正4项长路径状态误报，不改写已推送历史。完整清单\path{docs/sync_audit/20261031/submitted_files.csv}逐文件说明本次改动；归档原件位置、双SHA和用途见\path{archive_manifest.csv}。不使用git add .或git add -A。
 
 \begin{center}\small
 \begin{tabular}{@{}p{78mm}p{15mm}p{73mm}@{}}
