@@ -12,6 +12,7 @@ const d=JSON.parse(await fs.readFile(arg('--data'),'utf8'));
 if(d.status!=='COMPLETE_WITH_EXPLICIT_UNCOMPUTED_SUPPLEMENTAL_METHODS'&&!args.includes('--development-preview'))throw Error('No final dataset yet');
 const output=path.resolve(arg('--output'));
 try{await fs.access(output);throw Error('Never overwrite an existing workbook');}catch(e){if(e.code!=='ENOENT')throw e;}
+if(args.includes('--stage-summary')){await buildStageSummary();process.exit(0);}
 const wb=Workbook.create(),sheet=wb.worksheets.add('完整指标');
 const headers=['记录类型','模型或配对','seed或统计','损失臂','Train/Dev人口','方法或分组','阈值(mm/h)','来源Dev场景','全监督N','当前评价分母N','真值超阈像元时次N','Brier↓','AUROC↑','AP↑','条件Pinball↓','覆盖率（总体q32）','偏差（总体q32）','覆盖绝对误差↓','32分位平均覆盖误差↓','经验REL↓','经验RES↑','UNC','MAE(mm/h)','RMSE(mm/h)','MeanBias(mm/h)','PearsonCC','TP','FP','FN','TN','POD','FAR','CSI','HSS','不支持N','参与seed数','状态与范围','固定E9 SHA256','原训练commit或绑定状态','来源ID','参考来源ID','说明'];
 const col=i=>{let n=i+1,s='';while(n){s=String.fromCharCode(65+(n-1)%26)+s;n=Math.floor((n-1)/26);}return s;};
@@ -235,3 +236,137 @@ const verification={status:'PASS_IN_MEMORY_SINGLE_TABLE_REQUIRES_VISUAL_REVIEW',
 await fs.writeFile(path.join(path.dirname(output),'workbook_verification.json'),JSON.stringify(verification,null,2));
 if(args.includes('--layout-preview-only')){console.log(JSON.stringify(verification));process.exit(0);}
 const xlsx=await SpreadsheetFile.exportXlsx(wb);await xlsx.save(output);console.log(JSON.stringify({status:'EXPORTED_SINGLE_TABLE_FOR_VISUAL_REVIEW',output,rows:rows.length,columns:42,worksheets:1}));
+
+// Researcher-requested view: one actual model/seed/loss configuration per row.
+// Detailed strata and point-classification counts remain in the prior delivery.
+async function buildStageSummary(){
+  if(!args.includes('--review-dir'))throw Error('Missing --review-dir');
+  const reviewDir=path.resolve(arg('--review-dir'));
+  const workbook=Workbook.create(),ws=workbook.worksheets.add('阶段对比');
+  const letter=i=>{let n=i+1,s='';while(n){s=String.fromCharCode(65+(n-1)%26)+s;n=Math.floor((n-1)/26);}return s;};
+  const order=['B0','B1','B2','B3','B4','B5','B6','B7','B8','B7_ZERO_DOTE','B7_PERP_GRADIENT'];
+  const recs=[...d.records].sort((a,b)=>order.indexOf(a.model)-order.indexOf(b.model)||a.arm.localeCompare(b.arm)||a.seed-b.seed);
+  if(recs.length!==31||new Set(recs.map(r=>r.run_id)).size!==31||d.metric_runs_complete!==19||!d.candidate_closed)throw Error('Final 31-record scope is not ready');
+  const head=['模型','seed','损失方案','Brier↓','AUROC↑','AP↑','条件Pinball↓','q32覆盖率','q32偏差','q32绝对误差↓','配对方向','ΔBrier','ΔAUROC','ΔAP','ΔPinball','Δq32绝对误差','配对说明','MAE_A(mm/h)','RMSE_A(mm/h)','Bias_A(mm/h)','CC_A','POD','FAR','CSI','HSS','点估计状态','Train/Dev场景','监督像元时次N','有雨像元时次N','权重终点','来源ID','E9权重SHA256','MAE_B(mm/h)','RMSE_B(mm/h)','Bias_B(mm/h)','CC_B','MAE_C(mm/h)','RMSE_C(mm/h)','Bias_C(mm/h)','CC_C'];
+  const start=7,end=start+recs.length-1;
+  const index=new Map(recs.map((r,i)=>[r.run_id,i]));
+  const get=(model,r)=>recs.find(x=>x.model===model&&x.seed===r.seed&&x.arm===r.arm&&x.population===r.population);
+  const prior={B1:'B0',B3:'B2',B4:'B3',B5:'B4',B6:'B4',B7:'B6',B8:'B7'};
+  const fields=['brier','auroc','ap','pinball','q32_error'],directions=[-1,1,1,-1,-1];
+  const classifier=new Map(d.classifications.filter(c=>c[5]==='OCC_P').map(c=>[c[0],c]));
+  const continuous=new Map(d.continuous.map(c=>[c[0],c]));
+  const rows=[],links=[],summaryMap=new Map();let pointComplete=0;
+  for(const [i,r]of recs.entries()){
+    const row=Array(head.length).fill(null),c=classifier.get(r.run_id);
+    if(!c||c[7]!==r.n_valid||c[8]+c[10]!==r.n_rain||c.slice(8,12).reduce((a,b)=>a+b,0)!==r.n_valid)throw Error('Saved occurrence identity mismatch');
+    const [tp,fp,fn,tn]=c.slice(8,12),den=(tp+fn)*(fn+tn)+(tp+fp)*(fp+tn);
+    const rates=[tp+fn?tp/(tp+fn):null,tp+fp?fp/(tp+fp):null,tp+fp+fn?tp/(tp+fp+fn):null,den?2*(tp*tn-fp*fn)/den:null];
+    for(let k=0;k<4;k++)if(typeof c[16+k]==='number'&&Math.abs(c[16+k]-rates[k])>1e-12)throw Error('Saved classification rate differs');
+    const a=continuous.get(`${r.run_id}|A`),hasA=typeof a?.[7]==='number';if(hasA)pointComplete++;
+    Object.assign(row,{0:r.model,1:r.seed,2:r.arm,3:r.brier,4:r.auroc,5:r.ap,6:r.pinball,7:r.coverage,8:r.q32_bias,9:r.q32_error,25:hasA?'A/B/C已计算':'A/B/C未补算',26:r.population,27:r.n_valid,28:r.n_rain,29:'E9 LAST',30:[...new Set([r.source_id,hasA?a[13]:null].filter(Boolean))].join('；'),31:r.checkpoint});
+    for(const [method,offset]of [['A',17],['B',32],['C',36]]){
+      const v=continuous.get(`${r.run_id}|${method}`);if(typeof v?.[7]==='number')for(let k=0;k<4;k++){if(!Number.isFinite(v[7+k]))throw Error('Nonfinite continuous source');row[offset+k]=v[7+k];}
+    }
+    for(let k=0;k<4;k++)row[21+k]=typeof c[16+k]==='number'?c[16+k]:rates[k];
+    let experiment=r,reference=prior[r.model]?get(prior[r.model],r):null;
+    if(r.model==='B7_ZERO_DOTE'||r.model==='B7_PERP_GRADIENT'){experiment=get('B7',r);reference=r;}
+    if(reference&&experiment){
+      if(experiment.n_valid!==reference.n_valid||experiment.n_rain!==reference.n_rain)throw Error('Unequal paired masks');
+      const short=m=>m==='B7_ZERO_DOTE'?'ZERO_DOTE':m==='B7_PERP_GRADIENT'?'PERP':m;
+      row[10]=`${short(experiment.model)}−${short(reference.model)}`;
+      const vals=fields.map(f=>experiment[f]-reference[f]);
+      const good=vals.filter((v,k)=>v*directions[k]>0).length,bad=vals.filter((v,k)=>v*directions[k]<0).length;
+      row[16]=`${good}项改善，${bad}项退化`;
+      links.push({i,ei:index.get(experiment.run_id),ri:index.get(reference.run_id),values:vals});
+      const key=`${row[10]} / ${r.arm}`;if(!summaryMap.has(key))summaryMap.set(key,[]);summaryMap.get(key).push({seed:r.seed,delta:vals,experiment:experiment.run_id,reference:reference.run_id});
+    }else row[16]=r.model==='B0'?'同人口基准':r.model==='B2'?'与B1人口不同，不作增量归因':'无同seed参考，暂不配对';
+    if(row.slice(3,10).some(v=>!Number.isFinite(v)))throw Error('Incomplete probability endpoint');
+    rows.push(row);
+  }
+  if(pointComplete!==19)throw Error('Unexpected point-estimate coverage');
+  ws.showGridLines=false;ws.freezePanes.freezeRows(6);ws.freezePanes.freezeColumns(3);
+  ws.mergeCells('A2:Q2');ws.getRange('A2').values=[['YunTAPR-Net V1.3 阶段增量对比']];ws.getRange('A2:Q2').format={font:{name:'Microsoft YaHei',size:15,bold:true,color:'#16324F'},rowHeight:30};
+  ws.mergeCells('A3:Q3');ws.getRange('A3').values=[['每个模型 × seed × 损失方案一行，共31行。固定E9 LAST，2024 Development；2025最终测试冻结。']];
+  ws.mergeCells('A4:Q4');ws.getRange('A4').values=[['Δ按“配对方向”列计算；绿为改善、红为退化。B0/B1与B2–B8人口不同，不作直接增量归因。空白表示未补算或不能配对。']];
+  ws.getRange('A3:Q4').format={font:{name:'Microsoft YaHei',size:10},rowHeight:23};
+  for(const [range,label]of [['A5:C5','实验身份'],['D5:J5','概率预测与分位数覆盖'],['K5:Q5','同seed、同损失、同人口的增量'],['R5:U5','点估计A连续误差'],['V5:Y5','发生概率分类'],['Z5:AF5','范围与证据'],['AG5:AJ5','点估计B连续误差'],['AK5:AN5','点估计C连续误差']]){
+    ws.mergeCells(range);ws.getRange(range).values=[[label]];ws.getRange(range).format={fill:'#DCE6F1',font:{name:'Microsoft YaHei',size:10,bold:true},horizontalAlignment:'center',rowHeight:24};
+  }
+  ws.getRange('A6:AN6').values=[head];ws.getRange(`A${start}:AN${end}`).values=rows;
+  ws.getRange(`A6:AN${end}`).format={font:{name:'Microsoft YaHei',size:10,color:'#111827'},rowHeight:25,columnWidth:15,verticalAlignment:'center'};
+  ws.getRange('A6:AN6').format={fill:'#1F4E78',font:{name:'Microsoft YaHei',size:10,bold:true,color:'#FFFFFF'},wrapText:true,horizontalAlignment:'center',rowHeight:44};
+  ws.getRange(`A6:A${end}`).format.columnWidth=26;ws.getRange(`B6:C${end}`).format.columnWidth=9;
+  ws.getRange(`K6:K${end}`).format.columnWidth=27;ws.getRange(`Q6:Q${end}`).format.columnWidth=24;ws.getRange(`Z6:Z${end}`).format.columnWidth=23;
+  ws.getRange(`AA6:AA${end}`).format.columnWidth=20;ws.getRange(`AE6:AE${end}`).format.columnWidth=52;ws.getRange(`AF6:AF${end}`).format.columnWidth=70;
+  ws.getRange(`D${start}:Y${end}`).setNumberFormat('0.000000');ws.getRange(`H${start}:J${end}`).setNumberFormat('0.000%');ws.getRange(`L${start}:P${end}`).setNumberFormat('+0.00000000;-0.00000000;0.00000000');ws.getRange(`V${start}:Y${end}`).setNumberFormat('0.000%');ws.getRange(`AB${start}:AC${end}`).setNumberFormat('#,##0');ws.getRange(`AG${start}:AN${end}`).setNumberFormat('0.000000');
+  ws.getRange(`D${start}:Y${end}`).format.horizontalAlignment='right';ws.getRange(`AG${start}:AN${end}`).format.horizontalAlignment='right';
+  const t=ws.tables.add(`A6:AN${end}`,true,'StageSeedLossMetrics');t.style='TableStyleLight9';
+  for(let i=0;i<recs.length;i++){
+    const row=i+start;if(i===0||recs[i].model!==recs[i-1].model)ws.getRange(`A${row}:AN${row}`).format.borders={top:{style:'medium',color:'#91A7BB'}};
+    if(rows[i][17]===null){ws.getRange(`R${row}:U${row}`).format.fill='#F1F3F5';ws.getRange(`AG${row}:AN${row}`).format.fill='#F1F3F5';}
+  }
+  for(const link of links){
+    const a=link.ei+start,b=link.ri+start,r=link.i+start;
+    ws.getRange(`L${r}:P${r}`).formulas=[['D','E','F','G','J'].map(c=>`=${c}${a}-${c}${b}`)];
+    const good=['L','M','N','O','P'].map((c,k)=>`IF(${c}${r}${directions[k]>0?'>':'<'}0,1,0)`).join('+');
+    const bad=['L','M','N','O','P'].map((c,k)=>`IF(${c}${r}${directions[k]>0?'<':'>'}0,1,0)`).join('+');
+    ws.getRange(`Q${r}`).formulas=[[`=(${good})&"项改善，"&(${bad})&"项退化"`]];
+  }
+  ws.getRange(`P${start}:P${end}`).setNumberFormat('+0.000%;-0.000%;0.000%');
+  for(let k=0;k<5;k++){
+    const c=letter(11+k),range=ws.getRange(`${c}${start}:${c}${end}`);
+    range.conditionalFormats.addCustom(`AND(ISNUMBER(${c}${start}),${c}${start}${directions[k]>0?'>':'<'}0)`,{fill:'#E6F2E9',font:{color:'#17623C'}});
+    range.conditionalFormats.addCustom(`AND(ISNUMBER(${c}${start}),${c}${start}${directions[k]>0?'<':'>'}0)`,{fill:'#FBEAEA',font:{color:'#A52A2A'}});
+  }
+  workbook.recalculate();
+  for(const p of links){const actual=ws.getRange(`L${p.i+start}:P${p.i+start}`).values[0];for(let k=0;k<5;k++)if(Math.abs(actual[k]-p.values[k])>1e-12)throw Error('Paired formula differs from saved arithmetic');}
+  const probe=links.find(p=>recs[p.i].model==='B8');
+  const changed=ws.getRange(`D${probe.ei+start}`),before=changed.values[0][0];changed.values=[[before+.001]];workbook.recalculate();
+  if(Math.abs(ws.getRange(`L${probe.i+start}`).values[0][0]-probe.values[0]-.001)>1e-12)throw Error('Paired recalculation failed');changed.values=[[before]];
+  // Both static-terrain arms retain their frozen B4 reference. Also show the
+  // elevation-to-full-terrain contrast without replacing the primary contrast.
+  const full=recs.find(r=>r.model==='B6'),elevation=get('B5',full);
+  if(full&&elevation)summaryMap.set('B6−B5（补充） / E0',[{seed:full.seed,delta:fields.map(f=>full[f]-elevation[f]),experiment:full.run_id,reference:elevation.run_id}]);
+  const stats=[];
+  for(const [comparison,members]of summaryMap){
+    const n=members.length,metrics={};for(let k=0;k<5;k++){const values=members.map(p=>p.delta[k]),mean=values.reduce((a,b)=>a+b,0)/n;metrics[fields[k]]={mean,sample_sd:n>1?Math.sqrt(values.reduce((a,b)=>a+(b-mean)**2,0)/(n-1)):null,improved:values.filter(v=>v*directions[k]>0).length,worsened:values.filter(v=>v*directions[k]<0).length};}
+    stats.push({comparison,n,seeds:members.map(p=>p.seed),members,metrics});
+  }
+  const noteStart=end+3,notes=[];
+  notes.push(['模型、损失方案与读表规则',true]);
+  notes.push(['B0：B13单通道单时次；B1：B13六时次。两者同人口10455/10501，按相同seed及损失方案配对。']);
+  notes.push(['B2：七通道单时次t−10分钟；B3：七通道六时次。B2–B8同人口959/963；B2/B3输入维度和参数量不同。']);
+  notes.push(['B4：B3加13变量GFS MEE环境分支。B5：B4加海拔。B6：B4加完整静态地形六通道。B5/B6均以冻结的B4为主参考，B6−B5补充统计也完整保留。']);
+  notes.push(['B7：B6加8通道DOTE数值和concat残差融合。B8：相同条件信息下，单SP04 DTFM替换concat融合；不能解释为只叠加独立模块。']);
+  notes.push(['B7_ZERO_DOTE：数值置零但真实mask保留，128输入权重无损失梯度。PERP：仅DOTE内部梯度转90°，为单seed方向性探针。两种控制行的Δ均为真实B7−控制，方向已在表内注明。']);
+  notes.push(['B9：ERA5教师—学生蒸馏尚未正式训练，没有可填写的seed指标。本表不伪造未开展实验。']);
+  notes.push(['E0：gamma=2、lambda_q=1；E1：gamma=0，取消难样本聚焦；E2：gamma=2、lambda_q=2，分位数训练误差权重加倍。alpha均0.5。只有B0/B1实际训练过全部三种方案，其他模型仅E0。']);
+  notes.push(['条件Pinball评价不乘lambda_q。Brier/Pinball越低越好，AUROC/AP越高越好。q32按距98.4375%名义水平判断。偏差=实际覆盖−名义覆盖；覆盖偏差和误差差值按百分点理解，如+0.667%表示误差增加0.667个百分点。']);
+  notes.push(['A=p×mean(expm1(q))；B为混合中位数；C=p×expm1(mean(q))，C不是真实条件算术均值。A/B/C仅展示候选，均未科学冻结。连续误差单位mm/h，CC无量纲；Pinball使用冻结log1p尺度。']);
+  notes.push(['POD/FAR/CSI/HSS基于发生概率P(rain>0.1)≥0.5，不是点估计五阈值分类。FAR=FP/(TP+FP)。五阈值点分类、计数、完整分层和原始配对值保留在既有明细与METRICS.csv。']);
+  notes.push(['19个模型配置已有A/B/C补算；B0/B1的E1/E2共8条、ZERO三条及PERP一条共12条未补算。灰底空白表示这项未计算，真实0仍显示为0；不能用旧BEST代理补E9，未新增推理。']);
+  notes.push(['配对说明仅计五项核心指标改善/退化的数量，不是加权总分或模型排名。B3/B2、B7/B6只有seed2029能配对；无同seed参考时不强行计算差值。']);
+  notes.push(['以下统计按同seed差值计算均值及样本标准差，不用“两个模型均值之差”代替不完整配对。单seed不报告标准差。所有正负结果保留，不将像元时次数量视为独立天气事件。']);
+  notes.push(['阶段增量的配对统计（保存记录的统计快照）',true]);
+  const f=v=>(v>=0?'+':'')+v.toFixed(8);
+  for(const s of stats){
+    const text=fields.map((key,k)=>{const m=s.metrics[key],scale=k===4?100:1,label=['Brier','AUROC','AP','条件Pinball','q32绝对误差(pp)'][k];return `${label} ${f(m.mean*scale)}${s.n>1?' ± '+(m.sample_sd*scale).toFixed(8):''}（改善${m.improved}/${s.n}）`;}).join('；');
+    notes.push([`${s.comparison}，配对n=${s.n}：${text}`,false,48]);
+  }
+  notes.push(['结论边界：B7/B6与PERP仅单seed；B8/B7及真实B7/ZERO有三seed，仍是同一Dev年。q32、06UTC及20–50mm/h反例保留在原分析；>50mm/h仅6个像元时次，不等于6场暴雨。DOTE结果不能单独证明物理因果或跨年泛化。']);
+  notes.push(['来源与模型身份',true]);
+  notes.push(['原执行版本、原始指标和分层来源沿用EVIDENCE_INDEX.md及既有完成收据；B0/B1历史执行commit绑定缺口仍NOT_VERIFIED。此表只重排保存统计，没有训练、模型加载、推理或新增原始数据读取。']);
+  for(const s of d.sources)notes.push([`来源 ${s[0]}；SHA256 ${s[1]}；模型/评价代码 ${s[4]||'见既有证据索引'}`]);
+  for(let i=0;i<notes.length;i++){const [text,title,height]=notes[i],r=noteStart+i;ws.mergeCells(`A${r}:Q${r}`);ws.getRange(`A${r}`).values=[[text]];ws.getRange(`A${r}:Q${r}`).format={font:{name:'Microsoft YaHei',size:title?11:10,bold:!!title,color:'#16324F'},fill:title?'#E9EFF5':'#FFFFFF',wrapText:true,rowHeight:height||30,verticalAlignment:'center'};}
+  if(JSON.stringify({head,rows,notes}).includes('导师'))throw Error('Forbidden wording');
+  workbook.recalculate();
+  const scan=await workbook.inspect({kind:'match',searchTerm:'#REF!|#DIV/0!|#VALUE!|#NAME\\?|#N/A|#NUM!|#NULL!|#SPILL!|#CALC!',options:{useRegex:true,maxResults:20},maxChars:1800});
+  for(const line of scan.ndjson.split('\n')){let entry;try{entry=JSON.parse(line);}catch{continue;}if(entry.kind==='match')throw Error('Formula error in stage summary');}
+  await fs.mkdir(reviewDir,{recursive:true});
+  const previewRanges=['A2:Q4','A5:J15','K5:Q15','R5:Y15','AG5:AN15',`A${noteStart}:Q${noteStart+7}`,`A${noteStart+15}:Q${noteStart+19}`,'A25:J37','K25:Q37','Z5:AF10'];
+  for(let i=0;i<previewRanges.length;i++){const blob=await workbook.render({sheetName:'阶段对比',range:previewRanges[i],scale:1.1,format:'png'});await fs.writeFile(path.join(reviewDir,`preview_${i+1}.png`),new Uint8Array(await blob.arrayBuffer()));}
+  const verification={status:'PASS_IN_MEMORY_PENDING_SAVED_AND_VISUAL_REVIEW',dataRows:recs.length,columns:head.length,tableRange:`A6:AN${end}`,notesStart:noteStart,modelCounts:Object.fromEntries(order.map(m=>[m,recs.filter(r=>r.model===m).length])),pointComplete,pointNotComputed:recs.length-pointComplete,pairedRows:links.length,pairedFormulaChecks:links.length*5,recalculationChecked:true,allActualLossSchemes:true,extraTrainingUpdates:0,extraInference:0,final2025:'FROZEN_NO_ACCESS',headers:head,records:recs.map(r=>({run_id:r.run_id,training_commit:r.training_commit,checkpoint:r.checkpoint,source_id:r.source_id})),pairedStatistics:stats};
+  await fs.writeFile(path.join(reviewDir,'verification.json'),JSON.stringify(verification,null,2));
+  if(!args.includes('--layout-preview-only')){const xlsx=await SpreadsheetFile.exportXlsx(workbook);await xlsx.save(output);}
+  console.log(JSON.stringify({rows:recs.length,columns:head.length,pairedRows:links.length,pointComplete,exported:!args.includes('--layout-preview-only')}));
+}
