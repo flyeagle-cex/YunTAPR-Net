@@ -1,0 +1,51 @@
+{
+  "status": "METADATA_BUDGET_CORRECTION_PREPARED_NOT_APPROVED_OR_LAUNCHED",
+  "at": "2026-10-31T08:21:02.490970+00:00",
+  "execution_code_commit": "d27ba876ae0f1341eec7570956d20cec7cfc9bed",
+  "proposal_sha256": "058015e41af83353d57b677a84d9d955ef44db42c7e02028608d618724f5350a",
+  "synthetic_tests_passed": 46,
+  "synthetic_tests_failed": 0,
+  "checks": {
+    "model_identities_identical": true,
+    "scientific_methods_identical": true,
+    "provider_export_candidate_code_unchanged": true,
+    "native_runtime_binding_unchanged": true,
+    "fixed_entry_rejects_without_new_approval": true,
+    "independent_host_rejects_without_new_approval": true,
+    "approval_absent": true,
+    "formal_output_absent": true,
+    "launch_claim_absent": true
+  },
+  "metadata_only_preflight": {
+    "archive_reserved_bytes": 119168690,
+    "open_instances": 80,
+    "scientific_payload_opens": 0,
+    "scope": "Exact shared-label metadata path plus six extra frozen grid constructions and two static production-metadata reads; no model, raw-data reader, inference, or GPU request",
+    "formal_retry": false
+  },
+  "budget_change": {
+    "metadata_cumulative_additional_bytes": 268435456,
+    "worker_metadata_old_bytes": 67108864,
+    "worker_metadata_new_bytes": 134217728,
+    "future_metadata_bytes": 1275068416,
+    "prior_metadata_charge_bytes": 67108864,
+    "cumulative_metadata_bytes": 1342177280,
+    "cumulative_source_bytes": 242241735124,
+    "prior_target_seconds_charge": 12,
+    "future_maximum_seconds": 21588,
+    "cumulative_maximum_seconds": 21600,
+    "reason": "Frozen SQLite metadata is hashed and connected separately; previous 64MiB worker cap was insufficient"
+  },
+  "resource_admission": {
+    "passed_at_snapshot": true,
+    "disk_free_bytes": 54650195968,
+    "host_available_bytes": 15810084864,
+    "gpu_free_mib": 6440.0
+  },
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "raw_scientific_payload_reads": 0,
+  "final_2025_access": false,
+  "real_end_to_end_gate": "NOT_VERIFIED",
+  "scientific_acceptance": "PENDING_RESEARCHER_REVIEW"
+}

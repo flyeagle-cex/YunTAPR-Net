@@ -1,0 +1,103 @@
+\documentclass[UTF8,a4paper,10pt,fontset=none]{ctexart}
+\usepackage[margin=18mm,headheight=15pt]{geometry}
+\usepackage{amsmath,booktabs,tabularx,array,xcolor,fancyhdr,hyperref,enumitem}
+\setmainfont{Arial}\setCJKmainfont{Microsoft YaHei}\setCJKmonofont{Microsoft YaHei}
+\definecolor{ink}{HTML}{18344C}
+\hypersetup{unicode=true,colorlinks=true,urlcolor=ink,linkcolor=ink,pdftitle={YunTAPR-Net 元数据配额失败收据与限额纠正准备},pdfauthor={YunTAPR-Net Research}}
+\pagestyle{fancy}\fancyhf{}\lhead{\small YunTAPR-Net}\rhead{\small V2已停止／V3仅准备，未启动}\cfoot{\small 2026-10-31\quad|\quad\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\renewcommand{\arraystretch}{1.2}\setlength{\tabcolsep}{5pt}
+\setlist{nosep,leftmargin=1.7em,topsep=4pt}
+\ctexset{section={format=\large\bfseries,beforeskip=9pt,afterskip=4pt},subsection={format=\normalsize\bfseries,beforeskip=6pt,afterskip=3pt}}
+\emergencystretch=3em
+\newcommand{\key}[1]{\textcolor{ink}{\textbf{#1}}}
+\newcommand{\code}[1]{{\small\texttt{\detokenize{#1}}}}
+\begin{document}
+{\LARGE\bfseries 元数据配额失败收据}\\[4pt]
+{\Large 完整元数据路径核查与限额纠正准备}\\[6pt]
+2026年10月31日\quad V3候选\quad 研究者主导，AI辅助
+
+\section*{1. 批准后的真实终态}
+研究者明确批准V2固定代码\code{9d63713}与提案\code{0be1a2b4}。只做一次后台调度，原生解释器通过独立性门槛，正式目录与共享标签任务声明创建；随后在标签统计初始化的人口加载器中触及冻结元数据配额，控制器停止后续全部任务，未重试。
+
+\key{九模型前向均未开始，训练标签统计未完成，没有新科学结果。}
+科学气象／标签／静态包载荷、检查点读取、模型加载、推理和优化器更新均0，2025未访问。冻结元数据已经读取，不能把本轮写成“全部读取0”。V2目标存在9.062271秒；旧批准、启动声明、日志和失败现场全部保留。
+
+\section*{2. 原因与准备遗漏}
+冻结统计SQLite（轻量级关系数据库）档案为33,804,288字节。原人口加载器先做文件散列校验，再作只读数据库连接；按两次档案长度预留为：
+\[
+2\times33,804,288=67,608,576>67,108,864=64~\mathrm{MiB}.
+\]
+仅这两次预留已超过原单任务上限，尚未计入人口、样本清单、坐标和质量检查元数据。失败发生在第二次档案打开前，标签读取计量器尚未创建。先前准备没有完整核算这条依赖路径，属于本轮配额设计遗漏。
+
+V2未将失败时元数据终端计数保存，不能事后伪造精确实际值。V3准备保守计入整份已批准的64 MiB／128打开上限；原数据库第二次打开被提前拒绝，原生数据库内部物理读取量未冒充逐字节实测。
+
+\section*{3. 已完成的针对性核查}
+停止后进行独立的只读元数据准入检查，禁止任何科学载荷打开，仅走冻结人口与坐标依赖，并额外覆盖六次坐标网格构建和两次静态生产收据读取：
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+\toprule
+检查 & 实际结果\\
+\midrule
+冻结元数据档案长度预留 & 119,168,690字节／80打开\\
+训练／开发人口身份 & 959／963场景，通过\\
+科学载荷打开／模型加载／推理 & 0／0／0\\
+与128 MiB单任务候选上限比较 & 低于134,217,728字节\\
+数学、导出、读取、预算与失败封口合成检查 & 46项通过\\
+\bottomrule
+\end{tabularx}
+\end{center}
+此119,168,690字节是准备阶段元数据检查，单独披露，不冒充正式模型诊断或零读取。九模型的整体数据源代码存在两个版本，但人口加载器的AST（抽象语法树）一致，空间坐标与契约依赖一致；不宣称整个源文件完全相同。
+
+\textbf{新增工程修正：}逐次登记元数据接受与提前拒绝；每个工作进程打开前同时受单任务与整包剩余额度约束；失败也持久化已预留计数。计时从控制器入口开始，覆盖身份检查。模型、损失、评价器、旁路数值代码及科学定义均不改变。真实模型端到端数值一致性仍未验证。
+
+\newpage
+\section*{4. 待批准的精确纠正包}
+\textbf{固定执行提交：}\\
+\code{d27ba876ae0f1341eec7570956d20cec7cfc9bed}\\
+\textbf{提案规范化SHA-256（安全散列算法256位）：}\\
+\code{058015e41af83353d57b677a84d9d955}\\
+\code{ef44db42c7e02028608d618724f5350a}\\
+两行连接为完整提案身份。新包无批准文件、启动声明或正式运行目录，两个入口在无新批准时均先拒绝。
+
+范围保持一次共享2023训练标签统计及既有B4/B7/B8各三个种子的九次2024开发前向，固定E0损失、第九轮末检查点。主比较B8减B7，次要B7减B4、B8减B4；严格大于20 mm/h为主，A/B/C三种候选点估计全报告，未知概率尾部保留可识别范围，不挑开发最优，不新增训练或科学结论。
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}Xr@{}}
+\toprule
+预算项目 & 候选限额／记账\\
+\midrule
+单工作进程冻结元数据 & 128 MiB／128打开\\
+旧失败元数据保守扣记 & 64 MiB／128打开\\
+未来包冻结元数据 & 1,216 MiB／1,920打开\\
+正式尝试累计冻结元数据 & 1,280 MiB／2,048打开\\
+相对原1 GiB累计额度的增加 & \textbf{256 MiB（268,435,456字节）}\\
+\midrule
+未来气象／静态／标签／掩码逻辑源 & 239,935,204,070字节／71,802实例\\
+九检查点各散列、加载一次档案参考 & 964,353,774字节／18打开\\
+未来包源预留总上限 & 242,174,626,260字节\\
+含旧失败扣记的正式尝试累计源上限 & \textbf{242,241,735,124字节}\\
+\midrule
+两个旧目标11.920432秒，保守扣记 & 12秒\\
+未来包总时限 & 21,588秒（5小时59分48秒）\\
+正式尝试累计时限 & \textbf{21,600秒（6小时）}\\
+单模型／共享标签时限 & 2,400秒／600秒\\
+新输出上限 & 16 GiB\\
+最低可用磁盘／主机内存／显存 & 32 GiB／8 GiB／5,120 MiB\\
+优化器更新／额外重试／重放 & \textbf{0／0／0}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+字节为逻辑源交付及打开前档案长度预留，不能当作操作系统物理读盘实测。累计额度指正式包及失败正式尝试；准备阶段元数据检查单独列示，代码、库与批准身份检查按原口径单独绑定。气象、标签、静态和检查点额度均不增加。
+
+\section*{5. 研究者需要作出的唯一决定}
+\key{是否批准V3的元数据累计额度增加256 MiB，以及绑定上述代码、提案、扣记和限额的一次纠正启动。}
+旧包明确零重试，新的配额不能自动生效，旧批准不复用。科学方法不需重新选择。
+
+即使获批，任何身份、人口、原指标、时空键、读取计数、时限或容量门槛失败仍即停，保留现场，不自动重试。完成工程诊断只交付证据，科学验收和论文结论仍由研究者决定。无B9、2025解封、独立观测采集或新训练授权。
+
+{\footnotesize
+证据：同目录proposal.json、engineering\_verification.json、preparation\_receipt.json和main.tex；实际V2失败、元数据检查与探针源码见相邻V2目录launch/。\\
+代码：\href{https://github.com/flyeagle-cex/YunTAPR-Net/commit/d27ba876ae0f1341eec7570956d20cec7cfc9bed}{d27ba87元数据累计配额与失败计数封口}。不公开私有路径、进程编号、权重或原始数据。}
+\end{document}
