@@ -1,5 +1,11 @@
 # 统一证据索引
 
+## 2026-10-31 本地与GitHub进度清算
+
+本轮新入口：[清算报告](output/pdf/YunTAPR-Net_本地与GitHub同步及科研进度清算报告_20261031.pdf)、[完整文件清单](docs/sync_audit/20261031/submitted_files.csv)、[源档及原始/公开SHA](docs/sync_audit/20261031/archive_manifest.csv)、[所有未提交处置](docs/sync_audit/20261031/uncommitted_dispositions.csv)、[忽略项清单](docs/sync_audit/20261031/ignored_inventory.csv)、[106项检查](docs/sync_audit/20261031/quality_checks.json)。旧索引内哈希只属于原快照，当前六处文档/矩阵修订由本轮Git身份及`progress_reconciliation.json`定位。
+
+B4/B7/B8九份E9的同日SHA通过和当前存在/大小/mtime衔接见[权重元数据核对](docs/sync_audit/20261031/checkpoint_metadata_reconciliation.json)，本轮未重哈希或加载模型。终态证据继承B5/B6完成、B7/B8三seed、ZERO三seed、方向性探针完成以及10月31日极端审计；旧队列文字不再作为当前判断。[源档首次推送核对](docs/sync_audit/20261031/push_archive_verification.json)记录真实fetch结果，main未更新。
+
 2026-10-31单文件阅读汇总：[四页PDF](output/pdf/YunTAPR-Net_V1.3_极端降水审计结果汇总_20261031.pdf)，SHA256 `5eaa96a8d2f271076e54004ae21646b4af6dd611cfa5a7d488a6822dfdacbef5`；[可编辑LaTeX源码](output/pdf/YunTAPR-Net_V1.3_极端降水审计结果汇总_20261031.tex)。PDF内嵌三份附件：脱敏审计CSV、完整Markdown审计报告、同一LaTeX源码，逐附件内容一致性及四页渲染/文字检查通过。汇总只读取cfe525b已审计的1400行保存结果，未重算科研指标、读取权重、训练、推理或访问2025；原审计报告/CSV和全部历史证据保留。
 
 2026-10-31极端降水专项只读审计：[Markdown报告](docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md)与[可追溯CSV](docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv)登记109份源文件、九个B4/B7/B8固定E9实际SHA及1400行原值/同seed差值/统计/缺失。完整绝对路径仅保存在本地忽略目录的对应版本，公开文件按源ID脱敏。九模型三点估计在严格>20均TP=FP=0、FN=717；>=20与>20窗口数208/207不同，不篡改边界。峰值低估仅给由现有计数证明的下界，精确峰值及事件/联合分层仍缺失。核对108组分类、27组全人口概率决策界补全及1438个配对指标单元格；原权重未加载、原结果未覆盖、训练/推理及2025载荷读取为0。

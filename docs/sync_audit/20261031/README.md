@@ -20,3 +20,5 @@
 4. 项目总目录的`validate_yuntapr_inventory_recovery_v2.py`
 
 前三类不应公开的负载包括权重、私有定位/账本和中间清单；临时文件与重复公开副本也不混入有效科研成果。完整路径清单以CSV为准。忽略规则未改，未force-add，未删除/覆盖用户原件。源码归档不等于科学验收。
+
+本轮完整报告：[PDF](../../../output/pdf/YunTAPR-Net_本地与GitHub同步及科研进度清算报告_20261031.pdf) / [可编辑LaTeX](../../../output/pdf/YunTAPR-Net_本地与GitHub同步及科研进度清算报告_20261031.tex)。当前状态元数据修订见`progress_reconciliation.json`；首次源档push/fetch见`push_archive_verification.json`；全部提交文件见`submitted_files.csv`。PR #1保持草稿，GitHub当前返回不可直接合并，本轮不解决main合并冲突或自动合并。

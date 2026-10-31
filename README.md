@@ -1,5 +1,17 @@
 # YunTAPR-Net
 
+## 2026-10-31 本地与GitHub进度清算
+
+项目目标是云南复杂地形下近实时卫星概率降水反演（QPE）。当前实验证据来自2023 Train/2024 Dev，核心959/963场景、GFS f006回顾估计、四UTC时次；尚未证明业务全天近实时可用。正式研究路线按V1.3区分方案与已验证范围。
+
+**已经完成：**B0/B1两seed×E0/E1/E2，B2单seed，B3/B4及B7/B8各三seed，B5/B6单seed，ZERO_DOTE三seed和方向性探针单seed的既定Train/2024 Dev。19份固定E9指标补算、31配置单表及既有极端降水专项审计也已交付。全部训练完成结论均限登记口径；不存在B0-B8整体科学验收全部通过的结论。
+
+**等待实验验证：**DOTE物理归因、DTFM全面/多尺度增益、独立事件极端技能与跨年泛化。实际B7/B8训练使用单SP04尺度、width16；不能写成完整多尺度B8已通过。九份B4/B7/B8的A/B/C候选点估计在严格>20 mm/h均TP=FP=0、FN=717，强雨点检出没有改善证据；候选点估计未冻结。
+
+**正在进行：**带局限的科学验收、论文主张收敛和研究者理解对齐；本轮没有运行训练。**尚未开始：**B9与2025独立最终测试。**等待本人掌握：**指研究者待核验的知识清单，不由代码或AI代替本人宣称已掌握。2025继续封存，旧失败/重放/未验证时间预算原样保留。
+
+源档已普通推送工作分支，公开main仍是2026-10-27快照；PR #1保持草稿，未合并。[完整清算PDF](output/pdf/YunTAPR-Net_本地与GitHub同步及科研进度清算报告_20261031.pdf) · [逐文件提交清单](docs/sync_audit/20261031/submitted_files.csv) · [安全审计索引](docs/sync_audit/20261031/README.md)。下方旧时间状态按历史快照阅读，不作为当前状态。
+
 > 最新状态（2026-10-29）：ZERO_DOTE/2030、2031完整九轮Train/2024 Dev及固定E9已核验，合计8640更新、零重放/额外重试，未超预算。连同2029完成真实B7−零控制三seed：Brier改善3/3，AUROC/AP仅1/3，20–50强雨收益未复现、q32误差退化2/3。限定验收COMPLETE_WITH_LIMITATIONS，2025冻结。[完成/配对证据](docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json) · [全部科学分析](SCIENTIFIC_ANALYSIS.md)。
 
 统一科研交付入口：[阶段验收](STAGE_ACCEPTANCE.md) · [实验矩阵](EXPERIMENT_MATRIX.csv) · [原始指标与配对差值](METRICS.csv) · [科学分析](SCIENTIFIC_ANALYSIS.md) · [证据索引](EVIDENCE_INDEX.md)。以各文件明确的快照时间为准；历史报告和收据保持原状。

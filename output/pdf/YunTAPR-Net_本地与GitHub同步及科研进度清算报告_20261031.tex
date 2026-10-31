@@ -1,0 +1,278 @@
+\documentclass[UTF8,a4paper,10pt,fontset=none]{ctexart}
+\usepackage[margin=19mm,headheight=15pt]{geometry}
+\usepackage{amsmath,booktabs,array,tabularx,longtable,xcolor,fancyhdr,hyperref}
+\setmainfont{Arial}
+\setmonofont{Consolas}
+\setCJKmainfont{Microsoft YaHei}
+\setCJKmonofont{Microsoft YaHei}
+\definecolor{ink}{HTML}{18344C}
+\hypersetup{unicode=true,colorlinks=true,urlcolor=ink,linkcolor=ink,pdftitle={YunTAPR-Net 本地与GitHub同步及科研进度清算报告},pdfauthor={YunTAPR-Net Research}}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}\cfoot{\small\thepage}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.18}
+\ctexset{section={format=\large\bfseries,beforeskip=8pt,afterskip=5pt},subsection={format=\normalsize\bfseries,beforeskip=5pt,afterskip=3pt}}
+\emergencystretch=3em
+\newcommand{\key}[1]{\textcolor{ink}{\textbf{#1}}}
+\newcommand{\LocalRepoLocation}{\path{<PRIVATE_PROJECT_ROOT>/YunTAPR-B2-readiness-20261025}}
+\newcommand{\WorkspaceLocation}{本地项目总目录（公开版隐藏个人绝对路径）}
+\newcommand{\Edition}{公开脱敏版}
+\newcommand{\FinalPublication}{源档提交已核验；本报告所属提交由Git历史定位，精确最终HEAD见本地交付收据。}
+\begin{document}
+{\LARGE\bfseries YunTAPR-Net}\par
+{\Large\bfseries 本地与GitHub同步及科研进度清算报告}\par
+2026年10月31日，Asia/Shanghai\quad\Edition\par
+研究者主导，AI辅助整理；依据代码、Git对象、配置、既有实验收据和保存指标。
+
+\section*{1. 执行结论与仓库身份}
+\key{有效既有源码和记录已安全归档至工作分支；科研结论只在已运行、已核验的限定范围内成立。}
+本阶段没有新增功能模块、修改模型或科学参数，没有训练、模型推理、原始气象处理或2025结果访问。2025 Final Test继续封存。
+
+\begin{center}\small
+\begin{tabular}{@{}p{32mm}p{134mm}@{}}
+\toprule
+项目 & 核验结果 \\
+\midrule
+本地总目录 & \WorkspaceLocation \\
+实际开发仓库 & \LocalRepoLocation \\
+GitHub远程 & \url{https://github.com/flyeagle-cex/YunTAPR-Net.git} \\
+当前工作分支 & \path{prep/b2-stage-acceptance-20261025} \\
+同步前HEAD / upstream & \path{987d105280dea7437872e107e13c46c2a0af0ece}；fetch后为0领先/0落后 \\
+已推送归档提交 & \path{6784e5d8733017723389d4fef67f6f380d49a6d7} \\
+归档后远程核对 & 再次fetch；本地与远程均为6784e5d，0领先/0落后。 \\
+重新核验的main & \path{3a70e296629616fc60cf24cb030fb9151f76dca3}；本轮未更新。 \\
+报告发布身份 & \FinalPublication \\
+\bottomrule
+\end{tabular}\end{center}
+
+总目录本身不是Git仓库；下面30个仓库/工作树/固定执行副本均已盘点。当前开发仓库在本轮前工作区、暂存区及非忽略新增文件均为空；最近成果早已在工作分支公开，而非全部“未提交”。本轮真正补存的是仓库外代码、被忽略的科学辅助脚本及旧副本中尚未公开的有效记录。
+
+首次fetch因沙箱网络代理不可达失败；获准权限下fetch成功，后续普通push和再次fetch均成功。未force、reset、clean、amend、rebase或丢弃用户修改。PR \#1原已存在，保持草稿；GitHub当前返回不可直接合并，本轮不合并main或处理其冲突。
+
+\key{研究问题：}云南全境复杂地形约束下的近实时卫星概率降水反演（QPE）。当前证据是回顾式降水估计；不能改写为未来3--6小时降水预报，也不能据此宣布业务全天近实时可用。
+
+\clearpage
+\section*{2. 本地文件清算与安全边界}
+
+\begin{center}\small
+\begin{tabular}{@{}p{32mm}p{134mm}@{}}
+\toprule
+检查项 & 实际发现及处理 \\
+\midrule
+旧副本改动 & 5个旧副本共1996项原有改动。逐路径分类，原件保留；未把旧main或detached副本切换、重置或整体提交。 \\
+重复公开内容 & 24项与当前Git树中其他路径的规范化blob相同，记录现有归档位置，不重复上传。 \\
+本轮公开归档 & 396份既有源码/历史记录；包括187份Python、197份JSON，以及PowerShell、设计材料等。归档约12.27 MB。 \\
+忽略项 & 主仓库10041项可见忽略文件；约8539项属于工作簿依赖目录。原有14个临时目录不可访问，未改权限或取消忽略。 \\
+超50 MB文件 & 主仓库忽略项中9份B2权重约52.6 MB/份，另1份检查明细约71.2 MB。均不提交。9份B4/B7/B8 E9也为约53 MB级外置权重，留本地。 \\
+禁止公开内容 & 原始Himawari/GFS/IMERG/DEM、模型权重、访问/逐步账本、私有定位、凭据和中间缓存均未加入提交。 \\
+源码处理 & 只生成脱敏归档副本；原始SHA与公开SHA逐一登记。源码附加.txt防误执行；Python格式规范化并保存原注释，非字符串AST不变。 \\
+记录处理 & JSON结构重新序列化并脱敏定位字符串；197份数字、布尔值和null逐项保持不变。旧RUNNING或批准字段不代表当前授权。 \\
+\bottomrule
+\end{tabular}\end{center}
+
+\subsection*{仍未直接提交的文件}
+完整文件名与原因见：\par\path{docs/sync_audit/20261031/uncommitted_dispositions.csv}；忽略文件另见\path{ignored_inventory.csv}。私有/不完整账本、临时输出、源读取清单、过期导出和来源/年份不明资料均保留本地。原有4处旧fixture删除保持未暂存，当前工作分支对应文件仍在。
+
+以下4份原件未能完成可证明闭合的脱敏，明确不公开内容：
+\begin{enumerate}
+\item 旧上传副本\path{docs/formal_training_v2/pair_20261007T070503_825794Z/B1_V2/progress.json}；
+\item 项目总目录\path{authorize_yuntapr_paired_training_v1.py}；
+\item 项目总目录\path{create_yuntapr_resume_closure_v1.py}；
+\item 项目总目录\path{validate_yuntapr_inventory_recovery_v2.py}。
+\end{enumerate}
+这些文件没有被删除或悄悄遗漏。外部指标目录的逐场景明细/定位注册表、旧导出草稿、图和工作簿留在本地；当前有效成果由原有终态收据、源SHA及最新单表索引。新审计私有路径映射、编译中间件和含个人绝对路径的本地完整版也不上传。
+
+\clearpage
+\section*{3. 提交内容与质量检查}
+源档提交6784e5d包含405个明确路径：396份归档、1份归档说明和8份审计文件。随后报告提交只更新当前文档入口、3个矩阵元数据字段及报告/核验材料。完整清单\path{docs/sync_audit/20261031/submitted_files.csv}逐文件说明本次改动；归档原件位置、双SHA和用途见\path{archive_manifest.csv}。不使用git add .或git add -A。
+
+\begin{center}\small
+\begin{tabular}{@{}p{78mm}p{15mm}p{73mm}@{}}
+\toprule
+主要归档组 & 份数 & 用途/边界 \\
+\midrule
+仓库外历史工程/科研辅助脚本 & 126 & 静态归档；不执行旧流程或复用批准。 \\
+指标补算代码、公式测试与设计记录 & 23 & 静态归档；不执行旧流程或复用批准。 \\
+准确冻结的补算主程序 & 1 & 静态归档；不执行旧流程或复用批准。 \\
+原被忽略的收据整理/核验辅助脚本 & 29 & 静态归档；不执行旧流程或复用批准。 \\
+旧副本源码及历史记录 & 217 & 保留原状态和数值，明确历史属性。 \\
+\bottomrule
+\end{tabular}\end{center}
+\begin{center}\small
+\begin{tabular}{@{}p{83mm}p{83mm}@{}}
+\toprule
+主要文件 & 修改目的 \\
+\midrule
+\path{README.md} / \path{STAGE_ACCEPTANCE.md} & 新增准确当前入口；探针完成状态覆盖旧排队描述的当前含义。 \\
+\path{SCIENTIFIC_ANALYSIS.md} / \path{EVIDENCE_INDEX.md} & 链接最新终态与强雨反例；区分单尺度实验、归因假设和独立泛化。 \\
+\path{EXPERIMENT_MATRIX.csv} & 只改B8/2029旧partial阶段和缺失指标定位，及探针阶段名称；39行的结果、身份和数值不变。 \\
+B7/B8协议文档 & 增加终态阅读说明；冻结参数、历史正文和批准收据不变。 \\
+审计CSV/JSON、校验脚本 & 记录原始状态、逐文件处置、大小/凭据扫描、权重元数据和真正push/fetch结果。 \\
+本报告PDF与LaTeX源文件 & 提供可编辑、可追溯的进度清算；公开版隐藏个人绝对路径。 \\
+\bottomrule
+\end{tabular}\end{center}
+
+\subsection*{提交前通过的检查}
+指标表单元测试6项，补算门控12项，外部指标公式合成断言88项，共106项通过；不产生真实模型前向或优化器更新。门控首次2项因沙箱新建临时目录权限失败，相同代码在获准权限下重跑12/12通过；不改科学代码凑通过。
+
+396份原件SHA吻合；187份Python解析/非字符串AST、197份JSON数字不变检查通过；3份PowerShell与1份JavaScript模块语法通过。所有准备提交负载小于50 MB，无真实密钥/私有绝对路径命中；新增CSV/说明中的CRLF及两份EOF空行仅在本任务副本中规范化，暂存区diff --check通过。\path{src/}、\path{config/}、\path{METRICS.csv}没有改动，旧执行器不导入新归档，兼容性边界清楚。
+
+\clearpage
+\section*{4. B0--B8的四种状态分别核验}
+V1.3作为本次科学路线清算依据；数据QC、槽位、损失与预算的既定执行冻结规则继承，不新增科学假设。\textbf{方案存在、代码实现、实验运行、科学验收是四个不同层次。}
+
+\begin{center}\small
+\begin{tabular}{@{}p{12mm}p{17mm}p{35mm}p{56mm}p{46mm}@{}}
+\toprule
+阶段 & 方案 & 代码 & 已实际运行 & 科学验收/限制 \\
+\midrule
+B0 & 已设计 & 已实现 & 2026/2027；各E0/E1/E2，固定九轮Train/Dev & 限定基线交接；独立最终泛化未验证 \\
+B1 & 已设计 & 已实现 & 同两seed与三损失臂；单通道多时相 & 限定人口内时序对照；非全面创新通过 \\
+B2 & 已设计 & 已实现 & 2029/E0，7通道单时次t-10，九轮/E9 & 单seed探索；与B3的收益混合 \\
+B3 & 已设计 & 已实现 & 2029/2030/2031；7通道×6时相，九轮/E9 & 三seed描述性证据；最终验收未完成 \\
+B4 & 已设计 & 已实现 & 三seed；增加13变量GFS环境场，九轮/E9 & 总体四指标对B3同向；强雨/q32局限 \\
+B5 & 已设计 & 已实现 & 2029；海拔静态分支，九轮/E9 & 单seed地形消融，收益混合 \\
+B6 & 已设计 & 已实现 & 2029；海拔、梯度、坡度/坡向六通道，九轮/E9 & 单seed；q32仍欠覆盖，未独立泛化 \\
+B7 & 已设计 & 已实现 & 三seed；DOTE八通道与simple concat，九轮/E9 & 数值表征有限证据；物理因果未成立 \\
+B8 & 已设计 & 单尺度实现并运行；多尺度有候选接口 & 三seed；单SP04、width16、DTFM替换concat，九轮/E9 & 限定DTFM对照完成；完整多尺度目标未验证 \\
+\bottomrule
+\end{tabular}\end{center}
+
+全部“完成”指登记的Train/2024 Dev及固定E9，科学结论为\path{COMPLETE_WITH_LIMITATIONS}或未验证；\textbf{没有B0--B8全体科学验收全部通过的结论。}B0/B1有两seed、B2和B5/B6为单seed，不能伪造第三seed或把恢复当新seed。
+
+另有ZERO\_DOTE三个seed：同B7架构、真实mask、八数值固定零，九轮E9已完成；128个零输入权重无损失梯度，不能称有效容量完全相同。B7\_PERP\_GRADIENT/2029单seed方向探针九轮E9已完成，仍有分布/空间混杂，只能检验方向性表征敏感性。B9 ERA5 Teacher--Student为可选方案，未找到本轮可验证的正式蒸馏实现/运行证据，\key{尚未开始}。
+
+19份E9指标补算已完成。31配置单表包含不同损失臂、控制和探针；39行实验矩阵还包含旧失败/历史条目。它们不是31或39个独立seed。12条范围外点估计缺口保留n.a.，不补零。
+
+\clearpage
+\section*{5. 当前科研依据与最重要的问题}
+\subsection*{可支持的有限结论}
+B4相对B3的三seed总体Brier、AUROC、AP和条件Pinball同向改善：平均差分别约-0.00199084、+0.00583884、+0.0184720、-0.00118203。这是同人口、配对初始化/顺序、固定E9的开发集证据；q32方向不一致，不能外推全面强雨提升。
+
+真实DOTE相对ZERO，三seed Brier均下降，均值约-0.000892628；AUROC/AP仅1/3改善，条件Pinball2/3，q32距名义水平误差仅1/3改善。经验可靠性分解不是总体校准或地形抬升因果证明。
+
+DTFM相对concat总体AUROC三seed同向，其余结果混合。实际B8替换额外concat融合支路，\textbf{不是B7再简单叠加一个独立模块}。单SP04训练不能替代V1.3完整多尺度目标验收。
+
+\subsection*{极端降水结果必须保留反例}
+继承10月31日专项审计：B4/B7/B8各三个seed，共九个E0/E9配置，A/B/C三种尚未冻结的点估计，在严格$R>20$ mm/h均有
+\[
+TP=0,\quad FP=0,\quad FN=717,\quad CSI=POD=0.
+\]
+无预测阳性时FAR/Precision分母为零，不能填写0。该717是同一人口的像元时次，不能乘以seed数当独立样本。$R>50$只有6个像元时次、5个窗口，独立暴雨事件数仍\path{NOT_IDENTIFIED}。
+
+B7相对B4在(20,30]、(30,50]的条件Pinball各改善2/3；B8相对B7各仅1/3，均值退化。总体概率收益不能提升为“极端降水技能已建立”。总体q32覆盖仍低于名义98.4375%；按实际雨强条件化的覆盖率仅为描述值。
+
+没有完整保存极端雨强×高程联合逐像元误差、事件峰值位置/时刻及独立事件目录。不能由总体误差矩重建强雨MAE/RMSE/Bias，不能把最高分位数log尺度欠幅当真实雨强峰值误差。现有最大真值约68.06 mm/h，部分严格峰值低估下界可由保存统计推出，但不是精确峰值误差或模型排名。
+
+\subsection*{当前最重要的科研问题}
+首要缺口是\key{核心创新主张与证据范围不一致}：DOTE/DTFM仍为待检验假设，尤其强雨检出、尾部覆盖、物理归因及多尺度效益尚未建立。还需区分相同Dev年的训练随机性、相依像元、时块敏感性与独立事件/独立年份泛化。不能通过选择有利指标或最好seed回避反例。
+
+\clearpage
+\section*{6. 本地、公开工作分支与main的进度差异}
+
+\begin{center}\small
+\begin{tabular}{@{}p{32mm}p{67mm}p{67mm}@{}}
+\toprule
+位置 & 核验时进度 & 本轮之后 \\
+\midrule
+本地开发分支 & 987d105；到10月31日极端审计/四页摘要已提交，工作区干净。 & 补存396份源码/记录及报告；对应工作分支普通推送核验。 \\
+GitHub对应工作分支 & 987d105，与本地一致；已有B5/B6完成、B7/B8三seed、ZERO/探针及完整指标。 & 归档提交6784e5d已fetch验证；报告所属提交另由Git历史和交付收据定位。 \\
+GitHub默认main & 重新fetch仍为3a70e296（10月27日）；B5/B6公开状态IN\_PROGRESS。 & 保持原SHA；未假装main已包含后续实验。 \\
+PR审查入口 & 已有PR \#1，草稿；其说明还停留在较早科学决策。 & 更新为当前同步与有限科研结论；GitHub返回mergeable=false，保持草稿，不做合并或冲突改写。 \\
+\bottomrule
+\end{tabular}\end{center}
+
+同步前，工作分支与main有87个/3个各自独有提交，属于既有分支开发和报告合并轨迹。真正推送目标是对应upstream，推送前为本地领先1、远程领先0；不存在目标分支远端新增被覆盖。没有为了对齐main而合并、rebase或改写历史。
+
+\subsection*{发现并修复的状态记录缺口}
+原矩阵B8/2029已标完成，却残留\path{DYNAMIC_TERRAIN_STOPPED_PARTIAL}和\path{NOT_AVAILABLE_FIXED_E9}；依据真实恢复完成收据，仅修正阶段和指标JSON定位。方向探针的阶段名称也改为固定E9完成。39行所有数值、训练身份、更新次数和权重SHA均不变；没有修改\path{METRICS.csv}。
+
+README、阶段验收、科学分析、证据索引和B7/B8协议增加当前阅读入口；旧排队/停止/准备文字按历史快照保留，不修改冻结收据。旧EVIDENCE\_INDEX哈希仍属于原快照，当前文档由本轮Git身份追溯。
+
+\subsection*{权重与预算身份}
+九份B4/B7/B8 E9当前都存在，大小与mtime没有推翻同日既有逐文件SHA通过证据。本轮只核对元数据，\textbf{没有重新哈希、反序列化或推理}。源归档提交不是原训练执行commit，报告不混用二者。
+
+B8/2029有效4320、尝试4382含62重放；B7/2030尝试4761含441重放。方向探针有效4320、尝试4800含480重放；旧失败段时间验收仍NOT\_VERIFIED，后续恢复成功不追认旧时间通过。所有历史原件、失败与已消费批准均保留，不把剩余额度变成重启许可。
+
+\clearpage
+\section*{7. 工程进度、本人掌握进度和下一步}
+
+\begin{center}\small
+\begin{tabular}{@{}p{36mm}p{130mm}@{}}
+\toprule
+必须区分的标记 & 本次具体含义 \\
+\midrule
+已经完成 & 对应工作分支归档同步；登记实验Train/2024 Dev；19项指标补算、31配置单表与既有强雨审计；本报告。 \\
+正在进行 & 带局限科学验收、可接受论文主张与研究者理解对齐；不表示后台有新训练。 \\
+尚未开始 & B9蒸馏、2025一次性最终测试；完整多尺度B8正式训练没有本轮可核验运行证据。 \\
+等待本人掌握 & 下面知识主题的研究者本人解释与确认。本轮未测评掌握度，既不宣称已经掌握，也不推断研究者不会。 \\
+等待实验验证 & 物理因果、稳定强雨/尾部收益、完整多尺度效益、独立事件和跨年泛化。 \\
+\bottomrule
+\end{tabular}\end{center}
+\begin{center}\small
+\begin{tabular}{@{}p{50mm}p{116mm}@{}}
+\toprule
+研究者待讲解/确认主题 & 可自行核验的目标 \\
+\midrule
+QPE与时间信息边界 & 能说明标签[T,T+30min)、分析时刻T+30min、GFS f006回顾估计与未来预报的区别。 \\
+B0--B8增量与公平对照 & 能画出实际输入/静态/动态支路，说明人口差异、单尺度B8、同seed配对与固定E9。 \\
+概率指标与极端指标 & 能区分Brier/AUROC/AP、条件Pinball、q32名义覆盖、点估计CSI/POD/FAR及零分母。 \\
+DOTE/DTFM的科学地位 & 能解释数值控制、128无梯度权重、旋转分布/空间混杂，以及为何不能推出因果机制。 \\
+实验溯源与最终测试 & 能从源SHA、执行commit、E9权重身份和终态收据回查结果，说明2025封存与新预算边界。 \\
+\bottomrule
+\end{tabular}\end{center}
+
+\subsection*{下一步建议（本阶段不执行）}
+\begin{enumerate}
+\item 先由研究者阅读本报告和极端审计，确认当前可接受的有限主张；不要把GitHub同步或AI写好报告当成本人已理解科研方案。
+\item 对照代码与收据完成上述知识清单，优先理解“总体概率改善但强雨点检出仍为零”及单尺度B8的范围，之后再决定论文叙述。
+\item 审查PR草稿及逐文件清单后，再决定是否进入main；本轮不自动合并。
+\item 只有研究者明确开启下一阶段后，才准备针对缺口的科学方案、失败即停与精确预算。现阶段不新增模块、不补训成功实验，也不读取2025结果来筛模型。
+\end{enumerate}
+2025全模态共同人口、新适配器、事件/依赖方案与一次性揭盲预算仍需正式准入。既有历史catalogue/QC事实不改写成“2025历史从未被访问”；准确陈述是本次未读取任何2025结果，当前最终评价继续封存。
+
+\clearpage
+\section*{8. 证据链与交付文件}
+
+\begin{center}\small
+\begin{tabular}{@{}p{99mm}p{67mm}@{}}
+\toprule
+终态收据（共同前缀见下） & 支撑范围 \\
+\midrule
+\path{b3_b4_three_seed_completion.json} & B3/B4三seed的执行、E9、读取账本与总体差值。 \\
+\path{b5_b6_completion_and_paired_evidence.json} & 静态地形单seed完成和B4公平配对。 \\
+\path{b8_recovery_completion_20261028.json} & B8/2029真实E9及62重放，不以E6冒充E9。 \\
+\path{b7_b8_three_seed_completion_20261029.json} & B7/B8三seed终态、441重放和有限DTFM结论。 \\
+\path{dote_control_three_seed_completion_20261029.json} & ZERO三seed与真实DOTE配对及容量局限。 \\
+\path{dote_physical_control_completion_20261030.json} & 方向探针实际在10月31日完成；文件名日期不当作完成时点。 \\
+\path{complete_metric_workbook_delivery_20261031.json} & 19项补算/31配置、原始来源身份及显式缺口。 \\
+\bottomrule
+\end{tabular}\end{center}
+
+共同前缀：\path{docs/research_readiness/20261025/evidence/}。
+极端审计：\path{docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md}与同目录CSV；既有四页可编辑PDF在\path{output/pdf/}。九份权重的完整SHA、真实执行版本和数据身份均可由该审计回查。
+
+\subsection*{同步前最近10次提交（重新读取本地Git对象）}
+
+\begin{center}\small
+\begin{tabular}{@{}p{19mm}p{25mm}p{122mm}@{}}
+\toprule
+提交 & 日期 & 实际完成内容 \\
+\midrule
+\path{987d105} & 2026-10-31 & Deliver self-contained four-page extreme precipitation audit summary \\
+\path{cfe525b} & 2026-10-31 & Audit extreme precipitation from existing E9 evidence without inference \\
+\path{781c52d} & 2026-10-31 & Present all loss schemes as compact per-seed stage comparisons \\
+\path{c6f8170} & 2026-10-31 & Seal recovered physical probe E9 and deliver complete single-table metrics workbook \\
+\path{d661d2a} & 2026-10-31 & Record approved E5 recovery start and separate replay progress on read-only panel \\
+\path{8d42509} & 2026-10-31 & Freeze single E5 physical-probe recovery proposal awaiting replay approval \\
+\path{7d4970d} & 2026-10-31 & Prepare bounded physical probe E5 recovery with explicit replay and wall deadline \\
+\path{e74041f} & 2026-10-31 & Preserve physical probe E6 Dev I/O failure and incomplete E9 accounting \\
+\path{d79bd43} & 2026-10-30 & Record 19 metric gates and start authorized physical probe after path fix \\
+\path{4472355} & 2026-10-30 & Record corrective launch and exact full-Dev B0 precision recovery \\
+\bottomrule
+\end{tabular}\end{center}
+
+\subsection*{本次交付}
+本报告附可编辑LaTeX；完整提交文件清单、归档原始/公开SHA、忽略项和未提交理由均位于\path{docs/sync_audit/20261031/}。完整个人路径只出现在本地版。公开版本可由\url{https://github.com/flyeagle-cex/YunTAPR-Net/tree/prep/b2-stage-acceptance-20261025}查阅；默认main不代表本地当前科研进度。
+
+任何科学结论仍以所列真实收据、执行身份和保存指标为准。该报告不发放新训练/重放/最终测试预算，不把准备、实现或运行自动提升为科学创新成立。
+\end{document}

@@ -1,0 +1,61 @@
+{
+  "status": "EVIDENCE_GROUNDED_DOCUMENTATION_ALIGNMENT",
+  "matrix_metadata_changes": [
+    {
+      "model": "B8",
+      "seed": "2029",
+      "field": "phase",
+      "before": "DYNAMIC_TERRAIN_STOPPED_PARTIAL",
+      "after": "DYNAMIC_TERRAIN_FORMAL_COMPLETE"
+    },
+    {
+      "model": "B8",
+      "seed": "2029",
+      "field": "metrics_path",
+      "before": "NOT_AVAILABLE_FIXED_E9",
+      "after": "docs/research_readiness/20261025/evidence/b8_recovery_completion_20261028.json#endpoint_groups/B8/all/summary"
+    },
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": "2029",
+      "field": "phase",
+      "before": "DIRECTIONAL_PROBE_FORMAL_TRAINING",
+      "after": "DIRECTIONAL_PROBE_COMPLETE_FIXED_E9"
+    }
+  ],
+  "matrix_before_sha256": "0f6e550f0b3bf67e44480cfab56057a952e567f579eeba53c206027ee6cc6221",
+  "matrix_after_sha256": "f38e0899a5e81d29192810772fc8c5c9a0e2906d5637f6e11fbec926eb6b2e2a",
+  "rows_before": 39,
+  "rows_after": 39,
+  "all_numeric_result_and_training_identity_fields_unchanged": true,
+  "scientific_source": "Existing terminal receipts and 20261031 extreme audit; no new inference",
+  "corrections": [
+    "B8/2029 obsolete partial phase and missing E9 metric locator repaired",
+    "Directional probe phase and current status entry aligned to terminal receipt",
+    "Current entry points distinguish historical queued snapshots from completion",
+    "Single-scale experiment distinguished from V1.3 multi-scale target"
+  ],
+  "knowledge_status": "WAITING_RESEARCHER_MASTERY_OR_CONFIRMATION_NOT_ASSESSED",
+  "science_acceptance": "COMPLETE_WITH_LIMITATIONS_NOT_B0_B8_ALL_PASS",
+  "final_2025": "SEALED_NO_OUTCOME_ACCESS_THIS_TASK",
+  "new_training": 0,
+  "new_inference": 0,
+  "new_model_changes": 0,
+  "pull_request_snapshot": {
+    "number": 1,
+    "draft": true,
+    "mergeable": false,
+    "head_sha": "6784e5d8733017723389d4fef67f6f380d49a6d7",
+    "git_fetched_main_sha": "3a70e296629616fc60cf24cb030fb9151f76dca3",
+    "conflict_resolution_performed": false,
+    "merged": false
+  },
+  "document_QA": {
+    "pages": 8,
+    "latex_overfull_boxes": 0,
+    "rendered_pages_inspected": 8,
+    "required_status_terms": "PASS",
+    "public_absolute_path_privacy": "PASS",
+    "editable_source_included": true
+  }
+}

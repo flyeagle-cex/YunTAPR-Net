@@ -1,5 +1,9 @@
 # B7 DOTE / B8 DTFM 冻结科学协议与三seed证据
 
+## 2026-10-31 本地与GitHub进度清算
+
+最新事实：B7/B8与ZERO_DOTE三seed固定E9均已完成，B7_PERP_GRADIENT/2029亦已完成。该方向性探针的最终收据为`evidence/dote_physical_control_completion_20261030.json`，结论仅COMPLETE_WITH_LIMITATIONS。以下原“排队/尚未训练/不申请GPU”段落保留其历史时点，不再用作当前状态。冻结科学参数不变；本轮无任何新训练或2025解封。实际对照为单SP04尺度，不宣称完整多尺度创新已验证。
+
 ## 后续研究者指令：单候选授权排队，尚未训练
 
 研究者当前要求“先指标补算完成，再训练”，并明确回复“是，准备并启动该候选”。该直接指令绑定至执行9b4046a655e2ec91633104eaa64bd507cca81aad/[提案0444d92e](evidence/dote_physical_control_training_proposal_20261030.json)，不伪称研究者原文逐字引用SHA。继承此前披露单模型上限：4320更新、477571953840逻辑源字节/142813次、6小时、24GiB，零重放和额外重试。

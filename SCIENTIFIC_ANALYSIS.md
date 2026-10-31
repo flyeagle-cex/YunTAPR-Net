@@ -1,5 +1,13 @@
 # 科学分析统一入口
 
+## 2026-10-31 本地与GitHub进度清算
+
+既有B7_PERP_GRADIENT/2029已实际完成固定E9及九轮Train/2024 Dev；下文“排队/未训练”和早期不申请GPU的文字属于当时快照。最新终态见`docs/research_readiness/20261025/evidence/dote_physical_control_completion_20261030.json`：真实B7相对方向探针Brier/AP较好，AUROC/Pinball/q32绝对误差较差，20-50 mm/h Pinball退化。原失败时间预算NOT_VERIFIED不被后续完成追认为通过。
+
+DOTE的Dynamic Orographic and Thermodynamic Effects是待检验的动态地形与热力/水汽强迫假设；DTFM的Dynamic Terrain Feature Modulation是待检验的地形条件调制假设。现有B7/B8为单SP04尺度、width16对照，不能等同完整多尺度方案。DOTE相对ZERO的Brier收益三seed同向，但排序/强雨及q32不稳定；物理因果未成立。
+
+已公开的`docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md`确认九份B4/B7/B8的A/B/C点估计严格>20 mm/h均无真阳性，FN=717；三seed不是三批独立暴雨。该证据直接限制极端降水技能主张。B0/B1与B2-B8人口不同，不能跨人口归因排名。2025结果本轮不读取，最终测试继续封存。本阶段仅归档与报告，无新训练、推理、模型修改或原始气象读取。
+
 2026-10-31增量展示：[31配置对比表](outputs/01a17251-29bb-7172-89f8-380b42c4d290/YunTAPR-Net_V1.3_逐阶段逐seed全方案对比_20261031.xlsx)按模型×seed×损失方案保留原值，主配对为B1−B0、B3−B2、B4−B3、B5−B4、B6−B4、B7−B6、B8−B7，以及真实B7−ZERO/PERP。只比较同seed、同损失、同人口和同监督计数；B3/B2及B7/B6仅seed2029能配对。表下补B6−B5及各比较的有符号差值均值、样本标准差和改善次数，不汇成综合排名分。q32按距98.4375%名义水平的绝对误差判断，单seed没有伪造标准差；E0/E1/E2不混作独立seed。原分层、强雨、UTC、海拔和负面结果完整继承。本次仅重排已保存统计，无新训练、推理或2025访问。
 
 ## 2026-10-31非零方向性负对照：固定E9单seed结果
