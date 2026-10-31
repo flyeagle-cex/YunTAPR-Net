@@ -1,0 +1,73 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+import hashlib, json, re, zipfile
+from collections import Counter
+from pathlib import Path
+from xml.etree import ElementTree as ET
+ROOT = Path(__file__).resolve().parents[3]
+folder = ROOT / 'outputs/01a17251-29bb-7172-89f8-380b42c4d290'
+path = folder / 'YunTAPR-Net_V1.3_完整指标与消融对照_20261031.xlsx'
+ns = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+with zipfile.ZipFile(path) as z:
+    wb = ET.fromstring(z.read('xl/workbook.xml'))
+    sheets = wb.find('m:sheets', ns)
+    assert len(sheets) == 1 and sheets[0].get('name') == '完整指标'
+    tables = [n for n in z.namelist() if n.startswith('xl/tables/') and n.endswith('.xml')]
+    assert len(tables) == 1
+    table = ET.fromstring(z.read(tables[0]))
+    assert table.get('ref') == 'A5:AP4723' and len(table.find('m:tableColumns', ns)) == 42
+    shared = []
+    if 'xl/sharedStrings.xml' in z.namelist():
+        for item in ET.fromstring(z.read('xl/sharedStrings.xml')):
+            shared.append(''.join((t.text or '' for t in item.iter('{' + ns['m'] + '}t'))))
+    sheetname = next((n for n in z.namelist() if n.startswith('xl/worksheets/') and n.endswith('.xml')))
+    sheet = ET.fromstring(z.read(sheetname))
+    cells = {c.get('r'): c for c in sheet.findall('.//m:sheetData/m:row/m:c', ns)}
+
+    def value(c):
+        if c is None:
+            return None
+        t = c.get('t')
+        v = c.find('m:v', ns)
+        if t == 'inlineStr':
+            return ''.join((e.text or '' for e in c.findall('.//m:t', ns)))
+        if v is None:
+            return None
+        if t == 's':
+            return shared[int(v.text)]
+        if t in ('str', 'e'):
+            return v.text
+        return float(v.text) if v.text is not None else None
+
+    def at(ref):
+        return value(cells.get(ref))
+    assert all((c.get('t') != 'e' for c in cells.values()))
+    formula_cells = [c for c in cells.values() if c.find('m:f', ns) is not None]
+    assert formula_cells
+    assert all((c.find('m:v', ns) is not None for c in formula_cells))
+    assert isinstance(at('L6'), float) and abs(at('L6') - 0.09686762633953126) < 1e-12
+    assert at('A1') == 'YunTAPR-Net V1.3 完整指标与消融对照'
+    assert at('A4726') == '模型解释、指标口径与证据' and str(at('A4727')).startswith('B0：')
+    rows = range(6, 4724)
+    types = Counter((at('A' + str(r)) for r in rows))
+    assert sum(types.values()) == 4718 and types['QUANTILE'] == 992
+    rawprob = [r for r in rows if at(f'A{r}') == 'RAW' and at(f'F{r}') == 'OCC_P：P≥0.5']
+    assert len(rawprob) == 31
+    rawphy = next((r for r in rawprob if at(f'B{r}') == 'B7_PERP_GRADIENT'))
+    assert at(f'AL{rawphy}') == '5406e20e241a3697b867ba4f44519397c2943b2381bc047d938c4eb141ce34e6'
+    close = json.loads((ROOT / 'docs/research_readiness/20261025/evidence/dote_physical_control_completion_20261030.json').read_bytes())
+    delta = close['summary']['group_deltas']['all']
+    pair = next((r for r in rows if at(f'A{r}') == 'PAIR_DELTA' and at(f'B{r}') == 'B7−B7_PERP_GRADIENT' and (at(f'F{r}') == 'OCC_P：P≥0.5')))
+    for col, k in [('L', 'brier'), ('M', 'auroc'), ('N', 'average_precision'), ('O', 'conditional_pinball'), ('P', 'q32_coverage'), ('Q', 'q32_signed_bias'), ('R', 'q32_absolute_error')]:
+        assert abs(at(f'{col}{pair}') - delta[k]) < 1e-12
+    for r in rows:
+        if at(f'A{r}') in ('SAMPLE_SD', 'PAIR_SAMPLE_SD'):
+            assert at(f'AJ{r}') >= 2
+        if at(f'A{r}') == 'RAW' and isinstance(at(f'AA{r}'), float):
+            assert sum((at(f'{col}{r}') for col in ('AA', 'AB', 'AC', 'AD'))) == at(f'J{r}')
+    text = '\n'.join(shared) + '\n' + '\n'.join((str(value(c)) for c in cells.values()))
+    assert '导师' not in text and (not re.search('(?i)((?<![A-Za-z0-9])[A-Z]:[\\\\/]|/Users/|token=|password=)', text))
+    assert not any(('externalLinks/' in n for n in z.namelist()))
+    print(json.dumps(dict(status='PASS_SAVED_XLSX', bytes=path.stat().st_size, worksheets=1, tables=1, rows=4718, columns=42, probability_records=31, quantile_rows=992, formula_cells=len(formula_cells), errors=0, raw_counts_match=True, new_pair_matches_source=True, no_forbidden_word=True, no_private_paths=True), ensure_ascii=True))
+    result = dict(status='PASS_SAVED_XLSX_AND_BUNDLED_ENGINE', workbook_sha256=hashlib.sha256(path.read_bytes()).hexdigest(), workbook_bytes=path.stat().st_size, worksheets=1, tables=1, table_range=table.get('ref'), rows=4718, columns=42, probability_records=31, quantile_rows=992, record_types=dict(types), formula_cells=len(formula_cells), formula_errors=0, new_pair_matches_source=True, contingency_counts_exact=True, no_fake_single_seed_SD=True, no_forbidden_word=True, no_private_paths=True, source_scope='19 approved metric passes+all saved probability endpoints+completed one physical probe', native_Excel_application_test='NOT_RUN;bundled recalculation plus exported OOXML checked', final_2025='FROZEN_NO_ACCESS')
+    (folder / 'saved_workbook_verification.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')

@@ -1,0 +1,74 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Exercise inherited fixed-parent test fixtures with the corrected write scope."""
+from pathlib import Path
+import datetime, io, json, os, shutil, sys, tempfile, unittest, uuid
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import torch
+from unittest.mock import patch
+from paired_pipeline_fixture_scope_v1 import FixtureScope
+from paired_pipeline_historical_inventory_v1 import historical_final_test_fixture, scoped_final_test_suite
+from yuntapr.evaluation import final_test_b0 as historical_final_test_module
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+resume = json.loads((BASE / 'YunTAPR-paired-resume-active-v1.json').read_text(encoding='utf8'))
+journal = Path(resume['resume_directory'])
+fixture_parent = Path('<PRIVATE_LOCATOR_a949d71b8f99>')
+fixture_parent.mkdir(parents=True, exist_ok=True)
+root = fixture_parent / uuid.uuid4().hex
+root.mkdir()
+tempfile.tempdir = str(root)
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('run_%Y%m%dT%H%M%S_%fZ')
+out = journal / 'fixture_scope_checks' / stamp
+out.mkdir(parents=True, exist_ok=False)
+os.environ.update(TEMP=str(root), TMP=str(root))
+torch.set_num_threads(2)
+scope = FixtureScope(BASE)
+enabled = {'value': True}
+historical_fixture = historical_final_test_fixture(REPO, root / 'historical_final_test_inventory', Path(os.environ['YUNTAPR_FINAL_TEST_PREFLIGHT_EVIDENCE']) / 'preflight_manifest.json', historical_final_test_module)
+
+def guard_write(event, args):
+    if enabled['value'] and event == 'open' and isinstance(args[0], (str, bytes, os.PathLike)):
+        mode = args[1] if args[1] is not None else args[2]
+        write = isinstance(mode, str) and any((c in mode for c in 'wax+')) or (isinstance(mode, int) and mode & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC))
+        p = Path(args[0]).resolve()
+        if write and (not p.is_relative_to(root.resolve())) and (not scope.allows(p)):
+            raise PermissionError('Fixture write outside declared new UUID roots: ' + str(p))
+sys.addaudithook(guard_write)
+names = ['tests.paired_pipeline_fixture_scope.test_scope', 'tests.paired_phase_a_authorized.test_audit', 'tests.final_test_b0.test_final_test', 'tests.final_test_b0.test_catalogue_backend_v1_1', 'tests.final_test_catalogue.test_catalogue_gate']
+log = io.StringIO()
+ops = {'TEST_FIXTURE_OPTIMIZER_STEPS': 0, 'TEST_FIXTURE_BACKWARD_CALLS': 0}
+original_step = torch.optim.AdamW.step
+original_backward = torch.Tensor.backward
+
+def step(self, *args, **kwargs):
+    ops['TEST_FIXTURE_OPTIMIZER_STEPS'] += 1
+    return original_step(self, *args, **kwargs)
+
+def backward(self, *args, **kwargs):
+    ops['TEST_FIXTURE_BACKWARD_CALLS'] += 1
+    return original_backward(self, *args, **kwargs)
+try:
+    with PreflightSourceGuard() as guard, patch.object(torch.optim.AdamW, 'step', step), patch.object(torch.Tensor, 'backward', backward):
+        suites = []
+        for n in names:
+            suite = unittest.defaultTestLoader.loadTestsFromName(n)
+            if n == 'tests.final_test_b0.test_final_test':
+                suite = scoped_final_test_suite(suite, historical_final_test_module, historical_fixture)
+            suites.append(suite)
+        result = unittest.TextTestRunner(stream=log, verbosity=2).run(unittest.TestSuite(suites))
+        assert guard.raw_open_events == 0
+finally:
+    enabled['value'] = False
+    assert root.resolve().parent == fixture_parent.resolve()
+    shutil.rmtree(root)
+cleanup = not root.exists() and scope.cleanup_complete()
+(out / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+value = {'status': 'PASS' if result.wasSuccessful() and (not result.skipped) and cleanup else 'FAIL', 'test_count': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'TEST_FIXTURE_ONLY': True, **ops, 'FORMAL_OPTIMIZER_STEPS': 0, 'RAW_SOURCE_OPENS': 0, '2025_RAW_ACCESS': 0, 'all_new_uuid_fixtures_removed': cleanup, 'existing_fixture_children_preserved': scope.cleanup_complete(), 'frozen_tests_modified': False, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+with (out / 'test_summary.json').open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2)
+print(json.dumps(value), flush=True)
+if value['status'] != 'PASS':
+    print(log.getvalue())
+    raise SystemExit(1)

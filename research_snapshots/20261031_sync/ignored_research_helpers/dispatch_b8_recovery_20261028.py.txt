@@ -1,0 +1,33 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Consume the direct human approval once; no automatic retry."""
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+import hashlib, json, os, subprocess, sys
+r = Path(__file__).resolve().parents[3]
+local = r / 'docs/research_readiness/.local'
+commit = 'ef11531a7cdeb35b767caebdb61e0e81c6123187'
+frozen = r.parent / 'YunTAPR-B8-recovery-exec-ef11531'
+proposal = frozen / 'docs/research_readiness/20261025/evidence/b8_recovery_proposal_20261028.json'
+private = local / 'b8_recovery_preparation_20261028.json'
+approval_path = local / 'b8_recovery_approval_20261028.json'
+runtime = local / 'b8_recovery_runtime_20261028'
+p = json.loads(proposal.read_text(encoding='utf-8'))
+v = json.loads(private.read_text(encoding='utf-8'))
+assert not approval_path.exists() and (not runtime.exists()) and (not Path(v['output_root']).exists()), 'No duplicate launch/overwrite'
+assert hashlib.sha256(proposal.read_bytes()).hexdigest() == 'd45e725eb611e5ba168be66b854c282c0618c938ffe46c0f1ee33c7fc96ce16c'
+assert p['proposal_sha256'] == v['proposal_sha256'] == '60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == commit
+assert not subprocess.check_output(['git', '-C', str(frozen), 'status', '--porcelain'], text=True).strip()
+a = dict(approved_by_researcher=True, code_commit=commit, proposal_sha256=p['proposal_sha256'], tasks=p['tasks'], budget=p['budget'], scientific_choices=p['scientific_choices'], output_root=v['output_root'], approved_checkpoint_sha256=p['checkpoint']['sha256'], approved_replay_updates=62, decision_id='RESEARCHER_B8_E6_RECOVERY_EF11531_20261028', approved_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), researcher_answer='是，以及列出之前停止的原因', researcher_source='Direct human reply to the immediately preceding request approving ef11531a7cdeb35b767caebdb61e0e81c6123187, canonical proposal60e81408b8e07da0a66478631982f04f94bcc31f945967993e2d9f58f2629a69, B8 E6-to-E9 recovery with 62 replay and all listed caps; no B7 retraining, extra retry,2025 access or main merge')
+with approval_path.open('x', encoding='utf-8') as f:
+    json.dump(a, f, ensure_ascii=False, indent=2)
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_b8_recovery.py'), 'execute', '--proposal', str(proposal), '--private-preparation', str(private), '--researcher-approval', str(approval_path)]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    child = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=child.pid, training_commit=commit, proposal_sha256=p['proposal_sha256'], execution_root=str(frozen), output_root=v['output_root'], dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), python=sys._base_executable, approval_sha256=hashlib.sha256(approval_path.read_bytes()).hexdigest())
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, ensure_ascii=False, indent=2)
+print(json.dumps(dict(status='APPROVED_B8_RECOVERY_DISPATCHED_ONCE', pid=child.pid, training_commit=commit)))

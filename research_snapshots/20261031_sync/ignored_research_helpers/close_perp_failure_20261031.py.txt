@@ -1,0 +1,144 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read the failed candidate's metadata only; preserve all originals."""
+import csv, hashlib, io, json, re, sqlite3, subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[3]
+LOCAL = ROOT / 'docs/research_readiness/.local'
+OUT = Path('<PRIVATE_LOCATOR_e8b3a6ffc301>')
+FOLDER = OUT / 'B7_s2029'
+SERVICE = LOCAL / 'perp_absolute_start_20261030_v1'
+PUBLIC = 'docs/research_readiness/20261025/evidence/dote_physical_control_failure_20261031.json'
+
+def read(p):
+    return json.loads(Path(p).read_bytes())
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def canonical(x):
+    return hashlib.sha256(json.dumps(x, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+def query(p, sql):
+    with sqlite3.connect(p.resolve().as_uri() + '?mode=ro', uri=True) as db:
+        return db.execute(sql).fetchall()
+sources = {}
+
+def record(p, alias):
+    sources[alias] = dict(sha256=sha(p), bytes=p.stat().st_size, visibility='LOCAL_ONLY')
+binding = read(OUT / 'authorization_binding.json')
+proposal = read(ROOT / 'docs/research_readiness/20261025/evidence/dote_physical_control_training_proposal_20261030.json')
+assert binding['code_commit'] == proposal['execution_code_commit'] == '9b4046a655e2ec91633104eaa64bd507cca81aad'
+assert binding['approval']['proposal_sha256'] == proposal['proposal_sha256'] == '0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67'
+failure = read(FOLDER / 'failure.json')
+assert failure['error'] == 'OSError: [Errno 22] Invalid argument'
+exit_info = read(SERVICE / 'target_exit.json')
+assert exit_info['return_code'] == 1
+assert not (OUT / 'completion.json').exists() and (not (FOLDER / 'B7_LAST_epoch_06.pt').exists()) and (not (FOLDER / 'B7_LAST_epoch_09.pt').exists())
+assert query(FOLDER / 'updates.sqlite', 'SELECT state,COUNT(*),MIN(u),MAX(u) FROM updates GROUP BY state') == [('RETURNED', 2880, 1, 2880)]
+initial = read(FOLDER / 'paired_initial_identity.json')
+orders = read(FOLDER / 'paired_orders.json')
+for name, expected in proposal['baseline_metadata_sha256'].items():
+    assert sha(FOLDER / name) == expected
+epochs = []
+for e in range(1, 7):
+    train = read(FOLDER / f'B7_train_{e:02d}.json')
+    assert (train['scenes'], train['batches'], train['updates'], train['loss_arm']) == (959, 480, e * 480, 'E0')
+    assert train['train_order_sha256'] == orders[str(e)]['sha256'] == canonical(orders[str(e)]['ids'])
+    item = dict(epoch=e, train_status='COMPLETE', train_receipt_sha256=sha(FOLDER / f'B7_train_{e:02d}.json'), updates=train['updates'])
+    if e <= 5:
+        dev = read(FOLDER / f'B7_development_{e:02d}.json')
+        seal = read(FOLDER / f'B7_LAST_epoch_{e:02d}.receipt.json')
+        assert seal['code_commit'] == binding['code_commit'] and seal['validation_receipt_sha256'] == canonical(dev)
+        assert seal['population_sha256'] == proposal['data']['population_sha256'] and dev['source_identity'] == proposal['data']
+        summary = dev['groups']['all']['summary']
+        assert (summary['scenes'], summary['n_valid'], summary['n_rain']) == (963, 3303090, 407820)
+        item.update(dev_status='COMPLETE', dev_receipt_sha256=sha(FOLDER / f'B7_development_{e:02d}.json'), checkpoint_status='SAVED_SHA_FROM_ORIGINAL_RECEIPT_NOT_REHASHED_IN_FAILURE_CLOSEOUT', checkpoint_sha256=seal['checkpoint_sha256'])
+        record(FOLDER / f'B7_development_{e:02d}.json', f'CANDIDATE/development_{e:02d}.json')
+        record(FOLDER / f'B7_LAST_epoch_{e:02d}.receipt.json', f'CANDIDATE/LAST_epoch_{e:02d}.receipt.json')
+    else:
+        item.update(dev_status='FAILED_PARTIAL_NOT_AN_ENDPOINT', checkpoint_status='NOT_SAVED')
+    record(FOLDER / f'B7_train_{e:02d}.json', f'CANDIDATE/train_{e:02d}.json')
+    epochs.append(item)
+ledgers = []
+delivered = reserved = instances = 0
+for sub in sorted(FOLDER.glob('B7_*_reads_*')):
+    receipt = read(sub / 'pass_receipt.json')
+    n = receipt['actual_reads']
+    rows = query(sub / 'reads.sqlite', 'SELECT state,COUNT(*),SUM(actual_bytes),SUM(expected_bytes) FROM file_io GROUP BY state')
+    jobs = query(sub / 'reads.sqlite', 'SELECT state,COUNT(*) FROM jobs GROUP BY state')
+    assert sum((r[1] for r in rows)) == n['opened_files'] and sum((r[2] for r in rows)) == n['delivered_bytes'] and (sum((r[3] for r in rows)) == n['reserved_bytes'])
+    if receipt['during_failure']:
+        assert sub.name == 'B7_dev_reads_06' and dict(jobs) == {'COMPLETE': 1664, 'UNCERTAIN_NO_RETRY': 1}
+    else:
+        assert rows == [('READ_COMPLETE', n['opened_files'], n['delivered_bytes'], n['reserved_bytes'])]
+        assert jobs == [('COMPLETE', n['opened_files'])]
+    record(sub / 'reads.sqlite', f'CANDIDATE/{sub.name}/reads.sqlite')
+    record(sub / 'pass_receipt.json', f'CANDIDATE/{sub.name}/pass_receipt.json')
+    ledgers.append(dict(pass_id=sub.name, during_failure=receipt['during_failure'], actual=n, file_states=rows, job_states=jobs, source_manifest_sha256=receipt['source_manifest_sha256']))
+    delivered += n['delivered_bytes']
+    reserved += n['reserved_bytes']
+    instances += n['opened_files']
+static = OUT / 'B7_PERP_GRADIENT_static_source.sqlite'
+assert query(static, 'SELECT state,COUNT(*),SUM(actual_bytes),SUM(expected_bytes) FROM file_io GROUP BY state') == [('READ_COMPLETE', 1, 312828, 312828)]
+delivered += 312828
+reserved += 312828
+instances += 1
+assert (delivered, reserved, instances) == (296911969264, 296916674513, 88924)
+assert reserved <= 477571953840 and instances <= 142813
+failed_path = query(FOLDER / 'B7_dev_reads_06/reads.sqlite', "SELECT path FROM file_io WHERE state='PARTIAL_UNCERTAIN'")[0][0]
+record(static, 'CANDIDATE/static_source.sqlite')
+for path, alias in [(OUT / 'authorization_binding.json', 'PACKAGE/authorization_binding.json'), (OUT / 'failure.json', 'PACKAGE/failure.json'), (FOLDER / 'failure.json', 'CANDIDATE/failure.json'), (OUT / 'control_console.log', 'PACKAGE/control_console.log'), (FOLDER / 'updates.sqlite', 'CANDIDATE/updates.sqlite'), (FOLDER / 'paired_orders.json', 'CANDIDATE/paired_orders.json'), (FOLDER / 'paired_initial_identity.json', 'CANDIDATE/paired_initial_identity.json'), (SERVICE / 'target_exit.json', 'SERVICE/target_exit.json'), (SERVICE / 'target_launch.json', 'SERVICE/target_launch.json')]:
+    record(path, alias)
+launched = read(SERVICE / 'target_launch.json')['at']
+wall = (datetime.fromisoformat(exit_info['at']) - datetime.fromisoformat(launched)).total_seconds()
+at = datetime.now(timezone.utc).isoformat()
+seal = read(FOLDER / 'B7_LAST_epoch_05.receipt.json')
+report = dict(status='VERIFIED_STOPPED_PHYSICAL_CONTROL_INCOMPLETE_NO_RETRY', verified_at=at, model='B7_PERP_GRADIENT', seed=2029, execution_commit=binding['code_commit'], proposal_sha256=proposal['proposal_sha256'], data_version=proposal['data'], failure=dict(phase='E6_DEVELOPMENT_HIMAWARI_PAYLOAD_READ', error=failure['error'], error_is_previous_WinError121=False, underlying_storage_or_OS_cause='NOT_VERIFIED_NO_SOURCE_REOPEN_OR_SYSTEM_DIAGNOSTIC', failed_source_path_sha256=hashlib.sha256(failed_path.encode()).hexdigest(), partial_read_state='PARTIAL_UNCERTAIN', reserved_uncertain_bytes=4705249, recorded_delivered_bytes_for_uncertain_source=0, zero_is_not_proof_of_zero_physical_IO=True), training=dict(returned_updates=2880, effective_updates_target=4320, train_epochs=6, complete_dev_epochs=5, latest_saved_epoch=5, latest_saved_updates=2400, latest_checkpoint_sha256_from_receipt=seal['checkpoint_sha256'], weight_identity_verification='EXISTING_RECEIPT_REFERENCE_ONLY_NO_WEIGHT_REHASH_OR_DESERIALIZATION', unsaved_updates=480, replay_executed=0, extra_training_retry=0, E9_status='MISSING_NOT_COMPLETE', epochs=epochs), source_accounting=dict(delivered_logical_bytes=delivered, reserved_logical_bytes=reserved, opened_content_instances=instances, maximum_source_bytes=477571953840, maximum_source_instances=142813, static_bytes=312828, static_instances=1, uncertain_source_instances=1, reservation_minus_recorded_delivery=reserved - delivered, passes=ledgers, definition='Delivered bytes and reservations retained separately; uncertain read is not silently excluded'), time_accounting=dict(launch_utc=launched, exit_utc=exit_info['at'], wall_span_seconds=wall, approved_seconds_cap=21600, wall_span_exceeds_cap=wall > 21600, active_GPU_seconds='NOT_VERIFIED', budget_acceptance='NOT_VERIFIED_TIME_GATE_CANNOT_BE_CLAIMED_PASSED', explanation='Wall span exceeds6h; sleep/suspend, clock behavior and effective run time cannot be inferred from these receipts alone'), existing_metrics=dict(complete_runs=19, status='COMPLETE_ALL_FROZEN_GATES_PASS', rerun=False, evidence='docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json'), final_workbook=dict(status='BLOCKED_CANDIDATE_E9_MISSING', no_complete_candidate_comparison=True, no_partial_export_as_complete=True), recovery_boundary=dict(automatic_restart=False, automatic_replay=False, original_grant_consumed=True, separate_explicit_recovery_budget_required=True, from_E5_would_require_replaying_at_least480_updates=True), scientific_status='NO_FIXED_E9_ENDPOINT_NO_NEW_PHYSICAL_CONCLUSION', sources=sources, closeout_activity=dict(raw_weather_source_reads=0, model_inference=0, checkpoint_deserialization=0, weight_files_read=0, optimizer_updates=0), final_2025='FROZEN_NO_ACCESS', historical_evidence='ALL_PRESERVED', main='NOT_MODIFIED')
+text = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + '\n'
+assert not re.search('(?i)((?<![A-Za-z0-9])[A-Z]:[\\\\/]|/Users/|token=|password=)', text)
+with (ROOT / PUBLIC).open('x', encoding='utf-8', newline='\n') as f:
+    f.write(text)
+note = '2026-10-31终态：B7_PERP_GRADIENT/2029在E6 Dev的Himawari实际内容读取抛出OSError [Errno22] Invalid argument，按失败即停退出，未自动重试。已执行2880更新、6轮Train/5轮Dev，最新完整检查点E5/2400（原收据SHA9330e71c…），480次更新未保存，E9不存在。实际记录交付296,911,969,264逻辑字节、保留296,916,674,513字节预约/88,924实例，含1份4,705,249字节PARTIAL_UNCERTAIN源；不能将其物理读取当作零。启动至退出挂钟跨度约10小时22分44秒，超过6小时批准值；活动GPU时长和休眠/时钟原因未核实，时间预算不能宣称验收通过。底层源/存储故障未确定，不等同此前WinError121。19/19指标结果完整保留不重算；最终完整单表因候选E9缺失而BLOCKED，不用E5代替E9，不形成新的公平性能结论。原批准已消费，任何恢复和至少480次必要重放须新的限额批准，本轮未启动恢复。2025继续冻结。'
+for name in ('STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'docs/research_progress/CURRENT_STATUS.md'):
+    p = ROOT / name
+    original = p.read_bytes()
+    head, tail = original.split(b'\n', 1)
+    link = PUBLIC if '/' not in name else '../research_readiness/20261025/evidence/dote_physical_control_failure_20261031.json'
+    insertion = note + f' 见[真实失败与保留账本]({link})。下方运行快照为历史时点。'
+    p.write_bytes(head + b'\n\n' + insertion.encode('utf-8') + b'\n' + tail)
+p = ROOT / 'docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md'
+with p.open('a', encoding='utf-8', newline='\n') as f:
+    f.write('\n\n## 2026-10-31方向性探针停止，未取得E9\n\n' + note + ' 见[失败收口收据](evidence/dote_physical_control_failure_20261031.json)。\n')
+p = ROOT / 'EXPERIMENT_MATRIX.csv'
+original = p.read_bytes()
+rows = list(csv.DictReader(io.StringIO(original.decode('utf-8'))))
+row = next((r for r in rows if r['model_id'] == 'B7_PERP_GRADIENT'))
+row.update(status='STOPPED_IO_ERROR_E6_DEV_NO_E9', execution_state='FAILED_NO_RETRY', epochs='5', global_steps='2880', metrics_path='NOT_AVAILABLE_FIXED_E9_MISSING', checkpoint_reference=seal['checkpoint_sha256'], checkpoint_selection='LATEST_SAVED_E5_NOT_FIXED_E9', evidence_path=PUBLIC, verified_at=at, status_as_of=at, authorization_status='ORIGINAL_GRANT_CONSUMED_RECOVERY_NOT_AUTHORIZED', notes='E6 Train complete,Dev I/O Errno22; 6Train/5Dev,latest E5/2400,480 unsaved updates. Delivered296911969264B/reserved296916674513B/88924 instances incl1 uncertain source. Wall span exceeds6h; active-time acceptance NOT_VERIFIED. No E9,no endpoint comparison,no replay/retry; all19 metric gates retained.')
+s = io.StringIO(newline='')
+csv.DictWriter(s, list(row), lineterminator='\n').writerow(row)
+new = s.getvalue().encode()
+lines = original.splitlines(keepends=True)
+for i, line in enumerate(lines):
+    if line.startswith(b'B7_PERP_GRADIENT,'):
+        lines[i] = new[:-1] + (b'\r\n' if line.endswith(b'\r\n') else b'\n')
+p.write_bytes(b''.join(lines))
+p = ROOT / 'METRICS.csv'
+original = p.read_bytes()
+lines = original.splitlines(keepends=True)
+header = next(csv.reader([lines[0].decode()]))
+for i, line in enumerate(lines):
+    if b',B7_PERP_GRADIENT,' in line:
+        r = dict(zip(header, next(csv.reader([line.decode()]))))
+        assert r['record_type'] == 'MISSING_OR_NULL' and r['value'] == ''
+        r.update(status='NOT_AVAILABLE_FIXED_E9_MISSING_AFTER_E6_DEV_IO_FAILURE', executed_commit=binding['code_commit'], checkpoint_sha256='NOT_AVAILABLE_FIXED_E9_MISSING', source_file=PUBLIC, source_pointer='/training/E9_status')
+        s = io.StringIO(newline='')
+        csv.DictWriter(s, header, lineterminator='\n').writerow(r)
+        lines[i] = s.getvalue().encode()[:-1] + (b'\r\n' if line.endswith(b'\r\n') else b'\n')
+p.write_bytes(b''.join(lines))
+counter_path = LOCAL / 'pipeline_completion_heartbeat_correction_20261030.json'
+counter = read(counter_path)
+counter.update(last_notified_stage='CANDIDATE_FAILED_E6_DEV_ERRNO22_E5_SAVED', candidate_terminal=True, follow_on_terminal=True, failure_closeout=PUBLIC, final_workbook='BLOCKED_CANDIDATE_E9_MISSING')
+counter_path.write_text(json.dumps(counter, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps(dict(receipt=PUBLIC, returned_updates=2880, saved_updates=2400, unsaved_updates=480, delivered_bytes=delivered, reserved_bytes=reserved, instances=instances, wall_span_seconds=wall), ensure_ascii=True))

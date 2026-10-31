@@ -1,0 +1,37 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import json
+R = Path(__file__).resolve().parents[3]
+D = R / 'docs/research_readiness/20261025'
+
+def edit(p, old, new):
+    b = p.read_bytes()
+    assert old.encode() in b, (str(p), old[:50])
+    p.write_bytes(b.replace(old.encode(), new.encode(), 1))
+
+def insert(p, s):
+    b = p.read_bytes()
+    i = b.find(b'\n\n') + 2
+    if i == 1:
+        i = b.find(b'\r\n\r\n') + 4
+    assert i > 2
+    p.write_bytes(b[:i] + s.encode() + b[i:])
+note = '最新真实执行（2026-10-27）：研究者已明确批准d696fe2/41add1c3并单次调度；GPU/RAM和存储入场通过，但B5在首次气象读取前因ReaderFactory仍仅允许B3/B4而停止。实际更新0、气象源读取0、B5静态源62,828字节/1次；B6未启动，未生成模型权重。原失败目录与批准保持不变，未自动重启。见[停止收据](evidence/b5_b6_initial_start_stop.json)。\n\n最小修复已在工作分支完成：ReaderFactory保留旧默认B3/B4，仅在新入口显式接受当前B5或B6；两项针对实际读入口的检查通过。没有重跑旧15项/129来源/126摘要，也没有新气象源读取或GPU重检。原科学选择及DEM来源限制已被研究者接受，本次不重复申请它们。\n\n**当前：STOPPED_ZERO_UPDATES；修正启动：READY_WAITING_EXPLICIT_CORRECTED_START_APPROVAL。** 原批准绑定固定提交且额外重试0，不能因更新数为零就自动重用。已备好[唯一修正启动提案](evidence/b5_b6_corrected_start_proposal.json)，SHA=`36fc5dfbbc94c5576442ab95691595a7d4c3a130f373363015b5db13db6b57f1`，`authorized=false`，新目录尚不存在。\n\n|修正启动预算|上限|\n|---|---|\n|任务|同一B5 seed2029→B6 seed2029；不改科学协议|\n|新有效更新|8,640（两模型各4,320），此前为0；无优化器更新重放|\n|新逻辑源读取|955,143,657,680字节 / 285,626次，与原两模型需求相同|\n|额外成本|仅此前已读且需重新加载的B5静态包：62,828字节 / 1次|\n|累计读取上限|955,143,720,508字节 / 285,627次|\n|时间|B5最多21,587秒；B6最多21,600秒；新包最多43,187秒＝11小时59分47秒|\n|时间计费|此前启动保守扣13秒；累计上限仍43,200秒/12小时；B5累计仍6小时|\n|空间/失败规则|新目录初始≥48GiB，每任务≥24GiB；重放/后续额外重试0|\n\n13秒以私有调度时间至失败mtime向上取整再加1秒保守计量；binding文件至失败的7秒另存，不伪称GPU计算时间。原文件SHA已钉住，当前没有针对旧目录的恢复、删除或覆盖。以下生产、候选、首次预算描述保留其原时点；最新状态以上述停止与修正提案为准。\n\n'
+insert(D / 'B5_B6_READINESS_REPORT.md', note)
+edit(D / 'B5_B6_READINESS_REPORT.md', '**真实候选DEM：COMPLETE_CANDIDATE_PRODUCTION；模型及真实缓存预检查：PASS；B5/B6正式训练：NOT_STARTED_WAITING_REQUIRED_PROTOCOL_AND_BUDGET_APPROVAL。**', '**真实候选DEM：COMPLETE_CANDIDATE_PRODUCTION；真实缓存预检查：PASS；首次正式启动：STOPPED_BEFORE_FIRST_WEATHER_PASS_ZERO_UPDATES；修正代码已就绪，未再次执行。**')
+edit(D / 'B5_B6_READINESS_REPORT.md', '候选数据与代码已可执行，现无工程失败或缺测阻塞。**正式训练尚无新B5/B6明确预算批准，不能把“自主准备、无需逐项提问”填成批准记录。**', '该准备时点未发现读臂入口遗漏；随后正式启动暴露缺口，现已修复并保留停止记录。原B5/B6协议/预算已获批并消费，本次不重复申请已批准的科学选择；只请求修正提交及一次静态读取追加的纠正启动授权。')
+insert(D / 'RUNBOOK.md', '2026-10-27最新：d696fe2首次已获批调度，在第一遍气象读取前因旧ReaderFactory臂白名单拒绝B5而停止，0更新、62,828字节静态读取，B6未启动。**不要重跑原execute；原批准已消费、额外重试0。** 读取臂已最小修复，唯一待批准[修正启动提案](evidence/b5_b6_corrected_start_proposal.json)新目录未创建。累计只增加62,828字节/1次静态读取，13秒已从原时间扣除；新包43,187秒，8640更新不增加。详见[B5/B6报告](B5_B6_READINESS_REPORT.md)。原准备和命令保留历史时点。\n\n')
+for p in (R / 'docs/research_progress/CURRENT_STATUS.md', D / 'README.md'):
+    target = 'B5_B6_READINESS_REPORT.md' if p.parent == D else '../research_readiness/20261025/B5_B6_READINESS_REPORT.md'
+    insert(p, '最新执行停止（2026-10-27）：B5/B6获批首次启动在气象读取前被读取臂白名单拦截；0更新、62,828字节静态读取，B6未启动。最小修复及修正启动额度已备好，未重启；见[真实状态与修正方案](' + target + ')。下方旧“待原批准/已就绪”内容保留历史时点。\n\n')
+p = R / 'README.md'
+b = p.read_bytes()
+lines = b.splitlines(keepends=True)
+assert lines[2].startswith(b'> ')
+lines[2] = '> 最新实际状态（2026-10-27）：B5/B6首次获批启动在首遍气象读取前因读臂白名单遗漏停止，实际0更新、62,828字节静态读取；B6未启动。已最小修复，未擅自重启；[唯一修正启动方案与精确额度](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)。B0–B4基线交接及2025冻结不变。\n'.encode()
+p.write_bytes(b''.join(lines))
+for p in (R / 'AGENTS.md', R.parent / 'AGENTS.md'):
+    with p.open('a', encoding='utf-8') as h:
+        h.write('\n2026-10-27 B5/B6首次启动与停止：研究者明确批准d696fe25e632dc6a2d0e717caedb2fecac598fd9和41add1c3冻结提案。固定副本单次调度后，在首遍气象读取前因ReaderFactory仍限B3/B4而拒绝B5，原包失败即停；实际0优化器更新/0气象源读取，仅B5静态包62,828字节/1次，B6未启动。原批准已消费，不得自动重试。工作分支已修复显式B5/B6读取臂；修正提案36fc5dfb待新纠正启动批准，原科学参数无需重议。新包8640更新、955143657680字节/285626次，累计955143720508字节/285627次；扣此前保守13秒，新包43187秒、B5 21587秒/B6 21600秒，累计时间仍12小时；后续重试0。未重启；2025继续冻结。\n')
+print('Failure, exact consumed cost and minimal corrected start recorded; no training restarted.')

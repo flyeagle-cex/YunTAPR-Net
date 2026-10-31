@@ -1,0 +1,40 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Close completed real B1 audit with zero-source tests, preserving probe logs."""
+from pathlib import Path
+import gc
+import io
+import json
+import sys
+import unittest
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+active = json.loads((ROOT / 'YunTAPR-active-b1-design-closure-v1.json').read_text(encoding='utf-8'))
+RUN = Path(active['audit_directory'])
+if not (RUN / 'final_status.json').is_file():
+    raise RuntimeError('Completed real audit is required; NOT_RUN cannot pass')
+modules = [('B1_SYNTHETIC_UNITS', ['tests.b1_temporal_audit.test_b1_temporal_audit']), ('B1_REAL_ARTIFACTS', ['tests.b1_temporal_audit.test_full_audit_artifacts']), ('INHERITED_DATA_SPATIAL_REGRESSION', ['tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_v07_final_provenance_requires_metadata_and_manifest', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_b13_packed_fill_and_partial', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_zero_is_valid_missing_excluded', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_causal_latest_and_no_fallback', 'tests.b0_skeleton.test_b13_only_candidate'])]
+logs = io.StringIO()
+results = []
+with gate.PreflightSourceGuard() as sources, gate.legacy.FinalInferenceGuard():
+    for label, names in modules:
+        suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in names))
+        logs.write('\n' + label + '\n')
+        result = unittest.TextTestRunner(stream=logs, verbosity=2).run(suite)
+        results.append({'suite': label, 'executed': result.testsRun, 'passed': result.wasSuccessful(), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped)})
+        gc.collect()
+    assert sources.raw_open_events == 0
+summary = {'suites': results, 'total_tests_executed': sum((r['executed'] for r in results)), 'all_passed': all((r['passed'] and (not r['skipped']) for r in results)), 'raw_source_open_events': sources.raw_open_events, '2025_PIXELS_READ_DURING_CLOSURE_TESTS': 0, 'actual_backward_calls': 0, 'actual_optimizer_creations': 0, 'actual_optimizer_steps': 0, 'TEST_FIXTURE_ONLY': True, 'formal_model_inference_calls': 0, 'scope': '30 B1 tests plus 10 relevant existing data/spatial tests; not a claim that all historical training suites ran', 'probe_failure_logs_retained': True, 'completed_utc': gate.now()}
+stamp = gate.now().replace(':', '').replace('-', '').replace('.', '_').replace('+0000', 'Z')
+if (RUN / 'closure_test_summary.json').exists():
+    gate.save(RUN / ('closure_recheck_' + stamp + '.json'), summary)
+    (RUN / ('closure_recheck_' + stamp + '.txt')).write_text(logs.getvalue(), encoding='utf-8')
+else:
+    gate.save(RUN / 'closure_test_summary.json', summary)
+    (RUN / 'closure_test_results.txt').write_text(logs.getvalue(), encoding='utf-8')
+print(json.dumps(summary))
+if not summary['all_passed']:
+    print(logs.getvalue())
+    raise SystemExit(1)

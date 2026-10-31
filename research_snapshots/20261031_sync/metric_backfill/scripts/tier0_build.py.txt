@@ -1,0 +1,273 @@
+# Archival copy: formatting normalized; private locators redacted.
+# not resolved here; see provenance notes
+# ---------------------------------------------------------------- registry
+# loader: "dev_report" = H: isolated dev report JSON with top-level summary
+#         "s2027"      = completion results JSON, epochs[-1].development
+#         "stage4"     = stage4 evaluation JSON with groups[*].summary
+# model, seed, arm, loader, path, checkpoint path, checkpoint sha, executed commit
+# additional non-main rows: DOTE zero-numeric control (single seed, completed 2026-10-29)
+# ---------------------------------------------------------------- helpers
+# e.g. B7_development_09.json
+# ---- validation checks
+# q32 coverage consistency: covered[-1]/N_rain == coverage[31]
+# strict P>0.5 cross-check where an exact score table exists
+# P>=0.5 bins must equal strict P>0.5 plus the exact 0.5 boundary mass.
+# per-group derived table (UTC / strong-rain) for stage4 artifacts
+# empty groups have n_rain == 0
+# ---- write per-run tables
+# ---- pairwise deltas for the ablation sheet
+# B1-B0 per seed x arm
+# B4-B3 per seed
+# single-seed pairs
+# B8-B7 per seed
+# seed-level mean/sd for the multi-seed factors
+# ---- B0/B1 proxy (already-published diagnostic proxy, phase-A generation)
+# ---- validation report
+# boundary mass summary (informational)
+# sample print
+"""Tier-0 metric back-fill from existing E9 evaluation artifacts (read-only).
+
+Scope (approved Phase B, Tier-0 only):
+  * 19 main-table E9 runs (B0-B8, E0, fixed epoch 9, 2024 Development)
+  * 12 B0/B1 loss-arm runs (E0/E1/E2 x seed2026/2027) for the per-seed sheet
+  * derived occurrence contingency at P(rain>0.1) >= 0.5 from the 10 reliability bins
+  * existing probability metrics are copied verbatim from the stored summaries
+No inference, no raw-data read, no 2025 access, no writes outside this directory.
+
+The only "new" numbers are the probability-rule occurrence contingency table and
+its POD/FAR/CSI/HSS, which are labelled EXPLORATORY_POSTHOC throughout.
+"""
+from __future__ import annotations
+import csv
+import hashlib
+import json
+import math
+import os
+from datetime import datetime, timezone
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'outputs')
+LOG = os.path.join(ROOT, 'logs')
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+H26 = '<PRIVATE_LOCATOR_4ace3098b640>'
+S2027 = os.path.join(ACT, 'docs', 'phase_b_v2_seed2027_completion', '20261024', 'results')
+B2LOCAL = os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1')
+F = '<PRIVATE_LOCATOR_cfc983c5f221>'
+D = '<PRIVATE_LOCATOR_6f45235199f2>'
+B2B4_POP = {'train': 959, 'dev': 963}
+B01_POP = {'train': 10455, 'dev': 10501}
+POP_SHA_959 = '2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8'
+POP_SHA_10455 = 'ca215cda...'
+B13_DEV_IDS_SHA = '858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae75{0}'
+EVAL_SCRIPT_SHA = 'fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce'
+METRICS_SCRIPT_SHA = '9fbe6c5572d18f7478e58ec06d4915e2a007218fac0267217150192aee9bb318'
+RUNS = [('B0', 2026, 'E0', 'dev_report', os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2026, 'E0', 'dev_report', os.path.join(H26, 'B1_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B1_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B0', 2027, 'E0', 's2027', os.path.join(S2027, 'B0_MATCHED_V2__E0__s2027.json'), os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution', 'seed2027_epoch2_recovery_v2', '.local', 'B0_MATCHED_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt'), '34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2027, 'E0', 's2027', os.path.join(S2027, 'B1_V2__E0__s2027.json'), os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution', 'seed2027_b1_epoch7_recovery_v7', '.local', 'B1_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt'), '73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B0', 2026, 'E1', 'dev_report', os.path.join(H26, 'B0_MATCHED_V2__E1__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B0_MATCHED_V2__E1__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'd36f6d541245b15b20e90cc93b95f15898d46f8c32568355af850d5389182cda', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2026, 'E1', 'dev_report', os.path.join(H26, 'B1_V2__E1__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B1_V2__E1__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'b9696c16d69b7b92163563d5d18aae0beba703e8b500c99bb1c216b8803bc17b', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B0', 2027, 'E1', 's2027', os.path.join(S2027, 'B0_MATCHED_V2__E1__s2027.json'), os.path.join(WS, 'YunTAPR-Net-completed-review-20261021', 'docs', 'formal_recovery', 'seed2027_b0_e1_epoch1_v1', '.local', 'B0_MATCHED_V2__E1__s2027', 'checkpoints', 'LAST_epoch_09.pt'), 'bfe0e2edfcd5c6544f682148cafff36f2e458855452143fe6f74b141416f847a', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2027, 'E1', 's2027', os.path.join(S2027, 'B1_V2__E1__s2027.json'), os.path.join(WS, 'YunTAPR-Net-seed2027-b1-e1-recovery-v2-20261022', 'docs', 'formal_recovery', 'seed2027_b1_e1_epoch6_v2', '.local', 'B1_V2__E1__s2027', 'checkpoints', 'LAST_epoch_09.pt'), '56f2c7af67a28dcb27e03cd65e09966d2d24b1d1df887676a04e9948f1b8ff69', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B0', 2026, 'E2', 'dev_report', os.path.join(H26, 'B0_MATCHED_V2__E2__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B0_MATCHED_V2__E2__s2026', 'checkpoints', 'LAST_epoch_09.pt'), '851876e761814b8ffed045c39fcb9cd9067153e2dbe471b8576d9d5dc70aaa5c', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2026, 'E2', 'dev_report', os.path.join(H26, 'B1_V2__E2__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B1_V2__E2__s2026', 'checkpoints', 'LAST_epoch_09.pt'), '58bbeb40e5d91efab66d5335bd037e753492a700b95f3c2764d2adc29f3a67d3', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B0', 2027, 'E2', 's2027', os.path.join(S2027, 'B0_MATCHED_V2__E2__s2027.json'), os.path.join(WS, 'YunTAPR-Net-seed2027-b1-e1-recovery-v2-20261022', 'docs', 'formal_recovery', 'seed2027_b1_e1_epoch6_v2', '.local', 'B0_MATCHED_V2__E2__s2027', 'checkpoints', 'LAST_epoch_09.pt'), '8729e12690d4a154a371330473e5b2e4c7dfafc0dc43055e4e7b5b40ceaf8530', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B1', 2027, 'E2', 's2027', os.path.join(S2027, 'B1_V2__E2__s2027.json'), os.path.join(WS, 'YunTAPR-Net-seed2027-b1-e1-recovery-v2-20261022', 'docs', 'formal_recovery', 'seed2027_b1_e1_epoch6_v2', '.local', 'B1_V2__E2__s2027', 'checkpoints', 'LAST_epoch_09.pt'), '92d150d3b06e512ad5215b129877d5a87a57e440f08f859d03640cb6b262c9e4', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING'), ('B2', 2029, 'E0', 'stage4', os.path.join(B2LOCAL, 'B2_development_09.json'), os.path.join(B2LOCAL, 'B2_LAST_epoch_09.pt'), '9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0', 'a35302186b4b5d3d7ec735885a8d93762e6d3567'), ('B3', 2029, 'E0', 'stage4', os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_LAST_epoch_09.pt'), 'c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283', '5b5298f41025db5b7b718fd736fc3fe6de516875_E1_3;7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35_E4_9'), ('B4', 2029, 'E0', 'stage4', os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_LAST_epoch_09.pt'), '7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d', '7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35'), ('B3', 2030, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_LAST_epoch_09.pt'), '8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058', '52a8e90dcea156382d7f2c510c5891c78e610329'), ('B4', 2030, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2030', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2030', 'B4_LAST_epoch_09.pt'), '7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c', '943da957a3af846746c21b52d05a148bcb135064 (E1 inherited 52a8e90)'), ('B3', 2031, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_LAST_epoch_09.pt'), 'bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543', '943da957a3af846746c21b52d05a148bcb135064'), ('B4', 2031, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_LAST_epoch_09.pt'), '17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea', '943da957a3af846746c21b52d05a148bcb135064'), ('B5', 2029, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_LAST_epoch_09.pt'), '1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f', 'b251fd9ea06c0c90f48d2ac0decba0454114669d'), ('B6', 2029, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_LAST_epoch_09.pt'), '3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98', 'b251fd9ea06c0c90f48d2ac0decba0454114669d'), ('B7', 2029, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_development_09.json'), os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_LAST_epoch_09.pt'), '019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35', 'b1f072e45fdd17b80106a774083995c350b28f04'), ('B8', 2029, 'E0', 'stage4', os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_development_09.json'), os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_LAST_epoch_09.pt'), '8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0', 'ef11531a7cdeb35b767caebdb61e0e81c6123187'), ('B7', 2030, 'E0', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_LAST_epoch_09.pt'), '820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d', 'e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c'), ('B8', 2030, 'E0', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_LAST_epoch_09.pt'), 'f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e', 'e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c'), ('B7', 2031, 'E0', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_LAST_epoch_09.pt'), '4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7', 'e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c'), ('B8', 2031, 'E0', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_LAST_epoch_09.pt'), 'bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07', 'e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c')]
+EXTRA = [('B7_ZERO_DOTE', 2029, 'E0', 'stage4', os.path.join(F, 'YunTAPR_DOTE_ZERO_s2029_20261029_v1', 'B7_s2029', 'B7_development_09.json'), os.path.join(F, 'YunTAPR_DOTE_ZERO_s2029_20261029_v1', 'B7_s2029', 'B7_LAST_epoch_09.pt'), '445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21', '0c91ff0f36d5cce3f4516d38663482650f61b03a')]
+
+def sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def load_summary(loader: str, path: str):
+    with open(path, 'r', encoding='utf-8') as f:
+        j = json.load(f)
+    if loader == 'dev_report':
+        return (j['summary'], {})
+    if loader == 's2027':
+        dev = j['epochs'][-1]['development']
+        return (dev['summary'], {})
+    if loader == 'stage4':
+        return (j['groups']['all']['summary'], j['groups'])
+    raise ValueError(loader)
+
+def occurrence_from_bins(reliability):
+    """Reliability bins: bin b = [b/10,(b+1)/10) for b<9, bin9=[0.9,1]. P>=0.5 -> bins 5..9."""
+    if len(reliability) != 10:
+        raise ValueError('expected 10 reliability bins, got %d' % len(reliability))
+    n_total = sum((int(b['n']) for b in reliability))
+    r_total = sum((int(b['rain']) for b in reliability))
+    tp = sum((int(b['rain']) for b in reliability[5:]))
+    fp = sum((int(b['n']) - int(b['rain']) for b in reliability[5:]))
+    fn = r_total - tp
+    tn = n_total - r_total - fp
+    out = {'N_valid_bins': n_total, 'N_rain_bins': r_total, 'TP': tp, 'FP': fp, 'FN': fn, 'TN': tn, 'POD': tp / r_total if r_total else None, 'FAR': fp / (tp + fp) if tp + fp else None, 'CSI': tp / (tp + fp + fn) if tp + fp + fn else None}
+    denom = (tp + fp) * (fp + tn) + (tp + fn) * (fn + tn)
+    out['HSS'] = 2 * (tp * tn - fp * fn) / denom if denom else None
+    return out
+
+def strict_from_sqlite(path: str):
+    """Contingency from the exact score histogram (block=-1).
+
+    Returns strict P>0.5 counts, plus the counts sitting exactly on 0.5, so that
+    P>=0.5 can be reconstructed as strict + boundary.
+    """
+    import sqlite3
+    import struct
+    con = sqlite3.connect('file:' + path + '?mode=ro&immutable=1', uri=True)
+    try:
+        raw = con.execute('SELECT score,pos,neg FROM scores WHERE block=-1').fetchall()
+    finally:
+        con.close()
+    tp = fp = tp_eq = fp_eq = n_all = 0
+    for s, p, n in raw:
+        v = struct.unpack('>d', s)[0]
+        n_all += p + n
+        if v > 0.5:
+            tp += p
+            fp += n
+        elif v == 0.5:
+            tp_eq += p
+            fp_eq += n
+    return {'TP_strict': tp, 'FP_strict': fp, 'TP_at_0.5': tp_eq, 'FP_at_0.5': fp_eq, 'N_valid_sqlite': n_all}
+
+def eval_dir_for(loader: str, path: str):
+    if loader != 'stage4':
+        return None
+    base = os.path.dirname(path)
+    name = os.path.basename(path)
+    model = name.split('_development_')[0]
+    idx = name.split('_development_')[1].split('.')[0]
+    d = os.path.join(base, '%s_evaluation_%s' % (model, idx), 'all.sqlite')
+    return d if os.path.exists(d) else None
+
+def main():
+    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(LOG, exist_ok=True)
+    rows, provenance, validation = ([], [], {'as_of': datetime.now(timezone.utc).isoformat(), 'checks': []})
+    groups_rows = []
+    for model, seed, arm, loader, path, ckpt, ckpt_sha, commit in RUNS + EXTRA:
+        if not os.path.exists(path):
+            raise SystemExit('MISSING artifact: ' + path)
+        summary, groups = load_summary(loader, path)
+        occ = occurrence_from_bins(summary['reliability'])
+        n_valid = int(summary['n_valid'])
+        n_rain = int(summary['n_rain'])
+        q32_cov = summary['coverage'][31] if summary.get('coverage') else None
+        row = {'model': model, 'seed': seed, 'arm': arm, 'population': '959/963', 'scenes': int(summary['scenes']), 'N_valid': n_valid, 'N_rain': n_rain, 'Brier': summary['brier'], 'AUROC': summary['auroc'], 'AP': summary['average_precision'], 'conditional_pinball': summary['conditional_pinball'], 'q32_coverage': q32_cov, 'q32_abs_error': summary.get('q32_absolute_error'), 'POD_r01_Pge05': occ['POD'], 'FAR_r01_Pge05': occ['FAR'], 'CSI_r01_Pge05': occ['CSI'], 'HSS_r01_Pge05': occ['HSS'], 'TP': occ['TP'], 'FP': occ['FP'], 'FN': occ['FN'], 'TN': occ['TN'], 'artifact': path, 'checkpoint': ckpt, 'checkpoint_sha256': ckpt_sha, 'executed_commit': commit, 'rule': 'EXPLORATORY_POSTHOC_PROBABILITY_RULE_P_GE_0.5_EVENT_RATE_GT_0.1'}
+        if model in ('B0', 'B1'):
+            row['population'] = '10455/10501'
+        rows.append(row)
+        checks = {'model': model, 'seed': seed, 'arm': arm, 'bins_N_valid_eq_summary': occ['N_valid_bins'] == n_valid, 'bins_N_rain_eq_summary': occ['N_rain_bins'] == n_rain, 'contingency_total_eq_N_valid': occ['TP'] + occ['FP'] + occ['FN'] + occ['TN'] == n_valid}
+        if model in ('B0', 'B1'):
+            checks['population_expected'] = (n_valid, n_rain) == (36018430, 4496600)
+        elif model != 'B7_ZERO_DOTE':
+            checks['population_expected'] = (n_valid, n_rain) == (3303090, 407820)
+        try:
+            cov_from_counts = int(summary['covered'][31]) / n_rain if n_rain else None
+            checks['q32_coverage_consistent'] = cov_from_counts is not None and q32_cov is not None and (abs(cov_from_counts - q32_cov) < 1e-15)
+        except Exception:
+            checks['q32_coverage_consistent'] = None
+        sql = eval_dir_for(loader, path)
+        if sql:
+            s = strict_from_sqlite(sql)
+            checks['sqlite_present'] = True
+            checks['sqlite_N_valid_eq'] = s['N_valid_sqlite'] == n_valid
+            checks['p_ge_half_reconstructs'] = s['TP_strict'] + s['TP_at_0.5'] == occ['TP'] and s['FP_strict'] + s['FP_at_0.5'] == occ['FP']
+            checks['strict_gt_half_TP'] = s['TP_strict']
+            checks['strict_gt_half_FP'] = s['FP_strict']
+            checks['boundary_TP_at_0.5'] = s['TP_at_0.5']
+            checks['boundary_FP_at_0.5'] = s['FP_at_0.5']
+        else:
+            checks['sqlite_present'] = None
+        base = os.path.dirname(path)
+        name = os.path.basename(path)
+        validation['checks'].append(checks)
+        if groups:
+            for gname, g in groups.items():
+                gs = g['summary']
+                try:
+                    go = occurrence_from_bins(gs['reliability'])
+                    groups_rows.append({'model': model, 'seed': seed, 'arm': arm, 'group': gname, 'N_valid': gs['n_valid'], 'N_rain': gs['n_rain'], 'Brier': gs['brier'], 'AUROC': gs['auroc'], 'AP': gs['average_precision'], 'conditional_pinball': gs['conditional_pinball'], 'q32_coverage': gs['coverage'][31], 'POD_r01_Pge05': go['POD'], 'FAR_r01_Pge05': go['FAR'], 'CSI_r01_Pge05': go['CSI'], 'HSS_r01_Pge05': go['HSS'], 'TP': go['TP'], 'FP': go['FP'], 'FN': go['FN'], 'TN': go['TN']})
+                except Exception as exc:
+                    groups_rows.append({'model': model, 'seed': seed, 'arm': arm, 'group': gname, 'error': str(exc)})
+        provenance.append({'model': model, 'seed': seed, 'arm': arm, 'artifact_path': path, 'artifact_sha256': sha256_file(path), 'artifact_bytes': os.path.getsize(path), 'checkpoint_path': ckpt, 'checkpoint_exists': os.path.exists(ckpt), 'checkpoint_sha256': ckpt_sha, 'executed_commit': commit, 'population': row['population'], 'population_sha_959_963': POP_SHA_959 if row['population'] == '959/963' else 'NOT_RESOLVED_HERE', 'event_definition': 'float32 rate > float32(0.1) mm/h', 'q32_nominal': 0.984375, 'eval_script_sha256': EVAL_SCRIPT_SHA, 'metrics_script_sha256': METRICS_SCRIPT_SHA, 'dev_scope': '2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE', 'final_2025': 'FROZEN_NO_ACCESS'})
+
+    def write_csv(path, data, fields=None):
+        if not data:
+            return
+        fields = fields or list(data[0].keys())
+        with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+            w = csv.DictWriter(f, fieldnames=fields)
+            w.writeheader()
+            for d in data:
+                w.writerow({k: d.get(k) for k in fields})
+    write_csv(os.path.join(OUT, 'tier0_runs_all.csv'), rows)
+    write_csv(os.path.join(OUT, 'tier0_groups.csv'), groups_rows)
+    write_csv(os.path.join(OUT, 'tier0_provenance.csv'), provenance)
+
+    def find(model, seed, arm='E0'):
+        for r in rows:
+            if r['model'] == model and r['seed'] == seed and (r['arm'] == arm):
+                return r
+        return None
+    metric_keys = ['Brier', 'AUROC', 'AP', 'conditional_pinball', 'q32_coverage', 'POD_r01_Pge05', 'FAR_r01_Pge05', 'CSI_r01_Pge05', 'HSS_r01_Pge05']
+    dirs = {'Brier': 'lower', 'conditional_pinball': 'lower', 'AUROC': 'higher', 'AP': 'higher', 'q32_coverage': 'closer_to_0.984375', 'POD_r01_Pge05': 'higher', 'FAR_r01_Pge05': 'lower', 'CSI_r01_Pge05': 'higher', 'HSS_r01_Pge05': 'higher'}
+    pairs = []
+    for arm in ('E0', 'E1', 'E2'):
+        for seed in (2026, 2027):
+            b0, b1 = (find('B0', seed, arm), find('B1', seed, arm))
+            pairs.append((f'B1-B0|{arm}|s{seed}', 'B1', 'B0', b1, b0, [('B1-B0', 'B1', 'B0')]))
+    for seed in (2029, 2030, 2031):
+        pairs.append((f'B4-B3|E0|s{seed}', 'B4', 'B3', find('B4', seed), find('B3', seed), []))
+    pairs.append(('B3-B2|E0|s2029', 'B3', 'B2', find('B3', 2029), find('B2', 2029), []))
+    pairs.append(('B5-B4|E0|s2029', 'B5', 'B4', find('B5', 2029), find('B4', 2029), []))
+    pairs.append(('B6-B4|E0|s2029', 'B6', 'B4', find('B6', 2029), find('B4', 2029), []))
+    pairs.append(('B7-B6|E0|s2029', 'B7', 'B6', find('B7', 2029), find('B6', 2029), []))
+    for seed in (2029, 2030, 2031):
+        pairs.append((f'B8-B7|E0|s{seed}', 'B8', 'B7', find('B8', seed), find('B7', seed), []))
+    delta_rows = []
+    for label, new_model, old_model, new, old, _ in pairs:
+        if new is None or old is None:
+            delta_rows.append({'comparison': label, 'status': 'MISSING_RUN'})
+            continue
+        d = {'comparison': label, 'new_model': new_model, 'old_model': old_model, 'seed': new['seed'], 'population': new['population'], 'direction': 'new-minus-old'}
+        for k in metric_keys:
+            d[k] = new[k] - old[k] if new[k] is not None and old[k] is not None else None
+        delta_rows.append(d)
+    for factor, new_model, old_model, seeds in (('B4-B3', 'B4', 'B3', (2029, 2030, 2031)), ('B8-B7', 'B8', 'B7', (2029, 2030, 2031))):
+        vals = {k: [] for k in metric_keys}
+        for seed in seeds:
+            n, o = (find(new_model, seed), find(old_model, seed))
+            for k in metric_keys:
+                if n[k] is not None and o[k] is not None:
+                    vals[k].append(n[k] - o[k])
+        row = {'comparison': factor + '|seed-mean', 'new_model': new_model, 'old_model': old_model, 'seed': 'mean_over_3_seeds', 'population': '959/963', 'direction': 'new-minus-old'}
+        for k in metric_keys:
+            v = vals[k]
+            row[k] = sum(v) / len(v) if v else None
+            row[k + '_n'] = len(v)
+        delta_rows.append(row)
+        row = {'comparison': factor + '|seed-sample-sd', 'new_model': new_model, 'old_model': old_model, 'seed': 'sd_over_3_seeds', 'population': '959/963', 'direction': 'new-minus-old'}
+        for k in metric_keys:
+            v = vals[k]
+            if len(v) >= 2:
+                m = sum(v) / len(v)
+                row[k] = math.sqrt(sum(((x - m) ** 2 for x in v)) / (len(v) - 1))
+            else:
+                row[k] = None
+        delta_rows.append(row)
+    write_csv(os.path.join(OUT, 'tier0_pairwise_deltas.csv'), delta_rows)
+    proxy = [{'model': 'B0', 'seed': 2026, 'source': 'docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/PAIRED_STRATIFIED_ANALYSIS.csv', 'artifact_generation': 'PHASE_A_V2_EPOCH9_BEST_c9ea0525 (NOT main-table final LAST a806db98)', 'Bias_mm_h': 0.028232088059915488, 'MAE_mm_h': 0.25311146097739246, 'RMSE_mm_h': 0.8012766752218962, 'Pearson_CC': 'NOT_AVAILABLE', 'population': '10,501 Dev scenes / 36,018,430 valid cells', 'status': 'EXISTING_DIAGNOSTIC_PROXY_ONLY'}, {'model': 'B1', 'seed': 2026, 'source': 'docs/v2_scientific_acceptance/runs/run_20261009T112710_013267Z/PAIRED_STRATIFIED_ANALYSIS.csv', 'artifact_generation': 'PHASE_A_V2_EPOCH9_BEST_d5a45f9a (NOT main-table final LAST ead05bd4)', 'Bias_mm_h': 0.021719055886627897, 'MAE_mm_h': 0.24622956156788653, 'RMSE_mm_h': 0.7980259684699814, 'Pearson_CC': 'NOT_AVAILABLE', 'population': '10,501 Dev scenes / 36,018,430 valid cells', 'status': 'EXISTING_DIAGNOSTIC_PROXY_ONLY'}]
+    write_csv(os.path.join(OUT, 'tier0_proxy_continuous.csv'), proxy)
+    validation['n_runs'] = len(rows)
+    validation['n_groups'] = len(groups_rows)
+    required = ('bins_N_valid_eq_summary', 'bins_N_rain_eq_summary', 'contingency_total_eq_N_valid', 'q32_coverage_consistent', 'population_expected', 'sqlite_N_valid_eq', 'p_ge_half_reconstructs')
+    validation['required_keys'] = list(required)
+    validation['all_checks_pass'] = all((c[k] is True for c in validation['checks'] for k in required if k in c))
+    with open(os.path.join(OUT, 'tier0_validation.json'), 'w', encoding='utf-8') as f:
+        json.dump(validation, f, ensure_ascii=False, indent=2)
+    print('rows:', len(rows), 'groups:', len(groups_rows), 'deltas:', len(delta_rows))
+    print('all_checks_pass:', validation['all_checks_pass'])
+    for c in validation['checks']:
+        bad = {k: v for k, v in c.items() if k in required and v is not True}
+        if bad:
+            print('FAIL', c['model'], c['seed'], c['arm'], bad)
+    bnd = sum((c.get('boundary_TP_at_0.5', 0) for c in validation['checks']))
+    print('runs with exact p==0.5 rainy boundary mass:', bnd)
+    for r in rows[:3]:
+        print(r['model'], r['seed'], r['arm'], r['population'], r['N_valid'], r['N_rain'], 'TP', r['TP'], 'FP', r['FP'], 'POD %.6f' % r['POD_r01_Pge05'], 'FAR %.6f' % r['FAR_r01_Pge05'], 'CSI %.6f' % r['CSI_r01_Pge05'], 'HSS %.6f' % r['HSS_r01_Pge05'])
+if __name__ == '__main__':
+    main()

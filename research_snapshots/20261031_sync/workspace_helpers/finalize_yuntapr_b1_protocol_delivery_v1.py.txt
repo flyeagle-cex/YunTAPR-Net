@@ -1,0 +1,43 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import datetime, hashlib, json, shutil, subprocess
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+RUN = Path(a['run_directory'])
+NAME = 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1'
+scratch = ROOT / 'tmp/pdfs' / ('b1_protocol_' + RUN.name)
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def save(p, v):
+    with p.open('x', encoding='utf-8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+
+def read(n):
+    return json.loads((RUN / n).read_text(encoding='utf-8'))
+log = (scratch / (NAME + '.log')).read_text(encoding='utf-8')
+text = (scratch / 'text.txt').read_text(encoding='utf-8')
+images = sorted(scratch.glob('page-*.png'))
+assert len(images) == 4 and 'Overfull' not in log and ('Missing character' not in log) and ('人口' not in text)
+pdf = scratch / (NAME + '.pdf')
+assert pdf.read_bytes().startswith(b'%PDF-') and pdf.stat().st_size > 10000
+target = RUN / (NAME + '.pdf')
+assert not target.exists()
+shutil.copyfile(pdf, target)
+generation = read('document_generation_provenance.json')
+r1 = read('document_layout_repair.json')
+r2 = read('document_layout_repair_2.json')
+assert generation['documents'][(RUN / (NAME + '.tex')).relative_to(REPO).as_posix()] == r1['before_sha256']
+assert r1['after_sha256'] == r2['before_sha256'] and r2['after_sha256'] == sha(RUN / (NAME + '.tex'))
+save(RUN / 'render_verification.json', {'status': 'PASS', 'pages': 4, 'all_rendered_pages_visually_inspected': True, 'no_clipping_overlap_or_orphan_page': True, 'overfull_boxes': 0, 'missing_glyphs': 0, 'pdf_sha256': sha(target), 'pdf_bytes': target.stat().st_size, 'source_sha256': sha(RUN / (NAME + '.tex')), 'rendered_page_sha256': {p.name: sha(p) for p in images}, 'editable_LaTeX_delivered': True, 'population_terminology': '样本集合 / 样本总体', 'native_editor_tools_available': False, 'tool': 'Existing XeLaTeX --disable-installer and Poppler; no installation', 'layout_hash_chain_verified': True})
+helpers = ['prepare_yuntapr_b1_protocol_v1.py', 'resume_yuntapr_b1_protocol_v1.py', 'preserve_yuntapr_b1_runner_execution_sources.py', 'test_yuntapr_b1_protocol_v1.py', 'recheck_yuntapr_b1_protocol_tests_v1.py', 'audit_yuntapr_b1_validation_2024_v1.py', 'close_yuntapr_b1_protocol_v1.py', 'build_yuntapr_b1_protocol_report_v1.py', 'compile_yuntapr_b1_protocol_pdf_v1.py', 'repair_yuntapr_b1_protocol_pdf_layout_v1.py', 'repair_yuntapr_b1_protocol_pdf_layout_v2.py']
+save(RUN / 'orchestration_provenance.json', {'scripts': {name: sha(ROOT / name) for name in helpers}, 'source_archive_before_hardening': read('engineering_execution_source_archive.json'), 'GPU_and_fixture_optimizer_steps_separate_from_formal': True, 'no_2025_source_reads': True, 'all_frozen_historical_data_readonly': True})
+files = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '-z'], cwd=REPO).decode().split('\x00')[:-1]
+assert all((name.startswith(('docs/b1_training_protocol/', 'config/training/', 'src/yuntapr/', 'scripts/', 'tests/b1_training_protocol/')) for name in files))
+assert not any((Path(name).suffix.lower() in ('.pt', '.pth', '.ckpt', '.nc', '.whl') for name in files))
+save(RUN / 'delivery_artifact_sha256.json', {name: {'sha256': sha(REPO / name), 'bytes': (REPO / name).stat().st_size} for name in sorted(files)})
+print(json.dumps({'delivery_files': len(files) + 1, 'indexed_files': len(files), 'pdf_pages': 4, 'pdf_bytes': target.stat().st_size}), flush=True)

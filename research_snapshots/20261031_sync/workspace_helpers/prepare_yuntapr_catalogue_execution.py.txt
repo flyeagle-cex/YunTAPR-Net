@@ -1,0 +1,42 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Prepare a new immutable-history catalogue-only run, without raw access."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+BASE = 'c661d8a31dbd8cc205624716d8a2d0fcd0867023'
+REQUEST = Path('<PRIVATE_LOCATOR_410f4b69c911>')
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def baseline():
+    result = {}
+    for entry in git('ls-tree', '-r', '-z', BASE).decode('utf-8').rstrip('\x00').split('\x00'):
+        meta, name = entry.split('\t', 1)
+        data = (REPO / name).read_bytes()
+        digest = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+        if digest != meta.split()[2]:
+            raise ValueError('Historical artifact changed')
+        result[name] = {'git_blob_sha1': digest, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
+    return result
+if __name__ == '__main__':
+    if git('rev-parse', 'HEAD').decode().strip() != BASE or git('status', '--porcelain'):
+        raise ValueError('Clean authorized baseline required')
+    with gate.PreflightSourceGuard(), gate.CatalogueOnlyGuard():
+        protocol = gate.load_protocol()
+        history = baseline()
+        run = REPO / 'docs/final_test_b0/catalogue_gate_v1_1/catalogue_only_runs' / ('run_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ'))
+        run.mkdir(parents=True, exist_ok=False)
+        gate.save(run / 'history_before.json', history)
+        gate.save(run / 'preparation_manifest.json', {'baseline_commit': BASE, 'run_id': run.name, 'scope': gate.CATALOGUE_SCOPE, 'researcher_request_sha256': hashlib.sha256(REQUEST.read_bytes()).hexdigest(), 'protocol_sha256': gate.PROTOCOL_SHA, 'frozen_implementation_sha256': gate.implementation_hashes(), 'baseline_file_count': len(history), '2025_CATALOGUE_QC_ACCESS': False, '2025_PIXELS_READ': 0, 'FINAL_TEST_2025_AUTHORIZED': False, 'FINAL_TEST_2025_EXECUTED': False, 'FINAL_CHECKPOINT_LOADS': 0, 'MODEL_FORWARD_CALLS': 0, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'FINAL_identity_verification_mode': 'FROZEN_IDENTITY_RECORD_ONLY_RESEARCHER_APPROVED', 'FINAL_actual_file_sha256_recomputed': False, 'created_utc': gate.now()})
+        active = {'baseline': BASE, 'run': str(run), 'researcher_request_sha256': hashlib.sha256(REQUEST.read_bytes()).hexdigest()}
+        (ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').write_text(json.dumps(active, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        print(json.dumps({'prepared_run': str(run), 'historical_files_verified': len(history), '2025_pixels_read': 0}, ensure_ascii=True))

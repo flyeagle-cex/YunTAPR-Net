@@ -1,0 +1,143 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Update only four new-seed rows; leave the 22 historical records and B2 intact.
+import csv, io, json, statistics
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[3]
+BASE = ROOT / 'docs/research_readiness/20261025'
+x = json.loads((BASE / 'evidence/b3_b4_three_seed_completion.json').read_text(encoding='utf-8'))
+
+def load(p):
+    return p.read_bytes().decode('utf-8').replace('\r\n', '\n')
+
+def save(p, s):
+    previous = p.read_bytes()
+    nl = '\r\n' if b'\r\n' in previous else '\n'
+    p.write_bytes(s.replace('\r\n', '\n').replace('\n', nl).encode('utf-8'))
+
+def replace(p, a, b):
+    s = load(p)
+    assert a in s, (p, a[:60])
+    save(p, s.replace(a, b, 1))
+link = '[三seed完成与配对收据](evidence/b3_b4_three_seed_completion.json)'
+summary = x['summary']
+names = [('brier', 'Brier（布里尔分数，↓）'), ('auroc', 'AUROC（ROC曲线下面积，↑）'), ('average_precision', 'AP（平均精确率，↑）'), ('conditional_pinball', 'Conditional Pinball（条件分位数损失，↓）'), ('q32_coverage', 'q32 Coverage（最高分位数覆盖率）')]
+section = '## 三seed固定E9结果（2026-10-27完成）\n\n**状态：COMPLETE_DESCRIPTIVE_REPLICATION（三seed描述性复现完成）**。原四个新增模型均完成九轮Train及九轮2024 Dev评价；结合既有seed2029，形成三组完整配对。恢复包于2026-10-27 00:27:00（北京时间）封口。全部seed平等报告，未追加seed、改变E0、重选BEST或读取2025。\n\n|seed|模型|Brier ↓|AUROC ↑|AP ↑|条件Pinball ↓|q32覆盖率|\n|---|---|---|---|---|---|---|\n'
+for seed in ('2029', '2030', '2031'):
+    for model in ('B3', 'B4'):
+        z = summary['endpoints'][seed][model]
+        section += f"|{seed}|{model}|{z['brier']:.12f}|{z['auroc']:.12f}|{z['average_precision']:.12f}|{z['conditional_pinball']:.12f}|{100 * z['q32_coverage']:.6f}%|\n"
+section += '\n下表均为B4−B3；均值和样本标准差按三个seed差值计算（分母n−1），不以像元数制造独立样本量。q32以比例列示，正值只在当前欠覆盖区间表示接近名义水平。\n\n|指标|seed2029差值|seed2030差值|seed2031差值|均值|样本标准差|方向|\n|---|---|---|---|---|---|---|\n'
+for key, name in names:
+    z = summary['metrics'][key]
+    d = z['B4_minus_B3_by_seed']
+    direction = '三seed均改善' if key != 'q32_coverage' else '2031下降；不一致'
+    section += f"|{name}|{d['2029']:+.12f}|{d['2030']:+.12f}|{d['2031']:+.12f}|{z['mean']:+.12f}|{z['sample_sd']:.12f}|{direction}|\n"
+section += '\n总体四项指标的改善在这三个初始化/训练排列下方向一致；q32改善没有一致复现。六个模型总体q32覆盖为93.5050%–94.6094%，均低于98.4375%名义水平，差3.8281–4.9325个百分点。不能宣称上尾校准通过，也不能由总体Pinball改善推断强雨改善。\n\n|诊断，B4−B3|seed2029|seed2030|seed2031|三seed均值|\n|---|---|---|---|---|\n'
+for name, extract in [('06 UTC Brier', lambda g: g['analysis_UTC_06']['brier']), ('(20,30] mm/h 条件Pinball', lambda g: g['all']['rain_strata'][4]['conditional_pinball']), ('(30,50] mm/h 条件Pinball', lambda g: g['all']['rain_strata'][5]['conditional_pinball'])]:
+    vals = [extract(x['endpoint_groups'][s]['B4']) - extract(x['endpoint_groups'][s]['B3']) for s in ('2029', '2030', '2031')]
+    section += f'|{name}|{vals[0]:+.12f}|{vals[1]:+.12f}|{vals[2]:+.12f}|{statistics.mean(vals):+.12f}|\n'
+section += '\n正差代表上述损失变差。06 UTC的旧seed2029反例仍成立；另外两个seed有所改善，不能改写成每个时次、每个seed均改善。强雨误差未稳定改善：seed2031两层Pinball分别恶化约0.06579与0.08004；三seed平均也恶化。\n\n|seed|模型|(20,30] q32 covered / n（覆盖数/雨暴露数）|(30,50] q32 covered / n|\n|---|---|---|---|\n'
+for seed in ('2030', '2031'):
+    for model in ('B3', 'B4'):
+        s = x['tail_diagnostics'][seed][model]['strata']
+        section += f"|{seed}|{model}|{s[4]['q32_covered']} / {s[4]['n_rain']}|{s[5]['q32_covered']} / {s[5]['n_rain']}|\n"
+section += '\nseed2029的雨强分层q32计数仍不可得，未为补表新增推理；其各层Pinball已在旧评价收据中存在。新seed的上尾计数来自同一次Dev推理的附加充分量，并与原评价器总体雨数、Pinball和covered核对。上表按真实雨强条件化，是误差定位，不能要求每个按Y划分的层都满足98.4375%名义覆盖。564/147是场景像元暴露，不能当成独立暴雨数；独立暴雨事件数未估计。\n\n三个随机种子只复现同一个2024开发年上的初始化/排列随机性；相邻seed沿用seed+epoch−1排列规则，存在跨轮共享排列。没有显著性检验或最终泛化结论，没有证明缺陷的因果机制。研究者后续决定校准/强雨容差及地形实验，不因结果不理想自动改损失或追加实验。\n\n恢复新增12,480更新（仅390次必要重放）、1,379,654,740,081逻辑源字节、412,569读取实例（52封口遍历＋1单源校验）；含失败段累计17,670更新、1,931,972,785,094字节、577,748实例。旧源INTENT保持原状并单独计费，新校验通过，额外重试0。恢复执行区间约10小时09分14秒，累计执行区间约14小时10分52秒（文件mtime代理，非纯GPU计算时间），均未超批准时限；审批等待时间单列。\n\n|终点|执行代码|E9 LAST SHA256|\n|---|---|---|\n|B3 seed2030|52a8e90dcea156382d7f2c510c5891c78e610329|8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058|\n'
+for t in x['tasks']:
+    section += f"|{t['model']} seed{t['seed']}|{t['code_commit']}|{t['endpoint_sha256']}|\n"
+section += '\nB4 seed2030的E1保留原52a8e90绑定，E2–E9绑定943da95，原870更新中的390未保存更新不能从累计成本中删除。原完成记录中的`replay=0`描述保留轨迹的单次人口遍历；恢复实际成本必须读取`replay_updates=390`、`segment_updates=3840`、`cumulative_attempt_updates=4710`，不能用基类字段抵消实际重放。\n\n评价脚本：`src/yuntapr/experimental/core_innovation/stage4/evaluation.py`，继承`phase_b_v2_formal_integration_candidate/metrics.py`精确AUROC/AP；数据版本、全精度各分组指标、27个组合轮次绑定、188个新结果相关文件SHA、三份新E9权重实际文件哈希及52个新增源账本核对见' + link + '。B3/2030和seed2029的已通过收据直接继承，不重复历史129来源/126摘要检查。本次结果收口没有原始气象读取、权重反序列化、模型推理或优化器更新。\n\n'
+p = BASE / 'B3_B4_MULTI_SEED_PLAN.md'
+s = load(p)
+start = s.index('**总体多seed验收：')
+end = s.index('2025最终测试期继续冻结：')
+s = s[:start] + '**三seed训练与2024 Dev描述性复现：COMPLETE_DESCRIPTIVE_REPLICATION；B0–B4整体科学验收：IN_PROGRESS；创新与物理机制：NOT_VERIFIED。**\n\n最新完成状态：恢复包已于2026-10-27 00:27:00（北京时间）完成；B3/B4的seed2029、2030、2031均具备固定E9 LAST与九轮Train/Dev收据。B3 seed2030沿用原已完成结果，未重训；B4 seed2030经单次批准恢复完成，原失败段保持历史状态。见' + link + '。原提案、准备、启动和停止收据保留各自时点；以下历史描述不代表当前仍停止。\n\n' + s[end:]
+s = s.replace('|2030|COMPLETE_TRAIN_AND_DEV_EVALUATION|STOPPED_INCOMPLETE（E1完整、870更新）|B3可计第2个seed；B4不计完成；配对未完成|', '|2030|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE_TRAIN_AND_DEV_EVALUATION（E1继承＋E2–E9恢复）|计入第2组完整配对；390重放不另计seed|')
+s = s.replace('|2031|NOT_STARTED（整包已停）|NOT_STARTED（整包已停）|无新增独立seed证据|', '|2031|COMPLETE_TRAIN_AND_DEV_EVALUATION|COMPLETE_TRAIN_AND_DEV_EVALUATION|计入第3组完整配对|')
+s = s.replace('启动器按批准单次执行后已停止；', '原四模型启动器按批准单次执行后曾停止（历史）：')
+s = s.replace('当前未开发或执行恢复，', '该停止核查时点未开发或执行恢复，')
+s = s.replace('修复尚未用于重启训练。', '该修复随后用于943da95获批恢复，恢复已完成。')
+s = s.replace('当前只证明恢复已进入训练，尚无新增E9结果，不能宣称整包完成。', '该启动时点只证明恢复进入训练；最新E9、封口及三seed结果现已完成，见本文上方完成节。')
+s = s.replace('B4完成后自动串行衔接两个seed2031任务，失败即停，不再次申请同一批准。', 'B4完成后已串行完成两个seed2031任务，未重复申请批准或额外重试。')
+marker = '## 有效独立seed和拟补齐任务'
+s = s.replace(marker, section + '## 有效独立seed和已补齐任务', 1)
+save(p, s)
+p = BASE / 'B0_B4_STAGE_ACCEPTANCE.md'
+s = load(p)
+a = s.index('2026-10-26 12:20停止时状态：')
+b = s.index('最新B2完成核查：')
+s = s[:a] + '最新核查（2026-10-27）：B3/B4的seed2029、2030、2031三组固定E9配对训练和2024 Dev评价全部完成。原中止段及390次获批必要重放计入成本，未重训已完成B3。总体Brier、AUROC、AP、条件Pinball三seed方向一致改善；q32方向不一致，20–50mm/h强雨仍有明确退化。三seed描述性复现条目已完成，不等于整条B0–B4科学验收或最终泛化已通过。见' + link + '与[全seed原值、差值及上尾反例](B3_B4_MULTI_SEED_PLAN.md#三seed固定e9结果2026-10-27完成)。\n\n' + s[b:]
+s = s.replace('|B3|7通道×6时次实现完整|seed2029/2030 E0/f006各九轮|2有效；仍不足3个|959/963人口、精确评价及各轮绑定；2030 E9文件SHA已核对|新增B3随机性证据；2030的B4配对未完成，不给出其MEE差值|', '|B3|7通道×6时次实现完整|seed2029/2030/2031 E0/f006各九轮|3有效|959/963、固定E9、精确评价和逐轮绑定齐全|同开发年随机性复现完成；最终泛化未验证|')
+s = s.replace('|B4|MEE13/width16/SP04残差已执行|seed2029同协议九轮|1有效；多seed不足|总体4项改善但强雨、06UTC及q32有反例|单seed有限结论成立；不满足全链科学验收，不据此启动B5–B8|', '|B4|MEE13/width16/SP04残差已执行|与B3的三seed配对九轮均完成|3有效；2030恢复不另计seed|总体4项三seed改善；强雨与q32不稳定，06UTC旧反例保留|描述性MEE增益复现完成；校准和强雨门槛未通过，不据此启动B5–B8|')
+s = s.replace('|B3 vs B4，seed2029/E0/f006|959/963|相同人口、共同初始化/训练顺序下MEE增量；只限单seed与四UTC时次|', '|B3 vs B4，seed2029/2030/2031，E0/f006|959/963|三seed内部相同人口、共同初始化/顺序下MEE增量；仍限同一Dev年与四UTC时次|')
+s = s.replace('增加1条已完成B2及4条待审多seed行，不把未训练项标成完成。', '增加1条已完成B2及4条已完成多seed行，共27行；历史失败仍单列。')
+s = s.replace('支持：当前开发集单seed的总体环境融合增益，以及另一人口B0/B1两seed的总体方向重复。尚不支持：20–50mm/h改善、q32校准通过、B4全面优于B3、全天业务近实时、多seed B3/B4已复现、DOTE/DTFM有效或物理机制成立。', '上表保留seed2029原值；最新三seed平均B4−B3：Brier −0.001990837981、AUROC +0.005838836201、AP +0.018472015337、条件Pinball −0.001182030362，均为三seed同向改善；q32平均+0.001476958789但seed2031下降。支持同一开发年上的总体环境融合描述性复现，以及另一人口B0/B1两seed的方向重复。尚不支持20–50mm/h改善、q32校准通过、B4全面优于B3、全天业务近实时、独立最终泛化、DOTE/DTFM有效或物理机制成立。')
+s = s.replace('2. B3/B4至少3个独立seed，全部预定指标和反例展示；研究者冻结校准、强雨和总体容差，不事后补seed选结论。', '2. **已完成B3/B4三seed描述性复现**，全部预定指标、差值、样本标准差和反例已展示；校准/强雨未稳定改善，不能转写成整体科学通过。后续容差或新假设由研究者另行冻结，不事后补seed选结论。')
+s = s.replace('B3/B4多seed及2025最终测试未启动。', 'B3/B4三seed复现现已完成，2025最终测试未启动。')
+s = s.replace('最新恢复状态：研究者已批准943da95限额恢复包，B4从481更新开始实际训练，seed2031依序等待；本次启动不增加已完成独立seed数量。见[恢复启动收据](evidence/b3_b4_recovery_launch.json)。', '最新恢复状态：943da95限额恢复包已全部完成并封口；B3/B4各三个有效seed。见' + link + '。整体仍IN_PROGRESS的原因包括B2仅一seed、B0/B1与B2–B4人口不同、B0/B1仅两seed、q32及强雨缺陷、同一Dev年与未解封最终测试；本次不自动扩大研究方案。')
+save(p, s)
+p = BASE / 'B0_B4_EXPERIMENT_MATRIX.csv'
+s = load(p)
+rows = list(csv.DictReader(io.StringIO(s)))
+fields = list(rows[0])
+for row in rows:
+    if row['seed'] not in ('2030', '2031'):
+        continue
+    seed = row['seed']
+    model = row['model_id']
+    z = summary['endpoints'][seed][model]
+    endpoint = next((t['endpoint_sha256'] for t in x['tasks'] if t['seed'] == int(seed) and t['model'] == model), '8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058')
+    row.update(epochs='9', global_steps='4320', status='COMPLETE_TRAIN_AND_DEV_EVALUATION', metrics_path=f'evidence/b3_b4_three_seed_completion.json#summary/endpoints/{seed}/{model}', checkpoint_reference=endpoint, evidence_path='evidence/b3_b4_three_seed_completion.json', verified_at=x['verified_at'], authorization_status='EXPLICIT_APPROVAL_CONSUMED_RUN_COMPLETE', executed_commit=x['original_training_commit'] if (seed, model) == ('2030', 'B3') else x['training_commit'], source_manifest_reference='evidence/b3_b4_three_seed_completion.json#sources')
+    row['notes'] = 'Fixed E9 LAST; same 959/963 f006 E0; all three paired seeds reported; no 2025 inference.'
+    if (seed, model) == ('2030', 'B4'):
+        row['notes'] += ' E1 original commit, E2-E9 approved recovery; effective4320, actual4710, replay390; prior failed segment preserved.'
+buf = io.StringIO(newline='')
+w = csv.DictWriter(buf, fieldnames=fields, lineterminator='\n')
+w.writeheader()
+w.writerows(rows)
+save(p, buf.getvalue())
+current = '最新完成（2026-10-27）：B3/B4 seed2029、2030、2031的三组固定E9配对训练与2024 Dev评价全部完成；四个新增模型均为COMPLETE_TRAIN_AND_DEV_EVALUATION。943da95恢复包在北京时间00:27封口，390次必要重放已计费，无额外重试。总体Brier/AUROC/AP/条件Pinball三seed均改善；q32方向不一致，强雨仍有退化。总体科学验收继续IN_PROGRESS，2025继续冻结。\n'
+p = BASE / 'README.md'
+s = load(p)
+a = s.index('最新：')
+b = s.index('\n', a)
+s = s[:a] + current.strip() + f' 见{link}与[B3/B4三seed结果](B3_B4_MULTI_SEED_PLAN.md)。' + s[b:]
+s = s.replace('2026-10-26：B3/B4', '历史2026-10-26（此停止状态已由上方获批恢复完成结果取代）：B3/B4', 1)
+save(p, s)
+p = BASE / 'RUNBOOK.md'
+s = load(p)
+a = s.index('2026-10-26恢复执行更新：')
+b = s.index('\n', a)
+s = s[:a] + current.strip() + f' 见{link}。原execute与execute-recovery批准均已消费，禁止重复启动；仅保留只读页面与历史原件。' + s[b:]
+s = s.replace('当前不执行恢复、不复用原批准、不重训已完成B3。', '该停止核查时点不执行恢复；其后独立限额批准已用于完成恢复，不复用原批准、不重训已完成B3。')
+save(p, s)
+p = ROOT / 'README.md'
+s = load(p)
+lines = s.splitlines()
+assert lines[2].startswith('> 最新科研状态')
+lines[2] = '> ' + current.strip() + ' 见[三seed结果与边界](docs/research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)、[完成收据](docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)及[完整实验矩阵](docs/research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)。下方工程/历史记录保留各自时点。'
+save(p, '\n'.join(lines) + '\n')
+p = ROOT / 'docs/research_progress/CURRENT_STATUS.md'
+s = load(p)
+a = s.index('恢复执行（')
+b = s.index('数值证据核查：')
+s = s[:a] + current + '\n最新矩阵为[27行完整矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)，收据为[三seed完成与配对结果](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)。以下旧数值快照保留其明确时点；新增结果优先。B2 seed2029已于3acf7b0收口，B2/B3结论混合。\n\n' + s[b:]
+s = s.replace('**seed2029/E0/f006完成；2030九轮完成，2031未启动**', '**seed2029/2030/2031 E0/f006均完成九轮Train/Dev**')
+s = s.replace('**seed2029/E0/f006完成；2030中止不完整，2031未启动**', '**seed2029/2030/2031均完成；2030保留原失败＋获批恢复历史**')
+s = s.replace('## 当前运行状态', '## 历史运行观测（2026-10-25，非当前状态）', 1)
+s = s.replace('尚缺：B2 正式对照；B3/B4 的第二个独立 seed；雨强分层的 q32 covered 计数/逐像元分位数产物；', '该旧快照当时尚缺（B2及B3/B4三seed现已补齐；仅seed2029分层q32仍缺）：B2 正式对照；B3/B4 的第二个独立 seed；雨强分层的 q32 covered 计数/逐像元分位数产物；')
+save(p, s)
+p = ROOT / 'docs/research_progress/SCIENTIFIC_RESULTS.md'
+s = load(p)
+pos = s.index('\n\n') + 2
+prefix = '最新补充（2026-10-27）：B3/B4三seed固定E9复现完成，见[全部原值、B4−B3均值/样本标准差及反例](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md#三seed固定e9结果2026-10-27完成)和[全精度完成收据](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)。三seed平均Brier −0.001990837981、AUROC +0.005838836201、AP +0.018472015337、条件Pinball −0.001182030362；四项均同向改善。q32的seed2031差值−0.001542347114，欠覆盖仍存在；seed2031在(20,30]/(30,50]mm/h的Pinball分别恶化0.065789/0.080039。以下seed2029及更早表格保留历史时点，不代表只有一个seed。无统计显著性或独立最终泛化主张。\n\n'
+s = s[:pos] + prefix + s[pos:]
+save(p, s)
+p = ROOT / 'docs/research_progress/EVIDENCE_INDEX.md'
+s = load(p)
+pos = s.index('\n\n') + 2
+s = s[:pos] + '最新完成证据（2026-10-27）：[三seed固定E9完成与配对收据](../research_readiness/20261025/evidence/b3_b4_three_seed_completion.json)包含恢复新增26轮封口、3份新E9文件SHA、52个新增读取账本核对、原E1引用、精确预算、全部六个终点及分组/上尾充分量；[结果报告](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)给出三seed差值、均值和样本标准差。[最新27行矩阵](../research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv)优先于此目录保留的22行历史快照。188项仅为新增结果相关文件身份，未重复历史129来源/126逐轮核验。原始数据、权重和私有账本不公开。\n\n' + s[pos:]
+save(p, s)
+for p in (ROOT / 'AGENTS.md', ROOT.parent / 'AGENTS.md'):
+    s = load(p)
+    s += '\n2026-10-27完成核查：943da95限额恢复包于北京时间00:27封口；B3/B4的2029/2030/2031三组固定E9 Train/Dev配对完成。新增12,480更新含390必要重放、1,379,654,740,081源字节；累计17,670更新、1,931,972,785,094字节，额外重试0。训练及恢复批准均已消费，不再启动。三seed总体四指标同向改善，但q32方向不一致、强雨仍有退化；B0–B4整体科学验收仍IN_PROGRESS，2025和B5–B8继续冻结。\n'
+    save(p, s)
+print('Updated existing reports, 4 matrix rows, progress entry points and completion memory; no training changes.')

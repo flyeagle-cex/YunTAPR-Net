@@ -1,0 +1,44 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Git may canonicalize old CRLF; byte verification uses the actual committed blob.
+"""Public GitHub API byte verification; no credentials or proxy inheritance."""
+import base64
+from concurrent.futures import ThreadPoolExecutor
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import urllib.parse
+import urllib.request
+ROOT = Path('<PRIVATE_LOCATOR_5b8c9ae213bb>')
+commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+run = 'docs/formal_training/b0_phase_a/runs/run_20261001T035003_243409Z/'
+paths = ['config/training/b0_phase_a_formal_authorization_v1.yaml', 'docs/formal_training_authorization/B0_PHASE_A_FORMAL_AUTHORIZATION_v1.md', *[run + name for name in ('B0_PHASE_A_FORMAL_TRAINING_REPORT.md', 'training_history.csv', 'validation_history.csv', 'checkpoint_registry.json', 'best_checkpoint_identity.json', 'last_checkpoint_identity.json', 'formal_run_manifest.json', 'final_status.json')]]
+api = 'https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/'
+opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+def fetch(path):
+    request = urllib.request.Request(api + path, headers={'User-Agent': 'YunTAPR-researcher-authorized-audit', 'Accept': 'application/vnd.github+json'})
+    with opener.open(request, timeout=40) as response:
+        return json.load(response)
+remote = fetch('commits/main')
+if remote['sha'] != commit:
+    raise RuntimeError('GitHub main is not the local publication commit')
+
+def verify(path):
+    result = fetch('contents/' + urllib.parse.quote(path, safe='/') + '?ref=' + commit)
+    if result.get('encoding') != 'base64':
+        raise RuntimeError('GitHub content not returned as base64: ' + path)
+    public = base64.b64decode(result['content'])
+    local = (ROOT / path).read_bytes()
+    expected = subprocess.check_output(['git', 'show', commit + ':' + path], cwd=ROOT)
+    if public != expected or local.replace(b'\r\n', b'\n') != expected.replace(b'\r\n', b'\n'):
+        raise RuntimeError('Public/committed/worktree bytes mismatch: ' + path)
+    return {'path': path, 'bytes': len(public), 'sha256': hashlib.sha256(public).hexdigest(), 'pass': True}
+with ThreadPoolExecutor(max_workers=4) as pool:
+    results = list(pool.map(verify, paths))
+receipt = {'commit_sha': commit, 'main_sha': remote['sha'], 'GitHub_API_verified': True, 'verified_files': results, 'repository': 'https://github.com/flyeagle-cex/YunTAPR-Net'}
+output = ROOT.parent / ('YunTAPR-phase-a-formal-publication-' + commit[:12] + '.json')
+with output.open('x', encoding='utf-8', newline='\n') as stream:
+    json.dump(receipt, stream, indent=2, ensure_ascii=False)
+    stream.write('\n')
+print(json.dumps({'commit_sha': commit, 'verified_files': len(results), 'receipt': str(output)}, ensure_ascii=False))

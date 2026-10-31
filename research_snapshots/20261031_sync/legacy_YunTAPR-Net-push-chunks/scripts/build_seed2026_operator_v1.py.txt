@@ -1,0 +1,67 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Correct literal is copied from the actual prior receipt, not memory.
+# Existing store/model resume and pause handling are added separately.
+"""New scoped epoch7 recovery; preserve all prior runners and evidence."""
+from pathlib import Path
+ROOT = Path(__file__).absolute().parents[1]
+OLD = ROOT / 'src/yuntapr/training/phase_b_v2_seed2026_resume_v2'
+NEW = ROOT / 'src/yuntapr/training/phase_b_v2_seed2026_operator_v1'
+
+def once(text, before, after):
+    if text.count(before) != 1:
+        raise ValueError('ADAPTATION_ANCHOR ' + before[:80])
+    return text.replace(before, after)
+
+def main():
+    NEW.mkdir(exist_ok=False)
+    for path in OLD.glob('*.py'):
+        if path.name in ('quota.py', 'supervisor.py', 'worker.py'):
+            continue
+        text = path.read_text(encoding='utf-8')
+        if path.name == 'protocol.py':
+            text = text.replace('seed2026_resume_v2', 'seed2026_operator_v1').replace('EPOCH3_RECOVERY_20261013_V2', 'EPOCH7_OPERATOR_20261013_V1')
+            text = text.replace('TOTAL = 287540', 'TOTAL = 291451').replace('OLD_RESERVED = 162068', 'OLD_RESERVED = 186891')
+            text = text.replace('MAX_NEW = 125472', 'MAX_NEW = 104560').replace('ABANDONED = 5228', 'ABANDONED = 9139')
+            text = text.replace('64bb7c2158cabfb90bc3aa4f0bb454b80129dfa4ee6c4c8e4e8b5582a457ffdf', '2058390159ecc9195acf9812078ac56f7e63756bf3f176228e3c1ed6c1cf0ec2')
+            text = text.replace("a.get('source_epoch')!=3 or a.get('source_update')!=15684", "a.get('source_epoch')!=7 or a.get('source_update')!=36596")
+            text = text.replace("a.get('additional_replay_allowance')!=ABANDONED", "a.get('additional_replay_allowance')!=3911")
+            begin = text.index("    republication=release.get('republication_authorization',{})")
+            end = text.index('    guard=Guard', begin)
+            text = text[:begin] + text[end:]
+            text += "\nDB = ROOT/'.git/phase_b_v2_seed2026_epoch7_operator_v1.sqlite'\n"
+            text += "\ndef session_root(number=None):\n    n=int(number if number is not None else os.environ['YUNTAPR_OPERATOR_SESSION'])\n    if not 1<=n<=999:raise PermissionError('BOUNDED_OWNED_SESSION')\n    return LOCAL/'sessions'/f'session_{n:04d}'\n"
+        if path.name == 'checkpoint.py':
+            text = text.replace('FORMAL_PHASE_B_V2_SEED2026_EXPLICIT_RECOVERY_LAST_v1', 'FORMAL_PHASE_B_V2_SEED2026_OPERATOR_LAST_v1')
+            text = text.replace("q['limit']!=287540", "q['limit']!=291451")
+            text = text.replace("q['old_campaign_reserved']!=162068 or q['abandoned_old_updates']!=5228", "q['old_campaign_reserved']!=186891 or q['abandoned_old_updates']!=9139")
+            text = text.replace('recovery and epoch==4', 'recovery and epoch==8')
+        if path.name == 'recovery.py':
+            text = text.replace("CHECKPOINT_ROOT = OLD_OUT / '.local'", "PREVIOUS_OUT=ROOT/'docs/phase_b_v2_formal_execution/seed2026_resume_v2'\nCHECKPOINT_ROOT = PREVIOUS_OUT / '.local'")
+            text = text.replace('LAST_epoch_03', 'LAST_epoch_07')
+            text = text.replace("self.receipt['source_epoch'] != 3", "self.receipt['source_epoch'] != 7").replace("self.receipt['source_update'] != 15684", "self.receipt['source_update'] != 36596")
+            text = text.replace("self.receipt['abandoned_updates'] != 5228", "self.receipt['abandoned_updates'] != 9139")
+            text = text.replace("'.git/phase_b_v2_seed2026_epoch3_recovery_20261013_v1.sqlite'}", "'.git/phase_b_v2_seed2026_epoch3_recovery_20261013_v1.sqlite',\n                       '.git/phase_b_v2_seed2026_epoch3_recovery_20261013_v2.once',\n                       '.git/phase_b_v2_seed2026_epoch3_recovery_20261013_v2.sqlite'}")
+            text = text.replace("'docs/phase_b_v2_formal_execution/seed2026_resume_v1/'))", "'docs/phase_b_v2_formal_execution/seed2026_resume_v1/',\n                            'docs/phase_b_v2_formal_execution/seed2026_resume_v2/'))")
+            text = text.replace('reserved != OLD_RESERVED or verified != OLD_RESERVED', 'reserved != 162068 or verified != 162068')
+            text = text.replace('row != (3, 20912, LAST_SHA)', "row != (3, 20912, '64bb7c2158cabfb90bc3aa4f0bb454b80129dfa4ee6c4c8e4b5582a457ffdf')")
+            text = text.replace('64bb7c2158cabfb90bc3aa4f0bb454b80129dfa4ee6c4c8e4b5582a457ffdf', '64bb7c2158cabfb90bc3aa4f0bb454b80129dfa4ee6c4c8e4e8b5582a457ffdf')
+            anchor = '            # Hold parent directory objects against rename/reparse replacement.'
+            text = once(text, anchor, '            with sqlite3.connect((ROOT/\'.git/phase_b_v2_seed2026_epoch3_recovery_20261013_v2.sqlite\').as_uri()+\'?mode=ro\',uri=True) as con:\n                con.execute(\'PRAGMA query_only=ON\')\n                if con.execute(\'SELECT count(*) FROM attempts\').fetchone()[0]!=24823 or con.execute("SELECT count(*) FROM attempts WHERE status=\'RETURNED_VERIFIED\'").fetchone()[0]!=24823:\n                    raise ValueError(\'STOPPED_RECOVERY_QUOTA_AMBIGUOUS\')\n                if con.execute(\'SELECT epoch,updates,last_sha FROM runs WHERE id=?\',(RECOVER_RUN,)).fetchone()!=(7,40507,LAST_SHA) or con.execute(\'SELECT status FROM campaign\').fetchone()!=(\'FAILED_NO_RETRY\',):\n                    raise ValueError(\'STOPPED_EPOCH7_SOURCE_CHANGED\')\n' + anchor)
+            text = text.replace("OLD_OUT / '.local' / RECOVER_RUN / 'progress.json'", "PREVIOUS_OUT / '.local' / RECOVER_RUN / 'progress.json'")
+            text = text.replace("row['complete_epoch'] != 3 or row['updates'] != 15684 or len(row['epochs']) != 3", "row['complete_epoch'] != 7 or row['updates'] != 36596 or len(row['epochs']) != 7")
+            text = text.replace('from yuntapr.training.phase_b_v2_seed2026_v2.checkpoint import Contract as OldContract, Store as OldStore', 'from yuntapr.training.phase_b_v2_seed2026_resume_v2.checkpoint import Contract as OldContract, Store as OldStore')
+            text = text.replace("OLD_OUT / '.local' / RECOVER_RUN / 'identity.json'", "PREVIOUS_OUT / '.local' / RECOVER_RUN / 'identity.json'")
+            text = text.replace('519b2c55611e6f46645254213c921a2047646d89495b3a46c40c575e6b6aea9d', '22dee715eeefeedc6b8bdf1c7df3a9e9dfb2f504f29a4e15c3d9c8340f093d28')
+            text = text.replace('2638d93ba2b1419faaa785ab9d61286cc58cf00bc794416839cbc01964e18a6b', '467102b5a24e6458d588c5f342498ef50ad26109318d73d5520d55cd0445b35d')
+            text = text.replace("payload['epoch'] != 3 or payload['update'] != 15684", "payload['epoch'] != 7 or payload['update'] != 36596")
+            text = text.replace('source_epoch=3, source_update=15684', 'source_epoch=7, source_update=36596').replace('abandoned_epoch4_updates=5228', 'abandoned_updates_total=9139').replace('restores_complete_epoch3_state=True', 'restores_complete_epoch7_state=True')
+        if path.name == 'resources.py':
+            text = text.replace('from .protocol import LIMITS, LOCAL, atomic_json', 'from .protocol import LIMITS, LOCAL, atomic_json, session_root')
+            text = once(text, "ancestor=json.loads((LOCAL.parent/'ancestor.json').read_bytes())", 'from .quota import carry\n        ancestor=carry()')
+            text = text.replace("(LOCAL/'access_and_events.jsonl')", "(session_root()/'access_and_events.jsonl')").replace("LOCAL/'heartbeat.json'", "session_root()/'heartbeat.json'")
+        if path.name == 'engine.py':
+            text = text.replace('source_epoch=3,source_update=15684', 'source_epoch=7,source_update=36596').replace('replay_epoch=4,abandoned_old_updates=5228', 'replay_epoch=8,abandoned_old_updates=9139')
+            text = text.replace('epochs=history();first_epoch=4', 'epochs=history();first_epoch=8')
+        (NEW / path.name).write_bytes(text.encode('utf-8'))
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,254 @@
+{
+  "pid": 37112,
+  "updated_ns": 1791421704270402200,
+  "status": "COMPLETE",
+  "phase": "VALIDATION",
+  "model": "B0_MATCHED_V2",
+  "epoch": 17,
+  "step": 5228,
+  "sample_ids": [
+    "2023-08-12T04:00:00+00:00"
+  ],
+  "LR": 7.6160432131371e-05,
+  "train_loss": 0.03528463392461134,
+  "gradient_norm": 0.4246395528316498,
+  "post_clip_norm": 0.42463957079589437,
+  "BEST_epoch": 9,
+  "patience": 8,
+  "ETA_seconds": 0.0,
+  "gpu_memory_allocated": 94041088,
+  "diagnostics": {
+    "TRAIN": {
+      "phase": "TRAIN",
+      "forwards": 5228,
+      "scenes": 10455,
+      "qlog_unit": "log1p(mm/h)",
+      "FP64_physical_boundary": 709.782712893384,
+      "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+      "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+      "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+      "YUNNAN_INSIDE": {
+        "max_qlog": 5.961351470931464,
+        "q32_per_forward_max_p99": 4.812974868901275,
+        "q32_per_forward_max_p99_9": 5.588755009684568,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 1147540800,
+        "scene_pixel_any_tau_exposure": 35860650,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 1346162,
+            "scene_pixel_any_tau_exposure": 573267
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 6982,
+            "scene_pixel_any_tau_exposure": 6476
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 577,
+            "scene_pixel_any_tau_exposure": 571
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      },
+      "YUNNAN_OUTSIDE": {
+        "max_qlog": 8.36499738204492,
+        "q32_per_forward_max_p99": 6.323976908261707,
+        "q32_per_forward_max_p99_9": 7.271578509577578,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 2198059200,
+        "scene_pixel_any_tau_exposure": 68689350,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 5407623,
+            "scene_pixel_any_tau_exposure": 1909326
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 80602,
+            "scene_pixel_any_tau_exposure": 65445
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 13431,
+            "scene_pixel_any_tau_exposure": 12081
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 249,
+            "scene_pixel_any_tau_exposure": 245
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 50,
+            "scene_pixel_any_tau_exposure": 49
+          }
+        }
+      }
+    },
+    "VALIDATION": {
+      "phase": "VALIDATION",
+      "forwards": 1313,
+      "scenes": 10501,
+      "qlog_unit": "log1p(mm/h)",
+      "FP64_physical_boundary": 709.782712893384,
+      "percentile_method": "numpy.quantile float64 linear; each forward has equal weight",
+      "threshold_comparison": "qlog > log1p(threshold_mm_h)",
+      "affects_loss_BEST_early_stop_LR_parameters_batch_or_termination": false,
+      "YUNNAN_INSIDE": {
+        "max_qlog": 5.69555515156816,
+        "q32_per_forward_max_p99": 5.101089285520124,
+        "q32_per_forward_max_p99_9": 5.5308916457802875,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 1152589760,
+        "scene_pixel_any_tau_exposure": 36018430,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 1661978,
+            "scene_pixel_any_tau_exposure": 701157
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 8855,
+            "scene_pixel_any_tau_exposure": 8397
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 470,
+            "scene_pixel_any_tau_exposure": 470
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 0,
+            "scene_pixel_any_tau_exposure": 0
+          }
+        }
+      },
+      "YUNNAN_OUTSIDE": {
+        "max_qlog": 7.553764927144987,
+        "q32_per_forward_max_p99": 6.419498870981255,
+        "q32_per_forward_max_p99_9": 7.430189295697367,
+        "FP64_PHYSICAL_OVERFLOW_RISK": false,
+        "fp64_boundary_exceedance_count": 0,
+        "scene_pixel_tau_exposure": 2207730240,
+        "scene_pixel_any_tau_exposure": 68991570,
+        "threshold_exceedances": {
+          "10": {
+            "scene_pixel_tau_exposure": 7979674,
+            "scene_pixel_any_tau_exposure": 2766922
+          },
+          "50": {
+            "scene_pixel_tau_exposure": 112452,
+            "scene_pixel_any_tau_exposure": 95384
+          },
+          "100": {
+            "scene_pixel_tau_exposure": 17426,
+            "scene_pixel_any_tau_exposure": 16540
+          },
+          "500": {
+            "scene_pixel_tau_exposure": 117,
+            "scene_pixel_any_tau_exposure": 116
+          },
+          "1000": {
+            "scene_pixel_tau_exposure": 21,
+            "scene_pixel_any_tau_exposure": 21
+          }
+        }
+      }
+    }
+  },
+  "counters": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 6541,
+    "TRAIN_FORWARDS": 5228,
+    "VALIDATION_FORWARDS": 1313,
+    "BACKWARD_CALLS": 5228,
+    "OPTIMIZER_STEP_ATTEMPTS": 5228,
+    "OPTIMIZER_STEPS": 5228,
+    "CHECKPOINT_WRITES": 1
+  },
+  "validation_core_loss": 0.050775179497799354,
+  "termination_reason": "EARLY_STOP_PATIENCE_8",
+  "completed_epoch": 17,
+  "best_checkpoint_epoch": 9,
+  "best_es_epoch": 9,
+  "best_es_value": 0.0487596076193766,
+  "final_early_stop_counter": 8,
+  "min_delta": 0.0001,
+  "retained_trajectory_updates": 88876,
+  "counters_this_attempt": {
+    "scope": "FORMAL",
+    "FORWARD_CALLS": 6541,
+    "TRAIN_FORWARDS": 5228,
+    "VALIDATION_FORWARDS": 1313,
+    "BACKWARD_CALLS": 5228,
+    "OPTIMIZER_STEP_ATTEMPTS": 5228,
+    "OPTIMIZER_STEPS": 5228,
+    "CHECKPOINT_WRITES": 1
+  },
+  "2025_RAW_ACCESS": 0,
+  "2025_PIXELS_READ": 0,
+  "io": {
+    "RAW_SOURCE_OPENS": 83824,
+    "NATIVE_DECODES": 62869,
+    "DENIED_ATTEMPTS": 0,
+    "2025_RAW_ACCESS": 0,
+    "2025_PIXELS_READ": 0,
+    "log_files": [
+      {
+        "absolute_local_path": "<PRIVATE_LOCATOR_fba5a9a6d70a>",
+        "bytes": 272,
+        "sha256": "854dc6398b137ce95014e828acc96b784623c8a63af68ef26b50b2998878f7ce"
+      },
+      {
+        "absolute_local_path": "<PRIVATE_LOCATOR_2b8d83ca49da>",
+        "bytes": 14229966,
+        "sha256": "52621feeb1383bf9cb918ec62e5a294900d51d32e10b9b5eb39115e137a54b1e"
+      },
+      {
+        "absolute_local_path": "<PRIVATE_LOCATOR_3ec9c9954663>",
+        "bytes": 14298066,
+        "sha256": "ffbdedd86733eaee0b5f28ddd3cf0b268827ab47857d20e4b4faa574fd855fb1"
+      },
+      {
+        "absolute_local_path": "<PRIVATE_LOCATOR_a28e6dfab21b>",
+        "bytes": 14227242,
+        "sha256": "c3f6d0586d788f6dbbfbb8ca755abdd84e6f0351a34d3a1accdeb1edd14a55c8"
+      },
+      {
+        "absolute_local_path": "<PRIVATE_LOCATOR_d5630da725fe>",
+        "bytes": 14210974,
+        "sha256": "9bf4ac030d0fef5e1e10be18e14310d0ad90d4c56a690ab3647f5b67e9374a01"
+      }
+    ],
+    "proof_scope": "Controlled v2 parent/worker source opens and native decode, not unrelated OS processes"
+  },
+  "all_attempt_reconciliation": {
+    "retained_trajectory_updates": 88876,
+    "all_attempt_updates_lower_bound": 89175,
+    "all_attempt_updates_upper_bound": 89176,
+    "discarded_updates_lower_bound": 299,
+    "discarded_updates_upper_bound": 300,
+    "attempts": [
+      {
+        "attempt": "run_20261007T070818_003523Z",
+        "updates_lower_bound": 83947,
+        "updates_upper_bound": 83948,
+        "certainty": "JOURNAL_BOUNDS_UNCLEAN_EXIT"
+      },
+      {
+        "attempt": "run_20261008T002823_025978Z",
+        "updates_lower_bound": 5228,
+        "updates_upper_bound": 5228,
+        "certainty": "EXACT_PROCESS_COUNTER"
+      }
+    ],
+    "half_epoch_state_reused": false
+  }
+}

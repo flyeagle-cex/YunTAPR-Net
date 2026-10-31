@@ -1,0 +1,65 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""New journal for pure closure/path recovery; preserve all prior execution bytes."""
+from pathlib import Path
+import ast, json, os, subprocess, traceback
+import execute_yuntapr_extended_pipeline_v1 as original
+BASE = original.BASE
+REPO = original.REPO
+run = original.run
+oldrun = original.oldrun
+resume = original.read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+recovery = Path(resume['closure_path_recovery_directory'])
+adapter = REPO / 'scripts/paired_extended_path_adapter_v1.py'
+stages = list(original.STAGES)
+stages[0] = ('phase_a_closure', BASE / 'close_yuntapr_paired_training_resumed_v2.py', [])
+stages = [(n, BASE / 'execute_yuntapr_paired_phase_b_extended_v2.py', a) if n == 'sequential_paired_phase_b' else (n, p, a) for n, p, a in stages]
+stages = [(n, BASE / 'run_yuntapr_extended_regression_scoped_v1.py', a) if n in ('all_repository_regressions', 'post_extension_all_regressions') else (n, p, a) for n, p, a in stages]
+
+def main():
+    inventory = original.validated_inventory()
+    assert inventory == original.read(run / 'sequential_execution/execution_plan.json')['source_inventory']
+    previous = original.read(recovery / 'prior_resume_registry.json')
+    prior_plan = original.read(Path(previous['pipeline_journal']) / 'execution_plan.json')
+    original.check_inventory(prior_plan['source_inventory'])
+    plan = original.read(recovery / 'recovery_plan.json')
+    checks = sorted((recovery / 'path_adapter_tests').glob('*/test_summary.json'))
+    assert checks and original.read(checks[-1])['status'] == 'PASS'
+    for p, ref in plan['preserved_files'].items():
+        assert Path(p).stat().st_size == ref['bytes'] and original.sha(p) == ref['sha256']
+    for p in (Path(__file__), stages[0][1], adapter, BASE / 'execute_yuntapr_paired_phase_b_extended_v2.py', BASE / 'run_yuntapr_extended_regression_scoped_v1.py', REPO / 'scripts/paired_pipeline_fixture_scope_v1.py', REPO / 'scripts/paired_pipeline_historical_inventory_v1.py'):
+        ast.parse(p.read_text(encoding='utf8'))
+        inventory[str(p.resolve())] = original.sha(p)
+    assert (oldrun / 'both_formal_runs_completed.json').exists()
+    journal = Path(resume['pipeline_journal'])
+    journal.mkdir(exist_ok=False)
+    original.save(journal / 'execution_plan.json', {'source_inventory': inventory, 'stages': [(n, str(p), a) for n, p, a in stages], 'prior_stopped_journal': previous['pipeline_journal'], 'recovery_plan': str(recovery / 'recovery_plan.json'), 'started_utc': original.now(), 'scientific_parameters_changed': False, '2025_RAW_ACCESS': 0, 'B2_TRAINING_AUTHORIZED': False})
+    current = 'PREFLIGHT'
+    try:
+        for current, script, args in stages:
+            original.check_inventory(inventory)
+            original.prerequisites(current)
+            if current in ('phase_a_closure', 'install_extended_additions'):
+                cmd = [str(original.PYTHON), str(script), *args]
+            else:
+                cmd = [str(original.PYTHON), str(adapter), '--script', str(script), '--', *args]
+            original.save(journal / (current + '_start.json'), {'command': cmd, 'utc': original.now(), 'path_adapter_only': current not in ('phase_a_closure', 'install_extended_additions')})
+            with (journal / (current + '_console.txt')).open('x', encoding='utf8', newline='\n') as log:
+                process = subprocess.Popen(cmd, cwd=REPO, env=original.ENV, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf8')
+                original.save(journal / (current + '_process.json'), {'pid': process.pid, 'parent_pid': os.getpid(), 'utc': original.now()})
+                for line in process.stdout:
+                    log.write(line)
+                    log.flush()
+                    print(current + ': ' + line, end='', flush=True)
+                rc = process.wait()
+            original.save(journal / (current + '_result.json'), {'returncode': rc, 'utc': original.now()})
+            if rc:
+                raise RuntimeError('Authorized stage failed: ' + current + '; preserve and stop')
+        value = {'status': 'ALL_AUTHORIZED_NUMERICAL_STAGES_COMPLETED', 'reports_visual_QA_and_Git_publication': 'PENDING_SEPARATE_OPERATIONS', 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, '2025_RAW_ACCESS': 0, 'recovery_journal': str(journal), 'utc': original.now()}
+        original.save(journal / 'core_pipeline_completion.json', value)
+        original.save(run / 'sequential_execution/core_pipeline_completion.json', value)
+    except BaseException as error:
+        original.save(journal / 'STOP_failure.json', {'stage': current, 'error': repr(error), 'traceback': traceback.format_exc(), 'automatic_restart': False, 'next_stage_allowed': False, 'utc': original.now()})
+        raise
+if __name__ == '__main__':
+    main()

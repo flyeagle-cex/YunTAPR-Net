@@ -1,0 +1,24 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Single explicitly approved corrected startup; no further retries."""
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+import json, os, subprocess, sys
+r = Path(__file__).resolve().parents[3]
+local = r / 'docs/research_readiness/.local'
+frozen = r.parent / 'YunTAPR-static-corrected-exec-b251fd9'
+commit = 'b251fd9ea06c0c90f48d2ac0decba0454114669d'
+private = json.loads((local / 'b5_b6_corrected_start_preparation_20261027.json').read_text(encoding='utf-8'))
+runtime = local / 'static_corrected_runtime_20261027'
+assert not runtime.exists() and (not Path(private['output_root']).exists()), 'No duplicate dispatch or retry'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == commit
+assert not subprocess.check_output(['git', '-C', str(frozen), 'status', '--porcelain', '--untracked-files=no'], text=True).strip()
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_static_pair.py'), 'execute', '--proposal', str(r / 'docs/research_readiness/20261025/evidence/b5_b6_corrected_start_proposal.json'), '--private-preparation', str(local / 'b5_b6_corrected_start_preparation_20261027.json'), '--researcher-approval', str(local / 'b5_b6_corrected_start_approval_20261027.json')]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    p = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=p.pid, training_commit=commit, execution_root=str(frozen), output_root=private['output_root'], dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), runtime='Direct Python3.12.14 base with unchanged venv-cuda dependencies')
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, indent=2)
+print(json.dumps(dict(status='CORRECTED_B5_B6_DISPATCHED_ONCE', pid=p.pid)))

@@ -1,0 +1,42 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read-only: verify seed2027 release source pins against current readiness worktree.
+
+seed2027 run group code was pinned by release.json source_pins (271 paths).  If every
+pinned file still hashes to the pinned value in YunTAPR-B2-readiness-20261025, that
+worktree's code is a valid frozen re-execution copy for the B0/B1 seed2027 runs.
+"""
+from __future__ import annotations
+import hashlib
+import json
+import os
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+REL = os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution', 'seed2027_release_v1', 'release.json')
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def main():
+    with open(REL, 'r', encoding='utf-8') as f:
+        rel = json.load(f)
+    pins = rel['source_pins']
+    bad, missing = ([], [])
+    for relpath, expected in pins.items():
+        local = os.path.join(ACT, relpath.replace('/', os.sep))
+        if not os.path.exists(local):
+            missing.append(relpath)
+            continue
+        if sha256_file(local) != expected:
+            bad.append(relpath)
+    out = dict(release_path=REL, source_commit=rel['source_commit'], source_sha256=rel['source_sha256'], total=len(pins), matched=len(pins) - len(bad) - len(missing), mismatched=bad, missing=missing)
+    print(json.dumps(out, ensure_ascii=False, indent=2)[:4000])
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(base, 'outputs', 'probe_s2027_pins.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+if __name__ == '__main__':
+    main()

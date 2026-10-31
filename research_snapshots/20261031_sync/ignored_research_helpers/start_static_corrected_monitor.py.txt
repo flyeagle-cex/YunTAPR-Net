@@ -1,0 +1,10 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import json, subprocess, sys
+r = Path(__file__).resolve().parents[3]
+service = r / 'docs/research_readiness/.local/multiseed_monitor'
+command = [sys.executable, '-B', str(r / 'tools/b2_monitor/server.py'), '--experiment', '<PRIVATE_LOCATOR_8155b0dadec2>', '--training-pid', '45600', '--port', '51282', '--service-dir', str(service), '--campaign']
+with (service / 'static_corrected.stdout.log').open('xb') as out, (service / 'static_corrected.stderr.log').open('xb') as err:
+    p = subprocess.Popen(command, cwd=r, stdin=subprocess.DEVNULL, stdout=out, stderr=err, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS)
+print(json.dumps(dict(read_only_monitor_pid=p.pid, url='http://127.0.0.1:51282/')))

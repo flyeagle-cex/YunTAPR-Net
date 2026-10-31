@@ -1,0 +1,35 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+R = Path(__file__).resolve().parents[3]
+D = R / 'docs/research_readiness/20261025'
+
+def insert(p, s):
+    b = p.read_bytes()
+    i = b.find(b'\n\n') + 2
+    if i == 1:
+        i = b.find(b'\r\n\r\n') + 4
+    assert i > 2
+    p.write_bytes(b[:i] + s.encode() + b[i:])
+latest = '最新纠正执行（2026-10-27）：研究者明确回复“批准这一次纠正启动”，已绑定b251fd9/36fc5dfb并在全新目录单次调度。**B5已进入真实训练，B6依序等待，当前整包IN_PROGRESS。** 北京时间07:55:16启动快照记录B5从1开始的179次RETURNED、10,024,840,580字节已计量气象读取，以及62,828字节本轮静态读取；这是一份带时点的过程快照，不是当前实时计数或E9科研结果。见[获批启动收据](evidence/b5_b6_corrected_start_launch.json)。\n\n读取臂问题已通过实际B5优化器更新验证跨越。科学参数不变，原13秒/62,828字节失败段仍计费；新包8,640更新、955,143,657,680字节/285,626次、43,187秒；累计最多955,143,720,508字节/285,627次，时间仍12小时，后续额外重试0。原失败目录、权重和数据不覆盖，2025冻结。当前批准已消费，不再请求或重复启动。只读同一网址已切换当前包，完成后页面仅读取执行器自动保存的B4/B5/B6固定E9配对汇总。以下首次失败和修正等待状态保留历史时点。\n\n'
+insert(D / 'B5_B6_READINESS_REPORT.md', latest)
+p = D / 'B5_B6_READINESS_REPORT.md'
+b = p.read_bytes()
+a = '**真实候选DEM：COMPLETE_CANDIDATE_PRODUCTION；真实缓存预检查：PASS；首次正式启动：STOPPED_BEFORE_FIRST_WEATHER_PASS_ZERO_UPDATES；修正代码已就绪，未再次执行。**'.encode()
+z = '**真实候选DEM：COMPLETE_CANDIDATE_PRODUCTION；当前获批纠正训练：IN_PROGRESS；B5真实更新已确认，B6串行等待；正式E9配对结果尚未产生。**'.encode()
+assert a in b
+p.write_bytes(b.replace(a, z, 1))
+insert(D / 'RUNBOOK.md', '2026-10-27最新：b251fd9/36fc5dfb纠正启动已明确获批并单次执行，B5真实更新从1开始，B6自动串行等待。见[真实启动收据](evidence/b5_b6_corrected_start_launch.json)。原失败及纠正批准均已消费，**不要重复任何execute入口，不要重启**；当前包43,187秒/8,640更新，累计源读取预算包括旧62,828字节。完成后执行器自动生成static_paired_summary.json；本机页面只读展示，不控制训练。\n\n')
+for p in (R / 'docs/research_progress/CURRENT_STATUS.md', D / 'README.md'):
+    link = 'evidence/b5_b6_corrected_start_launch.json' if p.parent == D else '../research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json'
+    insert(p, '最新纠正运行（2026-10-27）：b251fd9/36fc5dfb已取得明确纠正启动批准，B5真实训练进行中，B6串行等待；07:55:16快照179确认更新，无额外优化器重放。当前IN_PROGRESS，不能宣称E9完成。见[启动与预算收据](' + link + ')。下方首启失败保持历史记录。\n\n')
+p = R / 'README.md'
+b = p.read_bytes()
+lines = b.splitlines(keepends=True)
+lines[2] = '> 最新科研状态（2026-10-27）：B5/B6纠正启动已获明确批准，固定b251fd9从B5 seed2029开始真实训练，B6自动串行衔接；整包IN_PROGRESS。原首启失败成本保留，不自动重试；[真实启动收据](docs/research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)。B0–B4限定基线与2025冻结不变。\n'.encode()
+p.write_bytes(b''.join(lines))
+insert(R / 'docs/research_progress/EVIDENCE_INDEX.md', '最新纠正训练启动（2026-10-27）：[真实更新、批准绑定与资源入场](../research_readiness/20261025/evidence/b5_b6_corrected_start_launch.json)记录B5已跨过原读取臂问题，179次RETURNED启动快照、原成本与累计上限；B6仍等待。旧首启失败和待批准提案保留历史时点，当前批准已取得并消费。\n\n')
+for p in (R / 'AGENTS.md', R.parent / 'AGENTS.md'):
+    with p.open('a', encoding='utf-8') as h:
+        h.write('\n2026-10-27纠正启动已批准并运行：研究者明确批准b251fd9ea06c0c90f48d2ac0decba0454114669d/36fc5dfb一次纠正启动。固定副本已单次调度，B5真实优化器更新从1开始，07:55:16快照179次RETURNED；B6由同控制器在B5九轮Train/Dev封口后串行启动，不再询问。新包8640更新、955143657680字节/285626次、43187秒，B5≤21587秒/B6≤21600秒；加原失败静态62828字节/1次及13秒，累计955143720508字节/285627次、12小时。后续重试0；批准已消费，不得重启。只读原网址已切换当前纠正包；原失败/所有历史原件保留，2025冻结。\n')
+print('Approved corrected start and actual running state recorded without claiming completion.')

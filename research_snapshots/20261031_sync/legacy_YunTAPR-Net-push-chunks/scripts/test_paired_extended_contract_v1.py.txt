@@ -1,0 +1,232 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Synthetic contract tests; never reads raw data or uses a formal checkpoint."""
+import copy, datetime, json, os, sys, tempfile, unittest
+from pathlib import Path
+ROOT = Path(os.environ['YUNTAPR_REPO_ROOT'])
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT), str(ROOT / 'scripts')]
+import numpy as np
+import torch
+from unittest.mock import patch
+import paired_extended_v1 as x
+from yuntapr.training.phase_a_protocol import state_digest, lr_for_update
+from yuntapr.data.b1_scientific_freeze import accumulate_packed, histogram_summary
+
+def records():
+    values = []
+    for year, n in [(2023, 10455), (2024, 10501)]:
+        start = datetime.datetime(year, 3, 1, 1, tzinfo=datetime.timezone.utc)
+        for i in range(n):
+            t = start + datetime.timedelta(minutes=30 * i)
+            a = t + datetime.timedelta(minutes=30)
+            values.append({'index': str(len(values)), 'sample_id': t.isoformat(), 'window_start': t.isoformat(), 'analysis_time': a.isoformat(), 'target_valid_yunnan_cells': '3430', 'role': 'FinalFit', 'imerg_day_path': f'{year}{t.month:02d}{t.day:02d}.nc', 'imerg_index': '0', 'imerg_sha256': 'a' * 64, **{f'slot_{s}_nominal': (a - datetime.timedelta(minutes=d)).isoformat() for s, d in enumerate(x.data.OFFSETS)}})
+    return values
+
+def expected():
+    return {'TEST_FIXTURE_ONLY': True, 'model': 'B1', 'run_id': 'run_20261004T000000_000000Z', 'epoch_budget': 13, 'protocol': {'sha256': 'a' * 64}, 'normalization': {'sha256': 'b' * 64}, 'manifest': {'sha256': 'c' * 64}, 'initial_model_state_sha256': 'd' * 64, 'phase_a_transfer': False, 'validation_allowed': False, 'BEST_selection_allowed': False}
+
+def payload():
+    e = expected()
+    order, _ = x.batch_plan(1)
+    p = {**e, 'completed_epoch': 1, 'global_update': 10478, 'training_completed': True, 'validation_completed': False, 'validation_samples': 0, 'last_applied_lr': 0.0001, 'coverage': x.coverage(1, order, 20956 * 3430), 'model_state_dict': {'weight': torch.tensor([1.0, 2.0])}, 'optimizer_state_dict': {}, 'rng_states': {'test': 'fixture'}}
+    for n in ('model_state_dict', 'optimizer_state_dict', 'rng_states'):
+        p[n + '_sha256'] = state_digest(p[n])
+    return (p, e)
+
+class ExtendedContractTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = records()
+
+    def test_01_exact_union_count(self):
+        x.validate_records(self.rows)
+
+    def test_02_union_duplicate_reject(self):
+        rows = copy.deepcopy(self.rows)
+        rows[-1]['sample_id'] = rows[0]['sample_id']
+        with self.assertRaises(ValueError):
+            x.validate_records(rows)
+
+    def test_03_union_2025_hard_reject(self):
+        rows = copy.deepcopy(self.rows)
+        rows[-1].update(window_start='2025-03-01T01:00:00+00:00', sample_id='2025-03-01T01:00:00+00:00')
+        with self.assertRaises(ValueError):
+            x.validate_records(rows)
+
+    def test_04_union_february_hard_reject(self):
+        with self.assertRaises(ValueError):
+            x.data.allowed_time('2024-02-29T23:50:00+00:00')
+
+    def test_05_union_order_reject(self):
+        rows = self.rows[::-1]
+        with self.assertRaises(ValueError):
+            x.validate_records(rows)
+
+    def test_06_union_count_reject(self):
+        with self.assertRaises(ValueError):
+            x.validate_records(self.rows[:-1])
+
+    def test_07_analysis_binding_reject(self):
+        rows = copy.deepcopy(self.rows)
+        rows[0]['analysis_time'] = rows[0]['window_start']
+        with self.assertRaises(ValueError):
+            x.validate_records(rows)
+
+    def test_08_target_eligibility_reject(self):
+        rows = copy.deepcopy(self.rows)
+        rows[0]['target_valid_yunnan_cells'] = '3429'
+        with self.assertRaises(ValueError):
+            x.validate_records(rows)
+
+    def test_09_batch_count_and_no_tail(self):
+        order, plan = x.batch_plan(1)
+        self.assertEqual(len(plan), 10478)
+        self.assertEqual(set(map(len, plan)), {2})
+        self.assertEqual(sorted(order), list(range(20956)))
+
+    def test_10_deterministic_epoch_replay(self):
+        self.assertEqual(x.batch_plan(7), x.batch_plan(7))
+
+    def test_11_epoch_order_changes(self):
+        self.assertNotEqual(x.batch_plan(1)[0], x.batch_plan(2)[0])
+
+    def test_12_actual_full_denominator(self):
+        order, _ = x.batch_plan(1)
+        self.assertEqual(x.coverage(1, order, 20956 * 3430)['denominator'], 71879080)
+
+    def test_13_drop_or_dup_reject(self):
+        order, _ = x.batch_plan(1)
+        with self.assertRaises(ValueError):
+            x.coverage(1, order[:-1], 20956 * 3430)
+
+    def test_14_wrong_denominator_reject(self):
+        order, _ = x.batch_plan(1)
+        with self.assertRaises(ValueError):
+            x.coverage(1, order, 20956 * 3430 - 3430)
+
+    def test_15_scheduler_first_step(self):
+        self.assertEqual(lr_for_update(1, steps_per_epoch=10478), 0.0001 / 10478)
+
+    def test_16_scheduler_warmup_boundary(self):
+        self.assertEqual(lr_for_update(10478, steps_per_epoch=10478), 0.0001)
+
+    def test_17_scheduler_fixed_horizon(self):
+        self.assertEqual(lr_for_update(523900, steps_per_epoch=10478), 1e-06)
+
+    def test_18_scheduler_not_budget_compressed(self):
+        self.assertGreater(lr_for_update(13 * 10478, steps_per_epoch=10478), 1e-06)
+
+    def test_19_scheduler_full_horizon_bounds(self):
+        for u in range(1, 523901):
+            lr = lr_for_update(u, steps_per_epoch=10478)
+            self.assertTrue(0 < lr <= 0.0001)
+            if u > 10478:
+                self.assertGreaterEqual(lr, 1e-06)
+
+    def test_20_scaler_transform_exact(self):
+        raw = np.array([240.21, 270.19, 299.99], dtype=np.float32)
+        s = {'mean_K': 271.6, 'std_K': 19.93, 'ddof': 0}
+        np.testing.assert_array_equal(x.normalize(raw, s), ((raw.astype(np.float64) - 271.6) / 19.93).astype(np.float32))
+
+    def test_21_scaler_fp64_input_reject(self):
+        with self.assertRaises(ValueError):
+            x.normalize(np.array([270.0]), {'mean_K': 270.0, 'std_K': 20.0, 'ddof': 0})
+
+    def test_22_scaler_nonfinite_reject(self):
+        with self.assertRaises(ValueError):
+            x.normalize(np.array([np.nan], dtype=np.float32), {'mean_K': 270.0, 'std_K': 20.0, 'ddof': 0})
+
+    def test_23_shared_scene_slot_weighting(self):
+        h = np.zeros(65536, dtype=np.int64)
+        raw = np.array([-100, 100], dtype=np.int16)
+        accumulate_packed(h, raw, 3)
+        accumulate_packed(h, np.array([200], dtype=np.int16), 1)
+        self.assertEqual(int(h.sum()), 7)
+        self.assertEqual(int(h[32668]), 3)
+        values = np.r_[np.tile(raw, 3), [200]].astype(np.float32) * np.float32(0.01) + np.float32(273.15)
+        s = histogram_summary(h)
+        self.assertAlmostEqual(s['mean_K'], float(values.astype(np.float64).mean()), places=12)
+        self.assertAlmostEqual(s['std_K'], float(values.astype(np.float64).std(ddof=0)), places=12)
+
+    def test_24_payload_complete_boundary_pass(self):
+        p, e = payload()
+        x.validate_payload(p, e)
+
+    def test_25_payload_provenance_before_state(self):
+        p, e = payload()
+        p['normalization'] = {'sha256': 'e' * 64}
+        p['model_state_dict'] = None
+        with self.assertRaisesRegex(ValueError, 'Provenance before state'):
+            x.validate_payload(p, e)
+
+    def test_26_payload_no_validation(self):
+        p, e = payload()
+        p['validation_completed'] = True
+        with self.assertRaises(ValueError):
+            x.validate_payload(p, e)
+
+    def test_27_payload_no_best_selection(self):
+        p, e = payload()
+        p['selection'] = {}
+        with self.assertRaises(ValueError):
+            x.validate_payload(p, e)
+
+    def test_28_payload_wrong_update_count(self):
+        p, e = payload()
+        p['global_update'] -= 1
+        with self.assertRaises(ValueError):
+            x.validate_payload(p, e)
+
+    def test_29_payload_wrong_lr(self):
+        p, e = payload()
+        p['last_applied_lr'] = 1e-06
+        with self.assertRaises(ValueError):
+            x.validate_payload(p, e)
+
+    def test_30_payload_nonfinite_reject(self):
+        p, e = payload()
+        p['model_state_dict']['weight'][0] = float('nan')
+        p['model_state_dict_sha256'] = state_digest(p['model_state_dict'])
+        with self.assertRaisesRegex(ValueError, 'Nonfinite'):
+            x.validate_payload(p, e)
+
+    def test_31_inference_backward_prohibited(self):
+        with x.inference_only():
+            with self.assertRaises(PermissionError):
+                torch.tensor(1.0, requires_grad=True).backward()
+
+    def test_32_inference_optimizer_prohibited(self):
+        with x.inference_only():
+            with self.assertRaises(PermissionError):
+                torch.optim.AdamW([torch.nn.Parameter(torch.ones(1))])
+
+    def test_33_reconciliation_failure_stops(self):
+        keys = ('global_val_core_loss', 'global_L_occ', 'global_core_L_qr', 'Brier_Score', 'AUROC', 'Average_Precision', 'conditional_mean_pinball', 'N_valid', 'N_rain', 'prevalence', 'per_tau_pinball', 'per_tau_conditional_coverage', 'coverage_error', 'strict_crossing_count', 'nonfinite_count', 'support_violation_count')
+        r = {k: 0.1 for k in keys}
+        r['per_tau_pinball'] = [0.1] * 32
+        r['per_tau_conditional_coverage'] = [0.1] * 32
+        r['coverage_error'] = [0.1] * 32
+        self.assertTrue(x.reconcile(r, r)['PASS'])
+        changed = copy.deepcopy(r)
+        changed['global_val_core_loss'] += 1e-05
+        with self.assertRaises(ValueError):
+            x.reconcile(r, changed)
+
+    def test_34_readonly_finalfit_no_phase_a_path(self):
+        identity = {'absolute_local_path': '<PRIVATE_LOCATOR_f28f26e24f4c>', 'epoch': 1}
+        with self.assertRaises(ValueError):
+            x.checkpoint_path(identity, expected())
+
+    def test_35_epoch_budget_not_exceeded(self):
+        p, e = payload()
+        e['epoch_budget'] = 0
+        p['epoch_budget'] = 0
+        with self.assertRaises(ValueError):
+            x.validate_payload(p, e)
+
+    def test_36_norm_no_sample_variance(self):
+        with self.assertRaises(ValueError):
+            x.normalize(np.array([270.0], dtype=np.float32), {'mean_K': 270.0, 'std_K': 20.0, 'ddof': 1})
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

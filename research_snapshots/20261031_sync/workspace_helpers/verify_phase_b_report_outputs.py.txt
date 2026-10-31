@@ -1,0 +1,34 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Record actual PDF QA and refresh the public artifact index after report completion."""
+import ast
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+root = Path(__file__).parent
+repo = root / 'YunTAPR-Net-push-chunks'
+out = repo / 'docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z'
+qa = root / 'tmp/pdfs/b0_phase_b_finalfit_20261002T132530Z'
+name = 'B0_PHASE_B_FINALFIT_FORMAL_TRAINING_REPORT_v1'
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def save(p, obj):
+    p.write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+status = json.loads((out / 'final_status.json').read_text(encoding='utf-8'))
+assert status['PHASE_B_FINALFIT_COMPLETED'] and status['TOTAL_POST_TRAINING_TESTS_EXECUTED'] == 254
+extracted = ''.join((qa / 'extracted.txt').read_text(encoding='utf-8').split())
+for token in ('128,964', '23,447', '11,724', '254', '242', status['FINAL_CHECKPOINT_SHA256'], 'c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327'):
+    assert token in extracted, token
+assert 'Overfull' not in (qa / (name + '.log')).read_text(encoding='utf-8', errors='replace')
+pages = sorted(qa.glob('page-*.png'))
+assert len(pages) == 3
+for script in ('close_b0_phase_b_finalfit_formal_v1.py', 'render_b0_phase_b_finalfit_report_v1.py'):
+    ast.parse((repo / 'scripts' / script).read_text(encoding='utf-8'))
+proof = {'status': 'PASS', 'page_count': 3, 'LaTeX_compile_pass': True, 'overfull_boxes': 0, 'required_completion_identity_text_PASS': True, 'all_rendered_pages_visually_inspected': True, 'visual_result': 'Readable tables and formulas; no clipping or overlap; long FINAL path breaks at directory boundary', 'PDF_sha256': sha(out / (name + '.pdf')), 'editable_LaTeX_sha256': sha(out / (name + '.tex')), 'QA_directory': str(qa), 'rendered_page_sha256': {p.name: sha(p) for p in pages}, 'packages_installed_or_upgraded': False, 'verified_utc': datetime.now(timezone.utc).isoformat()}
+save(out / 'report_render_verification.json', proof)
+index = {p.name: {'sha256': sha(p), 'bytes': p.stat().st_size} for p in sorted(out.iterdir()) if p.is_file() and p.name != 'artifact_sha256.json'}
+save(out / 'artifact_sha256.json', index)
+print(json.dumps({'PDF_QA': 'PASS', 'pages': 3, 'artifact_index_entries': len(index), 'PDF_sha256': proof['PDF_sha256']}))

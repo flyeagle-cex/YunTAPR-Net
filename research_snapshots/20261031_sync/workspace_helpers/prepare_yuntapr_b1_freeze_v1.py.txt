@@ -1,0 +1,36 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Start an independent, additions-only B1 decision update; raw sources stay closed."""
+from pathlib import Path
+from datetime import datetime, timezone
+import hashlib, json, subprocess, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+BASE = '1fd70ba9a563aa673012fa1b1494b86d72511eb6'
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip() == BASE
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO)
+history = {}
+for entry in subprocess.check_output(['git', 'ls-tree', '-rz', BASE], cwd=REPO).split(b'\x00'):
+    if not entry:
+        continue
+    meta, name = entry.split(b'\t', 1)
+    name = name.decode('utf-8')
+    data = (REPO / name).read_bytes()
+    blob = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+    assert blob == meta.decode().split()[2], name
+    history[name] = {'sha256': hashlib.sha256(data).hexdigest(), 'git_blob_sha1': blob, 'bytes': len(data)}
+assert len(history) == 1941
+stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+run = REPO / 'docs/b1_scientific_freeze/runs' / ('run_' + stamp)
+run.mkdir(parents=True, exist_ok=False)
+
+def save(p, x):
+    with p.open('x', encoding='utf-8', newline='\n') as f:
+        json.dump(x, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+save(run / 'history_before.json', history)
+decision = '批准：B1 采用 M1 严格六槽完整政策；研究窗口起点历史不足样本直接拒绝、不读取 2 月补齐；六槽共享一个 normalization，并仅基于正式 2023 B1 Train 的 10,455 个样本按 scene-slot exposure 拟合；primary B0-vs-B1 比较采用 common intersection，并建立独立 B0-Matched-Control，Train=10,455、Validation=10,501；历史 B0 保持不可变。先完成设计/人口/normalization/训练协议冻结，不启动 B1 training，不读取 2025 outcome。 人口这个词记得重新翻译为正确的词汇'
+save(run / 'researcher_decisions.json', {'authority': 'EXPLICIT_RESEARCHER_CHAT_DECISION', 'researcher_text_verbatim': decision, 'training_protocol_clarification': '只冻结已批准项，其余参数待研究者决定（推荐）', 'received_date': '2026-10-03', 'terminology': {'population': '样本集合 / 样本总体', 'verbatim_quote_preserved': True}, 'recorded_utc': datetime.now(timezone.utc).isoformat()})
+active = {'baseline': BASE, 'run_directory': str(run), 'run_relative': run.relative_to(REPO).as_posix(), 'old_audit_relative': 'docs/b1_temporal_audit/runs/run_20261003T035724_142784Z', 'staging_root': '<PRIVATE_LOCATOR_1d356e966b28>' + run.name}
+save(ROOT / 'YunTAPR-active-b1-freeze-v1.json', active)
+print(json.dumps({'status': 'PASS_BASELINE_1941_FILES_PINNED', 'active': active}, ensure_ascii=False))

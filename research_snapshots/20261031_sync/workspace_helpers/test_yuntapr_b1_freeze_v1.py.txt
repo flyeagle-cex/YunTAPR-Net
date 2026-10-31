@@ -1,0 +1,34 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Record necessary no-training regression checks; never source outcome reads."""
+from pathlib import Path
+import gc, io, json, sys, unittest
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.evaluation import catalogue_gate_b0 as g
+active = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+RUN = Path(active['run_directory'])
+preflight = '--preflight' in sys.argv
+modules = [('NEW_SYNTHETIC_UNITS', ['tests.b1_scientific_freeze.test_scientific_freeze'])]
+if not preflight:
+    modules.extend([('NEW_REAL_FREEZE_ARTIFACTS', ['tests.b1_scientific_freeze.test_freeze_artifacts']), ('EXISTING_B1_SYNTHETIC', ['tests.b1_temporal_audit.test_b1_temporal_audit']), ('EXISTING_B1_REAL_AUDIT', ['tests.b1_temporal_audit.test_full_audit_artifacts']), ('EXISTING_DATA_SPATIAL', ['tests.b0_skeleton.test_b0_skeleton.ContractAndSpatialTests', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_v07_final_provenance_requires_metadata_and_manifest', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_b13_packed_fill_and_partial', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_zero_is_valid_missing_excluded', 'tests.b0_skeleton.test_b0_skeleton.DataAndLossTests.test_causal_latest_and_no_fallback', 'tests.b0_skeleton.test_b13_only_candidate'])])
+log = io.StringIO()
+counts = []
+with g.PreflightSourceGuard() as guard, g.legacy.FinalInferenceGuard():
+    for label, names in modules:
+        suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in names))
+        log.write(label + '\n')
+        result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+        counts.append({'suite': label, 'executed': result.testsRun, 'passed': result.wasSuccessful(), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped)})
+        gc.collect()
+    assert guard.raw_open_events == 0
+summary = {'suites': counts, 'total_tests_executed': sum((r['executed'] for r in counts)), 'all_passed': all((r['passed'] and r['skipped'] == 0 for r in counts)), 'raw_source_open_events': guard.raw_open_events, '2025_PIXELS_READ': 0, 'MODEL_PARAMETERS_UPDATED': False, 'BACKWARD_CALLS': 0, 'OPTIMIZER_STEPS': 0, 'scope': 'Relevant B1 design, fitting, source guards and inherited data/spatial regression; not all historical training suites', 'temporary_fixture_cleanup_required_and_performed': True, 'completed_utc': g.now()}
+name = 'preflight_unit' if preflight else 'closure_test'
+g.save(RUN / (name + '_summary.json'), summary)
+with (RUN / (name + '_results.txt')).open('x', encoding='utf-8') as f:
+    f.write(log.getvalue())
+print(json.dumps(summary), flush=True)
+if not summary['all_passed']:
+    print(log.getvalue())
+    raise SystemExit(1)

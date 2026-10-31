@@ -1,0 +1,30 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Source-free tests and immutable-history closure for the new execution adapter."""
+from pathlib import Path
+import json
+import sys
+import time
+import unittest
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.evaluation import catalogue_execution_v1_1 as execution
+active = json.loads((ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').read_text(encoding='utf-8'))
+run = Path(active['run'])
+stamp = gate.now().replace(':', '').replace('-', '').replace('.', '_').replace('+', '_')
+history = gate.read(run / 'history_before.json')
+started = time.perf_counter()
+modules = ['tests.final_test_catalogue.test_catalogue_gate', 'tests.final_test_b0.test_catalogue_backend_v1_1', 'tests.final_test_catalogue.test_catalogue_execution_v1_1']
+with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+    execution.verify_history(history)
+    suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(m) for m in modules))
+    with (run / ('preflight_tests_' + stamp + '.txt')).open('x', encoding='utf-8') as stream:
+        result = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)
+    preserved = execution.verify_history(history)
+    summary = {'scope': gate.CATALOGUE_SCOPE, 'TEST_FIXTURE_ONLY': True, 'test_modules': modules, 'tests_run': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'passed': result.wasSuccessful(), 'raw_source_open_events': source.raw_open_events, '2025_PIXELS_READ': 0, 'FINAL_CHECKPOINT_LOADS': 0, 'MODEL_FORWARD_CALLS': 0, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'historical_artifacts_unchanged': preserved, 'execution_implementation_sha256': execution.execution_hashes(), 'elapsed_seconds': time.perf_counter() - started, 'completed_utc': gate.now()}
+    gate.save(run / ('preflight_test_summary_' + stamp + '.json'), summary)
+print(json.dumps(summary, ensure_ascii=True))
+if not result.wasSuccessful() or result.skipped or source.raw_open_events:
+    raise SystemExit(1)

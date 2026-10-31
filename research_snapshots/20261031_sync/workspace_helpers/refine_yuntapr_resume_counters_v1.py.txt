@@ -1,0 +1,58 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Independent corrected audit binding; preserve prior preflight/code evidence."""
+from pathlib import Path
+import datetime, json, io, os, sys, unittest
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+from yuntapr.training import paired_phase_a_audit as a, paired_phase_a as frozen
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+old = read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+plan = read(old['plan_path'])
+proofpath = Path(old['resume_directory']) / 'preflight_status.json'
+proof = read(proofpath)
+assert proof['status'] == 'RESUME_PREFLIGHT_PASS' and proof['tests']['all_passed']
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('run_%Y%m%dT%H%M%S_%fZ')
+journal = Path(old['resume_directory']).parent / stamp
+journal.mkdir(exist_ok=False)
+(journal / 'worker_logs').mkdir()
+hashes = {p: a.sha256(REPO / p) for p in plan['resume_governance_code_hashes']}
+plan.update(resume_directory=str(journal), worker_log_directory=str(journal / 'worker_logs'), resume_governance_code_hashes=hashes, superseded_preflight_path=str(proofpath), superseded_preflight_sha256=a.sha256(proofpath), correction='Separate backward counter while backward precedes optimizer.step; records only, no numerical change')
+cap_path = REPO / 'config/training' / ('b1_phase_a_resume_authorization_' + stamp + '.json')
+plan['resume_authorization_path'] = str(cap_path)
+plan_path = journal / 'resume_plan.json'
+save(plan_path, plan)
+cap = read(old['authorization_path'])
+cap.update(resume_plan_path=str(plan_path), resume_plan_sha256=a.sha256(plan_path), resume_governance_code_hashes=hashes)
+save(cap_path, cap)
+contract = frozen.RunnerContract.load()
+a.AuditedAuthorization.load(cap_path, a.sha256(cap_path), contract, 'B1')
+log = io.StringIO()
+with PreflightSourceGuard() as guard:
+    result = unittest.TextTestRunner(stream=log, verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('tests.paired_phase_a_resume.test_resume_governance'))
+    assert guard.raw_open_events == 0
+(journal / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+summary = {'test_count': result.testsRun, 'all_passed': result.wasSuccessful() and (not result.skipped), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'TEST_FIXTURE_ONLY': True, 'TEST_FIXTURE_OPTIMIZER_STEPS': 0, 'FORMAL_OPTIMIZER_STEPS': 0, '2025_RAW_ACCESS': 0}
+save(journal / 'test_summary.json', summary)
+if not summary['all_passed']:
+    print(log.getvalue())
+    raise SystemExit(1)
+registry = read(Path(plan['public_directory']) / 'checkpoint_registry.json')
+a.validate_resume_ancestry(a.AuditedAuthorization.load(cap_path, a.sha256(cap_path), contract, 'B1'), 'B1', cap['planned_run_id'], registry)
+p = Path(registry['LAST']['absolute_local_path'])
+assert p.stat().st_size == registry['LAST']['bytes'] and a.sha256(p) == registry['LAST']['sha256']
+save(journal / 'preflight_status.json', {**proof, 'resume_authorization_sha256': a.sha256(cap_path), 'tests': summary, 'inherited_103_test_evidence': {'path': str(proofpath), 'sha256': a.sha256(proofpath)}, 'corrected_backward_event_accounting_pass': True})
+active = {**old, 'resume_directory': str(journal), 'authorization_path': str(cap_path), 'authorization_sha256': a.sha256(cap_path), 'plan_path': str(plan_path), 'plan_sha256': a.sha256(plan_path)}
+temp = BASE / 'YunTAPR-paired-resume-active-v1.json.refined'
+save(temp, active)
+os.replace(temp, BASE / 'YunTAPR-paired-resume-active-v1.json')
+print(json.dumps({'status': 'RESUME_PREFLIGHT_PASS', 'inherited_tests': 103, 'new_tests': result.testsRun, 'resume_directory': str(journal)}, ensure_ascii=False))

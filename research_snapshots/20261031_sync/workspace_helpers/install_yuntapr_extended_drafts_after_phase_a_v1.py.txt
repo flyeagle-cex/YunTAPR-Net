@@ -1,0 +1,36 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Install additions only after both old Phase-A processes close successfully."""
+from pathlib import Path
+import ast, hashlib, json
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+old = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+extended = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+a_run = Path(old['run_directory'])
+run = Path(extended['run_directory'])
+assert (a_run / 'both_formal_runs_completed.json').exists(), 'Do not change the live Phase-A execution tree'
+closure = json.loads((a_run / 'final_delivery_status.json').read_text(encoding='utf8'))
+assert closure['post_training_tests']['all_passed']
+tests = sorted((run / 'draft_contract_tests').glob('*/test_summary.json'))
+assert tests and json.loads(tests[-1].read_text(encoding='utf8'))['status'] == 'PASS'
+files = {}
+for source in sorted((BASE / 'YunTAPR-extended-build').glob('*.py')):
+    data = source.read_bytes()
+    ast.parse(data.decode('utf8'))
+    dest = REPO / 'scripts' / source.name
+    with dest.open('xb') as f:
+        f.write(data)
+    assert dest.read_bytes() == data
+    files[dest.relative_to(REPO).as_posix()] = {'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data), 'draft_source_path': str(source)}
+folder = REPO / 'tests/paired_extended_pipeline'
+folder.mkdir(exist_ok=False)
+(folder / '__init__.py').write_text('', encoding='utf8')
+(folder / 'test_contract_v1.py').write_text('"""Synthetic-only extended FinalFit contract regression."""\nfrom test_paired_extended_contract_v1 import ExtendedContractTests\n', encoding='utf8')
+(folder / 'test_readiness_b2_v1.py').write_text('"""Zero-raw readiness and synthetic spectral reader regression."""\nfrom test_paired_extended_readiness_b2_v1 import ReadinessAndB2Tests\n', encoding='utf8')
+(folder / 'test_resume_v1.py').write_text('"""Isolated CPU completed-epoch resume regression."""\nfrom test_paired_extended_resume_v1 import ExtendedResumeTests\n', encoding='utf8')
+for dest in folder.iterdir():
+    files[dest.relative_to(REPO).as_posix()] = {'sha256': hashlib.sha256(dest.read_bytes()).hexdigest(), 'bytes': dest.stat().st_size}
+with (run / 'installed_source_manifest.json').open('x', encoding='utf8') as f:
+    json.dump({'source_additions_only': True, 'active_phase_a_was_not_modified': True, 'files': files}, f, indent=2)
+print(json.dumps({'new_files': len(files), 'formal_training_started_by_install': False}, indent=2))

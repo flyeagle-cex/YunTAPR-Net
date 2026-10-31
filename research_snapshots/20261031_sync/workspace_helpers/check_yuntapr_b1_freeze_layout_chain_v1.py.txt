@@ -1,0 +1,22 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json
+ROOT = Path(__file__).parent
+a = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+r = Path(a['run_directory'])
+
+def read(n):
+    return json.loads((r / n).read_text(encoding='utf-8'))
+source = read('document_generation_provenance.json')
+first = read('document_layout_repair.json')
+second = read('document_layout_repair_2.json')
+name = 'B1_SCIENTIFIC_FREEZE_REPORT_v1.tex'
+assert source['document_sha256'][name] == first['before_sha256'][name]
+assert first['after_sha256'][name] == second['before_sha256'][name]
+assert second['after_sha256'][name] == hashlib.sha256((r / name).read_bytes()).hexdigest()
+generator = 'build_yuntapr_b1_freeze_report_v1.py'
+assert source['generator_sha256'] == first['before_sha256'][generator]
+assert first['after_sha256'][generator] == second['before_sha256'][generator]
+assert second['after_sha256'][generator] == hashlib.sha256((ROOT / generator).read_bytes()).hexdigest()
+print('PASS_COMPLETE_DOCUMENT_GENERATION_AND_LAYOUT_REPAIR_HASH_CHAIN')

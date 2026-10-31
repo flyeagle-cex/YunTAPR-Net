@@ -1,0 +1,114 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""New explicit-resume evidence, fixture tests and read-only checkpoint preflight."""
+from pathlib import Path
+import collections, datetime, io, json, os, sys, unittest
+from unittest.mock import patch
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import torch
+from yuntapr.training import paired_phase_a_audit as a, paired_phase_a as frozen
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+from train_b0_phase_b_finalfit_v1 import environment
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def sha(p):
+    return a.sha256(Path(p))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+old = read(BASE / 'YunTAPR-active-paired-training-v1.json')
+ext = read(BASE / 'YunTAPR-extended-pipeline-active-v1.json')
+stop = Path(ext['run_directory']) / 'researcher_stop_20261004'
+stopped = read(stop / 'stop_status.json')
+spec = old['formal_runs']['B1']
+public = Path(spec['public_directory'])
+assert stopped['status'] == 'STOPPED_BY_RESEARCHER' and stopped['B1']['last_completed_epoch'] == 8
+assert not (public / 'final_status.json').exists() and (not (public / 'failure.json').exists())
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('run_%Y%m%dT%H%M%S_%fZ')
+journal = Path(ext['run_directory']) / 'researcher_resume' / stamp
+journal.mkdir(parents=True, exist_ok=False)
+(journal / 'worker_logs').mkdir()
+cap_path = REPO / 'config/training' / ('b1_phase_a_resume_authorization_' + stamp + '.json')
+plan_path = journal / 'resume_plan.json'
+discarded_pids = [154776, 154672, 156908, 159492]
+shards = []
+for pid in discarded_pids:
+    for prefix in ('worker_identity_', 'staging_worker_', 'raw_access_worker_'):
+        p = public / (prefix + str(pid) + '.jsonl')
+        assert p.exists()
+        shards.append({'path': str(p), 'bytes': p.stat().st_size, 'sha256': a.sha256(p), 'pid': pid, 'scope': 'INCOMPLETE_EPOCH_9_DISCARDED_FROM_RETAINED_TRAJECTORY_ONLY'})
+events = collections.Counter()
+for p in public.glob('logs/epoch_*/step_events.jsonl'):
+    with p.open(encoding='utf8') as f:
+        for line in f:
+            for event in ('BACKWARD_CALL', 'OPTIMIZER_STEP_CALLED', 'OPTIMIZER_STEP_RETURNED'):
+                if '"event": "' + event + '"' in line:
+                    events[event] += 1
+assert all((events[k] == 47052 for k in ('BACKWARD_CALL', 'OPTIMIZER_STEP_CALLED', 'OPTIMIZER_STEP_RETURNED'))), dict(events)
+origin = read(spec['authorization_path'])
+assert sha(spec['authorization_path']) == spec['authorization_sha256']
+additions = ['scripts/paired_phase_a_resume_governance_v1.py', 'tests/paired_phase_a_resume/__init__.py', 'tests/paired_phase_a_resume/test_resume_governance.py']
+hashes = {p: a.sha256(REPO / p) for p in additions}
+plan = {'status': 'EXPLICIT_RESEARCHER_RESUME_PLAN', 'researcher_resume_message': '继续', 'researcher_scope': 'Original extended pipeline; B1 resumes epoch 8 boundary; B0-Matched never reruns; no 2025 outcome', 'created_utc': now(), 'resume_directory': str(journal), 'public_directory': str(public), 'worker_log_directory': str(journal / 'worker_logs'), 'resume_completed_epoch': 8, 'discarded_uncheckpointed_updates': 5228, 'physical_updates_before_resume': 47052, 'canonical_updates_at_LAST': 41824, 'origin_authorization_sha256': spec['authorization_sha256'], 'stop_record_path': str(stop / 'stop_status.json'), 'stop_record_sha256': a.sha256(stop / 'stop_status.json'), 'discarded_incomplete_epoch_worker_pids': discarded_pids, 'interrupted_worker_shards': shards, 'original_step_event_counts': dict(events), 'resume_governance_code_hashes': hashes, 'resume_authorization_path': str(cap_path), 'no_automatic_retry': True, '2025_RAW_ACCESS': 0}
+save(plan_path, plan)
+cap = {**origin, 'resume_authorized': True, 'origin_authorization_path': spec['authorization_path'], 'origin_authorization_sha256': spec['authorization_sha256'], 'resume_ancestry': {'run_id': spec['run_id'], 'LAST_sha256': 'bca986c01cbd179e98b366d279a6bde486212a99653fc4e3743ada4ed5975e3d'}, 'researcher_resume_message': '继续', 'resume_plan_path': str(plan_path), 'resume_plan_sha256': a.sha256(plan_path), 'resume_governance_code_hashes': hashes, 'approved_resume_entrypoint': 'scripts/paired_phase_a_resume_governance_v1.py'}
+save(cap_path, cap)
+active = {'resume_directory': str(journal), 'authorization_path': str(cap_path), 'authorization_sha256': a.sha256(cap_path), 'plan_path': str(plan_path), 'plan_sha256': a.sha256(plan_path), 'origin_registry_path': str(BASE / 'YunTAPR-active-paired-training-v1.json'), 'extension_registry_path': str(BASE / 'YunTAPR-extended-pipeline-active-v1.json')}
+save(BASE / 'YunTAPR-paired-resume-active-v1.json', active)
+contract = frozen.RunnerContract.load()
+auth = a.AuditedAuthorization.load(cap_path, active['authorization_sha256'], contract, 'B1')
+registry = read(public / 'checkpoint_registry.json')
+a.validate_resume_ancestry(auth, 'B1', spec['run_id'], registry)
+assert registry['LAST']['epoch'] == 8 and registry['LAST'] == registry['BEST']
+status = read(old['formal_runs']['B0_MATCHED']['public_directory'] + '/final_status.json')
+assert status['status'] == 'FORMAL_PHASE_A_COMPLETE' and status['completed_epoch'] == 21
+for ident in (registry['LAST'], status['BEST'], status['LAST']):
+    p = Path(ident['absolute_local_path'])
+    assert p.stat().st_size == ident['bytes'] and a.sha256(p) == ident['sha256']
+manifest = read(public / 'run_manifest.json')
+assert environment() == manifest['environment']
+payload = torch.load(registry['LAST']['absolute_local_path'], map_location='cpu', weights_only=False)
+frozen.validate_payload(payload, manifest)
+assert payload['completed_epoch'] == 8 and payload['global_update'] == 41824
+assert len(read(public / 'training_validation_history.json')) == 8
+del payload
+assert a.code_hashes() == origin['code_hashes']
+cleanup = a.staging_state(a.data.STAGE_ROOT / ('authorized_paired_' + spec['run_id']))
+assert cleanup['cleanup_success']
+frames = a.data.load_frames()
+sources = a.allowed_sources(contract, 'B1', frames)
+assert all((Path(p).is_file() and Path(p).stat().st_size > 0 for p in sources))
+ops = {'TEST_FIXTURE_OPTIMIZER_STEPS': 0, 'TEST_FIXTURE_BACKWARD_CALLS': 0}
+old_step = torch.optim.AdamW.step
+old_backward = torch.Tensor.backward
+
+def step(self, *args, **kw):
+    ops['TEST_FIXTURE_OPTIMIZER_STEPS'] += 1
+    return old_step(self, *args, **kw)
+
+def backward(self, *args, **kw):
+    ops['TEST_FIXTURE_BACKWARD_CALLS'] += 1
+    return old_backward(self, *args, **kw)
+os.environ['YUNTAPR_PROTOCOL_DRYRUN_EVIDENCE'] = str(REPO / 'docs/phase_a_optimizer_dryrun/runs/run_20261001T030242Z')
+log = io.StringIO()
+with PreflightSourceGuard() as guard, patch.object(torch.optim.AdamW, 'step', step), patch.object(torch.Tensor, 'backward', backward):
+    suites = ['tests.paired_phase_a_resume.test_resume_governance', 'tests.paired_phase_a_authorized.test_audit', 'tests.b1_training_protocol.test_protocol', 'tests.b1_training_protocol.test_preflight_artifacts']
+    result = unittest.TextTestRunner(stream=log, verbosity=2).run(unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in suites)))
+    assert guard.raw_open_events == 0
+(journal / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+summary = {'test_count': result.testsRun, 'all_passed': result.wasSuccessful() and (not result.skipped), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'TEST_FIXTURE_ONLY': True, **ops, 'FORMAL_OPTIMIZER_STEPS': 0, '2025_RAW_ACCESS': 0, 'raw_source_open_events': 0}
+save(journal / 'test_summary.json', summary)
+if not summary['all_passed']:
+    print(log.getvalue())
+    raise SystemExit(1)
+save(journal / 'preflight_status.json', {'status': 'RESUME_PREFLIGHT_PASS', 'resume_authorization_sha256': active['authorization_sha256'], 'checkpoint_epoch': 8, 'checkpoint_sha256': registry['LAST']['sha256'], 'model_optimizer_rng_payload_validated_read_only': True, 'state_not_applied_by_preflight': True, 'frozen_57_code_files_unchanged': True, 'original_2061_files_unchanged': True, 'B0_completed_identity_unchanged': True, 'stop_record_preserved': True, 'source_paths_resolve': len(sources), 'actual_old_optimizer_step_events': dict(events), 'tests': summary, 'staging_state': cleanup, 'FORMAL_OPTIMIZER_STEPS': 0, '2025_RAW_ACCESS': 0})
+print(json.dumps({'status': 'RESUME_PREFLIGHT_PASS', 'resume_directory': str(journal), 'tests': summary}, ensure_ascii=False), flush=True)

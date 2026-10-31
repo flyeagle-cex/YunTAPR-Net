@@ -1,0 +1,13 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Preserve initial synthetic assertion failure; this never affected training."""
+from pathlib import Path
+import datetime, json
+BASE = Path(__file__).parent
+active = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+p = run / 'draft_contract_tests' / 'initial_36_test_attempt_failure_receipt.json'
+value = {'status': 'FAILED_SYNTHETIC_ASSERTION_PRESERVED', 'tests_executed': 36, 'passed': 35, 'failed': 1, 'test': 'test_12_actual_full_denominator', 'actual_correct_denominator': 71879080, 'initial_incorrect_test_expected_denominator': 71877500, 'correction': 'Corrected only the synthetic test expected arithmetic constant', 'formal_code_changed': False, 'formal_training_interrupted': False, '2025_RAW_ACCESS': 0, 'FORMAL_OPTIMIZER_STEPS_BY_DRAFT_TESTS': 0, 'full_first_attempt_log': 'Tool transcript; no separate original stdout file was captured', 'receipt_created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+with p.open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2)
+print('immutable initial draft-test failure receipt saved')

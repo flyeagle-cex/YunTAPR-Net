@@ -1,0 +1,261 @@
+# Archival copy: formatting normalized; private locators redacted.
+# noqa: E402
+# --------------------------------------------------------------------------- tests
+# float32 rate exactly at the event threshold
+# prediction boundary at the same value: equality must never count as a positive
+# P >= 0.5 boundary (occurrence rule)
+# frozen evaluator rain strata rule is searchsorted([1,5,10,20,30,50,inf], y, 'left')
+# expm1 = 1..32
+# p below occurrence median gives exactly zero
+# p == 1 -> u = 0.5 -> log-space midpoint of q15 and q16
+# monotone ordering A >= C (Jensen in log space)
+# r exactly q32: searchsorted(q, level, right) with equal value -> idx 32 -> NaN
+# D at r=0.1 with P>=0.5 rule reproduces the occurrence contigency
+# dry-only degenerate population: Pearson must be None, dry counts exact
+"""Synthetic unit tests for the Tier-1 metric core (CPU only, no frozen imports, no GPU).
+
+Covers exactly the acceptance items of task-7 item 3:
+  * TP+FP+FN+TN == N_valid for every contingency table
+  * strict '>' vs '>=' boundary semantics at r=0.1 mm/h and at P=0.5
+  * P>=0.5 reliability-bin semantics of the frozen evaluator
+  * MAE / RMSE / MeanBias / Pearson CC against direct numpy formulas
+  * known small examples for candidate point estimates A/B/C and candidate D support
+  * the 1e-12 abs/rel validation gate (pass on exact copy, fail on 2e-12 perturbation)
+
+Run:  python -B infer_eval.py self-test
+  or: python -B tests/test_formula.py
+"""
+from __future__ import annotations
+import json
+import math
+import os
+import sys
+import numpy as np
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE not in sys.path:
+    sys.path.insert(0, BASE)
+import infer_eval as ie
+FAILURES = []
+
+def check(name, condition, detail=''):
+    status = 'PASS' if condition else 'FAIL'
+    print(f'[{status}] {name}' + (f'  {detail}' if detail and (not condition) else ''))
+    if not condition:
+        FAILURES.append(name + ' :: ' + detail)
+
+def approx(a, b, atol=1e-12):
+    return abs(float(a) - float(b)) <= atol
+
+def metric_close(a, b, rel=1e-10, abs_=1e-10):
+    """Float64 accumulation-order differences stay far below this tolerance."""
+    if a is None or b is None:
+        return a is None and b is None
+    return math.isclose(float(a), float(b), rel_tol=rel, abs_tol=abs_)
+
+def synthetic_qlog(n, seed=0, base=None):
+    """Strictly increasing log1p quantiles above log1p(0.1), shape (n,32).
+
+    Step sizes are drawn so q32 stays in the observed frozen range (~log1p(70) at most),
+    keeping physical expm1 values in the real mm/h regime.
+    """
+    rng = np.random.default_rng(seed)
+    q = np.empty((n, 32), dtype=np.float64)
+    start = np.log1p(0.11) if base is None else base
+    steps = rng.uniform(0.02, 0.12, size=(n, 1)).repeat(32, axis=1)
+    q[:, 0] = start + rng.uniform(0, 0.05, size=n)
+    q[:, 1:] = q[:, :1] + np.cumsum(steps[:, :31], axis=1)
+    return q
+
+def frozen_reliability_bins(p):
+    """Exact frozen rule: np.searchsorted(np.arange(1,10)/10, p, side='right')."""
+    bins = np.searchsorted(np.arange(1, 10) / 10, p, side='right')
+    return bins
+
+def test_contingency_identities():
+    rng = np.random.default_rng(1)
+    for n in (1, 7, 1000):
+        pred = rng.normal(size=n) > 0.0
+        truth = rng.normal(size=n) > 0.2
+        c = ie.confusion_counts(pred, truth)
+        check(f'TP+FP+FN+TN=N_valid n={n}', c['TP'] + c['FP'] + c['FN'] + c['TN'] == n)
+        check(f'TP+FP=pred positives n={n}', c['TP'] + c['FP'] == int(np.count_nonzero(pred)))
+        check(f'TP+FN=truth positives n={n}', c['TP'] + c['FN'] == int(np.count_nonzero(truth)))
+    m = ie.contingency_metrics(dict(TP=50, FP=10, FN=5, TN=100))
+    check('known POD/FAR/CSI/HSS', approx(m['POD'], 50 / 55) and approx(m['FAR'], 10 / 60) and approx(m['CSI'], 50 / 65) and approx(m['HSS'], 0.8), json.dumps({k: m[k] for k in ('POD', 'FAR', 'CSI', 'HSS')}))
+
+def test_strict_vs_ge_boundary():
+    rate = np.array([0.1, np.nextafter(np.float32(0.1), np.float32(1)), np.float32(0.1), 0.10000001, 0.0], dtype=np.float32)
+    truth_gt = ie.event_truth_fp32(rate, 0.1)
+    truth_ge = rate >= np.float32(0.1)
+    check('truth: rate == float32(0.1) is NOT rain under strict >', bool(truth_gt[0]) is False)
+    check('truth: >= would count rate == float32(0.1)', bool(truth_ge[0]) is True)
+    check('truth: nextafter(0.1,1) is rain under strict >', bool(truth_gt[1]) is True)
+    pred = np.array([0.1, 0.2, 0.5], dtype=np.float32)
+    truth = np.array([1.0, 1.0, 0.0], dtype=np.float32)
+    c = ie.confusion_counts(pred > np.float32(0.1), ie.event_truth_fp32(truth, 0.1))
+    check('pred == 0.1 not a positive under strict >', (c['TP'], c['FP'], c['FN'], c['TN']) == (1, 1, 1, 0), str(c))
+    p = np.array([0.4999999999, 0.5, 0.5000000001, 1.0, 0.0], dtype=np.float64)
+    y = np.array([1.0, 1.0, 1.0, 0.0, 1.0], dtype=np.float32)
+    truth = ie.event_truth_fp32(y, 0.1)
+    c_ge = ie.confusion_counts(p >= 0.5, truth)
+    c_gt = ie.confusion_counts(p > 0.5, truth)
+    check('P>=0.5 counts p==0.5 as positive', (c_ge['TP'], c_ge['FP']) == (2, 1), str(c_ge))
+    check('P>0.5 excludes p==0.5', (c_gt['TP'], c_gt['FP']) == (1, 1), str(c_gt))
+    check('P>=0.5 and P>0.5 differ only at exact boundary', c_ge['TP'] - c_gt['TP'] == 1 and c_ge['FP'] == c_gt['FP'])
+
+def test_reliability_bin_semantics():
+    rng = np.random.default_rng(2)
+    p = np.concatenate([rng.uniform(0, 1, 5000), [0.5, 0.4999999999, 0.5000000001, 1.0, 0.0]])
+    bins = frozen_reliability_bins(p)
+    check('bins: P>=0.5 equivalent to bins 5..9', np.array_equal(p >= 0.5, bins >= 5), str(np.unique(bins)))
+    check('bins: 10 bins, index 9 for p==1.0', int(bins[np.flatnonzero(p == 1.0)[0]]) == 9)
+    y = np.array([0.1, 0.1000001, 1.0, 1.00001, 5.0, 5.0001, 10.0, 49.0, 50.0, 51.0])
+    strata = np.searchsorted(np.array([1, 5, 10, 20, 30, 50, np.inf]), y, side='left')
+    check('rain strata: rate == 1 is (0.1,1] stratum 0', int(strata[2]) == 0 and int(strata[3]) == 1)
+
+def test_point_estimates_known_examples():
+    qlog = np.log1p(np.arange(1.0, 33.0)).reshape(1, 32)
+    p = np.array([0.5], dtype=np.float64)
+    cand = ie.point_candidates_log(qlog, p)
+    check('A known example: 0.5 * mean(1..32) = 8.25', approx(cand['A'][0], 8.25, 1e-12), repr(cand['A'][0]))
+    check('C known example: 0.5 * expm1(mean(log1p(1..32)))', approx(cand['C'][0], 0.5 * math.expm1(np.log1p(np.arange(1.0, 33.0)).mean())), repr(cand['C'][0]))
+    check('B known example: p == 0.5 -> support edge 0.1 mm/h', approx(cand['B'][0], 0.1, 1e-12), repr(cand['B'][0]))
+    cand0 = ie.point_candidates_log(qlog, np.array([0.4999]))
+    check('B: p < 0.5 -> 0', cand0['B'][0] == 0.0)
+    cand1 = ie.point_candidates_log(qlog, np.array([1.0]))
+    taus = (np.arange(32) + 0.5) / 32
+    w = (0.5 - taus[15]) / (taus[16] - taus[15])
+    expect = math.expm1(qlog[0, 15] * (1 - w) + qlog[0, 16] * w)
+    check('B known example: p == 1 midpoint interpolation', approx(cand1['B'][0], expect, 1e-12), f"{cand1['B'][0]} vs {expect}")
+    rng = np.random.default_rng(3)
+    q = synthetic_qlog(500, seed=7)
+    pp = rng.uniform(0, 1, 500)
+    cand = ie.point_candidates_log(q, pp)
+    check('A >= C elementwise (log-space mean <= physical mean)', bool((cand['A'] >= cand['C'] - 1e-15).all()))
+
+def test_candidate_D():
+    qlog = np.log1p(np.arange(1.0, 33.0)).reshape(1, 32)
+    p = np.array([0.8])
+    d01 = ie.event_probability_d(qlog, p, 0.1)
+    check('D: r=0.1 -> F_cond=0 -> P=p', approx(d01[0], 0.8, 1e-15), repr(d01[0]))
+    d_lo = ie.event_probability_d(qlog, p, 5.5)
+    d_hi = ie.event_probability_d(qlog, p, 5.6)
+    check('D: non-increasing in r', d_lo[0] >= d_hi[0])
+    d_over = ie.event_probability_d(qlog, p, 100.0)
+    check('D: r above q32 is NOT_ESTABLISHED (NaN)', bool(np.isnan(d_over[0])))
+    q32 = math.expm1(qlog[0, 31])
+    d_eq = ie.event_probability_d(qlog, p, q32)
+    check('D: r == q32 boundary is treated as support-exceeded', bool(np.isnan(d_eq[0])))
+    rng = np.random.default_rng(4)
+    n = 4000
+    q = synthetic_qlog(n, seed=11)
+    pp = rng.uniform(0, 1, n)
+    rate = np.where(rng.uniform(size=n) < 0.2, rng.uniform(0.11, 20, n), 0.0).astype(np.float32)
+    b = 10
+    acc = ie.PointAccumulator()
+    acc.add(rate.reshape(b, 1, 20, 20), np.ones((b, 1, 20, 20), dtype=bool), np.ones((b, 1, 20, 20), dtype=bool), pp.reshape(b, 1, 20, 20), q.reshape(b, 20, 20, 32).transpose(0, 3, 1, 2))
+    res = acc.result()
+    occ = res['contingency']['OCC_P']['rows'][repr(0.1)]
+    d_row = res['candidate_D'][repr(0.1)]['supported_contingency']
+    check('D@r=0.1 P>=0.5 == occurrence P>=0.5 contingency', (occ['TP'], occ['FP'], occ['FN'], occ['TN']) == (d_row['TP'], d_row['FP'], d_row['FN'], d_row['TN']))
+    check('D@r=0.1 full support', res['candidate_D'][repr(0.1)]['support']['N_not_established'] == 0)
+
+def test_continuous_metrics_vs_numpy():
+    rng = np.random.default_rng(5)
+    n = 3000
+    rate = np.where(rng.uniform(size=n) < 0.3, rng.uniform(0.11, 40, n), 0.0).astype(np.float32)
+    pp = rng.uniform(0, 1, n)
+    q = synthetic_qlog(n, seed=13)
+    y = rate.astype(np.float64)
+    cand = ie.point_candidates_log(q, pp)
+    for name in ('A', 'B', 'C'):
+        est = cand[name]
+        mae = float(np.mean(np.abs(est - y)))
+        rmse = float(np.sqrt(np.mean((est - y) ** 2)))
+        bias = float(np.mean(est - y))
+        cc = float(np.corrcoef(est, y)[0, 1])
+        cnt = ie.confusion_counts(est > 5.0, ie.event_truth_fp32(y, 5.0))
+        check(f'{name}: TP+FP+FN+TN==N_valid', sum(cnt.values()) == n)
+    BATCH_SCENES, H, W = (10, 10, 10)
+    pixels = BATCH_SCENES * H * W
+    acc = ie.PointAccumulator()
+    for start in range(0, n, pixels):
+        sl = slice(start, start + pixels)
+        b = int(len(rate[sl]) // (H * W))
+        acc.add(rate[sl].reshape(b, 1, H, W), np.ones((b, 1, H, W), dtype=bool), np.ones((b, 1, H, W), dtype=bool), pp[sl].reshape(b, 1, H, W), q[sl].reshape(b, H, W, 32).transpose(0, 3, 1, 2))
+    res = acc.result()
+    check('accumulator N_valid', res['N_valid'] == n)
+    check('accumulator N_rain', res['N_rain'] == int(np.count_nonzero(rate > np.float32(0.1))))
+    for pe in res['point_estimates']:
+        name = pe['candidate']
+        est = cand[name]
+        check(f'{name}: MAE vs numpy', metric_close(pe['MAE_mm_h'], np.mean(np.abs(est - y))))
+        check(f'{name}: RMSE vs numpy', metric_close(pe['RMSE_mm_h'], np.sqrt(np.mean((est - y) ** 2))))
+        check(f'{name}: MeanBias vs numpy', metric_close(pe['MeanBias_mm_h'], np.mean(est - y)))
+        check(f'{name}: Pearson CC vs numpy', metric_close(pe['Pearson_CC'], np.corrcoef(est, y)[0, 1]))
+        for k, v in pe['sums'].items():
+            check(f'{name}: sum {k} finite', math.isfinite(v))
+    th = repr(10.0)
+    row = res['contingency']['A']['rows'][th]
+    naive = ie.confusion_counts(cand['A'] > 10.0, ie.event_truth_fp32(y, 10.0))
+    check('A: contingency at r=10 matches direct numpy', (row['TP'], row['FP'], row['FN'], row['TN']) == (naive['TP'], naive['FP'], naive['FN'], naive['TN']))
+    check('A: POD/FAR/CSI/HSS identity at r=10', approx(row['POD'], naive['TP'] / max(1, naive['TP'] + naive['FN'])))
+    zero_rate = np.zeros((1, 1, 10, 10), dtype=np.float32)
+    acc2 = ie.PointAccumulator()
+    acc2.add(zero_rate, np.ones_like(zero_rate, dtype=bool), np.ones_like(zero_rate, dtype=bool), np.full((1, 1, 10, 10), 0.4), synthetic_qlog(100, seed=3).reshape(1, 32, 10, 10))
+    dry = acc2.result()
+    check('dry-only: N_rain == 0', dry['N_rain'] == 0)
+    check('dry-only: Pearson CC undefined (None)', all((p['Pearson_CC'] is None for p in dry['point_estimates'])))
+
+def test_gate():
+    stored = dict(n_valid=3303090, n_rain=407820, brier=0.0123, auroc=0.9, average_precision=0.5, conditional_pinball=0.2, coverage=[0.0] * 31 + [0.95], covered=[0] * 31 + [387429])
+    ok = dict(stored)
+    g = ie.gate_summary(ok, stored)
+    check('gate: identical summary passes', g['passed'] is True)
+    bad = dict(stored, brier=stored['brier'] + 2e-12)
+    g2 = ie.gate_summary(bad, stored)
+    check('gate: 2e-12 Brier perturbation fails', g2['passed'] is False)
+    cnt = dict(stored, n_rain=stored['n_rain'] + 1)
+    g3 = ie.gate_summary(cnt, stored)
+    check('gate: count mismatch fails', g3['passed'] is False)
+    tiny = dict(stored, auroc=stored['auroc'] + 1e-13)
+    check('gate: 1e-13 perturbation passes', ie.gate_summary(tiny, stored)['passed'] is True)
+    cov = dict(stored, coverage=[0.0] * 31 + [0.96])
+    check('gate: q32 coverage mismatch fails', ie.gate_summary(cov, stored)['passed'] is False)
+
+def test_semantics_block():
+    rng = np.random.default_rng(6)
+    n = 100
+    rate = rng.uniform(0, 10, n).astype(np.float32).reshape(1, 1, 10, 10)
+    q = synthetic_qlog(n, seed=17).reshape(1, 32, 10, 10)
+    acc = ie.PointAccumulator()
+    acc.add(rate, np.ones_like(rate, dtype=bool), np.ones_like(rate, dtype=bool), np.full((1, 1, 10, 10), 0.6), q)
+    res = acc.result()
+    sem = res['semantics']
+    check('semantics: strict > documented', 'strict' in sem['greater_than'])
+    check('semantics: >= documented for P>=0.5', '>=' in sem['greater_or_equal'])
+    check('semantics: units mm/h', 'mm/h' in sem['units'])
+    check('semantics: mask documented', 'valid' in sem['mask'])
+    check('thresholds present', list(ie.THRESHOLDS_MM_H) == [0.1, 1.0, 5.0, 10.0, 20.0])
+    for t in ie.THRESHOLDS_MM_H:
+        check(f'candidate_D row {t}', repr(t) in res['candidate_D'])
+
+def test_digest():
+    d = dict(b=2, a=[1, 2], c='x')
+    h1 = ie.np_digest(d)
+    h2 = ie.np_digest(dict(c='x', a=[1, 2], b=2))
+    check('digest: order independent', h1 == h2)
+    import hashlib
+    expect = hashlib.sha256(json.dumps(d, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+    check('digest: canonical JSON sha256', h1 == expect)
+
+def main():
+    print('== Tier-1 synthetic formula checks ==')
+    for fn in (test_contingency_identities, test_strict_vs_ge_boundary, test_reliability_bin_semantics, test_point_estimates_known_examples, test_candidate_D, test_continuous_metrics_vs_numpy, test_gate, test_semantics_block, test_digest):
+        fn()
+    print(f'== {len(FAILURES)} failure(s) ==')
+    for f in FAILURES:
+        print('  FAIL:', f)
+    return 0 if not FAILURES else 1
+if __name__ == '__main__':
+    raise SystemExit(main())

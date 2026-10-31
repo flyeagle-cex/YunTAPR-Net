@@ -1,0 +1,177 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Local publication audit; never modifies the scientific review evidence."""
+import argparse
+import ast
+import csv
+import hashlib
+import json
+import subprocess
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+PARENT = '1130bc0160d1db317e93641d8c3631f637fcfe2c'
+RUN_ID = 'run_20261002T005448_798068Z'
+RUN = REPO / 'docs/scientific_review/b0_phase_a/runs' / RUN_ID
+OLD = 'docs/scientific_review/b0_phase_a/runs/run_20261002T000346_890906Z/'
+PREFIXES = ('docs/scientific_review/b0_phase_a/preflights/preflight_20261002T003932_983804Z/', 'docs/scientific_review/b0_phase_a/runs/run_20261002T004257_559320Z/', 'docs/scientific_review/b0_phase_a/runs/' + RUN_ID + '/')
+EDITABLE = {'docs/scientific_review/b0_phase_a/README.md', 'scripts/plot_b0_scientific_review_v1.py', 'scripts/review_b0_phase_a_scientific_v1.py', 'tests/scientific_review/test_review_full_artifacts.py', 'scripts/report_b0_scientific_review_v1.py', 'scripts/test_b0_scientific_review_v1.py', 'scripts/verify_b0_review_spatial_metadata_v1.py'}
+
+def sha(path):
+    with Path(path).open('rb') as handle:
+        return hashlib.file_digest(handle, 'sha256').hexdigest()
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding='utf-8'))
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def audit_local():
+    manifest = read(RUN / 'review_manifest.json')
+    for relative, expected in read(RUN / 'artifact_sha256.json').items():
+        path = RUN / relative
+        assert path.is_file() and path.stat().st_size == expected['bytes'], relative
+        assert sha(path) == expected['sha256'], relative
+    indexed = set(read(RUN / 'artifact_sha256.json'))
+    actual = {p.relative_to(RUN).as_posix() for p in RUN.rglob('*') if p.is_file()}
+    assert actual == indexed | {'artifact_sha256.json'}
+    for relative, expected in manifest['baseline_files_sha256'].items():
+        assert sha(REPO / relative) == expected, relative
+    for collection in ('code_sha256', 'additional_code_sha256'):
+        for relative, expected in manifest[collection].items():
+            assert sha(REPO / relative) == expected, relative
+    for identity in manifest['formal_identity'].values():
+        path = Path(identity['path'])
+        if not path.is_absolute():
+            path = REPO / path
+        assert sha(path) == identity['sha256'], str(path)
+    best = manifest['formal_best']
+    assert Path(best['absolute_local_path']).stat().st_size == best['bytes']
+    assert sha(best['absolute_local_path']) == best['sha256']
+    assert best['epoch'] == 11 and best['global_update'] == 64460
+    status = read(RUN / 'final_status.json')
+    assert status['B0_PHASE_A_SCIENTIFIC_REVIEW_COMPLETED'] is True
+    assert status['FULL_2024_REINFERENCE_COMPLETED'] is True
+    assert status['MODEL_PARAMETERS_UPDATED'] is False
+    assert status['OPTIMIZER_STEPS'] == status['BACKWARD_CALLS'] == 0
+    assert status['PHASE_B_AUTHORIZED'] is False
+    assert status['B0_PHASE_A_ACCEPTED'] == 'UNDECIDED'
+    assert status['TRANSFER_EPOCH_BUDGET_TO_PHASE_B'] == 'UNDECIDED'
+    assert status['2025_PIXELS_READ'] == 0
+    assert status['VALIDATION_SCENES_INFERRED'] == 11727
+    assert status['N_valid'] == 40223610 and status['N_rain'] == 4809183
+    assert all((status[k] == 0 for k in ('QUANTILE_CROSSING_COUNT', 'NONFINITE_COUNT', 'Q1_SUPPORT_VIOLATION_COUNT')))
+    tests = read(RUN / 'test_summary.json')
+    assert tests['status'] == 'PASS' and tests['total_tests_executed'] == 190
+    assert tests['existing_tests_executed'] == 171
+    assert tests['scientific_review_unit_tests_executed'] == 8
+    assert tests['full_review_artifact_tests_executed'] == 11
+    assert sum((s['executed'] for s in tests['suites'])) == 190
+    assert all((s['pass'] and s['failures'] == s['errors'] == s['skipped'] == 0 for s in tests['suites']))
+    assert tests['fixture_cleanup_success'] and (not Path(tests['fixture_root']).exists())
+    assert tests['formal_BEST_loaded_into_test_model'] is False
+    assert tests['prohibited_accesses'] == []
+    inference = read(RUN / 'reinference_summary.json')
+    assert inference['status'] == 'PASS' and all(inference['reconciliation'].values())
+    assert all((v == 0 for v in inference['numeric_checks'].values()))
+    model = inference['runtime']['model']
+    assert model['model_state_sha256_before'] == model['model_state_sha256_after']
+    assert model['optimizer_created'] is False
+    assert model['optimizer_steps'] == model['backward_calls'] == 0
+    assert all((v == 0 for v in model['prohibited_attempts'].values()))
+    assert inference['runtime']['source_years_read'] == [2024]
+    ledger = inference['runtime']['read_ledger']
+    assert sha(ledger['absolute_local_path']) == ledger['sha256']
+    assert Path(ledger['absolute_local_path']).stat().st_size == ledger['bytes']
+    figures = read(RUN / 'figure_manifest.json')
+    assert figures['status'] == 'PASS_VISUAL_REVIEW' and len(figures['figures']) == 24
+    spatial = read(RUN / 'spatial_artifact_identity.json')
+    assert sha(REPO / spatial['public_path']) == sha(spatial['english_local_path']) == spatial['sha256']
+    assert read(RUN / 'spatial_metadata_audit.json')['all_array_values_and_coordinates_unchanged'] is True
+    preflight = manifest['source_identity_preflight']
+    prepath = REPO / preflight['summary_path']
+    assert sha(prepath) == preflight['summary_sha256']
+    pre = read(prepath)
+    assert pre['status'] == 'PASS' and pre['scenes_checked'] == 11727
+    assert pre['source_root'] == '<PRIVATE_LOCATOR_fb3ffd39e0db>'
+    csvpath = prepath.parent / 'source_checks.csv'
+    assert sha(csvpath) == pre['source_checks_sha256']
+    with csvpath.open(encoding='utf-8', newline='') as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 11727
+    for i, row in enumerate(rows):
+        assert int(row['index']) == i
+        assert row['sample_id'].startswith('2024-')
+        assert row['b13_path'].startswith('<PRIVATE_LOCATOR_2cc5d99f5cee>')
+        assert all((row[k] == 'True' for k in ('required_files_exist', 'size_check', 'SHA_check', 'frozen_identity_resolves')))
+    assert read(REPO / OLD / 'final_status.json')['state'] == 'BLOCKED_SOURCE_DRIVE_UNAVAILABLE'
+    oldfiles = git('ls-tree', '-r', '--name-only', PARENT, '--', OLD).decode().splitlines()
+    for relative in oldfiles:
+        assert (REPO / relative).read_bytes() == git('show', PARENT + ':' + relative)
+    failed = read(REPO / PREFIXES[1] / 'final_status.json')
+    assert failed['state'] == 'FAILED_SPATIAL_NETCDF_UNICODE_OUTPUT'
+    assert failed['B0_PHASE_A_SCIENTIFIC_REVIEW_COMPLETED'] is False
+    for relative in EDITABLE:
+        if relative.endswith('.py'):
+            ast.parse((REPO / relative).read_text(encoding='utf-8'), filename=relative)
+    return {'status': 'PASS', 'artifact_files_checked': len(indexed), 'immutable_files_checked': len(manifest['baseline_files_sha256']), 'original_blocked_run_files_checked': len(oldfiles), 'tests': 190, 'figures': 24}
+
+def audit_changes(staged=False, commit=None):
+    args = ['diff', '--name-only', '-z']
+    args += [PARENT, commit] if commit else ['--cached']
+    paths = [p.decode('utf-8') for p in git(*args).split(b'\x00') if p]
+    assert paths, 'Nothing staged or committed'
+    files = {}
+    for relative in paths:
+        assert relative in EDITABLE or relative.startswith(PREFIXES), relative
+        assert not relative.startswith(OLD)
+        path = REPO / relative
+        assert path.is_file() and path.suffix.lower() in {'.py', '.md', '.json', '.csv', '.txt', '.log', '.png', '.nc'}, relative
+        data = path.read_bytes()
+        assert len(data) <= (10000000 if path.suffix == '.csv' else 2000000), relative
+        if path.suffix in {'.py', '.md', '.json', '.csv', '.txt', '.log'}:
+            assert b'\x00' not in data, relative
+            data.decode('utf-8')
+        target = commit if commit else ''
+        assert git('show', target + ':' + relative) == data, relative
+        files[relative] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest(), 'git_blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    return files
+
+def verify_remote(commit, files):
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def get(suffix):
+        request = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + suffix, headers={'User-Agent': 'YunTAPR-scientific-review-publication-audit', 'Accept': 'application/vnd.github+json'})
+        with opener.open(request, timeout=45) as response:
+            return json.load(response)
+    remote = get('commits/main')
+    assert remote['sha'] == commit
+    assert remote['parents'][0]['sha'] == PARENT
+    tree = get('git/trees/' + commit + '?recursive=1')
+    assert not tree.get('truncated')
+    entries = {v['path']: v for v in tree['tree']}
+    for relative, local in files.items():
+        assert entries[relative]['sha'] == local['git_blob_sha1'], relative
+        assert entries[relative]['size'] == local['bytes'], relative
+    return {'status': 'PASS', 'main_commit': commit, 'github_blob_identities_verified': len(files)}
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'run_id': RUN_ID, 'local': audit_local(), 'checked_utc': datetime.now(timezone.utc).isoformat()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = audit_changes(args.staged, commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((v['bytes'] for v in files.values()))
+        if args.remote:
+            result['remote'] = verify_remote(commit, files)
+        receipt = ROOT / ('YunTAPR-scientific-review-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        receipt.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(receipt)
+    print(json.dumps(result, ensure_ascii=False))

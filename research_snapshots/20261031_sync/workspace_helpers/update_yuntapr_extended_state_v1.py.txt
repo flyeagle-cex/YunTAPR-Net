@@ -1,0 +1,41 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Readonly runtime observation; writes only the independent extension state."""
+from pathlib import Path
+import datetime, json, os
+BASE = Path(__file__).parent
+extended = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+run = Path(extended['run_directory'])
+old = Path(active['run_directory'])
+
+def read(p):
+    return json.loads(p.read_text(encoding='utf8')) if p.exists() else None
+models = {}
+for k, v in active['formal_runs'].items():
+    public = Path(v['public_directory'])
+    counter = read(public / 'execution_counters.json')
+    final = read(public / 'final_status.json')
+    history = read(public / 'training_validation_history.json')
+    models[k] = {'status': final['status'] if final else 'RUNNING' if counter else 'NOT_RUN', 'counters': counter, 'last_completed_epoch': history[-1]['epoch'] if history else 0, 'BEST_epoch': history[-1]['BEST_epoch'] if history else None, 'BEST_val_core': history[-1]['BEST_val_core'] if history else None, 'early_stop_counter': history[-1]['early_stop_counter'] if history else None}
+review = read(run / 'phase_a_scientific_review/paired_scientific_review.json')
+prep = read(run / 'phase_b_preparation/preparation_status.json')
+b_registry = read(run / 'phase_b_execution_registry.json')
+b_models = {}
+if b_registry:
+    for k, v in b_registry['formal_runs'].items():
+        public = Path(v['public_directory'])
+        counter = read(public / 'execution_counters.json')
+        final = read(public / 'final_status.json')
+        b_models[k] = {'status': final['status'] if final else 'RUNNING' if counter else 'NOT_RUN', 'epoch_budget': v['epoch_budget'], 'counters': counter, 'final': final}
+state = {'run_directory': str(run), 'phase_a': models, 'scientific_review': review['status'] if review else 'NOT_RUN', 'phase_b_preparation': prep['status'] if prep else 'NOT_RUN', 'phase_b': b_models, 'phase_b_integrity': read(run / 'phase_b_integrity/final_status.json'), 'final_test_readiness': read(run / 'final_test_readiness/final_status.json'), 'b2': read(run / 'b2_design_audit/final_status.json'), 'FINAL_TEST_2025_AUTHORIZED': False, '2025_FINAL_TEST_EXECUTED': False, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, 'B2_TRAINING_AUTHORIZED': False, 'observed_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+for m in [*models.values(), *b_models.values()]:
+    c = m.get('counters') or {}
+    if any((c.get(k, 0) != 0 for k in ('PIXELS_2025_READ', 'RAW_ACCESS_2025', 'MODEL_INFERENCE_SCENES_2025'))):
+        raise RuntimeError('2025 firewall telemetry violation')
+temporary = run / ('pipeline_state.json.tmp_' + str(os.getpid()))
+with temporary.open('x', encoding='utf8', newline='\n') as f:
+    json.dump(state, f, indent=2, ensure_ascii=False, allow_nan=False)
+    f.write('\n')
+os.replace(temporary, run / 'pipeline_state.json')
+print(json.dumps({'phase_a': {k: {n: v[n] for n in ('status', 'last_completed_epoch', 'BEST_epoch', 'early_stop_counter')} for k, v in models.items()}, 'scientific_review': state['scientific_review'], 'phase_b_preparation': state['phase_b_preparation'], '2025_RAW_ACCESS': 0}, ensure_ascii=False))

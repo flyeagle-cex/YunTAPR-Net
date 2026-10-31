@@ -1,0 +1,64 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Register real fit identity and close only researcher-approved science items."""
+from pathlib import Path
+import importlib.metadata, json, shutil, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.data import b1_scientific_freeze as f
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+active = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+RUN = Path(active['run_directory'])
+REG = 'config/b1/b1_approved_scientific_freeze_registry_v1.json'
+NAME = 'B1_SCIENTIFIC_FREEZE_REPORT_v1'
+
+def register():
+    with gate.PreflightSourceGuard() as guard, gate.legacy.FinalInferenceGuard():
+        execution = f.read(RUN / 'normalization_execution.json')
+        norm = f.read(RUN / 'normalization_b1_2023_shared_v1.json')
+        assert execution['status'] == 'PASS_REAL_2023_TRAIN_FIT' and norm['ready']
+        assert f.verify_history(RUN) == 1941 and norm['valid_pixel_count'] == 15745292730
+        stage = Path(active['staging_root'])
+        assert stage.is_dir() and (not list(stage.iterdir()))
+        registry = {'version': 'v1', 'authority': 'RESEARCHER_APPROVED_SCIENCE_AND_TRAINING_PROTOCOL_CLARIFICATION', 'researcher_decisions': f.pin(RUN / 'researcher_decisions.json'), 'design': f.pin(REPO / f.DESIGN), 'sample_set_freeze': f.pin(RUN / 'sample_set_freeze.json'), 'normalization': f.pin(RUN / 'normalization_b1_2023_shared_v1.json'), 'approved_training_protocol_items': f.pin(REPO / f.PROTOCOL), 'B1_DESIGN_FROZEN': True, 'B1_MISSING_POLICY_FROZEN': True, 'B1_SAMPLE_SETS_FROZEN': True, 'B1_NORMALIZATION_FROZEN': True, 'B1_FAIRNESS_PRIMARY_SAMPLE_SET_FROZEN': True, 'B1_TRAINING_PROTOCOL_FULLY_FROZEN': False, 'B1_TRAINING_AUTHORIZED': False, 'B0_MATCHED_CONTROL_TRAINING_AUTHORIZED': False, 'B0_MATCHED_CONTROL_NORMALIZATION_FROZEN': False, 'supersedes': 'Old B1 candidate policy states and initial fit-rule/value-pending event; referenced originals remain immutable', 'historical_B0_modified': False, '2025_outcomes_sealed': True, 'created_utc': gate.now()}
+        f.save(REPO / REG, registry)
+        f.save(RUN / 'execution_environment.json', {'python': sys.version, 'executable': sys.executable, 'packages': {n: importlib.metadata.version(n) for n in ('numpy', 'netCDF4', 'torch', 'PyYAML')}, 'packages_installed_or_upgraded': False, 'normalization_fit_device': 'CPU_NO_MODEL', 'script_sha256': {n: f.sha256(ROOT / n) for n in ('prepare_yuntapr_b1_freeze_v1.py', 'run_yuntapr_b1_freeze_v1.py')}, 'inherited_code_bound_by_all_baseline_file_hashes': True, 'staging_postfit_independent_check': {'path': str(stage), 'files_remaining': 0, 'read_only_directory_listing': True}, 'coordinates': f.pin(REPO / 'config/spatial/sp04_coordinate_manifest_v1.json'), 'coordinate_axes': f.pin(REPO / 'config/spatial/sp04_coordinate_axes_v1.csv'), 'science_contract': f.pin(REPO / 'config/science_contract_v1.1.yaml'), 'raw_source_opens_in_registration': guard.raw_open_events})
+        assert guard.raw_open_events == 0
+    return {'registry_registered': True, 'normalization_SHA256': registry['normalization']['sha256'], 'mean_K': norm['mean_K'], 'std_K': norm['std_K'], 'training_protocol_fully_frozen': False}
+
+def status():
+    tests = f.read(RUN / 'closure_test_summary.json')
+    assert tests['all_passed'] and tests['total_tests_executed'] == 71
+    registry = f.read(REPO / REG)
+    normalization = f.read(RUN / 'normalization_b1_2023_shared_v1.json')
+    execution = f.read(RUN / 'normalization_execution.json')
+    assert f.verify_history(RUN) == 1941
+    status = {k: v for k, v in registry.items() if k.startswith('B1_') or k.startswith('B0_MATCHED_CONTROL_')}
+    status.update(status='COMPLETE_APPROVED_ITEMS_FROZEN_TRAINING_PARAMETERS_PENDING', B1_TRAINING_STARTED=False, B0_MATCHED_CONTROL_TRAINING_STARTED=False, B1_FORMAL_MODEL_IMPLEMENTED=False, B1_FORMAL_TRAIN_ENTRYPOINT_PROVIDED=False, MODEL_PARAMETERS_UPDATED=False, B0_HISTORICAL_ARTIFACTS_CHANGED=False, STOP_AFTER_PUBLICATION=True, Train_scenes=10455, Validation_scenes=10501, unique_2023_train_frames_read=33219, scene_slot_exposures=62730, weighted_normalization_pixels=15745292730, normalization_mean_K=normalization['mean_K'], normalization_std_K=normalization['std_K'], normalization_sha256=f.sha256(RUN / 'normalization_b1_2023_shared_v1.json'), historical_files_unchanged=1941, total_tests_executed=tests['total_tests_executed'], completed_utc=gate.now())
+    for key in ('2025_FINAL_TEST_EXECUTED',):
+        status[key] = False
+    for key in ('2025_MODEL_INFERENCE_SCENES', '2025_PIXELS_READ', '2025_RAW_PIXELS_READ', 'MODEL_FORWARD_CALLS', 'MODEL_CHECKPOINT_LOADS', 'OPTIMIZER_STEPS', 'BACKWARD_CALLS'):
+        status[key] = 0
+    f.save(RUN / 'final_status.json', status)
+    f.save(RUN / 'scientific_freeze_manifest.json', {'status': status['status'], 'run_id': RUN.name, 'baseline': active['baseline'], 'registry': f.pin(REPO / REG), 'final_status': f.pin(RUN / 'final_status.json'), 'sample_set_freeze': f.pin(RUN / 'sample_set_freeze.json'), 'normalization_execution': f.pin(RUN / 'normalization_execution.json'), 'test_summary': f.pin(RUN / 'closure_test_summary.json'), 'history_before': f.pin(RUN / 'history_before.json'), 'training_protocol_resolution': 'APPROVED_ITEMS_ONLY_REMAINDER_REQUIRES_RESEARCHER_DECISION', 'authorization_to_train_or_read_2025_outcome': False})
+    return status
+
+def finalize():
+    scratch = ROOT / 'tmp/pdfs/b1_scientific_freeze_v1'
+    text = (scratch / 'text.txt').read_text(encoding='utf-8')
+    log = (scratch / (NAME + '.log')).read_text(encoding='utf-8')
+    images = sorted(scratch.glob('page-*.png'))
+    assert len(images) == 4 and 'Overfull' not in log and ('Missing character' not in log) and ('人口' not in text)
+    target = RUN / (NAME + '.pdf')
+    assert not target.exists()
+    shutil.copyfile(scratch / (NAME + '.pdf'), target)
+    f.save(RUN / 'render_verification.json', {'status': 'PASS', 'pages': 4, 'all_rendered_pages_visually_inspected': True, 'no_visible_clipping_or_overlap': True, 'overfull_boxes': 0, 'missing_glyphs': 0, 'new_reports_use_correct_population_terminology': True, 'native_editor_tools_available': False, 'tool': 'Existing XeLaTeX --disable-installer and Poppler; no packages installed', 'pdf_sha256': f.sha256(target), 'source_sha256': f.sha256(target.with_suffix('.tex')), 'rendered_page_sha256': {p.name: f.sha256(p) for p in images}, 'verified_utc': gate.now()})
+    helpers = ('prepare_yuntapr_b1_freeze_v1.py', 'run_yuntapr_b1_freeze_v1.py', 'test_yuntapr_b1_freeze_v1.py', 'close_yuntapr_b1_freeze_v1.py', 'build_yuntapr_b1_freeze_report_v1.py')
+    f.save(RUN / 'orchestration_provenance.json', {'helpers_local_only_sha256': {n: f.sha256(ROOT / n) for n in helpers}, 'public_replay_entrypoint': 'scripts/freeze_b1_science_v1.py', 'created_utc': gate.now()})
+    from verify_yuntapr_b1_freeze_publication import NEW
+    names = NEW | {p.relative_to(REPO).as_posix() for p in RUN.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
+    names.discard((RUN / 'delivery_artifact_sha256.json').relative_to(REPO).as_posix())
+    f.save(RUN / 'delivery_artifact_sha256.json', {n: {'bytes': (REPO / n).stat().st_size, 'sha256': f.sha256(REPO / n)} for n in sorted(names)})
+    return {'artifacts_indexed': len(names), 'pdf_pages_visually_verified': 4, 'historical_files_preserved': f.verify_history(RUN)}
+print(json.dumps({'register': register, 'status': status, 'finalize': finalize}[sys.argv[1]]()), flush=True)

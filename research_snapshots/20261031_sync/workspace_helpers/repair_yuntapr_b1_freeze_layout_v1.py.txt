@@ -1,0 +1,22 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.data import b1_scientific_freeze as f
+a = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+RUN = Path(a['run_directory'])
+tex = RUN / 'B1_SCIENTIFIC_FREEZE_REPORT_v1.tex'
+generator = ROOT / 'build_yuntapr_b1_freeze_report_v1.py'
+old = '完整证据：本run的 scientific freeze manifest、sample set freeze、normalization execution、closure test summary与delivery artifact SHA索引；正式源代码见 freeze\\_b1\\_science\\_v1.py、b1\\_scientific\\_freeze.py及tests/b1\\_scientific\\_freeze。完整路径在配套Markdown与JSON记录；本轮无图表。'
+new = '完整证据：本run的 scientific freeze manifest、sample set freeze、normalization execution、closure test summary与delivery artifact SHA索引。\\par\n工程入口：freeze\\_b1\\_science\\_v1.py。\\par\n冻结与拟合源码：b1\\_scientific\\_freeze.py。\\par\n测试：tests/b1\\_scientific\\_freeze。完整路径见配套Markdown与JSON；本轮无图表。'
+before = {p.name: f.sha256(p) for p in (tex, generator)}
+for p in (tex, generator):
+    text = p.read_text(encoding='utf-8')
+    assert text.count(old) == 1
+    text = text.replace(old, new)
+    p.write_text(text, encoding='utf-8', newline='\n')
+f.save(RUN / 'document_layout_repair.json', {'reason': 'One long filenames paragraph caused 48pt overfull box', 'change': 'Split source references into separate paragraphs; no scientific content or results changed', 'original_document_generation_provenance_preserved': True, 'before_sha256': before, 'after_sha256': {p.name: f.sha256(p) for p in (tex, generator)}, 'normalization_generation_code_changed': False})
+print('PASS_LAYOUT_REPAIR_RECORDED')

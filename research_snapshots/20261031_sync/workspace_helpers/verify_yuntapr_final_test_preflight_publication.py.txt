@@ -1,0 +1,170 @@
+# Archival copy: formatting normalized; private locators redacted.
+# The full root tree hash proves the complete reviewed tree identity. Small
+# per-directory responses independently verify the new blobs without the
+# large recursive response that was truncated by the current network.
+"""Read-only, zero-source audit of Final Test protocol/preflight publication."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import urllib.request
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+BASE = 'ddbb69ccca6c806973a89a91127ea02c9af42afd'
+RUN_ID = 'run_20261002T152029_621524Z'
+DOC = REPO / 'docs/final_test_b0'
+RUN = DOC / 'preflight' / RUN_ID
+PREFIXES = ('config/evaluation/', 'docs/final_test_b0/', 'src/yuntapr/evaluation/', 'tests/final_test_b0/')
+FILES = {'scripts/test_b0_2025_final_v1.py'}
+PROTOCOL_SHA = '6d08def2602dda3d931937c68cadeae86b5c16b60f9f7132c9e134b962cdbe3b'
+FINAL_SHA = '05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65'
+
+def read(p):
+    return json.loads(p.read_text(encoding='utf-8'))
+
+def sha(p):
+    d = hashlib.sha256()
+    with p.open('rb') as stream:
+        for data in iter(lambda: stream.read(8 * 1024 * 1024), b''):
+            d.update(data)
+    return d.hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def audit():
+    status = read(RUN / 'final_status.json')
+    for k in ('FINAL_TEST_PROTOCOL_FROZEN', 'FINAL_TEST_RUNNER_READY', 'FINAL_read_only_identity_provenance_PASS'):
+        assert status[k] is True, k
+    for k in ('FINAL_TEST_2025_AUTHORIZED', 'FINAL_TEST_2025_EXECUTED', 'MODEL_PARAMETERS_UPDATED'):
+        assert status[k] is False, k
+    assert status['2025_PIXELS_READ'] == status['OPTIMIZER_STEPS'] == status['BACKWARD_CALLS'] == status['raw_sources_opened'] == 0
+    assert status['TOTAL_TESTS_EXECUTED'] == 60
+    assert status['TEST_FAILURES'] == status['TEST_ERRORS'] == status['TEST_SKIPS'] == 0
+    unit = read(RUN / 'unit_test_summary.json')
+    assert unit['total_tests_executed'] == sum((row['executed'] for row in unit['suites'])) == 54
+    assert [r['executed'] for r in unit['suites']] == [14, 12, 18, 1, 1, 8]
+    assert all((r['pass'] and r['failures'] == r['errors'] == r['skipped'] == 0 for r in unit['suites']))
+    assert unit['actual_backward_calls'] == unit['actual_optimizer_creations'] == unit['actual_optimizer_steps'] == 0
+    artifact_log = (RUN / 'artifact_test_results.txt').read_text(encoding='utf-8')
+    assert 'Ran 6 tests' in artifact_log and artifact_log.rstrip().endswith('OK')
+    smoke = read(RUN / 'synthetic_FINAL_forward_smoke.json')
+    assert smoke['not_a_Final_Test_result'] and smoke['synthetic_2025_dates_are_schema_labels_only']
+    assert smoke['model_state_sha256_before'] == smoke['model_state_sha256_after']
+    assert smoke['raw_quantile_dtype'] == 'torch.float32' and smoke['qlog_dtype'] == smoke['qphysical_dtype'] == 'torch.float64'
+    assert not any(smoke['prohibited_attempts_during_smoke'].values())
+    manifest = read(RUN / 'preflight_manifest.json')
+    pins = manifest['baseline_files_sha256']
+    assert manifest['baseline_commit'] == BASE and manifest['protocol_sha256'] == PROTOCOL_SHA
+    assert sha(REPO / 'config/evaluation/b0_2025_final_test_protocol_v1.yaml') == PROTOCOL_SHA
+    entries = git('ls-tree', '-r', '-z', BASE).decode().rstrip('\x00').split('\x00')
+    assert len(entries) == len(pins) == status['BASELINE_FILES_UNCHANGED'] == 1711
+    for entry in entries:
+        meta, name = entry.split('\t', 1)
+        data = (REPO / name).read_bytes()
+        assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest() == meta.split()[2], name
+        assert hashlib.sha256(data).hexdigest() == pins[name], name
+    for name, digest in manifest['implementation_sha256'].items():
+        assert sha(REPO / name) == digest, name
+    identity = read(RUN / 'final_identity_verification.json')
+    p = Path(identity['absolute_local_path'])
+    assert p.stat().st_size == identity['bytes'] == 52071595
+    assert sha(p) == identity['sha256'] == status['FINAL_SHA256_before'] == status['FINAL_SHA256_after'] == FINAL_SHA
+    assert identity['provenance_before_state_application'] and (not identity['optimizer_state_applied']) and (not identity['RNG_state_applied'])
+    assert identity['model_state_sha256'] == smoke['model_state_sha256_after']
+    index = read(RUN / 'artifact_sha256.json')
+    assert {p.name for p in RUN.iterdir() if p.is_file()} == set(index) | {'artifact_sha256.json'}
+    for name, ref in index.items():
+        p = RUN / name
+        assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+    delivery = read(DOC / 'delivery_artifact_sha256.json')
+    for name, ref in delivery.items():
+        p = REPO / name
+        assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+    assert read(DOC / 'preflight/run_20261002T151525_945067Z/final_status.json')['TOTAL_TESTS_EXECUTED'] == 57
+    for name in ('initial_unit_probe_failure_20261002.json', 'second_unit_probe_fixture_acl_failure_20261002.json'):
+        assert read(DOC / name)['not_a_PASS_record']
+    qa = read(DOC / 'report_render_verification.json')
+    assert qa['status'] == 'PASS' and qa['pages'] == 5
+    assert qa['all_five_rendered_pages_visually_inspected'] and (not qa['visible_clipping_or_overlap'])
+    assert qa['overfull_boxes'] == qa['missing_glyphs'] == 0 and (not qa['packages_installed_or_upgraded'])
+    assert read(DOC / 'fixture_cleanup_verification.json')['all_owned_fixture_children_cleaned']
+    return {'status': 'PASS', 'baseline_files_unchanged': len(pins), 'delivery_files_indexed': len(delivery), 'actual_tests': 60, 'new_tests': 50, 'existing_inference_only_tests': 10, '2025_pixels_read': 0, '2025_raw_sources_opened': 0, 'optimizer_steps': 0, 'backward_calls': 0, 'FINAL_checkpoint_sha256': FINAL_SHA, 'checkpoint_binary_publication': False}
+
+def changes(commit=None):
+    values = git('diff', '--name-status', '-z', BASE, commit) if commit else git('diff', '--cached', '--name-status', '-z')
+    parts = [p.decode('utf-8') for p in values.split(b'\x00') if p]
+    result = {}
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        assert action == 'A', 'Historical file modified: ' + name
+        assert name in FILES or name.startswith(PREFIXES), name
+        p = REPO / name
+        data = p.read_bytes()
+        assert p.suffix in ('.py', '.md', '.json', '.yaml', '.txt', '.tex', '.pdf'), name
+        assert len(data) < 20000000, name
+        if p.suffix != '.pdf':
+            assert b'\x00' not in data, name
+            data.decode('utf-8')
+            assert not re.search(b'ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|BEGIN (?:RSA |EC )?PRIVATE KEY', data), name
+        else:
+            assert data.startswith(b'%PDF-'), name
+        assert git('show', (commit or '') + ':' + name) == data, name
+        result[name] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest(), 'blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    assert set(result) == set(read(DOC / 'delivery_artifact_sha256.json')) | {'docs/final_test_b0/delivery_artifact_sha256.json'}
+    return result
+
+def remote(commit, files):
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def get(suffix):
+        request = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + suffix, headers={'User-Agent': 'YunTAPR-final-test-preflight-publication-audit', 'Accept': 'application/vnd.github+json'})
+        with opener.open(request, timeout=45) as response:
+            return json.load(response)
+    ref = get('git/ref/heads/main')
+    assert ref['object']['sha'] == commit
+    c = get('git/commits/' + commit)
+    assert c['sha'] == commit and c['parents'][0]['sha'] == BASE
+    expected_tree = git('rev-parse', 'HEAD^{tree}').decode().strip()
+    assert c['tree']['sha'] == expected_tree
+    root_tree = get('git/trees/' + expected_tree)
+    assert root_tree['sha'] == expected_tree and (not root_tree.get('truncated'))
+    directories = {'': {r['path']: r for r in root_tree['tree']}}
+    for name, ref in files.items():
+        parts = name.split('/')
+        parent = ''
+        for segment in parts[:-1]:
+            current = directories[parent][segment]
+            assert current['type'] == 'tree'
+            parent = parent + '/' + segment if parent else segment
+            if parent not in directories:
+                subtree = get('git/trees/' + current['sha'])
+                assert subtree['sha'] == current['sha'] and (not subtree.get('truncated'))
+                directories[parent] = {r['path']: r for r in subtree['tree']}
+        entry = directories[parent][parts[-1]]
+        assert entry['sha'] == ref['blob_sha1'] and entry['size'] == ref['bytes'], name
+    assert get('git/ref/heads/main')['object']['sha'] == commit
+    assert git('rev-parse', 'HEAD').decode().strip() == git('rev-parse', 'origin/main').decode().strip() == commit
+    assert not git('status', '--porcelain')
+    return {'status': 'PASS', 'main_commit': commit, 'remote_blobs_verified': len(files), 'full_tree_verified': True, 'verification_transport': 'official GitHub small per-directory responses', 'remote_directories_verified': len(directories)}
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'run_id': RUN_ID, 'local': audit(), 'utc': datetime.now(timezone.utc).isoformat()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = changes(commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+        if args.remote:
+            result['remote'] = remote(commit, files)
+        receipt = ROOT / ('YunTAPR-final-test-preflight-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        receipt.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(receipt)
+    print(json.dumps(result, ensure_ascii=True))

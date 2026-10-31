@@ -1,0 +1,124 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Exact additive commit/push, no force, model binaries or unrelated changes."""
+from pathlib import Path
+import argparse, datetime, gzip, hashlib, json, os, re, subprocess, urllib.request
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+active = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+indexpath = run / 'delivery_file_index.json'
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+
+def sha(p):
+    h = hashlib.sha256()
+    with Path(p).open('rb') as f:
+        for b in iter(lambda: f.read(1048576), b''):
+            h.update(b)
+    return h.hexdigest()
+
+def check():
+    status = read(run / 'extended_summary_status.json')
+    assert status['status'] == 'AUTHORIZED_NUMERICAL_PIPELINE_COMPLETE_REPORT_QA_AND_PUBLICATION_PENDING'
+    for key in ('2025_RAW_ACCESS', '2025_PIXELS_READ', '2025_MODEL_INFERENCE_SCENES', 'protocol_violations'):
+        assert status[key] == 0
+    for key in ('2025_FINAL_TEST_EXECUTED', 'FINAL_TEST_2025_AUTHORIZED', 'B2_TRAINING_AUTHORIZED'):
+        assert status[key] is False
+    assert read(run / 'pdf_visual_qa.json')['all_pages_visually_verified']
+    idx = read(indexpath)
+    assert idx['only_additions']
+    names = set(idx['files']) | {indexpath.relative_to(REPO).as_posix()}
+    old = read(active['phase_a_active_registry'])
+    oldrun = Path(old['run_directory'])
+    for rel, digest in read(oldrun / 'historical_file_snapshot.json')['files'].items():
+        assert sha(REPO / rel) == digest, rel
+    snapshot = read(run / 'phase_a_completed_immutable_snapshot.json')
+    for rel, digest in snapshot['files'].items():
+        assert sha(REPO / rel) == digest, rel
+    for rel, ref in idx['files'].items():
+        p = REPO / rel
+        assert p.resolve().is_relative_to(REPO.resolve()) and (not p.is_symlink()), rel
+        monitor_asset = rel.startswith((run / 'orchestration_sources/live_monitor').relative_to(REPO).as_posix() + '/') and p.suffix in ('.html', '.css', '.js', '.ps1', '.cjs')
+        assert p.suffix in ('.py', '.json', '.csv', '.md', '.tex', '.pdf', '.txt', '.yaml', '.gz') or monitor_asset, rel
+        assert sha(p) == ref['sha256'] and p.stat().st_size == ref['bytes'] < 90 * 1048576, rel
+        if p.suffix == '.pdf':
+            with p.open('rb') as f:
+                assert f.read(5) == b'%PDF-'
+        else:
+            opener = gzip.open if p.suffix == '.gz' else open
+            with opener(p, 'rt', encoding='utf8') as f:
+                for line in f:
+                    assert '\x00' not in line, rel
+                    assert not re.search('ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|BEGIN (?:RSA |EC )?PRIVATE KEY', line), rel
+    assert git('branch', '--show-current').decode().strip() == 'main'
+    assert git('remote', 'get-url', 'origin').decode().strip() == 'https://github.com/flyeagle-cex/YunTAPR-Net.git'
+    assert not git('diff', '--name-only'), 'Do not commit unrelated tracked edits'
+    return (idx['parent_commit'], names)
+
+def verify_blobs(parent, names, commit=None):
+    raw = git('diff', '--name-status', '-z', parent, commit) if commit else git('diff', '--cached', '--name-status', '-z')
+    fields = [v.decode('utf8') for v in raw.split(b'\x00') if v]
+    assert len(fields) % 2 == 0
+    found = set()
+    for i in range(0, len(fields), 2):
+        action, rel = fields[i:i + 2]
+        assert action == 'A' and rel in names, (action, rel)
+        assert git('show', (commit or '') + ':' + rel) == (REPO / rel).read_bytes(), rel
+        found.add(rel)
+    assert found == names
+    assert not git('-c', 'core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol', 'diff', '--cached', '--check')
+
+def remote_head():
+    return git('ls-remote', '--exit-code', 'origin', 'refs/heads/main').decode().split()[0]
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('operation', choices=['stage', 'commit', 'push', 'verify'])
+    args = p.parse_args()
+    parent, names = check()
+    head = git('rev-parse', 'HEAD').decode().strip()
+    if args.operation == 'stage':
+        assert head == parent and (not git('diff', '--cached', '--name-only'))
+        pathspec = BASE / 'YunTAPR-extended-delivery-git-pathspec.nul'
+        pathspec.write_bytes(b'\x00'.join((n.encode('utf8') for n in sorted(names))) + b'\x00')
+        git('add', '--pathspec-from-file=' + str(pathspec), '--pathspec-file-nul')
+        verify_blobs(parent, names)
+        print(json.dumps({'staged_additions': len(names)}))
+        return
+    if args.operation == 'commit':
+        assert head == parent
+        verify_blobs(parent, names)
+        message = BASE / 'YunTAPR-extended-delivery-commit-message.txt'
+        message.write_text('Complete paired scientific review and fresh FinalFit with readiness and B2 audit\n\nReinfer both Phase-A BESTs on the matched 2024 set and reconcile every frozen metric.\nUse each own BEST epoch budget, a shared 2023/2024 six-slot scaler, and fresh paired initialization.\nRegister only FINAL/LAST identities, complete-epoch provenance, actual counts and editable reports.\nPrepare synthetic Final Test interfaces and audit authoritative B2 channels on development data only.\nKeep 2025 outcomes sealed and all model/optimizer/raw/cache binaries outside Git.\n', encoding='utf8')
+        env = dict(os.environ)
+        stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        env.update(GIT_AUTHOR_DATE=stamp, GIT_COMMITTER_DATE=stamp)
+        git('commit', '--quiet', '--file', str(message), env=env)
+        head = git('rev-parse', 'HEAD').decode().strip()
+    assert git('rev-parse', 'HEAD^').decode().strip() == parent
+    verify_blobs(parent, names, head)
+    if args.operation in ('push', 'verify'):
+        if args.operation == 'push':
+            assert remote_head() in (parent, head), 'Remote changed; never force push'
+            git('push', 'origin', 'main')
+        assert remote_head() == head
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+        def api(path):
+            req = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + path, headers={'User-Agent': 'YunTAPR-extended-delivery-audit'})
+            with opener.open(req, timeout=45) as response:
+                return json.load(response)
+        assert api('git/ref/heads/main')['object']['sha'] == head
+        obj = api('git/commits/' + head)
+        tree = git('rev-parse', 'HEAD^{tree}').decode().strip()
+        assert obj['sha'] == head and obj['parents'][0]['sha'] == parent and (obj['tree']['sha'] == tree)
+        receipt = BASE / ('YunTAPR-extended-publication-' + head + '.json')
+        receipt.write_text(json.dumps({'commit': head, 'parent': parent, 'tree': tree, 'verified_GitHub_main': True, 'additive_files': len(names), 'model_binaries_uploaded': 0, '2025_RAW_ACCESS': 0}, indent=2) + '\n', encoding='utf8')
+    print(json.dumps({'commit': head, 'parent': parent, 'operation': args.operation, 'additive_files': len(names)}))
+if __name__ == '__main__':
+    main()

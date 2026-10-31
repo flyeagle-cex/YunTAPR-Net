@@ -1,0 +1,90 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read saved receipts only. No models, weights, weather inputs or inference."""
+import csv
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+import sqlite3
+ROOT = Path(__file__).resolve().parents[3]
+LOCAL = ROOT / 'docs/research_readiness/.local'
+
+def read(p):
+    return json.loads(Path(p).read_bytes())
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def write(p, x):
+    with Path(p).open('x', encoding='utf-8') as f:
+        json.dump(x, f, ensure_ascii=False, indent=2, allow_nan=False)
+out = LOCAL / 'metric_b01_correction_20261030_v1'
+complete = read(out / 'completion.json')
+private = read(LOCAL / 'metric_b01_correction_preparation_20261030_v1/private.json')
+registry = {x['run_id']: x for x in read(private['registry'])['runs']}
+assert complete['status'] == 'COMPLETE_19_E9_DEV_METRIC_BACKFILL' and len(complete['results']) == 19
+rows = []
+for rid, info in complete['results'].items():
+    result = read(info['path'])
+    run = registry[rid]
+    identity = result['checkpoint_identity']
+    gate = result['gate']
+    assert sha(info['path']) == info['sha256'] and result['status'] == 'COMPLETE' and (gate['passed'] is True)
+    assert identity['sha256_actual'] == identity['expected_sha256'] == run['checkpoint_sha256']
+    assert all((x['passed'] is True for x in gate['metrics'].values()))
+    assert all((x['passed'] is True and x['stored'] == x['recomputed'] for x in gate['counts'].values()))
+    rows.append(dict(run_id=rid, result_sha256=info['sha256'], checkpoint_sha256=run['checkpoint_sha256'], scenes=result['scenes_planned'], status='COMPLETE', gate=gate, new_metric_categories=list(result['new_metrics']), elapsed_seconds=result['elapsed_seconds'], inference_execution_commit=result.get('executed_commit'), historical_training_execution_commit='INHERITED_NOT_UPGRADED_BY_INFERENCE_CODE'))
+four = []
+for rid in private['remaining']:
+    v = read(out / (rid + '_verified.json'))
+    assert v['result_sha256'] == complete['results'][rid]['sha256']
+    assert v['gate_passed'] is True and v['optimizer_updates'] == 0
+    assert v['source_bytes'] == private['caps'][rid]['source_bytes'] and v['content_read_instances'] == private['caps'][rid]['content_reads']
+    four.append(dict(run_id=rid, verified_receipt_sha256=sha(out / (rid + '_verified.json')), source_bytes=v['source_bytes'], content_read_instances=v['content_read_instances']))
+assert sum((x['source_bytes'] for x in four)) == 389975899096
+assert sum((x['content_read_instances'] for x in four)) == 88692
+elapsed = (datetime.fromisoformat(complete['at']) - datetime.fromisoformat(read(out / 'binding.json')['at'])).total_seconds()
+assert elapsed <= 43200
+service = LOCAL / 'perp_absolute_start_20261030_v1'
+training = Path(read(LOCAL / 'metric_b01_correction_preparation_20261030_v1/perp_private.json')['output_root'])
+binding = read(training / 'authorization_binding.json')
+independence = read(service / 'independence.json')
+assert binding['code_commit'] == '9b4046a655e2ec91633104eaa64bd507cca81aad'
+assert binding['approval']['proposal_sha256'] == '0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67'
+assert independence['in_any_job'] is False and independence['package_status'] == 15700
+assert not (training / 'failure.json').exists() and (not (service / 'target_exit.json').exists())
+with sqlite3.connect((training / 'B7_s2029/updates.sqlite').resolve().as_uri() + '?mode=ro', uri=True) as db:
+    states = dict(db.execute('SELECT state,COUNT(*) FROM updates GROUP BY state'))
+returned = states.get('RETURNED', 0)
+at = datetime.now(timezone.utc).isoformat()
+rel = 'docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json'
+receipt = dict(status='VERIFIED_19_METRIC_BACKFILL_COMPLETE_CANDIDATE_TRAINING_IN_PROGRESS', at=at, metrics=dict(status=complete['status'], completed_at=complete['at'], results=rows, inherited=15, new_passes=4, correction_execution_commit='3d632954e37a6003d77babd06172922d63b0c77a', proposal_sha256='daa745a02e8e51ff25155dddd1b65721c958a649277787d4fe53a11b563381b2', exact_four_pass_content=four, source_bytes=389975899096, content_read_instances=88692, elapsed_seconds=elapsed, maximum_seconds=43200, optimizer_updates=0, automatic_retries=0, legacy_read_events='LOG_EVENTS_NOT_CONTENT_INSTANCES'), training=dict(model='B7_PERP_GRADIENT', seed=2029, status='IN_PROGRESS', first_formal_start=read(service / 'target_launch.json')['at'], execution_commit=binding['code_commit'], proposal_sha256=binding['approval']['proposal_sha256'], researcher_authorization='INHERIT_EXPLICIT_PREPARE_AND_START_INSTRUCTION_NOT_A_NEW_GRANT', original_user_quote=binding['approval']['researcher_statement'], source_call=binding['approval']['source_question_call'], returned_updates_snapshot=returned, maximum_updates=4320, maximum_source_bytes=477571953840, maximum_source_instances=142813, maximum_seconds=21600, replay=0, additional_training_retry=0, independent_supervisor_no_job_or_package=True, admission=binding['admission'], source_admission_status=read(training / 'source_admission.json')['status'], initial_weight_identity_sha256=sha(training / 'B7_s2029/paired_initial_identity.json'), sample_order_receipt_sha256=sha(training / 'B7_s2029/paired_orders.json'), final_E9_status='NOT_AVAILABLE_TRAINING_IN_PROGRESS'), historical_dispatch_failure=dict(reason='RELATIVE_PRIVATE_CONFIG_RESOLVED_IN_ANOTHER_FROZEN_CHECKOUT', stage='BEFORE_PRIVATE_JSON_LOAD_APPROVAL_VALIDATION_TORCH_IMPORT_OR_BUDGET_BINDING', failed_invocations=1, formal_training_attempts_before_path_fix=0, optimizer_updates=0, weather_source_bytes=0, evidence_preserved=True, fix='ABSOLUTE_CONFIG_ARGUMENTS_NEW_PRIVATE_SERVICE_ORIGINAL_FROZEN_TRAINING_CODE_UNCHANGED', targeted_host_tests='4_PASS_INCLUDING_REJECTION_OF_EACH_RELATIVE_CONFIG_ARGUMENT'), final_workbook=dict(status='IN_PROGRESS_WAITING_CANDIDATE_E9', worksheets=1, tables=1, no_partial_export_as_complete=True), final_2025='FROZEN_NO_ACCESS', historical_evidence='PRESERVED_NOT_OVERWRITTEN', main='NOT_CHANGED')
+write(ROOT / rel, receipt)
+note = f'2026-10-30最新核对：19/19份固定E9指标补算已完成，冻结概率指标与整数计数gate全部通过；四项修正实际读取389,975,899,096字节/88,692内容实例、0优化器更新，用时{elapsed:.1f}秒，继承15项。原自动衔接在模型加载前因跨副本相对配置路径找不到文件而退出，0训练更新/0气象读取，历史失败保留。配置改为绝对路径后，原9b4046a/0444d92e已于北京时间21:43:11由独立WMI完成首次正式启动，当前B7_PERP_GRADIENT/2029为IN_PROGRESS（本次快照{returned}次RETURNED），尚无E9，不算训练完成。原4320更新/477571953840字节/142813次/6小时/24GiB、零重放/额外训练重试额度不变；2025冻结。最终一工作表一大表等待该候选封口，未导出冒充完整。'
+for name in ('STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'docs/research_progress/CURRENT_STATUS.md'):
+    path = ROOT / name
+    text = path.read_text(encoding='utf-8')
+    head, tail = text.split('\n', 1)
+    link = rel if '/' not in name else '../research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json'
+    path.write_text(head + '\n\n' + note + f' 见[指标完成与首次训练启动收据]({link})。下方排队、待批准与早期进度为历史时点。\n' + tail, encoding='utf-8')
+path = ROOT / 'docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md'
+with path.open('a', encoding='utf-8') as f:
+    f.write('\n\n## 2026-10-30指标完成与方向性探针正式启动\n\n' + note + ' 见[本轮收据](evidence/metric_completion_candidate_started_20261030.json)。\n')
+path = ROOT / 'EXPERIMENT_MATRIX.csv'
+with path.open(encoding='utf-8-sig', newline='') as f:
+    reader = csv.DictReader(f)
+    fields = reader.fieldnames
+    matrix = list(reader)
+candidate = [r for r in matrix if r['model_id'] == 'B7_PERP_GRADIENT']
+assert len(candidate) == 1
+candidate[0].update(phase='DIRECTIONAL_PROBE_FORMAL_TRAINING', status='IN_PROGRESS', execution_state='RUNNING', executed_commit=binding['code_commit'], global_steps=str(returned), epochs='0', evidence_path=rel, authorization_status='ORIGINAL_RESEARCHER_START_GRANT_CONSUMED_FIRST_FORMAL_START', verified_at=at, status_as_of=at, notes='19/19 E9 metric gates passed. First formal training starts after correcting pre-budget relative-config dispatch failure (0 updates/weather reads). IN_PROGRESS; no E9 yet. Original caps unchanged; no replay/automatic training retry. Single-seed directional probe; spatial/distribution confounds retained.')
+with path.open('w', encoding='utf-8', newline='') as f:
+    w = csv.DictWriter(f, fields)
+    w.writeheader()
+    w.writerows(matrix)
+counter_path = LOCAL / 'pipeline_completion_heartbeat_correction_20261030.json'
+counter = read(counter_path)
+counter.update(last_notified_stage='ALL_19_METRICS_COMPLETE_FIRST_FORMAL_CANDIDATE_TRAINING_STARTED', last_notified_metric_complete=19, metric_terminal=True, candidate_terminal=False, follow_on_terminal=False, current_training_service='perp_absolute_start_20261030_v1', manual_status_at=at)
+counter_path.write_text(json.dumps(counter, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps(dict(receipt=rel, metrics=19, returned_updates=returned, elapsed_metric_seconds=elapsed, training_status='IN_PROGRESS'), ensure_ascii=True))

@@ -1,0 +1,85 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Prepare a reviewable GitHub export without touching Stage-0/B0 source runs.
+
+The export is deliberately a file snapshot. Source data, storage benchmarks and
+large duplicate tables remain local with a traceable omission manifest.
+"""
+from __future__ import annotations
+import csv
+import hashlib
+import os
+import shutil
+from pathlib import Path
+WORKSPACE = Path(__file__).resolve().parent
+DEST = WORKSPACE / 'github_upload_candidate'
+ROOTS = [(Path('<PRIVATE_LOCATOR_cb944548ad45>'), Path('evidence/outputs')), (Path('<PRIVATE_LOCATOR_351910f1dced>'), Path('evidence/himawari_stage0_outputs')), (Path('<PRIVATE_LOCATOR_d24aca026d13>'), Path('code/stage0_himawari/src')), (Path('<PRIVATE_LOCATOR_a97598d685c2>'), Path('code/stage0_himawari/tests')), (WORKSPACE / 'b0_engineering_smoke', Path('code/b0_engineering_smoke')), (WORKSPACE / 'b0_formal_readiness_tools', Path('code/b0_formal_readiness_tools')), (WORKSPACE / 'stage0_final_gate_tools', Path('code/stage0_final_gate_tools'))]
+TEXT_AND_SMALL_EVIDENCE = {'.py', '.md', '.csv', '.parquet', '.json', '.jsonl', '.txt', '.log', '.xml', '.geojson', '.npz', '.nc'}
+EXCLUDE_DIRS = {'.git', '.venv', '__pycache__', '.pytest_cache', 'cache', 'tmp', 'staging', 'storage_api_smoke.zarr', 'candidates'}
+MAX_BYTES = 5000000
+
+def sha(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open('rb') as f:
+        for block in iter(lambda: f.read(4 * 1024 * 1024), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def write_csv(path: Path, rows: list[dict], cols: list[str]) -> None:
+    with path.open('x', newline='', encoding='utf-8-sig') as f:
+        w = csv.DictWriter(f, fieldnames=cols)
+        w.writeheader()
+        w.writerows(rows)
+
+def main() -> None:
+    assert DEST.resolve().parent == WORKSPACE.resolve()
+    if DEST.exists():
+        raise FileExistsError(f'Export already exists; preserving it: {DEST}')
+    DEST.mkdir()
+    (DEST / 'manifests').mkdir()
+    included = []
+    omitted = []
+    summary = []
+    for root, prefix in ROOTS:
+        assert root.is_dir(), root
+        this_included = this_omitted = total_bytes = omitted_bytes = 0
+        for base, dirs, files in os.walk(root, topdown=True, followlinks=False):
+            base_path = Path(base)
+            skip = [d for d in dirs if d.lower() in EXCLUDE_DIRS or (base_path / d).is_symlink()]
+            dirs[:] = [d for d in dirs if d not in skip]
+            for name in files:
+                src = base_path / name
+                if src.is_symlink():
+                    omitted.append(dict(source=str(src), relative_export_path='', size_bytes='', reason='SYMLINK'))
+                    this_omitted += 1
+                    continue
+                size = src.stat().st_size
+                rel = prefix / src.relative_to(root)
+                reason = 'FILE_TYPE_EXCLUDED' if src.suffix.lower() not in TEXT_AND_SMALL_EVIDENCE else 'OVER_5_MB' if size > MAX_BYTES else ''
+                if reason:
+                    omitted.append(dict(source=str(src), relative_export_path=str(rel).replace('\\', '/'), size_bytes=size, reason=reason))
+                    this_omitted += 1
+                    omitted_bytes += size
+                    continue
+                dst = DEST / rel
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                with src.open('rb') as source, dst.open('xb') as target:
+                    shutil.copyfileobj(source, target, 1024 * 1024)
+                digest = sha(dst)
+                if dst.stat().st_size != size or digest != sha(src):
+                    raise ValueError(f'Copy verification failed: {src}')
+                included.append(dict(relative_path=str(rel).replace('\\', '/'), source=str(src), size_bytes=size, sha256=digest))
+                this_included += 1
+                total_bytes += size
+        summary.append(dict(root=str(root), export_prefix=str(prefix).replace('\\', '/'), included_files=this_included, included_bytes=total_bytes, omitted_named_files=this_omitted, omitted_named_bytes=omitted_bytes, skipped_dir_names=';'.join(sorted((skip for skip in EXCLUDE_DIRS)))))
+    write_csv(DEST / 'manifests/included_files.csv', included, ['relative_path', 'source', 'size_bytes', 'sha256'])
+    write_csv(DEST / 'manifests/omitted_named_files.csv', omitted, ['source', 'relative_export_path', 'size_bytes', 'reason'])
+    write_csv(DEST / 'manifests/source_summary.csv', summary, ['root', 'export_prefix', 'included_files', 'included_bytes', 'omitted_named_files', 'omitted_named_bytes', 'skipped_dir_names'])
+    (DEST / '.gitignore').write_text('# Working caches and local credentials\n.venv/\n__pycache__/\n.pytest_cache/\ncache/\ntmp/\n*.zarr/\n.env\n.env.*\n*.netrc\n*.pem\n*.key\n', encoding='utf-8')
+    (DEST / 'README.md').write_text(f"# YunTAPR-Net Stage-0 / B0 engineering evidence export\n\nThis is a versioned source and evidence snapshot prepared for GitHub review. It is not a scientific data release or a B0 formal-training result.\n\nIncluded: {len(included)} files ({sum((int(x['size_bytes']) for x in included)):,} bytes) from local project code, Stage-0 outputs, B0 engineering smoke, and B0 formal-readiness resolution. Earlier failed runs remain represented. See `manifests/included_files.csv` for per-file SHA256 and local source path.\n\nNot included: {len(omitted)} named files excluded by type or the 5 MB file cap ({sum((int(x['size_bytes']) for x in omitted if x['size_bytes'] != '')):,} bytes), plus excluded cache, Zarr, benchmark candidate and temporary directories. See `manifests/omitted_named_files.csv` and `manifests/source_summary.csv`. The excluded directory counts are not part of the named-file omission table. Raw Himawari, IMERG, GFS and DEM roots were never source roots for this export. Source runs were read only.\n\nThe original formal-readiness report is in `evidence/outputs/stage1_b0_formal_readiness_resolution/run_20260928T124313_169375Z/FINAL_B0_FORMAL_READINESS_REPORT.md`. Its result is **B0_FORMAL_NOT_READY**: 30 focused tests passed, while 12 entry items remain blocked. The prior smoke remains PASS. The 2025-10 IMERG V07 Final gap remains MISSING; the discovered Late files were not substituted. Candidate timing, input domain, context, splits, normalization method, and formal architecture were not frozen.\n\nReports and scripts can contain local absolute provenance paths; they point to the original workstation and do not make raw files available from this repository. CSV and Parquet pairs are retained when each component is within the export cap. Large scientific audit tables and storage benchmark arrays stay local; refer to the original run manifests and this export's omission table before claiming full reanalysis from this GitHub snapshot.\n\nNo training or next stage was launched by the export.\n", encoding='utf-8')
+    all_rows = list(csv.DictReader((DEST / 'manifests/included_files.csv').open(encoding='utf-8-sig')))
+    assert len(all_rows) == len(included)
+    assert all(((DEST / x['relative_path']).stat().st_size == int(x['size_bytes']) and sha(DEST / x['relative_path']) == x['sha256'] for x in all_rows))
+    print(f"EXPORT_READY {DEST} files={len(included)} bytes={sum((int(x['size_bytes']) for x in included))} omitted_named={len(omitted)}")
+if __name__ == '__main__':
+    main()

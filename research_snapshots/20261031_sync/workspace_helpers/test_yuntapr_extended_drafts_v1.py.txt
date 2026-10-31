@@ -1,0 +1,38 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Archive each synthetic-only draft test attempt, including failures."""
+from pathlib import Path
+import datetime, io, json, os, sys, unittest
+from unittest.mock import patch
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(BASE / 'YunTAPR-extended-build'), str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+os.environ['YUNTAPR_REPO_ROOT'] = str(REPO)
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+active = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+out = Path(active['run_directory']) / 'draft_contract_tests' / datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+out.mkdir(parents=True, exist_ok=False)
+log = io.StringIO()
+import torch
+torch.set_num_threads(2)
+counts = {'TEST_FIXTURE_OPTIMIZER_STEPS': 0, 'TEST_FIXTURE_BACKWARD_CALLS': 0}
+oldstep = torch.optim.AdamW.step
+oldback = torch.Tensor.backward
+
+def step(self, *a, **k):
+    counts['TEST_FIXTURE_OPTIMIZER_STEPS'] += 1
+    return oldstep(self, *a, **k)
+
+def back(self, *a, **k):
+    counts['TEST_FIXTURE_BACKWARD_CALLS'] += 1
+    return oldback(self, *a, **k)
+with PreflightSourceGuard() as guard, patch.object(torch.optim.AdamW, 'step', step), patch.object(torch.Tensor, 'backward', back):
+    suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in ['test_paired_extended_contract_v1', 'test_paired_extended_readiness_b2_v1', 'test_paired_extended_resume_v1']))
+    result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+summary = {'status': 'PASS' if result.wasSuccessful() and (not result.skipped) else 'FAILED_IMMUTABLE_ATTEMPT', 'count': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'TEST_FIXTURE_ONLY': True, 'RAW_SOURCE_OPENS': guard.raw_open_events, 'FORMAL_OPTIMIZER_STEPS': 0, **counts, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, 'active_formal_sources_changed': False, 'drafts_not_installed': True}
+(out / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+(out / 'test_summary.json').write_text(json.dumps(summary, indent=2), encoding='utf8')
+print(log.getvalue())
+print(json.dumps({'attempt': str(out), **summary}, ensure_ascii=False))
+if summary['status'] != 'PASS' or guard.raw_open_events != 0:
+    raise SystemExit(1)

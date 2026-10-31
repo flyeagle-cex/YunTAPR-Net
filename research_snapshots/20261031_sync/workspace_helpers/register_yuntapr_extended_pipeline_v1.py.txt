@@ -1,0 +1,28 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Register additional researcher authority without changing active Phase-A bytes."""
+from pathlib import Path
+import datetime, hashlib, json, shutil
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+ATTACHMENT = Path('<PRIVATE_LOCATOR_8acdd9accaa7>')
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+run = REPO / 'docs/paired_extended_pipeline/runs' / ('run_' + stamp)
+run.mkdir(parents=True, exist_ok=False)
+original = ATTACHMENT.read_bytes()
+(run / 'researcher_extended_authorization_v1.txt').write_bytes(original)
+authority = {'version': 'v1', 'scope': 'RESEARCHER_AUTHORIZED_UNATTENDED_EXTENDED_PIPELINE', 'baseline': active['baseline'], 'original_attachment': str(ATTACHMENT), 'original_attachment_sha256': hashlib.sha256(original).hexdigest(), 'phase_a_protocol_sha256': '284f71ca6677f23c018ed9ee3e8d8b298fe3e472735689953cd42d73f4ea57b6', 'development_normalization_sha256': '656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31', 'phase_a_active_registry': str(BASE / 'YunTAPR-active-paired-training-v1.json'), 'phase_a_artifacts_remain_immutable': True, 'continuation_rule': 'BOTH_PHASE_A_SUCCESS_AND_INTEGRITY_PASS_INDEPENDENT_OF_METRIC_DIRECTION', 'phase_b_epochs': {'B0_MATCHED': 'OWN_PHASE_A_BEST_EPOCH', 'B1': 'OWN_PHASE_A_BEST_EPOCH'}, 'finalfit_scenes': 20956, 'normalization': 'ONE_SHARED_SIX_SLOT_SCENE_SLOT_EXPOSURE_SCALER_2023_2024_DDOF0', 'steps_per_epoch': 10478, 'warmup_updates': 10478, 'cosine_horizon_updates': 523900, 'fresh_seed': 2026, 'phase_a_state_transfer_allowed': False, 'phase_b_validation_allowed': False, 'phase_b_early_stop_allowed': False, 'final_test_2025_authorized': False, 'b2_training_authorized': False, 'b2_real_audit_requires_existing_authoritative_channel_set': True, 'b2_normalization_fit_authorized': False, 'raw_2025_access_allowed': False, 'formal_failure_action': 'PRESERVE_AND_STOP', 'resume_exception': 'ONLY_PURE_LOGGING_REPORT_ORCHESTRATION_BUG_FROM_VERIFIED_COMPLETED_EPOCH_NO_SCIENTIFIC_CHANGE', 'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+stages = ['B0_MATCHED_PHASE_A', 'B1_PHASE_A', 'BEST_FULL_2024_REINFERENCE', 'PAIRED_PHASE_B_PREPARATION', 'B0_MATCHED_PHASE_B', 'B1_PHASE_B', 'PHASE_B_INTEGRITY', 'FINAL_TEST_READINESS_ONLY', 'B2_DESIGN_AND_CONDITIONAL_AUDIT']
+state = {'run_directory': str(run), 'stages': {s: 'NOT_RUN' for s in stages}, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, '2025_FINAL_TEST_EXECUTED': False, 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, 'active_phase_a_remains_running': True}
+for name, value in [('extended_authority.json', authority), ('pipeline_state.json', state)]:
+    with (run / name).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(value, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+registry = {'run_directory': str(run), 'authority_path': str(run / 'extended_authority.json'), 'authority_sha256': hashlib.sha256((run / 'extended_authority.json').read_bytes()).hexdigest(), 'phase_a_active_registry': str(BASE / 'YunTAPR-active-paired-training-v1.json')}
+with (BASE / 'YunTAPR-extended-pipeline-active-v1.json').open('x', encoding='utf8') as f:
+    json.dump(registry, f, ensure_ascii=False, indent=2)
+assert (run / 'researcher_extended_authorization_v1.txt').read_bytes() == original
+assert authority['steps_per_epoch'] * 2 == authority['finalfit_scenes']
+assert authority['warmup_updates'] * 50 == authority['cosine_horizon_updates']
+print(json.dumps(registry, ensure_ascii=False, indent=2))

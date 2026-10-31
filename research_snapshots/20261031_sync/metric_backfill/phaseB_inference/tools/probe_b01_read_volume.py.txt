@@ -1,0 +1,70 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read-only estimate of one B0/B1 Development pass read volume from frozen metadata.
+
+Reads only the pinned 2024/2023 formal manifests and the B13 frame-identity CSVs (repo
+metadata), plus a directory stat of the IMERG day files.  No observation payload is
+opened, no decoder is run.
+"""
+from __future__ import annotations
+import csv
+import json
+import os
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+FREEZE = os.path.join(ACT, 'docs', 'b1_scientific_freeze', 'runs', 'run_20261003T045139_110133Z')
+AUDIT = os.path.join(ACT, 'docs', 'b1_temporal_audit', 'runs', 'run_20261003T035724_142784Z')
+IMERG = '<PRIVATE_LOCATOR_fb4f0dfa666b>'
+
+def load_frames():
+    frames = {}
+    idx = json.load(open(os.path.join(AUDIT, 'frame_identity_index.json'), encoding='utf-8'))
+    for rel in idx['files']:
+        path = os.path.join(AUDIT, rel)
+        with open(path, encoding='utf-8-sig', newline='') as f:
+            for row in csv.DictReader(f):
+                if row.get('source_bytes'):
+                    frames[row['nominal']] = int(row['source_bytes'])
+    return (frames, idx)
+
+def load_rows(name):
+    with open(os.path.join(FREEZE, name), encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+def compute(rows, slots):
+    nominals = set()
+    for row in rows:
+        if slots == ('expected_nominal',):
+            nominals.add(row['expected_nominal'])
+        else:
+            for s in slots:
+                nominals.add(row[f'slot_{s}_nominal'])
+    days = {os.path.basename(row['imerg_day_path']) for row in rows}
+    return (nominals, days)
+
+def main():
+    frames, idx = load_frames()
+    out = {'frame_index_files': idx['files'], 'n_frames_indexed': len(frames)}
+    specs = [('B1_dev_2024', 'b1_2024_formal_manifest.csv', range(6), '2024'), ('B0_dev_2024', 'b0_matched_control_2024_formal_manifest.csv', ('expected_nominal',), '2024'), ('B1_train_2023', 'b1_2023_formal_manifest.csv', range(6), '2023'), ('B0_train_2023', 'b0_matched_control_2023_formal_manifest.csv', ('expected_nominal',), '2023')]
+    for label, manifest, slots, year in specs:
+        rows = load_rows(manifest)
+        nominals, days = compute(rows, slots)
+        missing = [n for n in nominals if n not in frames]
+        b13_bytes = sum((frames.get(n, 0) for n in nominals))
+        day_sizes = 0
+        day_missing = 0
+        for day in days:
+            p = os.path.join(IMERG, year, day)
+            if os.path.exists(p):
+                day_sizes += os.path.getsize(p)
+            else:
+                day_missing += 1
+        total = b13_bytes + day_sizes
+        out[label] = dict(scenes=len(rows), unique_frames=len(nominals), missing_frames=len(missing), b13_unique_bytes=b13_bytes, imerg_days=len(days), imerg_missing=day_missing, imerg_bytes=day_sizes, total_unique_bytes=total, total_unique_GiB=round(total / 1024 ** 3, 4), mean_frame_bytes=round(b13_bytes / max(1, len(nominals)), 1))
+        print(label, json.dumps(out[label]), flush=True)
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(base, 'outputs', 'probe_b01_read_volume.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print('WROTE outputs/probe_b01_read_volume.json')
+if __name__ == '__main__':
+    main()

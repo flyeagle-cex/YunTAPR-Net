@@ -1,0 +1,8 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+ROOT = Path(__file__).parent
+source = (ROOT / 'publish_yuntapr_b1_freeze_official_api.py').read_text(encoding='utf-8')
+source = source.replace('verify_yuntapr_b1_freeze_publication', 'verify_yuntapr_b1_protocol_publication').replace('YunTAPR-b1-freeze-publication-transport-', 'YunTAPR-b1-protocol-publication-transport-')
+(ROOT / 'publish_yuntapr_b1_protocol_official_api.py').write_text(source, encoding='utf-8', newline='\n')
+print('Prepared official GitHub Git Data API transport for exact reviewed tree; no network action yet')

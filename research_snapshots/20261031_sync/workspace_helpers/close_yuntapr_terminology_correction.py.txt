@@ -1,0 +1,67 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Verify and register a document-only correction without rerunning science."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import re
+import shutil
+import subprocess
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+DOC = REPO / 'docs/final_test_b0'
+ACTIVE = json.loads((ROOT / 'YunTAPR-active-terminology-correction.json').read_text(encoding='utf-8'))
+RUN = Path(ACTIVE['run'])
+BASE = ACTIVE['baseline']
+QA = ROOT / 'tmp/pdfs/b0_final_test_terminology_20261002'
+NAME = 'B0_2025_FINAL_TEST_PROTOCOL_FREEZE_PREFLIGHT_REPORT_v1'
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def identity(p):
+    return {'bytes': p.stat().st_size, 'sha256': sha(p)}
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def save(p, v):
+    with p.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(v, stream, ensure_ascii=False, indent=2)
+        stream.write('\n')
+manifest = json.loads((RUN / 'correction_manifest.json').read_text(encoding='utf-8'))
+approved = set(manifest['approved_modified_documents'])
+log = (QA / (NAME + '.log')).read_text(encoding='utf-8', errors='replace')
+extracted = (QA / 'extracted.txt').read_text(encoding='utf-8')
+assert '人口' not in extracted and '评价样本全集' in extracted and ('全样本评价指标' in extracted)
+assert 'Overfull' not in log and 'Missing character' not in log and ('! LaTeX Error' not in log)
+for suffix in ('md', 'tex'):
+    p = DOC / (NAME + '.' + suffix)
+    old = git('show', BASE + ':' + p.relative_to(REPO).as_posix()).decode('utf-8')
+    new = p.read_text(encoding='utf-8')
+    assert '人口' not in new
+    assert re.findall('\\d+', old) == re.findall('\\d+', new), 'Numeric values changed: ' + suffix
+assert 'N_valid' in (DOC / (NAME + '.md')).read_text(encoding='utf-8')
+pages = [QA / f'page-{i}.png' for i in range(1, 6)]
+assert all((p.is_file() for p in pages))
+shutil.copyfile(QA / (NAME + '.pdf'), DOC / (NAME + '.pdf'))
+assert sha(QA / (NAME + '.pdf')) == sha(DOC / (NAME + '.pdf'))
+unchanged = 0
+for name, ref in manifest['baseline_files'].items():
+    if name in approved:
+        continue
+    data = (REPO / name).read_bytes()
+    blob = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+    assert blob == ref['git_blob_sha1'], name
+    unchanged += 1
+assert unchanged == len(manifest['baseline_files']) - 4
+status = json.loads((DOC / 'preflight/run_20261002T152029_621524Z/final_status.json').read_text(encoding='utf-8'))
+assert status['TOTAL_TESTS_EXECUTED'] == 60 and status['2025_PIXELS_READ'] == status['OPTIMIZER_STEPS'] == status['BACKWARD_CALLS'] == 0
+assert status['FINAL_TEST_2025_AUTHORIZED'] is False and status['FINAL_TEST_2025_EXECUTED'] is False
+save(RUN / 'render_verification.json', {'status': 'PASS', 'checked_utc': datetime.now(timezone.utc).isoformat(), 'compiler': 'existing XeLaTeX --disable-installer; two successful passes', 'pages': 5, 'all_rendered_pages_visually_inspected': True, 'rendered_page_sha256': {p.name: sha(p) for p in pages}, 'no_visible_clipping_or_overlap': True, 'overfull_boxes': 0, 'missing_glyphs': 0, 'pdf_text_has_zero_incorrect_term_occurrences': True, 'numeric_tokens_in_MD_and_TEX_identical_to_original': True, 'source_identity': identity(DOC / (NAME + '.tex')), 'pdf_identity': identity(DOC / (NAME + '.pdf')), '2025_RAW_SOURCES_OPENED': 0, '2025_PIXELS_READ': 0, 'checkpoint_opened': False})
+save(RUN / 'final_status.json', {'status': 'DOCUMENTATION_CORRECTION_VERIFIED', 'baseline_commit': BASE, 'modified_document_count': 4, 'other_baseline_files_byte_identical': unchanged, 'protocol_code_tests_logs_scientific_results_unchanged': True, 'preflight_60_test_result_is_historical_not_rerun': True, 'FINAL_TEST_PROTOCOL_FROZEN': True, 'FINAL_TEST_RUNNER_READY': True, 'FINAL_TEST_2025_AUTHORIZED': False, 'FINAL_TEST_2025_EXECUTED': False, '2025_RAW_SOURCES_OPENED': 0, '2025_PIXELS_READ': 0, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'checkpoint_opened': False, 'completed_utc': datetime.now(timezone.utc).isoformat()})
+save(RUN / 'README.md.json', {'note': 'The historical render/delivery indexes remain byte-identical and describe their original release; the current document identities are tracked by this independent correction record.'})
+paths = [REPO / name for name in approved] + [p for p in RUN.iterdir() if p.is_file()]
+save(RUN / 'artifact_sha256.json', {p.relative_to(REPO).as_posix(): identity(p) for p in sorted(paths)})
+print(json.dumps({'status': 'PASS', 'run': str(RUN), 'other_baseline_files_unchanged': unchanged, 'current_document_hashes_registered': 4, '2025_pixels_read': 0, 'checkpoint_opened': False}, ensure_ascii=True))

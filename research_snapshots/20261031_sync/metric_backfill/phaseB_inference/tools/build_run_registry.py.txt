@@ -1,0 +1,88 @@
+# Archival copy: formatting normalized; private locators redacted.
+# private preparation chain for the B2-B8 plan (all frozen 2023/2024 scopes)
+# family: (code root for PYTHONPATH, executed commit(s), identity evidence)
+# run_id, model, seed, arm, family, dev loader, dev path, ckpt path, code family, population
+# probe paths that were wrong for B4/s2030 have been corrected below
+"""Generate phaseB_inference/run_registry.json from verified probe outputs.
+
+Read-only over run artifacts; writes only run_registry.json inside phaseB_inference.
+All hashes were computed in tools/probe_checkpoints.py; code copy mapping comes from
+tools/probe_code_identity.py and tools/probe_inference_path_identity.py.
+"""
+from __future__ import annotations
+import json
+import os
+from datetime import datetime, timezone
+HERE = os.path.dirname(os.path.abspath(__file__))
+BASE = os.path.dirname(HERE)
+OUT = os.path.join(BASE, 'outputs')
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+F = '<PRIVATE_LOCATOR_cfc983c5f221>'
+D = '<PRIVATE_LOCATOR_6f45235199f2>'
+H26 = '<PRIVATE_LOCATOR_4ace3098b640>'
+PUSH = os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution')
+DEV_PASS_BYTES_963 = 26639253112
+DEV_PASS_FILES_963 = 7950
+TRAIN_PASS_BYTES_959 = 26424262556
+train_scope_files_959 = 7918
+POP_959 = dict(train=959, dev=963, population_sha256='2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8', populations_sha256='ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2', statistics_sha256='53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980', target_qc_sha256='b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90', candidate_manifest_sha256=dict(Train='66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a', Development='6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de'))
+POP_10455 = dict(train=10455, dev=10501, train_ids_sha='ca215cdaee737a3d88a23c4836080f9b73afc9627c04a150bf62bf99b65667eb', dev_ids_sha='858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0', protocol_sha='a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be', source_inventory_sha='67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143', mask_sha='9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef', scaler_sha='656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31', sp04_sha='3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd')
+PREP_B2 = os.path.join(ACT, 'docs', 'research_readiness', '.local', 'b2_preparation_20261025_v4.json')
+PREP_B01 = dict(stage3_run=None, request=None, note='B0/B1 use the pinned B1 scientific-freeze manifests, not Stage3')
+CODE_ROOTS = {'b01_s2026': dict(code_root=ACT, executed_commit='db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3', identity='seed2026 source_release.json 168/168 source pins match readiness worktree'), 'b01_s2027': dict(code_root=ACT, executed_commit='8e8fd2545e41b2f4834366c02bd89bd37cd9891d', identity='seed2027 per-run release.json: 40/40 inference-path pins match readiness worktree; 6 execution-control files differ (see design.md)'), 'b2': dict(code_root=ACT, executed_commit='a35302186b4b5d3d7ec735885a8d93762e6d3567', identity='readiness worktree: 47/48 inference-path files identical; stage4/data.py+launch.py differ only by additive dynamic= fields not used by B2'), 'b3b4_s2029': dict(code_root=os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024'), executed_commit='7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35 (E4-E9); 5b5298f41025db5b7b718fd736fc3fe6de516875 (E1-E3)', identity='frozen worktree src/config tree == executed commit; 46/46 inference-path files identical'), 'b3b4_s2030_s2031': dict(code_root=os.path.join(WS, 'YunTAPR-recovery-exec-943da95'), executed_commit='943da957a3af846746c21b52d05a148bcb135064', identity='frozen worktree exact src/config tree; 49/49 inference-path files identical'), 'b3_s2030': dict(code_root=os.path.join(WS, 'YunTAPR-multiseed-exec-52a8e90'), executed_commit='52a8e90dcea156382d7f2c510c5891c78e610329', identity='frozen worktree exact src/config tree; 49/49 inference-path files identical'), 'b5b6': dict(code_root=os.path.join(WS, 'YunTAPR-static-corrected-exec-b251fd9'), executed_commit='b251fd9ea06c0c90f48d2ac0decba0454114669d', identity='frozen worktree exact src/config tree; 50/50 inference-path files identical'), 'b7_s2029': dict(code_root=os.path.join(WS, 'YunTAPR-dynamic-exec-b1f072e'), executed_commit='b1f072e45fdd17b80106a774083995c350b28f04', identity='frozen worktree exact src/config tree; 52/52 inference-path files identical'), 'b8_s2029': dict(code_root=os.path.join(WS, 'YunTAPR-B8-recovery-exec-ef11531'), executed_commit='ef11531a7cdeb35b767caebdb61e0e81c6123187', identity='frozen worktree exact src/config tree; 52/52 inference-path files identical'), 'b7b8_s2030_s2031': dict(code_root=os.path.join(WS, 'YunTAPR-dynamic-multiseed-recovery-exec-e81c6e1'), executed_commit='e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c', identity='frozen worktree exact src/config tree; 52/52 inference-path files identical')}
+RUNS = [('B0_s2026_E0', 'B0', 2026, 'E0', 'b01', 'dev_report', os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'b01_s2026', POP_10455), ('B1_s2026_E0', 'B1', 2026, 'E0', 'b01', 'dev_report', os.path.join(H26, 'B1_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B1_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'b01_s2026', POP_10455), ('B0_s2027_E0', 'B0', 2027, 'E0', 'b01', 's2027', os.path.join(ACT, 'docs', 'phase_b_v2_seed2027_completion', '20261024', 'results', 'B0_MATCHED_V2__E0__s2027.json'), os.path.join(PUSH, 'seed2027_epoch2_recovery_v2', '.local', 'B0_MATCHED_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt'), 'b01_s2027', POP_10455), ('B1_s2027_E0', 'B1', 2027, 'E0', 'b01', 's2027', os.path.join(ACT, 'docs', 'phase_b_v2_seed2027_completion', '20261024', 'results', 'B1_V2__E0__s2027.json'), os.path.join(PUSH, 'seed2027_b1_epoch7_recovery_v7', '.local', 'B1_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt'), 'b01_s2027', POP_10455), ('B2_s2029', 'B2', 2029, 'E0', 'b2', 'stage4', os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_development_09.json'), os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_LAST_epoch_09.pt'), 'b2', POP_959), ('B3_s2029', 'B3', 2029, 'E0', 'b3b4', 'stage4', os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_LAST_epoch_09.pt'), 'b3b4_s2029', POP_959), ('B4_s2029', 'B4', 2029, 'E0', 'b3b4', 'stage4', os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_LAST_epoch_09.pt'), 'b3b4_s2029', POP_959), ('B3_s2030', 'B3', 2030, 'E0', 'b3b4', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_LAST_epoch_09.pt'), 'b3_s2030', POP_959), ('B4_s2030', 'B4', 2030, 'E0', 'b3b4', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2030', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2030', 'B4_LAST_epoch_09.pt'), 'b3b4_s2030_s2031', POP_959), ('B3_s2031', 'B3', 2031, 'E0', 'b3b4', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_LAST_epoch_09.pt'), 'b3b4_s2030_s2031', POP_959), ('B4_s2031', 'B4', 2031, 'E0', 'b3b4', 'stage4', os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_LAST_epoch_09.pt'), 'b3b4_s2030_s2031', POP_959), ('B5_s2029', 'B5', 2029, 'E0', 'b5b6', 'stage4', os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_LAST_epoch_09.pt'), 'b5b6', POP_959), ('B6_s2029', 'B6', 2029, 'E0', 'b5b6', 'stage4', os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_LAST_epoch_09.pt'), 'b5b6', POP_959), ('B7_s2029', 'B7', 2029, 'E0', 'b7b8', 'stage4', os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_development_09.json'), os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_LAST_epoch_09.pt'), 'b7_s2029', POP_959), ('B8_s2029', 'B8', 2029, 'E0', 'b7b8', 'stage4', os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_development_09.json'), os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_LAST_epoch_09.pt'), 'b8_s2029', POP_959), ('B7_s2030', 'B7', 2030, 'E0', 'b7b8', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_LAST_epoch_09.pt'), 'b7b8_s2030_s2031', POP_959), ('B8_s2030', 'B8', 2030, 'E0', 'b7b8', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_LAST_epoch_09.pt'), 'b7b8_s2030_s2031', POP_959), ('B7_s2031', 'B7', 2031, 'E0', 'b7b8', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_LAST_epoch_09.pt'), 'b7b8_s2030_s2031', POP_959), ('B8_s2031', 'B8', 2031, 'E0', 'b7b8', 'stage4', os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_LAST_epoch_09.pt'), 'b7b8_s2030_s2031', POP_959)]
+
+def load_stored_summary(loader, path):
+    with open(path, 'r', encoding='utf-8') as f:
+        j = json.load(f)
+    if loader == 'dev_report':
+        s = j['summary']
+        identity = dict(source_sha=j.get('source_sha'), ids_sha=j.get('ids_sha'), scope=j.get('scope'))
+    elif loader == 's2027':
+        dev = j['epochs'][-1]['development']
+        s = dev['summary']
+        identity = dict(source_sha=dev.get('source_sha'), ids_sha=dev.get('ids_sha'), scope=dev.get('scope'))
+    else:
+        s = j['groups']['all']['summary']
+        identity = dict(source_identity=j.get('source_identity'), scope=j.get('scope'), groups=list(j.get('groups', {}).keys()))
+    return (s, identity)
+
+def main():
+    with open(os.path.join(OUT, 'probe_registry_sha.json'), 'r', encoding='utf-8') as f:
+        sha_probe = {(r['model'], r['seed']): r for r in json.load(f)['runs']}
+    with open(os.path.join(OUT, 'probe_b01_read_volume.json'), 'r', encoding='utf-8') as f:
+        b01_vol = json.load(f)
+    runs = []
+    total_gib = 0.0
+    for rid, model, seed, arm, family, loader, dev, ckpt, codefam, pop in RUNS:
+        key = (model, seed)
+        probe = sha_probe[key]
+        ckpt_sha = probe['checkpoint_sha256']
+        ckpt_bytes = probe['checkpoint_bytes']
+        dev_sha = probe.get('dev_sha256')
+        dev_bytes = probe.get('dev_bytes')
+        if rid == 'B4_s2030':
+            import hashlib
+            with open(dev, 'rb') as f:
+                h = hashlib.sha256()
+                for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+                    h.update(chunk)
+            dev_sha = h.hexdigest()
+            dev_bytes = os.path.getsize(dev)
+        summary, identity = load_stored_summary(loader, dev)
+        code = CODE_ROOTS[codefam]
+        if family == 'b01':
+            vol = b01_vol['B1_dev_2024'] if model == 'B1' else b01_vol['B0_dev_2024']
+            read_scope = dict(kind='COMPUTED_FROM_PINNED_FROZEN_METADATA', dev_pass_files=vol['unique_frames'] + vol['imerg_days'], dev_pass_bytes=vol['total_unique_bytes'], dev_pass_GiB=vol['total_unique_GiB'], b13_bytes=vol['b13_unique_bytes'], imerg_bytes=vol['imerg_bytes'], bytes_definition='distinct B13 nominal files + distinct 2024 IMERG day files; full-file payload delivered to Python; excludes metadata/checkpoints', sha_verification_on_every_read='YES (VerifiedReader.authenticate + same-handle SHA)')
+        else:
+            read_scope = dict(kind='FROZEN_PREPARED_SCOPE', dev_pass_files=DEV_PASS_FILES_963, dev_pass_bytes=DEV_PASS_BYTES_963, dev_pass_GiB=round(DEV_PASS_BYTES_963 / 1024 ** 3, 4), by_kind=dict(satellite=dict(files=5778, bytes=26067197976), GFS_main=dict(files=963, bytes=287429347), GFS_thermo=dict(files=963, bytes=89772072), IMERG=dict(files=245, bytes=194832801), static_mask=dict(files=1, bytes=20916)), sha_verification_on_every_read='YES (SourceCache + SourceMeter)', prepared_manifest_sha256='65e8b3754775ece7bbf60db0ca2b5320638c193fe20a9f21ee49828272514060')
+        total_gib += read_scope['dev_pass_GiB']
+        runs.append(dict(run_id=rid, model=model, seed=seed, arm=arm, family=family, population='B0/B1 10455/10501' if family == 'b01' else 'B2-B8 959/963', dev_loader=loader, dev_report_path=dev, dev_report_sha256=dev_sha, dev_report_bytes=dev_bytes, checkpoint_path=ckpt, checkpoint_sha256=ckpt_sha, checkpoint_bytes=ckpt_bytes, checkpoint_payload_key='model', executed_commit=code['executed_commit'], code_root=code['code_root'], code_identity=code['identity'], population_detail=pop, stored_summary=dict(scenes=summary.get('scenes'), n_valid=summary['n_valid'], n_rain=summary['n_rain'], brier=summary['brier'], auroc=summary['auroc'], average_precision=summary['average_precision'], conditional_pinball=summary['conditional_pinball'], q32_coverage=summary['coverage'][31], q32_covered=int(summary['covered'][31]), q32_abs_error=summary.get('q32_absolute_error')), stored_identity=identity, read_scope=read_scope, private_preparation=dict(path=PREP_B2 if family != 'b01' else None, stage3_run='<PRIVATE_LOCATOR_b393a4a28689>' if False else '<PRIVATE_LOCATOR_73f83caea596>', request='<PRIVATE_LOCATOR_5e19c3fca7ce>', mask_read_ledger='<PRIVATE_LOCATOR_65505de51b1a>', note='B2-B8: PopulationPlan(stage3_run, request, root=<code_root>)' if family != 'b01' else 'B0/B1: Plan() over pinned B1 scientific-freeze manifests'), validation_gate=dict(tolerance='abs_or_rel <= 1e-12', keys=['brier', 'auroc', 'average_precision', 'conditional_pinball', 'q32_coverage'], counts_exact=['n_valid', 'n_rain'])))
+    registry = dict(schema='yuntapr.phaseB.tier1.run_registry.v1', created_utc=datetime.now(timezone.utc).isoformat(), scope=dict(phase='B (Tier-1 GPU forward-only metric back-fill)', evaluation_set='2024 Development only (March-October, fixed f006, retrospective)', event_definition='float32 rate > float32(0.1) mm/h', n_main_table_runs=len(runs), final_2025_access='FROZEN_NO_ACCESS', training_authorized=False, optimizer_updates=0, evaluation_script=dict(path=os.path.join(ACT, 'src', 'yuntapr', 'experimental', 'core_innovation', 'stage4', 'evaluation.py'), sha256='fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce'), metrics_script=dict(path=os.path.join(ACT, 'src', 'yuntapr', 'experimental', 'phase_b_v2_formal_integration_candidate', 'metrics.py'), sha256='9fbe6c5572d18f7478e58ec06d4915e2a007218fac0267217150192aee9bb318'), b01_evaluator=dict(path=os.path.join(ACT, 'src', 'yuntapr', 'training', 'phase_b_v2_seed2026_v2', 'evaluation.py'), sha256='42415659f5a8af0b6469d623191737462c668d075a3e914af739707046e93277'), private_preparation_v4=dict(path=PREP_B2, proposal_sha256='0e002ad10dd3b6e6b6b0f354394cdba3eae11e3ec4d92829a5d4f594126b6bf3')), budget_estimate=dict(dev_pass_GiB_total=round(total_gib, 3), dev_pass_files_total=sum((r['read_scope']['dev_pass_files'] for r in runs)), basis='one forward-only Dev traversal per checkpoint; frozen prepared scope for B2-B8, distinct-payload accounting for B0/B1; excludes model/SHA metadata and checkpoints', estimated_wall_hours_low=3.5, estimated_wall_hours_high=6.5, timing_basis='measured historical Dev-pass wall time 682-705 s (B2-B8, F:); B0/B1 historical Dev passes ~13-30 min dominated by per-frame SHA reads on H:'), runs=runs)
+    path = os.path.join(BASE, 'run_registry.json')
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(registry, f, ensure_ascii=False, indent=2)
+    print('wrote', path, 'runs:', len(runs), 'dev GiB total:', round(total_gib, 2))
+if __name__ == '__main__':
+    main()

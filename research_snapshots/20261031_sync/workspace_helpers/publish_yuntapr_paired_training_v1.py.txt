@@ -1,0 +1,132 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Publish only the completed, reviewed additive delivery; never touch checkpoints."""
+from pathlib import Path
+import argparse, datetime, gzip, hashlib, json, os, re, subprocess, urllib.request
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+ACTIVE = json.loads((ROOT / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+RUN = Path(ACTIVE['run_directory'])
+BASE = ACTIVE['baseline']
+INDEX = RUN / 'delivery_file_index.json'
+
+def read(path):
+    return json.loads(path.read_text(encoding='utf8'))
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+
+def sha(path):
+    h = hashlib.sha256()
+    with path.open('rb') as f:
+        for block in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(block)
+    return h.hexdigest()
+
+def check_delivery():
+    status = read(RUN / 'final_delivery_status.json')
+    assert status['status'] == 'BOTH_PHASE_A_TRAINING_COMPLETE_READONLY_INTEGRITY_PASS'
+    assert status['B0_MATCHED_PHASE_A_COMPLETED'] and status['B1_PHASE_A_COMPLETED']
+    assert status['post_training_tests']['all_passed']
+    assert status['post_training_tests']['skipped'] == 0
+    for name in ('2025_RAW_ACCESS', '2025_PIXELS_READ', '2025_MODEL_INFERENCE_SCENES'):
+        assert status[name] == 0
+    for name in ('2025_FINAL_TEST_EXECUTED', '2025_FINAL_TEST_AUTHORIZED', 'B0_MATCHED_PHASE_B_AUTHORIZED', 'B1_PHASE_B_AUTHORIZED', 'B2_AUTHORIZED'):
+        assert status[name] is False
+    for rel, digest in read(RUN / 'historical_file_snapshot.json')['files'].items():
+        assert sha(REPO / rel) == digest, rel
+    qa = read(RUN / 'pdf_visual_qa.json')
+    assert qa['all_pages_visually_verified']
+    index = read(INDEX)
+    assert index['baseline_commit'] == BASE and index['only_additions']
+    for rel, ref in index['files'].items():
+        p = REPO / rel
+        assert p.resolve().is_relative_to(REPO.resolve()), rel
+        assert not p.is_symlink(), rel
+        assert p.suffix in ('.py', '.json', '.csv', '.md', '.tex', '.pdf', '.txt', '.yaml', '.gz'), rel
+        assert p.stat().st_size == ref['bytes'] < 90 * 1024 * 1024, rel
+        assert sha(p) == ref['sha256'], rel
+        if p.suffix == '.pdf':
+            with p.open('rb') as f:
+                assert f.read(5) == b'%PDF-', rel
+        else:
+            opener = gzip.open if p.suffix == '.gz' else open
+            with opener(p, 'rt', encoding='utf8') as f:
+                for line in f:
+                    assert '\x00' not in line, rel
+                    assert not re.search('ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|BEGIN (?:RSA |EC )?PRIVATE KEY', line), rel
+    assert git('branch', '--show-current').decode().strip() == 'main'
+    assert git('remote', 'get-url', 'origin').decode().strip().rstrip('/') == 'https://github.com/flyeagle-cex/YunTAPR-Net.git'
+    assert not git('diff', '--name-only'), 'Tracked worktree edits are forbidden'
+    return (status, set(index['files']) | {INDEX.relative_to(REPO).as_posix()})
+
+def check_staged(names, commit=None):
+    raw = git('diff', '--name-status', '-z', BASE, commit) if commit else git('diff', '--cached', '--name-status', '-z')
+    fields = [p.decode('utf8') for p in raw.split(b'\x00') if p]
+    assert len(fields) % 2 == 0
+    staged = set()
+    for i in range(0, len(fields), 2):
+        action, rel = fields[i:i + 2]
+        assert action == 'A' and rel in names, (action, rel)
+        assert git('show', (commit or '') + ':' + rel) == (REPO / rel).read_bytes(), rel
+        staged.add(rel)
+    assert staged == names
+    assert not git('-c', 'core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol', 'diff', '--cached', '--check')
+
+def remote_head():
+    return git('ls-remote', '--exit-code', 'origin', 'refs/heads/main').decode().split()[0]
+
+def official_verify(commit):
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def get(suffix):
+        request = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + suffix, headers={'User-Agent': 'YunTAPR-paired-phase-a-publication-audit', 'Accept': 'application/vnd.github+json'})
+        with opener.open(request, timeout=45) as response:
+            return json.load(response)
+    assert get('git/ref/heads/main')['object']['sha'] == commit
+    obj = get('git/commits/' + commit)
+    tree = git('rev-parse', 'HEAD^{tree}').decode().strip()
+    assert obj['sha'] == commit and obj['parents'][0]['sha'] == BASE
+    assert obj['tree']['sha'] == tree
+    assert remote_head() == commit
+    return {'main_commit': commit, 'parent': BASE, 'complete_tree_sha1': tree, 'complete_tree_identity_verified': True, 'verification': 'Git remote ref plus official GitHub commit/tree identity; exact local staged blobs checked'}
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('operation', choices=('stage', 'commit', 'push', 'verify'))
+    args = parser.parse_args()
+    status, names = check_delivery()
+    if args.operation in ('stage', 'commit'):
+        assert git('rev-parse', 'HEAD').decode().strip() == BASE
+    if args.operation == 'stage':
+        assert not git('diff', '--cached', '--name-only'), 'Do not disturb an existing index'
+        pathspec = ROOT / 'YunTAPR-paired-training-git-pathspec.nul'
+        pathspec.write_bytes(b'\x00'.join((name.encode('utf8') for name in sorted(names))) + b'\x00')
+        git('add', '--pathspec-from-file=' + str(pathspec), '--pathspec-file-nul')
+        check_staged(names)
+        print(json.dumps({'exact_additive_files_staged': len(names)}))
+    elif args.operation == 'commit':
+        check_staged(names)
+        message = ROOT / 'YunTAPR-paired-training-commit-message.txt'
+        message.write_text('Train paired B0-Matched and B1 Phase-A with audited authorization\n\nKeep the frozen science, normalization and matched 2023/2024 samples unchanged.\nRecord independent BEST/LAST identities, actual optimizer calls and paired validation metrics.\nPreserve 2061 baseline files and publish only source, metadata and editable reports.\nAll checkpoints remain local; no Phase-B, B2 or 2025 outcome access.\n', encoding='utf8')
+        env = os.environ.copy()
+        stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        env.update(GIT_AUTHOR_DATE=stamp, GIT_COMMITTER_DATE=stamp)
+        git('commit', '--quiet', '--file', str(message), env=env)
+        commit = git('rev-parse', 'HEAD').decode().strip()
+        assert git('rev-parse', 'HEAD^').decode().strip() == BASE
+        check_staged(names, commit)
+        print(json.dumps({'commit': commit, 'parent': BASE, 'additive_files': len(names)}))
+    else:
+        commit = git('rev-parse', 'HEAD').decode().strip()
+        assert git('rev-parse', 'HEAD^').decode().strip() == BASE
+        check_staged(names, commit)
+        if args.operation == 'push':
+            assert remote_head() in (BASE, commit), 'Remote changed; never force-push'
+            git('push', 'origin', 'main')
+        remote = official_verify(commit)
+        receipt = ROOT / ('YunTAPR-paired-training-publication-' + commit + '.json')
+        receipt.write_text(json.dumps({'remote': remote, 'additive_files': len(names), 'historical_files_unchanged': 2061, 'model_binaries_uploaded': 0, '2025_raw_access': 0}, indent=2) + '\n', encoding='utf8')
+        print(json.dumps({'commit': commit, 'verified': True, 'receipt': str(receipt)}))
+if __name__ == '__main__':
+    main()

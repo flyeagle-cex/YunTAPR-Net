@@ -1,0 +1,131 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Identity-only checks of old Phase-A binaries; never deserialize/apply them.
+"""Read-only completed FinalFit integrity, checkpoint ancestry, and full I/O audit."""
+import argparse, csv, gc, json, os, sys
+from pathlib import Path
+ROOT = Path(os.environ.get('YUNTAPR_REPO_ROOT', Path(__file__).resolve().parents[1]))
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT), str(ROOT / 'scripts')]
+import torch
+import paired_extended_v1 as x
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.models.b1 import paired_models
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--registry', required=True, type=Path)
+    args = parser.parse_args()
+    reg = x.read(args.registry)
+    run = Path(reg['run_directory'])
+    if not (run / 'both_phase_b_formal_runs_completed.json').exists():
+        raise PermissionError('Both FinalFits must succeed before closure')
+    execution = x.read(run / 'phase_b_execution_registry.json')
+    out = run / 'phase_b_integrity'
+    out.mkdir(exist_ok=False)
+    fw = a.RawFirewall()
+    fw.install()
+    contract = frozen.RunnerContract.load()
+    frames = a.data.load_frames()
+    results = {}
+    inventory = {}
+    with x.inference_only():
+        for kind, spec in execution['formal_runs'].items():
+            public = Path(spec['public_directory'])
+            status = x.read(public / 'final_status.json')
+            expected = x.read(public / 'run_manifest.json')
+            cap = x.read(spec['authorization']['path'])
+            registry = x.read(public / 'checkpoint_registry.json')
+            history = x.read(public / 'training_history.json')
+            if status['completed_epochs'] != spec['epoch_budget'] or status['FORMAL_OPTIMIZER_STEPS'] != spec['epoch_budget'] * 10478 or status['VALIDATION_FORWARD_CALLS'] != 0 or (registry.get('BEST') is not None) or (registry['FINAL'] != registry['LAST']) or (registry['FINAL']['epoch'] != spec['epoch_budget']):
+                raise ValueError('Fixed-budget FINAL/LAST semantics failed')
+            payload = x.load_verified(registry['FINAL'], expected)
+            before = registry['FINAL']['sha256']
+            anchor, temporal, initial = paired_models()
+            a.verify_initialization(anchor, temporal, initial)
+            model = temporal if kind == 'B1' else anchor
+            del anchor, temporal
+            model.load_state_dict(payload['model_state_dict'], strict=True)
+            if x.state_digest(model.state_dict()) != registry['FINAL']['model_state_sha256']:
+                raise ValueError('FINAL model SHA failed')
+            count = sum((p.numel() for p in model.parameters()))
+            if count != frozen.COUNTS[kind]['total'] or any((not torch.isfinite(p).all() for p in model.parameters())):
+                raise ValueError('FINAL parameter count/nonfinite failed')
+            if initial != expected['paired_initialization'] or expected['initial_model_state_sha256'] != x.INITIAL[kind]:
+                raise ValueError('Fresh paired provenance failed')
+            if len(history) != spec['epoch_budget']:
+                raise ValueError('Whole completed epoch history required')
+            for row in history:
+                e = row['epoch']
+                t = row['training']
+                if row['global_update'] != e * 10478 or t['N_valid'] != 71879080 or t['optimizer_steps'] != 10478:
+                    raise ValueError('Completed epoch training denominator/count failed')
+                if t['LR_start'] != x.lr_for_update((e - 1) * 10478 + 1, steps_per_epoch=10478) or t['LR_end'] != x.lr_for_update(e * 10478, steps_per_epoch=10478):
+                    raise ValueError('Fixed 50-epoch scheduler failed')
+            counts = {}
+            copies = total_bytes = raw_opens = 0
+            copy_seconds = read_seconds = 0.0
+            peak_bytes = 0
+            allow = {a.RawFirewall.key(p) for p in a.allowed_sources(contract, kind, frames)}
+            with Path(cap['manifest']['path']).open(encoding='utf8', newline='') as f:
+                records = list(csv.DictReader(f))
+            for path in public.glob('staging_worker_*.jsonl'):
+                with path.open(encoding='utf8') as stream:
+                    for line in stream:
+                        row = json.loads(line)
+                        if 'error' in row or row['sample_id'] != records[row['index']]['sample_id'] or row['year'] not in (2023, 2024):
+                            raise ValueError('Staging scene identity failed')
+                        counts[row['index']] = counts.get(row['index'], 0) + 1
+                        if len(row['staging']) != (7 if kind == 'B1' else 2):
+                            raise ValueError('Exact source count per scene failed')
+                        for item in row['staging']:
+                            if a.RawFirewall.key(item['source_path']) not in allow or not item['size_match'] or (not item['sha256_match']) or (not item['cleanup_success']) or item['error'] or item['cleanup_error']:
+                                raise ValueError('Source copy/hash/owned cleanup failed')
+                            copies += 1
+                            total_bytes += item['temporary_bytes']
+                            peak_bytes = max(peak_bytes, item['temporary_bytes'])
+                            copy_seconds += item['copy_seconds']
+                            read_seconds += item['read_seconds']
+            if sorted(counts) != list(range(20956)) or set(counts.values()) != {spec['epoch_budget']}:
+                raise ValueError('Every exact scene must be read once per completed epoch')
+            for path in public.glob('raw_access_*.jsonl'):
+                with path.open(encoding='utf8') as stream:
+                    for line in stream:
+                        row = json.loads(line)
+                        if a.RawFirewall.key(row['path']) not in allow or not row['model_scope_authorized']:
+                            raise ValueError('Raw I/O authorization scope failed')
+                        raw_opens += 1
+            if copies != spec['epoch_budget'] * 20956 * (7 if kind == 'B1' else 2) or raw_opens != 2 * copies or peak_bytes > 734003200:
+                raise ValueError('Exact source copy/open/temporary-byte counts failed')
+            checkpoints = []
+            for path in sorted(Path(spec['checkpoint_directory']).glob('epoch_*.pt')):
+                checkpoints.append({'absolute_local_path': str(path), 'bytes': path.stat().st_size, 'sha256': x.sha256(path)})
+            if len(checkpoints) != spec['epoch_budget']:
+                raise ValueError('All completed boundary checkpoints required')
+            inventory[kind] = checkpoints
+            x.verify_additive_snapshot(cap['phase_a_completed_snapshot'])
+            old = x.read(cap['phase_a_completed_snapshot']['path'])['phase_a_checkpoint_identities']
+            for identities in old.values():
+                for identity in identities:
+                    p = Path(identity['absolute_local_path'])
+                    if p.stat().st_size != identity['bytes'] or x.sha256(p) != identity['sha256']:
+                        raise ValueError('Historical Phase-A checkpoint changed')
+            if x.sha256(registry['FINAL']['absolute_local_path']) != before:
+                raise ValueError('Readonly FINAL file SHA changed')
+            for key in ('2025_RAW_ACCESS', '2025_PIXELS_READ', '2025_MODEL_INFERENCE_SCENES'):
+                if status[key] != 0:
+                    raise ValueError('2025 access violation')
+            results[kind] = {'status': 'FINALFIT_READONLY_INTEGRITY_PASS', 'epoch_budget': spec['epoch_budget'], 'completed_epochs': status['completed_epochs'], 'formal_updates': status['FORMAL_OPTIMIZER_STEPS'], 'FINAL': registry['FINAL'], 'LAST': registry['LAST'], 'parameter_count': count, 'normalization': expected['normalization'], 'manifest': expected['manifest'], 'paired_initialization': initial, 'optimizer_and_scheduler_identity': {'optimizer': frozen.protocol_body(8, contract.protocol['identity'])['optimizer'], 'W': 10478, 'U': 523900, 'last_applied_lr': payload['last_applied_lr']}, 'source_io': {'copies': copies, 'authorized_raw_open_events': raw_opens, 'cumulative_copied_bytes': total_bytes, 'copy_seconds_worker_sum': copy_seconds, 'read_seconds_worker_sum': read_seconds, 'peak_temporary_bytes_per_worker': peak_bytes, 'every_scene_once_per_epoch': True, 'cleanup_success': True}, 'post_closure_MODEL_PARAMETERS_UPDATED': False, 'post_closure_OPTIMIZER_STEPS': 0, 'post_closure_BACKWARD_CALLS': 0, 'validation_or_BEST_selection': False, 'Phase_A_state_transfer': False, '2025_RAW_ACCESS': 0}
+            del payload, model
+            gc.collect()
+    if results['B0_MATCHED']['normalization'] != results['B1']['normalization']:
+        raise ValueError('Paired FinalFit scaler identity mismatch')
+    protocol = x.read(run / 'phase_b_preparation/paired_phase_b_finalfit_protocol_v1.json')
+    x.verify_pin(protocol['common_sample_identity'])
+    active = x.read(reg['phase_a_active_registry'])
+    original = Path(active['run_directory']) / 'historical_file_snapshot.json'
+    baseline = a.verify_history(original, x.sha256(original))
+    x.save(out / 'all_completed_checkpoint_inventory.json', inventory)
+    x.save(out / 'final_status.json', {'status': 'BOTH_FINALFIT_INTEGRITY_PASS', 'models': results, 'same_20956_scene_identities': True, 'common_sample_identity': protocol['common_sample_identity'], 'shared_normalization': protocol['normalization'], 'historical_files': baseline, 'generalization_comparison_performed': False, 'MODEL_PARAMETERS_UPDATED_BY_CLOSURE': False, 'OPTIMIZER_STEPS_BY_CLOSURE': 0, 'BACKWARD_CALLS_BY_CLOSURE': 0, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, '2025_FINAL_TEST_EXECUTED': False, 'FINAL_TEST_2025_AUTHORIZED': False, 'completed_utc': x.now()})
+    print(json.dumps({'status': 'BOTH_FINALFIT_INTEGRITY_PASS', 'formal_updates': {k: v['formal_updates'] for k, v in results.items()}}), flush=True)
+if __name__ == '__main__':
+    main()

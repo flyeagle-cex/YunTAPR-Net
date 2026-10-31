@@ -1,0 +1,24 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json, shutil, subprocess
+ROOT = Path(__file__).parent
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+RUN = Path(a['run_directory'])
+NAME = 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1'
+scratch = ROOT / 'tmp/pdfs' / ('b1_protocol_' + RUN.name)
+scratch.mkdir(parents=True, exist_ok=True)
+shutil.copyfile(RUN / (NAME + '.tex'), scratch / (NAME + '.tex'))
+tex = '<PRIVATE_LOCATOR_ac4183a30422>'
+poppler = Path('<PRIVATE_LOCATOR_0c7d549b5041>')
+for n in (1, 2):
+    result = subprocess.run([tex, '--disable-installer', '-interaction=nonstopmode', '-halt-on-error', NAME + '.tex'], cwd=scratch, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    (scratch / f'compile_pass_{n}.txt').write_bytes(result.stdout)
+    if result.returncode:
+        print(result.stdout.decode('utf-8', errors='replace')[-6000:])
+        raise SystemExit(result.returncode)
+subprocess.run([str(poppler / 'pdftoppm.exe'), '-r', '105', '-png', str(scratch / (NAME + '.pdf')), str(scratch / 'page')], check=True)
+subprocess.run(['<PRIVATE_LOCATOR_95b439f6629f>', str(scratch / (NAME + '.pdf')), str(scratch / 'text.txt')], check=True)
+info = subprocess.check_output([str(poppler / 'pdfinfo.exe'), str(scratch / (NAME + '.pdf'))]).decode(errors='replace')
+log = (scratch / (NAME + '.log')).read_text(encoding='utf-8')
+print(json.dumps({'pdf_info': info, 'overfull_count': log.count('Overfull'), 'missing_glyph_count': log.count('Missing character'), 'rendered_pages': [str(p) for p in sorted(scratch.glob('page-*.png'))]}), flush=True)

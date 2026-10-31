@@ -1,0 +1,58 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Activate separate FinalFit caps only after real review/fit/tests/smoke pass."""
+from pathlib import Path
+import datetime, json, os, sys
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import paired_extended_v1 as x
+from prepare_paired_phase_b_extended_v1 import code_hashes
+registry = x.read(BASE / 'YunTAPR-extended-pipeline-active-v1.json')
+run = Path(registry['run_directory'])
+active = x.read(registry['phase_a_active_registry'])
+a_run = Path(active['run_directory'])
+prep = run / 'phase_b_preparation'
+if x.sha256(registry['authority_path']) != registry['authority_sha256']:
+    raise PermissionError('Researcher authority changed')
+review = x.read(run / 'phase_a_scientific_review/paired_scientific_review.json')
+gate = x.read(prep / 'pretraining_gate.json')
+protocol = x.read(prep / 'paired_phase_b_finalfit_protocol_v1.json')
+if review['status'] != 'PAIRED_FULL_REINFERENCE_PASS' or gate['status'] != 'PASS_REGRESSION_CONTRACT_ENGINEERING_PREFLIGHT':
+    raise PermissionError('Real completed review and preparation gates required')
+regressions = sorted((run / 'full_regression').glob('*/test_summary.json'))
+if not regressions:
+    raise PermissionError('Full regression evidence missing')
+regression = x.read(regressions[-1])
+if regression['status'] != 'PASS' or not regression['all_repository_modules_executed'] or (not regression['fixture_cleanup_success']):
+    raise PermissionError('Full current repository regression must pass without skips')
+if code_hashes() != gate['code_hashes']:
+    raise PermissionError('Code changed after preflight')
+history = x.pin(a_run / 'historical_file_snapshot.json')
+x.audit.verify_history(history['path'], history['sha256'])
+protected = {}
+for directory in [a_run, *[Path(v['public_directory']) for v in active['formal_runs'].values()]]:
+    for p in sorted(directory.rglob('*')):
+        if p.is_file() and p.suffix not in ('.aux', '.out', '.log', '.pyc'):
+            protected[p.relative_to(REPO).as_posix()] = x.sha256(p)
+snapshot_path = run / 'phase_a_completed_immutable_snapshot.json'
+x.save(snapshot_path, {'files': protected, 'file_count': len(protected), 'phase_a_checkpoint_identities': x.read(a_run / 'all_completed_checkpoint_inventory.json'), 'created_utc': x.now()})
+phase_a_snapshot = x.pin(snapshot_path)
+x.verify_additive_snapshot(phase_a_snapshot)
+specs = {}
+for kind in ('B0_MATCHED', 'B1'):
+    runid = 'run_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+    public = REPO / 'docs/formal_training' / ('b0_matched_phase_b_finalfit' if kind == 'B0_MATCHED' else 'b1_phase_b_finalfit') / 'runs' / runid
+    local = x.ROOTS[kind] / runid
+    if public.exists() or local.exists():
+        raise FileExistsError('Timestamp child already exists')
+    budget = protocol['epoch_budgets'][kind]
+    if budget != review['Phase_B_epoch_budgets'][kind]:
+        raise ValueError('Own BEST epoch budget changed')
+    cap = {'AUTHORIZED': True, 'model': kind, 'operation': 'PAIRED_PHASE_B_FINALFIT_FORMAL', 'authority': x.pin(registry['authority_path']), 'protocol': x.pin(prep / 'paired_phase_b_finalfit_protocol_v1.json'), 'normalization': protocol['normalization'], 'manifest': protocol['manifests'][kind], 'initialization': protocol['initialization_manifest'], 'pretraining_gate': x.pin(prep / 'pretraining_gate.json'), 'full_regression': x.pin(regressions[-1]), 'code_hashes': code_hashes(), 'historical_snapshot': history, 'phase_a_completed_snapshot': phase_a_snapshot, 'planned_run_id': runid, 'public_directory': str(public), 'checkpoint_directory': str(local), 'epoch_budget': budget, 'steps_per_epoch': 10478, 'planned_formal_updates': budget * 10478, 'Phase_A_state_transfer_allowed': False, 'validation_allowed': False, 'BEST_selection_allowed': False, '2025_raw_access': False, 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, 'resume_authorized': False, 'resume_exception_scope': 'Pure logging/report/orchestration bug only; independent verified boundary authorization required', 'created_utc': x.now()}
+    path = REPO / 'config/training' / (kind.lower() + '_phase_b_finalfit_extended_authorization_v1.json')
+    x.save(path, cap)
+    specs[kind] = {'run_id': runid, 'public_directory': str(public), 'checkpoint_directory': str(local), 'authorization': x.pin(path), 'epoch_budget': budget}
+execution = {'formal_runs': specs, 'status': 'AUTHORIZED_SEQUENTIAL_B0_MATCHED_THEN_B1', 'common_scenes': 20956, 'shared_normalization_sha256': protocol['normalization']['sha256'], 'FINAL_TEST_2025_AUTHORIZED': False, '2025_RAW_ACCESS': 0}
+x.save(run / 'phase_b_execution_registry.json', execution)
+print(json.dumps(execution, indent=2), flush=True)

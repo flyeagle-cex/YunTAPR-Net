@@ -1,0 +1,24 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Dispatch the approved unchanged entry once, detached without a console."""
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+from datetime import datetime, timezone, timedelta
+original = Path(__file__).resolve().parents[3]
+frozen = original.parent / 'YunTAPR-multiseed-exec-52a8e90'
+private = json.loads((original / 'docs/research_readiness/.local/b3_b4_multiseed_preparation_20261026.json').read_text(encoding='utf-8'))
+runtime = original / 'docs/research_readiness/.local/multiseed_runtime'
+assert not runtime.exists() and (not Path(private['output_root']).exists()), 'No duplicate dispatch or replay'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == '52a8e90dcea156382d7f2c510c5891c78e610329'
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_multiseed.py'), 'execute', '--proposal', str(original / 'docs/research_readiness/20261025/evidence/b3_b4_multiseed_proposal.json'), '--private-preparation', str(original / 'docs/research_readiness/.local/b3_b4_multiseed_preparation_20261026.json'), '--researcher-approval', str(original / 'docs/research_readiness/.local/b3_b4_multiseed_approval_20261026.json')]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    process = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=process.pid, training_commit='52a8e90dcea156382d7f2c510c5891c78e610329', execution_root=str(frozen), output_root=private['output_root'], runtime='Direct base Python3.12.14 plus unchanged venv-cuda dependencies', dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat())
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, indent=2)
+print(json.dumps(dict(status='DISPATCHED_ONCE', pid=process.pid)))

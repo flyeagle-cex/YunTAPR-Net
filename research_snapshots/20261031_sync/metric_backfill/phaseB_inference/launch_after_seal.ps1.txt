@@ -1,0 +1,131 @@
+# Phase B Tier-1 GPU forward-only inference: after-seal launcher (ASCII only).
+#
+#   .\launch_after_seal.ps1 -Mode check                  # CPU dry check (no GPU, no payload)
+#   .\launch_after_seal.ps1 -Mode smoke -ConfirmSealed    # 1 checkpoint x 2 scenes real-data smoke
+#   .\launch_after_seal.ps1 -Mode all   -ConfirmSealed    # 19 runs, one process each, fail-fast
+#
+# Preconditions enforced/printed: training package sealed (explicit -ConfirmSealed), GPU free,
+# frozen data roots readable. Every run gets its own process with PYTHONPATH=<frozen copy>/src.
+param(
+    [ValidateSet('check', 'smoke', 'all')]
+    [string]$Mode = 'all',
+    [string]$Only = '',
+    [switch]$ConfirmSealed
+)
+
+$ErrorActionPreference = 'Stop'
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $here
+$py = '<PRIVATE_LOCATOR_85023c7c63ca>'
+$registryPath = Join-Path $here 'run_registry.json'
+$logDir = Join-Path $here 'logs'
+if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir | Out-Null }
+
+if (-not (Test-Path $py)) { Write-Host "MISSING python: $py"; exit 4 }
+if (-not (Test-Path $registryPath)) { Write-Host "MISSING registry: $registryPath"; exit 4 }
+if (-not (Test-Path '<PRIVATE_LOCATOR_afdad63a07d3>') -or -not (Test-Path '<PRIVATE_LOCATOR_4af5fd0d6a39>')) {
+    Write-Host 'WARNING: raw data drives H: / F: not readable'; exit 4
+}
+
+$registry = Get-Content $registryPath -Raw -Encoding UTF8 | ConvertFrom-Json
+
+if ($Mode -ne 'check') {
+    if (-not $ConfirmSealed) {
+        Write-Host 'REFUSING: pass -ConfirmSealed only after the 2026-10-29 training package (<PRIVATE_LOCATOR_d2f718d28bff>) has sealed.'
+        Write-Host 'No GPU inference is allowed while training still occupies the GPU (8.15 GiB).'
+        exit 2
+    }
+    $smi = Get-Command nvidia-smi -ErrorAction SilentlyContinue
+    if ($smi) {
+        $freeLine = (& nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits 2>$null | Select-Object -First 1)
+        Write-Host "nvidia-smi free MiB: $freeLine"
+        if ($freeLine -and [int]$freeLine -lt 3000) {
+            Write-Host 'ABORT: GPU free memory < 3 GiB; training may still be running.'
+            exit 3
+        }
+    } else {
+        Write-Host 'WARNING: nvidia-smi not found; cannot verify GPU is free.'
+    }
+}
+
+function Set-RunEnv([string]$runId) {
+    $r = $registry.runs | Where-Object { $_.run_id -eq $runId }
+    if ($null -eq $r) { throw "unknown run_id $runId" }
+    $env:PYTHONPATH = (Join-Path $r.code_root 'src')
+    $env:PYTHONHASHSEED = [string]$r.seed
+    $env:CUBLAS_WORKSPACE_CONFIG = ':4096:8'
+    $env:PYTHONUTF8 = '1'
+    $env:PYTHONDONTWRITEBYTECODE = '1'
+    $env:OMP_NUM_THREADS = '1'
+    $env:MKL_NUM_THREADS = '1'
+    return $r
+}
+
+function Read-RunResult([string]$runId, [string]$subdir) {
+    if ($subdir -eq '_smoke') {
+        $p = Join-Path (Join-Path (Join-Path $here 'outputs') '_smoke') (Join-Path $runId 'result.json')
+    } else {
+        $p = Join-Path (Join-Path $here 'outputs') (Join-Path $runId 'result.json')
+    }
+    if (Test-Path $p) { return (Get-Content $p -Raw -Encoding UTF8 | ConvertFrom-Json) }
+    return $null
+}
+
+function Invoke-Native([string]$runId, [string[]]$extraArgs, [string]$subdir) {
+    $r = Set-RunEnv $runId
+    $log = Join-Path $logDir ($runId + $(if ($subdir -eq '_smoke') { '.smoke' } else { '' }) + '.log')
+    Write-Host ("[run] {0} code_root={1} seed={2}" -f $runId, $r.code_root, $r.seed)
+    & $py -B (Join-Path $here 'infer_eval.py') run --run-id $runId @extraArgs 2>&1 |
+        ForEach-Object { $_.ToString() } | Out-File -FilePath $log -Encoding utf8
+    $rc = $LASTEXITCODE
+    $res = Read-RunResult $runId $subdir
+    $status = 'NO_RESULT'
+    $gate = $null
+    if ($null -ne $res) {
+        $status = $res.status
+        if ($null -ne $res.gate) { $gate = $res.gate.passed }
+    }
+    Write-Host ("[done] {0} rc={1} status={2} gate={3} log={4}" -f $runId, $rc, $status, $gate, $log)
+    return @{ ok = ($rc -eq 0 -and ($status -eq 'COMPLETE' -or $status -eq 'SMOKE_COMPLETE')); status = $status; gate = $gate; rc = $rc; log = $log }
+}
+
+if ($Mode -eq 'check') {
+    & $py -B (Join-Path $here 'infer_eval.py') check --all
+    exit $LASTEXITCODE
+}
+
+if ($Mode -eq 'smoke') {
+    $ids = @('B7_s2029', 'B2_s2029', 'B0_s2026_E0')
+    if ($Only -ne '') { $ids = $Only.Split(',') }
+    $allOk = $true
+    foreach ($id in $ids) {
+        $out = Invoke-Native $id @('--smoke-scenes', '2') '_smoke'
+        if (-not $out.ok) {
+            Write-Host "SMOKE FAILED on $id; stopping. Inspect outputs\_smoke\$id\result.json"
+            $allOk = $false
+            break
+        }
+    }
+    if ($allOk) { Write-Host 'SMOKE COMPLETE: outputs\_smoke\<run_id>\result.json' }
+    exit ([int](-not $allOk))
+}
+
+$ids = @()
+if ($Only -ne '') { $ids = $Only.Split(',') } else { $ids = @($registry.runs | ForEach-Object { $_.run_id }) }
+$campaign = @()
+$failed = $false
+foreach ($id in $ids) {
+    $out = Invoke-Native $id @() $id
+    $campaign += [pscustomobject]@{ run_id = $id; status = $out.status; gate_passed = $out.gate; returncode = $out.rc; log = $out.log }
+    if (-not $out.ok) {
+        Write-Host "STOP: $id did not complete or failed the frozen-metric gate. Remaining runs are NOT started."
+        $failed = $true
+        break
+    }
+}
+$summaryPath = Join-Path (Join-Path $here 'outputs') 'campaign_summary_seal.ps.json'
+$campaign | ConvertTo-Json -Depth 5 | Out-File -FilePath $summaryPath -Encoding UTF8
+Write-Host "campaign summary: $summaryPath"
+if ($failed) { exit 1 }
+Write-Host 'ALL 19 RUNS COMPLETE (frozen-metric gate passed for every run).'
+exit 0

@@ -1,0 +1,94 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Copy verified portions of the already-approved public Git snapshot.
+
+Only the separately created upload checkout is written. This script never
+pushes, resets, deletes, or changes scientific source runs.
+"""
+from __future__ import annotations
+import hashlib
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+WORK = Path(__file__).resolve().parent
+SOURCE = WORK / 'YunTAPR-Net-upload'
+TARGET = WORK / 'YunTAPR-Net-push-chunks'
+PLAN = WORK / 'GITHUB_PUSH_CHUNKS_PLAN.json'
+APPROVED_HEAD = '337c9d28cf3aa5e07e7fad47dd428b666ceb1cbe'
+INITIAL_HEAD = '14bab8c655ba3463a604ac9dba39dfb38c15b95e'
+MAX_CHUNK_BYTES = 18000000
+
+def sha(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open('rb') as f:
+        for b in iter(lambda: f.read(4 * 1024 * 1024), b''):
+            h.update(b)
+    return h.hexdigest()
+
+def git(repo: Path, *args: str) -> str:
+    return subprocess.check_output(['git', *args], cwd=repo, text=True).strip()
+
+def priority(name: str) -> bool:
+    return name in {'README.md', '.gitattributes', 'stage0-b0-evidence/README.md', 'stage0-b0-evidence/.gitignore'} or name.startswith('stage0-b0-evidence/manifests/') or name.startswith('stage0-b0-evidence/code/') or any((k in name for k in ('/stage1_b0_formal_readiness_resolution/', '/stage1_b0_engineering_smoke/', '/stage0_final_gate_package/', '/stage0_spatial_decision_update/')))
+
+def create_plan() -> None:
+    if PLAN.exists():
+        raise FileExistsError(PLAN)
+    assert git(SOURCE, 'rev-parse', 'HEAD') == APPROVED_HEAD
+    assert git(TARGET, 'rev-parse', 'HEAD') == INITIAL_HEAD
+    raw = subprocess.check_output(['git', 'ls-files', '-z'], cwd=SOURCE)
+    names = [s.decode('utf-8') for s in raw.split(b'\x00') if s]
+    assert len(names) == 960
+    first = sorted((n for n in names if priority(n)))
+    remaining = sorted((n for n in names if not priority(n)))
+    chunks = [first]
+    current: list[str] = []
+    total = 0
+    for name in remaining:
+        size = (SOURCE / name).stat().st_size
+        if current and total + size > MAX_CHUNK_BYTES:
+            chunks.append(current)
+            current = []
+            total = 0
+        current.append(name)
+        total += size
+    if current:
+        chunks.append(current)
+    items = []
+    for i, names_in_chunk in enumerate(chunks, 1):
+        items.append({'index': i, 'file_count': len(names_in_chunk), 'bytes': sum(((SOURCE / p).stat().st_size for p in names_in_chunk)), 'paths': names_in_chunk})
+    assert sorted((n for c in items for n in c['paths'])) == sorted(names)
+    PLAN.write_text(json.dumps({'approved_source_head': APPROVED_HEAD, 'initial_remote_head': INITIAL_HEAD, 'target_repo': 'https://github.com/flyeagle-cex/YunTAPR-Net.git', 'chunks': items}, indent=2), encoding='utf-8')
+    print('PLAN', [(c['index'], c['file_count'], c['bytes']) for c in items])
+
+def copy_chunk(index: int) -> None:
+    plan = json.loads(PLAN.read_text(encoding='utf-8'))
+    assert plan['approved_source_head'] == APPROVED_HEAD
+    assert git(SOURCE, 'rev-parse', 'HEAD') == APPROVED_HEAD
+    assert git(TARGET, 'status', '--porcelain') == ''
+    chunk = plan['chunks'][index - 1]
+    assert chunk['index'] == index
+    source_root = SOURCE.resolve()
+    target_root = TARGET.resolve()
+    for rel in chunk['paths']:
+        source = (SOURCE / rel).resolve()
+        target = TARGET / rel
+        assert source.is_relative_to(source_root) and target.resolve().is_relative_to(target_root)
+        if target.exists() and rel != 'README.md':
+            raise FileExistsError(target)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        source_size = source.stat().st_size
+        source_sha = sha(source)
+        shutil.copyfile(source, target)
+        if target.stat().st_size != source_size or sha(target) != source_sha:
+            raise ValueError(f'Copy mismatch: {rel}')
+    print('COPIED', index, chunk['file_count'], chunk['bytes'])
+if __name__ == '__main__':
+    if len(sys.argv) == 2 and sys.argv[1] == 'plan':
+        create_plan()
+    elif len(sys.argv) == 3 and sys.argv[1] == 'copy':
+        copy_chunk(int(sys.argv[2]))
+    else:
+        raise SystemExit('usage: python plan_and_copy_github_chunks.py plan|copy N')

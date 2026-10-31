@@ -1,0 +1,20 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import datetime, hashlib, json, subprocess
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+BASE = '207a1872341f4fcdfd85eb534c892400fcf2ba99'
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip() == BASE
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO, text=True).strip()
+runid = 'run_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+run = REPO / 'docs/b1_training_protocol/preflight' / runid
+run.mkdir(parents=True)
+files = subprocess.check_output(['git', 'ls-files', '-z'], cwd=REPO).decode().split('\x00')[:-1]
+history = {p: {'sha256': hashlib.sha256((REPO / p).read_bytes()).hexdigest(), 'bytes': (REPO / p).stat().st_size} for p in files}
+(run / 'history_before.json').write_text(json.dumps({'baseline': BASE, 'files': history}, indent=2), encoding='utf-8')
+attachment = Path('<PRIVATE_LOCATOR_ab128d4a2e78>')
+(run / 'researcher_authority.json').write_text(json.dumps({'attachment_path': str(attachment), 'attachment_sha256': hashlib.sha256(attachment.read_bytes()).hexdigest(), 'task': attachment.read_text(encoding='utf-8'), 'paired_initialization_clarification': '分别重新设 seed=2026；same-name same-shape 从 anchor 复制；两个不同形输入 kernel 保留 native fresh 初始化，skip 原生零初始化保留。', 'authorization': 'ENGINEERING_ONLY; formal training prohibited; no 2025 raw access'}, ensure_ascii=False, indent=2), encoding='utf-8')
+active = {'run_id': runid, 'run_directory': str(run), 'baseline': BASE, 'staging_root': str(Path('<PRIVATE_LOCATOR_1524ffa8366d>') / ('b1_protocol_' + runid))}
+(ROOT / 'YunTAPR-active-b1-protocol-v1.json').write_text(json.dumps(active, indent=2), encoding='utf-8')
+print(json.dumps({'run_id': runid, 'historical_files': len(files), 'run_directory': str(run)}))

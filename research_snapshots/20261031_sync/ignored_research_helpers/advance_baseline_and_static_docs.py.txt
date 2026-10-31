@@ -1,0 +1,96 @@
+# Archival copy: formatting normalized; private locators redacted.
+# One compact new check receipt, retaining failures instead of laundering them.
+import ast, hashlib, json, statistics, subprocess, shutil
+from pathlib import Path
+R = Path(__file__).resolve().parents[3]
+D = R / 'docs/research_readiness/20261025'
+
+def read(p):
+    return json.loads(p.read_text(encoding='utf-8'))
+
+def text(p):
+    return p.read_bytes().decode('utf-8').replace('\r\n', '\n')
+
+def save(p, s):
+    p.write_bytes(s.replace('\r\n', '\n').replace('\n', '\r\n').encode('utf-8'))
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+x = read(D / 'evidence/b3_b4_three_seed_completion.json')
+seeds = ('2029', '2030', '2031')
+metrics = ('brier', 'auroc', 'average_precision', 'conditional_pinball', 'q32_coverage')
+section = '## 进入地形消融前的限定科学结论（2026-10-27）\n\n三seed完整结果已经完成并推送9877a59。本节仅重算已保存充分量，不追加训练或推理。按研究者本轮总控任务，基线交接判据为“核心对照有证据、局限明确、不会破坏B5/B6公平对照”，不以全部指标改善、q32达名义水平或所有模型统一三seed为前提。\n\n|指标|B3三seed均值 ± 样本标准差|B4三seed均值 ± 样本标准差|\n|---|---|---|\n'
+for k in metrics:
+    values = [[x['summary']['endpoints'][s][m][k] for s in seeds] for m in ('B3', 'B4')]
+    section += f'|{k}|{statistics.mean(values[0]):.12f} ± {statistics.stdev(values[0]):.12f}|{statistics.mean(values[1]):.12f} ± {statistics.stdev(values[1]):.12f}|\n'
+section += '\n下表为同一2024 Dev的条件Pinball（单位log1p(mm/h)）；n为每个模型使用的相同场景像元暴露数。均值±样本标准差均按三个seed计算，B4−B3负值有利；它定位条件分位数损失的变化，不能直接解释发生概率识别增益来自哪个雨层。\n\n|雨强mm/h|n|B3均值|B4均值|B4−B3均值 ± 样本标准差|改善seed数/3|\n|---|---|---|---|---|---|\n'
+rain = []
+for i, label in enumerate(('(0.1,1]', '(1,5]', '(5,10]', '(10,20]', '(20,30]', '(30,50]', '(50,∞)')):
+    a = [x['endpoint_groups'][s]['B3']['all']['rain_strata'][i]['conditional_pinball'] for s in seeds]
+    b = [x['endpoint_groups'][s]['B4']['all']['rain_strata'][i]['conditional_pinball'] for s in seeds]
+    d = [v - u for u, v in zip(a, b)]
+    n = x['endpoint_groups']['2029']['B3']['all']['rain_strata'][i]['n']
+    section += f'|{label}|{n}|{statistics.mean(a):.9f}|{statistics.mean(b):.9f}|{statistics.mean(d):+.9f} ± {statistics.stdev(d):.9f}|{sum((z < 0 for z in d))}/3|\n'
+    rain.append(n / 407820 * statistics.mean(d))
+assert abs(sum(rain) - x['summary']['metrics']['conditional_pinball']['mean']) < 1e-12
+section += '\n主要条件Pinball改善集中在1–5与5–10 mm/h；20–50 mm/h三seed平均退化，其中(30,50]三个seed全部退化。>50 mm/h只有6个暴露，不能作稳定结论。q32在全部六个模型中重复欠覆盖，MEE并未稳定解决校准；缺陷原因仍是假设，没有以新损失实验“修好”后再选择结果。\n\n|UTC时次|Brier差值均值 ± SD|AUROC差值均值 ± SD|AP差值均值 ± SD|条件Pinball差值均值 ± SD|q32覆盖差值均值 ± SD|\n|---|---|---|---|---|---|\n'
+for hour in (0, 6, 12, 18):
+    key = f'analysis_UTC_{hour:02d}'
+    cells = []
+    for metric in metrics:
+        vals = [x['endpoint_groups'][s]['B4'][key][metric] - x['endpoint_groups'][s]['B3'][key][metric] for s in seeds]
+        cells.append(f'{statistics.mean(vals):+.9f} ± {statistics.stdev(vals):.9f}')
+    section += f'|{hour:02d}|' + '|'.join(cells) + '|\n'
+section += '\n四个UTC时次的三seed平均Brier均改善，06 UTC平均增益较小；但seed2029的06 UTC和seed2030的18 UTC Brier仍恶化。这是固定四时次的描述性异质性，未隔离日变化、天气型、空间分布或GFS来源的因果作用，不宣称业务全天近实时。原所有分组值见完成收据，不用均值掩盖单seed反例。\n\nB0/B1在各自10,455/10,501人口上，两独立seed的限定结论保留；本轮无需机械新增第三seed。B2/B3仅声称seed2029的探索性时间信息比较（Brier与AUROC/AP/Pinball方向混合），不声称跨初始化稳定，故本轮不申请B2新seed。B0→B4不作为不同人口下的逐级架构优越性证据，也不自动补小人口B0/B1。B3/B4三seed同人口基线可直接供首轮B5/B6 seed2029公平对照。\n\n**B0–B4基线交接：COMPLETE_WITH_LIMITATIONS（带明确局限完成）；跨年份最终泛化及物理创新：NOT_VERIFIED。** 这一状态不抹去q32/强雨缺陷，也不代替新B5/B6训练批准。2025保持冻结。\n\n'
+p = D / 'B3_B4_MULTI_SEED_PLAN.md'
+s = text(p)
+marker = '## 有效独立seed和已补齐任务'
+assert marker in s
+s = s.replace(marker, section + marker, 1)
+s = s.replace('B0–B4整体科学验收：IN_PROGRESS', 'B0–B4基线交接：COMPLETE_WITH_LIMITATIONS；最终泛化：NOT_VERIFIED', 1)
+save(p, s)
+p = D / 'B0_B4_STAGE_ACCEPTANCE.md'
+s = text(p)
+a = s.index('**总体科学验收：')
+b = s.index('\n', a)
+s = s[:a] + '**本阶段B0–B4基线交接：COMPLETE_WITH_LIMITATIONS；2025最终模型测试：NOT_STARTED；最终泛化与地形创新：NOT_VERIFIED。**\n\n按2026-10-27研究者总控任务限定验收范围：已有核心对照有实验依据、局限已记录且不妨碍公平地形消融，即可进入B5/B6准备。不强制统一三seed、同人口全阶梯或修复全部缺陷；没有降低已执行实验的证据标准。' + s[b:]
+s = s.replace('不等于整条B0–B4科学验收或最终泛化已通过', '满足本阶段基线交接，不等于最终泛化已通过')
+s = s.replace('若统一要求≥3seed，仍缺第3seed', '两seed足以支持此人口的限定结论，本轮不补第3seed')
+s = s.replace('1；多seed证据不足', '1；结论明确限定为探索性')
+s = s.replace('B4|MEE13/width16/SP04残差已执行', 'B4|MEE13/width16/SP04残差已执行')
+s = s.replace('不据此启动B5–B8', '允许进入B5/B6准备，正式训练需新额度批准')
+s = s.replace('不满足全链科学验收', '不支持全链最终泛化')
+s = s.replace('整体科学验收仍IN_PROGRESS', '基线交接已带局限完成，最终泛化仍NOT_VERIFIED')
+s = s.replace('总体科学验收仍IN_PROGRESS', '基线交接已带局限完成，最终泛化仍NOT_VERIFIED')
+start = s.index('整体仍IN_PROGRESS的原因包括')
+s = s[:start] + '当前局限包括B2仅一seed、B0/B1与B2–B4人口不同、q32及强雨缺陷、同一Dev年与未解封最终测试。这些限制对应论文可声称范围，不自动转成新增训练关卡；本轮没有新增B0–B4训练需求。B5/B6可沿用B4 seed2029，不受这些已明确限制阻碍。\n'
+save(p, s)
+p = D / 'B2_TRAINING_AND_EVALUATION_REPORT.md'
+s = text(p)
+s = s.replace('B0–B4总体科研验收：IN_PROGRESS', 'B0–B4基线交接：COMPLETE_WITH_LIMITATIONS；最终泛化：NOT_VERIFIED', 1)
+s = s.replace('B0–B4整体科研验证仍IN_PROGRESS：B3/B4仅1个有效seed，尚缺预定多seed复现；B2也只有1个seed，q32问题、Dev重复使用和近实时来源链限制保留。2025继续冻结，B3/B4新seed、B5–B8和任何额外重放/读取均未因本次完成而取得授权。', '2026-10-27更新：B3/B4三seed复现已完成；本B2/B3对照仅限定seed2029探索性结论，不声称跨初始化稳定，因此首轮地形消融前无需新增B2训练。B0–B4基线交接已带局限完成；q32问题、Dev重复使用和近实时来源链限制保留。2025继续冻结，B5/B6正式训练仍需独立新协议和额度批准。')
+save(p, s)
+prior = R / 'docs/research_readiness/.local/static_training_cached_check_version.py'
+current = R / 'src/yuntapr/experimental/research_readiness/static_training.py'
+
+def nodes(path):
+    return {n.name: ast.dump(n, include_attributes=False) for n in ast.parse(path.read_text(encoding='utf-8')).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+aa, bb = (nodes(prior), nodes(current))
+for name in ('StaticTrainingModel', 'unpack', 'model_factory'):
+    assert aa[name] == bb[name]
+cache = Path(read(R / 'docs/research_readiness/.local/b5_b6_local_inputs.json')['cache'])
+assert sha(cache / 'batch_receipt.json') == read(R / 'docs/core_stage4/evidence.json')['receipt_sha256']['batch_receipt.json']
+checks = dict(status='PASS_NECESSARY_STATIC_PREPARATION_CHECKS', unique_checks_passed=15, new_production_checks=6, new_static_training_checks=6, affected_legacy_engine_checks=3, failures_preserved=[dict(check='target-edge fixture', reason='fixture used wrong second float32 longitude', action='correct fixture to actual frozen axis; rerun only failed check passed'), dict(check='static ledger fixture', reason='default temp directory inaccessible in sandbox', action='use fresh ignored workspace fixture; rerun only failed check passed')], synthetic_cpu_optimizer_updates=1, formal_optimizer_updates=0, real_cache_check='b5_b6_cached_real_check.json', production_check='b5_b6_terrain_production.json', unchanged_historical_checks='129 sources/126 summaries and unchanged synthetic checks inherited', after_real_check_changes=dict(scope='controller completion validation and metadata-only E9 summary', prior_module_sha256=sha(prior), current_module_sha256=sha(current), numeric_AST_nodes_unchanged=['StaticTrainingModel', 'unpack', 'model_factory'], real_GPU_check_reused=True), inherited_cache_receipt_pin_verified=True, source_control_state='PREPARATION_BASE_9877a59_PLUS_EXPLICIT_FILE_SHA_BOUND_NEW_UNCOMMITTED_SOURCE', code_sha256={str(q.relative_to(R)).replace('\\', '/'): sha(q) for q in (current, R / 'src/yuntapr/experimental/core_innovation/stage4/engine.py', R / 'src/yuntapr/experimental/research_readiness/terrain_production.py', R / 'tests/research_readiness/test_static_training.py', R / 'tests/research_readiness/test_terrain_production.py')})
+with (D / 'evidence/b5_b6_preparation_checks.json').open('x', encoding='utf-8') as f:
+    json.dump(checks, f, ensure_ascii=False, indent=2)
+for name in ('b5_b6_cached_real_check.json', 'b5_b6_terrain_production.json'):
+    p = D / 'evidence' / name
+    j = read(p)
+    j['source_control_state'] = checks['source_control_state']
+    p.write_text(json.dumps(j, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+for p in (R / 'AGENTS.md', R.parent / 'AGENTS.md'):
+    s = text(p)
+    s = s.replace('每次收到研究者命令后，在回答前先提问，一次只问一个问题；在对真实需求与目标达到至少 95% 的理解后再确定方案。', '2026-10-27最新研究者指令：准备和工程判断自主连续推进，不逐项提问；不确定时选择有依据的最优方法，最后汇报。B5/B6正式训练仍须遵守本轮总控文本要求的明确科学方案和新增预算批准，免提问不等于无限训练额度。')
+    s += '\n2026-10-27基线交接与地形准备：按限定科学结论完成B0–B4交接（COMPLETE_WITH_LIMITATIONS），不补训已完成模型、不机械补B0/B1第三seed或B2新seed。真实候选DEM读取100份档案、1,613,224,459字节，3430监督点海拔/梯度均有效、180接缝无冲突；原生米制梯度后WGS84面积聚合。B5/B6真实缓存前向/损失/零更新反向通过，正式训练仍未启动。候选规则、width16/SP04零输出残差与新两模型预算待一次集中明确批准；2025和B7/B8冻结。\n'
+    save(p, s)
+print('Baseline handoff and sufficient-statistic analysis updated; numeric GPU path inherited unchanged.')

@@ -1,0 +1,111 @@
+# 封口后真实数据冒烟计划（1 checkpoint × 2 场景）
+
+状态：**待 Lead 在训练包封口后明确触发**。本轮研发没有执行任何真实数据推理。
+冒烟唯一目的：证明「冻结读取器 → 模型 → 前向 → 冻结评价/新指标累加」这条链在真实（2024 Dev）数据上可跑通，
+并记录真实读取字节/耗时，为全量 19 run 的预算校准。冒烟**不产生**任何主表结论（2 场景 ≠ 963/10501 全量）。
+
+---
+
+## 1. 前置条件（全部满足才可执行）
+
+1. 训练包 `<PRIVATE_LOCATOR_d2f718d28bff>` 已封口（不再有训练进程；
+   该包完成后 GPU 8.15 GiB 占用释放）。
+2. 无其它 GPU 任务占用；`nvidia-smi` 显示空闲显存 ≥ 6 GiB（历史 B0/B1 峰值 reserved 5.53 GiB；
+   B2–B8 推理只需权重 + 单批激活，预计 ≤4–6 GiB）。
+3. 数据盘可读：`<PRIVATE_LOCATOR_fb3ffd39e0db>`（B13）、`<PRIVATE_LOCATOR_fb4f0dfa666b>`（IMERG）、
+   `<PRIVATE_LOCATOR_f702cae6a9df>`（Stage3 私有元数据，只读）。
+4. 本目录未被写入过该 run 的正式输出（`outputs/<run_id>/` 不存在）；冒烟输出写在 `outputs/_smoke/<run_id>/`，
+   与全量输出隔离，可重复重建。
+
+## 2. 推荐冒烟对象
+
+**首选 `B7_s2029`**：一条链同时覆盖 Stage3 `PopulationPlan`、`BatchReader`（6 卫星帧+GFS main/thermo+IMERG+mask）、
+B6 静态地形包、物理 DOTE 变换（8 通道）、`DynamicTerrainModel`（B7 concat）、`Evaluation` 与 `PointAccumulator`，
+是最重/最易出错的一条；冒烟通过则 B2–B8 其余 run 的机制同构。
+如 Lead 只想先验最轻链：`B2_s2029`；如需覆盖 B0/B1 独立链：`B0_s2026_E0` 或 `B1_s2026_E0`（B0/B1 的冻结
+`Evaluator` 在 2 场景冒烟中会按设计跳过，因为其构造函数硬要求 10,501 个 Dev id）。
+
+## 3. 命令（PowerShell，北京时间；由 Lead 在封口后执行）
+
+### 3.1 一键冒烟（推荐，自动设置环境）
+
+```powershell
+cd "<PRIVATE_LOCATOR_3ea951331938>"
+.\launch_after_seal.ps1 -Mode smoke
+```
+
+默认 smoke 顺序：`B7_s2029`（2 场景）→ `B2_s2029`（2 场景）→ `B0_s2026_E0`（2 场景）。任一失败即停。
+
+### 3.2 手工单条（等价，便于观察）
+
+```powershell
+cd "<PRIVATE_LOCATOR_3ea951331938>"
+$env:PYTHONUTF8="1"; $env:PYTHONDONTWRITEBYTECODE="1"
+$env:CUBLAS_WORKSPACE_CONFIG=":4096:8"; $env:PYTHONHASHSEED="2029"
+$env:OMP_NUM_THREADS="1"; $env:MKL_NUM_THREADS="1"
+$env:PYTHONPATH="<PRIVATE_LOCATOR_62a8b180e446>"
+& "<PRIVATE_LOCATOR_fb03d44a1d79>" -B infer_eval.py run --run-id B7_s2029 --smoke-scenes 2
+```
+
+说明：`PYTHONHASHSEED` 必须等于该 run 的 seed（B7_s2029→2029；B0/B1 s2026→2026；s2027→2027；s2030→2030；s2031→2031），
+`CUBLAS_WORKSPACE_CONFIG` 必须在 Python 启动前设置；`launch_after_seal.ps1` 会按 run 自动设置。
+
+## 4. 预计读取字节（B7_s2029，2 场景，来自冻结 prepared scope 的精确单文件大小）
+
+| 类别 | 文件数（2 场景） | 精确字节 |
+|---|---|---|
+| 卫星 6 slot（B13/B08…，5778 文件/963 场景，均值 4,511,xxx B） | 12 | ≈ 54.1 MB |
+| GFS main（963 文件 / 287,429,347 B，均值 298,473 B） | 2 | ≈ 0.60 MB |
+| GFS thermo（963 文件 / 89,772,072 B，均值 93,221 B） | 2 | ≈ 0.19 MB |
+| IMERG 日文件（245 文件 / 194,832,801 B，均值 795,236 B） | 1–2 | 0.80–1.59 MB |
+| yunnan mask | 1 | 20,916 B |
+| **合计（逻辑源字节）** | 18–19 | **≈ 55.7–56.5 MB** |
+
+- B0/B1 冒烟（2 场景）：B1 为 6 帧×4.42 MB≈26.5 MB，B0 为 1 帧≈4.4 MB，加 IMERG 0.8 MB、mask 20.9 kB；
+  另需读取冻结计划元数据（2024 manifest 5.35 MB + frame index CSVs 约 12.6 MB + protocol/scaler/mask 元数据），
+  合计约 **45–60 MB**（B1）/ **23–35 MB**（B0）。
+- 每次读取都做同 handle SHA-256 校验（B0/B1 VerifiedReader；B2–B8 SourceCache+SourceMeter）。
+
+## 5. 预计耗时（单 checkpoint × 2 场景，GPU 空闲时）
+
+| 阶段 | B7_s2029 等 B2–B8 | B0/B1 |
+|---|---|---|
+| Python/torch/冻结模块导入 + 计划构造 | 30–90 s（含 PopulationPlan 元数据哈希校验） | 60–120 s（含 16 个 frame CSV + 2 份 manifest 读取校验） |
+| 模型构造 + checkpoint 加载（strict） | 5–20 s | 5–15 s |
+| 2 场景读取+解码（≈56 MB，SHA） | 5–20 s | 20–60 s（B13 解码单帧约 0.5–1 s） |
+| 前向 + 指标累加（1 个 batch） | 3–10 s | 3–10 s |
+| **合计（每 checkpoint）** | **≈ 1–3 min** | **≈ 2–4 min** |
+
+（2026-10-29 的 CPU `check` 实测：单 run 构造+strict load 约 15–40 s，可作为导入开销的参考。）
+
+## 6. 期望输出与判据
+
+输出：`outputs/_smoke/<run_id>/result.json`（不含 compact CSV；不写正式主表目录）。
+
+必须满足（自动判据已写入 `smoke_checks`）：
+
+1. `status == "SMOKE_COMPLETE"`；
+2. `mode == "SMOKE_2_SCENES"`，`scenes_processed == 2`，`batches == 1`；
+3. `new_metrics.N_valid == 2 × 3430 == 6860`（B0/B1 同为 6860；若 B0/B1 的 `valid&region` 计数不同，说明 mask 链异常）；
+4. `new_metrics.N_rain > 0`（2024 Dev 两个首场景应当有雨；若为 0 记录为异常但不等于崩溃）；
+5. `new_metrics.point_estimates` 含 A/B/C，`MAE/RMSE/MeanBias/Pearson_CC` 全有限；`contingency` 含
+   `OCC_P` + A/B/C；每张混淆矩阵满足 `TP+FP+FN+TN == N_valid`（=6860）；
+6. `candidate_D` 每阈值有 `support.N_supported + support.N_not_established == N_valid`；
+7. `read_scope_actual` 存在（B2–B8 为 `meter_totals`：`opened_files` 应等于该 2 场景实际文件数 18–19，
+   `delivered_bytes` 与 §4 同量级；B0/B1 为 `content_bytes_read`），且无 FAILED 状态；
+8. `checkpoint_identity` 的 checkpoint/Dev 报告 SHA 与他们 registry 记录一致（默认开启 SHA 校验）；
+9. `gate` 明确 `applies=false` + 原因（2 场景不复现全量 summary；B0/B1 注明 frozen evaluator 跳过）。
+
+若任一失败：保持输出目录原样、**不要**改代码参数重试；把 `result.json` 的 `error`/`traceback` 报给 Lead，
+由 Lead 决定是否允许修正后重跑。修正后重跑会重建 `_smoke/<run_id>/`（非科学产物，允许覆盖）。
+
+## 7. 冒烟通过后的全量启动
+
+```powershell
+cd "<PRIVATE_LOCATOR_3ea951331938>"
+.\launch_after_seal.ps1 -Mode all
+```
+
+顺序：B0_s2026_E0 → B1_s2026_E0 → B0_s2027_E0 → B1_s2027_E0 → B2_s2029 → B3/B4 s2029 → B3/B4 s2030 →
+B3/B4 s2031 → B5/B6 s2029 → B7/B8 s2029 → B7/B8 s2030 → B7/B8 s2031（19 个，每 run 独立进程）。
+任一 gate 失败立即停止，`outputs/campaign_summary.json` 记录停在哪一个 run。

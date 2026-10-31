@@ -1,0 +1,124 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Researcher-authorized sequential extension; completion gates precede all stages.
+
+Waits for the existing Phase-A parent. It never restarts or interrupts it. Any
+failed stage writes an immutable failure and stops. PDF QA/publication remain
+separate explicit operations because compilation is not visual verification.
+"""
+from pathlib import Path
+import argparse, ast, datetime, hashlib, json, os, subprocess, sys, time, traceback
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+PYTHON = Path('<PRIVATE_LOCATOR_85023c7c63ca>')
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+reg_path = BASE / 'YunTAPR-extended-pipeline-active-v1.json'
+registry = read(reg_path)
+run = Path(registry['run_directory'])
+old = read(registry['phase_a_active_registry'])
+oldrun = Path(old['run_directory'])
+ENV = dict(os.environ, PYTHONUTF8='1', PYTHONHASHSEED='2026', CUBLAS_WORKSPACE_CONFIG=':4096:8', YUNTAPR_REPO_ROOT=str(REPO), PYTHONDONTWRITEBYTECODE='1')
+STAGES = [('phase_a_closure', BASE / 'close_yuntapr_paired_training_v1.py', []), ('install_extended_additions', BASE / 'install_yuntapr_extended_drafts_after_phase_a_v1.py', []), ('full_readonly_scientific_review', REPO / 'scripts/review_paired_phase_a_extended_v1.py', ['--registry', str(reg_path)]), ('finalfit_union_and_shared_scaler', REPO / 'scripts/prepare_paired_phase_b_extended_v1.py', ['--registry', str(reg_path)]), ('gpu_and_source_preflight', REPO / 'scripts/audit_paired_phase_b_preflight_extended_v1.py', ['--registry', str(reg_path)]), ('all_repository_regressions', BASE / 'run_yuntapr_extended_regression_v1.py', []), ('separate_phase_b_authorizations', BASE / 'authorize_yuntapr_paired_phase_b_extended_v1.py', []), ('sequential_paired_phase_b', BASE / 'execute_yuntapr_paired_phase_b_extended_v1.py', []), ('finalfit_integrity', REPO / 'scripts/close_paired_phase_b_extended_v1.py', ['--registry', str(reg_path)]), ('zero_raw_final_test_readiness', REPO / 'scripts/prepare_paired_final_test_readiness_v1.py', ['--registry', str(reg_path)]), ('b2_development_audit_only', REPO / 'scripts/audit_b2_spectral_design_extended_v1.py', ['--registry', str(reg_path)]), ('post_extension_all_regressions', BASE / 'run_yuntapr_extended_regression_v1.py', [])]
+
+def validated_inventory():
+    if sha(registry['authority_path']) != registry['authority_sha256']:
+        raise PermissionError('Additional researcher authority changed')
+    authority = read(registry['authority_path'])
+    if authority['raw_2025_access_allowed'] or authority['final_test_2025_authorized'] or authority['b2_training_authorized']:
+        raise PermissionError('Absolute 2025/B2 restrictions changed')
+    if len({s[0] for s in STAGES}) != len(STAGES):
+        raise ValueError('Duplicate pipeline stage')
+    files = [BASE / 'execute_yuntapr_extended_pipeline_v1.py']
+    files.extend((p for _, p, _ in STAGES if p.parent == BASE))
+    files.extend(sorted((BASE / 'YunTAPR-extended-build').glob('*.py')))
+    values = {}
+    for p in sorted(set(files)):
+        ast.parse(p.read_text(encoding='utf8'))
+        values[str(p.resolve())] = sha(p)
+    return values
+
+def check_inventory(values):
+    for p, digest in values.items():
+        if sha(p) != digest:
+            raise PermissionError('Orchestration/draft implementation changed: ' + p)
+
+def prerequisites(stage):
+    if stage == 'separate_phase_b_authorizations':
+        attempts = sorted((run / 'full_regression').glob('*/test_summary.json'))
+        v = read(attempts[-1])
+        assert v['status'] == 'PASS' and v['all_repository_modules_executed'] and v['fixture_cleanup_success']
+    if stage == 'sequential_paired_phase_b':
+        assert (run / 'phase_b_execution_registry.json').exists()
+    if stage == 'finalfit_integrity':
+        assert (run / 'both_phase_b_formal_runs_completed.json').exists()
+    if stage == 'zero_raw_final_test_readiness':
+        assert read(run / 'phase_b_integrity/final_status.json')['status'] == 'BOTH_FINALFIT_INTEGRITY_PASS'
+    if stage == 'b2_development_audit_only':
+        assert read(run / 'final_test_readiness/final_status.json')['2025_RAW_ACCESS'] == 0
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--verify-only', action='store_true')
+    args = parser.parse_args()
+    inventory = validated_inventory()
+    if args.verify_only:
+        print(json.dumps({'syntax_and_authority_inventory_PASS': True, 'files': len(inventory), 'ordered_stages': [v[0] for v in STAGES], 'existing_phase_a_completion_required': True, 'formal_training_started_by_verify': False, '2025_RAW_ACCESS': 0}))
+        return
+    journal = run / 'sequential_execution'
+    journal.mkdir(exist_ok=False)
+    save(journal / 'execution_plan.json', {'source_inventory': inventory, 'stages': [(n, str(p), a) for n, p, a in STAGES], 'authority_sha256': registry['authority_sha256'], 'existing_phase_a_parent_is_never_restarted': True, 'all_formal_failures_stop': True, 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, 'started_utc': now()})
+    current = 'WAIT_EXISTING_PHASE_A'
+    try:
+        while not (oldrun / 'both_formal_runs_completed.json').exists():
+            check_inventory(inventory)
+            for k, spec in old['formal_runs'].items():
+                public = Path(spec['public_directory'])
+                p = public / 'failure.json'
+                if p.exists():
+                    raise RuntimeError('Existing Phase-A failed; do not restart: ' + str(p))
+                results = oldrun / (k + '_execution_result.json')
+                if results.exists() and (not read(results).get('successful', False)):
+                    raise RuntimeError('Existing Phase-A parent failure')
+                p = public / 'final_status.json'
+                if p.exists() and read(p)['status'] != 'FORMAL_PHASE_A_COMPLETE':
+                    raise RuntimeError('Existing Phase-A non-success status')
+            if list(oldrun.glob('*STOP*failure*.json')) or list(oldrun.glob('*orchestration_failure*.json')):
+                raise RuntimeError('Existing parent recorded a STOP failure')
+            time.sleep(20)
+        save(journal / 'phase_a_wait_completion.json', {'both_existing_runs_completed': True, 'utc': now()})
+        for current, script, extra in STAGES:
+            check_inventory(inventory)
+            prerequisites(current)
+            cmd = [str(PYTHON), str(script), *extra]
+            save(journal / (current + '_start.json'), {'command': cmd, 'utc': now(), 'scientific_scope_unchanged': True})
+            with (journal / (current + '_console.txt')).open('x', encoding='utf8', newline='\n') as console:
+                process = subprocess.Popen(cmd, cwd=REPO, env=ENV, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf8')
+                save(journal / (current + '_process.json'), {'pid': process.pid, 'parent_pid': os.getpid(), 'utc': now()})
+                for line in process.stdout:
+                    console.write(line)
+                    console.flush()
+                    print(current + ': ' + line, end='', flush=True)
+                rc = process.wait()
+            save(journal / (current + '_result.json'), {'returncode': rc, 'utc': now()})
+            if rc:
+                raise RuntimeError('Stage failed: ' + current + '; no automatic retries')
+        save(journal / 'core_pipeline_completion.json', {'status': 'ALL_AUTHORIZED_NUMERICAL_STAGES_COMPLETED', 'reports_visual_QA_and_Git_publication': 'PENDING_SEPARATE_OPERATIONS', 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, '2025_RAW_ACCESS': 0, 'utc': now()})
+    except BaseException as e:
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+        save(journal / ('STOP_failure_' + stamp + '.json'), {'stage': current, 'error': repr(e), 'traceback': traceback.format_exc(), 'automatic_restart': False, 'next_stage_allowed': False, 'utc': now()})
+        raise
+if __name__ == '__main__':
+    main()

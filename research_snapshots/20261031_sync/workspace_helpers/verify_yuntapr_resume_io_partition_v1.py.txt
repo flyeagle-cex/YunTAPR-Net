@@ -1,0 +1,55 @@
+# Archival copy: formatting normalized; private locators redacted.
+# The live resumed parent performs no raw I/O; only original workers are included.
+"""Verify completed epochs 1-8 source records separately from interrupted epoch 9."""
+from pathlib import Path
+import collections, json, sys, datetime
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+from yuntapr.training import paired_phase_a_audit as a, paired_phase_a as frozen
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+resume = read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+plan = read(resume['plan_path'])
+public = Path(plan['public_directory'])
+excluded = {Path(row['path']) for row in plan['interrupted_worker_shards']}
+for row in plan['interrupted_worker_shards']:
+    p = Path(row['path'])
+    assert p.stat().st_size == row['bytes'] and a.sha256(p) == row['sha256']
+contract = frozen.RunnerContract.load()
+frames = a.data.load_frames()
+allowed = {a.RawFirewall.key(p) for p in a.allowed_sources(contract, 'B1', frames)}
+counts = {2023: collections.Counter(), 2024: collections.Counter()}
+copies = raw = 0
+for p in public.glob('staging_worker_*.jsonl'):
+    if p in excluded:
+        continue
+    with p.open(encoding='utf8') as f:
+        for line in f:
+            row = json.loads(line)
+            assert 'error' not in row
+            year = row['year']
+            i = row['index']
+            assert row['sample_id'] == contract.records['B1', year][i]['sample_id']
+            counts[year][i] += 1
+            assert len(row['staging']) == 7
+            for record in row['staging']:
+                assert record['size_match'] and record['sha256_match'] and record['cleanup_success'] and (not record['error']) and (not record['cleanup_error'])
+                assert a.RawFirewall.key(record['source_path']) in allowed
+                copies += 1
+for year, n in ((2023, 10455), (2024, 10501)):
+    assert sorted(counts[year]) == list(range(n)) and set(counts[year].values()) == {8}
+for p in public.glob('raw_access_*.jsonl'):
+    if p in excluded:
+        continue
+    with p.open(encoding='utf8') as f:
+        for line in f:
+            row = json.loads(line)
+            assert a.RawFirewall.key(row['path']) in allowed and row['model_scope_authorized']
+            raw += 1
+assert copies == 8 * 20956 * 7 and raw == 2 * copies
+value = {'status': 'RETAINED_EPOCHS_1_TO_8_SOURCE_LOG_PARTITION_PASS', 'epochs': 8, 'train_scene_count_each': 8, 'validation_scene_count_each': 8, 'source_copy_records': copies, 'readonly_source_open_events': raw, 'interrupted_epoch9_worker_pids': plan['discarded_incomplete_epoch_worker_pids'], 'interrupted_logs_removed': False, 'extra_raw_source_reads': 0, '2025_RAW_ACCESS': 0, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+with (Path(resume['resume_directory']) / 'origin_completed_io_partition.json').open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2)
+print(json.dumps(value), flush=True)

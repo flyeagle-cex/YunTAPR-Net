@@ -1,0 +1,32 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Run the full catalogue suites and eight independent real artifact tests."""
+from pathlib import Path
+import json
+import os
+import sys
+import time
+import unittest
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.evaluation import catalogue_execution_v1_1 as execution
+active = json.loads((ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').read_text(encoding='utf-8'))
+run = Path(active['run'])
+os.environ['B0_CATALOGUE_ARTIFACT_RUN'] = str(run)
+modules = ['tests.final_test_catalogue.test_catalogue_gate', 'tests.final_test_b0.test_catalogue_backend_v1_1', 'tests.final_test_catalogue.test_catalogue_execution_v1_1', 'tests.final_test_catalogue.test_real_catalogue_artifacts_v1_1']
+started = time.perf_counter()
+counts = []
+with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+    with (run / 'closure_test_results.txt').open('x', encoding='utf-8') as stream:
+        for name in modules:
+            stream.write('\n' + name + '\n')
+            result = unittest.TextTestRunner(stream=stream, verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName(name))
+            counts.append({'suite': name, 'executed': result.testsRun, 'passed': result.wasSuccessful(), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped)})
+    execution.verify_history(gate.read(run / 'history_before.json'))
+    summary = {'suites': counts, 'total_tests_executed': sum((r['executed'] for r in counts)), 'all_passed': all((r['passed'] and (not r['skipped']) for r in counts)), 'artifact_checks_only_read_repo_metadata': True, 'raw_source_open_events': source.raw_open_events, '2025_PIXELS_READ_DURING_CLOSURE_TESTS': 0, 'FINAL_CHECKPOINT_LOADS': 0, 'MODEL_FORWARD_CALLS': 0, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'elapsed_seconds': time.perf_counter() - started, 'completed_utc': gate.now()}
+    gate.save(run / 'closure_test_summary.json', summary)
+print(json.dumps(summary, ensure_ascii=True))
+if not summary['all_passed'] or source.raw_open_events:
+    raise SystemExit(1)

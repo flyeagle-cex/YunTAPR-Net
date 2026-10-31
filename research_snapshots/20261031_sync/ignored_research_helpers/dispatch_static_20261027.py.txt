@@ -1,0 +1,24 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""One researcher-approved B5/B6 dispatch; no retry or historical overwrite."""
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+import json, os, subprocess, sys
+root = Path(__file__).resolve().parents[3]
+local = root / 'docs/research_readiness/.local'
+frozen = root.parent / 'YunTAPR-static-exec-d696fe2'
+commit = 'd696fe25e632dc6a2d0e717caedb2fecac598fd9'
+private = json.loads((local / 'b5_b6_training_preparation_20261027.json').read_text(encoding='utf-8'))
+runtime = local / 'static_runtime_20261027'
+assert not runtime.exists() and (not Path(private['output_root']).exists()), 'No duplicate dispatch or retry'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == commit
+assert not subprocess.check_output(['git', '-C', str(frozen), 'status', '--porcelain', '--untracked-files=no'], text=True).strip()
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_static_pair.py'), 'execute', '--proposal', str(root / 'docs/research_readiness/20261025/evidence/b5_b6_training_proposal.json'), '--private-preparation', str(local / 'b5_b6_training_preparation_20261027.json'), '--researcher-approval', str(local / 'b5_b6_researcher_approval_20261027.json')]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    process = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=process.pid, training_commit=commit, execution_root=str(frozen), output_root=private['output_root'], dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), runtime='Direct Python3.12.14 base with unchanged venv-cuda dependencies')
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, indent=2)
+print(json.dumps(dict(status='B5_B6_DISPATCHED_ONCE', pid=process.pid)))

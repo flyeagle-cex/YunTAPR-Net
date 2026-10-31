@@ -1,0 +1,152 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Preserve execution support provenance without publishing outside-repo helpers.
+"""Audit an additions-only real catalogue freeze and its exact GitHub tree."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import verify_yuntapr_final_test_preflight_publication as previous
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+active = json.loads((ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').read_text(encoding='utf-8'))
+BASE = active['baseline']
+RUN = Path(active['run'])
+INDEX = RUN / 'delivery_artifact_sha256.json'
+NEW = {'config/evaluation/b0_2025_catalogue_only_authorization_v1.1.json', 'docs/final_test_b0/catalogue_gate_v1_1/B0_2025_CATALOGUE_ONLY_AUTHORIZATION_v1.1.md', 'src/yuntapr/evaluation/catalogue_execution_v1_1.py', 'scripts/execute_b0_2025_catalogue_only_v1_1.py', 'tests/final_test_catalogue/test_catalogue_execution_v1_1.py', 'tests/final_test_catalogue/test_real_catalogue_artifacts_v1_1.py'}
+sys.path[:0] = [str(REPO / 'src'), str(REPO / 'scripts')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.evaluation import catalogue_execution_v1_1 as execution
+
+def read(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def blob(data):
+    return hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+
+def finalize_artifacts():
+    qa = ROOT / 'tmp/pdfs/real_catalogue_freeze_v1_1'
+    name = 'B0_2025_CATALOGUE_ONLY_QC_POPULATION_FREEZE_REPORT_v1.1'
+    log = (qa / (name + '.log')).read_text(encoding='utf-8')
+    text = (qa / 'text.txt').read_text(encoding='utf-8')
+    assert 'Overfull' not in log and 'Missing character' not in log and ('人口' not in text)
+    images = sorted(qa.glob('page-*.png'))
+    assert len(images) == 4
+    for digest in (gate.PROTOCOL_SHA, read(RUN / 'final_status.json')['CANDIDATE_CATALOGUE_SHA256'], read(RUN / 'final_status.json')['CATALOGUE_FREEZE_RECORD_SHA256']):
+        assert digest in text, digest
+    assert '10244' in text and '10272' in text and ('NOT RECOMPUTED' in text)
+    target = RUN / (name + '.pdf')
+    assert not target.exists()
+    shutil.copyfile(qa / (name + '.pdf'), target)
+    assert sha(target) == sha(qa / (name + '.pdf'))
+    assert target.read_bytes().startswith(b'%PDF-')
+    gate.save(RUN / 'render_verification.json', {'status': 'PASS', 'pages': 4, 'all_rendered_pages_visually_inspected': True, 'no_visible_clipping_or_overlap': True, 'overfull_boxes': 0, 'missing_glyphs': 0, 'forbidden_population_mistranslation_present': False, 'native_editor_tools_available': False, 'tool': 'Existing XeLaTeX --disable-installer + Poppler; no installation or upgrade', 'source_sha256': sha(target.with_suffix('.tex')), 'pdf_sha256': sha(target), 'rendered_page_sha256': {p.name: sha(p) for p in images}, 'verified_utc': gate.now()})
+    helpers = ['prepare_yuntapr_catalogue_execution.py', 'bootstrap_yuntapr_catalogue_manifest_binding.py', 'run_yuntapr_catalogue_execution_preflight.py', 'authorize_yuntapr_catalogue_execution.py', 'close_yuntapr_catalogue_execution_tests.py', 'render_yuntapr_real_catalogue_freeze_report.py']
+    gate.save(RUN / 'orchestration_provenance.json', {'helper_sha256': {n: sha(ROOT / n) for n in helpers}, 'helpers_are_local_execution_orchestration_only': True, 'published_entrypoint': 'scripts/execute_b0_2025_catalogue_only_v1_1.py', 'primary_execution_closure': execution.execution_hashes(), 'created_utc': gate.now()})
+    names = NEW | {p.relative_to(REPO).as_posix() for p in RUN.rglob('*') if p.is_file()}
+    names.discard(INDEX.relative_to(REPO).as_posix())
+    gate.save(INDEX, {n: {'bytes': (REPO / n).stat().st_size, 'sha256': sha(REPO / n)} for n in sorted(names)})
+    return {'new_artifacts_indexed': len(names), 'index': str(INDEX)}
+
+def audit():
+    with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+        gate.load_protocol()
+        history = gate.read(RUN / 'history_before.json')
+        assert len(history) == execution.verify_history(history) == 1771
+        binding = read(RUN / 'authorization_binding.json')
+        value = read(REPO / binding['authorization_path'])
+        assert sha(REPO / binding['authorization_path']) == binding['authorization_sha256']
+        a = execution.ExecutionAuthority(value, binding['authorization_sha256'], execution._EXECUTION_SEAL)
+        a.require_catalogue()
+        freeze, digest = execution.verify_frozen_artifacts(RUN / 'catalogue', a)
+        assert value['execution_implementation_sha256'] == execution.execution_hashes()
+        assert value['implementation_sha256'] == gate.implementation_hashes()
+        assert value['imerg_completion_manifest_path'] == str(execution.METADATA_MANIFEST)
+        assert value['imerg_completion_manifest_sha256'] == read(RUN / 'resume_environment_and_metadata_binding.json')['manifest_sha256']
+        status = read(RUN / 'final_status.json')
+        tests = read(RUN / 'closure_test_summary.json')
+        assert status['REAL_2025_CANDIDATE_CATALOGUE'] == 'FROZEN'
+        assert status['REAL_2025_CANDIDATE_COUNT'] == 10272 and status['REAL_2025_ELIGIBLE_COUNT'] == 10244
+        assert status['REAL_2025_REJECTED_COUNT'] == 28
+        assert status['CATALOGUE_FREEZE_RECORD_SHA256'] == digest
+        assert status['FINAL_TEST_PROTOCOL_V1_1_FROZEN'] and status['FINAL_TEST_CATALOGUE_AUTHORIZED'] and status['2025_CATALOGUE_QC_ACCESS']
+        for name in ('FINAL_TEST_2025_AUTHORIZED', 'FINAL_TEST_2025_EXECUTED', '2025_FINAL_TEST_EXECUTED', '2025_FINAL_TEST_METRICS_COMPUTED', '2025_TARGET_OUTCOME_SUMMARIES_EXPOSED', 'MODEL_PARAMETERS_UPDATED', 'FINAL_actual_file_sha256_recomputed'):
+            assert status[name] is False, name
+        for name in ('2025_MODEL_INFERENCE_SCENES', 'OPTIMIZER_STEPS', 'BACKWARD_CALLS', 'FINAL_CHECKPOINT_LOADS', 'MODEL_FORWARD_CALLS'):
+            assert status[name] == 0, name
+        assert status['FINAL_identity_record_sha256_unchanged'] is True
+        assert status['raw_access_telemetry'] == freeze['raw_access_telemetry']
+        assert status['source_guard_raw_open_events'] == freeze['raw_access_telemetry']['raw_source_open_events']
+        assert tests['all_passed'] and tests['total_tests_executed'] == 128
+        assert [r['executed'] for r in tests['suites']] == [80, 18, 22, 8]
+        assert all((r['passed'] and r['failures'] == r['errors'] == r['skipped'] == 0 for r in tests['suites']))
+        assert tests['raw_source_open_events'] == tests['2025_PIXELS_READ_DURING_CLOSURE_TESTS'] == 0
+        assert (RUN / 'closure_test_results.txt').read_text(encoding='utf-8').rstrip().endswith('OK')
+        initial = [read(p) for p in sorted(RUN.glob('preflight_test_summary_*.json'))]
+        assert len(initial) == 3 and (not initial[0]['passed']) and (initial[0]['errors'] == 2)
+        assert initial[1]['passed'] and initial[2]['passed'] and (initial[2]['tests_run'] == 120)
+        assert not (RUN / 'failure.json').exists()
+        for name, ref in read(INDEX).items():
+            p = REPO / name
+            assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+        render = read(RUN / 'render_verification.json')
+        assert render['pages'] == 4 and render['all_rendered_pages_visually_inspected']
+        assert render['no_visible_clipping_or_overlap'] and render['overfull_boxes'] == render['missing_glyphs'] == 0
+        assert not source.raw_open_events
+        return {'status': 'PASS', 'scope': gate.CATALOGUE_SCOPE, 'tests': 128, 'candidate_count': 10272, 'eligible_count': 10244, 'rejected_count': 28, 'historical_files_unchanged': 1771, 'failure_preflight_log_preserved': True, 'FINAL_actual_file_sha256_recomputed': False, '2025_final_test_executed': False, 'model_inference_scenes': 0, 'metrics_computed': False, 'pixels_read_during_publication_audit': 0, 'freeze_record_sha256': digest}
+
+def changes(commit=None):
+    args = ('diff', '--name-status', '-z', BASE, commit) if commit else ('diff', '--cached', '--name-status', '-z')
+    parts = [p.decode('utf-8') for p in git(*args).split(b'\x00') if p]
+    result = {}
+    prefix = RUN.relative_to(REPO).as_posix() + '/'
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        assert action == 'A' and (name in NEW or name.startswith(prefix)), (action, name)
+        path = REPO / name
+        data = path.read_bytes()
+        assert path.suffix in ('.py', '.md', '.tex', '.pdf', '.json', '.txt', '.csv') and len(data) < 20000000, name
+        if path.suffix == '.pdf':
+            assert data.startswith(b'%PDF-')
+        else:
+            assert b'\x00' not in data
+            data.decode('utf-8')
+        assert git('show', (commit or '') + ':' + name) == data, name
+        result[name] = {'bytes': len(data), 'sha256': sha(path), 'blob_sha1': blob(data)}
+    assert set(result) == set(read(INDEX)) | {INDEX.relative_to(REPO).as_posix()}
+    return result
+
+def remote(commit, files):
+    previous.BASE = BASE
+    return previous.remote(commit, files)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--finalize', action='store_true')
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    if args.finalize:
+        print(json.dumps(finalize_artifacts(), ensure_ascii=True))
+    else:
+        result = {'utc': datetime.now(timezone.utc).isoformat(), 'local': audit()}
+        if args.staged or args.remote:
+            commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+            files = changes(commit)
+            result['files'] = files
+            result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+            if args.remote:
+                result['remote'] = remote(commit, files)
+            receipt = ROOT / ('YunTAPR-catalogue-execution-publication-' + (commit[:12] if commit else 'staged') + '.json')
+            receipt.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            result = {k: v for k, v in result.items() if k != 'files'}
+            result['receipt'] = str(receipt)
+        print(json.dumps(result, ensure_ascii=True))

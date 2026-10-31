@@ -1,0 +1,136 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Synthetic netCDF fixtures and identity dates only; no 2025/H/raw sources."""
+from pathlib import Path
+import datetime, os, sys, tempfile, unittest
+ROOT = Path(os.environ['YUNTAPR_REPO_ROOT'])
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT), str(ROOT / 'scripts')]
+import netCDF4
+import numpy as np
+import audit_b2_spectral_design_extended_v1 as b
+import prepare_paired_final_test_readiness_v1 as r
+CHANNELS = ['tbb_08', 'tbb_09', 'tbb_10', 'tbb_11', 'tbb_13', 'tbb_15', 'tbb_16']
+
+class Mapping:
+
+    def __init__(self):
+        self.axes = {'native_lat': np.linspace(30, 20, 501, dtype=np.float32), 'native_lon': np.linspace(97, 107, 501, dtype=np.float32), 'target_lat': np.zeros(100, dtype=np.float32), 'target_lon': np.zeros(100, dtype=np.float32)}
+
+    def assert_axes(self, lat, lon, *unused):
+        if not np.array_equal(lat, self.axes['native_lat']) or not np.array_equal(lon, self.axes['native_lon']):
+            raise ValueError('fixture coordinates changed')
+
+class ReadinessAndB2Tests(unittest.TestCase):
+
+    def setUp(self):
+        parent = Path(os.environ.get('YUNTAPR_SYNTHETIC_FIXTURE_ROOT', '<PRIVATE_LOCATOR_b569c7956382>'))
+        parent.mkdir(parents=True, exist_ok=True)
+        self.temp = tempfile.TemporaryDirectory(prefix='yuntapr_extended_fixture_', dir=parent)
+        self.mapping = Mapping()
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def source(self, missing=None, partial=None, fill=None, transpose=None, future=False):
+        path = Path(self.temp.name) / 'synthetic.nc'
+        with netCDF4.Dataset(path, 'w') as ds:
+            ds.createDimension('latitude', 501)
+            ds.createDimension('longitude', 501)
+            ds.createVariable('latitude', 'f4', ('latitude',))[:] = self.mapping.axes['native_lat']
+            ds.createVariable('longitude', 'f4', ('longitude',))[:] = self.mapping.axes['native_lon']
+            base = datetime.datetime(2024, 7, 1, tzinfo=datetime.timezone.utc).timestamp()
+            for name, seconds in [('start_time', 20 * 60), ('end_time', (35 if future else 28) * 60)]:
+                v = ds.createVariable(name, 'f8')
+                v.units = 'seconds since 1970-01-01 00:00:00 UTC'
+                v.assignValue(base + seconds)
+            ds.date_created = '2024-07-01T00:31:00+00:00'
+            for name in CHANNELS:
+                if name == missing:
+                    continue
+                dims = ('longitude', 'latitude') if name == transpose else ('latitude', 'longitude')
+                v = ds.createVariable(name, 'i2', dims, fill_value=-32768)
+                v.units = 'K'
+                v.scale_factor = 0.01
+                v.add_offset = 273.15
+                v.valid_min = np.int16(-10000)
+                v.valid_max = np.int16(10000)
+                v.set_auto_maskandscale(False)
+                raw = np.full((501, 501), -100, dtype=np.int16)
+                if name == partial:
+                    raw[0, 0] = -32768
+                if name == fill:
+                    raw[:] = -32768
+                v[:] = raw
+        return path
+
+    def read(self, **kwargs):
+        return b.read_seven(self.source(**kwargs), CHANNELS, self.mapping, r.a.data.utc('2024-07-01T00:30:00+00:00'))
+
+    def test_01_authority_list_matches_explicit_researcher_order(self):
+        self.assertEqual(b.channels_from_evidence(), CHANNELS)
+
+    def test_02_seven_full_valid_no_flip(self):
+        q = self.read()
+        self.assertTrue(q['grid_valid'] and q['causality_pass'])
+        self.assertTrue(all((c['full_valid'] for c in q['channels'])))
+        self.assertEqual([c['channel'] for c in q['channels']], CHANNELS)
+
+    def test_03_missing_channel_distinct(self):
+        q = self.read(missing='tbb_16')
+        c = q['channels'][-1]
+        self.assertFalse(c['present'])
+        self.assertIsNone(c['valid_count'])
+        self.assertFalse(c['all_fill'])
+
+    def test_04_partial_distinct(self):
+        c = self.read(partial='tbb_08')['channels'][0]
+        self.assertTrue(c['partial'])
+        self.assertEqual(c['valid_count'], 251000)
+
+    def test_05_all_fill_distinct(self):
+        c = self.read(fill='tbb_09')['channels'][1]
+        self.assertTrue(c['all_fill'])
+        self.assertFalse(c['partial'])
+        self.assertEqual(c['valid_count'], 0)
+
+    def test_06_transpose_rejected(self):
+        c = self.read(transpose='tbb_10')['channels'][2]
+        self.assertFalse(c['metadata_valid'])
+        self.assertFalse(c['full_valid'])
+
+    def test_07_actual_future_end_rejected(self):
+        self.assertFalse(self.read(future=True)['causality_pass'])
+
+    def test_08_b1_order_and_input_shape(self):
+        q = r.slot_requests('2025-07-01T00:00:00+00:00', 'B1')
+        self.assertEqual(q['input_shape'], [6, 501, 501])
+        self.assertEqual(q['nominal_times'][0], '2025-06-30T23:30:00+00:00')
+        self.assertEqual(q['nominal_times'][-1], '2025-07-01T00:20:00+00:00')
+
+    def test_09_b0_latest_matches_b1_slot_5(self):
+        t = '2025-07-01T00:00:00+00:00'
+        self.assertEqual(r.slot_requests(t, 'B0_MATCHED')['nominal_times'], r.slot_requests(t, 'B1')['nominal_times'][-1:])
+
+    def test_10_october_hard_reject(self):
+        with self.assertRaises(ValueError):
+            r.slot_requests('2025-10-01T00:00:00+00:00', 'B1')
+
+    def test_11_non_2025_target_reject(self):
+        with self.assertRaises(ValueError):
+            r.test_time('2024-07-01T00:00:00+00:00')
+
+    def test_12_study_start_insufficient_history_not_silently_filled(self):
+        q = r.slot_requests('2025-03-01T00:00:00+00:00', 'B1')
+        self.assertEqual(q['outside_study_window_slot_indices'], [0, 1, 2])
+        self.assertFalse(q['actual_2025_slot_availability_or_causality_verified'])
+
+    def test_13_september_tail_nominals_do_not_read_october(self):
+        q = r.slot_requests('2025-09-30T23:30:00+00:00', 'B1')
+        self.assertEqual(q['outside_study_window_slot_indices'], [])
+        self.assertTrue(all((t.startswith('2025-09-30') for t in q['nominal_times'])))
+
+    def test_14_cadence_rejected(self):
+        with self.assertRaises(ValueError):
+            r.test_time('2025-07-01T00:10:00+00:00')
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

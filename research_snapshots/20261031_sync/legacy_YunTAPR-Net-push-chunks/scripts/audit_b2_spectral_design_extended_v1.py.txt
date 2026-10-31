@@ -1,0 +1,234 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Confirm the old explicit researcher scientific-input order, not just a reader guess.
+# inherited packed arithmetic; per-channel metadata supplied.
+# Discovery is constrained to the 16 development month directories, no root-wide/2025 scan.
+"""Approved project channel list, one causal latest time; data audit only."""
+import argparse, ast, csv, json, os, re, sys, traceback
+from collections import Counter
+from datetime import timedelta
+from pathlib import Path
+from dataclasses import asdict
+ROOT = Path(os.environ.get('YUNTAPR_REPO_ROOT', Path(__file__).resolve().parents[1]))
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT), str(ROOT / 'scripts')]
+import netCDF4
+import numpy as np
+import paired_extended_v1 as x
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.data import b1_temporal_audit as prior
+from yuntapr.data.himawari_b13 import decode_b13, _cf_time
+from yuntapr.spatial.sp04_mapping import load_sp04
+PROJECT_CHANNEL_SOURCE = Path('stage0-b0-evidence/code/stage0_himawari/src/config.py')
+RESEARCHER_SOURCE = Path('<PRIVATE_LOCATOR_0ce74c0a743a>')
+SOURCE_NAME = re.compile('^NC_H(?:08|09)_(\\d{8})_(\\d{4})_R21_FLDK\\.06001_06001\\.nc$')
+
+def channels_from_evidence():
+    path = ROOT / PROJECT_CHANNEL_SOURCE
+    tree = ast.parse(path.read_text(encoding='utf8'))
+    definitions = [ast.literal_eval(n.value) for n in tree.body if isinstance(n, ast.Assign) and any((isinstance(t, ast.Name) and t.id == 'CHANNELS' for t in n.targets))]
+    if len(definitions) != 1:
+        raise ValueError('Unambiguous historical channel evidence required')
+    channels = list(definitions[0])
+    text = RESEARCHER_SOURCE.read_text(encoding='utf8')
+    match = re.search('固定 CHANNELS 顺序：\\s*(\\[[\\s\\S]*?\\])', text)
+    if not match or ast.literal_eval(match[1]) != channels or len(channels) != 7 or (len(set(channels)) != 7):
+        raise ValueError('Existing researcher channel approval does not reconcile')
+    return channels
+
+def channel_qc(ds, name):
+    result = {'channel': name, 'present': name in ds.variables, 'readable': False, 'metadata_valid': False, 'valid_count': None, 'full_valid': False, 'partial': False, 'all_fill': False, 'reasons': []}
+    if not result['present']:
+        result['reasons'] = ['MISSING_CHANNEL']
+        return result
+    try:
+        var = ds[name]
+        result.update(shape=list(var.shape), dimensions=list(var.dimensions), raw_dtype=str(var.dtype), units=getattr(var, 'units', None))
+        attrs = {k: var.getncattr(k) for k in ('scale_factor', 'add_offset', 'valid_min', 'valid_max', '_FillValue', 'missing_value') if k in var.ncattrs()}
+
+        def safe_metadata(v):
+            v = np.asarray(v).tolist()
+            if isinstance(v, list):
+                return [safe_metadata(item) for item in v]
+            return v if not isinstance(v, float) or np.isfinite(v) else str(v)
+        result['packing_metadata'] = {k: safe_metadata(v) for k, v in attrs.items()}
+        raw = np.asarray(var[:])
+        result['readable'] = True
+        if var.shape != (501, 501) or var.dimensions != ('latitude', 'longitude') or getattr(var, 'units', None) != 'K':
+            raise ValueError('Native channel grid/dimension/units mismatch')
+        if any((k not in attrs or not np.isfinite(attrs[k]) for k in ('scale_factor', 'add_offset', 'valid_min', 'valid_max'))) or attrs['valid_min'] > attrs['valid_max']:
+            raise ValueError('Invalid packed numeric metadata')
+        decoded, valid = decode_b13(raw, attrs)
+        n = int(valid.sum())
+        result.update(metadata_valid=True, valid_count=n, full_valid=n == 251001, partial=0 < n < 251001, all_fill=n == 0)
+        if result['partial']:
+            result['reasons'].append('PARTIAL')
+        if result['all_fill']:
+            result['reasons'].append('ALL_FILL')
+        del raw, decoded, valid
+    except (OSError, RuntimeError) as e:
+        result['reasons'].append('UNREADABLE_CHANNEL')
+        result['error'] = repr(e)
+    except (ValueError, KeyError, AttributeError, TypeError, IndexError, OverflowError) as e:
+        result['reasons'].append('GRID_OR_PACKING_METADATA_ERROR')
+        result['error'] = repr(e)
+    return result
+
+def read_seven(local, channels, mapping, analysis):
+    result = {'file_readable': False, 'grid_valid': False, 'time_metadata_valid': False, 'causality_pass': False, 'obs_start': None, 'obs_end': None, 'date_created': None, 'channels': [], 'reasons': []}
+    try:
+        with netCDF4.Dataset(str(local), 'r') as ds:
+            ds.set_auto_maskandscale(False)
+            result['file_readable'] = True
+            try:
+                lat, lon = (np.asarray(ds['latitude'][:]), np.asarray(ds['longitude'][:]))
+                mapping.assert_axes(lat, lon, mapping.axes['target_lat'], mapping.axes['target_lon'])
+                result.update(grid_valid=True, latitude_sha256=x.state_digest(lat), longitude_sha256=x.state_digest(lon), coordinate_direction={'latitude': 'descending', 'longitude': 'ascending'})
+            except (KeyError, ValueError, RuntimeError, OSError) as e:
+                result['reasons'].append('NATIVE_GRID_MISMATCH')
+                result['grid_error'] = repr(e)
+            for name in channels:
+                result['channels'].append(channel_qc(ds, name))
+            try:
+                start, end = (_cf_time(ds, 'start_time'), _cf_time(ds, 'end_time'))
+                result.update(obs_start=start.isoformat(), obs_end=end.isoformat(), time_metadata_valid=start <= end, causality_pass=start <= end <= analysis, date_created=str(ds.date_created) if hasattr(ds, 'date_created') else '')
+                if not start <= end:
+                    result['reasons'].append('TEMPORAL_ORDER_ERROR')
+                if end > analysis:
+                    result['reasons'].append('NONCAUSAL_FRAME')
+            except (KeyError, ValueError, AttributeError, RuntimeError, OSError) as e:
+                result['reasons'].append('TIME_METADATA_ERROR')
+                result['time_error'] = repr(e)
+    except (OSError, RuntimeError) as e:
+        result['reasons'].append('UNREADABLE_FILE')
+        result['error'] = repr(e)
+    if not result['channels']:
+        result['channels'] = [{'channel': n, 'present': None, 'readable': False, 'metadata_valid': False, 'valid_count': None, 'full_valid': False, 'partial': False, 'all_fill': False, 'reasons': ['UNREADABLE_FILE']} for n in channels]
+    return result
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--registry', required=True, type=Path)
+    args = parser.parse_args()
+    reg = x.read(args.registry)
+    run = Path(reg['run_directory'])
+    if x.read(run / 'final_test_readiness/final_status.json')['status'] != 'READINESS_PACKAGE_ONLY_ZERO_2025_RAW':
+        raise PermissionError('Complete preceding authorized stages before real B2 audit')
+    out = run / 'b2_design_audit'
+    out.mkdir(exist_ok=False)
+    try:
+        channels = channels_from_evidence()
+    except (OSError, ValueError, SyntaxError) as e:
+        x.save(out / 'final_status.json', {'status': 'B2_CHANNEL_DEFINITION_DECISION_REQUIRED', 'error': repr(e), 'B2_CHANNEL_SET_FROZEN': False, 'B2_DESIGN_FROZEN': False, 'B2_TRAINING_AUTHORIZED': False, 'real_2023_2024_audit_completed': False, '2025_RAW_ACCESS': 0})
+        return
+    (out / 'original_researcher_channel_authority.txt').write_bytes(RESEARCHER_SOURCE.read_bytes())
+    x.save(out / 'channel_authority.json', {'channels': channels, 'ordering': 'EXACT_HISTORICAL_RESEARCHER_ORDER', 'researcher_source': x.pin(RESEARCHER_SOURCE), 'project_evidence': x.pin(ROOT / PROJECT_CHANNEL_SOURCE), 'authority_found': True, 'audit_only_no_B2_training_or_normalization_authorized': True})
+    fw = a.RawFirewall()
+    fw.install()
+    if not a.data.H_ROOT.is_dir():
+        raise OSError('Original frozen H source drive unavailable')
+    targets, original, refs = prior.load_targets()
+    frames = a.data.load_frames()
+    mapping = load_sp04()
+    discovered = {}
+    for year in (2023, 2024):
+        for month in range(3, 11):
+            folder = a.data.H_ROOT / f'{year}{month:02d}'
+            if not folder.is_dir():
+                continue
+            for p in folder.rglob('*.nc'):
+                match = SOURCE_NAME.fullmatch(p.name)
+                if not match:
+                    continue
+                nominal = a.data.utc(match[1] + 'T' + match[2] + '00Z')
+                if nominal.year != year or nominal.month != month:
+                    continue
+                discovered.setdefault(nominal.isoformat(), []).append(p)
+    latest = {(a.data.utc(r['window_start']) + timedelta(minutes=20)).isoformat() for r in targets}
+    fw.allowed = {fw.key(p) for n, paths in discovered.items() if n in latest for p in paths}
+    fw.authorized = True
+    fw.log_path = out / 'raw_access.jsonl'
+    stagepath = a.data.STAGE_ROOT / ('extended_paired_' + run.name + '_b2_audit')
+    if stagepath.exists():
+        raise FileExistsError('Independent bounded staging child required')
+    stage = a.data.BoundedEnglishStaging(stagepath, 734003200, True, True)
+    counts = {y: {'calendar_targets': 0, 'all_seven_full_valid_causal_candidates': 0, 'per_channel': {n: Counter() for n in channels}, 'reasons': Counter(), 'multi_reason_candidate_rejections': 0} for y in (2023, 2024)}
+    candidates = {2023: [], 2024: []}
+    all_rows = []
+    try:
+        with (out / 'file_channel_qc.jsonl').open('x', encoding='utf8', newline='\n') as log:
+            for i, target in enumerate(targets, 1):
+                t = a.data.utc(target['window_start'])
+                analysis = t + timedelta(minutes=30)
+                nominal = t + timedelta(minutes=20)
+                paths = discovered.get(nominal.isoformat(), [])
+                reason = []
+                q = None
+                source = None
+                if len(paths) == 0:
+                    reason = ['MISSING_EXPECTED_LATEST_FRAME']
+                elif len(paths) != 1:
+                    reason = ['DUPLICATE_NOMINAL_IDENTITY_RESEARCHER_REVIEW_REQUIRED']
+                else:
+                    source = a.data.guard_source(paths[0], 'B13')
+                    identity = frames.get(nominal.isoformat())
+                    if identity and identity['relative_path'] and (str(source.relative_to(a.data.H_ROOT)) == identity['relative_path']):
+                        if source.stat().st_size != int(identity['source_bytes']):
+                            raise ValueError('Pinned native source size changed')
+                    with stage.local(source) as local:
+                        if identity and identity['source_sha256']:
+                            a.data.pinned(local, identity['source_sha256'])
+                        q = read_seven(local, channels, mapping, analysis)
+                    copy = asdict(stage.records[-1])
+                    del stage.records[:]
+                    if not copy['cleanup_success'] or not copy['size_match'] or (not copy['sha256_match']):
+                        raise IOError('B2 source staging integrity/cleanup failed')
+                    reason.extend(q['reasons'])
+                    for ch in q['channels']:
+                        reason.extend((ch['channel'] + '_' + r for r in ch['reasons']))
+                    if not q['grid_valid']:
+                        reason.append('NATIVE_GRID_NOT_VALIDATED')
+                    if not q['time_metadata_valid'] or not q['causality_pass']:
+                        reason.append('CAUSAL_METADATA_NOT_VALIDATED')
+                    log.write(json.dumps({'sample_id': t.isoformat(), 'expected_nominal': nominal.isoformat(), 'source': str(source), 'QC': q, 'staging': copy}, ensure_ascii=False, allow_nan=False) + '\n')
+                    log.flush()
+                if int(target['imerg_valid_yunnan_count']) != 3430:
+                    reason.append('PINNED_TARGET_NOT_FULL_VALID')
+                reason = sorted(set(reason))
+                count = counts[t.year]
+                count['calendar_targets'] += 1
+                strong = bool(q) and (not reason) and all((ch['full_valid'] for ch in q['channels']))
+                count['all_seven_full_valid_causal_candidates'] += int(strong)
+                count['multi_reason_candidate_rejections'] += int(len(reason) > 1)
+                count['reasons'].update(reason)
+                for name in channels:
+                    ch = next((c for c in q['channels'] if c['channel'] == name), None) if q else None
+                    for metric in ('missing', 'unreadable', 'partial', 'all_fill', 'metadata_error'):
+                        value = not paths or (ch and ch['present'] is False) if metric == 'missing' else bool(paths) and (ch is None or not ch['readable']) if metric == 'unreadable' else bool(ch and ch[metric]) if metric in ('partial', 'all_fill') else bool(ch and (not ch['metadata_valid']))
+                        count['per_channel'][name][metric] += int(bool(value))
+                row = {'sample_id': t.isoformat(), 'window_start': t.isoformat(), 'analysis_time': analysis.isoformat(), 'expected_nominal': nominal.isoformat(), 'year': t.year, 'candidate_full_seven_causal': strong, 'reasons': ';'.join(reason), 'candidate_rule_status': 'ENGINEERING_FULL_SEVEN_CANDIDATE_NOT_FORMAL_B2_ELIGIBILITY'}
+                all_rows.append(row)
+                if strong:
+                    candidates[t.year].append(row)
+                if i % 100 == 0 or i == len(targets):
+                    a.atomic_json(out / 'progress.json', {'targets_processed': i, 'total': 23520, '2025_RAW_ACCESS': 0})
+                    print(json.dumps({'operation': 'B2_SEVEN_CHANNEL_AUDIT', 'targets': i, 'total': 23520}), flush=True)
+        x.table(out / 'b2_all_target_candidate_qc.csv', all_rows)
+        intersection = {}
+        for year in (2023, 2024):
+            if candidates[year]:
+                x.table(out / f'b2_candidate_{year}.csv', candidates[year])
+            b2 = {r['sample_id'] for r in candidates[year]}
+            b1 = {r['sample_id'] for r in a.data.load_records('B1', year)}
+            common = sorted(original[year] & b1 & b2)
+            if common:
+                x.table(out / f'b0_b1_b2_candidate_common_{year}.csv', [{'sample_id': s} for s in common])
+            intersection[str(year)] = {'B0_original': len(original[year]), 'B1_and_B0_matched': len(b1), 'B2_strict_full_candidate': len(b2), 'B0_B1_B2_common_candidate': len(common), 'B2_formal_eligibility_frozen': False}
+        cleanup = x.staging_state(stagepath)
+        if not cleanup['cleanup_success']:
+            raise IOError('B2 owned staging remains')
+        status = {'status': 'B2_REAL_DEVELOPMENT_SPECTRAL_AUDIT_COMPLETE_DESIGN_PENDING', 'channels': channels, 'channel_authoritative_definition_found': True, 'real_2023_2024_audit_completed': True, 'counts': counts, 'candidate_intersections': intersection, 'source_evidence_refs': refs, 'source_open_events': fw.raw_opens, 'cleanup': cleanup, 'B2_DESIGN_FROZEN': False, 'B2_TRAINING_AUTHORIZED': False, 'B2_NORMALIZATION_FIT_EXECUTED': False, 'RESEARCHER_DECISION_REQUIRED': ['B2 formal missing/partial policy', 'B2 channel normalization policy', 'B0/B1/B2 fair primary comparison sample set and matched-control training protocol'], 'MODEL_CHECKPOINT_LOADS': 0, 'MODEL_FORWARD_CALLS': 0, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, '2025_FINAL_TEST_EXECUTED': False, 'completed_utc': x.now()}
+        x.save(out / 'final_status.json', status)
+    except BaseException as error:
+        x.save(out / 'failure.json', {'error': repr(error), 'traceback': traceback.format_exc(), 'processed_targets': len(all_rows), '2025_RAW_ACCESS': 0, 'utc': x.now()})
+        raise
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,48 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import json, subprocess, hashlib, re, csv, io
+source = Path(__file__).resolve().parents[3]
+target = source.parent / 'YunTAPR-reports-main-20261027'
+commit = '2ea3c9ce87f4e26c36ed7529c99122bea7cb3f54'
+assert subprocess.check_output(['git', '-C', str(target), 'rev-parse', 'HEAD'], text=True).strip() == '6c505d0ec63ed39f679720b82a65f601139dcd35'
+assert not subprocess.check_output(['git', '-C', str(target), 'status', '--porcelain'], text=True).strip()
+names = json.loads((source / 'docs/research_readiness/.local/reports_main_selection.json').read_text(encoding='utf-8'))['files']
+for name in names:
+    assert name.startswith(('docs/research_progress/', 'docs/research_readiness/20261025/')) and '/.local/' not in name
+    b = subprocess.check_output(['git', '-C', str(source), 'show', commit + ':' + name])
+    path = target / name
+    if path.exists() and '/evidence/' in name:
+        assert path.read_bytes() == b, 'Historical receipt overwrite prohibited: ' + name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(b)
+p = target / 'README.md'
+b = p.read_bytes()
+i = b.find(b'\n\n') + 2
+if i == 1:
+    i = b.find(b'\r\n\r\n') + 4
+assert i > 2
+notice = '最新科研报告：[已完成B0–B4实验与证据入口](docs/research_readiness/20261025/README.md)。B2 seed2029及B3/B4三seed固定E9配对已完成；**B5/B6：IN_PROGRESS**（B5执行中，B6串行等待），尚无最终评价。本次PR仅发布报告与脱敏证据，训练实现保留在开发/固定执行提交，2025最终测试继续冻结。\n\n'
+p.write_bytes(b[:i] + notice.encode() + b[i:])
+missing = []
+for name in names:
+    p = target / name
+    if p.suffix == '.md':
+        for raw in re.findall('\\[[^\\]]*\\]\\(([^\\n]+?)\\)', p.read_text(encoding='utf-8')):
+            rel = raw.strip('<>').split('#')[0]
+            if not rel or re.match('^[a-zA-Z][a-zA-Z0-9+.-]*:', rel):
+                continue
+            if not (p.parent / rel).exists():
+                missing.append([name, rel])
+assert not missing, missing
+rows = list(csv.DictReader(io.StringIO((target / 'docs/research_readiness/20261025/B0_B4_EXPERIMENT_MATRIX.csv').read_text(encoding='utf-8'))))
+assert len(rows) == 29 and all((r['status'] == 'IN_PROGRESS' for r in rows[-2:]))
+original = subprocess.check_output(['git', '-C', str(target), 'show', 'HEAD:docs/research_progress/PUBLICATION_MANIFEST.json'])
+assert (target / 'docs/research_progress/PUBLICATION_MANIFEST_20261025.json').read_bytes() == original
+for item in json.loads((target / 'docs/research_progress/PUBLICATION_MANIFEST.json').read_text(encoding='utf-8'))['files']:
+    b = (target / 'docs/research_progress' / item['path']).read_bytes()
+    assert len(b) == item['bytes'] and hashlib.sha256(b).hexdigest() == item['sha256']
+changed = subprocess.check_output(['git', '-C', str(target), 'diff', '--name-only'], text=True).splitlines() + subprocess.check_output(['git', '-C', str(target), 'ls-files', '--others', '--exclude-standard'], text=True).splitlines()
+assert all((n == 'README.md' or n.startswith(('docs/research_progress/', 'docs/research_readiness/20261025/')) for n in changed))
+assert not any((n.startswith(('src/', 'config/', 'tools/', 'tests/', '.github/')) for n in changed))
+print(json.dumps(dict(status='REPORTS_ONLY_PUBLICATION_CHECKS_PASS', source_commit=commit, selected_files=len(names), changed_files=len(changed), broken_local_links=0, training_code_changes=0, B5_B6='IN_PROGRESS', historical_evidence_overwritten=False), ensure_ascii=False))

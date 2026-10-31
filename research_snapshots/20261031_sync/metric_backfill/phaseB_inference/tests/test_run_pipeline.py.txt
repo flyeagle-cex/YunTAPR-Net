@@ -1,0 +1,176 @@
+# Archival copy: formatting normalized; private locators redacted.
+# noqa: E402
+# the fake "frozen" evaluator returns the real stored summary structure (the gate
+# compares against the actual E9 report on disk), so a faithful fake must include
+# coverage/covered as well.
+# B0_s2026_E0, real paths exist; no SHA/payload needed
+# ---- 1. passing gate
+# ---- 2. gate failure on a 2e-12 perturbation
+"""Synthetic end-to-end test of the run_one pipeline (CPU only, no GPU, no payload).
+
+Uses a fake family adapter and fake frozen evaluator, so it exercises exactly the
+plumbing that cannot be exercised before the training seal:
+  * run_one output-directory discipline and result.json schema
+  * PointAccumulator wiring from a forward-output object
+  * gate PASS when the fake frozen evaluator reproduces the stored summary
+  * gate FAIL (and status GATE_FAILED) when the summary is perturbed by 2e-12
+  * refusal to overwrite an existing scientific output
+
+Run: python -B tests/test_run_pipeline.py
+"""
+from __future__ import annotations
+import json
+import os
+import shutil
+import sys
+import tempfile
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE not in sys.path:
+    sys.path.insert(0, BASE)
+import infer_eval as ie
+
+class FakeEvaluator:
+
+    def __init__(self, summary, n_scenes):
+        self.summary = summary
+        self.n_scenes = n_scenes
+        self.seen = 0
+        self.closed = False
+
+    def add(self, *args, **kwargs):
+        self.seen += len(args[0])
+
+    def finish(self):
+        assert self.seen == self.n_scenes, (self.seen, self.n_scenes)
+        return {'summary': dict(self.summary)}
+
+    def close(self):
+        self.closed = True
+
+class FakeAdapter:
+    """Two batches of 8 synthetic Development scenes (16 scenes x 100 pixels)."""
+
+    def __init__(self, run, args, work):
+        import torch
+        self.torch = torch
+        self.run = run
+        self.work = work
+        self.ids = tuple((f'fake-{i:04d}' for i in range(16)))
+        self.analyses = tuple(('2024-05-01T00:00:00+00:00' for _ in self.ids))
+        self.n_scenes = len(self.ids)
+        self.evaluator_summary = ie.stored_summary(run)
+        self.n_batches = 0
+        gen = torch.Generator().manual_seed(7)
+        self._batches = []
+        for _ in range(2):
+            b, h, w = (8, 5, 20)
+            rate = torch.rand((b, 1, h, w), generator=gen) * 10.0
+            rate = torch.where(rate < 3.0, torch.zeros_like(rate), rate)
+            valid = torch.ones((b, 1, h, w), dtype=torch.bool)
+            region = torch.ones((b, 1, h, w), dtype=torch.bool)
+            prob = torch.rand((b, 1, h, w), generator=gen)
+            q = torch.empty((b, 32, h, w), dtype=torch.float64)
+            base = torch.linspace(0.12, 4.0, 32, dtype=torch.float64)
+            q[:] = base.view(1, 32, 1, 1)
+            q = q + torch.rand((b, 1, h, w), generator=gen, dtype=torch.float64) * 0.01
+            q = q.cumsum(dim=1) * 0.02 + torch.log1p(torch.tensor(0.11, dtype=torch.float64))
+            self._batches.append(dict(ids=self.ids[self.n_batches * 8:(self.n_batches + 1) * 8], rate=rate, valid=valid, region=region, probability=prob, qlog=q))
+            self.n_batches += 1
+
+    def new_evaluator(self, folder):
+        return FakeEvaluator(self.evaluator_summary, self.n_scenes)
+
+    def evaluator_add(self, ev, out, item):
+        ev.add(item['ids'])
+
+    def batches(self):
+        for item in self._batches:
+            yield item
+
+    def forward(self, item):
+        import types
+        return types.SimpleNamespace(rain_logit=item['probability'].clone(), rain_prob=item['probability'].clone(), conditional_quantiles_log=item['qlog'].clone())
+
+    def close(self):
+        pass
+
+    def read_scope_actual(self):
+        return dict(fake=True)
+
+    def describe(self):
+        return dict(family='fake')
+
+def _stored(run):
+    with open(os.path.join(BASE, 'run_registry.json'), 'r', encoding='utf-8') as f:
+        return json.load(f)['runs'][0]['stored_summary']
+
+def main():
+    failures = []
+
+    def check(name, cond, detail=''):
+        print(('[PASS] ' if cond else '[FAIL] ') + name + ('  ' + detail if detail and (not cond) else ''))
+        if not cond:
+            failures.append(name)
+    registry_path = os.path.join(BASE, 'run_registry.json')
+    with open(registry_path, 'r', encoding='utf-8') as f:
+        registry = json.load(f)
+    target = registry['runs'][0]
+    summary = target['stored_summary']
+    tmp_root = os.path.join(BASE, 'outputs', '_pipeline_selftest')
+    shutil.rmtree(tmp_root, ignore_errors=True)
+    os.makedirs(tmp_root)
+    old_root, old_adapters, old_validate = (ie.OUTPUT_ROOT, ie.FAMILY_ADAPTERS, ie._qlog_validate)
+    try:
+        ie.OUTPUT_ROOT = tmp_root
+        ie.FAMILY_ADAPTERS = {target['family']: FakeAdapter}
+        ie._qlog_validate = lambda q: q
+        res = ie.run_one(target['run_id'], verify_sha=False)
+        check('pipeline: status COMPLETE', res.get('status') == 'COMPLETE', str(res.get('status')))
+        check('pipeline: gate passed', (res.get('gate') or {}).get('passed') is True)
+        check('pipeline: N_valid == 16*100', res['new_metrics']['N_valid'] == 1600, str(res['new_metrics']['N_valid']))
+        check('pipeline: N_rain > 0', res['new_metrics']['N_rain'] > 0)
+        pes = res['new_metrics']['point_estimates']
+        check('pipeline: three candidates', sorted((p['candidate'] for p in pes)) == ['A', 'B', 'C'])
+        for p in pes:
+            check(f"pipeline: candidate {p['candidate']} metrics finite", all((p[k] is not None for k in ('MAE_mm_h', 'RMSE_mm_h', 'MeanBias_mm_h', 'Pearson_CC'))))
+        cont = res['new_metrics']['contingency']
+        check('pipeline: OCC_P + A/B/C contingency present', set(cont) == {'OCC_P', 'A', 'B', 'C'}, str(sorted(cont)))
+        for cand in ('OCC_P', 'A', 'B', 'C'):
+            for thr, row in cont[cand]['rows'].items():
+                check(f'pipeline: {cand}@{thr} TP+FP+FN+TN==N_valid', row['TP'] + row['FP'] + row['FN'] + row['TN'] == res['new_metrics']['N_valid'])
+        check('pipeline: OCC_P is defined only at r=0.1', list(cont['OCC_P']['rows'].keys()) == [repr(0.1)], str(list(cont['OCC_P']['rows'])))
+        d = res['new_metrics']['candidate_D']
+        for thr, block in d.items():
+            sp = block['support']
+            check(f'pipeline: D@{thr} support sums to N_valid', sp['N_supported'] + sp['N_not_established'] == res['new_metrics']['N_valid'])
+        check('pipeline: result.json written', os.path.exists(os.path.join(tmp_root, target['run_id'], 'result.json')))
+        check('pipeline: compact csv written', os.path.exists(os.path.join(tmp_root, target['run_id'], 'compact_metrics.csv')))
+        check('pipeline: read scope recorded', res.get('read_scope_actual') == dict(fake=True))
+        check('pipeline: no overwrite of existing scientific output', _raises(lambda: ie.run_one(target['run_id'], verify_sha=False)))
+        bad = dict(summary, brier=summary['brier'] + 2e-12)
+
+        class BadAdapter(FakeAdapter):
+
+            def new_evaluator(self, folder):
+                return FakeEvaluator(bad, self.n_scenes)
+        ie.FAMILY_ADAPTERS = {target['family']: BadAdapter}
+        shutil.rmtree(os.path.join(tmp_root, target['run_id']))
+        res2 = ie.run_one(target['run_id'], verify_sha=False)
+        check('pipeline: perturbed gate -> GATE_FAILED', res2.get('status') == 'GATE_FAILED', str(res2.get('status')))
+        check('pipeline: perturbed gate detail failed', (res2.get('gate') or {}).get('passed') is False)
+    finally:
+        ie.OUTPUT_ROOT, ie.FAMILY_ADAPTERS, ie._qlog_validate = (old_root, old_adapters, old_validate)
+        shutil.rmtree(tmp_root, ignore_errors=True)
+    print(f'== {len(failures)} failure(s) ==')
+    for f in failures:
+        print('  FAIL:', f)
+    return 0 if not failures else 1
+
+def _raises(fn):
+    try:
+        fn()
+    except BaseException:
+        return True
+    return False
+if __name__ == '__main__':
+    raise SystemExit(main())

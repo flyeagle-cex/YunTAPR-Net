@@ -1,0 +1,26 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Bind verified governance companions, preserve original controller journal."""
+from pathlib import Path
+import ast, hashlib, json, os
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+active_path = BASE / 'YunTAPR-paired-resume-active-v1.json'
+value = read(active_path)
+root = Path(value['resume_directory'])
+attempts = sorted((root / 'fixture_scope_checks').glob('*/test_summary.json'))
+latest = read(attempts[-1])
+assert latest['status'] == 'PASS' and latest['test_count'] == 200 and latest['all_new_uuid_fixtures_removed']
+assert (root / 'sequential_execution/waiting_controller_supersession.json').exists()
+for name in ('execute_yuntapr_extended_pipeline_resumed_v2.py', 'run_yuntapr_extended_regression_scoped_v1.py'):
+    ast.parse((BASE / name).read_text(encoding='utf8'))
+value.update(pipeline_journal=str(root / 'sequential_execution_v2'), controller_fixture_compatibility_proof=str(attempts[-1]))
+temp = active_path.with_suffix('.json.controller_v2')
+with temp.open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2, ensure_ascii=False)
+os.replace(temp, active_path)
+with (root / 'controller_v2_verification.json').open('x', encoding='utf8') as f:
+    json.dump({'fixture_compatibility': latest, 'proof_path': str(attempts[-1]), 'proof_sha256': hashlib.sha256(attempts[-1].read_bytes()).hexdigest(), 'changes': 'Test fixture paths and historical inventory scope only', 'B1_training_interrupted': False, 'numerical_code_changed': False, '2025_RAW_ACCESS': 0}, f, indent=2)
+print('CONTROLLER_V2_BINDING_VERIFIED_200_TESTS_PASS')

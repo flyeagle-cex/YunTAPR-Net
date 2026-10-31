@@ -1,0 +1,92 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Sanitize only the approved recovery's startup metadata; never run inference."""
+import csv, hashlib, io, json, re, sqlite3, urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[3]
+LOCAL = ROOT / 'docs/research_readiness/.local'
+
+def read(p):
+    return json.loads(Path(p).read_bytes())
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def query(p, sql):
+    c = sqlite3.connect(Path(p).resolve().as_uri() + '?mode=ro', uri=True)
+    try:
+        return c.execute(sql).fetchall()
+    finally:
+        c.close()
+proposal = read(ROOT / 'docs/research_readiness/20261025/evidence/dote_physical_recovery_proposal_20261031.json')
+v = read(LOCAL / 'perp_recovery_preparation_20261031_v1/private.json')
+out = Path(v['output_root'])
+service = LOCAL / 'perp_recovery_service_20261031_v1'
+binding = read(out / 'authorization_binding.json')
+grant = binding['approval']
+identity = read(service / 'independence.json')
+assert grant['researcher_statement'] == '好' and grant['approved_replay_updates'] == 480
+assert binding['code_commit'] == proposal['execution_code_commit'] == '7d4970d726aba1316f27fc7eea25817db6eca305'
+assert grant['proposal_sha256'] == proposal['proposal_sha256'] == 'ebd2391e0d6e95b1aa0a573df21416822f5173e1a6a11a8eafd6b74679e1f0d6'
+assert identity['in_any_job'] is False and identity['package_status'] == 15700
+verification = read(out / 'failed_source_verification/source_verification_receipt.json')
+assert verification == dict(opened_files=1, delivered_bytes=4705249, reserved_bytes=4705249, states={'READ_COMPLETE': 1})
+verify_rows = query(out / 'failed_source_verification/source_verification.sqlite', 'SELECT state,COUNT(*),SUM(actual_bytes),SUM(expected_bytes) FROM file_io GROUP BY state')
+assert verify_rows == [('READ_COMPLETE', 1, 4705249, 4705249)]
+assert query(out / 'failed_source_verification/source_verification.sqlite', 'SELECT sha256 FROM file_io') == [(proposal['source_verification']['expected_sha256'],)]
+assert query(out / 'B7_PERP_GRADIENT_static_source.sqlite', 'SELECT state,COUNT(*),SUM(actual_bytes) FROM file_io GROUP BY state') == [('READ_COMPLETE', 1, 312828)]
+states = query(out / 'B7_s2029/updates.sqlite', 'SELECT state,COUNT(*),MIN(u),MAX(u) FROM updates GROUP BY state')
+returned = sum((n for state, n, lo, hi in states if state == 'RETURNED'))
+assert returned > 0 and all((2401 <= lo <= hi <= 4320 for state, n, lo, hi in states))
+assert not (out / 'failure.json').exists()
+snapshot = json.load(urllib.request.urlopen('http://127.0.0.1:51282/api/snapshot', timeout=5))
+c = snapshot['candidate']
+assert snapshot['metric_completed'] == 19 and c['recovery'] and (c['sealed_epochs'] >= 5) and (c['source_commit'] == binding['code_commit'])
+at = datetime.now(timezone.utc).isoformat()
+rel = 'docs/research_readiness/20261025/evidence/dote_physical_recovery_started_20261031.json'
+public = dict(status='APPROVED_SINGLE_START_PHYSICAL_CONTROL_E5_RECOVERY_IN_PROGRESS', verified_at=at, researcher_decision=dict(original_reply='好', context='Direct affirmative reply to the exact disclosed E5 recovery proposal and budgets', researcher_quoted_SHA=False, decision_id=grant['decision_id'], approved_at=grant['approved_at']), execution_code_commit=binding['code_commit'], proposal_sha256=proposal['proposal_sha256'], data_version=proposal['data'], tasks=proposal['tasks'], budget=proposal['budget'], independent_supervisor=dict(in_any_job=False, package_status=15700), training=dict(status='IN_PROGRESS', inherited_epochs=5, saved_parent_updates=2400, prior_actual_attempts=2880, original_unsaved_updates=480, new_returned_snapshot=returned, effective_position=2400 + returned, cumulative_actual_attempts=2880 + returned, replay_returned_snapshot=min(480, returned), approved_new_updates=1920, approved_cumulative_attempts=4800, endpoint_status='FIXED_E9_NOT_YET_AVAILABLE', checkpoint_restoration='E5_MODEL_ADAMW_SCHEDULE_ALL_RNG_INHERITED_RESTORE_LAST; real u2401+ confirms successful restore'), source_verification=dict(status='PASS_FULL_PAYLOAD_SAME_PRIOR_SHA', actual=verification, expected_sha256=proposal['source_verification']['expected_sha256'], source_is_2024=True, raw_source_reread_during_reporting=0), initial_static_read=dict(bytes=312828, instances=1, status='READ_COMPLETE'), resource_admission=binding['admission'], identity=dict(initial_metadata_sha256=sha(out / 'B7_s2029/paired_initial_identity.json'), orders_sha256=sha(out / 'B7_s2029/paired_orders.json'), actual_E5_hash_inherited_from_preparation=proposal['checkpoint']['sha256']), readonly_panel=dict(status='RUNNING', effective_position=c['returned'], segment_returned=c['segment_returned'], cumulative_returned=c['cumulative_returned'], inherited_epochs=[e['epoch'] for e in c['epochs'] if e['inherited']], new_monitor_checks='2_PASS_RECOVERY_ACCOUNTING_AND_INHERITED_METRIC_GUARD;JS_SYNTAX_PASS', does_not_control_training=True), terminal_followup=dict(interval_minutes=30, maximum_checks=8, expires_at=read(LOCAL / 'perp_recovery_heartbeat_20261031.json')['expires_at'], silent_while_running=True, resource_protection='REMAINS_CANCELLED'), inherited_metrics=dict(complete=19, rerun=False, evidence='docs/research_readiness/20261025/evidence/metric_completion_candidate_started_20261030.json'), historical_failure=dict(preserved=True, evidence='docs/research_readiness/20261025/evidence/dote_physical_control_failure_20261031.json', prior_time_acceptance='NOT_VERIFIED_NOT_RETROACTIVELY_PASSED', same_seed_not_a_new_replicate=True), final_workbook='WAITING_RECOVERED_E9_ONE_WORKSHEET_ONE_TABLE_NO_FALSE_COMPLETE', new_inference_during_reporting=0, final_2025='FROZEN_NO_ACCESS', main='NOT_MODIFIED')
+text = json.dumps(public, ensure_ascii=False, indent=2, allow_nan=False) + '\n'
+assert not re.search('(?i)((?<![A-Za-z0-9])[A-Z]:[\\\\/]|/Users/|token=|password=)', text)
+with (ROOT / rel).open('x', encoding='utf-8', newline='\n') as f:
+    f.write(text)
+note = f'2026-10-31恢复已获准确批准并单次启动：研究者对完整限额申请回复“好”，7d4970d/ebd2391e已在独立WMI固定副本运行。出错2024源一次4,705,249字节完整SHA校验通过，E5模型/AdamW/学习率及RNG恢复成功，本次快照新增{returned}次RETURNED（有效训练位置{2400 + returned}，累计尝试{2880 + returned}，本段已重放{min(480, returned)}）；E1–E5继承，E6–E9进行中，尚无E9，不算训练完成。只读页面已切换并分列有效位置、本段和累计尝试，原480未保存及旧失败保留；19项指标不重算。仍限新增1920更新含480重放、212259080749字节/63474次、3小时/24GiB，额外重试及额外重放0，批准已消费不得重复启动。按批准每30分钟最多8次/4小时静默跟进，已取消的资源保护不恢复。2025冻结，最终单大表等待E9封口。'
+for name in ('STAGE_ACCEPTANCE.md', 'SCIENTIFIC_ANALYSIS.md', 'EVIDENCE_INDEX.md', 'docs/research_progress/CURRENT_STATUS.md'):
+    path = ROOT / name
+    original = path.read_bytes()
+    head, tail = original.split(b'\n', 1)
+    link = rel if '/' not in name else '../research_readiness/20261025/evidence/dote_physical_recovery_started_20261031.json'
+    path.write_bytes(head + b'\n\n' + (note + f' 见[真实批准及恢复启动收据]({link})。下方失败/待批准描述为历史时点。\n').encode('utf-8') + tail)
+path = ROOT / 'docs/research_readiness/20261025/B7_B8_INNOVATION_PROTOCOL.md'
+with path.open('a', encoding='utf-8', newline='\n') as f:
+    f.write('\n\n## 2026-10-31限额恢复已单次启动\n\n' + note + ' 见[恢复启动收据](evidence/dote_physical_recovery_started_20261031.json)。\n')
+path = ROOT / 'EXPERIMENT_MATRIX.csv'
+original = path.read_bytes()
+rows = list(csv.DictReader(io.StringIO(original.decode('utf-8'))))
+row = next((r for r in rows if r['model_id'] == 'B7_PERP_GRADIENT'))
+row.update(status='IN_PROGRESS', execution_state='E5_RECOVERY_RUNNING_E6_E9', global_steps=str(2880 + returned), epochs='5', executed_commit=binding['code_commit'], evidence_path=rel, verified_at=at, status_as_of=at, authorization_status='EXPLICIT_E5_480_REPLAY_GRANT_CONSUMED_SINGLE_START', notes=f'Approved7d4970d/ebd2391e. E1-E5 inherited9b4046a;new segment{returned}/1920 includes{min(480, returned)}/480 replay;effective{2400 + returned}/4320,cumulative attempts{2880 + returned}/4800. 19 metrics complete,no rerun. New3h cap;old time acceptance NOT_VERIFIED. IN_PROGRESS,no E9 yet,no extra retry/replay.')
+s = io.StringIO(newline='')
+csv.DictWriter(s, list(row), lineterminator='\n').writerow(row)
+lines = original.splitlines(keepends=True)
+for i, line in enumerate(lines):
+    if line.startswith(b'B7_PERP_GRADIENT,'):
+        lines[i] = s.getvalue().encode()[:-1] + (b'\r\n' if line.endswith(b'\r\n') else b'\n')
+path.write_bytes(b''.join(lines))
+path = ROOT / 'METRICS.csv'
+original = path.read_bytes()
+lines = original.splitlines(keepends=True)
+header = next(csv.reader([lines[0].decode()]))
+for i, line in enumerate(lines):
+    if b',B7_PERP_GRADIENT,' in line:
+        r = dict(zip(header, next(csv.reader([line.decode()]))))
+        assert not r['value']
+        r.update(status='IN_PROGRESS_FIXED_E9_NOT_YET_AVAILABLE', executed_commit=binding['code_commit'], source_file=rel, source_pointer='/training/endpoint_status')
+        s = io.StringIO(newline='')
+        csv.DictWriter(s, header, lineterminator='\n').writerow(r)
+        lines[i] = s.getvalue().encode()[:-1] + (b'\r\n' if line.endswith(b'\r\n') else b'\n')
+path.write_bytes(b''.join(lines))
+counter = LOCAL / 'perp_recovery_heartbeat_20261031.json'
+x = read(counter)
+x.update(automation_id='yuntapr-e5', startup_receipt=rel, terminal=False, last_notified_stage='APPROVED_RECOVERY_STARTED')
+counter.write_text(json.dumps(x, indent=2), encoding='utf-8')
+print(json.dumps(dict(receipt=rel, new_returned=returned, effective=2400 + returned, cumulative_attempts=2880 + returned, status='IN_PROGRESS'), ensure_ascii=True))

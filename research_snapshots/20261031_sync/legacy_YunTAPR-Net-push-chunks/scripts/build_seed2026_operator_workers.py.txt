@@ -1,0 +1,40 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Reuse the audited Job loop, with independently owned numbered sessions."""
+from pathlib import Path
+ROOT = Path(__file__).absolute().parents[1]
+OLD = ROOT / 'src/yuntapr/training/phase_b_v2_seed2026_resume_v2'
+NEW = ROOT / 'src/yuntapr/training/phase_b_v2_seed2026_operator_v1'
+
+def main():
+    text = (OLD / 'supervisor.py').read_text(encoding='utf-8')
+    text = text.replace('atomic_json,verify_release', 'atomic_json,verify_release,session_root')
+    text = text.replace('Job,ExtendedLimit,set_job,checked,memory,exited,code)', 'Job,ExtendedLimit,set_job,checked,memory,exited,code,K,native_identity)')
+    begin = text.index('    release=verify_release();LOCAL.mkdir')
+    end = text.index('    try:\n        os.environ.update', begin)
+    text = text[:begin] + "    if len(sys.argv)!=2:raise PermissionError('CLAIMED_SESSION_REQUIRED')\n    n=int(sys.argv[1]);os.environ['YUNTAPR_OPERATOR_SESSION']=str(n)\n    local=session_root();release=verify_release();host_admission()\n    from .quota import Ledger,carry\n    ledger=Ledger()\n    row=ledger.con.execute('SELECT status,nonce FROM sessions WHERE n=?',(n,)).fetchone()\n    if not row or row[0]!='CLAIMED':raise PermissionError('SESSION_NOT_CLAIMED')\n    nonce=row[1]\n    with (local/'launch.once').open('x',encoding='ascii') as f:f.write(CAMPAIGN);f.flush();os.fsync(f.fileno())\n    ledger.activate_session(n,nonce);ledger.close()\n    K.GetCurrentProcess.restype=__import__('ctypes').wintypes.HANDLE\n    atomic_json(local/'supervisor_identity.json',dict(**native_identity(K.GetCurrentProcess()),nonce=nonce,campaign=CAMPAIGN,session=n))\n    allowed=interpreter_keys();job=FormalJob();ancestor=carry()\n    launched=time.monotonic();start=launched-ancestor['elapsed_seconds'];worker=None;identity=None;peak_ws=peak_commit=0;failure=None;clean=False;success=False;paused=False\n    atomic_json(local/'launch.json',dict(campaign=CAMPAIGN,nonce=nonce,session=n,release=release,limits=LIMITS,\n        utc=datetime.now(timezone.utc).isoformat(),automatic_retries=0))\n" + text[end:]
+    text = text.replace("job.spawn([sys.executable,'-m','yuntapr.training.phase_b_v2_seed2026_resume_v2.worker',nonce],ROOT)", "job.spawn([sys.executable,'-m','yuntapr.training.phase_b_v2_seed2026_operator_v1.worker',str(n),nonce],ROOT)")
+    text = text.replace('LOCAL/', 'local/')
+    text = text.replace('dict(worker=identity,nonce=nonce,campaign=CAMPAIGN)', 'dict(worker=identity,nonce=nonce,campaign=CAMPAIGN,session=n)')
+    before = "                row=json.loads((local/'complete.json').read_bytes())\n                if row!=dict(nonce=nonce,campaign=CAMPAIGN,status='SIX_RUNS_COMPLETE'):raise ValueError('MISSING_COMPLETE_RECEIPT')\n                if not pids:success=True;break"
+    after = "                if (local/'paused.json').exists():\n                    row=json.loads((local/'paused.json').read_bytes())\n                    if row['nonce']!=nonce or row['campaign']!=CAMPAIGN or row['session']!=n or row['status']!='PAUSED_VERIFIED':raise ValueError('PAUSE_RECEIPT_IDENTITY')\n                    if not pids:paused=True;break\n                else:\n                    row=json.loads((local/'complete.json').read_bytes())\n                    if row!=dict(nonce=nonce,campaign=CAMPAIGN,status='SIX_RUNS_COMPLETE'):raise ValueError('MISSING_COMPLETE_RECEIPT')\n                    if not pids:success=True;break"
+    if text.count(before) != 1:
+        raise ValueError('JOB_COMPLETION_ANCHOR')
+    text = text.replace(before, after)
+    text = text.replace("status='COMPLETE' if success and clean else 'STOPPED_NO_RETRY'", "status='COMPLETE' if success and clean else ('PAUSED' if paused and clean else 'STOPPED_NO_RETRY')")
+    text = text.replace('        if not success:', '        if not success and not paused:')
+    text = text.replace('phase_b_v2_seed2026_epoch3_recovery_20261013_v2.sqlite', 'phase_b_v2_seed2026_epoch7_operator_v1.sqlite')
+    text = text.replace('return 0 if success and clean else 1', 'return 0 if (success or paused) and clean else 1')
+    (NEW / 'supervisor.py').write_bytes(text.encode())
+    text = (OLD / 'worker.py').read_text(encoding='utf-8')
+    text = text.replace('verify_release,atomic_json', 'verify_release,atomic_json,session_root')
+    text = text.replace('if len(sys.argv)!=2 or len(sys.argv[1])!=32', 'if len(sys.argv)!=3 or len(sys.argv[2])!=32')
+    text = text.replace('    nonce=sys.argv[1]', "    n=int(sys.argv[1]);os.environ['YUNTAPR_OPERATOR_SESSION']=str(n)\n    local=session_root();nonce=sys.argv[2]")
+    text = text.replace('LOCAL/', 'local/')
+    text = text.replace('from .quota import Ledger', 'from .quota import Ledger,PauseAtBoundary')
+    text = text.replace('ledger=Ledger(release)', 'ledger=Ledger()')
+    anchor = '    except BaseException as exc:'
+    text = text.replace(anchor, "    except PauseAtBoundary:\n        import time\n        resources=dict(elapsed_seconds=time.monotonic()-budget.start,content_bytes=budget.bytes)\n        row=ledger.pause_boundary(n,nonce,resources)\n        atomic_json(local/'paused.json',row)\n        atomic_json(OUT/'execution_status.json',dict(status='PAUSED',session=n,quota=ledger.snapshot(),updated_utc=utcnow(),**boundary_flags()))\n        budget.emit('SAFE_PAUSE_COMPLETE',**row)\n        return 0\n" + anchor)
+    (NEW / 'worker.py').write_bytes(text.encode())
+if __name__ == '__main__':
+    main()

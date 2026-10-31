@@ -1,0 +1,23 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Single approved recovery dispatch; original run and weights stay untouched."""
+from pathlib import Path
+import os, sys, json, subprocess
+from datetime import datetime, timezone, timedelta
+root = Path(__file__).resolve().parents[3]
+frozen = root.parent / 'YunTAPR-recovery-exec-943da95'
+local = root / 'docs/research_readiness/.local'
+private = json.loads((local / 'b3_b4_recovery_preparation_20261026.json').read_text(encoding='utf-8'))
+runtime = local / 'recovery_runtime'
+assert not runtime.exists() and (not Path(private['output_root']).exists()), 'No duplicate dispatch or retry'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == '943da957a3af846746c21b52d05a148bcb135064'
+assert not subprocess.check_output(['git', '-C', str(frozen), 'status', '--porcelain', '--untracked-files=no'], text=True).strip()
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_multiseed.py'), 'execute-recovery', '--proposal', str(root / 'docs/research_readiness/20261025/evidence/b3_b4_recovery_proposal.json'), '--private-preparation', str(local / 'b3_b4_recovery_preparation_20261026.json'), '--researcher-approval', str(local / 'b3_b4_recovery_approval_20261026.json')]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    p = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=p.pid, training_commit='943da957a3af846746c21b52d05a148bcb135064', execution_root=str(frozen), output_root=private['output_root'], dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), runtime='Direct Python3.12.14 base plus unchanged venv-cuda dependencies')
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, indent=2)
+print(json.dumps(dict(status='RECOVERY_DISPATCHED_ONCE', pid=p.pid)))

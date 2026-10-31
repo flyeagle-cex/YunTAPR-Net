@@ -1,0 +1,56 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Relevant additive regression closure, protected from all real raw/checkpoint reads."""
+from pathlib import Path
+import gc, io, json, sys, datetime, unittest
+from unittest.mock import patch
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import torch
+from yuntapr.training.paired_phase_a import implementation_hashes
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+
+def save(path, v):
+    with path.open('x', encoding='utf-8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+closure = run / 'runner_closure_manifest.json'
+if not closure.exists():
+    save(closure, {'implementation_hashes': implementation_hashes(), 'scope': 'ENGINEERING_ONLY_PREFLIGHT_AND_SYNTHETIC_RUNNER_CLOSURE', 'formal_training_authorized': False})
+modules = [('NEW_PROTOCOL_MODEL_DATA_RUNNER', ['tests.b1_training_protocol.test_protocol']), ('NEW_REAL_PREFLIGHT_ARTIFACTS', ['tests.b1_training_protocol.test_preflight_artifacts']), ('INHERITED_B0_DATA_SPATIAL_MODEL_LOSS', ['tests.b0_skeleton.test_b0_skeleton', 'tests.b0_skeleton.test_b13_only_candidate']), ('INHERITED_SCIENTIFIC_CONTRACTS', ['tests.scientific_freeze.test_science_contract_v1', 'tests.scientific_freeze_v1_1.test_v1_1']), ('INHERITED_QC', ['tests.development_qc.test_development_audit']), ('INHERITED_QUANTILE_NUMERICS', ['tests.quantile_numerical_closure.test_quantile_v4']), ('INHERITED_PHASE_A_PROTOCOL', ['tests.phase_a_protocol_v1.test_protocol_v1']), ('INHERITED_PHASE_A_RUNNER', ['tests.formal_phase_a.test_formal_run']), ('INHERITED_PHASE_B_RUNNER', ['tests.formal_phase_b.test_finalfit']), ('INHERITED_GPU_SAFETY', ['tests.gpu_training_feasibility.test_benchmark_safety']), ('INHERITED_B1_AUDIT', ['tests.b1_temporal_audit.test_b1_temporal_audit', 'tests.b1_temporal_audit.test_full_audit_artifacts']), ('INHERITED_B1_SCIENCE_SCALER', ['tests.b1_scientific_freeze.test_scientific_freeze', 'tests.b1_scientific_freeze.test_freeze_artifacts'])]
+counts = []
+log = io.StringIO()
+ops = {'fixture_optimizer_steps': 0, 'fixture_backward_calls': 0}
+original_step = torch.optim.AdamW.step
+original_backward = torch.Tensor.backward
+
+def step(self, *args, **kw):
+    ops['fixture_optimizer_steps'] += 1
+    return original_step(self, *args, **kw)
+
+def backward(self, *args, **kw):
+    ops['fixture_backward_calls'] += 1
+    return original_backward(self, *args, **kw)
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+with PreflightSourceGuard() as guard, patch.object(torch.optim.AdamW, 'step', step), patch.object(torch.Tensor, 'backward', backward):
+    for label, names in modules:
+        suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in names))
+        log.write(label + '\n')
+        result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+        counts.append({'suite': label, 'executed': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'passed': result.wasSuccessful()})
+        print(json.dumps(counts[-1]), flush=True)
+        gc.collect()
+    assert guard.raw_open_events == 0
+summary = {'suites': counts, 'total_tests_executed': sum((c['executed'] for c in counts)), 'all_passed': all((c['passed'] and c['skipped'] == 0 for c in counts)), 'TEST_FIXTURE_ONLY': True, **ops, 'FORMAL_OPTIMIZER_STEPS': 0, 'real_raw_source_open_events': 0, '2025_PIXELS_READ': 0, 'all_temporary_fixture_artifacts_cleaned': True, 'scope': 'All new tests and relevant inherited regression; no 2025 outcome artifact suites', 'completed_utc': stamp}
+save(run / ('test_summary_' + stamp + '.json'), summary)
+with (run / ('test_results_' + stamp + '.txt')).open('x', encoding='utf-8', newline='\n') as f:
+    f.write(log.getvalue())
+if summary['all_passed']:
+    save(run / 'test_summary.json', summary)
+else:
+    print(log.getvalue())
+    raise SystemExit(1)
+print(json.dumps(summary), flush=True)

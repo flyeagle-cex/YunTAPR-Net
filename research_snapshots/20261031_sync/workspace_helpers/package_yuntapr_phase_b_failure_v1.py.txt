@@ -1,0 +1,130 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Archive the exact executed source bytes; add no files to the production source tree.
+"""Publish-only evidence packet for the stopped paired FinalFit run; stdlib only."""
+from collections import Counter
+import datetime as dt
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import urllib.request
+BASE = Path(__file__).resolve().parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+PIPELINE = REPO / 'docs/paired_extended_pipeline/runs/run_20261005T043214_165890Z'
+FORMAL = REPO / 'docs/formal_training/b0_matched_phase_b_finalfit/runs/run_20261005T103053_888886Z'
+JOURNAL = PIPELINE / 'sequential_execution_recovery_v7_20261005T101450Z'
+
+def sha(path):
+    digest = hashlib.sha256()
+    with Path(path).open('rb') as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+def read(path):
+    return json.loads(Path(path).read_text(encoding='utf8'))
+
+def save(path, value):
+    with Path(path).open('x', encoding='utf8', newline='\n') as handle:
+        json.dump(value, handle, indent=2, ensure_ascii=False, allow_nan=False)
+        handle.write('\n')
+failure = read(FORMAL / 'failure.json')
+assert failure['status'] == 'FORMAL_EXECUTION_FAILED'
+assert 'QUANTILE_PHYSICAL_OVERFLOW' in failure['error']
+assert failure['FORMAL_OPTIMIZER_STEPS'] == failure['BACKWARD_CALLS'] == 50537
+assert failure['TRAIN_FORWARD_CALLS'] == 50538
+assert failure['RAW_ACCESS_2025'] == failure['PIXELS_2025_READ'] == 0
+assert failure['automatic_restart'] is False and failure['B1_start_allowed'] is False
+assert failure['source_cleanup_state']['cleanup_success'] is True
+assert read(FORMAL / 'final_status.json') == failure
+history = read(FORMAL / 'training_history.json')
+assert [item['epoch'] for item in history] == [1, 2, 3, 4]
+last = failure['last_verified_checkpoint']
+assert last['epoch'] == 4 and last['global_update'] == 41912
+checkpoint = Path(last['absolute_local_path'])
+assert checkpoint.stat().st_size == last['bytes'] and sha(checkpoint) == last['sha256']
+assert read(FORMAL / 'checkpoint_registry.json')['LAST']['sha256'] == last['sha256']
+with urllib.request.urlopen('http://127.0.0.1:8765/api/status', timeout=10) as response:
+    observer = json.load(response)
+assert observer['state'] == 'FAILED' and (not observer['processes'])
+assert observer['reported_2025_counter_sum'] == 0
+stamp = dt.datetime.now(dt.timezone.utc).strftime('run_%Y%m%dT%H%M%S_%fZ')
+out = PIPELINE / 'failure_publication' / stamp
+out.mkdir(parents=True, exist_ok=False)
+selected = set()
+excluded = []
+for path in sorted(FORMAL.rglob('*')):
+    if not path.is_file():
+        continue
+    if path.name.startswith(('raw_access_worker_', 'staging_worker_')):
+        excluded.append({'absolute_local_path': str(path), 'bytes': path.stat().st_size, 'sha256': sha(path), 'reason': 'Verbose I/O event log retained locally and registered by hash'})
+    elif path.suffix in ('.json', '.jsonl'):
+        selected.add(path)
+    else:
+        raise ValueError('Unexpected file in formal evidence directory: ' + str(path))
+selected.update((path for path in JOURNAL.iterdir() if path.is_file() and path.suffix in ('.json', '.txt')))
+for name in ('phase_b_execution_registry.json', 'phase_a_completed_immutable_snapshot.json', 'b0_matched_phase_b_execution_result.json', 'b0_matched_phase_b_launch_manifest.json', 'b0_matched_phase_b_process_identity.json', 'phase_b_sequence_STOP_failure.json'):
+    selected.add(PIPELINE / name)
+selected.update(PIPELINE.glob('phase_b_orchestration_failure_*.json'))
+execution = read(PIPELINE / 'phase_b_execution_registry.json')
+for spec in execution['formal_runs'].values():
+    cap = spec['authorization']
+    path = Path(cap['path'])
+    assert sha(path) == cap['sha256']
+    selected.add(path)
+regression = sorted((PIPELINE / 'full_regression').glob('*/test_summary.json'))[-1]
+regression_summary = read(regression)
+assert regression_summary['status'] == 'PASS' and regression_summary['all_repository_modules_executed']
+assert regression_summary['total_count'] == 691 and regression_summary['fixture_cleanup_success']
+selected.update((regression, regression.with_name('test_results.txt')))
+source = read(FORMAL / 'run_manifest.json')['code_hashes']
+source_pins = []
+for rel, expected in sorted(source.items()):
+    original = REPO / rel
+    assert sha(original) == expected, 'Executed source changed: ' + rel
+    archived = out / 'source_execution_code' / (rel + '.txt')
+    archived.parent.mkdir(parents=True, exist_ok=True)
+    with archived.open('xb') as handle:
+        handle.write(original.read_bytes())
+    assert sha(archived) == expected
+    selected.add(archived)
+    source_pins.append({'source_path': rel, 'archived_path': archived.relative_to(REPO).as_posix(), 'sha256': expected})
+for original in (BASE / 'execute_yuntapr_paired_phase_b_extended_v2.py', REPO / 'scripts/paired_extended_path_adapter_v1.py'):
+    pins = read(JOURNAL / 'execution_plan.json')['source_inventory']
+    assert sha(original) == pins[str(original)]
+    archived = out / (original.name + '.txt')
+    with archived.open('xb') as handle:
+        handle.write(original.read_bytes())
+    selected.add(archived)
+console = PIPELINE / 'b0_matched_phase_b_console.log'
+console_copy = out / 'b0_matched_phase_b_console.log.txt'
+with console_copy.open('xb') as handle:
+    handle.write(console.read_bytes())
+assert sha(console_copy) == sha(console)
+selected.add(console_copy)
+events = []
+for path in sorted((FORMAL / 'logs').glob('epoch_*/step_events.jsonl')):
+    counts = Counter()
+    maximum_update = 0
+    records = 0
+    with path.open(encoding='utf8') as handle:
+        for line in handle:
+            row = json.loads(line)
+            records += 1
+            counts[row['event']] += 1
+            maximum_update = max(maximum_update, row['FORMAL_OPTIMIZER_STEPS'])
+            assert row['RAW_ACCESS_2025'] == row['PIXELS_2025_READ'] == 0
+    events.append({'path': path.relative_to(REPO).as_posix(), 'records': records, 'event_counts': dict(counts), 'max_completed_optimizer_steps': maximum_update})
+assert max((item['max_completed_optimizer_steps'] for item in events)) == 50537
+receipt = {'status': 'FAILED_FORMAL_RUN_EVIDENCE_READY_FOR_PUBLICATION', 'recorded_utc': dt.datetime.now(dt.timezone.utc).isoformat(), 'bound_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip(), 'request': '先把这次失败提交GitHub', 'failure_error': failure['error'], 'run_id': 'run_20261005T103053_888886Z', 'completed_epochs': 4, 'formal_optimizer_steps_completed': 50537, 'backward_calls': 50537, 'train_forward_calls': 50538, 'failed_forward_attempt': 50538, 'uncheckpointed_updates_since_LAST': 50537 - 41912, 'uncheckpointed_update_disposition': 'Retained in immutable logs; no resume or discard decision executed', 'LAST_actual_file_identity_verified_read_only': {**last, 'actual_sha256': sha(checkpoint), 'actual_bytes': checkpoint.stat().st_size, 'deserialized': False}, 'protocol_sha256': last['protocol_sha256'], 'normalization_sha256': last['normalization_sha256'], 'B1_STARTED': False, 'B1_planned_run_id': execution['formal_runs']['B1']['run_id'], 'publication_optimizer_steps': 0, 'publication_backward_calls': 0, '2025_RAW_ACCESS': 0, 'automatic_restart': False, 'training_resumed': False, 'full_regression_gate': {'path': regression.relative_to(REPO).as_posix(), 'count': 691, 'passed': True}, 'original_failure_records_modified': False, 'checkpoint_binaries_published': False, 'source_code_snapshot': source_pins, 'step_event_summary': events, 'verbose_local_logs_not_uploaded': excluded}
+save(out / 'failure_submission_receipt.json', receipt)
+selected.add(out / 'failure_submission_receipt.json')
+files = []
+for path in sorted(selected):
+    assert path.resolve().is_relative_to(REPO.resolve())
+    assert path.suffix in ('.json', '.jsonl', '.txt')
+    assert path.stat().st_size < 50 * 1024 * 1024
+    files.append({'path': path.relative_to(REPO).as_posix(), 'bytes': path.stat().st_size, 'sha256': sha(path)})
+manifest = out / 'publication_manifest.json'
+save(manifest, {'files': files, 'file_count': len(files), 'total_bytes': sum((item['bytes'] for item in files)), 'checkpoint_binaries_included': False, 'source_pixel_data_included': False, 'original_evidence_byte_identity_preserved': True})
+print(json.dumps({'packet_directory': str(out), 'manifest': str(manifest), 'files': len(files) + 1, 'total_bytes': sum((item['bytes'] for item in files)), 'LAST_SHA_VERIFIED': True, 'training_resumed': False, '2025_RAW_ACCESS': 0}))

@@ -1,0 +1,389 @@
+# 阶段 B（Tier-1 GPU 部分）设计：19 个 E9 checkpoint 的 2024 Dev 前向推理与指标回填
+
+状态：**研发完成，未执行任何真实推理**（2026-10-29 20:30 北京时间）。
+本目录 `YunTAPR-metric-backfill-20261029/phaseB_inference/` 是唯一写入位置；活动仓库
+`YunTAPR-B2-readiness-20261025`、各冻结执行副本与私有运行目录**只读**。
+训练/优化器 step/反向传播在本交付中完全不存在；2025 数据与推理全程冻结。
+
+---
+
+## 0. 交付物与验收状态
+
+| 文件 | 作用 | 状态 |
+|---|---|---|
+| `infer_eval.py` | 前向推理 + 冻结指标验证门 + 新指标/候选点估计的唯一入口 | 完成；`dry-run` / `self-test` / `check` 已跑通 |
+| `run_registry.json` | 19 个主表 E9 run 的 checkpoint/Dev JSON/冻结副本/配置/场景数/已存 summary 全登记 | 完成，路径与 SHA 全部核验 |
+| `design.md`（本文件） | 统一推理-评价协议、各家族调用链、语义约定、风险 | 完成 |
+| `tests/test_formula.py` | 合成张量公式单测（纯 numpy，无 GPU/无冻结导入） | 88 项全部 PASS（0 failure） |
+| `tests/test_run_pipeline.py` | 合成 2-batch 端到端 **run 循环**测试（假 adapter/假 frozen evaluator）：result.json/compact csv、gate PASS、2e-12 扰动 → GATE_FAILED、拒绝覆盖 | 37 项全部 PASS（0 failure） |
+| `smoke_plan.md` | 封口后「1 checkpoint × 2 场景」真实冒烟命令与期望 | 完成 |
+| `expected_budget.md` | 每家族单 Dev 遍历读取量/耗时与 19 run 合计 | 完成 |
+| `launch_after_seal.ps1` | 封口后一键顺序启动（每 run 独立进程、gate 失败即停） | 完成 |
+| `tools/*.py` | 只读盘点/核验脚本（registry 生成、冻结代码树核验、读取量估算） | 完成，输出在 `outputs/` |
+
+自检证据（无 GPU、无真实数据）：
+- `python -B infer_eval.py self-test` → 0 failure；
+- `python -B infer_eval.py dry-run` → 19 run 计划、合计 **735.13 GiB** 逻辑 Dev 读取；退出码 0；
+- `python -B infer_eval.py check --run-id <id>`（CPU 构造计划 + strict `load_state_dict`，不前向、不读观测载荷）
+  已对 11 个代表性 run 全部通过（覆盖 B0/B1/B2/B3/B4/B5/B6/B7/B8 全部模型类与 s2026/s2027/s2029/s2030/s2031 各代副本）：
+  B0_s2026_E0(74 tensors)、B1_s2026_E0、B1_s2027_E0、B2_s2029、B3_s2029、B4_s2029(80)、B5_s2029(89)、
+  B6_s2029(89)、B7_s2029(97)、B8_s2029(98)、B8_s2031(98)。
+
+---
+
+## 1. 硬约束的代码化
+
+1. **只为前向推理写代码**：`infer_eval.py` 中不存在 `optimizer`、`backward()`、`loss.backward`、
+   `optimizer.step`；模型一律 `.eval()`，batch 循环在 `torch.autocast('cuda', dtype=torch.bfloat16)`
+   下做 forward，并 `_qlog_validate`（复用冻结 FP64 校验 `models/quantile_v2/outputs.py:26`）。
+2. **独立进程**：`run-all` 是 supervisor，对每个 run 用
+   `subprocess.run([python, -B, infer_eval.py, run, --run-id <id>], env=_run_env(run))` 启动独立进程；
+   `_run_env` 设置 `PYTHONPATH=<该家族冻结副本>/src`、`PYTHONHASHSEED=<seed>`、
+   `PYTHONDONTWRITEBYTECODE=1`、`CUBLAS_WORKSPACE_CONFIG=:4096:8`。
+   `PYTHONDONTWRITEBYTECODE`/`sys.dont_write_bytecode` 确保**不在冻结副本里生成 `__pycache__`**。
+3. **只读 2023/2024**：2025 拒绝由冻结读取器自身完成（`load_inherited` 的 `'2025' in Path(name).parts`
+   检查、`Plan` 的 `start.year!=year` 等）；本代码不含任何 2025 路径、也不含 2025 分支。
+4. **每次遍历前向只做一次**：每个 run 进程只创建一个 reader、一次 `Development` 遍历；
+   `BatchReader`/`PassReader` 的 `scene_seen` 禁止重复 scene；输出目录已存在即拒绝覆盖（无 resume）。
+5. **读取量可审计**：B2–B8 用冻结的 `SourceCache`+`SourceMeter`（逐文件 SHA、逐 pass 账本，
+   运行后 `read_scope_actual` 记录 `meter.totals()`）；B0/B1 用冻结 `VerifiedReader`
+   （每次读取在同一 handle 内做 SHA-256 校验），`FrozenBudgetStub` 只统计逻辑字节、**不写私有 run 目录**。
+6. **不修改任何既有文件**：写入仅发生在 `phaseB_inference/outputs/<run_id>/`、`logs/`、
+   `outputs/_dry_check/<run_id>/`。
+
+---
+
+## 2. 评价集与事件定义（全局冻结）
+
+- 评价集：**2024 Development**（2024-03-01～2024-10-31，fixed f006 retrospective）。
+  B0/B1 种群 **10455 Train / 10501 Dev**；B2–B8 种群 **959 Train / 963 Dev**
+  （`PopulationPlan`，`stage4/data.py:30`；`yuntapR-seed2029-recovery`/readiness 仓库的同名实现一致）。
+- 事件定义：**float32 rate > float32(0.1) mm/h**。冻结实现在
+  `phase_b_v2_ablations/validation.py:69`（`supervision`）：`rainy = clean > torch.tensor(.1, dtype=torch.float32)`，
+  其中 `valid = imerg_valid & yunnan_mask`、`clean = where(valid, rate, 0)`。
+  本代码在 numpy 侧用 `event_truth_fp32(rate, t) = rate32 > np.float32(t)` 精确复刻（`infer_eval.py`）。
+- 监督掩膜：`valid = imerg_valid & yunnan_region`（100×100 SP04 目标网格，云南 3430 像素/场景）。
+  B0/B1：10501×3430 = **36,018,430** 有效像素、**4,496,600** 雨像素；B2–B8：963×3430 = **3,303,090**、
+  **407,820**（19 份已存 Dev summary 完全一致，见 `run_registry.json`）。
+- 冻结评价脚本身份：`core_innovation/stage4/evaluation.py` SHA **fd4cb37b…**（`Evaluation`/`NumericEnvelope`），
+  `phase_b_v2_formal_integration_candidate/metrics.py` SHA **9fbe6c55…**（`Evaluator`/`summary`）。
+  B0/B1 另有 `training/phase_b_v2_seed2026_v2/evaluation.py` SHA **42415659…**（`Evaluator` 子类）。
+
+---
+
+## 3. 19 个主表 run 的冻结调用链（独立进程 + `PYTHONPATH` 指向该副本）
+
+所有代码根均为 `YunTAPR-B2-readiness-20261025` 仓库的 **git worktree**（同一对象库），
+逐文件 blob 身份见 `outputs/probe_code_identity.json` 与 `outputs/probe_inference_path_identity.json`。
+`checkpoint` 一律为 `LAST_epoch_09.pt`，payload 顶层含 `model`=完整 state_dict（CPU keys）。
+
+### 3.1 B0 / B1 家族（s2026 ×2、s2027 ×2）
+
+- 代码根：`<PRIVATE_LOCATOR_661763475e4a>`（s2026 执行 commit `db3cb10`；s2027 执行 commit `8e8fd254`）。
+  身份证据：s2026 `source_release.json` 的 **168/168** 源固定 SHA 与当前 worktree 全等；
+  s2027 每个 run 的 `release.json` 中**推理路径子集 40/40** 全等（仅 6 个执行控制文件
+  `Operator.ps1 / phase_b_v2_multiseed_candidate.protocol.py / seed2027.{authority,engine,protocol,release_check}.py`
+  在后续恢复提交中改动，均不在前向/评价路径上——这是本家族唯一的“非逐字节冻结副本”例外，已在风险节登记）。
+- 模型：`models/quantile_v2/models.py:42` `B0MatchedV2(frames=1)` / `:47` `B1V2(frames=6)`；
+  骨架 `models/b0.py:11 B0Model`、`models/backbone_b0.py:8 B0Backbone`、`models/b1.py:14 B1Backbone`。
+  state_dict 74 tensors，strict 加载（`check` 已证）。
+- 数据（B13/IMERG，非 Stage3 计划）：
+  `training/phase_b_v2_seed2026_v2/data.py:32 Plan`（读 pinned `docs/b1_scientific_freeze/.../{b1,b0_matched_control}_{2023,2024}_formal_manifest.csv`、
+  `docs/b1_temporal_audit/.../native_frames/*.csv`、`config/science_v2/phase_a_protocol_frozen_v1.json`、scaler、mask）
+  → `:113 Reader(VerifiedReader)`（同 handle SHA）→ `:192 Adapter`
+  → `:229 Adapter.batch(ids, model, year)`（B0 仅 slot5，B1 全 6 slots；2024 批大小 8，`:230`）。
+  原始数据根：`data/dataset_b1.py` 的 `H_ROOT=<PRIVATE_LOCATOR_fb3ffd39e0db>`、`IMERG_ROOT=<PRIVATE_LOCATOR_fb4f0dfa666b>`（均存在）。
+- 前向：`model(x, native_valid)`，外层 `torch.autocast('cuda', bfloat16)`；
+  历史上的 eval 循环见 `training/phase_b_v2_seed2026_v2/engine.py:136 @torch.inference_mode() def validate`（批 8，`:141`），
+  以及 s2027 复用同一 data/engine（`training/phase_b_v2_seed2027/worker.py` 导入 `phase_b_v2_seed2026_v2.data.Plan/Adapter`）。
+- 评价：`training/phase_b_v2_seed2026_v2/evaluation.py:7 Evaluator(ids, digest(identity), folder)`
+  → `phase_b_v2_formal_integration_candidate/metrics.py:50 add` / `:109 summary` / `:128 finish`
+  （写 `exact_scores.sqlite`，按精确 score 分组算 AUROC/AP）。
+- Dev 报告：`development_epoch_09_report.json`（s2026，顶层 `summary`）；
+  s2027 为 `..._s2027.json` 的 `epochs[-1].development.summary`（9 个 epoch 全存）。两者计数字段均已核对。
+- 复现要点：原训练中 `seeded_environment()`（`phase_b_v2_integration/initialization.py:24`）在 **validate 之前退出**，
+  因此 B0/B1 的 Dev 前向发生在**进程默认 torch 标志**下（deterministic=False、cudnn deterministic=False）。
+  推理脚本对 b01 家族显式不启用 deterministic 算法（`_apply_historical_determinism`），与历史环境一致。
+
+### 3.2 B2 家族（s2029）
+
+- 代码根：`YunTAPR-B2-readiness-20261025`，执行 commit **a353021**；`code_commit` 由
+  `docs/research_readiness/.local/B2_s2029_formal_20261025_v1/authorization_binding.json` 绑定
+  （`decision_id=RESEARCHER_FINAL_B2_START_20261025_A353021`）。
+  身份：48 个推理路径文件里 47 个与 a353021 blob 全等；差异仅 `stage4/data.py`、`stage4/launch.py`
+  的**新增可选 `dynamic*` 字段**（B2 不用）——语义等价，已逐 hunk 核对。
+- 模型：`stage2/models.py:72 SpectralCandidate('B2')`（7 通道 t−10 输入；stem 见 `research_readiness/b2.py:20 STEM_RULE`、`:73 fresh_b2`）；
+  state_dict 74 tensors。
+- 数据/前向：`research_readiness/b2.py:25 latest_frame` + `:81 forward_b2`（取 offset=10 的 slot → `model(x,mask,channel_order=CHANNELS)`）；
+  reader 是 `stage4/data.py:115 BatchReader`，逐 scene 读 6 卫星帧 + GFS main/thermo + IMERG 日文件 + mask
+  （`target_memory` `:85`、`combine_environment`/`prepare_mee` `:187-196`）。
+  历史训练/评价循环：`research_readiness/b2_runner.py:88 execute`（`:104 PopulationPlan`、`:127 fresh_b2`、
+  `:140-149 reader`、`:200-225 Dev 遍历 + Evaluation`、`:227-238 checkpoint payload`）。
+- 评价：`stage4/evaluation.py:35 Evaluation(ids, analyses, plan.identity, folder, strong_scene_ids=plan.strong_scene_ids)`，
+  `add` `:47-55`，`finish` `:56-62`；Dev 报告 `groups.all.summary`。
+
+### 3.3 B3 / B4 家族（s2029 ×2、s2030 ×2、s2031 ×2）
+
+- 代码根（逐 run 冻结 worktree，git HEAD == 执行 commit，`src/yuntapr`+`config` 树逐字节相等）：
+  - s2029：`...\YunTAPR-seed2029-recovery-20261024`（HEAD `0ccb3e2` == E4–E9 commit `7fa609e` 的 src/config 树；
+    E1–E3 为 `5b5298f`，其 worktree `YunTAPR-seed2029-launch-prep-20261024` 的推理路径文件亦全等）。
+  - B3 s2030：`...\YunTAPR-multiseed-exec-52a8e90`（HEAD `52a8e90`）。
+  - B4 s2030 / B3 s2031 / B4 s2031：`...\YunTAPR-recovery-exec-943da95`（HEAD `943da95`）。
+  推理路径 46–49/49 文件全等（`outputs/probe_inference_path_identity.json`）。
+- 模型：`stage2/models.py:72 SpectralCandidate('B3'|'B4')`，B4 带 `mee_width=16, mee_keys=MEE_V13_KEYS`
+  （`stage2/models.py:108 paired_spectral_candidates` 生成配对初值，推理只需类 + state_dict）。
+  75-ish tensors（B3 74；B4 80，含 MEE encoder）。
+- 数据/前向：`stage4/data.py` 同一 `PopulationPlan`/`BatchReader`；
+  `stage4/engine.py:60 forward`（B3 不传 GFS，B4 传 `environment/..._grid/keys`）+ `:188-205` Dev 遍历；
+  `:207-212` checkpoint payload（`model` key）。
+- 评价：`stage4/evaluation.py` 同 B2（`strong_scene_ids=plan.strong_scene_ids`）。
+- Dev 报告：`B{3,4}_development_09.json` 的 `groups.all.summary`。
+- 备注：B4 s2030 的 E9 权重在 `YunTAPR_B3_B4_recovery1_20261026_v1\B4_s2030`（dev 报告也在该目录；
+  tier-0 库存里曾指向中断包的旧路径，本 registry 已修正并重算 SHA `bc5ee14e…`）。
+
+### 3.4 B5 / B6 家族（s2029 各 1）
+
+- 代码根：`...\YunTAPR-static-corrected-exec-b251fd9`（HEAD `b251fd9`，50/50 推理路径文件全等）。
+- 模型：B4 主干 + 静态地形残差。`research_readiness/static_training.py:38 model_factory(packs, scalers)`
+  → `:18 StaticTrainingModel`（`*_static.npz` 经 `:26 unpack`、`static_terrain.py:140 StaticTerrainCandidate`
+  / `:106 StaticAdapter`，width=16，输出零初始化）。state_dict 89 tensors。
+  静态包来源 `<PRIVATE_LOCATOR_aa00ff71f8fb>{B5,B6}_static.npz`
+  （62,828 / 312,828 bytes；receipt SHA `788572b1…` 等），scaler 来自同目录 `production_receipt.json`。
+- 数据/前向：`stage4/data.py` BatchReader（无 dynamic）；forward 传 13 变量 MEE；
+  历史 worker：`static_training.py:113 worker`（`:134 PairedExecutor(..., model_factory=...)`）。
+- 评价：`stage4/evaluation.py`；Dev 报告 `groups.all.summary`。
+
+### 3.5 B7 / B8 家族（s2029 ×2、s2030 ×2、s2031 ×2）
+
+- 代码根：
+  - B7 s2029：`...\YunTAPR-dynamic-exec-b1f072e`（HEAD `b1f072e`）；
+  - B8 s2029：`...\YunTAPR-B8-recovery-exec-ef11531`（HEAD `ef11531`；E1–E6 继承 b1f072e，E7–E9 恢复）；
+  - B7/B8 s2030、s2031：`...\YunTAPR-dynamic-multiseed-recovery-exec-e81c6e1`（HEAD `e81c6e1`；
+    s2030 的 E1–E6 继承 `56aae5b`，其 worktree 推理路径文件同样全等）。
+  推理路径 52/52 文件全等。
+- 模型：`dynamic_terrain.py:115 model_factory(pack, scalers, modulation_limit=0.1)`
+  → `:75 DynamicTerrainModel`（B7 显式 concat、B8 DTFM；`stage2/fusion.py:14 FusionCandidate`），
+  条件通道 26 GFS + 28 terrain/DOTE、projection width 16、`modulation_limit=0.1`（三份提案同值，已核）。
+  state_dict B7 97、B8 98 tensors。
+- 物理 DOTE：`dynamic_terrain.py:22 DoteDefinition` + `:35 PhysicalDote`；
+  定义取自 `docs/research_readiness/20261025/evidence/b7_b8_physical_cache_correction.json` 的 `definition`
+  （PWAT 参考 31.85768219039871 kg/m²、windward_W、1 m/s 尺度）。
+  reader 以 `dynamic_transform=self.transform` 注入（`stage4/data.py:198`），8 通道、显式 mask。
+- 数据/前向：`stage4/data.py` BatchReader（带 dynamic）；forward 额外传 `dynamic/dynamic_valid/dynamic_grid`；
+  历史 worker：`dynamic_training.py:138 worker`（`:160-161 model_factory + ReaderFactory(dynamic_transform=...)`）。
+- 评价：`stage4/evaluation.py`；Dev 报告 `groups.all.summary`。
+
+### 3.6 代码根选择总表（`run_registry.json` 逐 run 登记）
+
+| run 组 | code_root（PYTHONPATH 的 `<root>/src`） | 执行 commit | 身份 |
+|---|---|---|---|
+| B0/B1 s2026 | `YunTAPR-B2-readiness-20261025` | `db3cb10` | 168/168 pins |
+| B0/B1 s2027 | 同上 | `8e8fd254` | 40/40 推理路径 pins（6 控制文件例外） |
+| B2 s2029 | 同上 | `a353021` | 47/48 逐字节 + 2 文件加法式差异 |
+| B3/B4 s2029 | `YunTAPR-seed2029-recovery-20261024` | `7fa609e`(E4-9)/`5b5298f`(E1-3) | 树逐字节 |
+| B3 s2030 | `YunTAPR-multiseed-exec-52a8e90` | `52a8e90` | 树逐字节 |
+| B4 s2030 + B3/B4 s2031 | `YunTAPR-recovery-exec-943da95` | `943da95` | 树逐字节 |
+| B5/B6 s2029 | `YunTAPR-static-corrected-exec-b251fd9` | `b251fd9` | 树逐字节 |
+| B7 s2029 | `YunTAPR-dynamic-exec-b1f072e` | `b1f072e` | 树逐字节 |
+| B8 s2029 | `YunTAPR-B8-recovery-exec-ef11531` | `ef11531` | 树逐字节 |
+| B7/B8 s2030 + s2031 | `YunTAPR-dynamic-multiseed-recovery-exec-e81c6e1` | `e81c6e1` | 树逐字节 |
+
+`PYTHONPATH` 指向的副本根必须同时包含 `src/`、`config/science_v2/`、`docs/core_stage3/execution_summary/evidence.json`、
+`docs/b0_pretraining_closure/.../formal_sample_eligibility_2023_2024.csv`（B2–B8），以及
+`docs/b1_scientific_freeze`、`docs/b1_temporal_audit`、`docs/phase_b_v2_full_payload_integrity`（B0/B1）——已逐一存在核验。
+
+---
+
+## 4. 统一推理-评价协议
+
+### 4.1 每 run 一次 Dev 遍历
+
+```
+for pos in range(0, N_dev, 8):
+    batch = reader.batch('Development', ids[pos:pos+8]).to('cuda')
+    with torch.autocast('cuda', dtype=torch.bfloat16):
+        out = forward(model, batch)
+    frozen_evaluator.add(...)            # 只为“验证门槛”复算既有指标
+    point_accumulator.add(rate, valid, region, out.rain_prob, out.conditional_quantiles_log)
+```
+
+- 批大小 8 与历史完全一致（B0/B1 `engine.py:141`；B2 `b2_runner.py:208`；B3–B8 `engine.py:194`）。
+- 顺序 == `plan.ids('Development')` 历史顺序；`BatchReader.scene_seen`/`Coverage` 语义保证 no-skip/no-dup。
+- B0/B1 的 `Evaluator` 要求 `len(ids)==DEV_N`（10501）；因此在 2 场景冒烟时冻结 evaluator 被跳过（记录在 smoke 输出），
+  全量 run 一定实例化并比较。
+- 不创建优化器、不算 loss；`torch.inference_mode()`（B0/B1 历史）由 `torch.no_grad()`/detach 等价覆盖。
+
+### 4.2 输出（每 run 一个 `outputs/<run_id>/result.json`）
+
+1. **既有指标（验证门槛）** `recomputed_frozen_metrics`：由冻结 `Evaluation`/`Evaluator` 本体重算的
+   `summary`（及 B2–B8 的 `groups`），与 `stored_summary` 逐项比较；
+2. **新指标** `new_metrics`：
+   - 点估计 A/B/C：`MAE/RMSE/MeanBias/Pearson_CC` + 原始累加和 `Σŷ,Σy,Σŷ²,Σy²,Σŷy`；
+   - 混淆矩阵（Pred>r vs Truth>r，r∈{0.1,1,5,10,20}，严格 `>`）：TP/FP/FN/TN + POD/FAR/CSI/HSS；
+   - 发生概率诊断 `OCC_P`：`P(rain>0.1) ≥ 0.5`（冻结 reliability 分箱规则）vs `Truth > 0.1`；
+   - 候选 D：`P(R>r)=p·(1−F_cond(r))` 的阈值支持统计 + 支持子集混淆矩阵 + 严格 `>0.5` 对照；
+3. `gate`：门槛明细（tolerance/计数/逐指标 diff/passed）；`status` = `COMPLETE` / `GATE_FAILED` / `FAILED`；
+4. `checkpoint_identity`（路径/字节/SHA 是否匹配 registry）、`read_scope_actual`（读账本）、耗时/GPU 峰值；
+5. `compact_metrics.csv`：便于 Lead 汇总主表（每个点估计一行 + 每个 (候选,阈值) 一行）。
+
+所有输出都带 `notes`：候选点估计一律 `NONE_OF_THE_POINT_ESTIMATES_IS_FROZEN_OR_SCIENTIFICALLY_APPROVED`，
+新指标 `EXPLORATORY_POSTHOC_DESCRIPTIVE_ONLY`，2025 `FROZEN_NO_ACCESS`。
+
+### 4.3 逐 run 进程级环境
+
+| 变量 | 值 | 原因 |
+|---|---|---|
+| `PYTHONPATH` | `<code_root>/src` | 隔离同名包，指向该家族冻结副本 |
+| `PYTHONHASHSEED` | `str(seed)` | `stage4/engine.py:46 seed_all` / `initialization.py:24` 的启动检查 |
+| `CUBLAS_WORKSPACE_CONFIG` | `:4096:8` | 同上，deterministic cuBLAS |
+| `PYTHONDONTWRITEBYTECODE` | `1` | 不污染冻结副本 |
+| `OMP/MKL_NUM_THREADS` | `1` | 与历史 CPU 侧一致，降低非确定性 |
+| `PYTHONUTF8` | `1` | 中文路径安全 |
+
+determinism 语义（重要）：
+- B2–B8：历史 forward 时 `seed_all(seed)` 的 `use_deterministic_algorithms(True)`、cudnn.deterministic=True、
+  TF32 off、matmul precision=highest 仍生效 → 推理进程在模型构造后调用同一 `seed_all(seed)`。
+- B0/B1：历史 forward 发生在 `seeded_environment()` 退出之后 → 进程默认标志；推理进程**不**开启 deterministic。
+  这两条差异都来自对历史 engine 源码的阅读，不是新选择。
+
+---
+
+## 5. 既有指标（验证门槛）
+
+对每个 checkpoint，用该家族**冻结评价类本体**（不是重写公式）在完全相同的 id/顺序/批/输入/前向环境下重算，
+与已存 `*_development_09.json` 的 summary 比较：
+
+| 指标 | 定义（冻结实现） | 门槛 |
+|---|---|---|
+| `n_valid` / `n_rain` | `valid=imerg_valid&region`；`rainy=rate(float32)>0.1` | **精确相等** |
+| `brier` | `mean((p − 1[rainy])²)`，p=sigmoid(logit)，FP64 精确分组 | abs/rel ≤ 1e-12 |
+| `auroc` | 精确 score 直方图（SQLite BLOB 排序）上的 Mann–Whitney；`metrics.py:109 summary` | ≤1e-12 |
+| `average_precision` | 精确直方图上的 AP；`:112-114` | ≤1e-12 |
+| `conditional_pinball` | 雨像素上的 32 分位 pinball 均值；`phase_b_v2_ablations/metrics.py:45 common_validation_sums` + `metrics.py:67` | ≤1e-12 |
+| `q32_coverage` | `covered[-1]/n_rain`，τ32=0.984375；`metrics.py:115/121` | ≤1e-12；`covered[-1]` 整数精确 |
+
+任一不满足 → 该 run `status=GATE_FAILED`，supervisor **停止后续 run**（fail-fast），不写任何"通过"结论。
+门槛代码：`infer_eval.py: gate_summary`。**这是判定“推理链错误”的唯一开关**；未过门的 run 不产出主表数值。
+
+---
+
+## 6. 新指标（全部 EXPLORATORY POSTHOC，不冻结）
+
+以冻结监督掩膜上的像素为总体（与门槛同一 N_valid），单位一律 **mm/h**：
+
+- **连续指标**：`MAE = mean|ŷ−y|`、`RMSE = sqrt(mean(ŷ−y)²)`、`MeanBias = mean(ŷ−y)`、
+  `Pearson_CC = (Σŷy−ΣŷΣy/N)/sqrt((Σŷ²−Σŷ²/N)(Σy²−Σy²/N))`；
+  同时落盘 `Σŷ,Σy,Σŷ²,Σy²,Σŷy` 供独立复算（`PointAccumulator.sums`）。
+- **事件混淆矩阵**：对 r∈{0.1,1,5,10,20}，`Pred = ŷ > r`（严格 >）vs `Truth = rate > r`（float32 严格 >）。
+  `POD=TP/(TP+FN)`、`FAR=FP/(TP+FP)`、`CSI=TP/(TP+FP+FN)`、
+  `HSS=2(TP·TN−FP·FN)/((TP+FP)(FP+TN)+(TP+FN)(FN+TN))`；
+  TP+FP+FN+TN=N_valid（单测覆盖；训练/评价中绝不使用）。
+- **发生率诊断** `OCC_P`：`p ≥ 0.5` vs `rate > 0.1`，与冻结 reliability 分箱 5..9 的语义一致
+  （`metrics.py:75 bins=searchsorted(arange(1,10)/10,p,'right')` ⇒ bin≥5 ⇔ p≥0.5，含 p=0.5；单测覆盖）。
+- **> 与 ≥**：所有候选点估计的 r 阈值判决用**严格 >**；只有 `P≥0.5`（冻结 reliability 语义）用 `≥`。
+  两个边界都在 `tests/test_formula.py::test_strict_vs_ge_boundary` 与 `test_reliability_bin_semantics` 验证。
+
+---
+
+## 7. 四个候选点估计（**均未冻结**，逐条标注）
+
+记 `q_i = conditional_quantiles_log[:,i]`（FP64，log1p(mm/h)，τ_i=(i+0.5)/32，严格递增），
+`p = rain_prob`，`Q_i = expm1(q_i)`（条件分位，mm/h）。
+
+| 候选 | 公式 | 语义 | 状态/标注 |
+|---|---|---|---|
+| **A** | `ŷ_A = p · mean_i(Q_i)` | 现有诊断代理（`models/quantile_v2/outputs.py:57 materialize_physical` 的 `p*q.mean`），物理空间 32 分位等权均值 | `EXISTING_DIAGNOSTIC_PROXY / NOT_FROZEN` |
+| **B** | `p<0.5 → 0`；`p≥0.5 → expm1( Q_cond((p−0.5)/p) )`；`Q_cond` 在 log1p 空间对 τ_i 线性插值；`u<τ_0` 取支持下界 0.1 mm/h；p=0.5 ⇒ 0.1 mm/h | 混合分布中位数：`F(r)=(1−p)+p·F_cond(r)=0.5` 的反解 | `MIXTURE_MEDIAN / NOT_FROZEN` |
+| **C** | `ŷ_C = p · expm1( mean_i(q_i) )` | 条件均值近似：32 分位等权积分在 **log1p 坐标**完成，尾部（τ>31/32）截断到 q32 | `CONDITIONAL_MEAN_APPROX_LOG_INTEGRAL / NOT_FROZEN`；[DESIGN_CHOICE] 见 §11-R6 |
+| **D** | `P(R>r) = p · (1 − F_cond(r))`；`F_cond` 由 32 分位在 log1p 空间线性插值；事件判决 `P≥0.5`（附严格 >0.5 对照） | 概率式超阈值概率（发生率 × 条件生存函数） | `PROBABILISTIC_EVENT / NOT_FROZEN`；r > expm1(q32) 的像素标 **NOT_ESTABLISHED** |
+
+候选 D 的支持规则：逐像素 `support ⇔ r ≤ expm1(q32_i)`（32 分位条件分布无法给出 q32 以上的质量）。
+D 的分母在 `candidate_D[<r>].support` 中显式给出 `N_supported / N_not_established`；
+混淆矩阵只在支持子集上给值，`status=ESTIMABLE_WITH_SUPPORT` 或 `NOT_ESTABLISHED_FOR_PART_OF_POPULATION`。
+D 在 r=0.1 且 P≥0.5 时与 `OCC_P` 完全一致（单测强制验证），可作为概率链自检。
+
+**所有候选只写入 `new_metrics`，绝不回馈 gate、模型选择或任何后续决策。**
+
+---
+
+## 8. 单位、缺测 mask、时间对齐
+
+- 单位：物理量一律 **mm/h**；`conditional_quantiles_log` 为 `log1p(mm/h)`；`q32_physical=expm1(q32_log)`。
+- 缺测 mask：`valid = imerg_valid & yunnan_region`（B0/B1 由 `read_imerg_local` 的 valid 与冻结 mask 组成；
+  B2–B8 由 `Batch.valid` 与 `Batch.region` 组成）。新指标只用 `valid&region` 像素；被 mask 像素的 rate 可为 NaN，
+  绝不进入任何 sum；冻结校验器在 `metrics.py:62 supervision(...)` 里同样拒绝 NaN/负值/零有效。
+- 时间对齐：batch 逐 scene 带 `analysis_time`（B0/B1 用 `window_start`），冻结 `block_id` 以 UTC 字符串解析；
+  每场景 6 个 satellite slot 的 nominal/obs_start/obs_end 由 reader 内 `TargetBinding.check_forecast` 校验
+  （B2–B8，`stage4/data.py:195`）或 `Plan` 的 `CAUSAL_SIX_SLOT_ORDER`（B0/B1，`data.py:66`）。
+  推理代码不对时间做任何重采样/位移。
+- 掩膜广播：`NumericEvaluator.add` 显式拒绝任意 mask 广播（`validation.py:19 same_shape_device`）；新指标同样要求
+  rate/valid/region 形状一致（`PointAccumulator.add` 会 broadcast-check）。
+
+---
+
+## 9. 失败处理与可复现性
+
+- 任一 gate 指标超差、任一 reader/身份/SHA 校验失败、任一 OOM/异常 → `result.json` 记录 `FAILED`（含 traceback）
+  且 supervisor 停止；不自动重试、不自动重放、不跳过进入下一个 run（`run-all` 默认 fail-fast）。
+- 输出目录不允许覆盖（除 `_dry_check/` 可重建）；因此每个 run 的可复现实验只需删除该 run 的 output 子目录后重跑，
+  但**科学上禁止**在已知 gate 失败后“调整后重跑”——需先定位推理链问题并报告。
+- 所有 checkpoint/Dev 报告在 `run` 前做 SHA-256 校验（`--no-verify-sha` 仅为调试保留；默认校验）。
+
+---
+
+## 10. 自检（已完成，2026-10-29）
+
+1. `tests/test_formula.py`：88 项 PASS，0 failure。覆盖 TP+FP+FN+TN=N_valid、`>` vs `≥` 边界、
+   P≥0.5 分箱语义、MAE/RMSE/Bias/CC 对 numpy、A/B/C 已知小例、D 支持/边界、gate 通过/2e-12 失败/计数失败、
+   dry-only Pearson=None 等。
+   `tests/test_run_pipeline.py`：合成 2×8 场景端到端 run 循环，37 项 PASS / 0 failure——验证 `run_one` 的
+   result.json/compact CSV 写出、gate PASS、2e-12 扰动触发 GATE_FAILED、已存在科学输出拒绝覆盖。
+   二者可用 `python -B infer_eval.py self-test` 一次跑完。
+2. `infer_eval.py dry-run`：19 run、合计 735.13 GiB 读取、逐 run 期望 N_valid/N_rain 与 summary；
+   返回 0；未 import torch、未开任何观测载荷。
+3. `infer_eval.py check --run-id <id>`：10 代表性 run 在 CPU 上完成
+   「冻结计划构造 + 模型构造 + strict `load_state_dict`」，覆盖所有 8 个模型类与 5 个代码根；全部 `DRY_CHECK_OK`。
+4. 只读身份核验：`tools/probe_*.py` 输出（registry SHA、冻结代码树/逐文件、s2027/s2026 pins、
+   B0/B1 读取量）全部落盘 `outputs/`。
+
+---
+
+## 11. 风险与未决点（必须随结果报告）
+
+- **R1 B0/B1 读取量最大**：B1 单 Dev 遍历约 **138 GiB**（33,297 个 B13 帧 × 4.44 MB + 245 个 IMERG 日文件），
+  B0 约 **43.5 GiB**；4 个 B0/B1 run 合计 ~363 GiB，占 19 run 总读取的 ~49%。B1 若 LRU 边界重读，实际字节可能高于
+  该“去重下界”（上界为 6×场景数的朴素读法，约 280 GiB/run，见 expected_budget.md）。这是时间预算的最大不确定项。
+- **R2 B0/B1 代码根不是逐字节冻结副本**：s2026 用 168 个源 pin 全等证明；s2027 有 6 个执行控制文件在恢复提交中变化
+  （Operator.ps1 / multiseed protocol / seed2027 authority·engine·protocol·release_check），均不在推理路径。
+  这是“可复用调用链”的合理工程判断，但严格说不是逐字节冻结；若 Lead 要求 100% 逐字节，需要从 git 对象库导出
+  `8e8fd254` 的 worktree（本任务不允许在 workspace 新建工作树，故只做逐文件 pin 证明）。
+- **R3 B2 代码根**：a353021 无当前 worktree；readiness HEAD 与其推理路径 47/48 全等，2 个差异为新增可选字段
+  （B2 不触达）。gate 会检出任何实际影响；若 B2 gate 失败，首先怀疑该差异。
+- **R4 B0/B1 全量 evaluator 内存/时间**：36,018,430 有效像素、精确 score SQLite（历史实际跑过）；单 run 需
+  ~13–30 min 读取+前向。若磁盘（<PRIVATE_LOCATOR_d0ed2abd59c9> expected_budget 的时间上界安排。
+- **R5 确定性**：BF16 autocast + cuDNN 算法选择在**同一 GPU/同一驱动/同一批顺序**下可复现；若封口后 GPU 型号/驱动变化、
+  或其它进程占用导致 cuBLAS workspace 行为变化，gate 1e-12 可能不过。gate 失败即停止并报告，不调参适配。
+- **R6 候选 C 的积分坐标是设计选择**：物理空间等权积分与 A 数值相同；本交付选 log1p 空间积分（Jensen 下界），
+  已在输出中标注 `NOT_FROZEN / DESIGN_CHOICE`。若 Lead 想要的 C 是别的定义，只需改 `point_candidates_log` 一处。
+- **R7 B 的插值/边界**：`u<τ_0` 取支持下界 0.1 mm/h（而非外插负值）；p=0.5 时 B=0.1 mm/h。已在单测固定。
+- **R8 D 的 NOT_ESTABLISHED**：r=10/20 时可能大量像素超 q32 支持（尤其弱模式），其混淆矩阵只覆盖支持子集；
+  报告必须同时给出支持分母，不能把“支持子集 POD”当成全样本 POD。
+- **R9 新指标仅总体（all）**：未计算 UTC 分时/强雨场景/海拔分组的新指标；冻结 groups 的既有指标仍完整复算。
+- **R10 未在本轮验证**：真实数据冒烟与全量推理（按约束等 Lead 封口后触发）；`tools/probe_scope` 的 B0/B1 读取量是
+  由冻结 manifest+frame index 计算的**去重下界**，不是实测账本。
+
+---
+
+## 12. 封口后执行顺序（由 Lead 触发）
+
+```powershell
+cd <...>\YunTAPR-metric-backfill-20261029\phaseB_inference
+# 0) 冒烟（1 checkpoint × 2 场景）
+.\launch_after_seal.ps1 -Mode smoke
+# 1) 全量 19 run（每 run 独立进程、gate 失败即停）
+.\launch_after_seal.ps1 -Mode all
+# 2) 汇总：outputs/campaign_summary.json + outputs/<run_id>/compact_metrics.csv
+```
+
+前置条件：训练包已封口（GPU 空闲 ≥6 GiB）、无其它 GPU 任务、`<PRIVATE_LOCATOR_5b764355a012>` 可读。详见 `smoke_plan.md` 与
+`expected_budget.md`。

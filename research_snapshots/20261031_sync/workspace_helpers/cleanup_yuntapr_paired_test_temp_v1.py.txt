@@ -1,0 +1,43 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Remove only the exact fixture dirs named in this task's preserved ACL failure log."""
+from pathlib import Path
+import ast, datetime, json, os, re, shutil
+BASE = Path(__file__).parent
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text())
+run = Path(active['run_directory'])
+log = run / 'pretraining_tests/20261003T091214_932968Z/test_results.txt'
+temp = Path(os.environ['TEMP']).resolve()
+targets = set()
+for line in log.read_text(encoding='utf8').splitlines():
+    if not line.startswith('PermissionError:'):
+        continue
+    for text in re.findall("'([^']+)'", line):
+        try:
+            p = Path(ast.literal_eval("'" + text + "'")).resolve()
+        except (ValueError, SyntaxError):
+            continue
+        if not p.is_relative_to(temp):
+            continue
+        rel = p.relative_to(temp)
+        if not rel.parts:
+            continue
+        top = temp / rel.parts[0]
+        if not re.fullmatch('(tmp[a-z0-9_]+|yuntapr_test_[a-z0-9_]+)', top.name):
+            raise ValueError('Unexpected fixture directory name')
+        targets.add(top)
+assert len(targets) == 11
+receipt = []
+for p in sorted(targets):
+    resolved = p.resolve()
+    assert resolved.is_relative_to(temp) and resolved.parent == temp
+    existed = p.exists()
+    if existed:
+        shutil.rmtree(p)
+    assert not p.exists()
+    receipt.append({'absolute_path': str(resolved), 'existed': existed, 'deleted': existed, 'confirmed_absent': True})
+value = {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'targets': receipt, 'count': len(receipt), 'scope': 'TEST_FIXTURE_ONLY', 'raw_or_formal_checkpoint_roots_touched': False, 'correction_to_prior_failed_summary': 'Prior all_temporary_artifacts_removed=true was premature during ACL errors; these 11 fixture directories have now been explicitly verified and cleaned.'}
+p = run / 'acl_fixture_cleanup_receipt.json'
+with p.open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2, ensure_ascii=False)
+print(json.dumps({'fixture_directories_cleaned': len(receipt), 'all_confirmed_absent': True, 'formal_optimizer_steps': 0}))

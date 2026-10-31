@@ -1,0 +1,196 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read-only post-training integrity and paired exact metrics; never training."""
+from pathlib import Path
+import csv, datetime, gzip, hashlib, io, json, os, shutil, sys, unittest
+from unittest.mock import patch
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import torch
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.contracts.loader import sha256
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text())
+run = Path(active['run_directory'])
+assert (run / 'both_formal_runs_completed.json').exists(), 'Never close an active, failed or NOT_RUN task as PASS'
+os.environ['YUNTAPR_PAIRED_AUTHORIZATION_REGISTRY'] = str(run / 'authorization_registry.json')
+reused_evidence = []
+
+def save(p, v):
+    if p.exists():
+        assert json.loads(p.read_text(encoding='utf8')) == v, 'Existing evidence differs: ' + str(p)
+        reused_evidence.append({'path': str(p), 'sha256': sha256(p), 'byte_identical_preserved': True})
+        return
+    with p.open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+
+def no_operation(*args, **kwargs):
+    raise PermissionError('Post-training integrity is read-only; no optimizer/backward/model fitting')
+allowed_checkpoint_roots = [Path(v['checkpoint_directory']).resolve() for v in active['formal_runs'].values()]
+
+def audit(event, args):
+    if event == 'open' and isinstance(args[0], (str, bytes, os.PathLike)):
+        text = os.fsdecode(args[0]).replace('/', '\\').lower()
+        if any((text.startswith(str(p).lower() + '\\') for p in (a.data.H_ROOT, a.data.IMERG_ROOT))):
+            raise PermissionError('No post-training raw source read, including any 2025 date')
+        if text.startswith('<PRIVATE_LOCATOR_fe8380a55494>' + '\\'):
+            p = Path(args[0]).resolve()
+            if not any((p.is_relative_to(root) for root in allowed_checkpoint_roots)):
+                raise PermissionError('Only own completed run checkpoints may be verified')
+            mode = args[1] if args[1] is not None else args[2]
+            if isinstance(mode, str) and any((c in mode for c in 'wa+')) or (isinstance(mode, int) and mode & (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_TRUNC)):
+                raise PermissionError('Checkpoint write forbidden during integrity tests')
+    if event in ('os.remove', 'os.rename', 'os.rmdir'):
+        if any((isinstance(p, (str, bytes)) and os.fsdecode(p).lower().startswith('<PRIVATE_LOCATOR_fe8380a55494>' + '\\') for p in args[:2])):
+            raise PermissionError('Checkpoint mutation forbidden during integrity tests')
+sys.addaudithook(audit)
+log = io.StringIO()
+with patch.object(torch.Tensor, 'backward', no_operation), patch.object(torch.optim.AdamW, '__init__', no_operation):
+    suite = unittest.defaultTestLoader.loadTestsFromName('tests.paired_phase_a_authorized.test_formal_artifacts')
+    result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+attempt = run / 'post_training_integrity' / stamp
+attempt.mkdir(parents=True, exist_ok=False)
+(attempt / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+summary = {'test_count': result.testsRun, 'all_passed': result.wasSuccessful() and (not result.skipped), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'MODEL_PARAMETERS_UPDATED_BY_TESTS': False, 'POST_TEST_OPTIMIZER_STEPS': 0, 'POST_TEST_BACKWARD_CALLS': 0, 'raw_source_open_events': 0, '2025_RAW_ACCESS': 0, 'formal_checkpoint_deserialization': 'READ_ONLY_IDENTITY_AND_SCHEMA_ONLY'}
+save(attempt / 'test_summary.json', summary)
+if not summary['all_passed']:
+    print(log.getvalue())
+    raise SystemExit(1)
+auth_records = json.loads((run / 'authorization_registry.json').read_text(encoding='utf8'))
+history_result = a.verify_history(run / 'historical_file_snapshot.json', sha256(run / 'historical_file_snapshot.json'))
+resume = json.loads((BASE / 'YunTAPR-paired-resume-active-v1.json').read_text(encoding='utf8'))
+resume_plan = json.loads(Path(resume['plan_path']).read_text(encoding='utf8'))
+assert sha256(Path(resume['plan_path'])) == resume['plan_sha256']
+assert sha256(Path(resume_plan['stop_record_path'])) == resume_plan['stop_record_sha256']
+excluded = {Path(row['path']) for row in resume_plan['interrupted_worker_shards']}
+for row in resume_plan['interrupted_worker_shards']:
+    assert Path(row['path']).stat().st_size == row['bytes'] and sha256(Path(row['path'])) == row['sha256']
+
+def retained_worker_shards(public, pattern, kind):
+    origin = [p for p in public.glob(pattern) if kind != 'B1' or p not in excluded]
+    additional = list(Path(resume_plan['worker_log_directory']).glob(pattern)) if kind == 'B1' else []
+    return origin + additional
+
+def actual_step_events(public):
+    from collections import Counter
+    counts = Counter()
+    for p in public.glob('logs/epoch_*/step_events.jsonl'):
+        with p.open(encoding='utf8') as f:
+            for line in f:
+                for name in ('BACKWARD_CALL', 'OPTIMIZER_STEP_CALLED', 'OPTIMIZER_STEP_RETURNED'):
+                    if '"event": "' + name + '"' in line:
+                        counts[name] += 1
+    return dict(counts)
+physical_work = {}
+models = {}
+io_audits = {}
+checkpoint_inventory = {}
+contract = frozen.RunnerContract.load()
+frames = a.data.load_frames()
+for kind, spec in active['formal_runs'].items():
+    public = Path(spec['public_directory'])
+    status = json.loads((public / 'final_status.json').read_text(encoding='utf8'))
+    history = json.loads((public / 'training_validation_history.json').read_text(encoding='utf8'))
+    selected = history[status['selected_best_epoch'] - 1]
+    models[kind] = {'run_id': spec['run_id'], 'completed_epochs': status['completed_epoch'], 'BEST_epoch': status['selected_best_epoch'], 'BEST_val_core': status['selected_best_val_core'], 'BEST_checkpoint_path': status['BEST']['absolute_local_path'], 'BEST_SHA256': status['BEST']['sha256'], 'LAST_SHA256': status['LAST']['sha256'], 'FORMAL_OPTIMIZER_STEPS': status['FORMAL_OPTIMIZER_STEPS'], 'validation': selected['validation'], 'checkpoint_registry': {'BEST': status['BEST'], 'LAST': status['LAST']}, 'status': status}
+    checkpoints = []
+    for p in sorted(Path(spec['checkpoint_directory']).glob('epoch_*.pt')):
+        checkpoints.append({'absolute_local_path': str(p), 'bytes': p.stat().st_size, 'sha256': sha256(p)})
+    assert len(checkpoints) == status['completed_epoch']
+    checkpoint_inventory[kind] = checkpoints
+    counts = {2023: {}, 2024: {}}
+    copies = bytes_total = raw_attempts = 0
+    copy_seconds = read_seconds = 0.0
+    peak_bytes = 0
+    allowed = a.allowed_sources(contract, kind, frames)
+    allowset = {a.RawFirewall.key(p) for p in allowed}
+    for p in retained_worker_shards(public, 'staging_worker_*.jsonl', kind):
+        with p.open(encoding='utf8') as stream:
+            for line in stream:
+                row = json.loads(line)
+                assert 'error' not in row
+                year = row['year']
+                i = row['index']
+                counts[year][i] = counts[year].get(i, 0) + 1
+                assert row['sample_id'] == contract.records[kind, year][i]['sample_id']
+                assert len(row['staging']) == (7 if kind == 'B1' else 2)
+                for record in row['staging']:
+                    assert a.RawFirewall.key(record['source_path']) in allowset
+                    assert record['size_match'] and record['sha256_match'] and record['cleanup_success']
+                    assert not record['error'] and (not record['cleanup_error'])
+                    copies += 1
+                    bytes_total += record['temporary_bytes']
+                    peak_bytes = max(peak_bytes, record['temporary_bytes'])
+                    copy_seconds += record['copy_seconds']
+                    read_seconds += record['read_seconds']
+    for year in counts:
+        n = 10455 if year == 2023 else 10501
+        assert sorted(counts[year]) == list(range(n)) and set(counts[year].values()) == {status['completed_epoch']}
+    for p in retained_worker_shards(public, 'raw_access_*.jsonl', kind):
+        with p.open(encoding='utf8') as f:
+            for line in f:
+                row = json.loads(line)
+                assert a.RawFirewall.key(row['path']) in allowset and row['model_scope_authorized']
+                raw_attempts += 1
+    expected_copies = status['completed_epoch'] * (10455 + 10501) * (7 if kind == 'B1' else 2)
+    assert copies == expected_copies and raw_attempts == 2 * copies and (peak_bytes <= 734003200)
+    io_audits[kind] = {'source_copy_count': copies, 'authorized_raw_open_attempt_events': raw_attempts, 'every_successful_copy_has_two_raw_opens': 'readonly copy plus source SHA read', 'source_bytes_copied_over_epochs': bytes_total, 'staging_copy_seconds_sum': copy_seconds, 'staged_read_seconds_sum': read_seconds, 'peak_single_temporary_bytes_per_worker': peak_bytes, 'all_source_size_sha_cleanup_pass': True, 'every_scene_count_per_year_equals_completed_epochs': True, '2025_RAW_ACCESS': 0}
+    offset = 5228 if kind == 'B1' else 0
+    actual = actual_step_events(public)
+    expected_actual = status['completed_epoch'] * 5228 + offset
+    assert all((actual[n] == expected_actual for n in ('BACKWARD_CALL', 'OPTIMIZER_STEP_CALLED', 'OPTIMIZER_STEP_RETURNED')))
+    models[kind].update(MODEL_TRAJECTORY_OPTIMIZER_STEPS=status['FORMAL_OPTIMIZER_STEPS'], ALL_ATTEMPTS_ACTUAL_FORMAL_OPTIMIZER_STEPS=expected_actual, DISCARDED_UNCHECKPOINTED_OPTIMIZER_STEPS=offset)
+    physical_raw = physical_copies = physical_bytes = 0
+    all_dirs = [public] + ([Path(resume_plan['worker_log_directory'])] if kind == 'B1' else [])
+    for folder in all_dirs:
+        for p in folder.glob('raw_access_*.jsonl'):
+            with p.open(encoding='utf8') as f:
+                for line in f:
+                    row = json.loads(line)
+                    assert a.RawFirewall.key(row['path']) in allowset and row['model_scope_authorized']
+                    physical_raw += 1
+        for p in folder.glob('staging_worker_*.jsonl'):
+            with p.open(encoding='utf8') as f:
+                for line in f:
+                    row = json.loads(line)
+                    assert 'error' not in row
+                    for record in row['staging']:
+                        assert record['size_match'] and record['sha256_match'] and record['cleanup_success']
+                        physical_copies += 1
+                        physical_bytes += record['temporary_bytes']
+    physical_work[kind] = {'actual_step_event_counts': actual, 'actual_formal_optimizer_steps_all_attempts': expected_actual, 'retained_model_trajectory_steps': status['FORMAL_OPTIMIZER_STEPS'], 'discarded_interrupted_epoch_updates': offset, 'raw_open_events_all_attempts': physical_raw, 'completed_sample_copy_records_all_attempts': physical_copies, 'bytes_in_completed_sample_copy_records_all_attempts': physical_bytes, 'interrupted_partial_copy_records': 'Not all interrupted in-flight reads form complete sample records; two owned copies were separately cleaned and logged at user stop' if offset else 'NONE', 'manual_stop_cleanup_record': resume_plan['stop_record_path'] if offset else None, '2025_RAW_ACCESS': 0}
+left, right = (models['B0_MATCHED']['validation'], models['B1']['validation'])
+pair = {'comparison': 'B0-Matched BEST vs B1 BEST', 'evaluation_split': '2024 Mar-Oct Validation', 'scenes': 10501, 'same_frozen_sample_identities': True, 'primary_quantity': 'exact global validation core loss', 'Delta_val_core_B1_minus_B0_Matched': right['global_val_core_loss'] - left['global_val_core_loss'], 'B0_MATCHED': left, 'B1': right, 'scientific_interpretation': 'RESEARCHER_REVIEW_REQUIRED', 'diagnostics_did_not_affect_checkpoint_selection': True}
+save(run / 'paired_comparison_metrics.json', pair)
+save(run / 'post_training_integrity_summary.json', summary)
+save(run / 'all_completed_checkpoint_inventory.json', checkpoint_inventory)
+save(run / 'full_source_io_cleanup_audit.json', io_audits)
+with io.StringIO(newline='') as f:
+    w = csv.writer(f)
+    w.writerow(['tau', 'B0_matched_pinball', 'B1_pinball', 'B0_matched_coverage', 'B1_coverage', 'B0_matched_coverage_error', 'B1_coverage_error'])
+    for i in range(32):
+        w.writerow([(i + 0.5) / 32, left['per_tau_pinball'][i], right['per_tau_pinball'][i], left['per_tau_conditional_coverage'][i], right['per_tau_conditional_coverage'][i], left['coverage_error'][i], right['coverage_error'][i]])
+    expected_csv = f.getvalue().encode('utf8')
+quantile_csv = run / 'paired_quantile_diagnostics.csv'
+if quantile_csv.exists():
+    assert quantile_csv.read_bytes() == expected_csv
+    reused_evidence.append({'path': str(quantile_csv), 'sha256': sha256(quantile_csv), 'byte_identical_preserved': True})
+else:
+    with quantile_csv.open('xb') as f:
+        f.write(expected_csv)
+delivery = {'status': 'BOTH_PHASE_A_TRAINING_COMPLETE_READONLY_INTEGRITY_PASS', 'models': models, 'pairwise': pair, 'post_training_tests': summary, 'pretraining_unique_tests': 336, 'posttraining_tests': result.testsRun, 'historical_file_integrity': history_result, 'source_io_cleanup': io_audits, 'B0_MATCHED_PHASE_A_COMPLETED': True, 'B1_PHASE_A_COMPLETED': True, 'PAIRWISE_PHASE_A_COMPARISON_COMPLETED': True, 'B0_MATCHED_PHASE_B_AUTHORIZED': False, 'B1_PHASE_B_AUTHORIZED': False, 'B2_AUTHORIZED': False, '2025_FINAL_TEST_AUTHORIZED': False, '2025_FINAL_TEST_EXECUTED': False, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, 'next_action': 'STOP_RESEARCHER_REVIEW', 'authorization_flags_scope': 'ORIGINAL_PHASE_A_LAUNCH_CAPS_ONLY'}
+extended_path = BASE / 'YunTAPR-extended-pipeline-active-v1.json'
+if extended_path.exists():
+    extension = json.loads(extended_path.read_text(encoding='utf8'))
+    if sha256(Path(extension['authority_path'])) != extension['authority_sha256']:
+        raise ValueError('Additional researcher authority changed')
+    delivery.update(additional_researcher_authorization=extension, paired_phase_b_conditionally_authorized_by_new_scope=True, next_action='ADDITIONAL_AUTHORITY_FULL_READONLY_REINFERENCE_THEN_SEPARATE_FINALFIT_GATES')
+delivery.update(resume_accounting=physical_work, explicit_researcher_resume=resume)
+save(run / 'resume_all_attempts_execution_audit.json', physical_work)
+save(run / 'final_delivery_status.json', delivery)
+recovery_path = Path(resume['closure_path_recovery_directory'])
+save(recovery_path / 'reused_evidence_verification.json', {'status': 'PASS', 'files': reused_evidence, 'old_failure_preserved': True, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, '2025_RAW_ACCESS': 0})
+print(json.dumps({'post_training_tests': result.testsRun, 'all_passed': True, 'models': {k: {n: v[n] for n in ('completed_epochs', 'BEST_epoch', 'BEST_val_core', 'FORMAL_OPTIMIZER_STEPS')} for k, v in models.items()}, 'Delta_val_core': pair['Delta_val_core_B1_minus_B0_Matched']}, indent=2))

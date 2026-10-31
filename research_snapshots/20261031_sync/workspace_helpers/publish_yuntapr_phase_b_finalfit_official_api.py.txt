@@ -1,0 +1,100 @@
+# Archival copy: formatting normalized; private locators redacted.
+# UTC identity timestamps refer to the same instants as the original +0800
+# local commit. File bytes, tree, parent, authors and message are identical.
+# The original unpublished local object remains in Git; published history
+# is extended solely by one non-forced commit.
+"""Publish the already reviewed Git tree through GitHub's official Git Data API."""
+import argparse
+import base64
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import urllib.request
+import urllib.error
+from verify_yuntapr_phase_b_finalfit_publication import ROOT, REPO, BASE, audit, changes
+
+def git(*args, input=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, input=input)
+
+def blob(kind, data):
+    return hashlib.sha1(kind.encode() + b' ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+
+def plan():
+    original = git('rev-parse', 'HEAD').decode().strip()
+    raw = git('cat-file', 'commit', original)
+    headers, message = raw.split(b'\n\n', 1)
+    lines = headers.decode('utf-8').splitlines()
+    fields = {}
+    newlines = []
+    for line in lines:
+        m = re.fullmatch('(author|committer) (.*) <([^>]+)> (\\d+) ([+-]\\d{4})', line)
+        if m:
+            kind, name, email, stamp, offset = m.groups()
+            fields[kind] = {'name': name, 'email': email, 'date': datetime.fromtimestamp(int(stamp), timezone.utc).isoformat()}
+            newlines.append(f'{kind} {name} <{email}> {stamp} +0000')
+        else:
+            newlines.append(line)
+    assert set(fields) == {'author', 'committer'}
+    assert lines[0].startswith('tree ') and lines[1] == 'parent ' + BASE
+    assert not any((line.startswith('gpgsig ') for line in lines))
+    canonical = ('\n'.join(newlines) + '\n\n').encode() + message
+    tree = git('rev-parse', 'HEAD^{tree}').decode().strip()
+    return (original, tree, canonical, blob('commit', canonical), fields, message.decode('utf-8'))
+
+def publish():
+    checked = audit()
+    original, tree, canonical, expected, identities, message = plan()
+    files = changes(original)
+    os.environ.update(GIT_TERMINAL_PROMPT='0', GCM_INTERACTIVE='never', GCM_GUI_PROMPT='false')
+    result = subprocess.run(['git', 'credential', 'fill'], cwd=REPO, input=b'protocol=https\nhost=github.com\n\n', stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+    credentials = dict((line.split('=', 1) for line in result.stdout.decode().splitlines() if '=' in line))
+    if result.returncode or not credentials.get('password'):
+        raise RuntimeError('Existing Git credential unavailable')
+    authorization = 'Basic ' + base64.b64encode((credentials.get('username', '') + ':' + credentials['password']).encode()).decode()
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def api(suffix, data=None, method=None):
+        payload = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode('utf-8') if data is not None else None
+        request = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + suffix, data=payload, method=method, headers={'Authorization': authorization, 'User-Agent': 'YunTAPR-reviewed-Git-tree-publication', 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'})
+        with opener.open(request, timeout=55) as response:
+            return json.load(response)
+    ref = api('git/ref/heads/main')
+    assert ref['object']['sha'] == BASE, 'Remote main advanced; never overwrite'
+    base_commit = api('git/commits/' + BASE)
+    assert base_commit['tree']['sha'] == git('rev-parse', BASE + '^{tree}').decode().strip()
+    entries = []
+    for index, (name, identity) in enumerate(files.items(), 1):
+        data = (REPO / name).read_bytes()
+        created = api('git/blobs', {'content': base64.b64encode(data).decode('ascii'), 'encoding': 'base64'})
+        assert created['sha'] == identity['blob_sha1'], name
+        entries.append({'path': name, 'mode': '100644', 'type': 'blob', 'sha': created['sha']})
+        print(json.dumps({'verified_blobs_created': index, 'total': len(files), 'last_path': name}), flush=True)
+    created_tree = api('git/trees', {'base_tree': base_commit['tree']['sha'], 'tree': entries})
+    assert created_tree['sha'] == tree, 'GitHub tree differs from reviewed local tree'
+    commit = api('git/commits', {'message': message, 'tree': tree, 'parents': [BASE], **identities})
+    assert commit['sha'] == expected, 'Unexpected GitHub commit serialization; branch remains unchanged'
+    assert api('git/ref/heads/main')['object']['sha'] == BASE, 'Remote changed during publication'
+    updated = api('git/refs/heads/main', {'sha': expected, 'force': False}, 'PATCH')
+    assert updated['object']['sha'] == expected
+    stored = git('hash-object', '-t', 'commit', '-w', '--stdin', input=canonical).decode().strip()
+    assert stored == expected
+    git('update-ref', 'refs/heads/main', expected, original)
+    git('update-ref', 'refs/remotes/origin/main', expected, BASE)
+    receipt = {'status': 'PASS', 'transport': 'OFFICIAL_GITHUB_GIT_DATA_API', 'original_unpublished_local_commit': original, 'published_commit': expected, 'tree': tree, 'parent': BASE, 'file_bytes_unchanged': True, 'commit_metadata_difference': 'timestamp offset normalized from +0800 to +0000; same time instants', 'remote_main_update_force': False, 'local_audit': checked, 'files_verified': len(files), 'credentials_written_or_logged': False}
+    path = ROOT / ('YunTAPR-phase-b-finalfit-publication-transport-' + expected[:12] + '.json')
+    path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    print(json.dumps({**receipt, 'receipt': str(path)}), flush=True)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--publish', action='store_true')
+    args = parser.parse_args()
+    if args.publish:
+        publish()
+    else:
+        original, tree, raw, expected, identities, message = plan()
+        assert blob('commit', git('cat-file', 'commit', original)) == original
+        print(json.dumps({'plan': 'PASS', 'original_local_commit': original, 'same_tree': tree, 'expected_UTC_commit': expected, 'parent': BASE, 'files': len(changes(original))}))

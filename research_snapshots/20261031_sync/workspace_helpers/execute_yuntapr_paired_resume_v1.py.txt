@@ -1,0 +1,62 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""One explicitly authorized B1 resume attempt; never reruns completed B0."""
+from pathlib import Path
+import datetime, hashlib, json, os, subprocess, traceback
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+PYTHON = Path('<PRIVATE_LOCATOR_85023c7c63ca>')
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+resume = read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+journal = Path(resume['resume_directory'])
+old = read(resume['origin_registry_path'])
+oldrun = Path(old['run_directory'])
+spec = old['formal_runs']['B1']
+public = Path(spec['public_directory'])
+assert sha(resume['authorization_path']) == resume['authorization_sha256']
+assert read(journal / 'preflight_status.json')['status'] == 'RESUME_PREFLIGHT_PASS'
+assert (journal / 'stale_gpu_lock_preservation.json').exists()
+b0 = read(oldrun / 'B0_MATCHED_execution_result.json')
+assert b0['successful']
+assert read(old['formal_runs']['B0_MATCHED']['public_directory'] + '/final_status.json') == b0['status']
+assert not (oldrun / 'B1_execution_result.json').exists() and (not (oldrun / 'both_formal_runs_completed.json').exists())
+env = dict(os.environ, PYTHONUTF8='1', PYTHONHASHSEED='2026', CUBLAS_WORKSPACE_CONFIG=':4096:8', PYTHONDONTWRITEBYTECODE='1', YUNTAPR_REPO_ROOT=str(REPO))
+cmd = [str(PYTHON), '-u', str(REPO / 'scripts/paired_phase_a_resume_governance_v1.py'), '--authorization', resume['authorization_path'], '--authorization-sha256', resume['authorization_sha256'], '--resume-run-id', spec['run_id']]
+save(journal / 'resume_launch_manifest.json', {'utc': now(), 'command': cmd, 'B0_RESTARTED': False, 'no_automatic_retry': True})
+try:
+    with (journal / 'B1_resume_console.txt').open('x', encoding='utf8', newline='\n') as log:
+        process = subprocess.Popen(cmd, cwd=REPO, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf8')
+        save(journal / 'B1_resume_process.json', {'pid': process.pid, 'parent_pid': os.getpid(), 'utc': now()})
+        for line in process.stdout:
+            log.write(line)
+            log.flush()
+            print(line, end='', flush=True)
+        rc = process.wait()
+    status = read(public / 'final_status.json') if (public / 'final_status.json').exists() else None
+    success = bool(rc == 0 and status and (status['status'] == 'FORMAL_PHASE_A_COMPLETE'))
+    if success:
+        canonical = status['completed_epoch'] * 5228
+        success = status['FORMAL_OPTIMIZER_STEPS'] == status['OPTIMIZER_STEPS_COMPLETED'] == status['BACKWARD_CALLS'] == canonical and status['ALL_ATTEMPTS_ACTUAL_FORMAL_OPTIMIZER_STEPS'] == canonical + 5228 and (status['2025_RAW_ACCESS'] == status['2025_PIXELS_READ'] == status['2025_MODEL_INFERENCE_SCENES'] == 0) and status['source_cleanup_state']['cleanup_success']
+    result = {'exit_code': rc, 'successful': success, 'status': status, 'resume_journal': str(journal), 'utc': now()}
+    save(journal / 'B1_execution_result.json', result)
+    if not success:
+        raise RuntimeError('B1 resume failed; preserve evidence and stop without retry')
+    save(oldrun / 'B1_execution_result.json', result)
+    save(oldrun / 'both_formal_runs_completed.json', {'utc': now(), 'runs': {'B0_MATCHED': b0, 'B1': result}, 'pairwise_review_pending': True, 'Phase_B_authorized': False, 'B2_authorized': False, '2025_Final_Test_authorized': False, 'explicit_resume_journal': str(journal)})
+    save(journal / 'resume_completion.json', {'status': 'B1_RESUME_FORMAL_PHASE_A_COMPLETE', 'utc': now(), 'retained_model_trajectory_updates': canonical, 'all_attempts_actual_formal_updates': canonical + 5228, 'B0_RESTARTED': False, '2025_RAW_ACCESS': 0})
+except BaseException as error:
+    save(journal / 'STOP_resume_failure.json', {'utc': now(), 'error': repr(error), 'traceback': traceback.format_exc(), 'automatic_retry': False, 'next_stage_allowed': False, '2025_RAW_ACCESS': 0})
+    raise

@@ -1,0 +1,32 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""One researcher-approved B7/B8 dispatch. Never retry or replay."""
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+import hashlib, json, os, subprocess, sys
+r = Path(__file__).resolve().parents[3]
+local = r / 'docs/research_readiness/.local'
+commit = 'b1f072e45fdd17b80106a774083995c350b28f04'
+frozen = r.parent / 'YunTAPR-dynamic-exec-b1f072e'
+proposal_path = frozen / 'docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json'
+p = json.loads(proposal_path.read_text(encoding='utf-8'))
+v = json.loads((local / 'b7_b8_preparation_20261027.json').read_text(encoding='utf-8'))
+approval_path = local / 'b7_b8_approval_20261027.json'
+runtime = local / 'dynamic_runtime_20261027'
+assert not approval_path.exists() and (not runtime.exists()) and (not Path(v['output_root']).exists()), 'No duplicate dispatch, automatic restart or overwritten evidence'
+assert hashlib.sha256(proposal_path.read_bytes()).hexdigest() == '1e3eb1f34df503344984532d0f9cc5416373bf74504ff3368e6ab9c28c56bc0e'
+assert p['proposal_sha256'] == v['proposal_sha256'] == '64e8d0f3c4b458b56e7cfaa1b81459eb4f61db0d947aceff62aa6e2ec579f5c8'
+assert subprocess.check_output(['git', '-C', str(frozen), 'rev-parse', 'HEAD'], text=True).strip() == commit
+assert not subprocess.check_output(['git', '-C', str(frozen), 'status', '--porcelain'], text=True).strip()
+approval = dict(approved_by_researcher=True, code_commit=commit, proposal_sha256=p['proposal_sha256'], tasks=p['tasks'], budget=p['budget'], scientific_choices=p['scientific_choices'], output_root=v['output_root'], decision_id='RESEARCHER_B7_B8_B1F072E_20261027', approved_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), researcher_answer='批准整包科学方案与正式训练', researcher_source='Direct human reply to call_ab7b807854e64f07baddb868e826beef approving exact b1f072e, canonical64e8/file1e3e proposal, science and bounded B7->B8 package;2025 frozen;no other training or main merge')
+with approval_path.open('x', encoding='utf-8') as f:
+    json.dump(approval, f, ensure_ascii=False, indent=2)
+runtime.mkdir()
+env = dict(os.environ, PYTHONPATH='<PRIVATE_LOCATOR_7ca8ef7e702a>', PYTHONUTF8='1', PYTHONNOUSERSITE='1', PYTHONDONTWRITEBYTECODE='1')
+command = [sys._base_executable, '-B', str(frozen / 'tools/research_readiness/start_dynamic_pair.py'), 'execute', '--proposal', str(proposal_path), '--private-preparation', str(local / 'b7_b8_preparation_20261027.json'), '--researcher-approval', str(approval_path)]
+with (runtime / 'controller.stdout.log').open('xb') as out, (runtime / 'controller.stderr.log').open('xb') as err:
+    child = subprocess.Popen(command, cwd=frozen, env=env, stdin=subprocess.DEVNULL, stdout=out, stderr=err, close_fds=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+record = dict(pid=child.pid, training_commit=commit, proposal_sha256=p['proposal_sha256'], execution_root=str(frozen), output_root=v['output_root'], dispatched_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), python=sys._base_executable, approval_sha256=hashlib.sha256(approval_path.read_bytes()).hexdigest())
+with (runtime / 'launch.json').open('x', encoding='utf-8') as f:
+    json.dump(record, f, ensure_ascii=False, indent=2)
+print(json.dumps(dict(status='APPROVED_B7_B8_DISPATCHED_ONCE', pid=child.pid, training_commit=commit)))

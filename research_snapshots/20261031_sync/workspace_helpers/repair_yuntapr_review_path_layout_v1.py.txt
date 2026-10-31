@@ -1,0 +1,34 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Preserve initial layout failure; repair only font/path wrapping and PDF pins."""
+from pathlib import Path
+import datetime, hashlib, json, re, subprocess
+import build_yuntapr_extended_reports_v1 as builder
+BASE = Path(__file__).parent
+run = builder.run
+manifest_path = run / 'report_build_review.json'
+manifest = builder.read(manifest_path)
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+backup = run / 'report_stage_qa/review' / ('layout_repair_' + stamp)
+backup.mkdir(parents=True, exist_ok=False)
+preserved = {}
+for p in [manifest_path, Path(manifest['reports'][0]['tex']['path']), Path(manifest['reports'][0]['pdf']['path'])]:
+    data = p.read_bytes()
+    (backup / p.name).write_bytes(data)
+    preserved[str(p)] = {'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
+tex = Path(manifest['reports'][0]['tex']['path'])
+text = tex.read_text(encoding='utf8')
+text = text.replace('\\usepackage{amsmath,booktabs,longtable,tabularx,array,hyperref}', '\\usepackage{amsmath,booktabs,longtable,tabularx,array,hyperref}' + '\n' + '\\newfontfamily\\EvidenceFont{Microsoft YaHei}')
+pattern = '\\{\\\\footnotesize\\\\path\\{([^{}]*)\\}\\}'
+text, count = re.subn(pattern, lambda match: builder.cell(match[1]), text)
+assert count == 1
+tex.write_text(text, encoding='utf8', newline='\n')
+for n in (1, 2):
+    value = subprocess.run(['<PRIVATE_LOCATOR_ac4183a30422>', '--disable-installer', '-interaction=nonstopmode', '-halt-on-error', tex.name], cwd=tex.parent, capture_output=True, text=True, encoding='utf8', errors='replace')
+    (backup / f'compile_pass_{n}.txt').write_text(value.stdout + value.stderr, encoding='utf8')
+    if value.returncode:
+        raise RuntimeError('Layout repair compilation failed')
+manifest['reports'][0].update(tex=builder.pin(tex), pdf=builder.pin(tex.with_suffix('.pdf')))
+manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf8')
+builder.save(backup / 'repair_receipt.json', {'status': 'FONT_AND_PATH_WRAPPING_REPAIR_COMPILED', 'preserved_initial_artifacts': preserved, 'metric_values_modified': False, 'science_artifacts_modified': False, 'layout_only': True, 'new_pdf_sha256': builder.pin(tex.with_suffix('.pdf'))['sha256']})
+print(json.dumps({'repaired_paths': count, 'prior_layout_failure_preserved': True, 'actual_metrics_changed': False}))

@@ -1,0 +1,110 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Workspace-only publication receipt for the authorized preparation artifacts."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import urllib.request
+from datetime import datetime, timezone
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+BASE = '5050b6cc77ab75eacb96e1494a165d61142227f4'
+RUN_ID = 'run_20261002T014649_144967Z'
+RUN = REPO / 'docs/phase_b_finalfit_preparation/runs' / RUN_ID
+PREFIXES = ('config/decisions/', 'docs/researcher_decisions/', 'docs/phase_b_finalfit_preparation/', 'tests/phase_b_preparation/')
+FILES = {'config/training/phase_b_finalfit_preparation_v1.yaml', 'scripts/prepare_b0_phase_b_finalfit_v1.py', 'scripts/validate_b0_phase_b_preparation_v1.py', 'scripts/test_b0_phase_b_preparation_v1.py', 'scripts/report_b0_phase_b_preparation_v1.py', 'src/yuntapr/training/phase_b_preparation.py'}
+
+def read(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def audit():
+    index = read(RUN / 'artifact_sha256.json')
+    for name, ref in index.items():
+        p = RUN / name
+        assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+    assert {p.relative_to(RUN).as_posix() for p in RUN.rglob('*') if p.is_file()} == set(index) | {'artifact_sha256.json'}
+    for name, expected in read(RUN / 'historical_preservation.json')['baseline_files_sha256'].items():
+        assert sha(REPO / name) == expected, name
+    status = read(RUN / 'final_status.json')
+    assert status['B0_PHASE_A_ACCEPTED'] is True and status['TRANSFER_EPOCH_BUDGET_TO_PHASE_B'] == 11
+    assert status['PHASE_B_NORMALIZATION_READY'] is True and status['PHASE_B_NORMALIZATION_PIXELS'] == 5885220447
+    assert status['PHASE_B_FINALFIT_SCENES'] == 23447 and status['PHASE_B_STEPS_PER_EPOCH'] == 11724
+    assert status['PHASE_B_TOTAL_PLANNED_UPDATES'] == 128964
+    assert status['PHASE_B_AUTHORIZED'] is False and status['PHASE_B_FORMAL_TRAINING_STARTED'] is False
+    assert status['2025_PIXELS_READ'] == status['FORMAL_OPTIMIZER_STEPS'] == 0
+    tests = read(RUN / 'test_summary.json')
+    assert tests['status'] == 'PASS' and tests['total_tests_executed'] == 210 and tests['fixture_cleanup_success']
+    assert not Path(tests['fixture_root']).exists()
+    assert all((r['pass'] and r['failures'] == r['errors'] == r['skipped'] == 0 for r in tests['suites']))
+    dry = read(RUN / 'engineering_dryrun.json')
+    assert dry['status'] == 'PASS' and dry['temporary_model_optimizer_released'] and (dry['checkpoint_load_calls'] == 0)
+    assert [b['batch_size'] for b in dry['batches']] == [2, 1]
+    norm = read(RUN / 'normalization_phaseB_finalfit_2023_2024.json')
+    assert norm['fit_years'] == [2023, 2024] and norm['ddof'] == 0 and (norm['valid_pixel_count'] == 5885220447)
+    for name, expected in read(RUN / 'completion_manifest.json')['code_sha256'].items():
+        assert sha(REPO / name) == expected, name
+    for ref in read(RUN / 'normalization_execution.json')['local_artifacts'].values():
+        p = Path(ref['absolute_local_path'])
+        assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256']
+    return {'status': 'PASS', 'artifact_hashes_checked': len(index), 'actual_final_tests': 210, 'formal_training_started': False}
+
+def changes(commit=None):
+    names = git('diff', '--name-status', '-z', BASE, commit) if commit else git('diff', '--cached', '--name-status', '-z')
+    parts = names.split(b'\x00')
+    parts = [p.decode('utf-8') for p in parts if p]
+    result = {}
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        assert action == 'A', 'Historical file modified: ' + name
+        assert name in FILES or name.startswith(PREFIXES), name
+        p = REPO / name
+        data = p.read_bytes()
+        assert p.suffix in ['.py', '.md', '.json', '.yaml', '.csv', '.log', '.txt'], name
+        assert len(data) <= 20000000 and b'\x00' not in data, name
+        data.decode('utf-8')
+        assert git('show', (commit or '') + ':' + name) == data, name
+        result[name] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest(), 'blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    assert result
+    return result
+
+def remote(commit, files):
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+    def get(suffix):
+        req = urllib.request.Request('https://api.github.com/repos/flyeagle-cex/YunTAPR-Net/' + suffix, headers={'User-Agent': 'YunTAPR-preparation-publication-audit', 'Accept': 'application/vnd.github+json'})
+        with opener.open(req, timeout=45) as response:
+            return json.load(response)
+    c = get('commits/main')
+    assert c['sha'] == commit and c['parents'][0]['sha'] == BASE
+    tree = get('git/trees/' + commit + '?recursive=1')
+    assert not tree.get('truncated')
+    entries = {r['path']: r for r in tree['tree']}
+    for p, ref in files.items():
+        assert entries[p]['sha'] == ref['blob_sha1'] and entries[p]['size'] == ref['bytes'], p
+    return {'status': 'PASS', 'main_commit': commit, 'remote_blobs_verified': len(files)}
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'run_id': RUN_ID, 'local': audit(), 'utc': datetime.now(timezone.utc).isoformat()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = changes(commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+        if args.remote:
+            result['remote'] = remote(commit, files)
+        receipt = ROOT / ('YunTAPR-phase-b-preparation-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        receipt.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(receipt)
+    print(json.dumps(result, ensure_ascii=False))

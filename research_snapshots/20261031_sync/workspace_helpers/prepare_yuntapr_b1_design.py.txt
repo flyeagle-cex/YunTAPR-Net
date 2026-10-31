@@ -1,0 +1,40 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Source-free B1 design preparation; no temporal audit or B1 implementation."""
+from datetime import datetime, timezone
+import hashlib
+import importlib.metadata
+import json
+from pathlib import Path
+import subprocess
+import sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.contracts.loader import sha256
+BASE = '4286f8151fea2185c99b3cea0c8e532e8cd90070'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+if git('rev-parse', 'HEAD').decode().strip() != BASE or git('status', '--porcelain'):
+    raise ValueError('Clean researcher-authorized baseline required')
+with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+    history = {}
+    for entry in git('ls-tree', '-r', '-z', BASE).decode('utf-8').rstrip('\x00').split('\x00'):
+        meta, name = entry.split('\t', 1)
+        data = (REPO / name).read_bytes()
+        digest = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()
+        if digest != meta.split()[2]:
+            raise ValueError('Baseline artifact changed')
+        history[name] = {'git_blob_sha1': digest, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
+    runid = 'run_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+    design = REPO / 'docs/b1_scientific_design' / 'candidates' / runid
+    audit = REPO / 'docs/b1_temporal_audit' / 'runs' / runid
+    design.mkdir(parents=True, exist_ok=False)
+    audit.mkdir(parents=True, exist_ok=False)
+    gate.save(audit / 'history_before.json', history)
+    evidence = {'baseline': BASE, 'run_id': runid, 'design_directory': str(design), 'audit_directory': str(audit), 'phase': 'CANDIDATE_EVIDENCE_PREPARATION', 'B1_DESIGN_FROZEN': False, 'slot_definition_approved': False, 'temporal_audit_executed': False, '2025_FINAL_TEST_EXECUTED': False, '2025_MODEL_INFERENCE_SCENES': 0, '2025_RAW_PIXELS_READ': 0, 'normalization_fitting_executed': False, 'B1_TRAINING_STARTED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'baseline_file_count': len(history), 'python': sys.executable, 'package_versions': {n: importlib.metadata.version(n) for n in ('torch', 'numpy', 'netCDF4', 'PyYAML')}, 'scientific_source_sha256': {n: sha256(REPO / n) for n in ('config/science_contract_v1.1.yaml', 'config/b0_engineering_v4.yaml', 'config/training/phase_a_training_protocol_v1.yaml', 'src/yuntapr/models/backbone_b0.py', 'src/yuntapr/models/blocks.py', 'src/yuntapr/models/probability_heads.py', 'src/yuntapr/data/formal_policy.py', 'docs/development_qc/runs/run_20260930T075627Z/manifest.json', 'stage0-b0-evidence/evidence/outputs/stage0_p0_audit/run_20260927T161311_417313Z/HIMAWARI_202407/HIMAWARI_202407_LATENCY_SUMMARY.md')}, 'raw_source_open_events': source.raw_open_events, 'created_utc': gate.now()}
+    gate.save(design / 'candidate_evidence_manifest.json', evidence)
+    (ROOT / 'YunTAPR-active-b1-design-audit-v1.json').write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps({'run_id': runid, 'baseline_files_unchanged': len(history), 'raw_pixels_read': 0}, ensure_ascii=True))

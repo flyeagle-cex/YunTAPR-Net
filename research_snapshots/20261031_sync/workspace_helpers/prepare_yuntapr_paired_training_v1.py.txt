@@ -1,0 +1,35 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import datetime, hashlib, json, subprocess, shutil
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+baseline = '6c7d436cfbab70f3d9ef181c59c938ca14bb3afa'
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip() == baseline
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO, text=True).strip()
+runid = 'run_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+run = REPO / 'docs/paired_phase_a_authorized/runs' / runid
+run.mkdir(parents=True, exist_ok=False)
+
+def save(p, v):
+    with p.open('x', encoding='utf-8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+paths = subprocess.check_output(['git', 'ls-files', '-z'], cwd=REPO).decode('utf8').split('\x00')[:-1]
+snapshot = {p: hashlib.sha256((REPO / p).read_bytes()).hexdigest() for p in paths}
+assert len(snapshot) == 2061
+save(run / 'historical_file_snapshot.json', {'baseline_commit': baseline, 'files': snapshot, 'file_count': len(snapshot), 'scope': 'All baseline tracked files, including source and historical scientific evidence; no exclusions'})
+archive = run / 'baseline_execution_sources'
+for rel in paths:
+    if rel.startswith('src/yuntapr/') and rel.endswith('.py') or rel in ('scripts/paired_phase_a_entry.py', 'scripts/train_b0_matched_phase_a_v1.py', 'scripts/train_b1_phase_a_v1.py'):
+        dest = archive / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(REPO / rel, dest)
+attachments = {}
+for name, folder in [('formal_training_authorization', '36a59e44-f394-4512-8647-fe92ef7ed177'), ('audit_strengthening_approval', '3e9cd9f8-8640-47e7-af6e-670f04b77434')]:
+    p = Path('<PRIVATE_LOCATOR_f126212c2a3c>') / folder / '已粘贴的文本.txt'
+    attachments[name] = {'absolute_local_path': str(p), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+active = {'baseline': baseline, 'run_id': runid, 'run_directory': str(run), 'approval_references': attachments, 'formal_runs': {}, 'staging_parent': '<PRIVATE_LOCATOR_1524ffa8366d>'}
+save(run / 'researcher_authorization_references.json', attachments)
+save(BASE / 'YunTAPR-active-paired-training-v1.json', active)
+print(json.dumps({'run_id': runid, 'historical_file_count': len(snapshot), 'original_files_modified': 0, 'formal_optimizer_steps': 0, '2025_raw_access': 0}, indent=2))

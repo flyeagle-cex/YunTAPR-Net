@@ -1,0 +1,17 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+paths = ['src/yuntapr/training/paired_phase_a.py', 'scripts/paired_phase_a_entry.py', 'scripts/preflight_b1_b0_matched_phase_a_v1.py']
+refs = {}
+for rel in paths:
+    p = run / 'engineering_execution_sources' / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_bytes((REPO / rel).read_bytes())
+    refs[rel] = {'snapshot_path': p.relative_to(REPO).as_posix(), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+(run / 'engineering_execution_source_archive.json').write_text(json.dumps(refs, indent=2), encoding='utf-8')
+print('Archived preflight sources before authorization/checkpoint-recovery hardening')

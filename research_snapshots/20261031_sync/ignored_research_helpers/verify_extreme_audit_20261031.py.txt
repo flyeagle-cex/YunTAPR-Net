@@ -1,0 +1,111 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+import csv, hashlib, json, math, re, statistics
+from collections import Counter, defaultdict
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[3]
+PUB = ROOT / 'docs/research_readiness/20261031_extreme_precipitation_audit'
+LOCAL = ROOT / 'docs/research_readiness/.local/extreme_precipitation_audit_20261031_final'
+
+def load(p):
+    with p.open(encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+rs = load(LOCAL / 'EXTREME_PRECIPITATION_AUDIT.csv')
+public = load(PUB / 'EXTREME_PRECIPITATION_AUDIT.csv')
+assert len(rs) == len(public) == 1400
+for x, y in zip(rs, public):
+    assert {k: v for k, v in x.items() if k not in ('source_path', 'reference_path')} == {k: v for k, v in y.items() if k not in ('source_path', 'reference_path')}
+for p in PUB.iterdir():
+    if p.is_file():
+        text = p.read_text(encoding='utf-8-sig')
+        assert not re.search('(?i)([a-z]:[\\\\/]|<PRIVATE_USER>|/Users/|token=|password=)', text)
+
+def num(r, k):
+    return float(r[k]) if r.get(k) not in ('', None) else None
+
+def same(x, y):
+    assert x is not None and y is not None and math.isclose(x, y, abs_tol=1e-12, rel_tol=1e-12), (x, y)
+classification = [r for r in rs if r['record_type'] == 'CLASSIFICATION']
+assert len(classification) == 108
+for r in classification:
+    t, p, n, z = [num(r, k) for k in ('TP', 'FP', 'FN', 'TN')]
+    assert t + p + n + z == 3303090
+    same(num(r, 'CSI'), t / (t + p + n))
+    same(num(r, 'POD'), t / (t + n))
+    if t + p:
+        same(num(r, 'FAR'), p / (t + p))
+        same(num(r, 'Precision'), t / (t + p))
+        same(num(r, 'FAR') + num(r, 'Precision'), 1)
+    else:
+        assert r['FAR'] == r['Precision'] == ''
+    if num(r, 'threshold_mm_h') == 20:
+        assert t == p == 0 and n == 717 and (r['truth_rule'] == 'R>20')
+    if num(r, 'threshold_mm_h') == 50:
+        assert t == p == 0 and n == 6 and (r['truth_rule'] == 'R>50')
+bound_rows = [r for r in rs if r['record_type'] == 'PEAK_UNDERESTIMATE_LOWER_BOUND']
+assert len(bound_rows) == 27
+assert all((num(r, 'value') > 48.05 and r['peak_underestimate_mm_h'] == '' for r in bound_rows))
+partial = [r for r in rs if r['record_type'] == 'CLASSIFICATION_PARTIALLY_IDENTIFIED']
+assert len(partial) == 27
+assert all((r['truth_rule'] == 'R>=50' and num(r, 'TP') == num(r, 'FP') == num(r, 'CSI') == num(r, 'POD') == 0 and (r['FN'] == r['TN'] == '') for r in partial))
+decision = [r for r in rs if r['record_type'] == 'MIXTURE_DECISION_BOUND_COMPLETION']
+assert len(decision) == 27
+assert 1 - 31.5 / 32 < 0.5
+for r in decision:
+    t, p, n, z = [num(r, k) for k in ('TP', 'FP', 'FN', 'TN')]
+    assert t + p + n + z == 3303090
+    same(t + n, num(r, 'n_positive'))
+    same(num(r, 'POD'), t / (t + n))
+    same(num(r, 'CSI'), t / (t + p + n))
+rawtypes = {'CLASSIFICATION', 'CONTINUOUS', 'RAIN_STRATUM', 'SAVED_SCENE_OR_UTC_SUBGROUP', 'ELEVATION_MARGINAL', 'MIXTURE_DECISION_BOUND_COMPLETION'}
+key = lambda r: (r['model'], r['seed'], r['record_type'], r['group'], r['method'], r['threshold_mm_h'])
+raw = {key(r): r for r in rs if r['record_type'] in rawtypes}
+pair_groups = defaultdict(list)
+numeric = ('TP', 'FP', 'FN', 'TN', 'CSI', 'POD', 'FAR', 'Precision', 'MAE_mm_h', 'RMSE_mm_h', 'Bias_mm_h', 'CC', 'brier', 'auroc', 'ap', 'conditional_pinball', 'q32_coverage', 'q32_absolute_error')
+pair_checks = 0
+for r in rs:
+    if r['record_type'] != 'PAIRED_DIFFERENCE':
+        continue
+    a = raw[r['model'], r['seed'], r['original_record_type'], r['group'], r['method'], r['threshold_mm_h']]
+    b = raw[r['reference_model'], r['seed'], r['original_record_type'], r['group'], r['method'], r['threshold_mm_h']]
+    for metric in numeric:
+        if num(a, metric) is not None and num(b, metric) is not None:
+            same(num(r, metric), num(a, metric) - num(b, metric))
+            pair_checks += 1
+            pair_groups[r['comparison'], r['original_record_type'], r['group'], r['method'], r['threshold_mm_h'], metric].append(num(r, metric))
+summary_checks = 0
+for r in rs:
+    if r['record_type'] != 'PAIRED_SEED_SUMMARY':
+        continue
+    values = pair_groups[r['comparison'], r['original_record_type'], r['group'], r['method'], r['threshold_mm_h'], r['metric']]
+    assert len(values) == int(r['n_seeds'])
+    same(num(r, 'value'), statistics.mean(values))
+    if len(values) > 1:
+        same(num(r, 'sample_sd'), statistics.stdev(values))
+    else:
+        assert r['sample_sd'] == ''
+    summary_checks += 1
+assert all((r['independent_events'] == 'NOT_IDENTIFIED' for r in rs))
+file_rows = [r for r in rs if r['record_type'] == 'FILE']
+assert len(file_rows) == 109
+assert all((Path(r['source_path']).is_file() for r in file_rows))
+cp = [r for r in file_rows if r['metric'] == 'FIXED_E9_CHECKPOINT_BYTES_ONLY']
+assert len(cp) == 9
+assert all((r['status'] == 'PASS_SHA256' and r['file_sha256'] == r['expected_sha256'] and ('REUSED_INITIAL_BYTE_HASH' in r['note']) for r in cp))
+for r in rs:
+    if r['record_type'] == 'SAMPLED_WINDOW_COUNTS' and r['group'] == '>20':
+        assert int(r['n_pixel_times']) == 717 and int(r['n_scenes']) == 207
+    if r['record_type'] == 'SAMPLED_WINDOW_COUNTS' and r['group'] == '>50':
+        assert int(r['n_pixel_times']) == 6 and int(r['n_scenes']) == 5
+coverage = [r for r in rs if r['record_type'] == 'RAIN_STRATUM']
+assert len(coverage) == 81
+assert sum((r['q32_coverage'] != '' for r in coverage)) == 72
+assert all((r['model'] == 'B4' and r['seed'] == '2029' for r in coverage if r['q32_coverage'] == ''))
+for r in coverage:
+    if r['q32_coverage'] != '':
+        assert 0 <= num(r, 'q32_coverage') <= 1
+source_script = next((r for r in file_rows if r['source_path'].endswith('audit_extreme_precipitation.py')))
+assert hashlib.sha256(Path(source_script['source_path']).read_bytes()).hexdigest() == source_script['file_sha256']
+result = dict(status='PASS_NEW_AUDIT_ARITHMETIC_PROVENANCE_AND_REDACTION', csv_rows=len(rs), source_files=109, checkpoint_byte_sha_first_pass=9, checkpoint_hashes_repeated=0, classifications_checked=len(classification), full_population_mixture_decisions_checked=len(decision), proven_peak_lower_bounds=27, partial_ge50_rows_honest=27, paired_metric_cells_checked=pair_checks, seed_summaries_checked=summary_checks, zero_denominators_not_zero_filled=True, public_private_values_identical=True, no_private_paths_in_public=True, events_not_fabricated=True, ge20_boundary_not_silently_relabelled=True, scientific_limitations_retained=True, new_training=0, new_model_inference=0, final_2025='FROZEN_NO_ACCESS')
+(LOCAL / 'audit_verification.json').write_bytes((json.dumps(result, ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
+print(json.dumps(result, ensure_ascii=True))

@@ -1,0 +1,62 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Decision and checks complete before deletion. Every target is a single
+# verified file directly inside the staging tree; no recursive operation.
+"""Remove only process-owned public-export data payloads; retain hash provenance."""
+import csv
+import hashlib
+from pathlib import Path
+ROOT = Path(__file__).resolve().parent / 'github_upload_candidate'
+MANIFEST = ROOT / 'manifests/included_files.csv'
+PUBLIC_OMISSIONS = ROOT / 'manifests/public_repository_omissions.csv'
+
+def sha(path):
+    h = hashlib.sha256()
+    with path.open('rb') as f:
+        for b in iter(lambda: f.read(4 * 1024 * 1024), b''):
+            h.update(b)
+    return h.hexdigest()
+
+def write_csv(path, rows, cols):
+    with path.open('x', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=cols)
+        w.writeheader()
+        w.writerows(rows)
+
+def main():
+    assert ROOT.is_dir() and (not PUBLIC_OMISSIONS.exists())
+    rows = list(csv.DictReader(MANIFEST.open(encoding='utf-8-sig')))
+    kept, removed = ([], [])
+    for x in rows:
+        rel = Path(x['relative_path'])
+        src = ROOT / rel
+        if not src.is_file() or src.is_symlink() or src.resolve().is_relative_to(ROOT.resolve()) is False:
+            raise ValueError(f'Unsafe/missing candidate path: {rel}')
+        reason = None
+        if src.suffix.lower() in {'.nc', '.npz', '.geojson'}:
+            reason = 'SCIENTIFIC_ARRAY_OR_GEOMETRY_PAYLOAD_NOT_IN_PUBLIC_REPOSITORY'
+        elif rel.name == 'gadm41_CHN_1.original_member.json':
+            reason = 'GADM_ORIGINAL_DATA_NO_REDISTRIBUTION_PERMISSION'
+        elif rel.name.startswith('boundary_difference_cells.'):
+            reason = 'GADM_DERIVED_MASK_CELL_DATA_NO_REDISTRIBUTION_PERMISSION'
+        if reason:
+            if src.stat().st_size != int(x['size_bytes']) or sha(src) != x['sha256']:
+                raise ValueError(f'Candidate changed before curation: {rel}')
+            removed.append({**x, 'reason': reason})
+        else:
+            kept.append(x)
+    for x in removed:
+        (ROOT / x['relative_path']).unlink()
+    write_csv(PUBLIC_OMISSIONS, removed, ['relative_path', 'source', 'size_bytes', 'sha256', 'reason'])
+    original = ROOT / 'manifests/included_before_public_curation.csv'
+    write_csv(original, rows, ['relative_path', 'source', 'size_bytes', 'sha256'])
+    MANIFEST.unlink()
+    write_csv(MANIFEST, kept, ['relative_path', 'source', 'size_bytes', 'sha256'])
+    readme = ROOT / 'README.md'
+    old = readme.read_text(encoding='utf-8')
+    header = f"# YunTAPR-Net public GitHub export\n\nThe target repository is public. [GADM's license](https://gadm.org/license.html) does not permit redistribution of its data without prior permission. This export therefore omits the GADM source geometry, derived mask cell payloads, and all `.nc`/`.npz`/`.geojson` scientific arrays or geometry payloads. Their local source paths, sizes, and SHA256 values remain in `manifests/public_repository_omissions.csv`; the frozen source files themselves remain unchanged on the workstation. No claim of legal permission to publish those payloads is made.\n\nThe current public export contains {len(kept)} copied source/evidence files ({sum((int(x['size_bytes']) for x in kept)):,} bytes). The original staging selection was {len(rows)} files; {len(removed)} payloads were removed before Git initialization or push. `manifests/included_files.csv` lists exactly what remains. Existing run reports may link to locally preserved files that this public snapshot cannot carry; the hash and provenance records allow audit against the local freeze.\n\n"
+    readme.write_text(header + old, encoding='utf-8')
+    assert all(((ROOT / x['relative_path']).is_file() and sha(ROOT / x['relative_path']) == x['sha256'] for x in kept))
+    assert all((not (ROOT / x['relative_path']).exists() for x in removed))
+    print(f"PUBLIC_EXPORT_READY files={len(kept)} bytes={sum((int(x['size_bytes']) for x in kept))} removed={len(removed)}")
+if __name__ == '__main__':
+    main()

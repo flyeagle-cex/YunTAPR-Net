@@ -1,0 +1,12 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const root=process.cwd(),require=createRequire(path.join(root,'docs/research_readiness/.local/complete_workbook_runtime_20261030/entry.cjs'));
+const {FileBlob,SpreadsheetFile}=await import(pathToFileURL(require.resolve('@oai/artifact-tool')).href);
+const folder=path.join(root,'outputs/01a17251-29bb-7172-89f8-380b42c4d290');
+const wb=await SpreadsheetFile.importXlsx(await FileBlob.load(path.join(folder,'YunTAPR-Net_V1.3_完整指标与消融对照_20261031.xlsx')));
+for(const [name,range] of [['title_complete_merged.png','A1:L3'],['table_body_left.png','A4:K12']]){
+ const png=await wb.render({sheetName:'完整指标',range,scale:1.2,format:'png'});await fs.writeFile(path.join(folder,'previews',name),new Uint8Array(await png.arrayBuffer()));
+}
+console.log('Saved-file title and left table rendered read-only; workbook not rewritten.');

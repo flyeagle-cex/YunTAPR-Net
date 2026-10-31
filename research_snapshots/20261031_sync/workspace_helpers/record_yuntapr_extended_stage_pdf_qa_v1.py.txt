@@ -1,0 +1,23 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Record actual manual all-page inspection against a pinned render manifest."""
+from pathlib import Path
+import argparse, datetime, hashlib, json
+BASE = Path(__file__).parent
+parser = argparse.ArgumentParser()
+parser.add_argument('manifest', type=Path)
+parser.add_argument('--all-pages-inspected', action='store_true', required=True)
+args = parser.parse_args()
+v = json.loads(args.manifest.read_text(encoding='utf8'))
+assert v['total_pages'] > 0 and args.all_pages_inspected
+for r in v['reports']:
+    p = Path(r['pdf'])
+    assert hashlib.sha256(p.read_bytes()).hexdigest() == r['sha256']
+    assert not r['latex_layout_warnings']
+    assert r['page_count'] == len(r['images']) and all((Path(p).is_file() for p in r['images']))
+out = args.manifest.parent / 'pdf_visual_qa.json'
+result = {'status': 'PASS_ACTUAL_ALL_PAGE_VISUAL_REVIEW', 'stage': v['stage'], 'render_manifest': str(args.manifest), 'render_manifest_sha256': hashlib.sha256(args.manifest.read_bytes()).hexdigest(), 'reviewed_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'total_pages': v['total_pages'], 'reports': [{'pdf': r['pdf'], 'sha256': r['sha256'], 'page_count': r['page_count'], 'all_pages_visually_verified': True, 'overlap_or_clipping': False, 'missing_glyphs': False, 'legibility_pass': True} for r in v['reports']], 'all_pages_visually_verified': True, 'scientific_artifacts_modified': False, 'metric_values_modified': False}
+with out.open('x', encoding='utf8', newline='\n') as f:
+    json.dump(result, f, ensure_ascii=False, indent=2)
+    f.write('\n')
+print(json.dumps({'status': result['status'], 'total_pages': result['total_pages']}))

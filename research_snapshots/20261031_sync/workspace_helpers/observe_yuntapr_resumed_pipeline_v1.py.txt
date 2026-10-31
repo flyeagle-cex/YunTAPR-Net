@@ -1,0 +1,36 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Compact read-only observation; no data/model/process interventions."""
+from pathlib import Path
+import json, datetime
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8')) if Path(p).exists() else None
+resume = read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+root = Path(resume['resume_directory'])
+origin = read(resume['origin_registry_path'])
+extension = read(resume['extension_registry_path'])
+extroot = Path(extension['run_directory'])
+value = {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'models': {}}
+for phase, registry in [('A', origin), ('B', read(extroot / 'phase_b_execution_registry.json'))]:
+    if registry:
+        for kind, spec in registry['formal_runs'].items():
+            public = Path(spec['public_directory'])
+            counter = read(public / 'execution_counters.json')
+            status = read(public / 'final_status.json')
+            history = read(public / 'training_validation_history.json')
+            fields = ('phase', 'epoch', 'completed_epoch', 'train_steps_this_epoch', 'validation_scenes_seen', 'FORMAL_OPTIMIZER_STEPS', 'ALL_ATTEMPTS_ACTUAL_FORMAL_OPTIMIZER_STEPS')
+            if counter and any((counter.get(k, 0) for k in ('PIXELS_2025_READ', 'RAW_ACCESS_2025', 'MODEL_INFERENCE_SCENES_2025'))):
+                raise RuntimeError('2025 telemetry violation')
+            value['models'][phase + '_' + kind] = {'status': status['status'] if status else 'RUNNING' if counter else 'NOT_RUN', **{k: (counter or {}).get(k) for k in fields}, 'BEST_epoch': history[-1]['BEST_epoch'] if history else None, 'early_stop_counter': history[-1]['early_stop_counter'] if history else None}
+pipeline_journal = Path(resume.get('pipeline_journal', root / 'sequential_execution'))
+starts = sorted(pipeline_journal.glob('*_start.json'), key=lambda p: p.stat().st_mtime_ns)
+value['stage'] = starts[-1].stem.removesuffix('_start') if starts else 'WAIT_B1_RESUME_COMPLETION'
+value['historical_failures'] = [str(p) for p in root.rglob('STOP*failure*.json') if p.parent != pipeline_journal]
+value['failures'] = [str(p) for p in pipeline_journal.glob('STOP*failure*.json')]
+if (root / 'STOP_resume_failure.json').exists():
+    value['failures'].append(str(root / 'STOP_resume_failure.json'))
+value['core_complete'] = (pipeline_journal / 'core_pipeline_completion.json').exists()
+value['2025_RAW_ACCESS'] = 0
+print(json.dumps(value, ensure_ascii=False), flush=True)

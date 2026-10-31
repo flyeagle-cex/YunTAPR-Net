@@ -1,0 +1,17 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json
+ROOT = Path(__file__).parent
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+p = run / 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.tex'
+old = p.read_bytes()
+(run / 'document_layout_before_2.tex').write_bytes(old)
+text = old.decode('utf-8')
+text = text.replace('科学效果。}loader', '科学效果。}\\par\nloader')
+text = text.replace('\\begingroup\\small\\setlength{\\parskip}{4pt}', '\\begingroup\\small\\setlength{\\parskip}{4pt}\\renewcommand{\\arraystretch}{1}')
+text = text.replace('详尽norm/sample/source/code hashes、两轮失败与复验、GPU原始读数、copy/read/cleanup日志、loss及grad norm见同名Markdown和独立run目录。此文档LaTeX源可手动修改；科学合同变更仍须另行研究者决策。', '完整数值、来源与失败记录见同名Markdown和run日志。LaTeX可编辑；科学合同变更仍须研究者决策。')
+p.write_text(text, encoding='utf-8', newline='\n')
+with (run / 'document_layout_repair_2.json').open('x', encoding='utf-8') as f:
+    json.dump({'reason': 'Separate loader paragraph to eliminate remaining 1.9pt overfull; compact test table and redundant closing reference to remove orphan last line', 'before_sha256': hashlib.sha256(old).hexdigest(), 'after_sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'snapshot': 'document_layout_before_2.tex'}, f, indent=2)

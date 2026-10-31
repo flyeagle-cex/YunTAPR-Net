@@ -1,0 +1,23 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json
+ROOT = Path(__file__).parent
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+p = run / 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.tex'
+old = p.read_bytes()
+(run / 'document_layout_before.tex').write_bytes(old)
+text = old.decode('utf-8')
+text = text.replace('\\renewcommand{\\arraystretch}{1.15}', '\\renewcommand{\\arraystretch}{1.15}' + '\n' + '\\ctexset{section={beforeskip=10pt,afterskip=7pt}}\\raggedbottom\\emergencystretch=2em')
+text = text.replace('amsgrad/maximize/capturable/differentiable/foreach/fused', 'amsgrad, maximize, capturable, differentiable, foreach, fused')
+text = text.replace('copy/read/time/bytes/cleanup', 'copy, read, time, bytes, cleanup')
+text = text.replace('optimizer/backward', 'optimizer / backward').replace('raw/checkpoint', 'raw / checkpoint')
+text = text.replace('\\section*{6. 测试闭环与可追溯历史}', '\\begingroup\\small\\setlength{\\parskip}{4pt}' + '\n' + '\\section*{6. 测试闭环与可追溯历史}')
+text = text.replace('\\end{document}', '\\endgroup' + '\n' + '\\end{document}')
+text = text.replace('\\noindent ', '\\par\\noindent ')
+text = text.replace('两种正式训练与2025 Final Test。FORMAL', '两种正式训练与2025 Final Test。\\par FORMAL')
+p.write_text(text, encoding='utf-8', newline='\n')
+with (run / 'document_layout_repair.json').open('x', encoding='utf-8') as f:
+    json.dump({'reason': 'Four initial overfull boxes and orphan fifth page; break long English lists, compact final page, tighten headings without changing scientific content', 'before_sha256': hashlib.sha256(old).hexdigest(), 'after_sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'snapshot': 'document_layout_before.tex'}, f, indent=2)
+print('Layout-only repair recorded')

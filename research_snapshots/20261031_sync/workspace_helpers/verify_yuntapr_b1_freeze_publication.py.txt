@@ -1,0 +1,99 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Review an additions-only B1 freeze and verify the exact official Git tree."""
+from pathlib import Path
+import argparse, hashlib, json, re, subprocess
+import verify_yuntapr_final_test_preflight_publication as remote_helper
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+active = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+BASE = active['baseline']
+RUN = Path(active['run_directory'])
+INDEX = RUN / 'delivery_artifact_sha256.json'
+sys_paths = [str(REPO / 'src'), str(REPO)]
+import sys
+sys.path[:0] = sys_paths
+from yuntapr.data import b1_scientific_freeze as f
+from yuntapr.evaluation import catalogue_gate_b0 as g
+NEW = {f.DESIGN, f.PROTOCOL, 'config/b1/b1_approved_scientific_freeze_registry_v1.json', *f.CODE, 'tests/b1_scientific_freeze/__init__.py', 'tests/b1_scientific_freeze/test_scientific_freeze.py', 'tests/b1_scientific_freeze/test_freeze_artifacts.py', 'docs/b1_scientific_freeze/README.md'}
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def audit():
+    with g.PreflightSourceGuard() as guard, g.legacy.FinalInferenceGuard():
+        assert f.verify_history(RUN) == 1941
+        status = f.read(RUN / 'final_status.json')
+        norm = f.read(RUN / 'normalization_b1_2023_shared_v1.json')
+        executed = f.read(RUN / 'normalization_execution.json')
+        tests = f.read(RUN / 'closure_test_summary.json')
+        registry = f.read(REPO / 'config/b1/b1_approved_scientific_freeze_registry_v1.json')
+        for key in ('B1_DESIGN_FROZEN', 'B1_MISSING_POLICY_FROZEN', 'B1_SAMPLE_SETS_FROZEN', 'B1_NORMALIZATION_FROZEN', 'B1_FAIRNESS_PRIMARY_SAMPLE_SET_FROZEN'):
+            assert status[key] is True
+        for key in ('B1_TRAINING_PROTOCOL_FULLY_FROZEN', 'B1_TRAINING_AUTHORIZED', 'B1_TRAINING_STARTED', 'B0_MATCHED_CONTROL_TRAINING_AUTHORIZED', 'B0_MATCHED_CONTROL_TRAINING_STARTED', '2025_FINAL_TEST_EXECUTED', 'MODEL_PARAMETERS_UPDATED'):
+            assert status[key] is False
+        for key in ('2025_PIXELS_READ', '2025_MODEL_INFERENCE_SCENES', 'MODEL_FORWARD_CALLS', 'MODEL_CHECKPOINT_LOADS', 'OPTIMIZER_STEPS', 'BACKWARD_CALLS'):
+            assert status[key] == 0
+        assert tests['all_passed'] and tests['total_tests_executed'] == 71
+        assert [r['executed'] for r in tests['suites']] == [20, 11, 19, 11, 10]
+        assert all((r['passed'] and r['errors'] == r['failures'] == r['skipped'] == 0 for r in tests['suites']))
+        assert norm['valid_pixel_count'] == 15745292730 and norm['unique_frames_read'] == 33219
+        assert executed['source_guard_final_open_events'] == executed['telemetry']['raw_source_open_events'] == 66438
+        assert executed['telemetry']['cleanup_success'] and executed['owned_staging_files_remaining'] == 0
+        f.verify_refs([registry[k] for k in ('design', 'approved_training_protocol_items', 'sample_set_freeze', 'normalization')])
+        render = f.read(RUN / 'render_verification.json')
+        assert render['all_rendered_pages_visually_inspected'] and render['overfull_boxes'] == render['missing_glyphs'] == 0
+        assert render['pdf_sha256'] == sha(RUN / 'B1_SCIENTIFIC_FREEZE_REPORT_v1.pdf')
+        assert render['source_sha256'] == sha(RUN / 'B1_SCIENTIFIC_FREEZE_REPORT_v1.tex')
+        for name, ref in f.read(INDEX).items():
+            p = REPO / name
+            assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+        for name in ('B1_SCIENTIFIC_FREEZE_REPORT_v1.md', 'B1_SCIENTIFIC_FREEZE_REPORT_v1.tex'):
+            assert '人口' not in (RUN / name).read_text(encoding='utf-8')
+        assert guard.raw_open_events == 0
+    return {'status': 'PASS', 'historical_files_unchanged': 1941, 'Train': 10455, 'Validation': 10501, 'unique_2023_B13_frames_read': 33219, 'scene_slot_exposures': 62730, 'weighted_pixel_count': 15745292730, 'normalization_mean_K': norm['mean_K'], 'normalization_std_K': norm['std_K'], 'tests_passed': 71, 'B1_DESIGN_FROZEN': True, 'B1_TRAINING_PROTOCOL_FULLY_FROZEN': False, 'training_authorized': False, 'training_started': False, '2025_pixels_read': 0, 'optimizer_steps': 0, 'backward_calls': 0}
+
+def changes(commit=None):
+    parts = [x.decode('utf-8') for x in git(*(('diff', '--name-status', '-z', BASE, commit) if commit else ('diff', '--cached', '--name-status', '-z'))).split(b'\x00') if x]
+    files = {}
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        assert action == 'A' and (name in NEW or name.startswith(active['run_relative'] + '/')), (action, name)
+        p = REPO / name
+        data = p.read_bytes()
+        assert p.suffix in ('.py', '.md', '.tex', '.pdf', '.json', '.txt', '.csv') and len(data) < 20000000
+        if p.suffix == '.pdf':
+            assert data.startswith(b'%PDF-')
+        else:
+            assert b'\x00' not in data
+            data.decode('utf-8')
+            assert not re.search(b'ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|BEGIN (?:RSA |EC )?PRIVATE KEY', data)
+        assert git('show', (commit or '') + ':' + name) == data, name
+        files[name] = {'bytes': len(data), 'sha256': sha(p), 'blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    assert set(files) == set(f.read(INDEX)) | {INDEX.relative_to(REPO).as_posix()}
+    return files
+
+def remote(commit, files):
+    remote_helper.BASE = BASE
+    return remote_helper.remote(commit, files)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'local': audit()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = changes(commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+        if args.remote:
+            result['remote'] = remote(commit, files)
+        target = ROOT / ('YunTAPR-b1-freeze-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        f.save(target, result)
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(target)
+    print(json.dumps(result), flush=True)

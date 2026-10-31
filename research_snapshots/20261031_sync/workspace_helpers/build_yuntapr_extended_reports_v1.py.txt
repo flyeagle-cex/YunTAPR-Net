@@ -1,0 +1,163 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Additive Markdown/editable LaTeX/PDF reports from completed stage evidence."""
+from pathlib import Path
+import argparse, hashlib, json, subprocess
+import yaml
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+active = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+
+def pin(p):
+    p = Path(p)
+    h = hashlib.sha256()
+    with p.open('rb') as f:
+        for b in iter(lambda: f.read(1048576), b''):
+            h.update(b)
+    return {'path': str(p), 'bytes': p.stat().st_size, 'sha256': h.hexdigest()}
+
+def esc(v):
+    return ''.join(({'\\': '\\textbackslash{}', '_': '\\_', '&': '\\&', '%': '\\%', '#': '\\#', '$': '\\$', '{': '\\{', '}': '\\}', '~': '\\textasciitilde{}', '^': '\\textasciicircum{}'}.get(c, c) for c in str(v)))
+
+def value(v):
+    if isinstance(v, (dict, list)):
+        return json.dumps(v, ensure_ascii=False, allow_nan=False)
+    if v is None:
+        return '未定义 / not defined'
+    return str(v)
+
+def cell(v):
+    s = value(v)
+    if len(s) == 64 and all((c in '0123456789abcdef' for c in s)):
+        return '\\texttt{' + s[:32] + '}\\newline\\texttt{' + s[32:] + '}'
+    if ':\\' in s or ':/' in s:
+        return '{\\footnotesize\\EvidenceFont\\raggedright ' + '\\allowbreak{}'.join((esc(c) for c in s.replace('\\', '/'))) + '\\par}'
+    return esc(s)
+PREAMBLE = '\\documentclass[UTF8,11pt,fontset=windows]{ctexart}\n\\usepackage[a4paper,margin=23mm]{geometry}\n\\usepackage{amsmath,booktabs,longtable,tabularx,array,hyperref}\n\\newfontfamily\\EvidenceFont{Microsoft YaHei}\n\\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}\n\\setlength{\\parindent}{0pt}\\setlength{\\parskip}{5pt}\n\\renewcommand{\\arraystretch}{1.15}\n\\newcolumntype{Y}{>{\\raggedright\\arraybackslash}X}\n\\begin{document}\n'
+COMMON = '2025 原始数据读取、像元读取和模型推理样本数均为 0；2025 Final Test 未执行且未授权。B2 正式训练未授权。统计术语 population 在中文中表述为“样本集合”。所有模型和 optimizer 二进制仅存 F 盘，Git 仅保存来源、代码、配置、身份与报告。'
+
+def report(folder, name, title, sections, refs):
+    folder = Path(folder)
+    folder.mkdir(parents=True, exist_ok=True)
+    md = '# ' + title + '\n\n' + COMMON + '\n\n'
+    tex = PREAMBLE + '\\begin{center}{\\Large\\bfseries ' + esc(title) + '}\\end{center}' + '\n' + esc(COMMON) + '\n\n'
+    for heading, paragraph, fields in sections:
+        md += '## ' + heading + '\n\n' + paragraph + '\n\n'
+        tex += '\\section*{' + esc(heading) + '}\n' + esc(paragraph) + '\n\n'
+        if fields:
+            md += '| 项目 | 实际记录 |\n|---|---|\n' + ''.join(('| ' + esc(k).replace('\\_', '_') + ' | ' + value(v).replace('|', ' / ') + ' |\n' for k, v in fields)) + '\n'
+            tex += '\\begin{longtable}{@{}p{.30\\textwidth}p{.65\\textwidth}@{}}\\toprule 项目 & 实际记录\\\\\\midrule\\endhead' + '\n'
+            tex += '\n'.join((esc(k).replace('\\_', '\\_\\allowbreak{}') + ' & ' + cell(v) + ' \\\\' for k, v in fields)) + '\n' + '\\bottomrule\\end{longtable}' + '\n'
+    md += '## 可追溯证据\n\n'
+    tex += '\\section*{可追溯证据}' + '\n'
+    for p in refs:
+        ref = pin(p)
+        md += '- ' + ref['path'] + '\n  SHA256: ' + ref['sha256'] + '\n\n'
+        tex += cell(ref['path']) + '\n\n' + cell(ref['sha256']) + '\n\n'
+    tex += '\\end{document}' + '\n'
+    if '人口' in md or '人口' in tex:
+        raise ValueError('Statistical translation regression')
+    for suffix, text in [('.md', md), ('.tex', tex)]:
+        with (folder / (name + suffix)).open('x', encoding='utf8', newline='\n') as f:
+            f.write(text)
+    p = folder / (name + '.tex')
+    xelatex = Path('<PRIVATE_LOCATOR_ac4183a30422>')
+    for n in (1, 2):
+        r = subprocess.run([str(xelatex), '--disable-installer', '-interaction=nonstopmode', '-halt-on-error', p.name], cwd=folder, capture_output=True, text=True, encoding='utf8', errors='replace')
+        (folder / (name + f'.compile_pass_{n}.txt')).write_text(r.stdout + r.stderr, encoding='utf8')
+        if r.returncode:
+            raise RuntimeError('LaTeX compilation failed: ' + str(p))
+    return {'markdown': pin(p.with_suffix('.md')), 'tex': pin(p), 'pdf': pin(p.with_suffix('.pdf')), 'visual_review_pending': True}
+
+def review_reports():
+    p = run / 'phase_a_scientific_review/paired_scientific_review.json'
+    v = read(p)
+    assert v['status'] == 'PAIRED_FULL_REINFERENCE_PASS'
+    fields = []
+    for k in ('B0_MATCHED', 'B1'):
+        r = v[k]
+        m = r['reinference']
+        fields.extend([(k + ' BEST epoch', r['BEST']['epoch']), (k + ' BEST SHA256', r['BEST']['sha256']), (k + ' full validation scenes', 10501), (k + ' N_valid', m['N_valid'])])
+        fields.extend(((k + ' ' + key, m[key]) for key in ('global_val_core_loss', 'global_L_occ', 'global_core_L_qr', 'Brier_Score', 'AUROC', 'Average_Precision', 'conditional_mean_pinball', 'N_rain', 'prevalence', 'strict_crossing_count', 'nonfinite_count', 'support_violation_count')))
+        fields.append((k + ' reconciliation', r['reconciliation']['PASS']))
+    deltas = [(key, v[key]) for key in ('Delta_core', 'relative_delta_core_percent', 'Delta_Brier', 'Delta_AUROC', 'Delta_AP', 'Delta_conditional_pinball')]
+    tau = []
+    for i in range(32):
+        tau.extend([(f'tau {(i + 0.5) / 32} pinball Delta', v['per_tau_pinball_difference'][i]), (f'tau {(i + 0.5) / 32} coverage Delta', v['per_tau_coverage_difference'][i])])
+    return [report(p.parent, 'PAIRED_PHASE_A_SCIENTIFIC_REVIEW_v1', '配对 Phase-A 完整只读科学审阅', [('完整重新推理', '双方各自 BEST 在相同固定顺序的 10,501 个 2024 Validation 样本上重新推理；未选择新的 checkpoint，未做 calibration 或 threshold tuning。', fields), ('配对差异与继续规则', 'Delta 一律为 B1 减 B0-Matched。双方是否继续 FinalFit 由预先授权的合法完成及完整性 gate 决定，不由指标方向决定。', deltas), ('32 tau 诊断', '沿用原 rainy valid cells 条件诊断定义。完整各模型原值、coverage error 和对账证据保存在 JSON。', [*tau]), ('审阅边界', '只读主流程未创建 optimizer，未 backward，未修改模型参数。泛化及时间信息增量的科研解释由研究者审阅。', [('MODEL_PARAMETERS_UPDATED', False), ('OPTIMIZER_STEPS', 0), ('BACKWARD_CALLS', 0)])], [p])]
+
+def preparation_reports():
+    folder = run / 'phase_b_preparation'
+    p = folder / 'paired_phase_b_finalfit_protocol_v1.json'
+    v = read(p)
+    n = read(v['normalization']['path'])
+    execution = read(folder / 'normalization_execution.json')
+    assert execution['status'] == 'PASS_REAL_FINALFIT_NORMALIZATION'
+    return [report(folder, 'PAIRED_PHASE_B_FINALFIT_PREPARATION_FREEZE_v1', '配对 Phase-B FinalFit 准备与冻结', [('共同样本集合', '严格继承 common intersection 的 2023 年 10,455 和 2024 年 10,501 个样本，union 共 20,956 个。双方 scene 和 target identities 完全相同。', [('FinalFit scenes', 20956), ('B0 epoch budget', v['epoch_budgets']['B0_MATCHED']), ('B1 epoch budget', v['epoch_budgets']['B1']), ('common identity SHA', v['common_sample_identity']['sha256'])]), ('一个共享 FinalFit scaler', '真实读取所有独立帧，按六槽 scene-slot exposure 权重计入每个 native pixel；float32 Kelvin 解码、float64 moments、ddof=0。该新 scaler 同时用于 B0-Matched 与 B1，B0 仍只输入最新帧。', [(k, n[k]) for k in ('mean_K', 'std_K', 'ddof', 'scene_slot_exposures', 'valid_pixel_count', 'unique_frames_read')] + [('2023 exposures', n['year_exposures']['2023']), ('2024 exposures', n['year_exposures']['2024']), ('2025 exposures', 0), ('normalization SHA', v['normalization']['sha256'])]), ('冻结训练规则', 'fresh paired reseed=2026，无 Phase-A 权重、optimizer 或 scheduler transfer。沿用原 architecture/loss/AdamW/precision/loader/clip；不做 Validation、early stopping 或 BEST selection。FINAL 为各自固定预算最后完整 epoch。', [('physical batch', 2), ('accumulation', 1), ('drop_last', False), ('singleton tail', False), ('steps/epoch', 10478), ('W', 10478), ('U', 523900), ('base LR', 0.0001), ('min LR cosine only', 1e-06)]), ('运行前 gate', '正式入口仅在实际 source identity、完整 regression、独立 GPU 工程 preflight 全部通过后激活。此冻结文档不代表正式训练已经完成。', [])], [p, Path(v['normalization']['path']), folder / 'normalization_execution.json', folder / 'finalfit_six_slot_exposure_plan.csv', folder / 'phase_b_paired_initialization_manifest.json'])]
+
+def completion_reports():
+    integritypath = run / 'phase_b_integrity/final_status.json'
+    integrity = read(integritypath)
+    ready_path = run / 'final_test_readiness/final_status.json'
+    ready = read(ready_path)
+    b2path = run / 'b2_design_audit/final_status.json'
+    b2 = read(b2path)
+    assert integrity['status'] == 'BOTH_FINALFIT_INTEGRITY_PASS'
+    original_eval_path = Path(ready['evaluation_protocol']['path'])
+    original_eval = yaml.safe_load(original_eval_path.read_text(encoding='utf8'))
+    scope_note = ready_path.parent / 'protocol_binding_scope_note.json'
+    save(scope_note, {'inherited_evaluation_protocol': pin(original_eval_path), 'inheritance_scope': 'FIXED_METRIC_AND_DIAGNOSTIC_DEFINITIONS_ONLY', 'historical_original_B0_FINAL': original_eval['FINAL'], 'historical_original_B0_normalization': original_eval['normalization'], 'paired_new_FINAL_bindings': {k: ready['models'][k]['FINAL'] for k in ('B0_MATCHED', 'B1')}, 'paired_new_normalization': integrity['shared_normalization'], 'historical_protocol_and_original_runner_unchanged': True, 'paired_formal_2025_execution_runner_provenance_adapter_provided': False, 'future_required': 'Separate explicit model/scaler provenance adapter and researcher authorization; never silently replace historical B0 pins', 'FINAL_TEST_2025_AUTHORIZED': False, '2025_RAW_ACCESS': 0})
+    results = []
+    specs = read(run / 'phase_b_execution_registry.json')['formal_runs']
+    for k in ('B0_MATCHED', 'B1'):
+        v = integrity['models'][k]
+        public = Path(specs[k]['public_directory'])
+        history = read(public / 'training_history.json')
+        name = 'B0_MATCHED_PHASE_B_FINALFIT_REPORT_v1' if k == 'B0_MATCHED' else 'B1_PHASE_B_FINALFIT_REPORT_v1'
+        fields = [('epoch budget', v['epoch_budget']), ('completed epochs', v['completed_epochs']), ('formal optimizer steps', v['formal_updates']), ('FINAL path', v['FINAL']['absolute_local_path']), ('FINAL bytes', v['FINAL']['bytes']), ('FINAL SHA256', v['FINAL']['sha256']), ('FINAL model SHA256', v['FINAL']['model_state_sha256']), ('parameter count', v['parameter_count']), ('normalization SHA', v['normalization']['sha256'])]
+        rows = [(f"epoch {r['epoch']} training global core", r['training']['global_core_loss']) for r in history]
+        results.append(report(public, name, k + ' Phase-B FinalFit 正式训练报告', [('正式完成与身份', '独立 fresh paired initialization，未加载 Phase-A 状态。仅训练共同 20,956 个 2023/2024 样本，无 Validation/BEST selection；只保存完整 epoch boundary LAST/FINAL。', fields), ('训练记录', '训练损失只描述 FinalFit 拟合集，不用于判断 generalization，不能据此宣称 B1 更好。固定 50 epoch scheduler 数学 horizon 未压缩到实际预算。', rows), ('数值与 I/O 审计', '双方共享一个 scaler；每个 scene 每个 epoch 恰好一次、batch2 分母 6860、全 epoch 分母 71,879,080。英文 staging 每次验证大小和 SHA 后清理，原 H 盘只读。', [('steps/epoch', 10478), ('W', 10478), ('U', 523900)] + list(v['source_io'].items()))], [public / 'final_status.json', public / 'checkpoint_registry.json', public / 'training_history.json', public / 'run_manifest.json', integritypath]))
+    results.append(report(integritypath.parent, 'B0_MATCHED_B1_FINALFIT_INTEGRITY_COMPARISON_v1', '配对 FinalFit 完整性比较', [('完整性比较', '本报告比较身份、来源及合法执行，不比较泛化性能；不进行 2025 inference。两个 FINAL 均通过可读性、SHA、有限性、参数数目、完整 epoch 及实际步数核验。', [(k + ' ' + field, integrity['models'][k][field]) for k in ('B0_MATCHED', 'B1') for field in ('epoch_budget', 'completed_epochs', 'formal_updates', 'parameter_count')] + [('same FinalFit identities', True), ('shared normalization SHA', integrity['shared_normalization']['sha256']), ('Phase-A transfer', False), ('Validation/BEST selection', False)]), ('历史与只读边界', '旧 Phase-A metadata 和所有 checkpoint 文件 SHA 均重新核验，基线历史文件逐文件核验；本次 closure 的 optimizer/backward 为 0。', [('MODEL_PARAMETERS_UPDATED_BY_CLOSURE', False), ('OPTIMIZER_STEPS_BY_CLOSURE', 0), ('BACKWARD_CALLS_BY_CLOSURE', 0)])], [integritypath, run / 'phase_b_integrity/all_completed_checkpoint_inventory.json', run / 'phase_a_completed_immutable_snapshot.json']))
+    results.append(report(ready_path.parent, 'FINAL_TEST_READINESS_PACKET_v1', '2025 Final Test 身份准备包', [('已准备身份', '仅使用 Git 中既有 catalogue 身份、checkpoint identity/hash、scaler 和 frozen evaluation protocol。未重新构建 catalogue，未读取任何 2025 raw source。', [('frozen eligible identities', 10244), ('eligible manifest SHA', ready['eligible_manifest']['sha256']), ('candidate catalogue SHA', ready['candidate_catalogue']['sha256']), ('freeze record SHA', ready['catalogue_freeze_record']['sha256'])] + [(k + ' FINAL SHA', ready['models'][k]['FINAL']['sha256']) for k in ('B0_MATCHED', 'B1')]), ('fixture 接口与资格限制', '两个新 FINAL 均通过 synthetic finite 输入的只读接口 preflight。既有 catalogue 证明 B0 latest-frame 资格；它并未证明 B1 全六槽的真实 2025 readability/QC/causality。10244 identities 可绑定 schema，不等于 B1 已获得可执行的正式测试资格。既有 evaluation protocol 的指标及诊断定义被继承，其历史原 B0 FINAL/scaler 身份保持不变；未来执行新配对 FINAL 必须另设显式 provenance adapter，不能直接绕过旧入口的固定身份校验。', [('B0-Matched FINAL identity ready', True), ('B1 FINAL identity ready', True), ('B1 actual 2025 eligibility certified', False), ('FINAL_TEST_2025_AUTHORIZED', False), ('active authorization created', False)]), ('研究者待决策', '任何未来 2025 raw audit 或 inference 需要独立授权；须解决 B1 六槽资格与边界历史不足，不能 silent fallback、补零或事后更改主要指标。', [])], [ready_path, ready_path.parent / 'synthetic_final_interface_preflight.json', scope_note]))
+    bfields = [('authoritative channel definition found', b2.get('channel_authoritative_definition_found', False)), ('real 2023/2024 audit completed', b2.get('real_2023_2024_audit_completed', False)), ('B2_DESIGN_FROZEN', False), ('B2_TRAINING_AUTHORIZED', False), ('B2_NORMALIZATION_FIT_EXECUTED', False)]
+    for year, v in b2.get('candidate_intersections', {}).items():
+        bfields.extend(((year + ' ' + k, n) for k, n in v.items()))
+    results.append(report(b2path.parent, 'B2_SCIENTIFIC_DESIGN_DECISION_PACKET_v1', 'B2 多光谱设计与开发集审计决策包', [('现有路线与权威通道', 'B2 仅为 7 个已有批准 AHI IR/WV 通道乘一个 latest causal time；没有增加历史时间槽。无 GFS/DEM/DOTE/DTFM/MEE/ERA5/attention/Transformer/RNN。', [('status', b2['status']), ('channels', b2.get('channels', []))] + bfields), ('工程候选集合', '严格 full-valid seven-channel causal 集合仅是工程候选。2023/2024 的 missing/unreadable/partial/all-fill/metadata 和多原因拒绝实际计数保存在完整 QC 表和 JSON。未读取 IMERG 值作评价。', []), ('待冻结决策', 'B2 正式缺帧/partial 政策、channel normalization、B0/B1/B2 公平主比较样本集合与对应 matched-control training protocol 均须研究者决定。未拟合 B2 scaler，未训练 B2。', [])], [b2path]))
+    summary_path = run / 'extended_summary_status.json'
+    pa = read(run / 'phase_a_scientific_review/paired_scientific_review.json')
+    old = read(active['phase_a_active_registry'])
+    phase_a = read(Path(old['run_directory']) / 'final_delivery_status.json')
+    regression = sorted((run / 'full_regression').glob('*/test_summary.json'))
+    last = read(regression[-1])
+    assert last['status'] == 'PASS'
+    summary = {'status': 'AUTHORIZED_NUMERICAL_PIPELINE_COMPLETE_REPORT_QA_AND_PUBLICATION_PENDING', 'Phase_A': phase_a['models'], 'Phase_A_reinference_deltas': {k: pa[k] for k in ('Delta_core', 'relative_delta_core_percent', 'Delta_Brier', 'Delta_AUROC', 'Delta_AP')}, 'Phase_B': integrity['models'], 'normalization': read(integrity['shared_normalization']['path']), 'Final_Test_readiness': ready, 'B2': b2, 'latest_regression': pin(regression[-1]), 'actual_suite_counts': last['suites'], 'historical_files_unchanged': True, 'protocol_violations': 0, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, '2025_FINAL_TEST_EXECUTED': False, 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, 'next_action': 'COMPLETE_REPORT_QA_AND_PUBLICATION_THEN_STOP', 'report_visual_QA': 'PENDING_SEPARATE_VISUAL_QA_MANIFEST', 'Git_publication': 'PENDING_EXTERNAL_VERIFIED_COMMIT_RECEIPT'}
+    save(summary_path, summary)
+    fields = []
+    for k in ('B0_MATCHED', 'B1'):
+        p = phase_a['models'][k]
+        b = integrity['models'][k]
+        fields.extend([(k + ' Phase-A completed epochs', p['completed_epochs']), (k + ' Phase-A BEST epoch', p['BEST_epoch']), (k + ' BEST core', p['BEST_val_core']), (k + ' BEST SHA', p['BEST_SHA256']), (k + ' Phase-A retained trajectory updates', p['FORMAL_OPTIMIZER_STEPS']), (k + ' Phase-A actual updates all attempts', p['ALL_ATTEMPTS_ACTUAL_FORMAL_OPTIMIZER_STEPS']), (k + ' discarded interrupted updates', p['DISCARDED_UNCHECKPOINTED_OPTIMIZER_STEPS']), (k + ' Phase-B completed epochs', b['completed_epochs']), (k + ' FINAL SHA', b['FINAL']['sha256']), (k + ' Phase-B updates', b['formal_updates'])])
+    fields.extend([(k, v) for k, v in summary['Phase_A_reinference_deltas'].items()])
+    n = summary['normalization']
+    fields.extend([('FinalFit scenes', 20956), ('Phase-B normalization mean K', n['mean_K']), ('Phase-B normalization std K', n['std_K']), ('normalization SHA', integrity['shared_normalization']['sha256']), ('steps/epoch', 10478), ('W', 10478), ('U', 523900), ('all regression tests', last['total_count']), ('2025 raw/pixels/inference', 0)])
+    results.append(report(run, 'UNATTENDED_EXTENDED_PIPELINE_SUMMARY_v1', '无人值守扩展流程完整结果摘要', [('实际结果', '两个 Phase-A 合法完成、完整只读 reinference reconciliation 通过、按各自 BEST 预算 fresh FinalFit 完成、FINAL 完整性通过。样本集合和 preprocessing 配对保持一致。', fields), ('readiness 与 B2', 'Final Test 仅准备身份和 synthetic 接口；B1 2025 六槽真实资格未认证。B2 仅完成允许的设计及开发集工程审计，科学缺项仍待研究者决定。', bfields), ('最终停止', '已达到追加授权停止点。不得执行 2025 Final Test，不训练 B2 或 B3–B8。全部失败/测试尝试历史保留，模型 binary 不进入 Git。', [])], [summary_path, run / 'extended_authority.json', run / 'phase_a_scientific_review/paired_scientific_review.json', integritypath, ready_path, b2path, regression[-1]]))
+    return results
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('stage', choices=['review', 'preparation', 'completion'])
+    args = p.parse_args()
+    outputs = {'review': review_reports, 'preparation': preparation_reports, 'completion': completion_reports}[args.stage]()
+    save(run / ('report_build_' + args.stage + '.json'), {'stage': args.stage, 'reports': outputs, 'compiled': True, 'all_pages_visual_review_pending': True})
+    print(json.dumps({'stage': args.stage, 'pdf_count': len(outputs), 'visual_review_pending': True}))
+if __name__ == '__main__':
+    main()

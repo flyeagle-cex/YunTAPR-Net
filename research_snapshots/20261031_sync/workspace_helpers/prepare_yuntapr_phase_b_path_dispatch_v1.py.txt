@@ -1,0 +1,15 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Clone the immutable dispatcher; wrap child CLI paths only, no numerical edits."""
+from pathlib import Path
+import ast
+base = Path(__file__).parent
+source = (base / 'execute_yuntapr_paired_phase_b_extended_v1.py').read_text(encoding='utf8')
+old = "cmd=[str(python),str(REPO/'scripts/train_paired_phase_b_finalfit_extended_v1.py'),"
+new = "cmd=[str(python),str(REPO/'scripts/paired_extended_path_adapter_v1.py'),'--script',str(REPO/'scripts/train_paired_phase_b_finalfit_extended_v1.py'),'--',"
+assert source.count(old) == 1
+source = source.replace(old, new)
+ast.parse(source)
+with (base / 'execute_yuntapr_paired_phase_b_extended_v2.py').open('x', encoding='utf8', newline='\n') as f:
+    f.write(source)
+print('CHILD_DISPATCH_PATH_ADAPTER_PREPARED_NUMERICS_UNCHANGED')

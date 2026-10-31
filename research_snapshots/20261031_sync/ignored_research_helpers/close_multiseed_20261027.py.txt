@@ -1,0 +1,196 @@
+# Archival copy: formatting normalized; private locators redacted.
+# B3/2030 and seed2029 have already passed historical closure. Inherit those
+# seals, read only their endpoint metadata needed for the preplanned comparison.
+# New ledgers only; old E1 seals were already checked before approval.
+"""One-off read-only closeout of NEW recovery receipts; never imports torch."""
+import hashlib, json, math, sqlite3, statistics, urllib.request
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+ROOT = Path(__file__).resolve().parents[3]
+OUT = ROOT / 'docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json'
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf-8'))
+
+def sha(p):
+    h = hashlib.sha256()
+    with Path(p).open('rb') as f:
+        for b in iter(lambda: f.read(1024 ** 2), b''):
+            h.update(b)
+    return h.hexdigest()
+
+def digest(x):
+    return hashlib.sha256(json.dumps(x, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+def query(p, q):
+    c = sqlite3.connect(Path(p).resolve().as_uri() + '?mode=ro', uri=True)
+    try:
+        return c.execute(q).fetchall()
+    finally:
+        c.close()
+
+def close(a, b):
+    assert math.isclose(a, b, rel_tol=1e-11, abs_tol=1e-12), (a, b)
+
+def time_at(p):
+    return datetime.fromtimestamp(Path(p).stat().st_mtime, timezone(timedelta(hours=8))).isoformat()
+sources = {}
+
+def record(p, alias):
+    sources[alias] = dict(sha256=sha(p), bytes=Path(p).stat().st_size)
+v = read(ROOT / 'docs/research_readiness/.local/b3_b4_recovery_preparation_20261026.json')
+new, old, hist = map(Path, (v['output_root'], v['parent'], v['historical_pair']))
+proposal = read(ROOT / 'docs/research_readiness/20261025/evidence/b3_b4_recovery_proposal.json')
+commit = '943da957a3af846746c21b52d05a148bcb135064'
+old_commit = '52a8e90dcea156382d7f2c510c5891c78e610329'
+result = read(new / 'completion.json')
+assert result == dict(status='COMPLETE_RECOVERED_PACKAGE_THREE_SEEDS', new_updates=12480, cumulative_updates=17670, replay_updates=390, new_source_bytes=1379654740081, cumulative_source_bytes=1931972785094, code_commit=commit)
+assert not (new / 'failure.json').exists()
+record(new / 'completion.json', 'RECOVERY/completion.json')
+binding = read(new / 'authorization_binding.json')
+assert binding['approval']['approved_by_researcher'] and binding['approval']['code_commit'] == commit
+assert binding['approval']['budget'] == proposal['budget']
+record(new / 'authorization_binding.json', 'RECOVERY/authorization_binding.json')
+summary = read(new / 'three_seed_summary.json')
+record(new / 'three_seed_summary.json', 'RECOVERY/three_seed_summary.json')
+data = proposal['data']
+tasks = []
+reports = {}
+tail = {}
+epoch_checks = []
+total_bytes = 0
+total_files = 0
+total_updates = 0
+for seed in (2029, 2030, 2031):
+    reports[str(seed)] = {}
+    for model in ('B3', 'B4'):
+        folder = hist if seed == 2029 else old / 'B3_s2030' if (seed, model) == (2030, 'B3') else new / f'{model}_s{seed}'
+        dev = read(folder / f'{model}_development_09.json')
+        assert dev['source_identity'] == data
+        reports[str(seed)][model] = dev
+        record(folder / f'{model}_development_09.json', f's{seed}/{model}/development_09.json')
+for index, (model, seed, offset) in enumerate((('B4', 2030, 480), ('B3', 2031, 0), ('B4', 2031, 0)), 1):
+    folder = new / f'{model}_s{seed}'
+    c = read(folder / 'completion.json')
+    assert c['status'] == 'COMPLETE_TRAIN_AND_DEV_EVALUATION' and c['seed'] == seed and (c['code_commit'] == commit)
+    assert c['epochs'] == 9 and c['optimizer_updates'] == 4320 and (c['segment_updates'] == 4320 - offset)
+    rows = query(folder / 'updates.sqlite', 'SELECT model,state,COUNT(*),MIN(u),MAX(u) FROM updates GROUP BY model,state')
+    assert rows == [(model, 'RETURNED', 4320 - offset, offset + 1, 4320)]
+    record(folder / 'updates.sqlite', f's{seed}/{model}/updates.sqlite')
+    record(folder / 'completion.json', f's{seed}/{model}/completion.json')
+    orders = read(folder / 'paired_orders.json')
+    initial = read(folder / 'paired_initial_identity.json')
+    ref = old / 'B3_s2030' if seed == 2030 else new / 'B3_s2031'
+    assert orders == read(ref / 'paired_orders.json') and initial == read(ref / 'paired_initial_identity.json')
+    assert initial['B3']['common_sha256'] == initial['B4']['common_sha256']
+    record(folder / 'paired_orders.json', f's{seed}/{model}/paired_orders.json')
+    record(folder / 'paired_initial_identity.json', f's{seed}/{model}/paired_initial_identity.json')
+    task_bytes = task_files = 0
+    for epoch in range(1, 10):
+        base = old / 'B4_s2030' if offset and epoch == 1 else folder
+        inherited = base != folder
+        expected_commit = old_commit if inherited else commit
+        train = read(base / f'{model}_train_{epoch:02d}.json')
+        dev = read(base / f'{model}_development_{epoch:02d}.json')
+        seal = read(base / f'{model}_LAST_epoch_{epoch:02d}.receipt.json')
+        assert (train['scenes'], train['batches'], train['updates'], train['loss_arm']) == (959, 480, 480 * epoch, 'E0')
+        assert train['train_order_sha256'] == orders[str(epoch)]['sha256'] == digest(orders[str(epoch)]['ids'])
+        assert seal == c['checkpoints'][epoch - 1] and seal['code_commit'] == expected_commit
+        assert seal['validation_receipt_sha256'] == digest(dev) and seal['population_sha256'] == data['population_sha256']
+        s = dev['groups']['all']['summary']
+        assert (s['scenes'], s['n_valid'], s['n_rain']) == (963, 3303090, 407820)
+        assert dev['source_identity'] == data
+        t = read(base / f'{model}_tail_{epoch:02d}.json')
+        assert len(t['scene_sufficient_statistics']) == 963 and t['nominal_q32'] == 0.984375
+        assert sum((z['n_rain'] for z in t['strata'])) == s['n_rain']
+        assert sum((z['q32_covered'] for z in t['strata'])) == s['covered'][-1]
+        close(sum((z['n_rain'] * z['conditional_pinball'] for z in t['strata'])) / s['n_rain'], s['conditional_pinball'])
+        for name in (f'{model}_train_{epoch:02d}.json', f'{model}_development_{epoch:02d}.json', f'{model}_LAST_epoch_{epoch:02d}.receipt.json', f'{model}_tail_{epoch:02d}.json'):
+            record(base / name, f's{seed}/{model}/{name}')
+        for role in ('train', 'dev'):
+            sub = base / f'{model}_{role}_reads_{epoch:02d}'
+            p = read(sub / 'pass_receipt.json')
+            a = p['actual_reads']
+            assert not p['during_failure'] and a['states'] == {'READ_COMPLETE': p['expected_files']}
+            assert a['opened_files'] == p['expected_files'] and a['delivered_bytes'] == a['reserved_bytes'] == p['expected_bytes']
+            if not inherited:
+                q = query(sub / 'reads.sqlite', 'SELECT state,COUNT(*),SUM(actual_bytes),SUM(expected_bytes),SUM(sha256 IS NULL) FROM file_io GROUP BY state')
+                assert q == [('READ_COMPLETE', a['opened_files'], a['delivered_bytes'], a['reserved_bytes'], 0)]
+                task_bytes += a['delivered_bytes']
+                task_files += a['opened_files']
+            record(sub / 'pass_receipt.json', f's{seed}/{model}/{role}_{epoch:02d}/pass_receipt.json')
+        epoch_checks.append(dict(model=model, seed=seed, epoch=epoch, updates=seal['updates'], inherited=inherited, code_commit=expected_commit, dev_digest=seal['validation_receipt_sha256'], checkpoint_sha256=seal['checkpoint_sha256']))
+    assert task_bytes == c['segment_source_bytes'] and task_files == c['segment_source_files']
+    e9 = folder / f'{model}_LAST_epoch_09.pt'
+    e9sha = sha(e9)
+    assert e9sha == c['checkpoints'][-1]['checkpoint_sha256']
+    record(e9, f's{seed}/{model}/LAST_epoch_09.pt')
+    elapsed = (folder / 'completion.json').stat().st_mtime - (new / f'task_{index}_claim.json').stat().st_mtime
+    assert elapsed <= proposal['budget']['task_wall_seconds'][index - 1]
+    tasks.append(dict(model=model, seed=seed, status=c['status'], epochs=9, segment_updates=c['segment_updates'], effective_updates=4320, cumulative_attempt_updates=c.get('cumulative_attempt_updates', 4320), replay_updates=c['replay_updates'], segment_source_bytes=task_bytes, segment_source_files=task_files, endpoint_sha256=e9sha, code_commit=commit, inherited_E1_code_commit=old_commit if offset else None, completed_at=time_at(folder / 'completion.json'), wall_seconds_mtime=elapsed))
+    total_updates += c['segment_updates']
+    total_bytes += task_bytes
+    total_files += task_files
+verification = new / 'interrupted_source_verification'
+sv = read(verification / 'source_verification_receipt.json')
+assert sv['states'] == {'READ_COMPLETE': 1} and sv['opened_files'] == 1 and (sv['delivered_bytes'] == 3332713)
+q = query(verification / 'source_verification.sqlite', 'SELECT state,actual_bytes,sha256 FROM file_io')
+assert q == [('READ_COMPLETE', 3332713, proposal['source_verification']['sha'])]
+record(verification / 'source_verification_receipt.json', 'RECOVERY/single_source_verification_receipt.json')
+total_bytes += 3332713
+total_files += 1
+assert (total_updates, total_bytes, total_files) == (12480, 1379654740081, 412569)
+groups = {}
+endpoints = {}
+differences = {}
+for seed in ('2029', '2030', '2031'):
+    a, b = (reports[seed]['B3'], reports[seed]['B4'])
+    assert a['population_ids_sha256'] == b['population_ids_sha256'] and a['partition_sha256'] == b['partition_sha256']
+    assert a['groups'].keys() == b['groups'].keys()
+    endpoints[seed] = {}
+    groups[seed] = {}
+    for model, dev in reports[seed].items():
+        s = dev['groups']['all']['summary']
+        endpoints[seed][model] = {**{k: s[k] for k in ('brier', 'auroc', 'average_precision', 'conditional_pinball')}, 'q32_coverage': s['coverage'][-1], 'q32_signed_bias': s['coverage'][-1] - 0.984375, 'q32_absolute_error': abs(s['coverage'][-1] - 0.984375)}
+        assert endpoints[seed][model] == summary['endpoints'][seed][model]
+        groups[seed][model] = {}
+        for name, g in dev['groups'].items():
+            s = g['summary']
+            other = reports[seed]['B4' if model == 'B3' else 'B3']['groups'][name]
+            assert g['ids_sha'] == other['ids_sha'] and s['n_valid'] == other['summary']['n_valid'] and (s['n_rain'] == other['summary']['n_rain'])
+            close(s['brier_sum'] / s['n_valid'], s['brier'])
+            close(s['s_qr'] / s['n_rain'], s['conditional_pinball'])
+            close(s['covered'][-1] / s['n_rain'], s['coverage'][-1])
+            groups[seed][model][name] = dict(ids_sha256=g['ids_sha'], exact_score_table_sha256=g['exact_score_table_sha256'], **{k: s[k] for k in ('scenes', 'n_valid', 'n_rain', 'brier_sum', 's_qr', 'brier', 'auroc', 'average_precision', 'conditional_pinball', 'rain_strata')}, q32_covered=s['covered'][-1], q32_coverage=s['coverage'][-1])
+    differences[seed] = {k: endpoints[seed]['B4'][k] - endpoints[seed]['B3'][k] for k in endpoints[seed]['B3']}
+    tail[seed] = {}
+    for model in ('B3', 'B4'):
+        if seed == '2029':
+            tail[seed][model] = dict(status='NOT_AVAILABLE_IN_INHERITED_RECEIPTS_NO_EXTRA_INFERENCE')
+            continue
+        folder = old / 'B3_s2030' if (seed, model) == ('2030', 'B3') else new / f'{model}_s{seed}'
+        t = read(folder / f'{model}_tail_09.json')
+        record(folder / f'{model}_tail_09.json', f's{seed}/{model}/{model}_tail_09.json')
+        tail[seed][model] = {k: t[k] for k in ('scope', 'nominal_q32', 'independent_event_count', 'strata')}
+for metric, m in summary['metrics'].items():
+    ds = [differences[s][metric] for s in ('2029', '2030', '2031')]
+    assert m['B4_minus_B3_by_seed'] == {s: differences[s][metric] for s in differences}
+    close(statistics.mean(ds), m['mean'])
+    close(statistics.stdev(ds), m['sample_sd'])
+old_initial = read(old / 'B3_s2030/paired_initial_identity.json')
+new_initial = read(new / 'B3_s2031/paired_initial_identity.json')
+assert old_initial['B3']['common_sha256'] != new_initial['B3']['common_sha256']
+old_orders = read(old / 'B3_s2030/paired_orders.json')
+new_orders = read(new / 'B3_s2031/paired_orders.json')
+assert all((old_orders[str(e)]['sha256'] != new_orders[str(e)]['sha256'] for e in range(1, 10)))
+elapsed = (new / 'completion.json').stat().st_mtime - (new / 'authorization_binding.json').stat().st_mtime
+assert elapsed <= 62784
+api = json.load(urllib.request.urlopen('http://127.0.0.1:51282/api/snapshot', timeout=20))
+assert api['state'] == 'COMPLETE' and api['completed_models'] == 4 and (api['sealed_epochs'] == 36) and (api['returned'] == 17670)
+assert api['io']['bytes'] == 1931972785094 and api['io']['files'] == 577748 and (api['replay_returned'] == 390)
+for name in ('src/yuntapr/experimental/core_innovation/stage4/evaluation.py', 'src/yuntapr/experimental/phase_b_v2_formal_integration_candidate/metrics.py', 'src/yuntapr/experimental/research_readiness/multiseed_recovery.py'):
+    assert sha(ROOT / name) == proposal['code_sha256'][name]
+receipt = dict(status='VERIFIED_COMPLETE_THREE_PAIRED_SEEDS_TRAIN_AND_DEV', verified_at=datetime.now(timezone(timedelta(hours=8))).isoformat(), completed_at=time_at(new / 'completion.json'), training_commit=commit, original_training_commit=old_commit, proposal_sha256=proposal['proposal_sha256'], data_version=data, evaluation_script='src/yuntapr/experimental/core_innovation/stage4/evaluation.py', evaluation_script_sha256=proposal['code_sha256']['src/yuntapr/experimental/core_innovation/stage4/evaluation.py'], endpoint='FIXED_EPOCH_9_LAST', tasks=tasks, epochs=epoch_checks, summary=summary, endpoint_groups=groups, tail_diagnostics=tail, budget_closure=dict(new_updates=total_updates, cumulative_updates=17670, necessary_replay_updates=390, extra_retries=0, new_source_bytes=total_bytes, cumulative_source_bytes=1931972785094, new_source_files=total_files, cumulative_source_files=577748, new_sealed_passes=52, verification_files=1, verification_bytes=3332713, original_uncertain_source_record='PRESERVED_UNMODIFIED_AND_SEPARATELY_CHARGED', wall_seconds_mtime=elapsed, cumulative_executed_interval_seconds_mtime=14498 + elapsed, maximum_recovery_seconds=62784), inherited_evidence=['b3_b4_multiseed_stop.json: B3/2030 completed nine epochs and original failed segment', 'seed2029 prior verified complete pair; no repeat training or historical full audit'], checks=dict(new_epoch_seals=26, inherited_E1_seals=1, new_read_ledgers=52, actual_E9_weight_hashes=3, paired_initialization=True, paired_orders_all_nine_epochs=True, cross_seed_initialization_and_same_epoch_orders_differ=True, summary_recomputed_from_all_six_endpoints=True, tail_additive_totals_match=True, live_page_complete=True), closeout_activity=dict(raw_weather_payload_reads=0, checkpoint_deserializations=0, optimizer_updates=0, model_inference=0, scope_2025='FROZEN_NO_ACCESS_IN_THIS_CLOSEOUT', weight_file_hash_reads=3), scientific_acceptance=dict(descriptive_replication_complete=True, B0_B4_overall='IN_PROGRESS', significance='NOT_CLAIMED', final_generalization='NOT_VERIFIED', B5_B8_training='NOT_STARTED', seed2029_stratum_q32='NOT_AVAILABLE_NO_EXTRA_INFERENCE'), sources=sources, closeout_script_sha256=sha(__file__))
+assert not OUT.exists(), 'Never overwrite an earlier closeout receipt'
+OUT.write_text(json.dumps(receipt, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8')
+print(json.dumps(dict(status=receipt['status'], completed_at=receipt['completed_at'], tasks=[(t['model'], t['seed'], t['segment_updates']) for t in tasks], new_epoch_seals=26, source_files=len(sources), elapsed_seconds=elapsed, receipt_bytes=OUT.stat().st_size), ensure_ascii=False))

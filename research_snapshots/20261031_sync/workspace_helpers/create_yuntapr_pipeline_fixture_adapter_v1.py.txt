@@ -1,0 +1,22 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Independent regression/scheduler companions; never edit pinned originals."""
+from pathlib import Path
+BASE = Path(__file__).parent
+source = (BASE / 'run_yuntapr_extended_regression_v1.py').read_text(encoding='utf8')
+source = source.replace('fixture=fixture_parent/stamp;fixture.mkdir(parents=True,exist_ok=False)', 'fixture=fixture_parent/stamp;fixture.mkdir(parents=True,exist_ok=False)\nfrom paired_pipeline_fixture_scope_v1 import FixtureScope\nfixture_scope=FixtureScope(BASE)')
+old = 'if not p.is_relative_to(fixture.resolve()) and not p.is_relative_to(out.resolve()):'
+assert source.count(old) == 1
+source = source.replace(old, 'if not p.is_relative_to(fixture.resolve()) and not p.is_relative_to(out.resolve()) and not fixture_scope.allows(p):')
+source = source.replace('shutil.rmtree(fixture);cleanup=not fixture.exists()', 'shutil.rmtree(fixture);cleanup=not fixture.exists() and fixture_scope.cleanup_complete()')
+dest = BASE / 'run_yuntapr_extended_regression_scoped_v1.py'
+with dest.open('x', encoding='utf8', newline='\n') as f:
+    f.write(source)
+source = (BASE / 'execute_yuntapr_extended_pipeline_resumed_v1.py').read_text(encoding='utf8')
+source = source.replace("stages=list(original.STAGES);stages[0]=('phase_a_closure',BASE/'close_yuntapr_paired_training_resumed_v1.py',[])", "stages=list(original.STAGES);stages[0]=('phase_a_closure',BASE/'close_yuntapr_paired_training_resumed_v1.py',[])\nstages=[(name,BASE/'run_yuntapr_extended_regression_scoped_v1.py',args) if name in ('all_repository_regressions','post_extension_all_regressions') else (name,path,args) for name,path,args in stages]")
+source = source.replace("REPO/'scripts/paired_phase_a_resume_governance_v1.py']", "REPO/'scripts/paired_phase_a_resume_governance_v1.py',BASE/'run_yuntapr_extended_regression_scoped_v1.py',REPO/'scripts/paired_pipeline_fixture_scope_v1.py']")
+source = source.replace("journal=resume_root/'sequential_execution';journal.mkdir(exist_ok=False)", "journal=resume_root/'sequential_execution_v2';journal.mkdir(exist_ok=False)")
+dest = BASE / 'execute_yuntapr_extended_pipeline_resumed_v2.py'
+with dest.open('x', encoding='utf8', newline='\n') as f:
+    f.write(source)
+print('INDEPENDENT_FIXTURE_ADAPTER_AND_CONTROLLER_CREATED')

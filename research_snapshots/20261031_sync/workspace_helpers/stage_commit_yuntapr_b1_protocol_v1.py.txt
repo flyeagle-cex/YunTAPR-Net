@@ -1,0 +1,24 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import datetime, json, os, subprocess, sys
+from verify_yuntapr_b1_protocol_publication import ROOT, REPO, RUN, BASE, INDEX, audit
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+assert git('rev-parse', 'HEAD').decode().strip() == BASE
+assert audit()['status'] == 'PASS'
+if sys.argv[1] == 'stage':
+    names = sorted(set(json.loads(INDEX.read_text())) | {INDEX.relative_to(REPO).as_posix()})
+    git('add', '--', *names)
+    assert not git('-c', 'core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol', 'diff', '--cached', '--check')
+    print(json.dumps({'staged_additive_files': len(names)}))
+else:
+    message = ROOT / 'YunTAPR-b1-protocol-commit-message.txt'
+    message.write_text('Freeze paired B1 and B0-Matched Phase-A protocols and formal runners\n\nPin shared 2023-only scaler and matched 10455/10501 sample identities.\nVerify seed2026 paired initialization, batch2 GPU headroom and two-worker six-slot reads.\nImplement separately authorized epoch-boundary training/resume and fixed global validation.\n288 unique relevant tests pass; 18 real engineering updates, zero formal steps and 2025 reads.\nPreserve all 1982 historical files, failure evidence and editable LaTeX/PDF provenance.\n', encoding='utf-8')
+    env = os.environ.copy()
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S+00:00')
+    env.update(GIT_AUTHOR_DATE=stamp, GIT_COMMITTER_DATE=stamp)
+    git('commit', '--quiet', '--file', str(message), env=env)
+    assert not git('status', '--porcelain')
+    print(json.dumps({'commit': git('rev-parse', 'HEAD').decode().strip(), 'tree': git('rev-parse', 'HEAD^{tree}').decode().strip(), 'parent': BASE, 'worktree_clean': True}))

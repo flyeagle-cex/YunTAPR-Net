@@ -1,0 +1,62 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Append rows without changing any existing historical matrix byte.
+# The reports-only main PR must link to, rather than copy, executable tooling.
+"""Documentation-only status publication; never opens data or checkpoints."""
+from pathlib import Path
+from datetime import datetime, timezone, timedelta
+import csv, io, json, urllib.request, subprocess
+R = Path(__file__).resolve().parents[3]
+D = R / 'docs/research_readiness/20261025'
+x = json.load(urllib.request.urlopen('http://127.0.0.1:51282/api/snapshot', timeout=20))
+assert x['state'] == 'RUNNING' and x['source_commit'] == 'b251fd9ea06c0c90f48d2ac0decba0454114669d'
+assert all((r['state'] != 'COMPLETE' and r['sealed_epochs'] < 9 for r in x['runs']))
+p = json.loads((D / 'evidence/b5_b6_corrected_start_proposal.json').read_text(encoding='utf-8'))
+stamp = datetime.fromisoformat(x['snapshot_utc']).astimezone(timezone(timedelta(hours=8))).isoformat()
+record = dict(status='IN_PROGRESS', as_of=stamp, scope='REPORTS_PUBLICATION_STATUS_NOT_FINAL_SCIENTIFIC_RESULTS', training_commit=x['source_commit'], proposal_sha256=p['proposal_sha256'], data_version=p['data'], static_source_sha256=p['static_source_sha256'], models=[dict(model=r['model'], seed=r['seed'], status='IN_PROGRESS', execution_state=r['state'], training_started=r['returned'] > 0, returned_updates=r['returned'], sealed_train_dev_epochs=r['sealed_epochs'], current_epoch=r['current_epoch'], phase=r['phase'], fixed_E9_results='NOT_AVAILABLE', complete=False) for r in x['runs']], completed_models=0, final_pair_evaluation='NOT_AVAILABLE_UNTIL_BOTH_NINE_EPOCHS_COMPLETE', historical_receipts='PRESERVED_UNCHANGED', publication_scope='REPORTS_AND_SANITIZED_EVIDENCE_ONLY_NO_TRAINING_SOURCE_MERGE')
+receipt = D / 'evidence/b5_b6_status_for_main_20261027.json'
+with receipt.open('x', encoding='utf-8') as f:
+    json.dump(record, f, ensure_ascii=False, indent=2)
+
+def replace(path, old, new):
+    b = path.read_bytes()
+    assert old.encode() in b, (str(path), old[:40])
+    path.write_bytes(b.replace(old.encode(), new.encode(), 1))
+
+def insert(path, s):
+    b = path.read_bytes()
+    i = b.find(b'\n\n') + 2
+    if i == 1:
+        i = b.find(b'\r\n\r\n') + 4
+    assert i > 2
+    path.write_bytes(b[:i] + s.encode() + b[i:])
+table = '报告发布状态（' + stamp + '，北京时间）：本次向main发布已完成的B0/B1历史正式结果、B2 seed2029固定E9对照，以及B3/B4 seed2029/2030/2031三组完整配对与脱敏收据。**B5/B6均为IN_PROGRESS，不属于已完成科研结果。** B5正在执行，B6处于同一获批串行包的等待队列；等待不等于已经训练，任何E9指标尚不可报告。训练代码保留在开发/固定执行提交，本次报告合并不发布训练源码，也不改变执行器。见[状态快照](evidence/b5_b6_status_for_main_20261027.json)。以下过程和失败记录保留历史时点。\n\n|模型|实验阶段状态|实际执行状态|固定E9结果|\n|---|---|---|---|\n|B5 seed2029|IN_PROGRESS|' + x['runs'][0]['state'] + '，已产生真实优化器更新|NOT_AVAILABLE|\n|B6 seed2029|IN_PROGRESS|' + x['runs'][1]['state'] + '，等待B5完整收口后启动|NOT_AVAILABLE|\n\n'
+insert(D / 'README.md', table)
+insert(D / 'B5_B6_READINESS_REPORT.md', table)
+replace(D / 'B5_B6_READINESS_REPORT.md', '**当前：STOPPED_ZERO_UPDATES；修正启动：READY_WAITING_EXPLICIT_CORRECTED_START_APPROVAL。**', '**历史首次启动状态：STOPPED_ZERO_UPDATES；当时修正启动：READY_WAITING_EXPLICIT_CORRECTED_START_APPROVAL。**')
+replace(D / 'B5_B6_READINESS_REPORT.md', '最新真实执行（2026-10-27）：研究者已明确批准d696fe2', '历史首次执行（2026-10-27，后续已另获纠正批准）：研究者已明确批准d696fe2')
+progress = '当前报告发布状态（' + stamp + '，北京时间）：已完成结果为B0/B1既有正式实验、B2 seed2029及B3/B4三seed固定E9配对。**B5：IN_PROGRESS；B6：IN_PROGRESS（串行等待，尚未开始优化器更新）**。两模型均未完成九轮Train/Dev，不发布最终评价。见[固定状态快照](../research_readiness/20261025/evidence/b5_b6_status_for_main_20261027.json)。本次通过报告专用PR合入main，不改训练源码和历史证据。\n\n'
+insert(R / 'docs/research_progress/CURRENT_STATUS.md', progress)
+replace(R / 'docs/research_progress/CURRENT_STATUS.md', '|B5|B4 + 海拔|未找到完整模型接入或正式实验收据|存在 DEM 读取/地形接口，不等于 B5 已实现或训练|', '|B5|B4 + 海拔|**IN_PROGRESS**；seed2029已进入获批正式训练|真实DEM/模型接入完成；固定E9与公平配对结果尚不可用|')
+replace(R / 'docs/research_progress/CURRENT_STATUS.md', '|B6|B4 + 完整静态地形|未找到完整模型接入或正式实验收据|静态特征候选存在；正式结构与数据生产参数仍需冻结|', '|B6|B4 + 完整静态地形|**IN_PROGRESS**；同一获批串行包中等待B5收口|实际执行仍PENDING，尚无优化器更新；不得标为COMPLETE|')
+insert(R / 'docs/research_progress/EVIDENCE_INDEX.md', '报告合并时点状态：[B5/B6均IN_PROGRESS的脱敏快照](../research_readiness/20261025/evidence/b5_b6_status_for_main_20261027.json)。B6的阶段进行中与执行队列PENDING分别列明；已完成B0–B4结果和历史失败证据继续使用原收据，不把新训练的部分轮次或checkpoint当作完成。\n\n')
+path = D / 'B0_B4_EXPERIMENT_MATRIX.csv'
+raw = path.read_bytes()
+rows = list(csv.DictReader(io.StringIO(raw.decode('utf-8'))))
+assert len(rows) == 27
+fields = list(rows[0])
+out = io.StringIO(newline='')
+w = csv.DictWriter(out, fieldnames=fields, lineterminator='\r\n')
+for run in x['runs']:
+    row = {k: '' for k in fields}
+    model = run['model']
+    row.update(model_id=model, experiment_id=f'{model}__E0__s2029__f006__static', seed='2029', phase='STATIC_TERRAIN_FORMAL_IN_PROGRESS', config='E0_F006_STATIC_SEED2029_FIXED_E9', loss_arm='E0', dataset_split='2023_Train/2024_Development/2025_FORBIDDEN', train_scenes='959', dev_scenes='963', epochs=str(run['sealed_epochs']), global_steps=str(run['returned']), status='IN_PROGRESS', metrics_path='NOT_AVAILABLE_FIXED_E9', checkpoint_reference='NOT_AVAILABLE_FIXED_E9', checkpoint_selection='FIXED_EPOCH_9_LAST', evidence_path='evidence/b5_b6_status_for_main_20261027.json', verified_at=stamp, notes=f"Snapshot only; execution_state={run['state']}; E9 incomplete; no final performance claim.", authorization_status='CORRECTED_START_APPROVED_IN_PROGRESS', comparison_population='CORE_F006_959_963', protocol_reference='B5_B6_READINESS_REPORT.md', source_snapshot_commit=x['source_commit'], executed_commit=x['source_commit'], data_version=p['data']['population_sha256'] + ';statistics=' + p['data']['statistics_sha256'] + ';static=' + p['static_source_sha256'][model], evaluation_script='src/yuntapr/experimental/core_innovation/stage4/evaluation.py', source_manifest_reference='evidence/b5_b6_corrected_start_launch.json')
+    w.writerow(row)
+assert raw.endswith(b'\n')
+path.write_bytes(raw + out.getvalue().encode('utf-8'))
+replace(D / 'B0_B4_STAGE_ACCEPTANCE.md', '保留22条原历史记录，增加1条已完成B2及4条已完成多seed行，共27行；历史失败仍单列。', '保留22条原历史记录、1条已完成B2及4条已完成多seed行；这27条B0–B4记录保持原状。另附B5/B6各1条IN_PROGRESS状态，共29行；历史失败仍单列。')
+replace(D / 'B2_TRAINING_AND_EVALUATION_REPORT.md', '[本地进度页面](../../../tools/b2_monitor/README.md)', '[只读进度工具说明（开发提交）](https://github.com/flyeagle-cex/YunTAPR-Net/blob/0e34b7738097e7e4de35b45deefe9eb95c3401b1/tools/b2_monitor/README.md)')
+selection = R / 'docs/research_readiness/.local/reports_main_selection.json'
+v = json.loads(selection.read_text(encoding='utf-8'))
+v['files'] = sorted(set(v['files'] + [receipt.relative_to(R).as_posix()]))
+selection.write_text(json.dumps(v, ensure_ascii=False, indent=2), encoding='utf-8')
+print(json.dumps({'snapshot': stamp, 'B5_B6_status': 'IN_PROGRESS', 'execution_states': [(run['model'], run['state']) for run in x['runs']], 'matrix_rows': 29, 'selected_files': len(v['files'])}, ensure_ascii=False))

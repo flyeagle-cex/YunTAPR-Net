@@ -1,0 +1,45 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Materialize the researcher-approved standalone catalogue-only capability."""
+from pathlib import Path
+import json
+import sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.evaluation import catalogue_execution_v1_1 as execution
+from yuntapr.contracts.loader import sha256
+active = json.loads((ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').read_text(encoding='utf-8'))
+run = Path(active['run'])
+with gate.PreflightSourceGuard(), gate.CatalogueOnlyGuard():
+    summaries = sorted(run.glob('preflight_test_summary_*.json'))
+    summary = gate.read(summaries[-1])
+    if not summary['passed'] or summary['skipped'] or summary['execution_implementation_sha256'] != execution.execution_hashes():
+        raise ValueError('Current exact execution closure must pass all catalogue tests')
+    metadata = gate.read(run / 'resume_environment_and_metadata_binding.json')
+    if sha256(Path(str(execution.METADATA_MANIFEST))) != metadata['manifest_sha256']:
+        raise ValueError('Pinned completion metadata changed before authorization')
+    protocol = gate.load_protocol()
+    value = execution.authorization_bindings(protocol, metadata['manifest_sha256'])
+    value.update(created_utc=gate.now(), researcher_request_sha256=active['researcher_request_sha256'])
+    path = REPO / 'config/evaluation/b0_2025_catalogue_only_authorization_v1.1.json'
+    gate.save(path, value)
+    digest = sha256(path)
+    authority = execution.ExecutionAuthority.load(path, digest)
+    authority.require_catalogue()
+    execution.verify_history(gate.read(run / 'history_before.json'))
+    doc = REPO / 'docs/final_test_b0/catalogue_gate_v1_1/B0_2025_CATALOGUE_ONLY_AUTHORIZATION_v1.1.md'
+    with doc.open('x', encoding='utf-8', newline='\n') as stream:
+        stream.write('# B0 2025 catalogue-only authorization v1.1\n\n')
+        stream.write('研究者仅授权真实 2025 March–September catalogue QC 与资格样本清单冻结。本文件不授权 FINAL 加载、模型实例化、推理、训练或任何结果统计。\n\n')
+        stream.write(f'独立能力文件：`config/evaluation/b0_2025_catalogue_only_authorization_v1.1.json`。授权文件 SHA256：`{digest}`。\n\n')
+        stream.write('研究者补充批准只绑定既有 completion manifest 的独立适配器。原 v1.1 代码、协议、28 列 candidate schema、12 列 identity projection 和资格规则均保持原字节。此路径批准只用于 manifest 元数据，不扩大 raw source 范围。\n\n')
+        stream.write('FINAL 完整性按研究者明确决定，只核验冻结 identity 记录。实际 FINAL 文件未打开，实际文件 SHA256 未重新计算；登记的 SHA 值不能解释为本轮重新验签。\n\n')
+        stream.write('本授权绑定以下元数据：\n\n```json\n' + json.dumps(value, ensure_ascii=False, indent=2) + '\n```\n\n')
+        stream.write('适配器源码与测试 SHA 由本授权锁定；catalogue freeze record 保持原冻结 schema，其 `catalogue_authorization_sha256` 绑定本授权，因而递归绑定新适配器。旧 `implementation_sha256` 仍是原 v1.1 bundle，未被静默替换。\n\n')
+        stream.write('固定范围为 [2025-03-01 00:00 UTC, 2025-10-01 00:00 UTC)，10272 个半小时槽位。只记录源身份、有效性 QC、时间/网格 provenance 与固定资格枚举；不使用降雨强度决定资格。基础设施/复制 SHA/清理/身份异常必须 STOP，固定样本拒绝原因按原规则写入。\n\n')
+        stream.write('完成 catalogue freeze 后 STOP。真正 Final Test 必须另获第二阶段研究者授权。\n')
+    staging = str(execution.STAGING_PARENT / ('catalogue_only_' + run.name))
+    gate.save(run / 'authorization_binding.json', {'authorization_path': path.relative_to(REPO).as_posix(), 'authorization_sha256': digest, 'authorization_document_sha256': sha256(doc), 'staging_root': staging, 'latest_passing_preflight_summary': summaries[-1].name, 'tests_run': summary['tests_run'], 'source_access_before_authorization': 'METADATA_MANIFEST_ONLY_RAW_PIXELS_ZERO', 'created_utc': gate.now()})
+print(json.dumps({'authorization_sha256': digest, 'staging_root': staging, 'tests_passed': summary['tests_run']}, ensure_ascii=True))

@@ -1,0 +1,36 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Compact read-only progress, no raw data, no training process intervention."""
+from pathlib import Path
+import datetime, json, time
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8')) if Path(p).exists() else None
+ext = read(BASE / 'YunTAPR-extended-pipeline-active-v1.json')
+run = Path(ext['run_directory'])
+old = read(ext['phase_a_active_registry'])
+while True:
+    value = {'observed_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'Phase_A': {}, 'Phase_B': {}}
+    for k, spec in old['formal_runs'].items():
+        public = Path(spec['public_directory'])
+        counter = read(public / 'execution_counters.json')
+        status = read(public / 'final_status.json')
+        history = read(public / 'training_validation_history.json')
+        value['Phase_A'][k] = {'status': status['status'] if status else 'RUNNING' if counter else 'NOT_RUN', **{n: (counter or {}).get(n) for n in ('epoch', 'phase', 'completed_epoch', 'train_steps_this_epoch', 'validation_scenes_seen', 'FORMAL_OPTIMIZER_STEPS')}, 'BEST_epoch': history[-1]['BEST_epoch'] if history else None, 'early_stop_counter': history[-1]['early_stop_counter'] if history else None}
+    execution = read(run / 'phase_b_execution_registry.json')
+    if execution:
+        for k, spec in execution['formal_runs'].items():
+            public = Path(spec['public_directory'])
+            counter = read(public / 'execution_counters.json')
+            status = read(public / 'final_status.json')
+            value['Phase_B'][k] = {'status': status['status'] if status else 'RUNNING' if counter else 'NOT_RUN', 'epoch_budget': spec['epoch_budget'], **{n: (counter or {}).get(n) for n in ('epoch', 'completed_epoch', 'train_steps_this_epoch', 'FORMAL_OPTIMIZER_STEPS')}}
+    stage_starts = sorted((run / 'sequential_execution').glob('*_start.json'), key=lambda p: p.stat().st_mtime_ns)
+    value['extension_stage'] = stage_starts[-1].stem.removesuffix('_start') if stage_starts else 'WAIT_EXISTING_PHASE_A'
+    failures = list((run / 'sequential_execution').glob('STOP_failure_*.json'))
+    value['extension_failure'] = [str(p) for p in failures]
+    value['core_pipeline_complete'] = (run / 'sequential_execution/core_pipeline_completion.json').exists()
+    print(json.dumps(value, ensure_ascii=False), flush=True)
+    if failures or value['core_pipeline_complete']:
+        break
+    time.sleep(50)

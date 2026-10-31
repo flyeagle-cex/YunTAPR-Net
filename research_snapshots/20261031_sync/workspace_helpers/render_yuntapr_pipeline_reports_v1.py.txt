@@ -1,0 +1,51 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Render every compiled report page to owned ASCII QA paths; never auto-PASS."""
+from pathlib import Path
+import datetime, hashlib, json, re, subprocess
+from pypdf import PdfReader
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+ext = read(BASE / 'YunTAPR-extended-pipeline-active-v1.json')
+run = Path(ext['run_directory'])
+old = read(ext['phase_a_active_registry'])
+oldrun = Path(old['run_directory'])
+original = read(oldrun / 'report_build_manifest.json')
+extended = [r for stage in ('review', 'preparation', 'completion') for r in read(run / ('report_build_' + stage + '.json'))['reports']]
+pdfs = [Path(r['pdf']) for r in original] + [Path(r['pdf']['path']) for r in extended]
+assert len(pdfs) == 11 and len(set(pdfs)) == 11
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+qa_root = Path('<PRIVATE_LOCATOR_f7948182ec5f>') / 'yuntapr_extended_pdf_qa' / stamp
+qa_root.mkdir(parents=True, exist_ok=False)
+poppler = Path('<PRIVATE_LOCATOR_d4b1b768e36c>')
+results = []
+for i, p in enumerate(pdfs, 1):
+    info = subprocess.run([str(poppler.with_name('pdfinfo.exe')), str(p)], capture_output=True, text=True, encoding='utf8', errors='replace', check=True).stdout
+    page_count = int(re.search('^Pages:\\s+(\\d+)', info, re.MULTILINE).group(1))
+    text = '\n'.join((page.extract_text() or '' for page in PdfReader(p).pages))
+    if '人口' in text:
+        raise ValueError('Statistical translation regression: ' + str(p))
+    log = p.with_suffix('.log').read_text(encoding='utf8', errors='replace')
+    errors = [line for line in log.splitlines() if 'Missing character:' in line or 'Overfull \\hbox' in line or 'Overfull \\vbox' in line]
+    dest = qa_root / f'report_{i:02d}'
+    dest.mkdir()
+    result = subprocess.run([str(poppler), '-r', '105', '-png', str(p), str(dest / 'page')], capture_output=True, text=True, encoding='utf8', errors='replace')
+    if result.returncode:
+        raise RuntimeError('Page render failed: ' + result.stderr)
+    images = sorted(dest.glob('page-*.png'), key=lambda q: int(q.stem.rsplit('-', 1)[1]))
+    if len(images) != page_count:
+        raise ValueError('All PDF pages must render')
+    results.append({'pdf': str(p), 'sha256': sha(p), 'page_count': page_count, 'images': [str(q) for q in images], 'text_translation_pass': True, 'latex_layout_warnings': errors, 'visual_review_pending': True})
+    print(json.dumps({'pdf': str(p), 'pages': len(images), 'layout_warnings': errors}, ensure_ascii=False), flush=True)
+save(run / 'all_report_page_render_manifest.json', {'reports': results, 'total_pages': sum((r['page_count'] for r in results)), 'ascii_qa_root': str(qa_root), 'all_pages_visually_verified': False})
+print(json.dumps({'pdf_count': 11, 'total_pages': sum((r['page_count'] for r in results)), 'visual_review': 'PENDING_MODEL_INSPECTION'}))

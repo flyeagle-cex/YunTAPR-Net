@@ -1,0 +1,25 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import datetime, hashlib, json
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+active = ROOT / 'YunTAPR-active-b1-protocol-v1.json'
+a = json.loads(active.read_text())
+old = Path(a['run_directory'])
+snapshot = old / 'failed_execution_sources'
+snapshot.mkdir()
+for rel in ['scripts/preflight_b1_b0_matched_phase_a_v1.py', 'src/yuntapr/data/dataset_b1.py', 'src/yuntapr/models/b1.py', 'src/yuntapr/training/paired_phase_a.py', 'scripts/paired_phase_a_entry.py']:
+    p = snapshot / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_bytes((REPO / rel).read_bytes())
+runid = 'run_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+new = old.parent / runid
+new.mkdir()
+for name in ['history_before.json', 'researcher_authority.json']:
+    (new / name).write_bytes((old / name).read_bytes())
+oldhash = {p.relative_to(REPO).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in old.rglob('*') if p.is_file()}
+(new / 'resume_ancestry.json').write_text(json.dumps({'preserved_failed_run': str(old), 'files': oldhash, 'reason': 'psutil optional monitoring dependency unavailable; use Windows native working-set monitor, no package installation and no loader setting changes', 'formal_optimizer_steps': 0, '2025_raw_access': 0}, indent=2), encoding='utf-8')
+a.update(run_id=runid, run_directory=str(new), staging_root=str(Path(a['staging_root']).parent / ('b1_protocol_' + runid)))
+active.write_text(json.dumps(a, indent=2), encoding='utf-8')
+print(json.dumps(a))

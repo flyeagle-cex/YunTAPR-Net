@@ -1,0 +1,199 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Adaptation initialization must not move the frozen B4 RNG stream.
+# Only the current arm's real static payload is read in this worker.
+"""B5/B6 use the Stage4 engine, with a separately approved static input scope."""
+import copy, hashlib, io, json, os, shutil, sqlite3, subprocess, sys, time
+from pathlib import Path
+import numpy as np
+import torch
+from ..core_innovation.grid import GridSpec
+from ..core_innovation.stage3.planning import digest
+from ..core_innovation.stage3.metered_io import SourceMeter, path_key
+from ..core_innovation.stage4.engine import paired_models, PairedExecutor, FormalDecision, write, resources
+from ..core_innovation.stage4.data import PopulationPlan, read, sha
+from ..core_innovation.stage4.launch import ReaderFactory
+from .static_terrain import StaticPack, StaticTerrainCandidate
+from .multiseed import load_inherited, code_hashes, endpoint, BatchTail, worker_creation_flags
+ENTRY = 'tools/research_readiness/start_static_pair.py'
+TASKS = (('B5', 2029), ('B6', 2029))
+
+class StaticTrainingModel(StaticTerrainCandidate):
+
+    @property
+    def backbone(self):
+        return self.base.backbone
+
+    @property
+    def heads(self):
+        return self.base.heads
+
+    @property
+    def grid(self):
+        return self.base.grid
+
+def unpack(raw, kind, receipt):
+    from .static_terrain import B6_CHANNELS, UNITS
+    with np.load(io.BytesIO(raw), allow_pickle=False) as a:
+        channels = ('elevation_m',) if kind == 'B5' else B6_CHANNELS
+        pack = StaticPack(GridSpec(a['lat'], a['lon']), a['values'], a['valid'], a['region'], channels, UNITS[:len(channels)], receipt['source_sha256'], receipt['aggregation_rule'])
+    if pack.values.shape != (len(channels), 100, 100) or pack.valid.shape != pack.values.shape or pack.valid.dtype != bool or (pack.region.dtype != bool) or (pack.region.sum() != 3430):
+        raise ValueError('Static array/mask shape differs')
+    if not np.isfinite(pack.values[pack.valid]).all() or pack.grid.identity != receipt['grid_sha256']:
+        raise ValueError('Static finite values/grid differ')
+    if not pack.valid[0, pack.region].all() or (kind == 'B6' and (not pack.valid[1:4, pack.region].all())):
+        raise ValueError('No missing supervision terrain allowed')
+    return pack
+
+def model_factory(packs, scalers):
+
+    def create(seed, root):
+        models = paired_models(seed, root)
+        for kind in packs:
+            with torch.random.fork_rng(devices=[]):
+                torch.set_rng_state(torch.Generator(device='cpu').manual_seed(seed + 10000).get_state())
+                models[kind] = StaticTrainingModel(copy.deepcopy(models['B4']), packs[kind], scalers[kind], kind=kind, width=16)
+        return models
+    return create
+
+def training_budget(static_bytes):
+    caps = [477571641012 + static_bytes[k] for k in ('B5', 'B6')]
+    return dict(models=2, updates_per_model=4320, total_updates=8640, weather_source_bytes_per_model=477571641012, weather_source_files_per_model=142812, static_source_bytes_per_model=static_bytes, static_source_files_per_model=1, total_source_bytes_per_model=dict(zip(('B5', 'B6'), caps)), total_source_bytes=sum(caps), total_source_files=285626, max_model_seconds=21600, max_package_seconds=43200, replay_allowance=0, additional_retry_allowance=0, initial_free_bytes=48 * 1024 ** 3, minimum_task_free_bytes=24 * 1024 ** 3)
+
+def hashes(root):
+    h = code_hashes(root)
+    for name in (ENTRY, 'src/yuntapr/experimental/research_readiness/static_training.py', 'src/yuntapr/experimental/research_readiness/static_terrain.py', 'src/yuntapr/experimental/research_readiness/terrain_production.py'):
+        h[name] = sha(root / name)
+    return h
+
+def prepare(root, inherited, terrain, public_terrain, output):
+    root, terrain, output = map(Path, (root, terrain, output))
+    _, p = load_inherited(inherited)
+    r = read(terrain / 'production_receipt.json')
+    public = read(public_terrain)
+    if r['status'] != 'COMPLETE_CANDIDATE_DEM_PRODUCTION_NOT_A_TRAINING_GRANT' or sha(terrain / 'production_receipt.json') != public['artifacts_sha256']['production_receipt.json']:
+        raise ValueError('Terrain production receipt changed')
+    if output.exists() or not output.parent.is_dir():
+        raise PermissionError('Fresh output under confirmed storage parent required')
+    byte_sizes = {k: (terrain / f'{k}_static.npz').stat().st_size for k in ('B5', 'B6')}
+    if shutil.disk_usage(output.parent).free < 48 * 1024 ** 3:
+        raise RuntimeError('Reserve48GiB for two full retained models')
+    scientific = dict(aggregation_rule=r['aggregation_rule'], footprint='ACTUAL_SP04_CENTRES_MIDPOINT_ENDPOINT_HALFSTEP_FLOAT32_EDGES', native_post_area='NEAREST_POST_VORONOI_CELLS_WGS84_ELLIPSOID_AREA', derivative_order='NATIVE_CENTRAL_GRADIENT_THEN_AREA_AVERAGE_EAST_NORTH_COMPONENTS_THEN_SLOPE_ASPECT', static_width=16, fusion='ADDITIVE_TARGET_SP04_FEATURE_RESIDUAL_ZERO_OUTPUT_INITIALIZATION', B5_channels=['elevation_m'], B6_channels=['elevation_m', 'east_gradient', 'north_gradient', 'slope_degrees', 'aspect_sin', 'aspect_cos'], flat_aspect='ZERO_NORMALIZED_VALUE_PLUS_SEPARATE_INVALID_INDICATOR', scaler_fit='2023_TRAIN_UNIQUE_SPATIAL_SUPPORT', source_release=r['release_version'], vertical_datum=r['vertical_datum'])
+    proposal = dict(status='READY_WAITING_EXPLICIT_B5_B6_PROTOCOL_AND_BUDGET_APPROVAL', authorized=False, tasks=[dict(model=k, seed=s) for k, s in TASKS], data=p['data'], scientific_choices=scientific, budget=training_budget(byte_sizes), static_source_sha256={k: sha(terrain / f'{k}_static.npz') for k in byte_sizes}, terrain_receipt_sha256=sha(terrain / 'production_receipt.json'), grid_sha256=r['grid_sha256'], region_sha256=r['region_sha256'], production_source_bytes=r['source_reads']['delivered_bytes'], production_source_files=r['source_reads']['opened_files'], scalers=r['scalers'], source_sha256=r['source_sha256'], code_sha256=hashes(root))
+    proposal['proposal_sha256'] = digest(proposal)
+    wrapper = read(inherited)
+    private = dict(proposal_sha256=proposal['proposal_sha256'], inherited=str(Path(inherited).resolve()), terrain=str(terrain.resolve()), output_root=str(output.resolve()), historical_pair=wrapper['historical_b3_run'])
+    return (proposal, private)
+
+def validate_approval(a, p, v, commit):
+    expected = dict(approved_by_researcher=True, code_commit=commit, proposal_sha256=p['proposal_sha256'], tasks=p['tasks'], budget=p['budget'], scientific_choices=p['scientific_choices'], output_root=v['output_root'])
+    if any((a.get(k) != x for k, x in expected.items())) or not isinstance(a.get('decision_id'), str) or (not a['decision_id'].strip()):
+        raise PermissionError('New explicit B5/B6 protocol, exact code/data/storage and budget approval required')
+
+def checked(root, proposal, private, approval, commit):
+    p, v, a = map(read, (proposal, private, approval))
+    validate_approval(a, p, v, commit)
+    if digest({k: x for k, x in p.items() if k != 'proposal_sha256'}) != p['proposal_sha256'] or v['proposal_sha256'] != p['proposal_sha256'] or hashes(root) != p['code_sha256']:
+        raise ValueError('Approved static proposal/code changed')
+    _, prepared = load_inherited(v['inherited'])
+    if prepared['data'] != p['data']:
+        raise ValueError('Inherited population drift')
+    if sha(Path(v['terrain']) / 'production_receipt.json') != p['terrain_receipt_sha256']:
+        raise ValueError('Terrain receipt changed')
+    return (p, v, a, prepared)
+
+def worker(root, proposal, private, approval, commit, index):
+    started = time.monotonic()
+    p, v, a, prepared = checked(root, proposal, private, approval, commit)
+    if type(index) != int or not 0 <= index < 2:
+        raise PermissionError('Only two approved static tasks')
+    package = Path(v['output_root'])
+    binding = read(package / 'authorization_binding.json')
+    claim = read(package / f'task_{index + 1}_claim.json')
+    if binding['controller_pid'] != os.getppid() or binding['approval'] != a or claim != dict(index=index, controller_pid=os.getppid(), code_commit=commit):
+        raise PermissionError('Direct once-only serial controller required')
+    if os.environ.get('PYTHONHASHSEED') != '2029' or shutil.disk_usage(package).free < 24 * 1024 ** 3:
+        raise RuntimeError('Hash seed or24GiB task admission differs')
+    kind, seed = TASKS[index]
+    folder = package / f'{kind}_s{seed}'
+    packs = {}
+    terrain = Path(v['terrain'])
+    receipt = read(terrain / 'production_receipt.json')
+    static_db = package / f'{kind}_static_source.sqlite'
+    db = sqlite3.connect(static_db)
+    db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)')
+    db.execute("INSERT INTO jobs VALUES ('static','PENDING')")
+    db.commit()
+    path = terrain / f'{kind}_static.npz'
+    n = p['budget']['static_source_bytes_per_model'][kind]
+    meter = SourceMeter(db, {str(path): dict(bytes=n, sha=p['static_source_sha256'][kind], job_id='static')}, max_files=1, max_bytes=n)
+    meter.active = {path_key(path)}
+    try:
+        with meter.open(path, 'rb') as f:
+            raw = f.read()
+        pack = unpack(raw, kind, receipt)
+        meter.active = set()
+        source_totals = meter.totals()
+        with db:
+            db.execute("UPDATE jobs SET state='COMPLETE'")
+    finally:
+        db.close()
+    packs[kind] = pack
+    inputs = prepared['private_inputs']
+    plan = PopulationPlan(inputs['stage3_run'], inputs['request'], root=root)
+    if plan.identity != p['data']:
+        raise ValueError('Population changed')
+
+    def deadline():
+        if time.monotonic() - started > 21600:
+            raise RuntimeError('Static model6h cap; no retry')
+    PairedExecutor(plan, folder, decision=FormalDecision(a['decision_id'], seed, p['data']['population_sha256'], True, True, True), kinds=(kind,), deadline=deadline, tail_factory=BatchTail, code_commit=commit, pair_reference=Path(v['historical_pair']), model_factory=model_factory(packs, p['scalers'])).run(ReaderFactory(plan, prepared, a['decision_id']))
+    result = endpoint(folder, kind, seed, commit)
+    result.update(static_source_reads=source_totals, total_logical_source_bytes=result['logical_source_bytes'] + n)
+    deadline()
+    write(folder / 'completion.json', result)
+    return result
+
+def execute(root, proposal, private, approval, commit):
+    started = time.monotonic()
+    p, v, a, prepared = checked(root, proposal, private, approval, commit)
+    out = Path(v['output_root'])
+    if out.exists():
+        raise PermissionError('Static approval consumed/output exists; no replay or restart')
+    if shutil.disk_usage(out.parent).free < 48 * 1024 ** 3:
+        raise RuntimeError('Initial48GiB reserve')
+    admission = resources()
+    out.mkdir()
+    write(out / 'authorization_binding.json', dict(approval=a, controller_pid=os.getpid(), admission=admission))
+    active = None
+    total_updates = total_bytes = 0
+    try:
+        for index, (kind, seed) in enumerate(TASKS):
+            remaining = 43200 - (time.monotonic() - started)
+            if remaining <= 0:
+                raise RuntimeError('Static package12h cap')
+            write(out / f'task_{index + 1}_claim.json', dict(index=index, controller_pid=os.getpid(), code_commit=commit))
+            env = dict(os.environ, PYTHONHASHSEED='2029', CUBLAS_WORKSPACE_CONFIG=':4096:8', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1', PYTHONUTF8='1')
+            command = [sys.executable, '-B', str(root / ENTRY), 'worker', '--proposal', str(proposal), '--private-preparation', str(private), '--researcher-approval', str(approval), '--task-index', str(index)]
+            with (out / f'{kind}_console.log').open('xb') as f:
+                active = subprocess.Popen(command, cwd=root, env=env, stdout=f, stderr=subprocess.STDOUT, creationflags=worker_creation_flags())
+                try:
+                    rc = active.wait(timeout=min(remaining, 21600))
+                except subprocess.TimeoutExpired:
+                    active.kill()
+                    active.wait()
+                    raise RuntimeError('Static deadline reached; no retry')
+            active = None
+            if rc:
+                raise RuntimeError(f'{kind} worker failed; remaining task blocked')
+            r = read(out / f'{kind}_s{seed}/completion.json')
+            total_updates += r['optimizer_updates']
+            total_bytes += r['total_logical_source_bytes']
+        if total_updates != 8640 or total_bytes != p['budget']['total_source_bytes']:
+            raise RuntimeError('Static package exact closure differs')
+        write(out / 'completion.json', dict(status='COMPLETE_TRAIN_AND_DEV_EVALUATION', updates=total_updates, total_logical_source_bytes=total_bytes, code_commit=commit))
+    except BaseException as exc:
+        if active is not None and active.poll() is None:
+            active.kill()
+            active.wait()
+        write(out / 'failure.json', dict(status='STOP_NO_AUTOMATIC_REPLAY', error=type(exc).__name__ + ': ' + str(exc), partial_counts='SEE_PRESERVED_LEDGERS'))
+        raise

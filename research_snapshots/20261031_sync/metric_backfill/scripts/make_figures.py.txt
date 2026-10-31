@@ -1,0 +1,164 @@
+# Archival copy: formatting normalized; private locators redacted.
+# ---------------------------------------------------------------- fig1
+# ---------------------------------------------------------------- fig2
+# ---------------------------------------------------------------- fig3 heatmap
+# direction: +1 means larger raw delta is an improvement, -1 means smaller raw delta is an improvement
+# ---------------------------------------------------------------- fig4 B3 vs B4
+# ---------------------------------------------------------------- fig5 occurrence r=0.1
+# ---------------------------------------------------------------- fig6 q32 coverage
+"""Figures for the advisor report (Tier-0 numbers only).
+
+All figures state population, seed count, units and evaluation method in the
+footnote. No figure plots anything that does not exist in outputs/tier0_*.csv.
+"""
+from __future__ import annotations
+import csv
+import os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'outputs')
+FIG = os.path.join(OUT, 'figures')
+os.makedirs(FIG, exist_ok=True)
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei', 'SimHei', 'DejaVu Sans']
+plt.rcParams['axes.unicode_minus'] = False
+plt.rcParams['figure.dpi'] = 150
+
+def read_csv(name):
+    with open(os.path.join(OUT, name), 'r', encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+def f(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+runs = read_csv('tier0_runs_all.csv')
+deltas = read_csv('tier0_pairwise_deltas.csv')
+main = [r for r in runs if r['model'] != 'B7_ZERO_DOTE']
+e0 = [r for r in main if r['arm'] == 'E0']
+labels = ['%s/s%s' % (r['model'], r['seed']) for r in e0]
+colors = ['#1f77b4' if r['model'] in ('B0', 'B1') else '#d62728' for r in e0]
+POP_NOTE = 'Populations: B0/B1 = 10,455 Train / 10,501 Dev (B13-V2); B2-B8 = 959 Train / 963 Dev (f006, 4 UTCs, Mar-Oct). Same-year (2024) development set; fixed Epoch 9 (LAST). 2025 final test frozen / not read.'
+fig, axes = plt.subplots(1, 3, figsize=(15, 5.2))
+vals = {'Brier (lower is better)': [f(r['Brier']) for r in e0], 'AUROC (higher is better)': [f(r['AUROC']) for r in e0], 'q32 coverage (nominal 0.984375)': [f(r['q32_coverage']) for r in e0]}
+for ax, (title, v) in zip(axes, vals.items()):
+    ax.bar(range(len(v)), v, color=colors, edgecolor='black', linewidth=0.4)
+    ax.set_title(title, fontsize=10)
+    ax.set_xticks(range(len(v)))
+    ax.set_xticklabels(labels, rotation=90, fontsize=7)
+    ax.grid(axis='y', alpha=0.3)
+    if 'q32' in title:
+        ax.axhline(0.984375, color='green', ls='--', lw=1.2, label='nominal 98.4375%')
+        ax.legend(fontsize=7)
+axes[0].set_ylim(0.085, 0.105)
+axes[1].set_ylim(0.875, 0.905)
+axes[2].set_ylim(0.9, 1.0)
+fig.suptitle('YunTAPR-Net main-table E9 metrics by model/seed (2024 Development)', fontsize=12)
+fig.text(0.01, 0.01, POP_NOTE + ' Blue = B0/B1 population; red = B2-B8 population. Error bars not shown (single seed per run).', fontsize=7)
+fig.tight_layout(rect=(0, 0.04, 1, 0.95))
+fig.savefig(os.path.join(FIG, 'fig1_model_metrics.png'))
+plt.close(fig)
+b01 = [d for d in deltas if d['comparison'].startswith('B1-B0')]
+fig, axes = plt.subplots(2, 2, figsize=(12, 7))
+metrics = [('Brier', 'ΔBrier (neg = improvement)'), ('AUROC', 'ΔAUROC (pos = improvement)'), ('AP', 'ΔAP (pos = improvement)'), ('conditional_pinball', 'ΔConditional Pinball (neg = improvement)')]
+for ax, (key, title) in zip(axes.ravel(), metrics):
+    x = np.arange(len(b01))
+    v = [f(d[key]) for d in b01]
+    ax.bar(x, v, color=['#2ca02c' if (val < 0) == (key in ('Brier', 'conditional_pinball')) else '#d62728' for val in v], edgecolor='black', linewidth=0.4)
+    ax.axhline(0, color='black', lw=0.8)
+    ax.set_title(title, fontsize=9)
+    ax.set_xticks(x)
+    ax.set_xticklabels([d['comparison'].split('|', 1)[1].replace('|', '/') for d in b01], rotation=30, fontsize=7)
+    ax.grid(axis='y', alpha=0.3)
+fig.suptitle('B1 − B0 paired deltas (same seed, same loss arm; 2 seeds × E0/E1/E2)', fontsize=12)
+fig.text(0.01, 0.01, 'Population 10,455 Train / 10,501 Dev (B13-V2), 2024 Development, fixed Epoch 9. E0/E1/E2 are loss arms, NOT independent seeds. Green = improvement in the stated direction.', fontsize=7)
+fig.tight_layout(rect=(0, 0.04, 1, 0.95))
+fig.savefig(os.path.join(FIG, 'fig2_B1_minus_B0.png'))
+plt.close(fig)
+factor_order = ['B3-B2|E0|s2029', 'B4-B3|seed-mean', 'B5-B4|E0|s2029', 'B6-B4|E0|s2029', 'B7-B6|E0|s2029', 'B8-B7|seed-mean']
+mcols = [('Brier', 'ΔBrier'), ('AUROC', 'ΔAUROC'), ('AP', 'ΔAP'), ('conditional_pinball', 'ΔPinball'), ('q32_coverage', 'Δq32cov'), ('POD_r01_Pge05', 'ΔPOD※'), ('FAR_r01_Pge05', 'ΔFAR※'), ('CSI_r01_Pge05', 'ΔCSI※')]
+mat = np.zeros((len(factor_order), len(mcols)))
+for i, fac in enumerate(factor_order):
+    row = next((d for d in deltas if d['comparison'] == fac), None)
+    for j, (k, _) in enumerate(mcols):
+        mat[i, j] = f(row[k]) if row and row.get(k) not in (None, '') else np.nan
+fig, ax = plt.subplots(figsize=(11, 4.8))
+direction = {'Brier': -1, 'AUROC': +1, 'AP': +1, 'conditional_pinball': -1, 'q32_coverage': +1, 'POD_r01_Pge05': +1, 'FAR_r01_Pge05': -1, 'CSI_r01_Pge05': +1}
+norm = np.zeros_like(mat)
+for j, (k, _) in enumerate(mcols):
+    col = mat[:, j] * direction[k]
+    m = np.nanmax(np.abs(col)) if np.isfinite(col).any() else 1
+    norm[:, j] = col / (m if m else 1)
+im = ax.imshow(norm, cmap='RdYlGn', vmin=-1, vmax=1, aspect='auto')
+ax.set_xticks(range(len(mcols)))
+ax.set_xticklabels([c[1] for c in mcols], fontsize=8)
+ax.set_yticks(range(len(factor_order)))
+ax.set_yticklabels(factor_order, fontsize=8)
+for i in range(mat.shape[0]):
+    for j in range(mat.shape[1]):
+        v = mat[i, j]
+        ax.text(j, i, 'NA' if not np.isfinite(v) else '%+.4f' % v, ha='center', va='center', fontsize=7)
+ax.set_title("Paired ablation gains (new − old); green = improvement in the metric's good direction", fontsize=10)
+fig.text(0.01, 0.01, 'B3-B2/B5-B4/B6-B4/B7-B6: single seed (s2029), no SD. B4-B3 and B8-B7: mean over 3 seeds (s2029/2030/2031). B1-B0 shown separately in fig2. All 2024 Development, fixed Epoch 9, f006 population 959/963. ※ POD/FAR/CSI use exploratory post-hoc probability rule P≥0.5 at r=0.1 mm/h.', fontsize=7)
+fig.colorbar(im, ax=ax, fraction=0.02, pad=0.01, label='column-normalised (colour only)')
+fig.tight_layout(rect=(0, 0.05, 1, 1))
+fig.savefig(os.path.join(FIG, 'fig3_ablation_gains.png'))
+plt.close(fig)
+seeds = [2029, 2030, 2031]
+fig, axes = plt.subplots(1, 4, figsize=(14, 4.2))
+for ax, (key, title) in zip(axes, [('Brier', 'Brier ↓'), ('AUROC', 'AUROC ↑'), ('AP', 'AP ↑'), ('conditional_pinball', 'Conditional Pinball ↓')]):
+    b3 = [f(r[key]) for r in e0 if r['model'] == 'B3']
+    b4 = [f(r[key]) for r in e0 if r['model'] == 'B4']
+    x = np.arange(3)
+    ax.plot(x, b3, 'o-', label='B3 (7ch x 6)', color='#1f77b4')
+    ax.plot(x, b4, 's-', label='B4 (B3+MEE13)', color='#d62728')
+    for xi, (a, b) in enumerate(zip(b3, b4)):
+        ax.annotate('', xy=(xi, b), xytext=(xi, a), arrowprops=dict(arrowstyle='->', color='gray', lw=0.8))
+    ax.set_xticks(x)
+    ax.set_xticklabels(['s%d' % s for s in seeds])
+    ax.set_title(title, fontsize=9)
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=7)
+fig.suptitle('B3 vs B4: confirmed three-seed comparison (seed2029/2030/2031, 2024 Development, fixed E9)', fontsize=11)
+fig.text(0.01, 0.01, 'Population 959 Train / 963 Dev (f006). Each seed is an independent training run; arrows show B3→B4 direction. No statistical significance is claimed (same development year, pixels are not independent events).', fontsize=7)
+fig.tight_layout(rect=(0, 0.04, 1, 0.93))
+fig.savefig(os.path.join(FIG, 'fig4_B3_vs_B4_three_seed.png'))
+plt.close(fig)
+fig, ax = plt.subplots(figsize=(13, 4.6))
+x = np.arange(len(e0))
+w = 0.27
+ax.bar(x - w, [f(r['POD_r01_Pge05']) for r in e0], width=w, label='POD', color='#2ca02c')
+ax.bar(x, [f(r['FAR_r01_Pge05']) for r in e0], width=w, label='FAR', color='#d62728')
+ax.bar(x + w, [f(r['CSI_r01_Pge05']) for r in e0], width=w, label='CSI', color='#1f77b4')
+ax.set_xticks(x)
+ax.set_xticklabels(labels, rotation=90, fontsize=7)
+ax.set_ylabel('score (0-1)')
+ax.set_title('Occurrence-event classification at r = 0.1 mm/h using probability rule P(rain>0.1) ≥ 0.5 (EXPLORATORY, POST-HOC)', fontsize=10)
+ax.legend()
+ax.grid(axis='y', alpha=0.3)
+fig.text(0.01, 0.01, "Event: float32 rate > 0.1 mm/h; P≥0.5 bins 5-9. Population: B0/B1 10,501 Dev scenes; B2-B8 963 Dev scenes. Only r=0.1 is derivable from existing aggregates; r=1/5/10/20 and point-estimate rules REQUIRE re-inference. The project's frozen protocol marks POD/FAR/CSI as THRESHOLD_NOT_FROZEN; this figure is supplementary only.", fontsize=7)
+fig.tight_layout(rect=(0, 0.05, 1, 1))
+fig.savefig(os.path.join(FIG, 'fig5_occurrence_r01.png'))
+plt.close(fig)
+fig, ax = plt.subplots(figsize=(8, 4.2))
+x = np.arange(len(e0))
+ax.scatter(x, [f(r['q32_coverage']) for r in e0], c=colors, s=45, zorder=3)
+ax.axhline(0.984375, color='green', ls='--', lw=1.2, label='nominal q32 = 0.984375')
+for i, r in enumerate(e0):
+    ax.annotate('%s/s%s' % (r['model'], r['seed']), (x[i], f(r['q32_coverage'])), textcoords='offset points', xytext=(3, 4), fontsize=6, rotation=90)
+ax.set_xticks([])
+ax.set_ylim(0.9, 1.0)
+ax.set_ylabel('q32 conditional coverage (rainy cells)')
+ax.set_title('q32 coverage at fixed E9: all runs under-cover the nominal 98.4375%', fontsize=10)
+ax.legend(fontsize=8)
+ax.grid(alpha=0.3)
+fig.text(0.01, 0.01, "Coverage = #{log1p(y) ≤ q32} / N_rain (conditional on rainy cells); higher is not automatically 'better' beyond nominal. Blue = B0/B1; red = B2-B8. 2024 Development, fixed Epoch 9.", fontsize=7)
+fig.tight_layout(rect=(0, 0.05, 1, 1))
+fig.savefig(os.path.join(FIG, 'fig6_q32_coverage.png'))
+plt.close(fig)
+print('figures saved to', FIG)
+for fn in sorted(os.listdir(FIG)):
+    print(' -', fn)

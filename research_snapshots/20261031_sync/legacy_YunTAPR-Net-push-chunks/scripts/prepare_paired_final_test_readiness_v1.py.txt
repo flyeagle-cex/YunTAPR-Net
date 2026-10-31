@@ -1,0 +1,115 @@
+# Archival copy: formatting normalized; private locators redacted.
+# authorization stays false; no raw path can open.
+# Zero normalized inputs are explicit synthetic finite data, not missing placeholders.
+"""Bind two new FINALs to existing identities; synthetic inference only, no raw."""
+import argparse, csv, gc, json, math, os, sys
+from pathlib import Path
+from datetime import timedelta
+ROOT = Path(os.environ.get('YUNTAPR_REPO_ROOT', Path(__file__).resolve().parents[1]))
+sys.path[:0] = [str(ROOT / 'src'), str(ROOT), str(ROOT / 'scripts')]
+import numpy as np
+import torch
+import paired_extended_v1 as x
+from yuntapr.training import paired_phase_a as frozen
+from yuntapr.training import paired_phase_a_audit as a
+from yuntapr.models.b1 import paired_models
+from yuntapr.spatial.sp04_mapping import load_sp04
+from yuntapr.data.masks import read_frozen_yunnan_mask
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+CATALOGUE = Path('docs/final_test_b0/catalogue_gate_v1_1/catalogue_only_runs/run_20261003T015507_526850Z/catalogue')
+ELIGIBLE_SHA = '53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e'
+CANDIDATE_SHA = 'b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d'
+FREEZE_SHA = '0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f'
+
+def test_time(value):
+    t = a.data.utc(value)
+    if t.year != 2025 or not 3 <= t.month <= 9 or t.minute not in (0, 30) or t.second or t.microsecond:
+        raise ValueError('Only exact March-September 2025 target identity; October hard reject')
+    return t
+
+def slot_requests(window, kind):
+    t = test_time(window)
+    analysis = t + timedelta(minutes=30)
+    offsets = a.data.OFFSETS if kind == 'B1' else (10,)
+    if kind not in ('B0_MATCHED', 'B1'):
+        raise ValueError('Only paired B0-Matched/B1 supported')
+    nominals = [analysis - timedelta(minutes=m) for m in offsets]
+    return {'window_start': t.isoformat(), 'analysis_time': analysis.isoformat(), 'nominal_times': [n.isoformat() for n in nominals], 'ordering': 'OLDEST_TO_LATEST', 'input_shape': [len(offsets), 501, 501], 'outside_study_window_slot_indices': [i for i, n in enumerate(nominals) if n.year != 2025 or not 3 <= n.month <= 9], 'actual_2025_slot_availability_or_causality_verified': False}
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--registry', required=True, type=Path)
+    args = parser.parse_args()
+    reg = x.read(args.registry)
+    run = Path(reg['run_directory'])
+    integrity = x.read(run / 'phase_b_integrity/final_status.json')
+    if integrity['status'] != 'BOTH_FINALFIT_INTEGRITY_PASS':
+        raise PermissionError('Both verified FINALs required')
+    out = run / 'final_test_readiness'
+    out.mkdir(exist_ok=False)
+    fw = a.RawFirewall()
+    fw.install()
+    catalogue = ROOT / CATALOGUE
+    eligible = catalogue / 'b0_2025_final_test_population_manifest_v1.csv'
+    candidate = catalogue / 'b0_2025_final_test_candidate_catalogue_v1.csv'
+    freeze = catalogue / 'catalogue_freeze_record.json'
+    for p, digest in [(eligible, ELIGIBLE_SHA), (candidate, CANDIDATE_SHA), (freeze, FREEZE_SHA)]:
+        if x.sha256(p) != digest:
+            raise ValueError('Frozen 2025 catalogue identity changed')
+    with eligible.open(encoding='utf8', newline='') as f:
+        identities = list(csv.DictReader(f))
+    if len(identities) != 10244 or any((tuple(r) != gate.POPULATION_COLUMNS for r in identities)):
+        raise ValueError('Only fixed 12-column identity manifest allowed; outcome columns prohibited')
+    windows = [r['window_start'] for r in identities]
+    if len(set(windows)) != 10244 or windows != sorted(windows):
+        raise ValueError('Fixed eligible identity order required')
+    requests = {k: [slot_requests(t, k) for t in windows] for k in ('B0_MATCHED', 'B1')}
+    for k, rows in requests.items():
+        x.save(out / (k.lower() + '_identity_only_slot_requests.json'), rows)
+    guards = []
+    for t in ('2025-10-01T00:00:00+00:00', '2025-02-28T23:30:00+00:00', '2024-07-01T00:00:00+00:00'):
+        try:
+            test_time(t)
+        except ValueError:
+            guards.append(t)
+        else:
+            raise AssertionError('Temporal hard guard failed')
+    contract = frozen.RunnerContract.load()
+    mapping = load_sp04()
+    mask = read_frozen_yunnan_mask(Path(contract.protocol['identity']['yunnan_mask']['path']), mapping)
+    execution = x.read(run / 'phase_b_execution_registry.json')
+    smokes = {}
+    with x.inference_only():
+        for kind, spec in execution['formal_runs'].items():
+            public = Path(spec['public_directory'])
+            expected = x.read(public / 'run_manifest.json')
+            identity = x.read(public / 'checkpoint_registry.json')['FINAL']
+            payload = x.load_verified(identity, expected)
+            anchor, temporal, initial = paired_models()
+            model = temporal if kind == 'B1' else anchor
+            del anchor, temporal
+            model.load_state_dict(payload['model_state_dict'], strict=True)
+            del payload
+            model = model.cuda().eval()
+            before = x.state_digest(model.state_dict())
+            channels = 6 if kind == 'B1' else 1
+            item = {'x': np.zeros((channels, 501, 501), dtype=np.float32), 'y': np.zeros((1, 100, 100), dtype=np.float32), 'valid': np.ones((1, 100, 100), dtype=bool), 'yunnan': mask[None], 'index': 0, 'sample_id': 'SYNTHETIC_INPUT_LAYOUT_ONLY_NOT_A_2025_SOURCE_SCENE'}
+            batch = a.data.make_batch([item])
+            with torch.inference_mode():
+                output, loss = frozen.forward_loss(model, batch)
+            if loss.valid_supervised_count != 3430 or not torch.isfinite(output.conditional_quantiles_physical).all():
+                raise ValueError('Synthetic Final Test interface failed')
+            after = x.state_digest(model.state_dict())
+            if before != after or x.sha256(identity['absolute_local_path']) != identity['sha256']:
+                raise ValueError('Readonly FINAL/model changed in fixture preflight')
+            smokes[kind] = {'status': 'PASS_SYNTHETIC_FINAL_INTERFACE', 'FINAL': identity, 'normalization': expected['normalization'], 'same_10244_frozen_identity_set_schema_bindable': True, 'input_shape': [1, channels, 501, 501], 'model_state_sha256_before': before, 'model_state_sha256_after': after, 'SYNTHETIC_FORWARD_CALLS': 1, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, '2025_MODEL_INFERENCE_SCENES': 0, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0}
+            del model, batch, output, loss
+            gc.collect()
+            torch.cuda.empty_cache()
+    x.save(out / 'synthetic_final_interface_preflight.json', smokes)
+    boundary = {k: [rows[i]['sample_id'] for i, r in enumerate(requests[k]) if r['outside_study_window_slot_indices']] for k in requests for rows in [identities]}
+    packet = {'status': 'READINESS_PACKAGE_ONLY_ZERO_2025_RAW', 'models': smokes, 'frozen_2025_eligible_count': 10244, 'eligible_manifest': x.pin(eligible), 'candidate_catalogue': x.pin(candidate), 'catalogue_freeze_record': x.pin(freeze), 'evaluation_protocol': x.pin(ROOT / gate.PROTOCOL_PATH), 'evaluation_definitions': 'INHERIT_FROZEN_V1_1_PRIMARY_AND_2024_DIAGNOSTIC_RULES_NO_METRIC_CHANGE', 'actual_2025_six_slot_readability_QC_and_causality': 'NOT_RUN_NO_2025_RAW_AUTHORIZATION', 'B1_2025_formal_eligibility_certified': False, 'outside_study_window_identity_only_diagnostic': boundary, 'RESEARCHER_DECISION_REQUIRED': ['Authorize any future 2025 raw audit/inference separately', 'Resolve B1 six-slot test eligibility on the frozen 2025 identities before claiming an executable formal test'], 'B0_MATCHED_FINAL_identity_ready': True, 'B1_FINAL_identity_ready': True, 'active_final_test_authorization_created': False, 'FINAL_TEST_2025_AUTHORIZED': False, '2025_FINAL_TEST_EXECUTED': False, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, '2025_MODEL_INFERENCE_SCENES': 0, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0, 'hard_guard_cases_passed': guards, 'completed_utc': x.now()}
+    x.save(out / 'final_status.json', packet)
+    print(json.dumps({'status': packet['status'], 'B1_actual_2025_eligibility_certified': False, 'identity_only_boundary_count': {k: len(v) for k, v in boundary.items()}, '2025_RAW_ACCESS': 0}), flush=True)
+if __name__ == '__main__':
+    main()

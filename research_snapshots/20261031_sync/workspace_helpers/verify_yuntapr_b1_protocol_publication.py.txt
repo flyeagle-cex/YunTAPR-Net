@@ -1,0 +1,99 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import argparse, ast, hashlib, json, re, subprocess, sys
+import verify_yuntapr_final_test_preflight_publication as remote_helper
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+active = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+BASE = active['baseline']
+RUN = Path(active['run_directory'])
+INDEX = RUN / 'delivery_artifact_sha256.json'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.contracts.loader import sha256
+from yuntapr.training.paired_phase_a import RunnerContract, implementation_hashes
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf-8'))
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def audit():
+    with PreflightSourceGuard() as guard:
+        history = read(RUN / 'history_before.json')['files']
+        assert len(history) == 1982
+        for rel, ref in history.items():
+            assert sha256(REPO / rel) == ref['sha256'], rel
+        for rel, digest in read(RUN / 'resume_ancestry.json')['files'].items():
+            assert sha256(REPO / rel) == digest, rel
+        status = read(RUN / 'final_status.json')
+        test = read(RUN / 'test_summary.json')
+        assert test['all_passed'] and test['total_tests_executed'] == 288 and (test['actual_test_invocations_including_rechecks'] == 299)
+        assert all((r['passed'] and (not (r['errors'] or r['failures'] or r['skipped'])) for r in test['suites']))
+        for k in ('B1_TRAINING_PROTOCOL_FULLY_FROZEN', 'B0_MATCHED_TRAINING_PROTOCOL_FULLY_FROZEN', 'PAIRED_INITIALIZATION_VERIFIED', 'B1_FORMAL_RUNNER_READY', 'B0_MATCHED_FORMAL_RUNNER_READY'):
+            assert status[k] is True
+        for k in ('B1_TRAINING_AUTHORIZED', 'B0_MATCHED_CONTROL_TRAINING_AUTHORIZED', 'B1_TRAINING_STARTED', 'B0_MATCHED_CONTROL_TRAINING_STARTED', '2025_FINAL_TEST_EXECUTED'):
+            assert status[k] is False
+        assert status['FORMAL_OPTIMIZER_STEPS'] == status['2025_RAW_ACCESS'] == status['2025_PIXELS_READ'] == status['2025_MODEL_INFERENCE_SCENES'] == 0
+        c = RunnerContract.load()
+        assert c.protocol_sha256 == status['protocol_sha256']
+        assert read(RUN / 'runner_closure_manifest.json')['implementation_hashes'] == implementation_hashes()
+        for model in ('b1', 'b0_matched'):
+            assert read(REPO / f'config/training/{model}_phase_a_authorization_template_v1.json')['AUTHORIZED'] is False
+        render = read(RUN / 'render_verification.json')
+        assert render['all_rendered_pages_visually_inspected'] and render['pages'] == 4 and (render['overfull_boxes'] == render['missing_glyphs'] == 0)
+        assert render['pdf_sha256'] == sha256(RUN / 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.pdf')
+        assert render['source_sha256'] == sha256(RUN / 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.tex')
+        assert read(RUN / 'validation_2024_inference_gpu_audit.json')['status'] == 'PASS'
+        for rel, ref in read(INDEX).items():
+            assert sha256(REPO / rel) == ref['sha256'] and (REPO / rel).stat().st_size == ref['bytes'], rel
+        for rel in ('B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.md', 'B1_B0_MATCHED_PHASE_A_TRAINING_PROTOCOL_v1.tex'):
+            assert '人口' not in (RUN / rel).read_text(encoding='utf-8')
+        assert guard.raw_open_events == 0
+    return {'status': 'PASS', 'historical_files_unchanged': 1982, 'tests_passed': 288, 'actual_test_invocations': 299, 'formal_optimizer_steps': 0, '2025_pixels_read': 0, 'protocol_frozen': True, 'formal_runner_ready': True, 'training_authorized': False, 'run_id': RUN.name}
+
+def changes(commit=None):
+    args = ('diff', '--name-status', '-z', BASE, commit) if commit else ('diff', '--cached', '--name-status', '-z')
+    parts = [p.decode('utf-8') for p in git(*args).split(b'\x00') if p]
+    files = {}
+    allowed = set(read(INDEX)) | {INDEX.relative_to(REPO).as_posix()}
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        assert action == 'A' and name in allowed, (action, name)
+        p = REPO / name
+        data = p.read_bytes()
+        assert p.suffix in ('.py', '.md', '.tex', '.pdf', '.json', '.txt', '.yaml') and len(data) < 20000000
+        if p.suffix == '.pdf':
+            assert data.startswith(b'%PDF-')
+        else:
+            assert b'\x00' not in data
+            data.decode('utf-8')
+            assert not re.search(b'ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|BEGIN (?:RSA |EC )?PRIVATE KEY', data)
+        assert git('show', (commit or '') + ':' + name) == data, name
+        files[name] = {'bytes': len(data), 'sha256': sha256(p), 'blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    assert set(files) == allowed
+    return files
+
+def remote(commit, files):
+    remote_helper.BASE = BASE
+    return remote_helper.remote(commit, files)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'local': audit()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = changes(commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+        if args.remote:
+            result['remote'] = remote(commit, files)
+        p = ROOT / ('YunTAPR-b1-protocol-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        p.write_text(json.dumps(result, indent=2), encoding='utf-8')
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(p)
+    print(json.dumps(result), flush=True)

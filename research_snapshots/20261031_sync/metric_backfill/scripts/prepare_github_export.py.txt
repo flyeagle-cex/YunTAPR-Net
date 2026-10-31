@@ -1,0 +1,177 @@
+# Archival copy: formatting normalized; private locators redacted.
+# contingency (candidate A/B/C + OCC_P + D)
+# reports
+# workbook (binary, no sanitisation needed)
+# figures
+# Tier-0 CSVs (sanitised)
+# Tier-1 compact tables (derived, sanitised by construction)
+# scripts (sanitised text)
+# sanitised run registry (drop absolute paths; keep identity)
+"""Prepare the public GitHub export of the metric back-fill deliverable.
+
+Run after the Tier-1 campaign finishes (19/19 runs) and the merged workbook is
+rebuilt.  Produces `public_export/` containing only public-safe artifacts:
+
+  * six-sheet Excel workbook, figures, README/REPORT (methods, results, limits)
+  * machine-readable metric CSVs with absolute private paths sanitised
+  * Tier-1 compact metrics / gate summary derived from result.json files
+  * scripts (Tier-0 builders + Tier-1 runner design/scripts)
+  * MANIFEST.json with every exported file's SHA256 and byte size
+
+Never exported: checkpoints/weights, raw netCDF data, private staging paths,
+per-pixel outputs, unredacted read ledgers, logs.
+"""
+from __future__ import annotations
+import csv
+import hashlib
+import json
+import os
+import re
+import shutil
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'outputs')
+PUB = os.path.join(ROOT, 'public_export')
+PHASEB = os.path.join(ROOT, 'phaseB_inference')
+SANITIZE = [(re.compile('<PRIVATE_LOCATOR_c7343451282f>', re.I), '<WORKSPACE>'), (re.compile('<PRIVATE_LOCATOR_1ff28d5fdcdb>', re.I), '<WORKSPACE>'), (re.compile('<PRIVATE_LOCATOR_88f72c05ef74>', re.I), '<PRIVATE_CHECKPOINT_BACKUP>'), (re.compile('<PRIVATE_LOCATOR_222c20fb2e54>', re.I), '<PRIVATE_CHECKPOINT_BACKUP>'), (re.compile('<PRIVATE_LOCATOR_bd3a5ca188e2>"\'\\\\s,;]*', re.I), '<PRIVATE_RAW_SATELLITE>'), (re.compile('<PRIVATE_LOCATOR_d8f13ea30101>"\'\\\\s,;]*', re.I), '<PRIVATE_RAW_SATELLITE>'), (re.compile('<PRIVATE_LOCATOR_6064126bbedd>', re.I), '<PRIVATE_RESEARCH_ROOT>'), (re.compile('<PRIVATE_LOCATOR_7fea3423afc7>', re.I), '<PRIVATE_RESEARCH_ROOT>'), (re.compile('<PRIVATE_LOCATOR_170f1bc9c65e>', re.I), '<PRIVATE_RESEARCH_ROOT_D>'), (re.compile('<PRIVATE_LOCATOR_092381d66474>', re.I), '<PRIVATE_RESEARCH_ROOT_D>'), (re.compile('<PRIVATE_LOCATOR_a62a3ad76510>"\'\\\\s,;]*', re.I), '<PRIVATE_RAW_IMERG>'), (re.compile('<PRIVATE_LOCATOR_a31568e49f19>"\'\\\\s,;]*', re.I), '<PRIVATE_RAW_IMERG>'), (re.compile('<PRIVATE_LOCATOR_9e3da7a7eb5b>', re.I), '<PRIVATE_HOME>'), (re.compile('<PRIVATE_LOCATOR_9a3b9054b918>', re.I), '<PRIVATE_HOME>')]
+
+def sanitize(text: str) -> str:
+    for pat, repl in SANITIZE:
+        text = pat.sub(repl, text)
+    return text
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def copy_text(src, dst):
+    with open(src, 'r', encoding='utf-8-sig', errors='replace') as f:
+        text = f.read()
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    with open(dst, 'w', encoding='utf-8') as f:
+        f.write(sanitize(text))
+
+def copy_binary(src, dst):
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copyfile(src, dst)
+
+def sanitized_csv(src, dst):
+    with open(src, 'r', encoding='utf-8-sig', newline='') as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return
+    fields = list(rows[0].keys())
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    with open(dst, 'w', encoding='utf-8-sig', newline='') as f:
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader()
+        for r in rows:
+            w.writerow({k: sanitize(str(v)) if v is not None else '' for k, v in r.items()})
+
+def build_tier1_tables():
+    """Compact Tier-1 metrics + gate summary from result.json files (sanitised)."""
+    base = os.path.join(ROOT, 'phaseB_inference', 'outputs')
+    rows, gates = ([], [])
+    for d in sorted(os.listdir(base)):
+        if d.startswith(('_', 'tier1', 't_', 'campaign')):
+            continue
+        p = os.path.join(base, d, 'result.json')
+        if not os.path.exists(p):
+            continue
+        j = json.load(open(p, encoding='utf-8'))
+        gate = j.get('gate') or {}
+        gates.append({'run_id': d, 'model': j.get('model'), 'seed': j.get('seed'), 'status': j.get('status'), 'gate_passed': gate.get('passed'), 'elapsed_min': round((j.get('elapsed_seconds') or 0) / 60.0, 2), 'n_valid_recomputed': (gate.get('counts') or {}).get('n_valid', {}).get('recomputed'), 'n_rain_recomputed': (gate.get('counts') or {}).get('n_rain', {}).get('recomputed'), 'brier_abs_diff': (gate.get('metrics') or {}).get('brier', {}).get('abs_diff'), 'auroc_abs_diff': (gate.get('metrics') or {}).get('auroc', {}).get('abs_diff'), 'ap_abs_diff': (gate.get('metrics') or {}).get('average_precision', {}).get('abs_diff'), 'pinball_abs_diff': (gate.get('metrics') or {}).get('conditional_pinball', {}).get('abs_diff'), 'q32_cov_abs_diff': (gate.get('metrics') or {}).get('q32_coverage', {}).get('abs_diff')})
+        nm = j.get('new_metrics') or {}
+        for pe in nm.get('point_estimates', []):
+            rows.append({'run_id': d, 'model': j.get('model'), 'seed': j.get('seed'), 'candidate': pe.get('candidate'), 'status': pe.get('status'), 'MAE_mm_h': pe.get('MAE_mm_h'), 'RMSE_mm_h': pe.get('RMSE_mm_h'), 'MeanBias_mm_h': pe.get('MeanBias_mm_h'), 'Pearson_CC': pe.get('Pearson_CC'), 'N_valid': (pe.get('sums') or {}).get('N')})
+        for cand, block in (nm.get('contingency') or {}).items():
+            for thr, m in (block.get('rows') or {}).items():
+                rows.append({'run_id': d, 'model': j.get('model'), 'seed': j.get('seed'), 'candidate': cand, 'status': block.get('status'), 'threshold_mm_h': thr, 'TP': m.get('TP'), 'FP': m.get('FP'), 'FN': m.get('FN'), 'TN': m.get('TN'), 'POD': m.get('POD'), 'FAR': m.get('FAR'), 'CSI': m.get('CSI'), 'HSS': m.get('HSS')})
+    return (rows, gates)
+
+def main():
+    os.makedirs(PUB, exist_ok=True)
+    entries = []
+
+    def add(path, kind):
+        entries.append({'file': os.path.relpath(path, PUB), 'kind': kind, 'bytes': os.path.getsize(path), 'sha256': sha256_file(path)})
+    for name in ('README.md', 'REPORT.md'):
+        dst = os.path.join(PUB, name)
+        copy_text(os.path.join(ROOT, name), dst)
+        add(dst, 'report')
+    wb = None
+    for name in sorted(os.listdir(OUT)):
+        if name.endswith('.xlsx'):
+            wb = name
+            break
+    if wb:
+        dst = os.path.join(PUB, 'workbook', wb)
+        copy_binary(os.path.join(OUT, wb), dst)
+        add(dst, 'workbook')
+    figdir = os.path.join(OUT, 'figures')
+    if os.path.isdir(figdir):
+        for name in sorted(os.listdir(figdir)):
+            if name.endswith('.png'):
+                dst = os.path.join(PUB, 'figures', name)
+                copy_binary(os.path.join(figdir, name), dst)
+                add(dst, 'figure')
+    for name in sorted(os.listdir(OUT)):
+        if name.startswith('tier0_') and name.endswith('.csv'):
+            dst = os.path.join(PUB, 'metrics', name)
+            sanitized_csv(os.path.join(OUT, name), dst)
+            add(dst, 'metrics')
+    val = os.path.join(OUT, 'tier0_validation.json')
+    if os.path.exists(val):
+        dst = os.path.join(PUB, 'metrics', 'tier0_validation.json')
+        copy_text(val, dst)
+        add(dst, 'metrics')
+    rows, gates = build_tier1_tables()
+    os.makedirs(os.path.join(PUB, 'metrics'), exist_ok=True)
+    ti_path = os.path.join(PUB, 'metrics', 'tier1_metrics_long.csv')
+    with open(ti_path, 'w', encoding='utf-8-sig', newline='') as f:
+        fields = []
+        for r in rows:
+            for k in r:
+                if k not in fields:
+                    fields.append(k)
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader()
+        w.writerows(rows)
+    add(ti_path, 'metrics')
+    gate_path = os.path.join(PUB, 'metrics', 'tier1_gate_summary.csv')
+    with open(gate_path, 'w', encoding='utf-8-sig', newline='') as f:
+        fields = list(gates[0].keys()) if gates else ['run_id']
+        w = csv.DictWriter(f, fieldnames=fields)
+        w.writeheader()
+        w.writerows(gates)
+    add(gate_path, 'metrics')
+    for rel in ('scripts/tier0_build.py', 'scripts/build_excel.py', 'scripts/make_figures.py', 'phaseB_inference/infer_eval.py', 'phaseB_inference/design.md', 'phaseB_inference/smoke_plan.md', 'phaseB_inference/expected_budget.md', 'phaseB_inference/launch_after_seal.ps1'):
+        src = os.path.join(ROOT, rel)
+        if os.path.exists(src):
+            dst = os.path.join(PUB, rel)
+            copy_text(src, dst)
+            add(dst, 'script')
+    reg = os.path.join(PHASEB, 'run_registry.json')
+    if os.path.exists(reg):
+        j = json.load(open(reg, encoding='utf-8'))
+        for r in j.get('runs', []):
+            for k in ('checkpoint_path', 'dev_report_path', 'dev_report_sha256_path'):
+                if k in r:
+                    r[k] = '<PRIVATE_PATH>/' + os.path.basename(str(r[k]))
+            if 'code_root' in r:
+                r['code_root'] = '<PRIVATE_CODE_ROOT>/' + os.path.basename(str(r['code_root']))
+        dst = os.path.join(PUB, 'phaseB_inference', 'run_registry_public.json')
+        with open(dst, 'w', encoding='utf-8') as f:
+            json.dump(j, f, ensure_ascii=False, indent=1)
+        add(dst, 'registry')
+    manifest = {'schema': 'YUNTAPR_METRIC_BACKFILL_PUBLIC_EXPORT_V1', 'generated_utc': __import__('time').strftime('%Y-%m-%dT%H:%M:%SZ', __import__('time').gmtime()), 'scope': '2024 Development fixed E9 metrics back-fill; no 2025 access; no training', 'n_files': len(entries), 'files': entries}
+    with open(os.path.join(PUB, 'MANIFEST.json'), 'w', encoding='utf-8') as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    print('public export:', PUB)
+    print('files:', len(entries))
+    for e in entries:
+        print(' ', e['file'], e['bytes'])
+if __name__ == '__main__':
+    main()

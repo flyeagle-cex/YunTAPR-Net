@@ -1,0 +1,73 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read-only: checkpoint payload schema probe + frozen-source SHA verification.
+
+Loads one LAST_epoch_09.pt per model family on CPU (weights_only=False, local trusted
+training checkpoints) and prints the top-level payload keys plus state_dict key count.
+Also verifies that current worktree source files match the frozen release pins that were
+recorded at training time (seed2026 source_release.json and seed2027 release pins).
+
+No forward pass, no optimizer, no raw observation payload.
+"""
+from __future__ import annotations
+import hashlib
+import json
+import os
+import sys
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+H26 = '<PRIVATE_LOCATOR_4ace3098b640>'
+F = '<PRIVATE_LOCATOR_cfc983c5f221>'
+D = '<PRIVATE_LOCATOR_6f45235199f2>'
+CKPTS = {'B0': os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'B1': os.path.join(H26, 'B1_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt'), 'B2': os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_LAST_epoch_09.pt'), 'B3': os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_LAST_epoch_09.pt'), 'B5': os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_LAST_epoch_09.pt'), 'B7': os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_LAST_epoch_09.pt')}
+
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def probe_ckpt():
+    import torch
+    out = {}
+    for kind, path in CKPTS.items():
+        payload = torch.load(path, map_location='cpu', weights_only=False)
+        keys = sorted(payload.keys())
+        state = payload.get('model')
+        info = {'path': path, 'top_keys': keys, 'state_tensors': len(state) if state else None, 'epoch': payload.get('epoch'), 'schema': payload.get('schema'), 'identity_keys': sorted(payload['identity'].keys()) if isinstance(payload.get('identity'), dict) else None}
+        print(kind, json.dumps(info, ensure_ascii=False)[:2000], flush=True)
+        if state:
+            info['state_sample'] = {k: list(v.shape) for k, v in list(state.items())[:8]}
+            print(kind, 'sample:', json.dumps(info['state_sample']), flush=True)
+            info['param_bytes'] = sum((v.numel() * v.element_size() for v in state.values() if hasattr(v, 'numel')))
+        out[kind] = info
+        del payload, state
+    return out
+
+def verify_seed2026_pins():
+    pins_path = os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'source_release.json')
+    with open(pins_path, 'r', encoding='utf-8') as f:
+        rel = json.load(f)
+    pins = rel['source_pins']
+    bad, ok = ([], 0)
+    for relpath, expected in pins.items():
+        local = os.path.join(ACT, relpath.replace('/', os.sep))
+        if not os.path.exists(local):
+            bad.append((relpath, 'MISSING'))
+            continue
+        actual = sha256_file(local)
+        if actual != expected:
+            bad.append((relpath, 'MISMATCH', actual, expected))
+        else:
+            ok += 1
+    return dict(pins_file=pins_path, total=len(pins), matched=ok, bad=bad, source_commit=rel.get('source_commit'), source_sha256=rel.get('source_sha256'))
+
+def main():
+    out = {'checkpoints': probe_ckpt(), 'seed2026_pins': verify_seed2026_pins()}
+    with open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'outputs', 'probe_ckpt_schema.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print('seed2026 pin check:', json.dumps({k: out['seed2026_pins'][k] for k in ('total', 'matched', 'source_commit')}, ensure_ascii=False))
+    print('bad pins:', json.dumps(out['seed2026_pins']['bad'], ensure_ascii=False)[:1500])
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,80 @@
+# Archival copy: formatting normalized; private locators redacted.
+# execution commits per family/run (from completion.json / receipts already read)
+# also allow src-only match if config differs
+"""Read-only verification of frozen-code identity for each executed family/commit.
+
+For every execution commit recorded in run completion receipts, finds a current
+worktree whose `src/yuntapr` + `config` trees are bit-identical (git tree objects),
+which is what makes "PYTHONPATH=<worktree>/src" a valid frozen re-execution copy.
+
+Also probes the seed2027 checkpoint payload identity (top-level keys + code field).
+No data payload, no forward pass.
+"""
+from __future__ import annotations
+import json
+import os
+import subprocess
+import sys
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+REPO = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+H26 = '<PRIVATE_LOCATOR_4ace3098b640>'
+F = '<PRIVATE_LOCATOR_cfc983c5f221>'
+PUSH = os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution')
+WORKTREES = {'readiness_HEAD': REPO, 'recovery_exec_943da95': os.path.join(WS, 'YunTAPR-recovery-exec-943da95'), 'multiseed_exec_52a8e90': os.path.join(WS, 'YunTAPR-multiseed-exec-52a8e90'), 'static_corrected_b251fd9': os.path.join(WS, 'YunTAPR-static-corrected-exec-b251fd9'), 'static_d696fe2': os.path.join(WS, 'YunTAPR-static-exec-d696fe2'), 'dynamic_b1f072e': os.path.join(WS, 'YunTAPR-dynamic-exec-b1f072e'), 'dynamic_multiseed_e81c6e1': os.path.join(WS, 'YunTAPR-dynamic-multiseed-recovery-exec-e81c6e1'), 'b8_recovery_ef11531': os.path.join(WS, 'YunTAPR-B8-recovery-exec-ef11531'), 'b7b8_multiseed_56aae5b': os.path.join(WS, 'YunTAPR-B7-B8-multiseed-exec-56aae5b'), 'seed2029_launch_prep_5b5298f': os.path.join(WS, 'YunTAPR-seed2029-launch-prep-20261024'), 'seed2029_recovery_0ccb3e2': os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024'), 'stage4_d475722': os.path.join(WS, 'YunTAPR-stage4-20261024'), 'dote_zero_0c91ff0': os.path.join(WS, 'YunTAPR-dote-zero-exec-0c91ff0'), 'dote_zero_multi_8a46683': os.path.join(WS, 'YunTAPR-dote-zero-multiseed-exec-8a46683'), 'push_chunks_main': os.path.join(WS, 'YunTAPR-Net-push-chunks')}
+EXEC = {'B0/B1 s2026': ['db3cb10fa1f62c1a8dfb330a9db60eccd5efaea3'], 'B0/B1 s2027 initial release': ['8e8fd2545e41b2f4834366c02bd89bd37cd9891d'], 'B2 s2029': ['a35302186b4b5d3d7ec735885a8d93762e6d3567'], 'B3/B4 s2029 E1-E3': ['5b5298f41025db5b7b718fd736fc3fe6de516875'], 'B3/B4 s2029 E4-E9': ['7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35'], 'B3 s2030 E1-E9': ['52a8e90dcea156382d7f2c510c5891c78e610329'], 'B4 s2030 E1 (inherited)': ['52a8e90dcea156382d7f2c510c5891c78e610329'], 'B3/B4 s2031 + B4 s2030 E2-E9': ['943da957a3af846746c21b52d05a148bcb135064'], 'B5/B6 s2029': ['b251fd9ea06c0c90f48d2ac0decba0454114669d'], 'B7 s2029 + B8 s2029 E1-E6': ['b1f072e45fdd17b80106a774083995c350b28f04'], 'B8 s2029 E7-E9': ['ef11531a7cdeb35b767caebdb61e0e81c6123187'], 'B7/B8 s2030 E1-E6': ['56aae5bc4568df5d91354805aa5d4cb6d34b62b3'], 'B7/B8 s2030/s2031 E7-E9 + s2031': ['e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c'], 'ZERO_DOTE s2029': ['0c91ff0f36d5cce3f4516d38663482650f61b03a']}
+
+def git(args, cwd=REPO):
+    return subprocess.run(['git', '-C', cwd] + args, capture_output=True, text=True, check=False)
+
+def tree_of(ref):
+    r = git(['rev-parse', ref])
+    return r.stdout.strip() if r.returncode == 0 else None
+
+def compare():
+    result = {}
+    worktree_trees = {}
+    for name, path in WORKTREES.items():
+        if not os.path.exists(path):
+            worktree_trees[name] = None
+            continue
+        head = tree_of('HEAD') if path == REPO else git(['rev-parse', 'HEAD'], cwd=path).stdout.strip()
+        src = git(['rev-parse', head + ':src/yuntapr']).stdout.strip()
+        cfg = git(['rev-parse', head + ':config']).stdout.strip()
+        worktree_trees[name] = dict(head=head, src=src, config=cfg)
+    result['worktree_trees'] = worktree_trees
+    commit_trees = {}
+    for label, commits in EXEC.items():
+        rows = []
+        for c in commits:
+            cs = git(['rev-parse', c + ':src/yuntapr']).stdout.strip()
+            cc = git(['rev-parse', c + ':config']).stdout.strip()
+            match = [n for n, t in worktree_trees.items() if t and t['src'] == cs and (t['config'] == cc)]
+            match_src = [n for n, t in worktree_trees.items() if t and t['src'] == cs]
+            rows.append(dict(commit=c, src_tree=cs, config_tree=cc, exact_worktrees=match, src_only_worktrees=match_src))
+        commit_trees[label] = rows
+        print(label, json.dumps(rows)[:600], flush=True)
+    result['commits'] = commit_trees
+    return result
+
+def probe_s2027():
+    import torch
+    path = os.path.join(PUSH, 'seed2027_epoch2_recovery_v2', '.local', 'B0_MATCHED_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt')
+    payload = torch.load(path, map_location='cpu', weights_only=False)
+    ident = payload.get('identity', {})
+    info = dict(path=path, top_keys=sorted(payload.keys()), state_tensors=len(payload['model']), identity_keys=sorted(ident.keys()) if isinstance(ident, dict) else None, epoch=payload.get('epoch'), schema=payload.get('schema'))
+    if isinstance(ident, dict):
+        info['identity_code'] = ident.get('code')
+        info['identity_run_id'] = ident.get('run_id')
+        info['identity_data'] = ident.get('data')
+    print('s2027 ckpt:', json.dumps(info, ensure_ascii=False)[:2500], flush=True)
+    return info
+if __name__ == '__main__':
+    out = {'code_identity': compare()}
+    try:
+        out['s2027_checkpoint'] = probe_s2027()
+    except BaseException as exc:
+        out['s2027_checkpoint_error'] = type(exc).__name__ + ': ' + str(exc)
+    base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(base, 'outputs', 'probe_code_identity.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print('WROTE outputs/probe_code_identity.json')

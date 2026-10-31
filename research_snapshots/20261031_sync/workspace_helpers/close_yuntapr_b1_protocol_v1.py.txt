@@ -1,0 +1,46 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Numerical code used by real GPU checks is unchanged by later path/resume hardening.
+from pathlib import Path
+import ast, datetime, hashlib, json, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.training.paired_phase_a import RunnerContract, implementation_hashes
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+
+def read(n):
+    return json.loads((run / n).read_text(encoding='utf-8'))
+
+def save(p, v):
+    with p.open('x', encoding='utf-8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2, allow_nan=False)
+        f.write('\n')
+tests = read('test_summary.json')
+assert tests['all_passed'] and all((x['passed'] and (not (x['errors'] or x['failures'] or x['skipped'])) for x in tests['suites']))
+contract = RunnerContract.load()
+gpu = read('gpu_feasibility.json')
+eng = read('engineering_preflight.json')
+loader = read('loader_preflight.json')
+assert gpu['status'] == loader['status'] == eng['status'] == 'PASS'
+assert eng['engineering_optimizer_steps'] == 18 and eng['FORMAL_OPTIMIZER_STEPS'] == 0
+assert not list(Path(a['staging_root']).rglob('*.nc'))
+before = read('history_before.json')['files']
+for rel, ref in before.items():
+    assert hashlib.sha256((REPO / rel).read_bytes()).hexdigest() == ref['sha256'], rel
+ancestry = read('resume_ancestry.json')
+for rel, digest in ancestry['files'].items():
+    assert hashlib.sha256((REPO / rel).read_bytes()).hexdigest() == digest, rel
+arch = read('engineering_execution_source_archive.json')
+old = ast.parse((REPO / arch['src/yuntapr/training/paired_phase_a.py']['snapshot_path']).read_text(encoding='utf-8'))
+new = ast.parse((REPO / 'src/yuntapr/training/paired_phase_a.py').read_text(encoding='utf-8'))
+names = ('protocol_body', 'optimizer_for', 'forward_loss', 'forward_backward_clip', 'batch_plan', 'EpochCoverage')
+get = lambda tree, name: ast.dump(next((n for n in tree.body if isinstance(n, (ast.FunctionDef, ast.ClassDef)) and n.name == name)), include_attributes=False)
+assert all((get(old, n) == get(new, n) for n in names))
+save(run / 'post_preflight_code_review.json', {'unchanged_numerical_functions': list(names), 'AST_bit_identical': True, 'changes_after_GPU': 'Authorization JSON path hard guard before hash; preserve train numerators and recover completed-LAST history after interrupted write', 'current_implementation_hashes': implementation_hashes(), 'tests_passed': tests['total_tests_executed']})
+truekeys = ['B1_DESIGN_FROZEN', 'B1_SAMPLE_SETS_FROZEN', 'B1_NORMALIZATION_FROZEN', 'B0_MATCHED_CONTROL_NORMALIZATION_FROZEN', 'B1_TRAINING_PROTOCOL_FULLY_FROZEN', 'B0_MATCHED_TRAINING_PROTOCOL_FULLY_FROZEN', 'PAIRED_INITIALIZATION_FROZEN', 'PAIRED_INITIALIZATION_VERIFIED', 'B1_GPU_FEASIBILITY_PASS', 'B0_MATCHED_GPU_FEASIBILITY_PASS', 'B1_FORMAL_RUNNER_READY', 'B0_MATCHED_FORMAL_RUNNER_READY']
+falsekeys = ['B1_TRAINING_AUTHORIZED', 'B0_MATCHED_CONTROL_TRAINING_AUTHORIZED', 'B1_TRAINING_STARTED', 'B0_MATCHED_CONTROL_TRAINING_STARTED', '2025_FINAL_TEST_EXECUTED', 'FORMAL_MODEL_PARAMETERS_UPDATED']
+status = {**{k: True for k in truekeys}, **{k: False for k in falsekeys}, 'status': 'PROTOCOL_FROZEN_FORMAL_RUNNERS_READY_TRAINING_NOT_AUTHORIZED', 'run_id': run.name, 'baseline': a['baseline'], 'PHYSICAL_BATCH': 2, 'ACCUMULATION': 1, 'STEPS_PER_EPOCH': 5228, 'W': 5228, 'U': 261400, 'VALIDATION_BATCH': gpu['common_validation_batch'], 'FORMAL_OPTIMIZER_STEPS': 0, '2025_PIXELS_READ': 0, '2025_RAW_ACCESS': 0, '2025_MODEL_INFERENCE_SCENES': 0, 'ENGINEERING_ONLY_OPTIMIZER_STEPS': 18, 'historical_files_byte_identical': len(before), 'test_fixture_optimizer_steps': tests['fixture_optimizer_steps'], 'test_fixture_backward_calls': tests['fixture_backward_calls'], 'test_count': tests['total_tests_executed'], 'protocol_sha256': contract.protocol_sha256, 'completed_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'formal_checkpoint_binaries_written': 0, 'packages_installed_or_upgraded': False, 'STOP_AFTER_GITHUB_PUBLICATION': True}
+save(run / 'final_status.json', status)
+save(run / 'decision_update.json', {'supersedes_pending_training_and_control_scaler_decisions_from': 'config/b1/b1_approved_scientific_freeze_registry_v1.json', 'original_registry_byte_immutable': True, 'new_authority': str((run / 'researcher_authority.json').relative_to(REPO)), 'new_protocol_registry': 'config/training/b1_b0_matched_phase_a_freeze_registry_v1.json', 'normalization_file_not_modified_or_refitted': True, 'B0_MATCHED_CONTROL_NORMALIZATION': 'USE_FROZEN_B1_SHARED_SCALER', 'no_authorization_to_train_or_access_2025': True})
+print(json.dumps(status), flush=True)

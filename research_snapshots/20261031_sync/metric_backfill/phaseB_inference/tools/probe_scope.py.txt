@@ -1,0 +1,96 @@
+# Archival copy: formatting normalized; private locators redacted.
+# file-kind mix for Development
+# one s2027 report structure probe
+"""Read-only probe of frozen preparation/scope/registry artifacts (no raw payload).
+
+Prints the per-role I/O scope of the B2-B8 Stage-3/4 preparation and checks that
+all 19 main-table E9 dev-report + checkpoint paths exist.  Writes nothing except
+stdout.
+"""
+from __future__ import annotations
+import json
+import os
+import sys
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+ACT = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+PREP = os.path.join(ACT, 'docs', 'research_readiness', '.local', 'b2_preparation_20261025_v4.json')
+S2027 = os.path.join(ACT, 'docs', 'phase_b_v2_seed2027_completion', '20261024', 'results')
+H26 = '<PRIVATE_LOCATOR_4ace3098b640>'
+F = '<PRIVATE_LOCATOR_cfc983c5f221>'
+D = '<PRIVATE_LOCATOR_6f45235199f2>'
+PUSH = os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution')
+
+def show_scope():
+    with open(PREP, 'r', encoding='utf-8') as f:
+        w = json.load(f)
+    p = w['prepared']
+    print('== top-level keys ==', sorted(w.keys()))
+    print('== prepared keys ==', sorted(p.keys()))
+    print('config:', json.dumps(p['config'], sort_keys=True))
+    print('data:', json.dumps(p['data'], sort_keys=True)[:1200])
+    print('private_inputs:', json.dumps(p['private_inputs'], indent=2))
+    print('preparation_sha256:', p.get('preparation_sha256'))
+    for role in ('Train', 'Development'):
+        s = p['roles'][role]
+        print(f'== {role} ==')
+        print(' ids:', len(s['ids']), 'first:', s['ids'][:4], 'last:', s['ids'][-2:])
+        print(' file_count:', s['file_count'], 'bytes_per_pass:', s['bytes_per_pass'])
+        print(' by_kind:', json.dumps(s['by_kind'], indent=2))
+        print(' manifest_sha256:', s['source_manifest_sha256'])
+        print(' unique files:', len(s['files']))
+    total = sum((s['bytes_per_pass'] for s in p['roles'].values()))
+    print('sum(bytes_per_pass) =', total, 'x9 =', 9 * total)
+    print('sum(file_count) =', sum((s['file_count'] for s in p['roles'].values())), 'x9 =', 9 * sum((s['file_count'] for s in p['roles'].values())))
+    dev = p['roles']['Development']
+    kinds = {}
+    for name, item in dev['files'].items():
+        kinds.setdefault(item['kind'], [0, 0])
+        kinds[item['kind']][0] += 1
+        kinds[item['kind']][1] += item['bytes']
+    print('Development kind mix:', json.dumps(kinds, indent=2))
+    train = p['roles']['Train']
+    kinds = {}
+    for name, item in train['files'].items():
+        kinds.setdefault(item['kind'], [0, 0])
+        kinds[item['kind']][0] += 1
+        kinds[item['kind']][1] += item['bytes']
+    print('Train kind mix:', json.dumps(kinds, indent=2))
+    print('mask sources:', [n for n in dev['files'] if 'mask' in n.lower()][:3])
+RUNS = [('B0', 2026, os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B0_MATCHED_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt')), ('B1', 2026, os.path.join(H26, 'B1_V2__E0__s2026', 'development_epoch_09_report.json'), os.path.join(H26, 'B1_V2__E0__s2026', 'checkpoints', 'LAST_epoch_09.pt')), ('B0', 2027, os.path.join(S2027, 'B0_MATCHED_V2__E0__s2027.json'), os.path.join(PUSH, 'seed2027_epoch2_recovery_v2', '.local', 'B0_MATCHED_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt')), ('B1', 2027, os.path.join(S2027, 'B1_V2__E0__s2027.json'), os.path.join(PUSH, 'seed2027_b1_epoch7_recovery_v7', '.local', 'B1_V2__E0__s2027', 'checkpoints', 'LAST_epoch_09.pt')), ('B2', 2029, os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_development_09.json'), os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_LAST_epoch_09.pt')), ('B3', 2029, os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B3_LAST_epoch_09.pt')), ('B4', 2029, os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_development_09.json'), os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024', 'docs', 'core_stage4', '.local', 'seed2029_recovery1_20261024_v1', 'B4_LAST_epoch_09.pt')), ('B3', 2030, os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B3_s2030', 'B3_LAST_epoch_09.pt')), ('B4', 2030, os.path.join(F, 'YunTAPR_B3_B4_s2030_s2031_20261026_v1', 'B4_s2030', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2030', 'B4_LAST_epoch_09.pt')), ('B3', 2031, os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B3_s2031', 'B3_LAST_epoch_09.pt')), ('B4', 2031, os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_development_09.json'), os.path.join(F, 'YunTAPR_B3_B4_recovery1_20261026_v1', 'B4_s2031', 'B4_LAST_epoch_09.pt')), ('B5', 2029, os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B5_s2029', 'B5_LAST_epoch_09.pt')), ('B6', 2029, os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_development_09.json'), os.path.join(F, 'YunTAPR_B5_B6_s2029_corrected_start_20261027_v1', 'B6_s2029', 'B6_LAST_epoch_09.pt')), ('B7', 2029, os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_development_09.json'), os.path.join(F, 'YunTAPR_B7_B8_s2029_20261027_v1', 'B7_s2029', 'B7_LAST_epoch_09.pt')), ('B8', 2029, os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_development_09.json'), os.path.join(F, 'YunTAPR_B8_s2029_E6_recovery_20261028_v1', 'B8_s2029', 'B8_LAST_epoch_09.pt')), ('B7', 2030, os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2030', 'B7_LAST_epoch_09.pt')), ('B8', 2030, os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2030', 'B8_LAST_epoch_09.pt')), ('B7', 2031, os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B7_s2031', 'B7_LAST_epoch_09.pt')), ('B8', 2031, os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_development_09.json'), os.path.join(D, 'B7_B8_s2030_s2031_E6_recovery_20261028_v1', 'B8_s2031', 'B8_LAST_epoch_09.pt'))]
+
+def check_runs():
+    print('== 19 main-table dev/checkpoint existence ==')
+    bad = 0
+    for model, seed, dev, ckpt in RUNS:
+        d = os.path.exists(dev)
+        c = os.path.exists(ckpt)
+        bad += (not d) + (not c)
+        print(f"{model}/s{seed}: dev={d} ckpt={c} dev_bytes={(os.path.getsize(dev) if d else '-')} ckpt_bytes={(os.path.getsize(ckpt) if c else '-')}")
+    print('missing:', bad)
+    with open(os.path.join(S2027, 'B0_MATCHED_V2__E0__s2027.json'), 'r', encoding='utf-8') as f:
+        j = json.load(f)
+    print('s2027 keys:', sorted(j.keys()))
+    print('epochs:', len(j.get('epochs', [])))
+    last = j['epochs'][-1]
+    print('epoch keys:', sorted(last.keys()))
+    print('development keys:', sorted(last['development'].keys()))
+    print('summary keys:', sorted(last['development']['summary'].keys())[:12])
+    for k in ('brier', 'auroc', 'average_precision', 'conditional_pinball', 'n_valid', 'n_rain'):
+        print(' ', k, '=', last['development']['summary'][k])
+
+def check_b2_count():
+    with open(os.path.join(ACT, 'docs', 'research_readiness', '.local', 'B2_s2029_formal_20261025_v1', 'B2_development_09.json'), 'r', encoding='utf-8') as f:
+        j = json.load(f)
+    print('B2 dev keys:', sorted(j.keys()))
+    print('B2 groups:', list(j.get('groups', {}).keys()))
+    print('B2 all summary keys:', sorted(j['groups']['all']['summary'].keys()))
+    s = j['groups']['all']['summary']
+    print('B2 n_valid/n_rain:', s['n_valid'], s['n_rain'])
+if __name__ == '__main__':
+    what = sys.argv[1] if len(sys.argv) > 1 else 'all'
+    if what in ('scope', 'all'):
+        show_scope()
+    if what in ('runs', 'all'):
+        check_runs()
+    if what in ('b2', 'all'):
+        check_b2_count()

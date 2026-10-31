@@ -1,0 +1,60 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+import csv, io, sys, json, math
+from pathlib import Path
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / 'tools/research_readiness'))
+from build_unified_delivery import leaves, unit, favorable
+source = 'docs/research_readiness/20261025/evidence/dote_physical_control_completion_20261030.json'
+c = json.loads((ROOT / source).read_bytes())
+path = ROOT / 'METRICS.csv'
+original = path.read_bytes()
+reader = csv.DictReader(io.StringIO(original.decode('utf-8')))
+fields = reader.fieldnames
+rows = list(reader)
+eid = 'B7_PERP_GRADIENT__E0__s2029__f006__candidate'
+assert not any((r['experiment_id'] == eid and r['record_type'] == 'RAW_ENDPOINT' for r in rows))
+rows = [r for r in rows if r['experiment_id'] != eid]
+new = []
+seen = set()
+
+def add(obj, pointer, group='all', record_type='RAW_ENDPOINT', epoch='ENDPOINT', split='2024_Development', ids=''):
+    for sub, value in leaves(obj):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or (not math.isfinite(value)):
+            continue
+        metric = sub.lstrip('/')
+        key = (group, epoch, metric)
+        if key in seen:
+            continue
+        seen.add(key)
+        r = dict.fromkeys(fields, '')
+        r.update(record_type=record_type, experiment_id=eid, model_id='B7_PERP_GRADIENT', seed='2029', loss_arm='E0', epoch=str(epoch), split=split, comparison_population='CORE_F006_959_963', group=group, group_ids_sha256=ids, metric=metric, value=repr(value), status='RECORDED', unit=unit(metric), source_file=source, source_pointer=pointer + sub, executed_commit=c['training_commit'], evaluation_script=c['evaluation_script'], checkpoint_sha256=c['endpoint_sha256'] if epoch == 'ENDPOINT' else '')
+        new.append(r)
+for group, item in c['endpoint_groups']['B7_PERP_GRADIENT'].items():
+    pointer = f'/endpoint_groups/B7_PERP_GRADIENT/{group}/summary'
+    add(item['summary'], pointer, group=group, ids=item['ids_sha256'])
+    add({'q32_coverage': item['summary']['coverage'][-1]}, pointer, group=group, ids=item['ids_sha256'])
+    new[-1]['source_pointer'] = pointer + '/coverage/31'
+add(c['tail_diagnostics']['B7_PERP_GRADIENT'], '/tail_diagnostics/B7_PERP_GRADIENT', group='tail_diagnostics')
+for i, item in enumerate(c['epochs']):
+    if item['epoch'] <= 5:
+        continue
+    add(item['development'], f'/epochs/{i}/development', record_type='RAW_EPOCH', epoch=item['epoch'])
+    add(item['train'], f'/epochs/{i}/train', record_type='RAW_EPOCH', epoch=item['epoch'], split='2023_Train')
+for group, delta in c['summary']['group_deltas'].items():
+    for metric, value in delta.items():
+        r = dict.fromkeys(fields, '')
+        r.update(record_type='PAIRED_DELTA', experiment_id=eid, model_id='B7', seed='2029', loss_arm='E0', epoch='ENDPOINT', split='2024_Development', comparison_population='CORE_F006_959_963', group=group, metric=metric, value=repr(value), status='DESCRIPTIVE_SINGLE_SEED', unit=unit(metric), comparison='B7_REAL_MINUS_B7_PERP_GRADIENT', reference_experiment_id=eid, n_seeds='1', improvement_direction=favorable(metric), source_file=source, source_pointer=f'/summary/group_deltas/{group}/{metric}', executed_commit=c['training_commit'], evaluation_script=c['evaluation_script'])
+        new.append(r)
+for section, items in c['summary']['tail_pairs'].items():
+    for key, pair in items.items():
+        for metric, value in pair['real_minus_perp'].items():
+            r = dict.fromkeys(fields, '')
+            r.update(record_type='PAIRED_DELTA', experiment_id=eid, model_id='B7', seed='2029', loss_arm='E0', epoch='ENDPOINT', split='2024_Development', comparison_population='CORE_F006_959_963', group=section + '_' + key, metric=metric, value=repr(value), status='DESCRIPTIVE_SINGLE_SEED', unit=unit(metric), comparison='B7_REAL_MINUS_B7_PERP_GRADIENT', reference_experiment_id=eid, n_seeds='1', improvement_direction=favorable(metric), source_file=source, source_pointer=f'/summary/tail_pairs/{section}/{key}/real_minus_perp/{metric}', executed_commit=c['training_commit'], evaluation_script=c['evaluation_script'])
+            new.append(r)
+s = io.StringIO(newline='')
+w = csv.DictWriter(s, fields, lineterminator='\n')
+w.writeheader()
+w.writerows(rows + new)
+path.write_bytes(s.getvalue().encode('utf-8'))
+print(json.dumps(dict(new_rows=len(new), total_rows=len(rows) + len(new))))

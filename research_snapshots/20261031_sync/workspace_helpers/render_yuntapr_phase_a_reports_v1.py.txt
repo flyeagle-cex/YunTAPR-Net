@@ -1,0 +1,33 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Render all Phase-A PDF pages before the additive Phase-A snapshot freezes."""
+from pathlib import Path
+import datetime, hashlib, json, re, subprocess
+from pypdf import PdfReader
+BASE = Path(__file__).parent
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+reports = json.loads((run / 'report_build_manifest.json').read_text(encoding='utf8'))
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+root = Path('<PRIVATE_LOCATOR_f7948182ec5f>') / 'yuntapr_phase_a_pdf_qa' / stamp
+root.mkdir(parents=True, exist_ok=False)
+poppler = Path('<PRIVATE_LOCATOR_d4b1b768e36c>')
+values = []
+for i, r in enumerate(reports, 1):
+    p = Path(r['pdf'])
+    info = subprocess.run([str(poppler.with_name('pdfinfo.exe')), str(p)], capture_output=True, text=True, encoding='utf8', errors='replace', check=True).stdout
+    page_count = int(re.search('^Pages:\\s+(\\d+)', info, re.MULTILINE).group(1))
+    text = '\n'.join((page.extract_text() or '' for page in PdfReader(p).pages))
+    assert '人口' not in text
+    folder = root / f'report_{i:02d}'
+    folder.mkdir()
+    subprocess.run([str(poppler), '-r', '105', '-png', str(p), str(folder / 'page')], check=True, capture_output=True)
+    pages = sorted(folder.glob('page-*.png'), key=lambda q: int(q.stem.rsplit('-', 1)[1]))
+    assert len(pages) == page_count
+    log = p.with_suffix('.log').read_text(encoding='utf8', errors='replace')
+    warnings = [line for line in log.splitlines() if 'Missing character:' in line or 'Overfull \\hbox' in line or 'Overfull \\vbox' in line]
+    values.append({'pdf': str(p), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(), 'page_count': len(pages), 'images': [str(q) for q in pages], 'latex_layout_warnings': warnings, 'visual_review_pending': True})
+value = {'reports': values, 'total_pages': sum((r['page_count'] for r in values)), 'all_pages_visually_verified': False}
+with (run / 'phase_a_page_render_manifest.json').open('x', encoding='utf8') as f:
+    json.dump(value, f, ensure_ascii=False, indent=2)
+print(json.dumps(value, ensure_ascii=False))

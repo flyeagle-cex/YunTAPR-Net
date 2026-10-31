@@ -1,0 +1,68 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Archive metadata-only logs and prepare an exact, model-binary-free Git file index."""
+from pathlib import Path
+import gzip, hashlib, json, subprocess
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+delivery = json.loads((run / 'final_delivery_status.json').read_text(encoding='utf8'))
+assert delivery['status'] == 'BOTH_PHASE_A_TRAINING_COMPLETE_READONLY_INTEGRITY_PASS'
+qa = json.loads((run / 'pdf_visual_qa.json').read_text(encoding='utf8'))
+assert qa['all_pages_visually_verified']
+
+def sha(p):
+    h = hashlib.sha256()
+    with p.open('rb') as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def save(p, v):
+    with p.open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+history = json.loads((run / 'historical_file_snapshot.json').read_text(encoding='utf8'))
+for rel, digest in history['files'].items():
+    assert sha(REPO / rel) == digest, rel
+assert len(history['files']) == 2061
+archives = []
+roots = [run, *[Path(spec['public_directory']) for spec in active['formal_runs'].values()]]
+for root in roots:
+    for source in sorted(root.rglob('*.jsonl')):
+        dest = source.with_suffix(source.suffix + '.gz')
+        assert not dest.exists()
+        with source.open('rb') as reader, dest.open('xb') as writer, gzip.GzipFile(filename='', mode='wb', fileobj=writer, mtime=0) as packed:
+            for chunk in iter(lambda: reader.read(1024 * 1024), b''):
+                packed.write(chunk)
+        h = hashlib.sha256()
+        with gzip.open(dest, 'rb') as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                h.update(chunk)
+        assert h.hexdigest() == sha(source)
+        archives.append({'original_absolute_local_path': str(source), 'original_sha256': sha(source), 'original_bytes': source.stat().st_size, 'published_log': dest.relative_to(REPO).as_posix(), 'gzip_sha256': sha(dest), 'gzip_bytes': dest.stat().st_size, 'decompression_byte_identical': True, 'scope': 'metadata-only text log; no pixel/model/optimizer binary'})
+save(run / 'published_log_archive_manifest.json', archives)
+untracked = subprocess.check_output(['git', 'ls-files', '--others', '--exclude-standard', '-z'], cwd=REPO).decode('utf8').split('\x00')[:-1]
+allowed_prefixes = ['docs/paired_phase_a_authorized/', 'tests/paired_phase_a_authorized/', 'docs/formal_training/b0_matched_phase_a/runs/' + active['formal_runs']['B0_MATCHED']['run_id'] + '/', 'docs/formal_training/b1_phase_a/runs/' + active['formal_runs']['B1']['run_id'] + '/']
+allowed_exact = {'src/yuntapr/training/paired_phase_a_audit.py', 'scripts/authorized_paired_phase_a_entry.py', 'scripts/launch_authorized_paired_phase_a_v1.py', 'config/training/b0_matched_phase_a_formal_authorization_v1.json', 'config/training/b1_phase_a_formal_authorization_v1.json'}
+excluded = []
+files = {}
+for rel in untracked:
+    p = REPO / rel
+    if rel not in allowed_exact and (not any((rel.startswith(prefix) for prefix in allowed_prefixes))):
+        excluded.append({'path': rel, 'reason': 'outside this task delivery'})
+        continue
+    if p.suffix in ('.pt', '.pth', '.ckpt', '.nc', '.npy', '.npz', '.bin', '.safetensors'):
+        raise AssertionError('Forbidden raw or model binary found in task repository subtree: ' + rel)
+    if p.suffix in ('.jsonl', '.aux', '.out', '.log', '.synctex', '.pyc') or '.compile_pass_' in p.name:
+        excluded.append({'path': rel, 'reason': 'raw metadata log retained locally, gzip version published, or build scratch'})
+        continue
+    assert p.stat().st_size < 90 * 1024 * 1024, rel
+    files[rel] = {'sha256': sha(p), 'bytes': p.stat().st_size}
+save(run / 'delivery_scope_check.json', {'original_files_verified_byte_identical': 2061, 'no_original_file_changes': True, 'binary_model_checkpoint_optimizer_upload_allowed': False, 'log_archives': len(archives), 'omitted_local_artifacts': excluded, 'eligible_file_count_before_this_check_and_index': len(files)})
+for p in (run / 'delivery_scope_check.json', run / 'delivery_file_index.json'):
+    if p.name != 'delivery_file_index.json':
+        files[p.relative_to(REPO).as_posix()] = {'sha256': sha(p), 'bytes': p.stat().st_size}
+save(run / 'delivery_file_index.json', {'baseline_commit': active['baseline'], 'files': files, 'index_itself_is_staged_but_excluded_from_self_hash': 'delivery_file_index.json', 'total_file_bytes_without_index': sum((v['bytes'] for v in files.values())), 'only_additions': True})
+print(json.dumps({'eligible_files': len(files) + 1, 'publication_bytes_without_index': sum((v['bytes'] for v in files.values())), 'original_files_unchanged': 2061, 'metadata_log_archives': len(archives), 'model_binaries_uploaded': 0}, indent=2))

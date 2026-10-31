@@ -1,0 +1,1121 @@
+# Archival copy: formatting normalized; private locators redacted.
+#!/usr/bin/env python
+# ------------------------------------------------------------------ constants
+# Inference batch size. The frozen training Dev loop used 8 scenes; inference is
+# scene-additive (the evaluator accumulates per scene), so a smaller batch is
+# scientifically equivalent and is only used to fit inside the free VRAM.
+# frozen for every B7/B8 run (three proposals, same value)
+# ============================================================================
+# 1. Pure numpy metric core (unit-tested without torch / GPU / frozen imports)
+# ============================================================================
+# ---- B: mixture median (u = 0.5 for p<0.5 -> zero, i.e. dry below occurrence median)
+# sentinel; physical value fixed to 0 below
+# vectorised piecewise-linear interpolation in log1p space on taus; for u below
+# the first tau the conditional quantile is the support edge log1p(0.1), not an
+# extrapolation below the frozen q_min.
+# number of conditional quantiles at or below the level (q rows are strictly increasing)
+# per candidate scalars
+# confusion matrices per candidate/threshold
+# D (probabilistic) contingency uses two denominators
+# ---- candidates A, B, C
+# ---- occurrence-probability diagnostic (P >= 0.5, frozen reliability-bin rule)
+# ---- candidate D: probabilistic P(R>r)
+# ============================================================================
+# 2. Frozen-chain family adapters (every heavy import is lazy)
+# ============================================================================
+# ------------------------------------------------------------------ B0 / B1
+# reads the frozen 3430-pixel Yunnan mask through the same-handle SHA reader;
+# skipped in dry-check so that no observation-family payload is touched.
+# model construction mirrors fresh_paired_models()'s constructor arguments; the
+# initial random weights are irrelevant because the full frozen state_dict is loaded.
+# ------------------------------------------------------------------ B2
+# the historical B2 forward ran with seed_all(2029) still active.
+# ------------------------------------------------------------------ B3 / B4
+# ------------------------------------------------------------------ B5 / B6
+# ------------------------------------------------------------------ B7 / B8
+# ============================================================================
+# 3. Registry / gate helpers
+# ============================================================================
+# q32 coverage: stored 'coverage'[-1] must equal recomputed 'coverage'[-1]
+# exact covered count cross-check (integer)
+# ============================================================================
+# 4. Execution modes
+# ============================================================================
+# non-scientific check artifacts are reproducible
+# the B0/B1 frozen Evaluator hard-requires all 10,501 Dev ids, so a 2-scene smoke
+# run cannot instantiate it and skips the frozen-metric branch by design.
+# new metrics on CPU float64 (outputs detached; never feed any gate)
+# b01 frozen evaluator: flat report
+# stage4 Evaluation wraps per-group NumericEnvelope reports
+"""YunTAPR Phase B Tier-1: forward-only 2024 Development metric back-fill.
+
+One frozen E9 checkpoint -> one Development traversal -> (a) exact re-computation of the
+stored probability metrics as a hard validation gate, (b) new point-estimate / continuous
+/ contingency metrics, (c) four explicitly-unfrozen candidate point estimates.
+
+The script never trains: no optimizer, no backward, no parameter update.  It reuses the
+frozen execution copy of each model family through PYTHONPATH (see run_registry.json);
+every frozen import happens lazily inside the family adapter, so `dry-run` needs neither
+torch nor any observation payload.
+
+Modes
+-----
+  dry-run     print the 19-run plan, frozen read scope, gate expectations; no inference
+  run         execute one run (or --all as a per-run subprocess supervisor)
+  smoke       real-data smoke on <=N Development scenes of one checkpoint (Lead-triggered)
+  self-test   run the synthetic formula checks in tests/test_formula.py
+
+Hard rules encoded here
+-----------------------
+  * Development role only, 2024 only; 2025 paths are rejected lexically by the frozen
+    readers themselves and no code below can select another role.
+  * Every read is SHA-verified by the frozen reader chain.  No cache/reread shortcuts.
+  * Gate failure (recomputed stored metrics differ by > 1e-12 abs/rel, or counts differ)
+    marks the run GATE_FAILED and the supervisor stops the campaign.
+  * Bytecode writing is disabled (sys.dont_write_bytecode / PYTHONDONTWRITEBYTECODE) so the
+    frozen copies are never modified, including __pycache__.
+"""
+from __future__ import annotations
+import argparse
+import hashlib
+import json
+import math
+import os
+import subprocess
+import sys
+import time
+import traceback
+sys.dont_write_bytecode = True
+BASE = os.path.dirname(os.path.abspath(__file__))
+REGISTRY_PATH = os.path.join(BASE, 'run_registry.json')
+OUTPUT_ROOT = os.path.join(BASE, 'outputs')
+LOG_ROOT = os.path.join(BASE, 'logs')
+SCHEMA = 'yuntapr.phaseB.tier1.infer_eval.v1'
+THRESHOLDS_MM_H = (0.1, 1.0, 5.0, 10.0, 20.0)
+CANDIDATES = ('A', 'B', 'C')
+BATCH_SIZE = max(1, int(os.environ.get('TIER1_BATCH', '8')))
+EVENT_DEFINITION = 'float32 rate > float32(0.1) mm/h'
+GATE_ABS = 1e-12
+GATE_REL = 1e-12
+GATE_KEYS = ('brier', 'auroc', 'average_precision', 'conditional_pinball', 'q32_coverage')
+GATE_COUNTS = ('n_valid', 'n_rain')
+MODULATION_LIMIT = 0.1
+STATIC_TERRAIN = '<PRIVATE_LOCATOR_d6eb64ee8bcc>'
+B7_B8_DOTE_EVIDENCE = os.path.join('docs', 'research_readiness', '20261025', 'evidence', 'b7_b8_physical_cache_correction.json')
+OUTPUT_NOTE = dict(candidates='NONE_OF_THE_POINT_ESTIMATES_IS_FROZEN_OR_SCIENTIFICALLY_APPROVED', existing_metrics='FROZEN_PROBABILITY_METRICS_RECOMPUTED_AS_VALIDATION_GATE', new_metrics='EXPLORATORY_POSTHOC_DESCRIPTIVE_ONLY', final_2025='FROZEN_NO_ACCESS')
+
+def _np():
+    import numpy
+    return numpy
+
+def _taus():
+    np = _np()
+    return (np.arange(32, dtype=np.float64) + 0.5) / 32
+
+def np_digest(value) -> str:
+    """Same canonical JSON digest as the frozen protocol.digest (identity only)."""
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+def event_truth_fp32(rate, threshold):
+    """Strict > with float32 comparison semantics, as frozen supervision uses."""
+    np = _np()
+    rate32 = np.asarray(rate, dtype=np.float32)
+    return rate32 > np.float32(threshold)
+
+def point_candidates_log(qlog, p):
+    """Candidate point estimates in mm/h from FP64 log1p quantiles + occurrence prob.
+
+    qlog : (n, 32) float64 log1p(mm/h) conditional quantiles, strictly increasing.
+    p    : (n,)    float64 occurrence probability P(rate > 0.1 mm/h).
+
+    A  existing diagnostic proxy:  p * mean_i(expm1(q_i))          (physical mean)
+    B  mixture median:             p<0.5 -> 0 else expm1(Qcond((p-0.5)/p)); Qcond is
+                                   linearly interpolated in log1p space on tau_i=(i+0.5)/32
+    C  conditional-mean approximation by the equal-weight 32-quantile integral taken in
+       log1p space, tail truncated at q32:  p * expm1(mean_i(q_i))
+       [DESIGN_CHOICE: the physical-space equal-weight integral would be numerically
+        identical to A; the log-space integral is the discriminating scientific choice.]
+    """
+    np = _np()
+    q = np.asarray(qlog, dtype=np.float64)
+    p = np.asarray(p, dtype=np.float64)
+    if q.ndim != 2 or q.shape[1] != 32 or p.shape != (q.shape[0],):
+        raise ValueError('qlog must be (n,32) and p must be (n,)')
+    taus = _taus()
+    physical = np.expm1(q)
+    out = {}
+    out['A'] = p * physical.mean(axis=1)
+    out['C'] = p * np.expm1(q.mean(axis=1))
+    u = np.zeros_like(p)
+    above = p >= 0.5
+    u[above] = (p[above] - 0.5) / p[above]
+    qb = np.empty_like(u)
+    qb[~above] = -np.inf
+    if above.any():
+        uu = u[above]
+        qa = q[above]
+        idx = np.searchsorted(taus, uu, side='right')
+        idx = np.clip(idx, 1, 31)
+        lo = taus[idx - 1]
+        hi = taus[idx]
+        w = (uu - lo) / (hi - lo)
+        rows = np.arange(qa.shape[0])
+        q_int = qa[rows, idx - 1] * (1.0 - w) + qa[rows, idx] * w
+        qb[above] = np.where(uu < taus[0], math.log1p(0.1), q_int)
+    est = np.zeros_like(u)
+    est[above] = np.expm1(qb[above])
+    out['B'] = est
+    return out
+
+def conditional_cdf_at(qlog, threshold):
+    """F_cond(threshold) from the 32 log1p quantiles; NaN => support exceeded (NOT_ESTABLISHED).
+
+    Linear interpolation of the conditional CDF in log1p space between adjacent quantiles.
+    Thresholds at/below the first quantile map to 0 (support starts at 0.1 mm/h, and all
+    quantiles are > log1p(0.1)); thresholds above q32 are NOT_ESTABLISHED.
+    """
+    np = _np()
+    q = np.asarray(qlog, dtype=np.float64)
+    taus = _taus()
+    level = math.log1p(float(threshold))
+    idx = (q <= level).sum(axis=1).astype(np.int64)
+    n = q.shape[0]
+    f = np.zeros(n, dtype=np.float64)
+    inside = (idx >= 1) & (idx <= 31)
+    if inside.any():
+        ii = idx[inside]
+        rows = np.flatnonzero(inside)
+        qlo = q[rows, ii - 1]
+        qhi = q[rows, ii]
+        w = (level - qlo) / (qhi - qlo)
+        f[inside] = taus[ii - 1] * (1.0 - w) + taus[ii] * w
+    above_support = idx >= 32
+    f[above_support] = np.nan
+    return f
+
+def event_probability_d(qlog, p, threshold):
+    """Candidate D: P(R > r) = p * (1 - F_cond(r)); NaN where r exceeds q32 support."""
+    np = _np()
+    f = conditional_cdf_at(qlog, threshold)
+    out = p * (1.0 - f)
+    out = np.where(np.isnan(f), np.nan, out)
+    return out
+
+def confusion_counts(pred, truth):
+    """TP/FP/FN/TN for pred > 0 vs truth > 0 (already-thresholded boolean arrays)."""
+    np = _np()
+    pred = np.asarray(pred, dtype=bool)
+    truth = np.asarray(truth, dtype=bool)
+    tp = int(np.count_nonzero(pred & truth))
+    fp = int(np.count_nonzero(pred & ~truth))
+    fn = int(np.count_nonzero(~pred & truth))
+    tn = int(np.count_nonzero(~pred & ~truth))
+    return dict(TP=tp, FP=fp, FN=fn, TN=tn)
+
+def contingency_metrics(counts):
+    tp, fp, fn, tn = (counts['TP'], counts['FP'], counts['FN'], counts['TN'])
+    n = tp + fp + fn + tn
+    pod = tp / (tp + fn) if tp + fn else None
+    far = fp / (tp + fp) if tp + fp else None
+    csi = tp / (tp + fp + fn) if tp + fp + fn else None
+    denom = (tp + fp) * (fp + tn) + (tp + fn) * (fn + tn)
+    hss = 2.0 * (tp * tn - fp * fn) / denom if denom else None
+    return dict(counts | dict(N=n, POD=pod, FAR=far, CSI=csi, HSS=hss))
+
+def pearson_from_sums(n, sy, syh, syy, syhyh, syhy):
+    """Pearson CC from raw sums; yields None for degenerate variance."""
+    if n <= 0:
+        return None
+    cov = syhy - sy * syh / n
+    vy = syy - sy * sy / n
+    vyh = syhyh - syh * syh / n
+    if vy <= 0 or vyh <= 0:
+        return None
+    return float(cov / math.sqrt(vy * vyh))
+
+class PointAccumulator:
+    """Online accumulators for continuous + contingency metrics on the Dev population.
+
+    All sums are float64.  Pixels enter exactly when `valid & region` (the frozen
+    supervision mask), matching N_valid/N_rain of the stored evaluator.
+    """
+
+    def __init__(self, thresholds=THRESHOLDS_MM_H):
+        np = _np()
+        self.thresholds = tuple((float(t) for t in thresholds))
+        self.n = 0
+        self.n_rain = 0
+        self.sy = 0.0
+        self.syy = 0.0
+        self.sums = {c: dict(syh=0.0, syhyh=0.0, syhy=0.0, sae=0.0, sse=0.0, sbias=0.0) for c in CANDIDATES}
+        self.cont = {c: {t: dict(TP=0, FP=0, FN=0, TN=0) for t in self.thresholds} for c in CANDIDATES + ('OCC_P',)}
+        self.d_cont = {t: dict(TP=0, FP=0, FN=0, TN=0) for t in self.thresholds}
+        self.d_support = {t: dict(N_supported=0, N_not_established=0) for t in self.thresholds}
+        self.d_strict_gt_half = {t: dict(TP=0, FP=0) for t in self.thresholds}
+        self._np = np
+
+    def add(self, rate, valid, region, probability, qlog):
+        np = self._np
+        rate = np.asarray(rate, dtype=np.float32)
+        valid = np.asarray(valid, dtype=bool)
+        region = np.asarray(region, dtype=bool)
+        if rate.ndim != region.ndim:
+            raise ValueError('rate/region rank mismatch')
+        mask = np.broadcast_to(valid & region, rate.shape)
+        flat_mask = mask.reshape(rate.shape[0], -1)
+        n = int(np.count_nonzero(flat_mask))
+        if n == 0:
+            return
+        y = rate.reshape(rate.shape[0], -1)[flat_mask].astype(np.float64)
+        p = np.asarray(probability, dtype=np.float64).reshape(probability.shape[0], -1)[flat_mask]
+        q = np.asarray(qlog, dtype=np.float64)
+        if q.ndim != 4 or q.shape[1] != 32 or q.shape[0] != rate.shape[0]:
+            raise ValueError(f'qlog must be (B,32,H,W); got {q.shape}')
+        q = q.reshape(q.shape[0], 32, -1).transpose(0, 2, 1)[flat_mask]
+        if q.shape != (n, 32):
+            raise ValueError(f'qlog supervision slice {q.shape} != {(n, 32)}')
+        if p.shape != (n,):
+            raise ValueError('probability supervision slice mismatch')
+        self.n += n
+        rain = event_truth_fp32(y, 0.1)
+        self.n_rain += int(np.count_nonzero(rain))
+        self.sy += float(y.sum())
+        self.syy += float(np.square(y).sum())
+        cand = point_candidates_log(q, p)
+        for name in CANDIDATES:
+            est = cand[name]
+            s = self.sums[name]
+            s['syh'] += float(est.sum())
+            s['syhyh'] += float(np.square(est).sum())
+            s['syhy'] += float((est * y).sum())
+            s['sae'] += float(np.abs(est - y).sum())
+            s['sse'] += float(np.square(est - y).sum())
+            s['sbias'] += float((est - y).sum())
+            for t in self.thresholds:
+                counts = confusion_counts(est > t, event_truth_fp32(y, t))
+                self.cont[name][t]['TP'] += counts['TP']
+                self.cont[name][t]['FP'] += counts['FP']
+                self.cont[name][t]['FN'] += counts['FN']
+                self.cont[name][t]['TN'] += counts['TN']
+        counts = confusion_counts(p >= 0.5, event_truth_fp32(y, 0.1))
+        base = self.cont['OCC_P'][0.1]
+        for k in ('TP', 'FP', 'FN', 'TN'):
+            base[k] += counts[k]
+        for t in self.thresholds:
+            d = event_probability_d(q, p, t)
+            supported = ~np.isnan(d)
+            self.d_support[t]['N_supported'] += int(np.count_nonzero(supported))
+            self.d_support[t]['N_not_established'] += int(np.count_nonzero(~supported))
+            if supported.any():
+                truth = event_truth_fp32(y[supported], t)
+                counts = confusion_counts(d[supported] >= 0.5, truth)
+                for k in ('TP', 'FP', 'FN', 'TN'):
+                    self.d_cont[t][k] += counts[k]
+                strict = confusion_counts(d[supported] > 0.5, truth)
+                self.d_strict_gt_half[t]['TP'] += strict['TP']
+                self.d_strict_gt_half[t]['FP'] += strict['FP']
+
+    def result(self):
+        n = self.n
+        out = dict(N_valid=n, N_rain=self.n_rain, event_definition=EVENT_DEFINITION, point_estimates=[], contingency=dict(), candidate_D=dict(), sums=dict(y=dict(sy=self.sy, syy=self.syy)))
+        if n:
+            out['N_dry'] = n - self.n_rain
+            out['truth_mean_mm_h'] = self.sy / n
+            out['truth_rmse_scale'] = math.sqrt(self.syy / n)
+        for name in CANDIDATES:
+            s = self.sums[name]
+            if not n:
+                continue
+            out['point_estimates'].append(dict(candidate=name, status='NOT_FROZEN_EXPLORATORY', MAE_mm_h=s['sae'] / n, RMSE_mm_h=math.sqrt(s['sse'] / n), MeanBias_mm_h=s['sbias'] / n, Pearson_CC=pearson_from_sums(n, self.sy, s['syh'], self.syy, s['syhyh'], s['syhy']), sums=dict(N=n, sum_y=self.sy, sum_yhat=s['syh'], sum_y2=self.syy, sum_yhat2=s['syhyh'], sum_y_yhat=s['syhy']), units='mm/h', population='frozen Dev supervision mask (valid & region)'))
+        for name in CANDIDATES + ('OCC_P',):
+            rows = dict()
+            thresholds = (0.1,) if name == 'OCC_P' else self.thresholds
+            for t in thresholds:
+                rows[repr(t)] = contingency_metrics(self.cont[name][t])
+            out['contingency'][name] = dict(rule='Pred > r vs Truth > r  (strict >, float32 rate)' if name != 'OCC_P' else 'P(rain>0.1) >= 0.5 vs Truth > 0.1  (frozen reliability-bin rule; P>=0.5)', thresholds_mm_h=list(thresholds), rows=rows, status='NOT_FROZEN_EXPLORATORY')
+        for t in self.thresholds:
+            out['candidate_D'][repr(t)] = dict(formula='P(R>r) = p * (1 - F_cond(r)); event if P >= 0.5', support=self.d_support[t], supported_contingency=contingency_metrics(self.d_cont[t]), strict_gt_half=dict(TP=self.d_strict_gt_half[t]['TP'], FP=self.d_strict_gt_half[t]['FP'], rule='P(R>r) > 0.5 vs Truth > r (cross-check)'), status='ESTIMABLE_WITH_SUPPORT' if self.d_support[t]['N_not_established'] == 0 else 'NOT_ESTABLISHED_FOR_PART_OF_POPULATION', support_rule='r <= expm1(q32) per pixel; beyond q32 the 32-quantile conditional distribution carries no estimable mass and is labelled NOT_ESTABLISHED')
+        out['semantics'] = dict(greater_than='strict > used for both Pred and Truth at every r', greater_or_equal='only the frozen reliability-bin occurrence rule P>=0.5 uses >=', units='mm/h for all physical quantities; qlog is log1p(mm/h)', mask='frozen supervision mask valid=imerg_valid & yunnan_region; N_valid counts it exactly', time_alignment='batch order == frozen Dev scene order; each batch carries its own analysis time', validation='candidate point estimates are never fed back into any gate')
+        return out
+
+class FrozenBudgetStub:
+    """Read-only replacement for seed2026_v2.resources.Budget.
+
+    The original Budget opens (and fsyncs) docs/.../.local/access_and_events.jsonl, i.e.
+    it writes into a private run directory.  Tier-1 inference must not write there, so
+    this stub keeps only the interface Plan/Adapter/VerifiedReader call, and records the
+    logical content bytes for a per-run receipt.
+    """
+
+    def __init__(self, max_read_bytes=32 * 1024 ** 4):
+        self.bytes = 0
+        self.stopped = False
+        self.start = time.monotonic()
+        self.max_read_bytes = max_read_bytes
+        self.events = 0
+
+    def emit(self, event, **fields):
+        self.events += 1
+
+    def check(self):
+        if self.stopped:
+            raise RuntimeError('TIER1_STOPPED')
+        return {'working_set_bytes': 0, 'private_bytes': 0}
+
+    def admit_bytes(self, size):
+        if type(size) is not int or size <= 0:
+            raise MemoryError('BAD_ADMISSION_SIZE')
+        if self.bytes + size > self.max_read_bytes:
+            raise MemoryError('TIER1_READ_CAP')
+        return None
+
+    def account_bytes(self, size):
+        if type(size) is not int or size < 0:
+            raise MemoryError('BAD_ACCOUNT_SIZE')
+        self.bytes += size
+
+    def close(self):
+        return None
+
+def _root(run):
+    from pathlib import Path
+    return Path(run['code_root'])
+
+def _import(code_root):
+    src = os.path.join(code_root, 'src')
+    if src not in sys.path:
+        sys.path.insert(0, src)
+
+def _sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(8 * 1024 * 1024), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+def _torch_load_model(path):
+    import torch
+    payload = torch.load(path, map_location='cpu', weights_only=False)
+    if 'model' not in payload:
+        raise ValueError(f"checkpoint payload has no 'model' key: {path}")
+    return payload
+
+def _require_cuda():
+    import torch
+    if not torch.cuda.is_available():
+        raise RuntimeError('CUDA required for Tier-1 forward inference')
+    if not torch.cuda.is_bf16_supported():
+        raise RuntimeError('CUDA BF16 required (frozen evaluation used autocast bfloat16)')
+    return torch
+
+def _apply_historical_determinism(family, seed, dry_check):
+    """Reproduce the torch global flags that were active during the stored Dev forward.
+
+    B2-B8 ran with seed_all()'s deterministic settings still in force (paired_models is
+    called once and never restores them).  B0/B1 validation ran *after* the
+    seeded_environment() context exited, so process defaults were active; we therefore do
+    not enable deterministic algorithms for b01.
+    """
+    import torch
+    torch.backends.cudnn.benchmark = False
+    if dry_check:
+        return
+    if family == 'b01':
+        torch.backends.cudnn.deterministic = False
+        return
+    from yuntapr.experimental.core_innovation.stage4.engine import seed_all
+    seed_all(int(seed))
+
+def _qlog_validate(qlog):
+    from yuntapr.models.quantile_v2.outputs import validate_log_quantiles
+    validate_log_quantiles(qlog)
+    return qlog
+
+class B01Adapter:
+    """B0_MATCHED_V2 / B1_V2 (seed2026 and seed2027) via the frozen seed2026_v2 chain."""
+
+    def __init__(self, run, args, work):
+        self.run = run
+        self.work = work
+        self.dry_check = bool(args and args.get('dry_check'))
+        _import(run['code_root'])
+        import torch
+        from yuntapr.training.phase_b_v2_seed2026_v2.data import Plan, Adapter
+        from yuntapr.training.phase_b_v2_seed2026_v2.evaluation import Evaluator
+        from yuntapr.models.quantile_v2.models import B0MatchedV2, B1V2
+        from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
+        self.torch = torch
+        budget = FrozenBudgetStub()
+        self.budget = budget
+        self.plan = Plan(budget)
+        self.adapter = Adapter(self.plan, budget)
+        if not self.dry_check:
+            self.adapter.initialize_geometry()
+        ids = self.plan.ids(2024)
+        self.ids = tuple(ids)
+        self.analyses = tuple((self.plan.by_id[s]['window_start'] for s in ids))
+        kind = run['model']
+        model_tag = 'B0_MATCHED_V2' if kind == 'B0' else 'B1_V2'
+        numerics = CandidateNumerics(0.0001, 0.0001)
+        model = B0MatchedV2(numerics=numerics, root=_root(run)) if kind == 'B0' else B1V2(numerics=numerics, root=_root(run))
+        payload = _torch_load_model(run['checkpoint_path'])
+        model.load_state_dict(payload['model'], strict=True)
+        self.identity = payload['identity']
+        self.state_dict_tensors = len(payload['model'])
+        del payload
+        self.device = 'cpu' if self.dry_check else 'cuda'
+        model = model.to(self.device).eval()
+        self.model = model
+        self.kind = kind
+        self.model_tag = model_tag
+        _apply_historical_determinism('b01', run['seed'], self.dry_check)
+        self.evaluator_cls = Evaluator
+        self.source_sha = np_digest(self.identity)
+
+    def describe(self):
+        return dict(family='b01', model=self.kind, device=self.device, dev_scenes=len(self.ids), state_dict_tensors=self.state_dict_tensors, forward_contract='model(x, native_valid) under autocast(bfloat16)', evaluator='seed2026_v2.evaluation.Evaluator (NumericEvaluator)')
+
+    def batches(self):
+        for pos in range(0, len(self.ids), BATCH_SIZE):
+            batch_ids = self.ids[pos:pos + BATCH_SIZE]
+            x, native, rate, valid, region = self.adapter.batch(batch_ids, self.model_tag, 2024)
+            yield dict(ids=batch_ids, x=x, native=native, rate=rate, valid=valid, region=region, analyses=tuple((self.analyses[i] for i in range(pos, pos + len(batch_ids)))))
+
+    def forward(self, batch):
+        torch = self.torch
+        with torch.autocast('cuda', dtype=torch.bfloat16):
+            out = self.model(batch['x'], batch['native'])
+        _qlog_validate(out.conditional_quantiles_log)
+        return out
+
+    def new_evaluator(self, folder):
+        from pathlib import Path
+        p = Path(folder)
+        p.mkdir(parents=True, exist_ok=True)
+        return self.evaluator_cls(self.ids, self.source_sha, p)
+
+    def evaluator_add(self, ev, out, batch):
+        import torch
+        ev.add(batch['ids'], batch['analyses'], out.rain_logit.detach(), out.rain_prob.detach(), out.conditional_quantiles_log.detach(), batch['rate'], batch['valid'], batch['region'])
+
+    def close(self):
+        try:
+            self.adapter.reader.close()
+        except Exception:
+            pass
+
+    def read_scope_actual(self):
+        return dict(content_bytes_read=self.budget.bytes, read_events=self.budget.events)
+
+class B2Adapter:
+
+    def __init__(self, run, args, work):
+        self.run = run
+        self.work = work
+        self.dry_check = bool(args and args.get('dry_check'))
+        _import(run['code_root'])
+        import torch
+        from yuntapr.experimental.core_innovation.stage4.data import PopulationPlan, BatchReader, read
+        from yuntapr.experimental.core_innovation.stage4.evaluation import Evaluation
+        from yuntapr.experimental.research_readiness.b2 import forward_b2
+        from yuntapr.experimental.core_innovation.stage2.models import SpectralCandidate
+        from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
+        self.torch = torch
+        self.forward_b2 = forward_b2
+        prep = read(run['private_preparation']['path'])
+        self.prepared = prep['prepared']
+        inputs = self.prepared['private_inputs']
+        plan = PopulationPlan(inputs['stage3_run'], inputs['request'], root=_root(run))
+        self.plan = plan
+        self.ids = tuple(plan.ids('Development'))
+        self.analyses = tuple((plan.rows['Development'][s]['analysis_time'] for s in self.ids))
+        model = SpectralCandidate('B2', numerics=CandidateNumerics(0.0001, 0.0001), root=_root(run))
+        payload = _torch_load_model(run['checkpoint_path'])
+        model.load_state_dict(payload['model'], strict=True)
+        self.state_dict_tensors = len(payload['model'])
+        del payload
+        self.device = 'cpu' if self.dry_check else 'cuda'
+        self.model = model.to(self.device).eval()
+        _apply_historical_determinism('b2', run['seed'], self.dry_check)
+        self.scope = self.prepared['roles']['Development']
+        self.reader = None
+        self._batch_reader_cls = BatchReader
+        self._evaluation_cls = Evaluation
+        self.code_root = run['code_root']
+
+    def describe(self):
+        return dict(family='b2', model='B2', device=self.device, dev_scenes=len(self.ids), state_dict_tensors=self.state_dict_tensors, forward_contract='forward_b2: latest_frame(x,valid) -> SpectralCandidate(B2)', evaluator='stage4.evaluation.Evaluation (groups + scene partitions)')
+
+    def open_reader(self, folder):
+        self.reader = self._batch_reader_cls(self.plan, {'Development': self.ids}, folder, decision_id='TIER1_' + self.run['run_id'], max_files=self.scope['file_count'], max_bytes=self.scope['bytes_per_pass'], source_bytes={p: f['bytes'] for p, f in self.scope['files'].items()})
+        return self
+
+    def batches(self):
+        for pos in range(0, len(self.ids), BATCH_SIZE):
+            batch_ids = self.ids[pos:pos + BATCH_SIZE]
+            batch = self.reader.batch('Development', batch_ids).to('cuda')
+            yield dict(batch=batch, ids=batch.ids, rate=batch.rate, valid=batch.valid, region=batch.region)
+
+    def forward(self, item):
+        torch = self.torch
+        with torch.autocast('cuda', dtype=torch.bfloat16):
+            out, _ = self.forward_b2(self.model, item['batch'])
+        _qlog_validate(out.conditional_quantiles_log)
+        return out
+
+    def new_evaluator(self, folder):
+        return self._evaluation_cls(self.ids, self.analyses, self.plan.identity, folder, strong_scene_ids=self.plan.strong_scene_ids)
+
+    def evaluator_add(self, ev, out, item):
+        ev.add(out, item['batch'])
+
+    def close(self):
+        if self.reader is not None:
+            try:
+                self.reader.close()
+            except Exception:
+                pass
+
+    def read_scope_actual(self):
+        if self.reader is None:
+            return dict()
+        return dict(meter_totals=self.reader.meter.totals())
+
+class B34Adapter:
+
+    def __init__(self, run, args, work):
+        self.run = run
+        self.work = work
+        self.dry_check = bool(args and args.get('dry_check'))
+        _import(run['code_root'])
+        import torch
+        from yuntapr.experimental.core_innovation.stage4.data import PopulationPlan, BatchReader, read
+        from yuntapr.experimental.core_innovation.stage4.evaluation import Evaluation
+        from yuntapr.experimental.core_innovation.stage2.models import SpectralCandidate
+        from yuntapr.experimental.core_innovation.stage2 import CHANNELS, MEE_V13_KEYS
+        from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
+        self.torch = torch
+        self.CHANNELS = CHANNELS
+        self.MEE_KEYS = MEE_V13_KEYS
+        prep = read(run['private_preparation']['path'])
+        self.prepared = prep['prepared']
+        inputs = self.prepared['private_inputs']
+        plan = PopulationPlan(inputs['stage3_run'], inputs['request'], root=_root(run))
+        self.plan = plan
+        self.ids = tuple(plan.ids('Development'))
+        self.analyses = tuple((plan.rows['Development'][s]['analysis_time'] for s in self.ids))
+        kind = run['model']
+        model = SpectralCandidate(kind, numerics=CandidateNumerics(0.0001, 0.0001), mee_width=16 if kind == 'B4' else None, mee_keys=MEE_V13_KEYS, root=_root(run))
+        payload = _torch_load_model(run['checkpoint_path'])
+        model.load_state_dict(payload['model'], strict=True)
+        self.state_dict_tensors = len(payload['model'])
+        del payload
+        self.device = 'cpu' if self.dry_check else 'cuda'
+        self.model = model.to(self.device).eval()
+        _apply_historical_determinism('b3b4', run['seed'], self.dry_check)
+        self.scope = self.prepared['roles']['Development']
+        self.reader = None
+        self._batch_reader_cls = BatchReader
+        self._evaluation_cls = Evaluation
+
+    def describe(self):
+        return dict(family='b3b4', model=self.run['model'], device=self.device, dev_scenes=len(self.ids), state_dict_tensors=self.state_dict_tensors, forward_contract='SpectralCandidate(kind) with 42-channel six-slot input' + (' + 13-var MEE target residual' if self.run['model'] == 'B4' else ''), evaluator='stage4.evaluation.Evaluation')
+
+    def open_reader(self, folder):
+        self.reader = self._batch_reader_cls(self.plan, {'Development': self.ids}, folder, decision_id='TIER1_' + self.run['run_id'], max_files=self.scope['file_count'], max_bytes=self.scope['bytes_per_pass'], source_bytes={p: f['bytes'] for p, f in self.scope['files'].items()})
+        return self
+
+    def batches(self):
+        for pos in range(0, len(self.ids), BATCH_SIZE):
+            batch = self.reader.batch('Development', self.ids[pos:pos + BATCH_SIZE]).to('cuda')
+            yield dict(batch=batch, ids=batch.ids, rate=batch.rate, valid=batch.valid, region=batch.region)
+
+    def forward(self, item):
+        torch = self.torch
+        batch = item['batch']
+        extra = {}
+        if self.run['model'] in ('B4',):
+            extra = dict(environment=batch.environment, environment_valid=batch.environment_valid, environment_grid=self.model.grid, environment_keys=self.MEE_KEYS)
+        with torch.autocast('cuda', dtype=torch.bfloat16):
+            out = self.model(batch.x, batch.native_valid, channel_order=self.CHANNELS, **extra)
+        _qlog_validate(out.conditional_quantiles_log)
+        return out
+
+    def new_evaluator(self, folder):
+        return self._evaluation_cls(self.ids, self.analyses, self.plan.identity, folder, strong_scene_ids=self.plan.strong_scene_ids)
+
+    def evaluator_add(self, ev, out, item):
+        ev.add(out, item['batch'])
+
+    def close(self):
+        if self.reader is not None:
+            try:
+                self.reader.close()
+            except Exception:
+                pass
+
+    def read_scope_actual(self):
+        if self.reader is None:
+            return dict()
+        return dict(meter_totals=self.reader.meter.totals())
+
+class B56Adapter(B34Adapter):
+
+    def __init__(self, run, args, work):
+        self.run = run
+        self.work = work
+        self.dry_check = bool(args and args.get('dry_check'))
+        _import(run['code_root'])
+        import torch
+        from yuntapr.experimental.core_innovation.stage4.data import PopulationPlan, BatchReader, read
+        from yuntapr.experimental.core_innovation.stage4.evaluation import Evaluation
+        from yuntapr.experimental.core_innovation.stage2.models import SpectralCandidate
+        from yuntapr.experimental.core_innovation.stage2 import CHANNELS, MEE_V13_KEYS
+        from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
+        from yuntapr.experimental.research_readiness.static_training import unpack, StaticTrainingModel
+        self.torch = torch
+        self.CHANNELS = CHANNELS
+        self.MEE_KEYS = MEE_V13_KEYS
+        prep = read(run['private_preparation']['path'])
+        self.prepared = prep['prepared']
+        inputs = self.prepared['private_inputs']
+        plan = PopulationPlan(inputs['stage3_run'], inputs['request'], root=_root(run))
+        self.plan = plan
+        self.ids = tuple(plan.ids('Development'))
+        self.analyses = tuple((plan.rows['Development'][s]['analysis_time'] for s in self.ids))
+        receipt = read(os.path.join(STATIC_TERRAIN, 'production_receipt.json'))
+        kind = run['model']
+        raw = open(os.path.join(STATIC_TERRAIN, f'{kind}_static.npz'), 'rb').read()
+        self.pack = unpack(raw, kind, receipt)
+        b4 = SpectralCandidate('B4', numerics=CandidateNumerics(0.0001, 0.0001), mee_width=16, mee_keys=MEE_V13_KEYS, root=_root(run))
+        model = StaticTrainingModel(b4, self.pack, receipt['scalers'][kind], kind=kind, width=16)
+        payload = _torch_load_model(run['checkpoint_path'])
+        model.load_state_dict(payload['model'], strict=True)
+        self.state_dict_tensors = len(payload['model'])
+        del payload
+        self.device = 'cpu' if self.dry_check else 'cuda'
+        self.model = model.to(self.device).eval()
+        _apply_historical_determinism('b5b6', run['seed'], self.dry_check)
+        self.scope = self.prepared['roles']['Development']
+        self.reader = None
+        self._batch_reader_cls = BatchReader
+        self._evaluation_cls = Evaluation
+
+    def describe(self):
+        return dict(family='b5b6', model=self.run['model'], device=self.device, dev_scenes=len(self.ids), state_dict_tensors=self.state_dict_tensors, static_channels=list(self.pack.channels), forward_contract='StaticTrainingModel: B4 MEE13 feature + additive SP04 terrain residual', evaluator='stage4.evaluation.Evaluation')
+
+    def forward(self, item):
+        torch = self.torch
+        batch = item['batch']
+        extra = dict(environment=batch.environment, environment_valid=batch.environment_valid, environment_grid=self.model.grid, environment_keys=self.MEE_KEYS)
+        with torch.autocast('cuda', dtype=torch.bfloat16):
+            out = self.model(batch.x, batch.native_valid, channel_order=self.CHANNELS, **extra)
+        _qlog_validate(out.conditional_quantiles_log)
+        return out
+
+class B78Adapter(B56Adapter):
+
+    def __init__(self, run, args, work):
+        self.run = run
+        self.work = work
+        self.dry_check = bool(args and args.get('dry_check'))
+        _import(run['code_root'])
+        import copy
+        import torch
+        from yuntapr.experimental.core_innovation.stage4.data import PopulationPlan, BatchReader, read
+        from yuntapr.experimental.core_innovation.stage4.evaluation import Evaluation
+        from yuntapr.experimental.core_innovation.stage2.models import SpectralCandidate
+        from yuntapr.experimental.core_innovation.stage2 import CHANNELS, MEE_V13_KEYS
+        from yuntapr.experimental.core_innovation.stage2.fusion import paired_fusion_candidates
+        from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
+        from yuntapr.experimental.research_readiness.static_training import unpack, StaticTrainingModel
+        from yuntapr.experimental.research_readiness.dynamic_terrain import DynamicTerrainModel, DoteDefinition, PhysicalDote
+        self.torch = torch
+        self.CHANNELS = CHANNELS
+        self.MEE_KEYS = MEE_V13_KEYS
+        prep = read(run['private_preparation']['path'])
+        self.prepared = prep['prepared']
+        inputs = self.prepared['private_inputs']
+        plan = PopulationPlan(inputs['stage3_run'], inputs['request'], root=_root(run))
+        self.plan = plan
+        self.ids = tuple(plan.ids('Development'))
+        self.analyses = tuple((plan.rows['Development'][s]['analysis_time'] for s in self.ids))
+        receipt = read(os.path.join(STATIC_TERRAIN, 'production_receipt.json'))
+        raw = open(os.path.join(STATIC_TERRAIN, 'B6_static.npz'), 'rb').read()
+        self.pack = unpack(raw, 'B6', receipt)
+        definition = read(os.path.join(run['code_root'], B7_B8_DOTE_EVIDENCE))['definition']
+        self.dote_definition = definition
+        self.transform = PhysicalDote(self.pack, DoteDefinition(**definition))
+        b4 = SpectralCandidate('B4', numerics=CandidateNumerics(0.0001, 0.0001), mee_width=16, mee_keys=MEE_V13_KEYS, root=_root(run))
+        b6 = StaticTrainingModel(b4, self.pack, receipt['scalers']['B6'], kind='B6', width=16)
+        fusion_b7, fusion_b8 = paired_fusion_candidates(feature_channels=[48], gfs_channels=[26], terrain_channels=[28], projection_width=16, modulation_limit=MODULATION_LIMIT)
+        fusion = fusion_b7 if run['model'] == 'B7' else fusion_b8
+        model = DynamicTerrainModel(copy.deepcopy(b6), fusion, run['model'])
+        payload = _torch_load_model(run['checkpoint_path'])
+        model.load_state_dict(payload['model'], strict=True)
+        self.state_dict_tensors = len(payload['model'])
+        del payload
+        self.device = 'cpu' if self.dry_check else 'cuda'
+        self.model = model.to(self.device).eval()
+        _apply_historical_determinism('b7b8', run['seed'], self.dry_check)
+        self.scope = self.prepared['roles']['Development']
+        self.reader = None
+        self._batch_reader_cls = BatchReader
+        self._evaluation_cls = Evaluation
+
+    def describe(self):
+        return dict(family='b7b8', model=self.run['model'], device=self.device, dev_scenes=len(self.ids), state_dict_tensors=self.state_dict_tensors, dote_definition=self.dote_definition, modulation_limit=MODULATION_LIMIT, forward_contract='DynamicTerrainModel: B6 feature + explicit DOTE concat(B7)/DTFM(B8) fusion', evaluator='stage4.evaluation.Evaluation')
+
+    def open_reader(self, folder):
+        self.reader = self._batch_reader_cls(self.plan, {'Development': self.ids}, folder, decision_id='TIER1_' + self.run['run_id'], max_files=self.scope['file_count'], max_bytes=self.scope['bytes_per_pass'], source_bytes={p: f['bytes'] for p, f in self.scope['files'].items()}, dynamic_transform=self.transform)
+        return self
+
+    def forward(self, item):
+        torch = self.torch
+        batch = item['batch']
+        extra = dict(environment=batch.environment, environment_valid=batch.environment_valid, environment_grid=self.model.grid, environment_keys=self.MEE_KEYS, dynamic=batch.dynamic, dynamic_valid=batch.dynamic_valid, dynamic_grid=self.model.grid)
+        with torch.autocast('cuda', dtype=torch.bfloat16):
+            out = self.model(batch.x, batch.native_valid, channel_order=self.CHANNELS, **extra)
+        _qlog_validate(out.conditional_quantiles_log)
+        return out
+FAMILY_ADAPTERS = dict(b01=B01Adapter, b2=B2Adapter, b3b4=B34Adapter, b5b6=B56Adapter, b7b8=B78Adapter)
+
+def load_registry():
+    with open(REGISTRY_PATH, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def stored_summary(run):
+    with open(run['dev_report_path'], 'r', encoding='utf-8') as f:
+        j = json.load(f)
+    loader = run['dev_loader']
+    if loader == 'dev_report':
+        return j['summary']
+    if loader == 's2027':
+        return j['epochs'][-1]['development']['summary']
+    if loader == 'stage4':
+        return j['groups']['all']['summary']
+    raise ValueError(loader)
+
+def _close(a, b, abs_tol=GATE_ABS, rel_tol=GATE_REL):
+    if a is None or b is None:
+        return a is None and b is None
+    return abs(a - b) <= max(abs_tol, rel_tol * max(abs(a), abs(b)))
+
+def gate_summary(new_summary, stored):
+    """Compare recomputed frozen-evaluator summary against the stored E9 report summary."""
+    checks = {}
+    for k in GATE_COUNTS:
+        checks[k] = dict(stored=stored.get(k), recomputed=new_summary.get(k), exact=int(stored.get(k) == new_summary.get(k)), passed=bool(stored.get(k) == new_summary.get(k)))
+    measured = {}
+    for k in ('brier', 'auroc', 'average_precision', 'conditional_pinball'):
+        measured[k] = dict(stored=stored.get(k), recomputed=new_summary.get(k), abs_diff=None if stored.get(k) is None or new_summary.get(k) is None else abs(float(stored[k]) - float(new_summary[k])), passed=bool(_close(stored.get(k), new_summary.get(k))))
+    s_cov = (stored.get('coverage') or [None])[-1]
+    r_cov = (new_summary.get('coverage') or [None])[-1]
+    measured['q32_coverage'] = dict(stored=s_cov, recomputed=r_cov, abs_diff=None if s_cov is None or r_cov is None else abs(s_cov - r_cov), passed=bool(_close(s_cov, r_cov)))
+    s_cov_n = (stored.get('covered') or [None])[-1]
+    r_cov_n = (new_summary.get('covered') or [None])[-1]
+    checks['q32_covered_count'] = dict(stored=s_cov_n, recomputed=r_cov_n, exact=int(s_cov_n == r_cov_n), passed=bool(s_cov_n == r_cov_n))
+    passed = all((c['passed'] for c in checks.values())) and all((m['passed'] for m in measured.values()))
+    return dict(tolerance=dict(abs=GATE_ABS, rel=GATE_REL), counts=checks, metrics=measured, passed=passed)
+
+def _run_env(run):
+    env = dict(os.environ)
+    env['PYTHONPATH'] = os.path.join(run['code_root'], 'src')
+    env['PYTHONHASHSEED'] = str(int(run['seed']))
+    env['PYTHONDONTWRITEBYTECODE'] = '1'
+    env['CUBLAS_WORKSPACE_CONFIG'] = ':4096:8'
+    env['OMP_NUM_THREADS'] = '1'
+    env['MKL_NUM_THREADS'] = '1'
+    env['PYTHONUTF8'] = '1'
+    return env
+
+def _checkpoint_identity(run, verify_sha):
+    info = dict(path=run['checkpoint_path'], expected_sha256=run['checkpoint_sha256'], exists=os.path.exists(run['checkpoint_path']))
+    if not info['exists']:
+        raise FileNotFoundError(run['checkpoint_path'])
+    info['bytes_actual'] = os.path.getsize(run['checkpoint_path'])
+    if verify_sha:
+        info['sha256_actual'] = _sha256_file(run['checkpoint_path'])
+        info['sha256_match'] = info['sha256_actual'] == run['checkpoint_sha256']
+        if not info['sha256_match']:
+            raise RuntimeError('CHECKPOINT_SHA_MISMATCH ' + run['checkpoint_path'])
+    dev = run['dev_report_path']
+    info['dev_report'] = dict(path=dev, exists=os.path.exists(dev), bytes=os.path.getsize(dev) if os.path.exists(dev) else None, expected_sha256=run['dev_report_sha256'])
+    if verify_sha and os.path.exists(dev):
+        info['dev_report']['sha256_actual'] = _sha256_file(dev)
+        info['dev_report']['sha256_match'] = info['dev_report']['sha256_actual'] == run['dev_report_sha256']
+        if not info['dev_report']['sha256_match']:
+            raise RuntimeError('DEV_REPORT_SHA_MISMATCH ' + dev)
+    return info
+
+def run_one(run_id, verify_sha=True, max_batches=None, smoke_scenes=0, dry_check=False):
+    registry = load_registry()
+    runs = {r['run_id']: r for r in registry['runs']}
+    if run_id not in runs:
+        raise SystemExit(f'unknown run_id {run_id}; known: {sorted(runs)}')
+    run = runs[run_id]
+    if dry_check:
+        outdir = os.path.join(OUTPUT_ROOT, '_dry_check', run_id)
+    elif smoke_scenes:
+        outdir = os.path.join(OUTPUT_ROOT, '_smoke', run_id)
+    else:
+        outdir = os.path.join(OUTPUT_ROOT, run_id)
+    if dry_check or smoke_scenes:
+        import shutil
+        if os.path.exists(outdir):
+            shutil.rmtree(outdir)
+    elif os.path.exists(os.path.join(outdir, 'result.json')):
+        raise SystemExit(f"refusing to overwrite completed output: {os.path.join(outdir, 'result.json')}")
+    os.makedirs(OUTPUT_ROOT, exist_ok=True)
+    os.makedirs(outdir, exist_ok=dry_check)
+    work = os.path.join(outdir, 'work')
+    if not dry_check:
+        os.makedirs(work)
+    started = time.time()
+    result = dict(schema=SCHEMA, run_id=run_id, model=run['model'], seed=run['seed'], mode='SMOKE_2_SCENES' if smoke_scenes else 'FULL_DEVELOPMENT', started_utc=time.strftime('%Y-%m-%dT%H:%M:%S%z'), notes=OUTPUT_NOTE)
+    adapter = None
+    try:
+        result['checkpoint_identity'] = _checkpoint_identity(run, verify_sha)
+        result['code_root'] = run['code_root']
+        result['executed_commit'] = run['executed_commit']
+        adapter = FAMILY_ADAPTERS[run['family']](run, {'dry_check': dry_check}, work)
+        result['scenes_planned'] = len(adapter.ids)
+        if dry_check:
+            result['dry_check'] = adapter.describe()
+            result['dry_check']['checkpoint_payload_key'] = 'model'
+            result['dry_check']['gate_expectation'] = dict(n_valid=run['stored_summary']['n_valid'], n_rain=run['stored_summary']['n_rain'], brier=run['stored_summary']['brier'], auroc=run['stored_summary']['auroc'], average_precision=run['stored_summary']['average_precision'], conditional_pinball=run['stored_summary']['conditional_pinball'], q32_coverage=run['stored_summary']['q32_coverage'])
+            result['dry_check']['read_scope'] = run['read_scope']
+            result['dry_check']['note'] = 'CPU-only construction + strict state_dict load; no forward, no observation payload, no GPU allocation'
+            result['status'] = 'DRY_CHECK_OK'
+            adapter.close()
+            adapter = None
+            with open(os.path.join(outdir, 'result.json'), 'w', encoding='utf-8') as f:
+                json.dump(result, f, ensure_ascii=False, indent=2)
+            print(json.dumps(result['dry_check'], ensure_ascii=False, indent=1))
+            return result
+        if smoke_scenes:
+            adapter.ids = adapter.ids[:int(smoke_scenes)]
+            adapter.analyses = adapter.analyses[:int(smoke_scenes)]
+        if hasattr(adapter, 'open_reader'):
+            adapter.open_reader(os.path.join(work, 'reads'))
+        ev = None if smoke_scenes and run['family'] == 'b01' else adapter.new_evaluator(os.path.join(work, 'eval'))
+        acc = PointAccumulator()
+        n_batches = 0
+        peak = 0.0
+        for item in adapter.batches():
+            out = adapter.forward(item)
+            if ev is not None:
+                adapter.evaluator_add(ev, out, item)
+            rate = item['rate'].detach().cpu().numpy()
+            valid = item['valid'].detach().cpu().numpy()
+            region = item['region'].detach().cpu().numpy()
+            prob = out.rain_prob.detach().double().cpu().numpy()
+            qlog = out.conditional_quantiles_log.detach().double().cpu().numpy()
+            acc.add(rate, valid, region, prob, qlog)
+            n_batches += 1
+            try:
+                import torch
+                peak = max(peak, float(torch.cuda.max_memory_allocated()) / 1024 ** 3)
+            except Exception:
+                pass
+            if smoke_scenes and n_batches * BATCH_SIZE >= len(adapter.ids):
+                break
+            if max_batches is not None and n_batches >= int(max_batches):
+                break
+        new_summary = None
+        group_summaries = {}
+        if ev is not None:
+            new_report = ev.finish()
+            ev.close()
+            if 'summary' in new_report:
+                new_summary = new_report['summary']
+            elif 'groups' in new_report and 'all' in new_report['groups']:
+                new_summary = new_report['groups']['all']['summary']
+                group_summaries = {k: v['summary'] for k, v in new_report.get('groups', {}).items()}
+            else:
+                new_summary = new_report
+            result['recomputed_frozen_metrics'] = dict(summary=new_summary, groups=group_summaries, source_identity=new_report.get('source_identity'), note='produced by the frozen Evaluation/Evaluator class itself')
+        if smoke_scenes:
+            result['gate'] = dict(applies=False, note='2-scene smoke does not reproduce the full Dev summary; the full-run gate applies only after the 963/10,501-scene traversal')
+        else:
+            stored = stored_summary(run)
+            result['stored_summary'] = {k: stored.get(k) for k in ('scenes', 'n_valid', 'n_rain', 'brier', 'auroc', 'average_precision', 'conditional_pinball', 'q32_signed_bias')}
+            result['stored_summary']['q32_coverage'] = (stored.get('coverage') or [None])[-1]
+            result['gate'] = gate_summary(new_summary, stored)
+            result['gate']['stored_scope'] = run.get('stored_identity')
+        new_metrics = acc.result()
+        result['new_metrics'] = new_metrics
+        result['read_scope_actual'] = adapter.read_scope_actual()
+        result['elapsed_seconds'] = time.time() - started
+        result['cuda_peak_allocated_GiB'] = peak
+        result['status'] = 'SMOKE_COMPLETE' if smoke_scenes else 'COMPLETE' if result['gate']['passed'] else 'GATE_FAILED'
+        if smoke_scenes:
+            result['smoke_checks'] = dict(scenes_processed=len(adapter.ids), batches=n_batches, point_estimate_candidates_available=[p['candidate'] for p in new_metrics.get('point_estimates', [])], contingency_candidates_available=sorted(new_metrics.get('contingency', {}).keys()), N_valid_accumulated=new_metrics.get('N_valid'), truth_mean_mm_h=new_metrics.get('truth_mean_mm_h'), finite_metrics=all((math.isfinite(v) for p in new_metrics.get('point_estimates', []) for v in (p.get('MAE_mm_h'), p.get('RMSE_mm_h'), p.get('MeanBias_mm_h')) if v is not None)), frozen_evaluator_skipped=run['family'] == 'b01')
+        adapter.close()
+        adapter = None
+        with open(os.path.join(outdir, 'result.json'), 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+        _write_compact(run_id, result, outdir)
+        return result
+    except BaseException as exc:
+        result['status'] = 'FAILED'
+        result['error'] = type(exc).__name__ + ': ' + str(exc)
+        result['traceback'] = traceback.format_exc()
+        with open(os.path.join(outdir, 'result.json'), 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+        raise
+
+def _write_compact(run_id, result, outdir=None):
+    """Compact CSV-friendly summary for the Lead's table assembly."""
+    rows = []
+    nm = result.get('new_metrics', {})
+    for pe in nm.get('point_estimates', []):
+        rows.append(dict(run_id=run_id, model=result['model'], seed=result['seed'], section='point_estimate', name=pe['candidate'], MAE=pe['MAE_mm_h'], RMSE=pe['RMSE_mm_h'], Bias=pe['MeanBias_mm_h'], Pearson=pe['Pearson_CC']))
+    for cand, block in nm.get('contingency', {}).items():
+        for th, m in block.get('rows', {}).items():
+            rows.append(dict(run_id=run_id, model=result['model'], seed=result['seed'], section='contingency', name=f'{cand}|r={th}', POD=m['POD'], FAR=m['FAR'], CSI=m['CSI'], HSS=m['HSS'], TP=m['TP'], FP=m['FP'], FN=m['FN'], TN=m['TN']))
+    import csv
+    path = os.path.join(outdir or os.path.join(OUTPUT_ROOT, run_id), 'compact_metrics.csv')
+    if rows:
+        fields = []
+        for row in rows:
+            for k in row:
+                if k not in fields:
+                    fields.append(k)
+        with open(path, 'w', newline='', encoding='utf-8-sig') as f:
+            w = csv.DictWriter(f, fieldnames=fields, restval='')
+            w.writeheader()
+            w.writerows(rows)
+
+def cmd_dry_run(args):
+    registry = load_registry()
+    runs = registry['runs']
+    out = dict(schema=SCHEMA, mode='DRY_RUN', no_inference_performed=True, registry=os.path.basename(REGISTRY_PATH), n_runs=len(runs), constants=dict(event_definition=EVENT_DEFINITION, thresholds_mm_h=list(THRESHOLDS_MM_H), gate_tolerance=dict(abs=GATE_ABS, rel=GATE_REL), gate_keys=list(GATE_KEYS), gate_counts=list(GATE_COUNTS)))
+    rows = []
+    total_gib = 0.0
+    missing = 0
+    print(f"{'run_id':<12} {'family':<7} {'scenes':>6} {'N_valid':>10} {'N_rain':>9} {'GiB':>9} {'code_root':<44} {'ckpt':<4} {'dev':<4}")
+    for r in runs:
+        row = dict(run_id=r['run_id'], model=r['model'], seed=r['seed'], family=r['family'], population=r['population'], checkpoint=os.path.basename(r['checkpoint_path']), checkpoint_exists=os.path.exists(r['checkpoint_path']), dev_report_exists=os.path.exists(r['dev_report_path']), scenes=r['stored_summary']['scenes'], expected_N_valid=r['stored_summary']['n_valid'], expected_N_rain=r['stored_summary']['n_rain'], expected=dict(brier=r['stored_summary']['brier'], auroc=r['stored_summary']['auroc'], ap=r['stored_summary']['average_precision'], conditional_pinball=r['stored_summary']['conditional_pinball'], q32_coverage=r['stored_summary']['q32_coverage']), read_scope_GiB=r['read_scope']['dev_pass_GiB'], read_scope_files=r['read_scope']['dev_pass_files'], read_scope_kind=r['read_scope']['kind'], code_root=r['code_root'], executed_commit=r['executed_commit'])
+        if not (row['checkpoint_exists'] and row['dev_report_exists']):
+            missing += 1
+        total_gib += row['read_scope_GiB']
+        rows.append(row)
+        print(f"{row['run_id']:<12} {row['family']:<7} {row['scenes']:>6} {row['expected_N_valid']:>10} {row['expected_N_rain']:>9} {row['read_scope_GiB']:>9.2f} {os.path.basename(row['code_root'])[:44]:<44} {str(row['checkpoint_exists']):<4} {str(row['dev_report_exists']):<4}")
+    out['runs'] = rows
+    out['budget'] = dict(dev_pass_GiB_total=round(total_gib, 3), dev_pass_files_total=sum((r['read_scope']['dev_pass_files'] for r in runs)), estimate=registry['budget_estimate'], note='logical source bytes; checkpoints/metadata excluded; one traversal per run')
+    out['plan'] = dict(sequential_one_process_per_run=True, fail_fast_on_gate=True, outputs=OUTPUT_ROOT, estimate_wall_hours=[3.5, 6.5], entries=['python -B infer_eval.py run-all', 'python -B infer_eval.py run --run-id <id>', 'python -B infer_eval.py check --run-id <id>  (CPU dry check)'])
+    json_path = args.json_out or os.path.join(OUTPUT_ROOT, 'dry_run_plan.json')
+    os.makedirs(os.path.dirname(os.path.abspath(json_path)), exist_ok=True)
+    with open(json_path, 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f'[dry-run] 19-run plan written to {json_path}')
+    print(f'[dry-run] logical Dev-read total {total_gib:.2f} GiB; no payload opened, no torch imported')
+    if missing:
+        print(f'[dry-run] WARNING {missing} run(s) have a missing artifact', file=sys.stderr)
+        return 2
+    return 0
+
+def cmd_check(args):
+    """CPU dry check: construct plan + model, strict-load state_dict, no forward/no payload."""
+    if args.all:
+        registry = load_registry()
+        rc = 0
+        for r in registry['runs']:
+            try:
+                res = run_one(r['run_id'], verify_sha=args.verify_sha, dry_check=True)
+                if res.get('status') != 'DRY_CHECK_OK':
+                    rc = 1
+            except BaseException as exc:
+                print(f"[check] {r['run_id']} FAILED: {type(exc).__name__}: {exc}", file=sys.stderr)
+                rc = 1
+        print(f'[check] finished, failures={rc}')
+        return rc
+    res = run_one(args.run_id, verify_sha=args.verify_sha, dry_check=True)
+    return 0 if res.get('status') == 'DRY_CHECK_OK' else 1
+
+def cmd_run(args):
+    res = run_one(args.run_id, verify_sha=not args.no_verify_sha, max_batches=args.max_batches, smoke_scenes=args.smoke_scenes)
+    return 0 if res.get('status') in ('COMPLETE', 'SMOKE_COMPLETE') else 1
+
+def cmd_all(args):
+    """Supervisor: one independent process per run; stop the campaign on first gate failure."""
+    registry = load_registry()
+    order = [r['run_id'] for r in registry['runs']]
+    if args.run_ids:
+        order = [rid for rid in order if rid in set(args.run_ids)]
+    os.makedirs(OUTPUT_ROOT, exist_ok=True)
+    os.makedirs(LOG_ROOT, exist_ok=True)
+    summary = []
+    for rid in order:
+        run = next((r for r in registry['runs'] if r['run_id'] == rid))
+        cmd = [sys.executable, '-B', os.path.abspath(__file__), 'run', '--run-id', rid]
+        if args.no_verify_sha:
+            cmd.append('--no-verify-sha')
+        log_path = os.path.join(LOG_ROOT, rid + '.log')
+        started = time.time()
+        with open(log_path, 'wb') as log:
+            proc = subprocess.run(cmd, cwd=BASE, env=_run_env(run), stdout=log, stderr=subprocess.STDOUT)
+        elapsed = time.time() - started
+        result_path = os.path.join(OUTPUT_ROOT, rid, 'result.json')
+        status = 'PROCESS_FAILED'
+        gate_passed = None
+        if os.path.exists(result_path):
+            with open(result_path, 'r', encoding='utf-8') as f:
+                res = json.load(f)
+            status = res.get('status', 'UNKNOWN')
+            gate_passed = (res.get('gate') or {}).get('passed')
+        summary.append(dict(run_id=rid, returncode=proc.returncode, status=status, gate_passed=gate_passed, elapsed_seconds=round(elapsed, 1), log=log_path))
+        print(f'[{rid}] rc={proc.returncode} status={status} gate={gate_passed} {elapsed:.1f}s', flush=True)
+        if proc.returncode != 0 or gate_passed is False:
+            summary.append(dict(campaign='STOPPED_ON_FIRST_FAILURE_OR_GATE_MISMATCH', remaining=order[order.index(rid) + 1:]))
+            break
+    with open(os.path.join(OUTPUT_ROOT, 'campaign_summary.json'), 'w', encoding='utf-8') as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    return 0 if all((s.get('gate_passed') is not False and s.get('returncode') == 0 for s in summary if 'run_id' in s)) else 1
+
+def cmd_self_test(args):
+    sys.path.insert(0, os.path.join(BASE, 'tests'))
+    import test_formula
+    rc = test_formula.main()
+    print()
+    try:
+        import test_run_pipeline
+        rc = max(rc, test_run_pipeline.main())
+    except BaseException as exc:
+        print(f'[self-test] pipeline test failed to run: {type(exc).__name__}: {exc}')
+        rc = 1
+    return rc
+
+def build_parser():
+    p = argparse.ArgumentParser(description='YunTAPR Phase B Tier-1 forward-only Dev metric back-fill')
+    sub = p.add_subparsers(dest='mode', required=True)
+    d = sub.add_parser('dry-run', help='print plan/budget only')
+    d.add_argument('--smoke-scenes', type=int, default=0)
+    d.add_argument('--json-out', default=None, help='path for the machine-readable plan JSON')
+    d.set_defaults(func=cmd_dry_run)
+    r = sub.add_parser('run', help='one run in this process')
+    r.add_argument('--run-id', required=True)
+    r.add_argument('--no-verify-sha', action='store_true')
+    r.add_argument('--max-batches', type=int, default=None)
+    r.add_argument('--smoke-scenes', type=int, default=0)
+    r.set_defaults(func=cmd_run)
+    c = sub.add_parser('check', help='CPU dry check: plan + strict state_dict load, no forward')
+    c.add_argument('--run-id', default=None)
+    c.add_argument('--all', action='store_true')
+    c.add_argument('--verify-sha', action='store_true')
+    c.set_defaults(func=cmd_check)
+    a = sub.add_parser('run-all', help='supervisor: one process per run, fail-fast')
+    a.add_argument('--run-ids', nargs='*', default=None)
+    a.add_argument('--no-verify-sha', action='store_true')
+    a.set_defaults(func=cmd_all)
+    s = sub.add_parser('self-test', help='synthetic formula unit tests')
+    s.set_defaults(func=cmd_self_test)
+    return p
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    return args.func(args) or 0
+if __name__ == '__main__':
+    raise SystemExit(main())

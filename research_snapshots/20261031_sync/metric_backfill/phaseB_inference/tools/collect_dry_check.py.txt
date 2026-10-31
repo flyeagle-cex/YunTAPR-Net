@@ -1,0 +1,30 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Collect the CPU dry-check evidence into outputs/dry_check_summary.json (read-only)."""
+from __future__ import annotations
+import json
+import os
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(BASE, 'outputs')
+DRY = os.path.join(OUT, '_dry_check')
+
+def main():
+    rows = []
+    if os.path.isdir(DRY):
+        for name in sorted(os.listdir(DRY)):
+            path = os.path.join(DRY, name, 'result.json')
+            if not os.path.exists(path):
+                continue
+            with open(path, 'r', encoding='utf-8') as f:
+                r = json.load(f)
+            dc = r.get('dry_check', {})
+            rows.append(dict(run_id=r.get('run_id'), status=r.get('status'), family=dc.get('family'), model=dc.get('model'), device=dc.get('device'), dev_scenes=dc.get('dev_scenes'), state_dict_tensors=dc.get('state_dict_tensors'), checkpoint_sha_match=(r.get('checkpoint_identity') or {}).get('sha256_match'), gate_expectation=dc.get('gate_expectation')))
+    summary = dict(schema='yuntapr.phaseB.tier1.dry_check.v1', note='CPU-only plan+model construction and strict state_dict load; no forward, no observation payload, no GPU allocation', n_checked=len(rows), all_ok=all((r['status'] == 'DRY_CHECK_OK' for r in rows)), runs=rows)
+    path = os.path.join(OUT, 'dry_check_summary.json')
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+    print('checked:', len(rows), 'all_ok:', summary['all_ok'], '->', path)
+    for r in rows:
+        print(f"  {r['run_id']:<14} {r['status']:<14} {r['family']:<6} {str(r['model']):<3} tensors={r['state_dict_tensors']} dev_scenes={r['dev_scenes']}")
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,18 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import json, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO)]
+from yuntapr.data.b1_scientific_freeze import prepare, fit
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard, legacy
+a = json.loads((ROOT / 'YunTAPR-active-b1-freeze-v1.json').read_text(encoding='utf-8'))
+run = Path(a['run_directory'])
+if sys.argv[1] == 'prepare':
+    with PreflightSourceGuard() as g, legacy.FinalInferenceGuard():
+        result = prepare(run)
+        assert g.raw_open_events == 0
+else:
+    result = fit(run, Path(a['staging_root']))
+print(json.dumps(result), flush=True)

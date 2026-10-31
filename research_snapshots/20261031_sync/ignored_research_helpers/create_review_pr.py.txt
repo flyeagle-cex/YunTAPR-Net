@@ -1,0 +1,46 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Use existing Git credential helper for this repository; never print secrets."""
+import json
+import os
+import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
+REPO = 'flyeagle-cex/YunTAPR-Net'
+BRANCH = 'prep/b2-stage-acceptance-20261025'
+os.environ['GIT_TERMINAL_PROMPT'] = '0'
+os.environ['GCM_INTERACTIVE'] = 'Never'
+credential = subprocess.run(['git', 'credential', 'fill'], input='protocol=https\nhost=github.com\n\n', text=True, capture_output=True, check=True)
+fields = dict((line.split('=', 1) for line in credential.stdout.splitlines() if '=' in line))
+secret = fields.get('password')
+if not secret:
+    raise SystemExit('Existing Git helper supplied no usable credential; no PR created')
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+
+    def redirect_request(self, *args, **kwargs):
+        raise RuntimeError('Refusing redirect of authenticated GitHub API request')
+opener = urllib.request.build_opener(NoRedirect())
+
+def api(path, payload=None):
+    headers = {'Authorization': 'Bearer ' + secret, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'YunTAPR-research-review'}
+    data = None if payload is None else json.dumps(payload).encode('utf-8')
+    if data is not None:
+        headers['Content-Type'] = 'application/json'
+    request = urllib.request.Request('https://api.github.com/repos/' + REPO + path, data=data, headers=headers)
+    with opener.open(request, timeout=30) as response:
+        return json.load(response)
+body = '本次准备B2对照协议、预算、授权门控执行候选，以及B0–B4验收和B5/B6地形审计。B2正式训练为NOT_STARTED，B3/B4多seed及整体科学验收为IN_PROGRESS，尚无B2/B3新配对结果。\n\n## 审查范围\n- 科研交付提交：1664f28；同步规则：81e5f96、17f0a1b。\n- 分支基于既有0ccb3e2源码/证据快照，还包含main尚未合入的Stage 2–4代码、seed2027完成记录和seed2029恢复证据。相对main为ahead 25 / behind 1。本PR不只是本轮新增文件；比较接口只返回前300个文件，本轮检查不代表已重新验证全部继承改动。\n- 保留四份中文报告、27行矩阵、验证及修正收据、源SHA清单；私有定位、原始观测、权重及未脱敏账本未加入本轮公开交付。\n\n## 报告\n- [B2训练与评价](docs/research_readiness/20261025/B2_TRAINING_AND_EVALUATION_REPORT.md)\n- [B3/B4多seed计划](docs/research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md)\n- [B0–B4科学验收](docs/research_readiness/20261025/B0_B4_STAGE_ACCEPTANCE.md)\n- [B5/B6就绪审计](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)\n\n## 验证与边界\n- 复核129个已有来源、22条历史实验、126份逐轮摘要；核对seed2029账本及两份E9 LAST文件SHA，未加载权重。\n- 27项针对性工程检查、B2合成GPU batch2前向/反向及batch8验证、交付一致性检查通过。\n- B2复现历史B3初始SHA和九轮顺序；单帧选择、首层sqrt(6)映射仍待研究者冻结，真实数据训练端到端仍NOT_VERIFIED。\n- 本轮正式更新=0、原始气象载荷读取=0；2025最终测试期继续冻结。环境及进程查询问题修正收据保留。\n\n按研究者要求，推送工作分支，通过PR审查后再决定是否合并main。本草稿PR不代表批准训练、预算或科学验收；不启用自动合并，不直接更新main。'
+try:
+    query = urllib.parse.urlencode({'state': 'open', 'head': 'flyeagle-cex:' + BRANCH})
+    existing = api('/pulls?' + query)
+    if existing:
+        result = existing[0]
+    else:
+        result = api('/pulls', dict(base='main', head=BRANCH, draft=True, title='B2训练准备与B0–B4科研验收（含既有Stage 2–4基线）', body=body))
+    print(json.dumps(dict(number=result['number'], url=result['html_url'], draft=result['draft'], head_sha=result['head']['sha'], base=result['base']['ref'], state=result['state'])))
+except urllib.error.HTTPError as error:
+    info = json.loads(error.read().decode('utf-8'))
+    print(json.dumps(dict(status='API_REQUEST_FAILED', code=error.code, message=info.get('message'))))
+    raise SystemExit(1)

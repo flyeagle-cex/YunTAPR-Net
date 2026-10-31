@@ -1,0 +1,61 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+import ast, hashlib, json, shutil, subprocess
+from pathlib import Path
+R = Path(__file__).resolve().parents[3]
+D = R / 'docs/research_readiness/20261025'
+
+def read(p):
+    return json.loads(p.read_text(encoding='utf-8'))
+
+def load(p):
+    return p.read_bytes().decode('utf-8').replace('\r\n', '\n')
+
+def save(p, s):
+    p.write_bytes(s.replace('\r\n', '\n').replace('\n', '\r\n').encode('utf-8'))
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+t = read(D / 'evidence/b5_b6_terrain_production.json')
+c = read(D / 'evidence/b5_b6_cached_real_check.json')
+p = D / 'B5_B6_READINESS_REPORT.md'
+s = '# B5/B6 地形数据、模型与首轮训练就绪报告\n\n**真实候选DEM：COMPLETE_CANDIDATE_PRODUCTION；模型及真实缓存预检查：PASS；B5/B6正式训练：NOT_STARTED_WAITING_REQUIRED_PROTOCOL_AND_BUDGET_APPROVAL。**\n\n2026-10-27更新。B0–B4按研究者本轮“限定结论可信、局限准确、不妨碍地形公平消融”的判据完成基线交接，见[阶段验收](B0_B4_STAGE_ACCEPTANCE.md)。B0/B1不机械补第三seed，B2保留seed2029探索性对照，B3/B4已有三seed。q32及强雨缺陷继续保留，不设为地形准备前置障碍；不追加损失实验。最终泛化及物理机制仍NOT_VERIFIED，2025冻结。\n\n## 真实DEM候选已生产\n\n只从原237份SRTM集合中读取97–107°E、20–30°N矩形及内部导数halo所需的100份既有SRTMGL1命名ZIP档案。压缩源实际交付/预留均为**1,613,224,459字节、100次文件读取**，每份一次，SHA256已保存；解压2,593,440,200字节，生产约190.55秒，未超过独立30分钟上限。未扫描全部237份载荷，未下载新DEM，未读取气象原始数据或2025。派生native mosaic占2,592,144,002字节，所有源及历史权重保持原位。私有产物位于研究者确认存储父目录下的全新目录，定位只保留本机。\n\n实际档案为3601×3601、1角秒、大端int16 HGT，NoData=−32768，WGS84经纬度、北到南行、向东列。180条重复边界逐点一致，无接缝修补或平均。产品规范以米为单位并采用EGM96垂直基准，见[USGS官方说明](https://www.usgs.gov/centers/eros/science/usgs-eros-archive-digital-elevation-shuttle-radar-topography-mission-srtm)。**本地HGT头不能证明厂商发布版本/垂直基准；缺少原下载元数据，官方逐粒校验访问未成功，故具体发布链仍NOT_VERIFIED。** 本候选以100份本地内容SHA集合身份固定，EGM96是依据产品规范的推定，未伪装成已独立匹配V003官方校验。集中批准须接受该来源边界或要求补充原下载凭据；不通过文件名编造验证完成。\n\n|项目|真实结果|\n|---|---|\n|原监督格点|3430；未更改|\n|海拔有效/梯度有效监督格点|3430 / 3430|\n|静态卷积上下文|4513格点；3430区域外扩2目标格，供两层3×3静态卷积|\n|有效面积最小比例|0.999999999989219；数值积分舍入误差，判据≥1−1e−9，无数据空洞|\n|内部平坦坡向格点|0；代码仍保留独立aspect_valid（坡向有效性）掩膜|\n|source集合SHA|`81ec25cf403cd902edcd352169deb1dbefe574df7c7ab41d0e7d0489c0737691`|\n|目标grid SHA|`47216db2c4461e193a1ad5b06f2df3a02a09d2081d6a5d7383739ac2e33cc540`|\n|region SHA|`d25679ff76b26c59ab724ce5518dfce3cc42ec7e2b23ceb8f838554ee9314cd5`|\n|B5 / B6特征文件字节|62,828 / 312,828|\n|B5特征SHA|`98d91515b8475f15343b931be0e14d8b005762987f6d4caeb69e9c9ce1d134b8`|\n|B6特征SHA|`788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd`|\n\n生产和身份记录见[真实DEM收据](evidence/b5_b6_terrain_production.json)。原件、产物数组和私有账本未上传；公开的是规则、覆盖充分量与内容身份。\n\n## 建议集中冻结的科学参数\n\n候选规则：**原生1角秒高程上先用既有WGS84米制中心差分计算东/北梯度，再分别面积聚合高程、东/北梯度，最后由平均梯度向量计算坡度与下坡坡向**。原生SRTM点以最近post的Voronoi覆盖小格表示；面积权重使用WGS84椭球的纬向积分×经向弧度长度，处理目标边缘的部分覆盖，绝非双线性点插值。\n\n目标footprint候选由冻结SP04实际float32中心做float64中点/端点半步推断，再按既有坐标规则显式转float32边缘；保留实际微小非均匀间距，不暗中吸附成理想网格。原DEM北到南、目标纬度南到北通过显式坐标和面积区间相交对应，不隐藏翻转。\n\n0.02°网格是七通道Himawari骨干的501×501原生特征网格，纬30→20°、经97→107°；SP04将其中250,000个中心按每目标格25个中心做冻结离散池化。**这不等于DEM真实面积平均**。本候选直接将DEM面积投到100×100目标格，省去非必要的0.02°中间重采样；不改变SP04的25中心关系。候选目标footprint是显式建模选择，不声称与所有mask ancillary bounds（附属边界）或卫星像元物理足迹完全等价。\n\n梯度分量先聚合可避免把359°/1°作普通角平均；再由向量推导的坡度代表目标尺度净地形趋势，不等于原生坡度平均，也会丢失正反坡抵消后的次网格粗糙度。这是本轮静态消融的清楚边界，DOTE/DTFM未因此被改动。NoData及不完整导数模板传播为无效；监督区域如缺一个有效格点即失败，不补零高程、不缩小掩膜。当前真实结果无此缺口。\n\nB5输入海拔1通道；B6输入海拔、东梯度、北梯度、坡度、坡向sin、坡向cos六通道，单位分别m、m/m、m/m、degree、1、1。每通道另有独立valid指示；平坦坡向以中性输入加无效指示处理，不能解释为朝北。静态统计在冻结2023 Train空间支持3430个独特格点拟合一次，不重复959遍；不使用2024/2025标签选地形特征。\n\n|B6通道|2023空间支持均值|总体标准差|独特格点数|\n|---|---|---|---|\n'
+for channel, scale in zip(t['scalers']['B6']['channels'], t['scalers']['B6']['scales']):
+    s += f"|{channel}|{scale['mean']:.12g}|{scale['std']:.12g}|{scale['n_unique_pixels']}|\n"
+s += '\n模型候选沿用`StaticTerrainCandidate`：B4骨干/概率头/MEE13不变，在SP04目标特征处加独立width16两层3×3残差适配器，输出卷积零初始化。B5/B6均从seed2029的B4**初始权重**构建，非从训练后B4权重微调；完整B4初始化SHA与历史真实记录一致。额外适配器使用独立CPU随机数状态，保留B4训练CPU/CUDA随机流和九轮顺序。\n\n参数量：B4=4,355,986；B5=4,359,426（+3,440）；B6=4,360,866（+4,880）。不能把额外参数效应自动解释成物理信息增益；本轮先做标准静态消融，不擅自增加额外等参数对照预算。\n\n## 必要真实预检查和工程测试\n\n继承已计量缓存，仅用2023 Train2及2024 Dev1；真实静态包各读一次。B4/B5/B6前向初始预测逐位一致；Train2的E0损失、反向梯度有限且静态输出层有非零梯度；Dev1前向/损失有限。模型和buffer前后SHA不变；优化器构造0、正式更新0、历史模型权重加载0、原始气象读取0。约5.39秒，实测峰值CUDA allocated约2.81GiB；这不是正式全程峰值或AdamW/Dev8压力证明，Dev8路径继承已完成B4，新增分支很小，不再跑长基准。\n\n见[真实缓存收据](evidence/b5_b6_cached_real_check.json)及[15项必要检查收据](evidence/b5_b6_preparation_checks.json)：6项新聚合性质、6项静态初始化/预算/串行保护、3项受影响引擎兼容检查。保留1次错误float32测试夹具和1次默认临时目录权限错误，修正后仅重跑失败项。旧129来源、126轮摘要和未变测试直接继承。合成旧引擎小夹具产生1次CPU模拟优化器更新，明确不是新增科研训练；真实检查没有step。\n\n实现复用Stage4训练循环、E0、AdamW、学习率、ReaderFactory、精确评价、LAST封口和原子INTENT/RETURNED账本。仅新增明确的B5/B6模型工厂/账本臂，正式入口`tools/research_readiness/start_static_pair.py`必须匹配新协议、提案SHA、实际Git commit、数据身份、目录和预算批准；旧B2/B3/B4批准一律拒绝。B5→B6串行，每模型只读自身静态包一次；零重放，失败即停，输出目录已存在即拒绝再次执行。所有正式子进程保留CREATE_NO_WINDOW。完成时按E9元数据比较B5−B4、B6−B4、B6−B5，不增加推理。\n\n准备执行先于本轮提交，准确身份为9877a59基线加逐文件SHA绑定的新源码；收据未把旧commit冒充新实现的执行版本。真实GPU检查后仅补了控制器封口/文件计数和元数据汇总，模型工厂、解包及前向数值AST未变，直接继承真实检查，不重复GPU工作。\n\n## 集中决策与正式训练额度（待明确批准）\n\n统一候选协议：B5 seed2029→B6 seed2029，E0、f006回顾估计、Train959/Dev963、Train batch2/Dev8、九轮固定E9 LAST、AdamW和24,000步原轨迹前4,320步，与B4相同。发生阈值、32分位数、评价掩膜与精确AUROC/AP不变。2025不进入读清单。\n\n|资源|B5|B6|合计/规则|\n|---|---|---|---|\n|有效更新|4,320|4,320|8,640|\n|原气象逻辑源字节|477,571,641,012|477,571,641,012|955,143,282,024|\n|新增静态逻辑源字节|62,828|312,828|375,656，每模型启动读1次|\n|总逻辑源字节|477,571,703,840|477,571,953,840|**955,143,657,680**|\n|源读取实例|142,813|142,813|285,626，含两份静态源|\n|时间上限|6小时|6小时|串行12小时；预计约7–9小时，仅据历史B4调度估计|\n|存储预留|启动≥24GiB|启动≥24GiB|初始≥48GiB；新目录，保留所有历史原件|\n|Replay/额外重试|0|0|失败后没有自动恢复授权|\n\n已执行DEM生产1,613,224,459字节/100文件、解压2,593,440,200字节以及真实缓存零更新预检查，均独立于上述**待批准正式训练**预算，不把它们藏入B4读取额度。缓存实际字节及预检查10分钟上限见收据，未读取新的2023/2024原始气象载荷。正式GPU/RAM入场仍沿用CUDA可用≥5GiB、RAM可用≥8GiB、系统提交可用≥2GiB；当前预检查与新目录写入成功，资源可用，启动时再做原入场检查。\n\n集中批准对象只有：上述DEM面积/导数/footprint选择及来源边界、1/6通道＋width16/SP04零残差架构，以及两模型精确预算、新目录和最终代码版本。候选数据与代码已可执行，现无工程失败或缺测阻塞。**正式训练尚无新B5/B6明确预算批准，不能把“自主准备、无需逐项提问”填成批准记录。** 最终提案和私有准备由现有入口生成；获批后直接一次串行启动，不重复全面审查。\n'
+save(p, s)
+checks = read(D / 'evidence/b5_b6_preparation_checks.json')
+current = R / 'src/yuntapr/experimental/research_readiness/static_training.py'
+old = R / 'docs/research_readiness/.local/static_training_cached_check_version.py'
+
+def nodes(p):
+    return {n.name: ast.dump(n, include_attributes=False) for n in ast.parse(p.read_text(encoding='utf-8')).body if isinstance(n, (ast.FunctionDef, ast.ClassDef))}
+for name in ('StaticTrainingModel', 'unpack', 'model_factory'):
+    assert nodes(current)[name] == nodes(old)[name]
+checks['after_real_check_changes']['current_module_sha256'] = sha(current)
+checks['code_sha256'][current.relative_to(R).as_posix()] = sha(current)
+checks['code_sha256']['tests/research_readiness/test_static_training.py'] = sha(R / 'tests/research_readiness/test_static_training.py')
+(D / 'evidence/b5_b6_preparation_checks.json').write_text(json.dumps(checks, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+for path in (R / 'README.md', R / 'docs/research_progress/CURRENT_STATUS.md', D / 'README.md'):
+    s = load(path)
+    prefix = '最新推进（2026-10-27）：B0–B4基线按限定结论带局限完成交接；真实候选DEM、B5/B6模型和真实缓存零更新检查已完成。B5/B6正式训练未启动，需新协议/预算集中明确批准，2025冻结。'
+    if path == R / 'README.md':
+        lines = s.splitlines()
+        lines[2] = '> ' + prefix + ' 见[静态地形就绪及两模型预算](docs/research_readiness/20261025/B5_B6_READINESS_REPORT.md)。下方保留既有实验证据。'
+        s = '\n'.join(lines) + '\n'
+    else:
+        pos = s.index('\n\n') + 2
+        link = 'B5_B6_READINESS_REPORT.md' if path == D / 'README.md' else '../research_readiness/20261025/B5_B6_READINESS_REPORT.md'
+        s = s[:pos] + prefix + ' 见[真实地形与启动预算](' + link + ')。\n\n' + s[pos:]
+    save(path, s)
+p = R / 'docs/research_progress/EVIDENCE_INDEX.md'
+s = load(p)
+pos = s.index('\n\n') + 2
+s = s[:pos] + 'B5/B6准备新证据（2026-10-27）：[实际100瓦片生产与3430有效点](../research_readiness/20261025/evidence/b5_b6_terrain_production.json)、[真实缓存零更新检查](../research_readiness/20261025/evidence/b5_b6_cached_real_check.json)、[必要检查及失败保留](../research_readiness/20261025/evidence/b5_b6_preparation_checks.json)。这是候选生产/准备完成，正式训练未启动；原DEM发布版本链未独立核实，候选按本地SHA固定，不从HGT头伪造版本。\n\n' + s[pos:]
+save(p, s)
+p = R / 'docs/research_progress/SCIENTIFIC_RESULTS.md'
+s = load(p)
+pos = s.index('\n\n') + 2
+s = s[:pos] + '新增分析仅使用已保存充分量：[B3/B4完整均值/样本标准差、七雨强层及四UTC时次](../research_readiness/20261025/B3_B4_MULTI_SEED_PLAN.md#进入地形消融前的限定科学结论2026-10-27)。条件Pinball主要改善集中1–5和5–10 mm/h；(30,50]三seed全部退化，q32欠覆盖重复出现。B0–B4限定基线交接完成，允许地形准备，不代表这些问题已修复或最终泛化通过。\n\n' + s[pos:]
+save(p, s)
+print('Updated existing static report and progress entries; formal training remains unapproved.')

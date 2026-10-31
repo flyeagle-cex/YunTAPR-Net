@@ -1,0 +1,10 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+from pathlib import Path
+import hashlib, json, shutil, uuid
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+run = Path(a['run_directory'])
+(run / 'failed_fixture_binding_driver.py').write_bytes((ROOT / 'recheck_yuntapr_b1_protocol_tests_v1.py').read_bytes())
+print('Preserved initial fixture recheck driver before original-inventory fixture adaptation')

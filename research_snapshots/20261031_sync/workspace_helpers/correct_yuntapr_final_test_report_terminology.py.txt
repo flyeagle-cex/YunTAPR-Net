@@ -1,0 +1,60 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Authorized documentation wording correction; never opens raw data or models."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+DOC = REPO / 'docs/final_test_b0'
+BASE = '299d3f1080840b24db3ba6fe39684a1e6bca530a'
+NAME = 'B0_2025_FINAL_TEST_PROTOCOL_FREEZE_PREFLIGHT_REPORT_v1'
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO).decode().strip() == BASE
+assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=REPO)
+RUN = DOC / 'documentation_corrections' / ('run_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ'))
+RUN.mkdir(parents=True, exist_ok=False)
+
+def identity(data):
+    return {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+before = {}
+for filename in (NAME + '.md', NAME + '.tex', NAME + '.pdf', 'README.md'):
+    before[(DOC / filename).relative_to(REPO).as_posix()] = identity((DOC / filename).read_bytes())
+md = DOC / (NAME + '.md')
+text = md.read_text(encoding='utf-8')
+replacements = {'实际 eligible population 当前': '实际符合资格的评价样本数当前', '再冻结 population identity': '再冻结评价样本全集身份', 'population 冻结后': '评价样本清单冻结后', '使用全人口原始分子与真实 valid 分母': '使用评价样本全集内有效像元的原始分子与真实 valid 分母', '本测试人口': '本测试评价样本全集', '在读取 population、源文件及 FINAL 前拒绝': '在读取评价样本清单、源文件及 FINAL 前拒绝', '缺失/重复/乱序人口': '缺失/重复/乱序评价样本', '非全人口性能预测': '非全样本推理性能预测', '全人口 reinference': '全样本重新推理'}
+for old, new in replacements.items():
+    assert old in text, old
+    text = text.replace(old, new)
+paragraph = '术语约定：**评价样本全集（population）**指按固定资格规则确定的全部评价场景。全样本评价按这些场景中的有效像元累计分子和分母；conditional 指标按有效 rainy 像元统计，不对场景或 batch loss 简单取平均。\n\n'
+text = text.replace('## 身份、基线与执行证据\n\n', paragraph + '## 身份、基线与执行证据\n\n')
+assert '人口' not in text
+md.write_text(text, encoding='utf-8', newline='\n')
+tex = DOC / (NAME + '.tex')
+text = tex.read_text(encoding='utf-8')
+replacements = {'时期、资格与全人口指标': '时期、资格与全样本评价指标', '实际 eligible population 仍为': '实际符合资格的评价样本数仍为', '冻结人口后': '评价样本清单冻结后', '全人口累计原始分子和真实 valid 分母': '在评价样本全集内，按有效像元累计原始分子和真实 valid 分母', 'population/source/FINAL': '评价样本清单/source/FINAL', '重复/缺失/乱序人口': '重复/缺失/乱序评价样本', '不是全人口性能预测': '不用于预测全样本推理性能'}
+for old, new in replacements.items():
+    assert old in text, old
+    text = text.replace(old, new)
+paragraph = '术语约定：\\textbf{评价样本全集（population）}指按固定资格规则确定的全部评价场景。全样本评价按这些场景中的有效像元累计分子和分母；conditional 指标按有效 rainy 像元统计，不对场景或 batch loss 简单取平均。' + '\n\n'
+text = text.replace('\\section{基线与冻结身份}', paragraph + '\\section{基线与冻结身份}')
+assert '人口' not in text
+tex.write_text(text, encoding='utf-8', newline='\n')
+readme = DOC / 'README.md'
+text = readme.read_text(encoding='utf-8')
+text = text.replace('## Entrypoint\n\n', '## Terminology\n\nPopulation means the complete set of eligible evaluation scenes. Pixel metrics accumulate raw numerators and valid-pixel denominators across that set; conditional metrics use valid rainy pixels. The Chinese terms are 评价样本全集 and 全样本评价. This documentation correction changes no metric, data, code, test or authorization.\n\n## Entrypoint\n\n')
+old = '`artifact_sha256.json` in the latest evidence directory identifies every evidence file. `delivery_artifact_sha256.json` identifies every new delivery file except itself.'
+new = '`artifact_sha256.json` in the latest preflight evidence directory identifies every original evidence file. The original `delivery_artifact_sha256.json` and `report_render_verification.json` are immutable records for commit `' + BASE + '`. The current terminology-only document revision, rendering verification and current document hashes are recorded separately under `documentation_corrections/' + RUN.name + '/`; the historical preflight was not rerun.'
+assert old in text
+text = text.replace(old, new)
+readme.write_text(text, encoding='utf-8', newline='\n')
+snapshot = {}
+for entry in subprocess.check_output(['git', 'ls-tree', '-r', '-z', BASE], cwd=REPO).decode().rstrip('\x00').split('\x00'):
+    meta, name = entry.split('\t', 1)
+    snapshot[name] = {'git_blob_sha1': meta.split()[2]}
+value = {'scope': 'DOCUMENTATION_TERMINOLOGY_CORRECTION_ONLY', 'baseline_commit': BASE, 'created_utc': datetime.now(timezone.utc).isoformat(), 'approved_modified_documents': before, 'baseline_files': snapshot, 'definition': 'population = complete set of eligible evaluation scenes; metrics use valid-pixel or valid-rainy-pixel denominators', 'protocol_code_preflight_logs_and_scientific_results_must_be_unchanged': True, 'regression_tests_rerun': False, 'checkpoint_opened': False, '2025_RAW_SOURCES_OPENED': 0, '2025_PIXELS_READ': 0, 'MODEL_PARAMETERS_UPDATED': False, 'OPTIMIZER_STEPS': 0, 'BACKWARD_CALLS': 0}
+(RUN / 'correction_manifest.json').write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+active = ROOT / 'YunTAPR-active-terminology-correction.json'
+active.write_text(json.dumps({'run': str(RUN), 'baseline': BASE}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+print(json.dumps({'status': 'DOCUMENT_WORDING_CORRECTED', 'run': str(RUN)}, ensure_ascii=True))

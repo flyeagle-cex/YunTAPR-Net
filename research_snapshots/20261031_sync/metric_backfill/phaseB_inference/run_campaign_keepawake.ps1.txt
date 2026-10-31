@@ -1,0 +1,30 @@
+# Keep the host awake while the Tier-1 serial campaign runs, then release.
+param(
+    [Parameter(Mandatory = $true)][string]$Ids
+)
+$ErrorActionPreference = 'Stop'
+$sig = @'
+using System;
+using System.Runtime.InteropServices;
+public class YunTAPRPowerKeep {
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern uint SetThreadExecutionState(uint esFlags);
+}
+'@
+Add-Type -TypeDefinition $sig
+$ES_CONTINUOUS = [uint32]2147483648
+$ES_SYSTEM_REQUIRED = [uint32]1
+$ES_DISPLAY_REQUIRED = [uint32]2
+$keep = $ES_CONTINUOUS -bor $ES_SYSTEM_REQUIRED -bor $ES_DISPLAY_REQUIRED
+[void][YunTAPRPowerKeep]::SetThreadExecutionState($keep)
+Write-Host ("[keepawake] engaged flags=0x{0:X}" -f $keep)
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
+try {
+    & powershell -ExecutionPolicy Bypass -File (Join-Path $here 'launch_after_seal.ps1') -Mode all -ConfirmSealed -Only $Ids *>&1 |
+        Tee-Object -FilePath (Join-Path $here 'logs\campaign_keepawake_console.log')
+    $code = $LASTEXITCODE
+} finally {
+    [void][YunTAPRPowerKeep]::SetThreadExecutionState($ES_CONTINUOUS)
+    Write-Host '[keepawake] released'
+}
+exit $code

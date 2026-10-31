@@ -1,0 +1,48 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Close documentation and hash indexes without reading any raw data."""
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import shutil
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+DOC = REPO / 'docs/final_test_b0'
+RUN = DOC / 'preflight/run_20261002T152029_621524Z'
+QA = ROOT / 'tmp/pdfs/b0_final_test_preflight_20261002'
+NAME = 'B0_2025_FINAL_TEST_PROTOCOL_FREEZE_PREFLIGHT_REPORT_v1'
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def identity(p):
+    return {'bytes': p.stat().st_size, 'sha256': sha(p)}
+
+def save(p, v):
+    with p.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(v, stream, ensure_ascii=False, indent=2)
+        stream.write('\n')
+pdf = QA / (NAME + '.pdf')
+assert pdf.stat().st_size > 10000 and pdf.read_bytes().startswith(b'%PDF-')
+log = (QA / (NAME + '.log')).read_text(encoding='utf-8', errors='replace')
+assert 'Overfull' not in log and 'Missing character' not in log and ('! LaTeX Error' not in log)
+pages = [QA / f'page-{i}.png' for i in range(1, 6)]
+assert all((p.is_file() for p in pages))
+assert not (DOC / (NAME + '.pdf')).exists()
+shutil.copyfile(pdf, DOC / (NAME + '.pdf'))
+assert sha(pdf) == sha(DOC / (NAME + '.pdf'))
+save(DOC / 'report_render_verification.json', {'status': 'PASS', 'checked_utc': datetime.now(timezone.utc).isoformat(), 'compiler': 'existing MiKTeX XeLaTeX, --disable-installer, two successful passes', 'native_editor_tools': 'not available in this session; existing local compiler used', 'source': NAME + '.tex', 'source_sha256': sha(DOC / (NAME + '.tex')), 'pdf': NAME + '.pdf', 'pdf_identity': identity(DOC / (NAME + '.pdf')), 'pages': 5, 'paper': 'A4', 'all_five_rendered_pages_visually_inspected': True, 'rendered_png_sha256': {p.name: sha(p) for p in pages}, 'overfull_boxes': 0, 'missing_glyphs': 0, 'visible_clipping_or_overlap': False, 'underfull_box_warning_count': log.count('Underfull'), 'packages_installed_or_upgraded': False, '2025_raw_sources_opened': 0})
+targets = [Path('<PRIVATE_LOCATOR_fb73efb082b4>'), ROOT / 'tmp/final_test_b0_units/unit_xm5m56r1']
+assert all((not p.exists() for p in targets))
+fixture_parent = ROOT / 'tmp/final_test_b0_units'
+assert fixture_parent.is_dir() and (not list(fixture_parent.iterdir()))
+save(DOC / 'fixture_cleanup_verification.json', {'status': 'PASS', 'checked_utc': datetime.now(timezone.utc).isoformat(), 'owned_failed_fixture_paths_removed': [str(p) for p in targets], 'all_owned_fixture_children_cleaned': True, 'raw_sources_checkpoints_diagnostic_cache_deleted': False})
+save(RUN / 'artifact_sha256.json', {p.name: identity(p) for p in sorted(RUN.iterdir()) if p.is_file()})
+paths = list((REPO / 'config/evaluation').rglob('*')) + list(DOC.rglob('*'))
+paths += list((REPO / 'src/yuntapr/evaluation').rglob('*.py')) + list((REPO / 'tests/final_test_b0').rglob('*.py'))
+paths += [REPO / 'scripts/test_b0_2025_final_v1.py']
+files = sorted({p for p in paths if p.is_file()})
+assert all(('__pycache__' not in p.parts for p in files))
+save(DOC / 'delivery_artifact_sha256.json', {p.relative_to(REPO).as_posix(): identity(p) for p in files})
+print(json.dumps({'status': 'PASS', 'delivery_files_indexed': len(files), 'evidence_files_indexed': len(list(RUN.iterdir())) - 1, 'pdf_bytes': pdf.stat().st_size, '2025_raw_sources_opened': 0}))

@@ -1,0 +1,21 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Record the completed human-visible review of every rendered Phase-A page."""
+from pathlib import Path
+import datetime, hashlib, json
+BASE = Path(__file__).parent
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text(encoding='utf8'))
+run = Path(active['run_directory'])
+render = json.loads((run / 'phase_a_page_render_manifest.json').read_text(encoding='utf8'))
+assert render['total_pages'] == 7 and len(render['reports']) == 3
+reports = []
+for value in render['reports']:
+    p = Path(value['pdf'])
+    assert hashlib.sha256(p.read_bytes()).hexdigest() == value['sha256']
+    assert not value['latex_layout_warnings']
+    reports.append({'pdf': str(p), 'sha256': value['sha256'], 'page_count': value['page_count'], 'all_pages_visually_verified': True, 'pages': [{'path': path, 'sha256': hashlib.sha256(Path(path).read_bytes()).hexdigest(), 'review': 'Legible Chinese and numerical tables; no clipping, overlap or missing glyphs'} for path in value['images']]})
+qa = {'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'all_pages_visually_verified': True, 'pdf_count': 3, 'total_pages': 7, 'reports': reports, 'review_method': 'Model viewed every actual rendered PNG with view_image', 'source_render_manifest': str(run / 'phase_a_page_render_manifest.json')}
+with (run / 'pdf_visual_qa.json').open('x', encoding='utf8', newline='\n') as f:
+    json.dump(qa, f, ensure_ascii=False, indent=2)
+    f.write('\n')
+print('PHASE_A_PDF_QA_PASS_3_REPORTS_7_PAGES')

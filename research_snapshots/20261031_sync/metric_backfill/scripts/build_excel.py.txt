@@ -1,0 +1,230 @@
+# Archival copy: formatting normalized; private locators redacted.
+# ================================================================ 01
+# ================================================================ 02
+# ================================================================ 03
+# ================================================================ 04
+# ================================================================ 05
+# every other run gets explicit NEEDS_REINFERENCE rows (one per model/seed/arm)
+# ================================================================ 06
+# provenance table
+"""Build the six-sheet workbook for the advisor report (Tier-0 data only).
+
+Sheets (as requested):
+  01导师指标总表 / 02逐种子结果 / 03消融增益 / 04分类指标计算 / 05连续误差 / 06指标与证据
+
+Every number is traceable to outputs/tier0_*.csv and outputs/tier0_validation.json,
+which in turn are derived from the stored E9 evaluation artifacts (read-only).
+"""
+from __future__ import annotations
+import csv
+import json
+import os
+from collections import OrderedDict
+from openpyxl import Workbook
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'outputs')
+XLSX = os.path.join(OUT, 'YunTAPR-Net基线指标与消融对照_v1_Tier0_20261029.xlsx')
+THIN = Side(style='thin', color='BFBFBF')
+BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
+HEAD_FILL = PatternFill('solid', fgColor='1F4E78')
+SUB_FILL = PatternFill('solid', fgColor='DDEBF7')
+WARN_FILL = PatternFill('solid', fgColor='FFF2CC')
+NOTE_FILL = PatternFill('solid', fgColor='F2F2F2')
+HEAD_FONT = Font(bold=True, color='FFFFFF', size=10)
+TITLE_FONT = Font(bold=True, size=13, color='1F4E78')
+SMALL = Font(size=9, italic=True, color='595959')
+
+def read_csv(name):
+    path = os.path.join(OUT, name)
+    with open(path, 'r', encoding='utf-8-sig', newline='') as f:
+        return list(csv.DictReader(f))
+
+def num(v):
+    if v is None or v == '':
+        return None
+    if isinstance(v, (int, float)):
+        return v
+    try:
+        return float(v)
+    except ValueError:
+        return v
+
+def write_table(ws, start_row, headers, rows, widths=None, number_formats=None, wrap_cols=()):
+    for j, h in enumerate(headers, 1):
+        c = ws.cell(row=start_row, column=j, value=h)
+        c.font = HEAD_FONT
+        c.fill = HEAD_FILL
+        c.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        c.border = BORDER
+    for i, row in enumerate(rows, 1):
+        for j, h in enumerate(headers, 1):
+            v = row.get(h)
+            if isinstance(v, str):
+                v = num(v)
+            c = ws.cell(row=start_row + i, column=j, value=v)
+            c.border = BORDER
+            c.font = Font(size=9)
+            c.alignment = Alignment(vertical='center', wrap_text=h in wrap_cols, horizontal='center' if not isinstance(v, str) else 'left')
+            if number_formats and h in number_formats and isinstance(v, (int, float)):
+                c.number_format = number_formats[h]
+    if widths:
+        for j, h in enumerate(headers, 1):
+            ws.column_dimensions[get_column_letter(j)].width = widths.get(h, 14)
+    ws.row_dimensions[start_row].height = 34
+    return start_row + len(rows)
+
+def note(ws, row, text, fill=NOTE_FILL, merge_to=16):
+    c = ws.cell(row=row, column=1, value=text)
+    c.font = SMALL
+    c.alignment = Alignment(wrap_text=True, vertical='top')
+    c.fill = fill
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=merge_to)
+    ws.row_dimensions[row].height = 26
+
+def main():
+    runs = read_csv('tier0_runs_all.csv')
+    groups = read_csv('tier0_groups.csv')
+    deltas = read_csv('tier0_pairwise_deltas.csv')
+    prov = read_csv('tier0_provenance.csv')
+    proxy = read_csv('tier0_proxy_continuous.csv')
+    validation = json.load(open(os.path.join(OUT, 'tier0_validation.json'), encoding='utf-8'))
+    main_rows = [r for r in runs if r['model'] != 'B7_ZERO_DOTE']
+    control_rows = [r for r in runs if r['model'] == 'B7_ZERO_DOTE']
+    main_e0 = [r for r in main_rows if r['arm'] == 'E0']
+    model_def = {'B0': 'B0 B13单通道单时次', 'B1': 'B1 B13单通道六时次', 'B2': 'B2 七通道单时次(t-10,sqrt6)', 'B3': 'B3 七通道六时次', 'B4': 'B4 B3+GFS MEE13', 'B5': 'B5 B4+海拔', 'B6': 'B6 B4+六静态地形', 'B7': 'B7 B6+DOTE concat残差', 'B8': 'B8 B6+DTFM有界替换融合', 'B7_ZERO_DOTE': 'B7零数值通道主对照(非基线)'}
+    wb = Workbook()
+    ws = wb.active
+    ws.title = '01导师指标总表'
+    ws['A1'] = 'YunTAPR-Net 基线指标总表（2024 Development，固定 Epoch 9，主表=E0）'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:V1')
+    note(ws, 2, '口径：2024 开发集；固定 Epoch 9 LAST；B0/B1 为 B13-V2 人口 10,455/10,501，B2–B8 为 f006 人口 959/963（四 UTC、3–10 月）；两组人口不同，禁止跨组归因。Brier/条件Pinball 越低越好；AUROC/AP 越高越好；q32 名义覆盖 98.4375%；条件 Pinball 在 log1p(mm/h) 域。2025 最终测试冻结、未读取。', merge_to=22)
+    note(ws, 3, '※ POD/FAR/CSI/HSS 为“概率规则 P(rain>0.1)≥0.5”的发生事件分类，从既有 10 档可靠性分箱精确导出，属 EXPLORATORY / POST-HOC（既有协议 POD/FAR/CSI=THRESHOLD_NOT_FROZEN），不进入预注册主指标。点估计阈值分类（Pred>r，r=1/5/10/20）与 MAE/RMSE/Bias/CC 需重新推理，本表不填。', merge_to=22, fill=WARN_FILL)
+    headers = ['序号', '模型', '定义', 'seed', '样本群体(Train/Dev)', 'Dev场景', 'N_valid', 'N_rain', 'Brier↓', 'AUROC↑', 'AP↑', '条件Pinball↓', 'q32覆盖率', 'POD@0.1※', 'FAR@0.1※', 'CSI@0.1※', 'HSS@0.1※', 'MAE(mm/h)', 'RMSE(mm/h)', 'MeanBias(mm/h)', 'PearsonCC', '固定E9 SHA256(前12)', '状态/备注']
+    rows = []
+    for i, r in enumerate(main_e0, 1):
+        rows.append({'序号': i, '模型': r['model'], '定义': model_def.get(r['model'], r['model']), 'seed': r['seed'], '样本群体(Train/Dev)': r['population'], 'Dev场景': r['scenes'], 'N_valid': r['N_valid'], 'N_rain': r['N_rain'], 'Brier↓': r['Brier'], 'AUROC↑': r['AUROC'], 'AP↑': r['AP'], '条件Pinball↓': r['conditional_pinball'], 'q32覆盖率': r['q32_coverage'], 'POD@0.1※': r['POD_r01_Pge05'], 'FAR@0.1※': r['FAR_r01_Pge05'], 'CSI@0.1※': r['CSI_r01_Pge05'], 'HSS@0.1※': r['HSS_r01_Pge05'], 'MAE(mm/h)': 'NEEDS_REINFERENCE', 'RMSE(mm/h)': 'NEEDS_REINFERENCE', 'MeanBias(mm/h)': 'NEEDS_REINFERENCE', 'PearsonCC': 'NEEDS_REINFERENCE', '固定E9 SHA256(前12)': r['checkpoint_sha256'][:12], '状态/备注': '单seed' if r['model'] in ('B2', 'B5', 'B6') else '2seed' if r['model'] in ('B0', 'B1') else '3seed'})
+    end = write_table(ws, 5, headers, rows, widths={'定义': 26, '样本群体(Train/Dev)': 14, '固定E9 SHA256(前12)': 16, '状态/备注': 10}, number_formats={'Brier↓': '0.0000000', 'AUROC↑': '0.0000000', 'AP↑': '0.0000000', '条件Pinball↓': '0.0000000', 'q32覆盖率': '0.0000000', 'POD@0.1※': '0.000000', 'FAR@0.1※': '0.000000', 'CSI@0.1※': '0.000000', 'HSS@0.1※': '0.000000', 'N_valid': '#,##0', 'N_rain': '#,##0', 'Dev场景': '#,##0'})
+    r = end + 2
+    c = ws.cell(row=r, column=1, value='B9（ERA5教师—学生蒸馏，可选）')
+    c.font = Font(bold=True, size=10)
+    ws.cell(row=r, column=3, value='NOT_STARTED：全仓库无实现、无训练、无收据、无矩阵行（规划项，不出任何指标）')
+    ws.merge_cells(start_row=r, start_column=3, end_row=r, end_column=17)
+    c2 = ws.cell(row=r, column=3)
+    c2.fill = WARN_FILL
+    c2.font = Font(size=9)
+    note(ws, r + 2, '证据：METRICS/收据见 06 表；E9 检查点 19/19 本地存在。B0/B1 的 executed_commit 为 NOT_VERIFIED_EXECUTION_COMMIT_BINDING（历史执行绑定不完整）。B7_ZERO_DOTE 为附加控制（2029 完成、2030 训练中、2031 未启动），不属于 B0–B9 主表，见 02 表。', merge_to=22)
+    ws.freeze_panes = 'D6'
+    ws = wb.create_sheet('02逐种子结果')
+    ws['A1'] = '逐种子原始结果（含 loss arm；不把 loss arm 当独立 seed）'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:R1')
+    note(ws, 2, 'B0/B1 的 E0/E1/E2 是损失臂（同一 seed 的三次 fresh 训练），不是三个独立 seed；seed 只有 2026/2027。B2/B5/B6 仅 1 个 seed，不计算种子间标准差。※ 发生事件分类同 01 表说明。B7_ZERO_DOTE 行属附加控制，标注 NON_BASELINE_CONTROL。', merge_to=18)
+    headers2 = ['模型', 'seed', 'loss arm', '样本群体', 'Dev场景', 'N_valid', 'N_rain', 'Brier↓', 'AUROC↑', 'AP↑', '条件Pinball↓', 'q32覆盖率', 'POD@0.1※', 'FAR@0.1※', 'CSI@0.1※', 'HSS@0.1※', '类型', '证据文件']
+    rows2 = []
+    for r in main_rows + control_rows:
+        rows2.append({'模型': r['model'], 'seed': r['seed'], 'loss arm': r['arm'], '样本群体': r['population'], 'Dev场景': r['scenes'], 'N_valid': r['N_valid'], 'N_rain': r['N_rain'], 'Brier↓': r['Brier'], 'AUROC↑': r['AUROC'], 'AP↑': r['AP'], '条件Pinball↓': r['conditional_pinball'], 'q32覆盖率': r['q32_coverage'], 'POD@0.1※': r['POD_r01_Pge05'], 'FAR@0.1※': r['FAR_r01_Pge05'], 'CSI@0.1※': r['CSI_r01_Pge05'], 'HSS@0.1※': r['HSS_r01_Pge05'], '类型': 'NON_BASELINE_CONTROL' if r['model'] == 'B7_ZERO_DOTE' else 'LOSS_ARM' if r['model'] in ('B0', 'B1') else 'MAIN', '证据文件': r['artifact']})
+    write_table(ws, 4, headers2, rows2, widths={'证据文件': 90, '样本群体': 12}, number_formats={'Brier↓': '0.0000000', 'AUROC↑': '0.0000000', 'AP↑': '0.0000000', '条件Pinball↓': '0.0000000', 'q32覆盖率': '0.0000000', 'POD@0.1※': '0.000000', 'FAR@0.1※': '0.000000', 'CSI@0.1※': '0.000000', 'HSS@0.1※': '0.000000', 'N_valid': '#,##0', 'N_rain': '#,##0', 'Dev场景': '#,##0'}, wrap_cols=('证据文件',))
+    ws.freeze_panes = 'A5'
+    ws = wb.create_sheet('03消融增益')
+    ws['A1'] = '配对消融增益（新模型 − 原模型；同 seed、同人口；负 Δ 对 Brier/Pinball 是改善）'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:R1')
+    note(ws, 2, '公平对照：B1−B0（同 seed 同臂，2 seed×3 臂）；B2↔B3（单 seed）；B4−B3（三 seed，另给均值/样本标准差）；B5−B4、B6−B4（seed2029 单 seed）；B7−B6（仅 seed2029 一对）；B8−B7（三 seed）。只有 1 个 seed 的对照不计算标准差。B0/B1 人口与 B2–B8 不同，未做跨人口增益。※ 为概率规则发生事件分类（EXPLORATORY/POST-HOC）。', merge_to=18)
+    headers3 = ['对照', '新模型', '原模型', 'seed', '样本群体', 'ΔBrier', 'ΔAUROC', 'ΔAP', 'Δ条件Pinball', 'Δq32覆盖', 'ΔPOD@0.1※', 'ΔFAR@0.1※', 'ΔCSI@0.1※', 'ΔHSS@0.1※', '备注']
+    rows3 = []
+    for d in deltas:
+        if d.get('status') == 'MISSING_RUN':
+            continue
+        rows3.append({'对照': d['comparison'], '新模型': d['new_model'], '原模型': d['old_model'], 'seed': d['seed'], '样本群体': d['population'], 'ΔBrier': d.get('Brier'), 'ΔAUROC': d.get('AUROC'), 'ΔAP': d.get('AP'), 'Δ条件Pinball': d.get('conditional_pinball'), 'Δq32覆盖': d.get('q32_coverage'), 'ΔPOD@0.1※': d.get('POD_r01_Pge05'), 'ΔFAR@0.1※': d.get('FAR_r01_Pge05'), 'ΔCSI@0.1※': d.get('CSI_r01_Pge05'), 'ΔHSS@0.1※': d.get('HSS_r01_Pge05'), '备注': '三seed均值(非独立seed)' if 'seed-mean' in d['comparison'] else '三seed样本标准差' if 'sample-sd' in d['comparison'] else '单seed，不计算sd' if d['comparison'].split('|')[-1].startswith('s2029') or 's2029' in d['comparison'] or 's2026' in d['comparison'] or ('s2027' in d['comparison']) else ''})
+    write_table(ws, 4, headers3, rows3, widths={'对照': 24, '备注': 22}, number_formats={h: '+0.0000000;-0.0000000' for h in ['ΔBrier', 'ΔAUROC', 'ΔAP', 'Δ条件Pinball', 'Δq32覆盖', 'ΔPOD@0.1※', 'ΔFAR@0.1※', 'ΔCSI@0.1※', 'ΔHSS@0.1※']})
+    r = 4 + len(rows3) + 2
+    note(ws, r, '方向说明：Δ 一律为新模型−原模型。Brier/条件Pinball 负值为改善；AUROC/AP/CSI/HSS 正值为改善；FAR 负值为改善；q32 覆盖率以 98.4375% 名义值为目标（负值=更欠覆盖）。三 seed 均值与样本标准差行仅供描述，不构成统计显著性检验（同一 2024 开发年、像元非独立事件）。', merge_to=18)
+    ws.freeze_panes = 'A5'
+    ws = wb.create_sheet('04分类指标计算')
+    ws['A1'] = '发生事件分类指标（r=0.1 mm/h，概率规则 P≥0.5；EXPLORATORY / POST-HOC）'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:R1')
+    note(ws, 2, '数据来源：既有 E9 development 报告的 10 档可靠性分箱（bins 5–9 与 P≥0.5 精确对应；0.5 恰在边界，已归入 bin5）。公式：TP=Σ₅₋₉rain_b；FP=Σ₅₋₉(n_b−rain_b)；FN=N_rain−TP；TN=(N_valid−N_rain)−FP；POD=TP/(TP+FN)；FAR=FP/(TP+FP)（不是 FPR）；CSI=TP/(TP+FP+FN)；HSS=2(TP·TN−FP·FN)/[(TP+FP)(FP+TN)+(TP+FN)(FN+TN)]。', merge_to=18)
+    note(ws, 3, '边界与单位：事件=float32 降水率 > float32(0.1) mm/h；P=0.5 恰为 bin5 下界并计入 P≥0.5；若研究者要求严格 P>0.5，需从精确分数表扣除 0.5 点质量（B2–B8 的评估 sqlite 已有，可在 Tier-0 复算；B0/B1 无备份分数表）。所有行已通过 TP+FP+FN+TN = N_valid 与 Σbins=N_valid / Σrain=N_rain 校验。', merge_to=18, fill=WARN_FILL)
+    headers4 = ['模型', 'seed', 'arm', '样本群体', 'N_valid', 'N_rain', 'TP', 'FP', 'FN', 'TN', 'TP+FP+FN+TN', 'POD', 'FAR', 'CSI', 'HSS', '校验', '方法标注']
+    rows4 = []
+    for r in main_rows + control_rows:
+        total = int(r['TP']) + int(r['FP']) + int(r['FN']) + int(r['TN'])
+        rows4.append({'模型': r['model'], 'seed': r['seed'], 'arm': r['arm'], '样本群体': r['population'], 'N_valid': r['N_valid'], 'N_rain': r['N_rain'], 'TP': r['TP'], 'FP': r['FP'], 'FN': r['FN'], 'TN': r['TN'], 'TP+FP+FN+TN': total, 'POD': r['POD_r01_Pge05'], 'FAR': r['FAR_r01_Pge05'], 'CSI': r['CSI_r01_Pge05'], 'HSS': r['HSS_r01_Pge05'], '校验': 'OK' if total == int(r['N_valid']) else 'MISMATCH', '方法标注': 'EXPLORATORY_POSTHOC_PROB_RULE_P_GE_0.5'})
+    end4 = write_table(ws, 5, headers4, rows4, widths={'方法标注': 36}, number_formats={'N_valid': '#,##0', 'N_rain': '#,##0', 'TP': '#,##0', 'FP': '#,##0', 'FN': '#,##0', 'TN': '#,##0', 'TP+FP+FN+TN': '#,##0', 'POD': '0.000000', 'FAR': '0.000000', 'CSI': '0.000000', 'HSS': '0.000000'})
+    r = end4 + 2
+    c = ws.cell(row=r, column=1, value='未计算项（状态）')
+    c.font = Font(bold=True, size=10)
+    todo = [('r=1 / 5 / 10 / 20 mm/h 的 TP/FP/FN/TN、POD/FAR/CSI/HSS（Pred>r vs Truth>r）', 'NEEDS_REINFERENCE + 需先冻结点估计规则'), ('同一事件改用点估计 Pred>0.1 判定', 'NEEDS_REINFERENCE（现有点估计规则未冻结）'), ('混淆矩阵原始逐像元输出', 'NOT_AVAILABLE（全盘无逐像元预测文件）'), ('概率规则严格 P>0.5', '可从 B2–B8 评估 sqlite 与 B0/B1 无备份分数表；如需可零GPU复算 B2–B8、B0/B1 需重推理')]
+    for k, (a, b) in enumerate(todo, 1):
+        ws.cell(row=r + k, column=1, value=a).font = Font(size=9)
+        ws.merge_cells(start_row=r + k, start_column=1, end_row=r + k, end_column=7)
+        c = ws.cell(row=r + k, column=8, value=b)
+        c.font = Font(size=9, color='C00000')
+        ws.merge_cells(start_row=r + k, start_column=8, end_row=r + k, end_column=17)
+    r2 = r + len(todo) + 2
+    note(ws, r2, '校验汇总（outputs/tier0_validation.json）：全部 28 个 run 的 bins 计数、N_valid/N_rain 期望值（B0/B1=36,018,430/4,496,600；B2–B8=3,303,090/407,820）、q32 覆盖率一致性、TP+FP+FN+TN 恒等式均通过；B2–B8 的 16 个 run 另有精确分数 sqlite 校验 P≥0.5 = P>0.5 + 0.5 边界质量，全部通过。', merge_to=18)
+    ws.freeze_panes = 'D6'
+    ws = wb.create_sheet('05连续误差')
+    ws['A1'] = '连续降水误差指标（mm/h）——现状与缺口'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:J1')
+    note(ws, 2, '冻结协议没有正式“确定性点估计降水率”定义。唯一既有定义是诊断代理 DIAGNOSTIC_PROXY：ŷ = p_rain × (1/32)Σ expm1(q_τi)（freeze v1 §D6；标注 exact_physical_mean=false，缺失 0<R≤0.1 毛毛雨分量，且 q32 明确不是点预测）。现有 B0/B1 的 MAE/RMSE/Bias 只在 2026-10-09 v2 验收（phase-A 17 轮 run 的 epoch9，SHA c9ea0525/d5a45f9a）中算过，不是主表 final LAST 的绑定产物；B2–B8 与 Pearson CC 全部未算。', merge_to=10, fill=WARN_FILL)
+    headers5 = ['模型', 'seed', '指标', '值', '单位', '点估计规则', '样本范围', '产物代次/绑定', '状态', '备注']
+    rows5 = []
+    for p in proxy:
+        for metric, key in (('MAE', 'MAE_mm_h'), ('RMSE', 'RMSE_mm_h'), ('MeanBias', 'Bias_mm_h')):
+            rows5.append({'模型': p['model'], 'seed': p['seed'], '指标': metric, '值': p[key], '单位': 'mm/h', '点估计规则': 'DIAGNOSTIC_PROXY p×mean(expm1(q_32))', '样本范围': p['population'], '产物代次/绑定': p['artifact_generation'], '状态': 'EXISTING_DIAGNOSTIC_PROXY_ONLY', '备注': '非精确期望；遗漏毛毛雨'})
+        rows5.append({'模型': p['model'], 'seed': p['seed'], '指标': 'PearsonCC', '值': None, '单位': '-', '点估计规则': 'DIAGNOSTIC_PROXY p×mean(expm1(q_32))', '样本范围': p['population'], '产物代次/绑定': p['artifact_generation'], '状态': 'NOT_AVAILABLE', '备注': '缺 Σŷ,Σy,Σŷ²,Σy²,Σŷy'})
+    for r in main_rows:
+        if r['model'] in ('B0', 'B1'):
+            continue
+        for metric in ('MAE', 'RMSE', 'MeanBias', 'PearsonCC'):
+            rows5.append({'模型': r['model'], 'seed': r['seed'], '指标': metric, '值': None, '单位': 'mm/h' if metric != 'PearsonCC' else '-', '点估计规则': 'TO_BE_CONFIRMED_BY_RESEARCHER', '样本范围': '959/963（Dev 963 场景）', '产物代次/绑定': r['checkpoint_sha256'][:12], '状态': 'NEEDS_REINFERENCE', '备注': '需加载 E9 重推理'})
+    write_table(ws, 4, headers5, rows5, widths={'点估计规则': 40, '样本范围': 26, '产物代次/绑定': 60, '备注': 28}, number_formats={'值': '0.000000'}, wrap_cols=('产物代次/绑定', '备注', '点估计规则'))
+    r = 4 + len(rows5) + 2
+    note(ws, r, '点估计候选（需研究者选择，不得擅自冻结）：A 现有诊断代理 p×mean(expm1(q))；B 混合中位数（p<0.5→0，否则 expm1(Q_cond((p-0.5)/p))）；C 条件均值近似（32 分位等权积分、尾部截断到 q32 并标注）；D 概率式 P(R>r)=p×(1−F_cond(r))（超 q32 支持标 NOT_ESTABLISHED）。一次性推理即可同时输出 A–D，不额外消耗 GPU。', merge_to=10)
+    ws.freeze_panes = 'A5'
+    ws = wb.create_sheet('06指标与证据')
+    ws['A1'] = '指标与证据（口径、来源、身份、缺口）'
+    ws['A1'].font = TITLE_FONT
+    ws.merge_cells('A1:K1')
+    blocks = [('统一评价口径', [('评价集', '2024 Development（2023 Train 训练；2025 Final Test 冻结未读取）'), ('时次/vintage', 'f006：GFS init=analysis−6h、valid=analysis；仅 00/06/12/18 UTC、3–10 月；retrospective'), ('空间域', 'SP04 100×100 输出（10,000 cells），冻结云南 mask 3430 cells 参与监督评价；有效像元=IMERG valid & 云南 mask'), ('事件定义', 'float32 降水率 > float32(0.1) mm/h（在转 FP64 前比较）'), ('条件分位数', 'log1p(mm/h) 域；τ_i=(i−0.5)/32；q32 对应 0.984375；36 个分位在雨像元上条件化'), ('Brier', '(1/N_valid)Σ(p−1[rain])²'), ('AUROC/AP', '精确分数分组、tie 半分；AP 非插值；BF16 原生分数身份'), ('条件 Pinball', '(1/N_rain)Σ_iΣ_τ max(τe,(τ−1)e)，e=log1p(y)−q；log1p 域无量纲'), ('q32 coverage', '#{log1p(y)≤q32}/N_rain（雨像元条件覆盖）；名义 98.4375%'), ('POD/FAR/CSI/HSS', '本次新增：r=0.1、概率规则 P≥0.5（EXPLORATORY/POST-HOC）；既有协议为 THRESHOLD_NOT_FROZEN'), ('人口 SHA（959/963）', '2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8'), ('人口（B0/B1）', 'B13-V2 10,455 Train / 10,501 Dev；dev ids SHA 858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae75…'), ('评价脚本 SHA', 'stage4/evaluation.py fd4cb37b…；phase_b_v2_formal_integration_candidate/metrics.py 9fbe6c55…'), ('执行边界', '阶段 B Tier-0：零推理、零原始数据读取、零 2025 访问；全部来自既有 E9 聚合产物')]), ('数据与产物缺口', [('逐像元预测/概率/分位数数组', '不存在（全盘盘点：无预测类 npz/npy/parquet；.pt 仅权重）'), ('混淆矩阵', '从未保存；本表由可靠性分箱重建（仅 r=0.1、P≥0.5）'), ('概率规则严格 P>0.5', 'B2–B8 可从评估 sqlite 复算；B0/B1 无备份分数表（需重推理或接受 P≥0.5）'), ('点估计阈值分类（r=1/5/10/20）', '需加载 E9 重推理 + 先冻结点估计规则'), ('MAE/RMSE/Bias（主表口径）', 'B0/B1 仅有 phase-A 代次诊断代理值；B2–B8 全缺；均需重推理'), ('Pearson CC', '全部缺失（缺 5 个协方差充分统计量）'), ('B0/B1 executed_commit', 'NOT_VERIFIED_EXECUTION_COMMIT_BINDING（历史执行绑定不完整，保留原状）'), ('B0/B1 两代 E9', '主表以 final campaign LAST 为准；2026-10-09 v2 验收的 phase-A epoch9 仅历史证据，不得混用'), ('B9', 'NOT_STARTED（无实现/训练/收据）'), ('2025', 'FROZEN_NO_ACCESS（不得读取/推理/调参/选模）')])]
+    row = 3
+    for title, items in blocks:
+        c = ws.cell(row=row, column=1, value=title)
+        c.font = Font(bold=True, size=11, color='1F4E78')
+        c.fill = SUB_FILL
+        ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=12)
+        row += 1
+        for k, v in items:
+            a = ws.cell(row=row, column=1, value=k)
+            a.font = Font(size=9, bold=True)
+            a.alignment = Alignment(wrap_text=True, vertical='top')
+            a.border = BORDER
+            b = ws.cell(row=row, column=2, value=v)
+            b.font = Font(size=9)
+            b.alignment = Alignment(wrap_text=True, vertical='top')
+            b.border = BORDER
+            ws.merge_cells(start_row=row, start_column=2, end_row=row, end_column=12)
+            row += 1
+        row += 1
+    c = ws.cell(row=row, column=1, value='逐 run 证据身份（来源产物 SHA256 为本次只读重算）')
+    c.font = Font(bold=True, size=11, color='1F4E78')
+    c.fill = SUB_FILL
+    ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=12)
+    row += 1
+    headers6 = ['模型', 'seed', 'arm', 'Dev产物路径', '产物SHA256(前16)', '产物字节', 'E9检查点', '检查点存在', 'E9 SHA256(前16)', 'executed commit', '人口', '备注']
+    rows6 = []
+    for p in prov:
+        rows6.append({'模型': p['model'], 'seed': p['seed'], 'arm': p['arm'], 'Dev产物路径': p['artifact_path'], '产物SHA256(前16)': p['artifact_sha256'][:16], '产物字节': int(p['artifact_bytes']), 'E9检查点': p['checkpoint_path'], '检查点存在': 'YES' if p['checkpoint_exists'] == 'True' else p['checkpoint_exists'], 'E9 SHA256(前16)': p['checkpoint_sha256'][:16], 'executed commit': p['executed_commit'], '人口': p['population'], '备注': 'EXPLORATORY_2024_DEV_E9'})
+    end6 = write_table(ws, row, headers6, rows6, widths={'Dev产物路径': 70, 'E9检查点': 70, 'executed commit': 40, '产物SHA256(前16)': 18, 'E9 SHA256(前16)': 18}, number_formats={'产物字节': '#,##0'}, wrap_cols=('Dev产物路径', 'E9检查点', 'executed commit'))
+    row = end6 + 2
+    note(ws, row, '验证结果：见 outputs/tier0_validation.json（全部 required checks 通过）。本工作簿所有新增分类指标均为 EXPLORATORY/POST-HOC，不能替代预注册主指标，也不能用于 2025 选模。', merge_to=12)
+    wb.save(XLSX)
+    print('saved:', XLSX)
+if __name__ == '__main__':
+    main()

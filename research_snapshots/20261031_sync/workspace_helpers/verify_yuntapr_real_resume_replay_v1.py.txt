@@ -1,0 +1,37 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Read-only comparison of first 100 replayed epoch-9 audited real updates."""
+from pathlib import Path
+import json, datetime, argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--full-epoch', action='store_true')
+args = parser.parse_args()
+count = 5228 if args.full_epoch else 100
+BASE = Path(__file__).parent
+resume = json.loads((BASE / 'YunTAPR-paired-resume-active-v1.json').read_text(encoding='utf8'))
+plan = json.loads(Path(resume['plan_path']).read_text(encoding='utf8'))
+public = Path(plan['public_directory'])
+journal = Path(resume['resume_directory'])
+original = {}
+replayed = {}
+with (public / 'logs/epoch_009/step_events.jsonl').open(encoding='utf8') as f:
+    for line in f:
+        if '"event": "TRAIN_UPDATE_AUDITED"' not in line:
+            continue
+        row = json.loads(line)
+        if not 41825 <= row['update'] <= 41824 + count:
+            continue
+        (replayed if row.get('resume_journal') == str(journal) else original)[row['update']] = row
+assert sorted(original) == sorted(replayed) == list(range(41825, 41825 + count)), 'Requested real replay updates not yet available'
+fields = ['sample_ids', 'update', 'LR', 'actual_denominator', 'loss', 'pre_clip_norm', 'post_clip_norm', 'clipped', 'quantile_crossing', 'support_violation', 'nonfinite', 'probability_in_unit_interval', 'raw_quantile_dtype', 'quantile_pinball_dtype']
+differences = []
+for update in original:
+    for field in fields:
+        if original[update][field] != replayed[update][field]:
+            differences.append({'update': update, 'field': field, 'before_stop': original[update][field], 'replayed': replayed[update][field]})
+value = {'status': ('REAL_FULL_EPOCH9_REPLAY_AUDITED_METRICS_EXACT_PASS' if args.full_epoch else 'REAL_FIRST_100_REPLAY_AUDITED_METRICS_EXACT_PASS') if not differences else 'REAL_REPLAY_MISMATCH_STOP_REQUIRED', 'updates_compared': count, 'fields': fields, 'exact_equality': not differences, 'differences': differences, 'scope': 'Recorded samples, LR, loss and gradient norms; this is not a per-update full-state SHA assertion', 'extra_optimizer_steps': 0, 'extra_forward_calls': 0, 'extra_raw_reads': 0, '2025_RAW_ACCESS': 0, 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+with (journal / ('real_replay_full_epoch9_metrics.json' if args.full_epoch else 'real_replay_first_100_metrics.json')).open('x', encoding='utf8') as f:
+    json.dump(value, f, indent=2, ensure_ascii=False)
+print(json.dumps(value, ensure_ascii=False))
+if differences:
+    raise SystemExit(1)

@@ -1,0 +1,38 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Render only an already completed report stage; no readiness or QA auto-PASS."""
+from pathlib import Path
+import argparse, datetime, hashlib, json, subprocess
+from pypdf import PdfReader
+BASE = Path(__file__).parent
+parser = argparse.ArgumentParser()
+parser.add_argument('stage', choices=('review', 'preparation', 'completion'))
+args = parser.parse_args()
+registry = json.loads((BASE / 'YunTAPR-extended-pipeline-active-v1.json').read_text(encoding='utf8'))
+run = Path(registry['run_directory'])
+manifest = json.loads((run / ('report_build_' + args.stage + '.json')).read_text(encoding='utf8'))
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+root = Path('<PRIVATE_LOCATOR_f7948182ec5f>') / 'yuntapr_extended_ready_qa' / stamp
+root.mkdir(parents=True, exist_ok=False)
+poppler = Path('<PRIVATE_LOCATOR_d4b1b768e36c>')
+reports = []
+for i, v in enumerate(manifest['reports'], 1):
+    pdf = Path(v['pdf']['path'])
+    assert hashlib.sha256(pdf.read_bytes()).hexdigest() == v['pdf']['sha256']
+    reader = PdfReader(pdf)
+    text = '\n'.join((page.extract_text() or '' for page in reader.pages))
+    assert '人口' not in text
+    folder = root / f'report_{i:02d}'
+    folder.mkdir()
+    subprocess.run([str(poppler), '-r', '105', '-png', str(pdf), str(folder / 'page')], check=True, capture_output=True)
+    pages = sorted(folder.glob('page-*.png'), key=lambda p: int(p.stem.rsplit('-', 1)[1]))
+    assert len(pages) == len(reader.pages)
+    log = pdf.with_suffix('.log').read_text(encoding='utf8', errors='replace')
+    warnings = [line for line in log.splitlines() if 'Missing character:' in line or 'Overfull \\hbox' in line or 'Overfull \\vbox' in line]
+    reports.append({'pdf': str(pdf), 'sha256': v['pdf']['sha256'], 'page_count': len(pages), 'images': [str(p) for p in pages], 'latex_layout_warnings': warnings, 'visual_review_pending': True})
+out = run / 'report_stage_qa' / args.stage / stamp
+out.mkdir(parents=True, exist_ok=False)
+value = {'stage': args.stage, 'reports': reports, 'total_pages': sum((v['page_count'] for v in reports)), 'all_pages_visually_verified': False}
+with (out / 'render_manifest.json').open('x', encoding='utf8') as f:
+    json.dump(value, f, ensure_ascii=False, indent=2)
+print(json.dumps(value, ensure_ascii=False))

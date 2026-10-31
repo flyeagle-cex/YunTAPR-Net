@@ -1,0 +1,62 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Preserve failed closure bytes; create a path-only, additive recovery attempt."""
+from pathlib import Path
+import ast, datetime, hashlib, json, os
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf-8-sig'))
+
+def sha(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+def save(p, v):
+    with Path(p).open('x', encoding='utf8', newline='\n') as f:
+        json.dump(v, f, ensure_ascii=False, indent=2)
+        f.write('\n')
+registry = BASE / 'YunTAPR-paired-resume-active-v1.json'
+resume = read(registry)
+extension = read(resume['extension_registry_path'])
+old = read(resume['origin_registry_path'])
+failed = Path(resume['pipeline_journal'])
+assert read(failed / 'STOP_failure.json')['stage'] == 'phase_a_closure'
+assert read(failed / 'phase_a_closure_result.json')['returncode'] != 0
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+recovery = Path(extension['run_directory']) / 'closure_path_recovery' / ('run_' + stamp)
+recovery.mkdir(parents=True, exist_ok=False)
+save(recovery / 'prior_resume_registry.json', resume)
+original = BASE / 'close_yuntapr_paired_training_resumed_v1.py'
+source = original.read_text(encoding='utf8')
+dest = BASE / 'close_yuntapr_paired_training_resumed_v2.py'
+needle = "def save(p,v):\n    with p.open('x',encoding='utf8',newline='\\n') as f:json.dump(v,f,indent=2,ensure_ascii=False,allow_nan=False);f.write('\\n')"
+replacement = "reused_evidence=[]\ndef save(p,v):\n    if p.exists():\n        assert json.loads(p.read_text(encoding='utf8'))==v,'Existing evidence differs: '+str(p)\n        reused_evidence.append({'path':str(p),'sha256':sha256(p),'byte_identical_preserved':True})\n        return\n    with p.open('x',encoding='utf8',newline='\\n') as f:json.dump(v,f,indent=2,ensure_ascii=False,allow_nan=False);f.write('\\n')"
+assert source.count(needle) == 1
+source = source.replace(needle, replacement)
+assert source.count("sha256(extension['authority_path'])") == 1
+source = source.replace("sha256(extension['authority_path'])", "sha256(Path(extension['authority_path']))")
+start = source.index("with (run/'paired_quantile_diagnostics.csv').open('x'")
+end = source.index('\ndelivery=', start)
+block = source[start:end]
+block = block.replace("with (run/'paired_quantile_diagnostics.csv').open('x',encoding='utf8',newline='') as f:", "with io.StringIO(newline='') as f:")
+block += "\n    expected_csv=f.getvalue().encode('utf8')\nquantile_csv=run/'paired_quantile_diagnostics.csv'\nif quantile_csv.exists():\n    assert quantile_csv.read_bytes()==expected_csv\n    reused_evidence.append({'path':str(quantile_csv),'sha256':sha256(quantile_csv),'byte_identical_preserved':True})\nelse:\n    with quantile_csv.open('xb') as f:f.write(expected_csv)"
+source = source[:start] + block + source[end:]
+source = source.replace("save(run/'final_delivery_status.json',delivery)", "save(run/'final_delivery_status.json',delivery)\nrecovery_path=Path(resume['closure_path_recovery_directory'])\nsave(recovery_path/'reused_evidence_verification.json',{'status':'PASS','files':reused_evidence,'old_failure_preserved':True,'MODEL_PARAMETERS_UPDATED':False,'OPTIMIZER_STEPS':0,'BACKWARD_CALLS':0,'2025_RAW_ACCESS':0})")
+ast.parse(source)
+with dest.open('x', encoding='utf8', newline='\n') as f:
+    f.write(source)
+preserved = {}
+for p in [original, *failed.glob('*'), *[Path(old['run_directory']) / name for name in ('paired_comparison_metrics.json', 'post_training_integrity_summary.json', 'all_completed_checkpoint_inventory.json', 'full_source_io_cleanup_audit.json', 'paired_quantile_diagnostics.csv')]]:
+    if p.is_file():
+        preserved[str(p)] = {'bytes': p.stat().st_size, 'sha256': sha(p)}
+for kind, spec in old['formal_runs'].items():
+    status = read(Path(spec['public_directory']) / 'final_status.json')
+    assert status['status'] == 'FORMAL_PHASE_A_COMPLETE'
+    assert status['FORMAL_OPTIMIZER_STEPS'] == status['completed_epoch'] * 5228
+    assert not any((status.get(k, 0) for k in ('2025_RAW_ACCESS', '2025_PIXELS_READ', '2025_MODEL_INFERENCE_SCENES')))
+save(recovery / 'recovery_plan.json', {'status': 'PURE_PATH_AND_ADDITIVE_EVIDENCE_RECOVERY_PREPARED', 'original_closure': str(original), 'original_sha256': sha(original), 'corrected_closure': str(dest), 'corrected_sha256': sha(dest), 'preserved_files': preserved, 'formal_training_repeated': False, 'scientific_or_numerical_functions_changed': False, '2025_RAW_ACCESS': 0, 'prior_failure': str(failed / 'STOP_failure.json'), 'authority': extension, 'researcher_confirmation': '2026-10-05 continue original authorized closure and GitHub publication'})
+resume.update(closure_path_recovery_directory=str(recovery), pipeline_journal=str(recovery / 'sequential_execution_v3'))
+temporary = registry.with_suffix('.json.recovery_' + stamp)
+save(temporary, resume)
+os.replace(temporary, registry)
+print(json.dumps({'recovery': str(recovery), 'journal': resume['pipeline_journal'], 'formal_training_repeated': False}, ensure_ascii=False))

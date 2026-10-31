@@ -1,0 +1,40 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Actual 2024 validation fixtures only; resource audit, never full validation."""
+from pathlib import Path
+import datetime, gc, json, sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO / 'scripts')]
+import preflight_b1_b0_matched_phase_a_v1 as e
+from torch.utils.data import DataLoader
+from yuntapr.data.dataset_b1 import TemporalDataset, load_records, load_frames, worker_init, collate, install_source_guard
+from yuntapr.training.phase_a_protocol import seed_reproducibility
+from yuntapr.spatial.sp04_mapping import load_sp04
+from yuntapr.data.masks import read_frozen_yunnan_mask
+if __name__ == '__main__':
+    a = json.loads((ROOT / 'YunTAPR-active-b1-protocol-v1.json').read_text())
+    run = Path(a['run_directory'])
+    seed_reproducibility()
+    install_source_guard()
+    mapping = load_sp04()
+    ids = json.loads((run / 'identity_preflight.json').read_text())['identity']
+    mask = read_frozen_yunnan_mask(Path(ids['yunnan_mask']['path']), mapping)
+    frames = load_frames()
+    items = {}
+    proof = {}
+    for kind in ('B0_MATCHED', 'B1'):
+        ds = TemporalDataset(kind, load_records(kind, 2024)[:16], frames, mapping, mask, Path(a['staging_root']) / ('actual_2024_' + kind))
+        loader = DataLoader(ds, batch_size=2, shuffle=False, drop_last=False, num_workers=2, pin_memory=False, persistent_workers=False, prefetch_factor=1, worker_init_fn=worker_init, collate_fn=collate)
+        items[kind] = [r for batch in loader for r in batch]
+        del loader
+        gc.collect()
+        assert len(items[kind]) == 16
+        proof[kind] = [{k: v for k, v in r.items() if k not in ('x', 'y', 'valid', 'yunnan')} for r in items[kind]]
+    cases = {n: {kind: e.memory_case(kind, items[kind][:n], False, 2) for kind in ('B0_MATCHED', 'B1')} for n in (8, 9, 16)}
+    assert all((v['status'] == 'PASS' and v['recommended_20_percent'] for v in cases[8].values()))
+    assert not all((v['recommended_20_percent'] for v in cases[9].values()))
+    assert not all((v['recommended_20_percent'] for v in cases[16].values()))
+    assert not list(Path(a['staging_root']).rglob('*.nc'))
+    e.save(run / 'validation_2024_inference_gpu_audit.json', {'scope': 'ENGINEERING_ONLY_REAL_2024_VALIDATION_RESOURCE_AUDIT', 'sample_year': 2024, 'unique_fixture_scenes_per_model': 16, 'full_10501_validation_executed': False, 'cases': cases, 'selected_common_validation_batch': 8, 'ENGINEERING_OPTIMIZER_STEPS': 0, 'FORMAL_OPTIMIZER_STEPS': 0, '2025_PIXELS_READ': 0, 'source_fixtures': proof, 'cleanup_success': True, 'status': 'PASS'})
+    print(json.dumps({'status': 'PASS', 'actual_2024_validation_scenes': 16, 'common_validation_batch': 8, 'optimizer_steps': 0}), flush=True)

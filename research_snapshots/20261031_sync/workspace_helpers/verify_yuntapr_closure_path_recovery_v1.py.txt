@@ -1,0 +1,37 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Archive every new adapter-test result and independently pin old failure bytes."""
+from pathlib import Path
+import ast, datetime, hashlib, io, json, os, sys, tempfile, unittest
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+resume = read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+recovery = Path(resume['closure_path_recovery_directory'])
+plan = read(recovery / 'recovery_plan.json')
+for p, ref in plan['preserved_files'].items():
+    p = Path(p)
+    assert p.stat().st_size == ref['bytes'] and hashlib.sha256(p.read_bytes()).hexdigest() == ref['sha256']
+for name in ('close_yuntapr_paired_training_resumed_v2.py', 'execute_yuntapr_paired_phase_b_extended_v2.py', 'execute_yuntapr_extended_pipeline_resumed_v3.py'):
+    ast.parse((BASE / name).read_text(encoding='utf8'))
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+attempt = recovery / 'path_adapter_tests' / stamp
+attempt.mkdir(parents=True, exist_ok=False)
+fixture = attempt / 'fixtures'
+fixture.mkdir()
+tempfile.tempdir = str(fixture)
+os.environ.update(TEMP=str(fixture), TMP=str(fixture))
+log = io.StringIO()
+suite = unittest.defaultTestLoader.loadTestsFromName('tests.paired_pipeline_fixture_scope.test_path_adapter')
+result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+summary = {'status': 'PASS' if result.wasSuccessful() and (not result.skipped) else 'FAILED', 'test_count': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'prior_failure_byte_identical': True, 'prior_completed_output_byte_identical': True, 'FORMAL_OPTIMIZER_STEPS': 0, 'RAW_SOURCE_READS': 0, 'fixture_cleanup_success': not list(fixture.iterdir()), '2025_RAW_ACCESS': 0}
+(attempt / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+(attempt / 'test_summary.json').write_text(json.dumps(summary, indent=2), encoding='utf8')
+if summary['fixture_cleanup_success']:
+    fixture.rmdir()
+print(json.dumps({'attempt': str(attempt), **summary}, ensure_ascii=False))
+if summary['status'] != 'PASS' or not summary['fixture_cleanup_success']:
+    raise SystemExit(1)

@@ -1,0 +1,63 @@
+# Archival copy: formatting normalized; private locators redacted.
+# New absent completion receipt in the canonical journal; original plan is never rewritten.
+"""Continue the same authority with a new journal after explicit user resume."""
+from pathlib import Path
+import ast, datetime, json, os, subprocess, time, traceback
+import execute_yuntapr_extended_pipeline_v1 as original
+BASE = original.BASE
+REPO = original.REPO
+run = original.run
+oldrun = original.oldrun
+resume = original.read(BASE / 'YunTAPR-paired-resume-active-v1.json')
+resume_root = Path(resume['resume_directory'])
+stages = list(original.STAGES)
+stages[0] = ('phase_a_closure', BASE / 'close_yuntapr_paired_training_resumed_v1.py', [])
+stages = [(name, BASE / 'run_yuntapr_extended_regression_scoped_v1.py', args) if name in ('all_repository_regressions', 'post_extension_all_regressions') else (name, path, args) for name, path, args in stages]
+
+def main():
+    inventory = original.validated_inventory()
+    pinned = original.read(run / 'sequential_execution/execution_plan.json')['source_inventory']
+    if inventory != pinned:
+        raise PermissionError('Original extension orchestration/draft inventory changed')
+    extra = [Path(__file__), BASE / 'execute_yuntapr_paired_resume_v1.py', stages[0][1], REPO / 'scripts/paired_phase_a_resume_governance_v1.py', BASE / 'run_yuntapr_extended_regression_scoped_v1.py', REPO / 'scripts/paired_pipeline_fixture_scope_v1.py', REPO / 'scripts/paired_pipeline_historical_inventory_v1.py']
+    for p in extra:
+        ast.parse(p.read_text(encoding='utf8'))
+        inventory[str(p.resolve())] = original.sha(p)
+    journal = resume_root / 'sequential_execution_v2'
+    journal.mkdir(exist_ok=False)
+    original.save(journal / 'execution_plan.json', {'source_inventory': inventory, 'stages': [(n, str(p), a) for n, p, a in stages], 'origin_plan': str(run / 'sequential_execution/execution_plan.json'), 'resume_registry': resume, 'started_utc': original.now(), 'scientific_parameters_changed': False, '2025_RAW_ACCESS': 0, 'B2_TRAINING_AUTHORIZED': False})
+    current = 'WAIT_AUTHORIZED_B1_RESUME'
+    try:
+        while not (oldrun / 'both_formal_runs_completed.json').exists():
+            original.check_inventory(inventory)
+            if (resume_root / 'STOP_resume_failure.json').exists():
+                raise RuntimeError('Explicit resume failed; stop')
+            for spec in original.old['formal_runs'].values():
+                if (Path(spec['public_directory']) / 'failure.json').exists():
+                    raise RuntimeError('Formal run failure; stop')
+            time.sleep(20)
+        original.save(journal / 'phase_a_wait_completion.json', {'both_runs_completed': True, 'utc': original.now()})
+        for current, script, args in stages:
+            original.check_inventory(inventory)
+            original.prerequisites(current)
+            cmd = [str(original.PYTHON), str(script), *args]
+            original.save(journal / (current + '_start.json'), {'command': cmd, 'utc': original.now()})
+            with (journal / (current + '_console.txt')).open('x', encoding='utf8', newline='\n') as log:
+                process = subprocess.Popen(cmd, cwd=REPO, env=original.ENV, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf8')
+                original.save(journal / (current + '_process.json'), {'pid': process.pid, 'parent_pid': os.getpid(), 'utc': original.now()})
+                for line in process.stdout:
+                    log.write(line)
+                    log.flush()
+                    print(current + ': ' + line, end='', flush=True)
+                rc = process.wait()
+            original.save(journal / (current + '_result.json'), {'returncode': rc, 'utc': original.now()})
+            if rc:
+                raise RuntimeError('Authorized stage failed: ' + current + '; no automatic retries')
+        value = {'status': 'ALL_AUTHORIZED_NUMERICAL_STAGES_COMPLETED', 'reports_visual_QA_and_Git_publication': 'PENDING_SEPARATE_OPERATIONS', 'FINAL_TEST_2025_AUTHORIZED': False, 'B2_TRAINING_AUTHORIZED': False, '2025_RAW_ACCESS': 0, 'explicit_resume_journal': str(journal), 'utc': original.now()}
+        original.save(journal / 'core_pipeline_completion.json', value)
+        original.save(run / 'sequential_execution/core_pipeline_completion.json', value)
+    except BaseException as error:
+        original.save(journal / 'STOP_failure.json', {'stage': current, 'error': repr(error), 'traceback': traceback.format_exc(), 'automatic_restart': False, 'next_stage_allowed': False, 'utc': original.now()})
+        raise
+if __name__ == '__main__':
+    main()

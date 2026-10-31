@@ -1,0 +1,25 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Recompile the reviewed editable report with existing tools; no package installation."""
+from pathlib import Path
+import hashlib
+import json
+import shutil
+import subprocess
+root = Path(__file__).parent
+out = root / 'YunTAPR-Net-push-chunks/docs/formal_training/b0_phase_b_finalfit/runs/run_20261002T035929_487644Z'
+qa = root / 'tmp/pdfs/b0_phase_b_finalfit_20261002T132530Z'
+name = 'B0_PHASE_B_FINALFIT_FORMAL_TRAINING_REPORT_v1'
+tex, pdf = (out / (name + '.tex'), out / (name + '.pdf'))
+for index in (3, 4):
+    result = subprocess.run([shutil.which('pdflatex'), '--disable-installer', '-interaction=nonstopmode', '-halt-on-error', '-output-directory=' + str(qa), str(tex)], cwd=qa, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    (qa / f'compile_{index}.txt').write_bytes(result.stdout)
+    if result.returncode:
+        raise RuntimeError('LaTeX layout repair compilation failed')
+if 'Overfull' in (qa / (name + '.log')).read_text(encoding='utf-8', errors='replace'):
+    raise RuntimeError('Unresolved layout overflow')
+pdf.write_bytes((qa / (name + '.pdf')).read_bytes())
+for tool, args in [('pdfinfo', [str(pdf)]), ('pdftotext', ['-layout', str(pdf), str(qa / 'extracted.txt')]), ('pdftoppm', ['-r', '100', '-png', str(pdf), str(qa / 'page')])]:
+    result = subprocess.run([shutil.which(tool), *args], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True)
+    (qa / (tool + '.txt')).write_bytes(result.stdout)
+print(json.dumps({'status': 'COMPILED_NO_OVERFULL_BOXES', 'pages': len(list(qa.glob('page-*.png'))), 'sha256': hashlib.sha256(pdf.read_bytes()).hexdigest()}))

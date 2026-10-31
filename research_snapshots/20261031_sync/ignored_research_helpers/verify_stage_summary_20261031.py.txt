@@ -1,0 +1,134 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+import hashlib, json, math, re, statistics, zipfile
+from pathlib import Path
+from xml.etree import ElementTree as ET
+root = Path(__file__).resolve().parents[3]
+data = json.loads((root / 'docs/research_readiness/.local/complete_metrics_final_20261031.json').read_text(encoding='utf-8'))
+review = root / 'docs/research_readiness/.local/stage_summary_review_20261031'
+verification = json.loads((review / 'verification.json').read_text(encoding='utf-8'))
+folder = root / 'outputs/01a17251-29bb-7172-89f8-380b42c4d290'
+file = folder / 'YunTAPR-Net_V1.3_逐阶段逐seed全方案对比_20261031.xlsx'
+old = folder / 'YunTAPR-Net_V1.3_完整指标与消融对照_20261031.xlsx'
+assert hashlib.sha256(old.read_bytes()).hexdigest() == 'b77469a441e36feeb55b5fea282ae5bcc0760481e5c7b3209a8d1d587151b4b4'
+order = ['B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B7_ZERO_DOTE', 'B7_PERP_GRADIENT']
+records = sorted(data['records'], key=lambda r: (order.index(r['model']), r['arm'], r['seed']))
+ns = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+
+def column(index):
+    value = ''
+    index += 1
+    while index:
+        index, rem = divmod(index - 1, 26)
+        value = chr(65 + rem) + value
+    return value
+with zipfile.ZipFile(file) as z:
+    workbook = ET.fromstring(z.read('xl/workbook.xml'))
+    sheets = workbook.find('m:sheets', ns)
+    assert len(sheets) == 1 and sheets[0].get('name') == '阶段对比'
+    tables = [x for x in z.namelist() if re.match('xl/tables/[^/]+\\.xml$', x)]
+    assert len(tables) == 1
+    table = ET.fromstring(z.read(tables[0]))
+    assert table.get('ref') == 'A6:AN37'
+    assert len(table.find('m:tableColumns', ns)) == 40
+    shared = []
+    if 'xl/sharedStrings.xml' in z.namelist():
+        for item in ET.fromstring(z.read('xl/sharedStrings.xml')):
+            shared.append(''.join((t.text or '' for t in item.iter('{' + ns['m'] + '}t'))))
+    worksheet = ET.fromstring(z.read(next((x for x in z.namelist() if re.match('xl/worksheets/[^/]+\\.xml$', x)))))
+    cells = {c.get('r'): c for c in worksheet.findall('.//m:sheetData/m:row/m:c', ns)}
+
+    def at(address):
+        c = cells.get(address)
+        if c is None:
+            return None
+        typ = c.get('t')
+        v = c.find('m:v', ns)
+        if typ == 'inlineStr':
+            return ''.join((x.text or '' for x in c.findall('.//m:t', ns)))
+        if v is None:
+            return None
+        if typ == 's':
+            return shared[int(v.text)]
+        if typ in ('str', 'e'):
+            return v.text
+        return float(v.text)
+
+    def close(a, b):
+        assert isinstance(a, (int, float)) and math.isfinite(a) and (abs(a - b) < 1e-12), (a, b)
+    assert all((c.get('t') != 'e' for c in cells.values()))
+    formulas = [c for c in cells.values() if c.find('m:f', ns) is not None]
+    assert len(formulas) == 120 and all((c.find('m:v', ns) is not None for c in formulas))
+    assert [at(column(k) + '6') for k in range(40)] == verification['headers']
+    continuous = {v[0]: v for v in data['continuous']}
+    classifications = {v[0]: v for v in data['classifications'] if v[5] == 'OCC_P'}
+    point_complete = 0
+    blank_point_cells = 0
+    for i, r in enumerate(records, 7):
+        assert [at(column(k) + str(i)) for k in range(3)] == [r['model'], r['seed'], r['arm']]
+        for k, key in enumerate(['brier', 'auroc', 'ap', 'pinball', 'coverage', 'q32_bias', 'q32_error'], 3):
+            close(at(column(k) + str(i)), r[key])
+        assert at('AA' + str(i)) == r['population'] and at('AD' + str(i)) == 'E9 LAST'
+        assert at('AF' + str(i)) == r['checkpoint']
+        close(at('AB' + str(i)), r['n_valid'])
+        close(at('AC' + str(i)), r['n_rain'])
+        for method, offset in [('A', 17), ('B', 32), ('C', 36)]:
+            a = continuous[r['run_id'] + '|' + method]
+            if isinstance(a[7], (int, float)):
+                if method == 'A':
+                    point_complete += 1
+                for k in range(4):
+                    close(at(column(offset + k) + str(i)), a[7 + k])
+            else:
+                for k in range(4):
+                    assert at(column(offset + k) + str(i)) is None
+                    blank_point_cells += 1
+        c = classifications[r['run_id']]
+        tp, fp, fn, tn = c[8:12]
+        den = (tp + fn) * (fn + tn) + (tp + fp) * (fp + tn)
+        expected = [tp / (tp + fn), fp / (tp + fp), tp / (tp + fp + fn), 2 * (tp * tn - fp * fn) / den]
+        for k in range(4):
+            close(at(column(21 + k) + str(i)), expected[k])
+    assert point_complete == 19 and blank_point_cells == 144
+    by_id = {r['run_id']: (i, r) for i, r in enumerate(records, 7)}
+    paired_rows = 0
+    fields = ['brier', 'auroc', 'ap', 'pinball', 'q32_error']
+    direction = [-1, 1, 1, -1, -1]
+    for s in verification['pairedStatistics']:
+        for member in s['members']:
+            ei, experiment = by_id[member['experiment']]
+            ri, reference = by_id[member['reference']]
+            assert (experiment['seed'], experiment['arm'], experiment['population'], experiment['n_valid'], experiment['n_rain']) == (reference['seed'], reference['arm'], reference['population'], reference['n_valid'], reference['n_rain'])
+            vals = [experiment[f] - reference[f] for f in fields]
+            for a, b in zip(vals, member['delta']):
+                close(a, b)
+            if '补充' not in s['comparison']:
+                row = ri if reference['model'] in ('B7_ZERO_DOTE', 'B7_PERP_GRADIENT') else ei
+                for k, value in enumerate(vals):
+                    close(at(column(11 + k) + str(row)), value)
+                improved = sum((v * d > 0 for v, d in zip(vals, direction)))
+                worsened = sum((v * d < 0 for v, d in zip(vals, direction)))
+                assert at('Q' + str(row)) == f'{improved}项改善，{worsened}项退化'
+                paired_rows += 1
+        assert s['n'] == len(s['members']) and len(set(s['seeds'])) == s['n']
+        for k, f in enumerate(fields):
+            values = [v['delta'][k] for v in s['members']]
+            m = s['metrics'][f]
+            close(m['mean'], statistics.mean(values))
+            if s['n'] > 1:
+                close(m['sample_sd'], statistics.stdev(values))
+            else:
+                assert m['sample_sd'] is None
+    assert paired_rows == 20
+    for i, r in enumerate(records, 7):
+        if at('K' + str(i)) is None:
+            assert all((at(column(k) + str(i)) is None for k in range(11, 16)))
+    assert at('A40') == '模型、损失方案与读表规则' and 'B0' in at('A41')
+    contents = '\n'.join((str(at(c)) for c in cells))
+    assert '导师' not in contents and (not re.search('\\b(?:nan|n\\.a\\.)\\b', contents, re.I))
+    assert not re.search('(?i)([A-Z]:[\\\\/]|/Users/|token=|password=)', contents)
+    assert not any(('externalLinks/' in n for n in z.namelist()))
+    assert len(worksheet.findall('m:conditionalFormatting', ns)) == 5
+    result = dict(status='PASS_SAVED_XLSX', workbook_sha256=hashlib.sha256(file.read_bytes()).hexdigest(), bytes=file.stat().st_size, worksheets=1, tables=1, data_rows=31, columns=40, table_range='A6:AN37', formula_cells=len(formulas), probability_records_exact=31, all_actual_E0_E1_E2=True, point_records_exact=19, point_uncomputed=12, deliberate_blank_point_cells=144, paired_rows=20, paired_formula_values_exact=True, paired_mean_sample_sd_and_direction_exact=True, no_unmatched_pairing=True, no_single_seed_sd=True, no_NaN_or_na_text=True, old_workbook_preserved=True, private_paths_absent=True, extra_training=0, extra_inference=0, final_2025='FROZEN_NO_ACCESS', native_Excel_application_test='NOT_RUN;bundled engine recalculation and saved OOXML inspected')
+    (review / 'saved_verification.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(json.dumps(result, ensure_ascii=True))

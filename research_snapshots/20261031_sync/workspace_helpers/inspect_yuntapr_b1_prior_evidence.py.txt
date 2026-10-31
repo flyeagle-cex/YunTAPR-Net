@@ -1,0 +1,56 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Validate existing 2023/2024 evidence only; no six-slot decisions or raw reads."""
+import csv
+from datetime import datetime, timedelta, timezone
+import hashlib
+import json
+from pathlib import Path
+import sys
+import yaml
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.contracts.loader import sha256
+active = json.loads((ROOT / 'YunTAPR-active-b1-design-audit-v1.json').read_text(encoding='utf-8'))
+with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+    prior = gate.read(REPO / 'docs/development_qc/runs/run_20260930T075627Z/manifest.json')
+    ref = prior['local_evidence']['b13_per_frame.csv']
+    path = Path(ref['local_path'])
+    data = path.read_bytes()
+    if len(data) != ref['bytes'] or hashlib.sha256(data).hexdigest() != ref['sha256']:
+        raise ValueError('Pinned B13-only development QC evidence changed')
+    import io
+    reader = csv.DictReader(io.StringIO(data.decode('utf-8-sig')))
+    if reader.fieldnames != ref['schema']:
+        raise ValueError('Prior B13 QC schema changed')
+    rows = list(reader)
+    if len(rows) != 70560 or len({r['nominal'] for r in rows}) != 70560:
+        raise ValueError('Prior B13 cadence population incomplete')
+    expected = []
+    for year in (2023, 2024):
+        begin = datetime(year, 3, 1, tzinfo=timezone.utc)
+        end = datetime(year, 11, 1, tzinfo=timezone.utc)
+        expected.extend(((begin + timedelta(minutes=10 * i)).isoformat() for i in range(int((end - begin).total_seconds() / 600))))
+    if [r['nominal'] for r in rows] != expected:
+        raise ValueError('Prior B13 evidence not exact allowed years/months/order')
+    protocol = yaml.safe_load((REPO / 'config/training/phase_a_training_protocol_v1.yaml').read_text(encoding='utf-8'))
+    populations = {}
+    for role, key, count in (('2023_TRAIN', 'eligible_train_manifest', 11720), ('2024_VALIDATION', 'eligible_validation_manifest', 11727)):
+        identity = protocol['identity'][key]
+        p = REPO / identity['path']
+        if sha256(p) != identity['sha256']:
+            raise ValueError('Original B0 population identity changed')
+        with p.open(encoding='utf-8-sig', newline='') as stream:
+            original = list(csv.DictReader(stream))
+        if len(original) != count:
+            raise ValueError('Original B0 eligible population count changed')
+        times = [gate.utc(r['window_start']) for r in original]
+        year = 2023 if role == '2023_TRAIN' else 2024
+        if any((t.year != year or t.month not in range(3, 11) for t in times)) or times != sorted(set(times)):
+            raise ValueError('Original B0 population outside allowed period or not strictly ordered')
+        populations[role] = {'path': identity['path'], 'sha256': identity['sha256'], 'eligible_scenes': count, 'calendar_candidate_targets': 11760}
+    result = {'scope': 'EXISTING_2023_2024_EVIDENCE_IDENTITY_PREFLIGHT_ONLY', 'b13_qc_snapshot': {'absolute_path': str(path), 'sha256': ref['sha256'], 'bytes': len(data), 'rows': len(rows), 'years': [2023, 2024], 'months': list(range(3, 11)), 'strict_nominal_order_verified': True}, 'original_B0_populations': populations, 'mixed_year_imerg_evidence_not_opened': True, 'temporal_six_slot_audit_executed': False, 'raw_source_open_events': source.raw_open_events, '2025_RAW_PIXELS_READ': 0, '2025_FINAL_TEST_EXECUTED': False, '2025_MODEL_INFERENCE_SCENES': 0, 'created_utc': gate.now()}
+    gate.save(Path(active['design_directory']) / 'prior_evidence_preflight.json', result)
+print(json.dumps(result, ensure_ascii=True))

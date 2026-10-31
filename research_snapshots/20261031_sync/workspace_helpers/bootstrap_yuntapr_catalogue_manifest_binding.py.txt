@@ -1,0 +1,27 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Only the researcher-approved completion metadata is read at bootstrap."""
+from pathlib import Path
+import importlib.metadata
+import json
+import sys
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src')]
+from yuntapr.evaluation import catalogue_gate_b0 as gate
+from yuntapr.evaluation import catalogue_execution_v1_1 as execution
+from yuntapr.contracts.loader import sha256
+active = json.loads((ROOT / 'YunTAPR-active-catalogue-execution-v1-1.json').read_text(encoding='utf-8'))
+run = Path(active['run'])
+path = Path(str(execution.METADATA_MANIFEST))
+with gate.PreflightSourceGuard() as source, gate.CatalogueOnlyGuard():
+    if path.resolve(strict=True) != path:
+        raise ValueError('Approved metadata path redirects')
+    size = path.stat().st_size
+    digest = sha256(path)
+    expected = '7efef36f05545ac6b9482e5d8fd68367aea875bc59145606a1bf45b5848968c1'
+    record = {'approved_completion_manifest_absolute_path': str(path), 'manifest_bytes': size, 'manifest_sha256': digest, 'historical_manifest_sha256': expected, 'historical_identity_match': digest == expected, 'metadata_only_bootstrap': True, '2025_RAW_SOURCE_OPEN_EVENTS': source.raw_open_events, '2025_PIXELS_READ': 0, 'FINAL_actual_file_sha256_recomputed': False, 'created_utc': gate.now(), 'researcher_decisions': {'existing_metadata_path_adapter': 'APPROVED_FIXED_BINDING_ONLY', 'FINAL_integrity': 'IDENTITY_RECORD_ONLY_ACTUAL_BINARY_SHA_NOT_RECOMPUTED'}, 'python_executable': sys.executable, 'python_version': sys.version, 'package_versions': {name: importlib.metadata.version(name) for name in ('numpy', 'torch', 'netCDF4', 'PyYAML')}}
+    gate.save(run / 'resume_environment_and_metadata_binding.json', record)
+    if digest != expected:
+        raise ValueError('Historical completion-manifest identity changed; STOP')
+print(json.dumps(record, ensure_ascii=True))

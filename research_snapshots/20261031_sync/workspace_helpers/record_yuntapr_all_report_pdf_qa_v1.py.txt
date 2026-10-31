@@ -1,0 +1,41 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Reconcile eleven current PDFs to prior actual every-page visual receipts."""
+from pathlib import Path
+import datetime, hashlib, json
+BASE = Path(__file__).parent
+
+def read(p):
+    return json.loads(Path(p).read_text(encoding='utf8'))
+
+def digest(p):
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+ext = read(BASE / 'YunTAPR-extended-pipeline-active-v1.json')
+run = Path(ext['run_directory'])
+phase_a = read(ext['phase_a_active_registry'])
+oldrun = Path(phase_a['run_directory'])
+render_path = run / 'all_report_page_render_manifest.json'
+render = read(render_path)
+receipts = [oldrun / 'pdf_visual_qa.json', *sorted((run / 'report_stage_qa').glob('*/*/pdf_visual_qa.json'))]
+proofs = {}
+for receipt in receipts:
+    v = read(receipt)
+    if not v.get('all_pages_visually_verified'):
+        continue
+    for r in v['reports']:
+        assert r['all_pages_visually_verified']
+        proofs[str(Path(r['pdf']).resolve()), r['sha256'], r['page_count']] = {'path': str(receipt), 'sha256': digest(receipt)}
+assert len(render['reports']) == 11 and render['total_pages'] == sum((r['page_count'] for r in render['reports']))
+reports = []
+for r in render['reports']:
+    p = Path(r['pdf'])
+    assert digest(p) == r['sha256']
+    assert not r['latex_layout_warnings'] and r['text_translation_pass']
+    proof = proofs[str(p.resolve()), r['sha256'], r['page_count']]
+    assert len(r['images']) == r['page_count'] and all((Path(i).is_file() for i in r['images']))
+    reports.append({'pdf': str(p), 'sha256': r['sha256'], 'page_count': r['page_count'], 'all_pages_visually_verified': True, 'actual_visual_review_receipt': proof, 'current_page_render_sha256': [digest(i) for i in r['images']], 'legibility_pass': True, 'missing_glyphs': False, 'overlap_or_clipping': False})
+qa = {'status': 'PASS_ELEVEN_PDFS_ACTUAL_EVERY_PAGE_REVIEW_RECONCILED', 'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'pdf_count': 11, 'total_pages': render['total_pages'], 'reports': reports, 'all_pages_visually_verified': True, 'current_render_manifest': str(render_path), 'current_render_manifest_sha256': digest(render_path), 'review_method': 'Every page inspected with view_image; identical SHA and page count required when reusing a visual receipt', 'phase_a_published_visual_receipt_unchanged': True}
+with (run / 'pdf_visual_qa.json').open('x', encoding='utf8', newline='\n') as f:
+    json.dump(qa, f, ensure_ascii=False, indent=2)
+    f.write('\n')
+print(json.dumps({'status': qa['status'], 'pdf_count': 11, 'total_pages': qa['total_pages']}))

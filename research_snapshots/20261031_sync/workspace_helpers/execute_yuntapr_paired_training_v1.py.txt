@@ -1,0 +1,56 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Sequential execution, immutable failure preservation; never auto-restart."""
+from pathlib import Path
+import datetime, json, os, subprocess, sys, traceback
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+PYTHON = Path('<PRIVATE_LOCATOR_85023c7c63ca>')
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text())
+audit = Path(active['run_directory'])
+os.environ.update(PYTHONUTF8='1', PYTHONHASHSEED='2026', CUBLAS_WORKSPACE_CONFIG=':4096:8')
+
+def save(p, value):
+    with p.open('x', encoding='utf8', newline='\n') as f:
+        json.dump(value, f, indent=2, ensure_ascii=False, allow_nan=False)
+        f.write('\n')
+
+def now():
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+started = audit / 'sequential_execution_started.json'
+save(started, {'utc': now(), 'sequence': ['B0_MATCHED', 'B1'], 'pid': os.getpid(), 'automatic_restart': False, 'python_executable': str(PYTHON), 'scope': 'AUTHORIZED_PHASE_A_ONLY', '2025_access_authorized': False})
+states = {}
+for kind in ('B0_MATCHED', 'B1'):
+    spec = active['formal_runs'][kind]
+    public = Path(spec['public_directory'])
+    console = audit / (kind + '_formal_console.log')
+    assert not public.exists() and (not Path(spec['checkpoint_directory']).exists())
+    command = [str(PYTHON), '-u', str(REPO / 'scripts/launch_authorized_paired_phase_a_v1.py'), '--model', kind, '--authorization', spec['authorization_path'], '--authorization-sha256', spec['authorization_sha256']]
+    save(audit / (kind + '_launch_manifest.json'), {'utc': now(), 'command': command, 'sequential': True, 'run_id': spec['run_id'], 'predecessor_completed': states.get('B0_MATCHED') if kind == 'B1' else None})
+    print(json.dumps({'event': 'FORMAL_RUN_LAUNCH', 'model': kind, 'run_id': spec['run_id'], 'utc': now()}), flush=True)
+    try:
+        with console.open('x', encoding='utf8', newline='\n') as log:
+            process = subprocess.Popen(command, cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf8', errors='strict', bufsize=1)
+            save(audit / (kind + '_process_identity.json'), {'pid': process.pid, 'run_id': spec['run_id'], 'utc': now()})
+            for line in process.stdout:
+                log.write(line)
+                log.flush()
+                print(line, end='', flush=True)
+            exit_code = process.wait()
+        status_path = public / 'final_status.json'
+        status = json.loads(status_path.read_text(encoding='utf8')) if status_path.exists() else {'status': 'FAILED_BEFORE_FORMAL_RUN_ARTIFACT', 'FORMAL_OPTIMIZER_STEPS': 0}
+        success = exit_code == 0 and status['status'] == 'FORMAL_PHASE_A_COMPLETE'
+        if success:
+            epoch = status['completed_epoch']
+            success = status['FORMAL_OPTIMIZER_STEPS'] == status['OPTIMIZER_STEPS_COMPLETED'] == status['BACKWARD_CALLS'] == epoch * 5228 and status['2025_RAW_ACCESS'] == status['2025_PIXELS_READ'] == status['2025_MODEL_INFERENCE_SCENES'] == 0 and status['source_cleanup_state']['cleanup_success']
+        states[kind] = {'exit_code': exit_code, 'successful': success, 'status': status}
+        save(audit / (kind + '_execution_result.json'), states[kind])
+        if not success:
+            save(audit / 'sequence_STOP_failure.json', {'utc': now(), 'failed_model': kind, 'completed_runs': states, 'B1_STARTED': kind == 'B1', 'automatic_retry': False, 'reason': 'Formal failure/interruption/identity or audit gate; researcher decision required', '2025_FINAL_TEST_EXECUTED': False, 'Phase_B_authorized': False})
+            print('STOP_REQUIRED_FORMAL_RUN_FAILED', flush=True)
+            raise SystemExit(1)
+    except (KeyboardInterrupt, Exception) as error:
+        save(audit / ('orchestration_failure_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ') + '.json'), {'utc': now(), 'model': kind, 'error': repr(error), 'traceback': traceback.format_exc(), 'automatic_retry': False, 'formal_counter_source': str(public / 'execution_counters.json'), '2025_access_authorized': False})
+        raise
+save(audit / 'both_formal_runs_completed.json', {'utc': now(), 'runs': states, 'pairwise_review_pending': True, 'Phase_B_authorized': False, 'B2_authorized': False, '2025_Final_Test_authorized': False})
+print('BOTH_PHASE_A_RUNS_COMPLETED_AWAITING_POST_TRAINING_INTEGRITY', flush=True)

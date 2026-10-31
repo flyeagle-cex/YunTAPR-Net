@@ -1,0 +1,107 @@
+# Archival copy: formatting normalized; private locators redacted.
+# Reuse the proven small-response GitHub tree verifier, with this revision's
+# baseline; no historical audit() or checkpoint operation is invoked.
+"""Read-only publication check of the authorized terminology-only revision."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import verify_yuntapr_final_test_preflight_publication as previous
+ROOT = Path(__file__).parent
+REPO = ROOT / 'YunTAPR-Net-push-chunks'
+active = json.loads((ROOT / 'YunTAPR-active-terminology-correction.json').read_text(encoding='utf-8'))
+BASE = active['baseline']
+RUN = Path(active['run'])
+
+def read(p):
+    return json.loads(p.read_text(encoding='utf-8'))
+
+def sha(p):
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=REPO)
+
+def audit():
+    manifest = read(RUN / 'correction_manifest.json')
+    allowed = set(manifest['approved_modified_documents'])
+    count = 0
+    for name, ref in manifest['baseline_files'].items():
+        if name in allowed:
+            continue
+        data = (REPO / name).read_bytes()
+        assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest() == ref['git_blob_sha1'], name
+        count += 1
+    assert count == 1738
+    status = read(RUN / 'final_status.json')
+    assert status['protocol_code_tests_logs_scientific_results_unchanged']
+    assert status['2025_RAW_SOURCES_OPENED'] == status['2025_PIXELS_READ'] == status['OPTIMIZER_STEPS'] == status['BACKWARD_CALLS'] == 0
+    assert not status['checkpoint_opened'] and (not status['MODEL_PARAMETERS_UPDATED'])
+    assert status['FINAL_TEST_2025_AUTHORIZED'] is False and status['FINAL_TEST_2025_EXECUTED'] is False
+    for name, ref in read(RUN / 'artifact_sha256.json').items():
+        p = REPO / name
+        assert p.stat().st_size == ref['bytes'] and sha(p) == ref['sha256'], name
+    for name in allowed:
+        p = REPO / name
+        if p.suffix in ('.md', '.tex'):
+            text = p.read_text(encoding='utf-8')
+            assert '人口' not in text, name
+        if p.suffix in ('.md', '.tex') and p.name != 'README.md':
+            old = git('show', BASE + ':' + name).decode('utf-8')
+            assert re.findall('\\d+', old) == re.findall('\\d+', text), name
+    render = read(RUN / 'render_verification.json')
+    assert render['all_rendered_pages_visually_inspected'] and render['no_visible_clipping_or_overlap']
+    assert render['pages'] == 5 and render['overfull_boxes'] == render['missing_glyphs'] == 0
+    return {'status': 'PASS', 'scope': 'DOCUMENTATION_TERMINOLOGY_ONLY', 'modified_documents': 4, 'other_baseline_files_unchanged': count, 'protocol_code_tests_and_scientific_artifacts_unchanged': True, '2025_pixels_read': 0, 'checkpoint_opened': False, 'regression_tests_rerun': False}
+
+def changes(commit=None):
+    parts = [p.decode('utf-8') for p in (git('diff', '--name-status', '-z', BASE, commit) if commit else git('diff', '--cached', '--name-status', '-z')).split(b'\x00') if p]
+    approved = set(read(RUN / 'correction_manifest.json')['approved_modified_documents'])
+    prefix = RUN.relative_to(REPO).as_posix() + '/'
+    result = {}
+    modified = set()
+    for i in range(0, len(parts), 2):
+        action, name = parts[i:i + 2]
+        if name in approved:
+            assert action == 'M'
+            modified.add(name)
+        else:
+            assert action == 'A' and name.startswith(prefix), name
+        p = REPO / name
+        data = p.read_bytes()
+        assert p.suffix in ('.md', '.tex', '.pdf', '.json') and len(data) < 20000000, name
+        if p.suffix != '.pdf':
+            assert b'\x00' not in data
+            data.decode('utf-8')
+        else:
+            assert data.startswith(b'%PDF-')
+        assert git('show', (commit or '') + ':' + name) == data, name
+        result[name] = {'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest(), 'blob_sha1': hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\x00' + data).hexdigest()}
+    assert modified == approved
+    assert set(result) == set(read(RUN / 'artifact_sha256.json')) | {prefix + 'artifact_sha256.json'}
+    return result
+
+def remote(commit, files):
+    previous.BASE = BASE
+    return previous.remote(commit, files)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--staged', action='store_true')
+    parser.add_argument('--remote', action='store_true')
+    args = parser.parse_args()
+    result = {'utc': datetime.now(timezone.utc).isoformat(), 'local': audit()}
+    if args.staged or args.remote:
+        commit = git('rev-parse', 'HEAD').decode().strip() if args.remote else None
+        files = changes(commit)
+        result['files'] = files
+        result['publication_bytes'] = sum((r['bytes'] for r in files.values()))
+        if args.remote:
+            result['remote'] = remote(commit, files)
+        path = ROOT / ('YunTAPR-terminology-publication-' + (commit[:12] if commit else 'staged') + '.json')
+        path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        result = {k: v for k, v in result.items() if k != 'files'}
+        result['receipt'] = str(path)
+    print(json.dumps(result, ensure_ascii=True))

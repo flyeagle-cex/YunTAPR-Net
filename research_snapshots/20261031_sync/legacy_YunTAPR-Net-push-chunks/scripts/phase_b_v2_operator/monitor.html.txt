@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta http-equiv="refresh" content="60">
+<title>YunTAPR-Net 训练监控</title>
+<style>body{margin:0;background:#0d1117;color:#c9d1d9;font-family:"Segoe UI","Microsoft YaHei",sans-serif;font-size:14px}
+.wrap{max-width:1080px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0 0 2px} .sub{color:#8b949e;font-size:12px;margin-bottom:12px}
+.banner{padding:12px 14px;border-radius:8px;margin-bottom:14px;font-size:14px;font-weight:600;border:1px solid}
+.banner.red{background:#3d1117;border-color:#f85149;color:#ff7b72}
+.banner.yellow{background:#2b2a10;border-color:#d29922;color:#e3b341}
+.banner.green{background:#0f2d1c;border-color:#2ea043;color:#56d364}
+.banner.gray{background:#161b22;border-color:#30363d;color:#8b949e}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:14px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px}
+.card h3{margin:0 0 8px;font-size:12px;color:#8b949e;text-transform:uppercase;letter-spacing:.5px}
+.big{font-size:26px;font-weight:700} .dim{color:#8b949e;font-size:12px}
+.bar{background:#21262d;border-radius:6px;height:12px;overflow:hidden;margin:6px 0 2px}
+.fill{height:100%;border-radius:6px}
+.pct{color:#8b949e;font-size:12px}
+table{width:100%;border-collapse:collapse;background:#161b22;border:1px solid #30363d;border-radius:8px;overflow:hidden}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #21262d;font-size:13px}
+th{background:#1c2129;color:#8b949e;font-size:12px}
+td.bar-td{min-width:200px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700}
+.footer{color:#6e7681;font-size:12px;margin-top:14px;line-height:1.7}
+code{background:#161b22;border:1px solid #30363d;border-radius:4px;padding:1px 5px}</style></head>
+<body><div class="wrap">
+<h1>YunTAPR-Net · Phase-B v2 训练监控</h1>
+<div class="sub">campaign: YUNTAPR_PHASE_B_V2_SEED2027_FRESH_RESTART_V4 · 快照生成于 2026-10-19 21:02:13 · 状态更新时间 2026-10-19 21:02:13</div>
+<div class="banner gray">campaign 状态：FAILED_NO_RETRY（无训练在跑）。</div>
+<div class="grid">
+  <div class="card"><h3>总进度</h3><div class="big">1.9%</div><div class="bar"><div class="fill" style="width:2%;background:#2ea043"></div></div><span class="pct">2%</span><div class="dim">已完成 5228 / 282312 · 剩余 277084 次更新</div></div>
+  <div class="card"><h3>预计完成</h3><div class="big">已停止（恢复后重新计时）</div><div class="dim">按 0.500 秒/更新 估算</div></div>
+  <div class="card"><h3>配额</h3><div class="big">75327<span class="dim"> / 352411</span></div><div class="dim">已记账配额</div><div class="bar"><div class="fill" style="width:21%;background:#a371f7"></div></div><span class="pct">21%</span></div>
+  <div class="card"><h3>心跳</h3><div class="big">7 小时 24 分</div><div class="dim">最后心跳 2026-10-19 13:37:21</div></div>
+  <div class="card"><h3>GPU</h3><div class="big">8%</div><div class="dim">利用率 · 1349/8151 MiB · 53°C · 19.47W</div></div>
+  <div class="card"><h3>会话 / 累计</h3><div class="big" style="font-size:16px">session 1 · ACTIVE</div><div class="dim">累计执行 1 天 16 小时 · 读取 2.47 TiB</div></div>
+</div>
+<table><tr><th>Run</th><th>状态</th><th>Epoch</th><th>更新数</th><th>进度</th></tr><tr><td>B0_MATCHED_V2__E0__s2027</td><td><span class="badge" style="background:#388bfd;color:#fff">RUNNING</span></td><td>1 / 9</td><td>5228 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:11%;background:#388bfd"></div></div><span class="pct">11%</span></td></tr><tr><td>B1_V2__E0__s2027</td><td><span class="badge" style="background:#6e7681;color:#fff">PENDING</span></td><td>0 / 9</td><td>0 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:0%;background:#6e7681"></div></div><span class="pct">0%</span></td></tr><tr><td>B0_MATCHED_V2__E1__s2027</td><td><span class="badge" style="background:#6e7681;color:#fff">PENDING</span></td><td>0 / 9</td><td>0 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:0%;background:#6e7681"></div></div><span class="pct">0%</span></td></tr><tr><td>B1_V2__E1__s2027</td><td><span class="badge" style="background:#6e7681;color:#fff">PENDING</span></td><td>0 / 9</td><td>0 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:0%;background:#6e7681"></div></div><span class="pct">0%</span></td></tr><tr><td>B0_MATCHED_V2__E2__s2027</td><td><span class="badge" style="background:#6e7681;color:#fff">PENDING</span></td><td>0 / 9</td><td>0 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:0%;background:#6e7681"></div></div><span class="pct">0%</span></td></tr><tr><td>B1_V2__E2__s2027</td><td><span class="badge" style="background:#6e7681;color:#fff">PENDING</span></td><td>0 / 9</td><td>0 / 47052</td><td class="bar-td"><div class="bar"><div class="fill" style="width:0%;background:#6e7681"></div></div><span class="pct">0%</span></td></tr></table>
+<div class="footer">
+  页面每 60 秒自动刷新；也可手动 <code>Monitor-Training.ps1</code> 刷新。<br>
+  红色横幅 = 心跳长时间未更新或 python 进程消失（训练已停/已死）；黄色 = 心跳滞后需留意；绿色 = 训练进行中。<br>
+  启动并监控：<code>.\scripts\phase_b_v2_operator\Start-Training-Monitored.ps1</code> ·
+  仅监控：<code>.\scripts\phase_b_v2_operator\Monitor-Training.ps1</code><br>
+  Ctrl+C 只停止本监控，不影响后台训练进程。监控只读状态与 GPU，不写账本。
+</div>
+</div></body></html>

@@ -1,0 +1,103 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""CPU-only disposable completed-epoch checkpoint and exact resume fixtures."""
+import copy, os, random, tempfile, unittest
+from pathlib import Path
+from unittest.mock import patch
+import numpy as np
+import torch
+import paired_extended_v1 as x
+from test_paired_extended_contract_v1 import expected
+from yuntapr.training.phase_a_protocol import state_digest
+
+class ExtendedResumeTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fixture = tempfile.TemporaryDirectory(prefix='extended_resume_fixture_')
+        cls.root = Path(cls.fixture.name)
+        cls.public = cls.root / 'public'
+        cls.public.mkdir()
+        cls.e = expected()
+        cls.e['epoch_budget'] = 1
+        cls.model = torch.nn.Linear(2, 1, bias=False)
+        cls.opt = torch.optim.AdamW(cls.model.parameters(), lr=0.0001, foreach=False, fused=False)
+        cls.input = torch.tensor([[0.25, 0.75]])
+        for _ in range(10478):
+            cls.opt.zero_grad(set_to_none=True)
+            cls.model(cls.input).square().sum().backward()
+            cls.opt.step()
+        order, _ = x.batch_plan(1)
+        with patch.object(torch.cuda, 'get_rng_state_all', return_value=[]):
+            rng = x.capture_rng()
+        cls.p = {**cls.e, 'completed_epoch': 1, 'global_update': 10478, 'training_completed': True, 'validation_completed': False, 'validation_samples': 0, 'last_applied_lr': 0.0001, 'coverage': x.coverage(1, order, 20956 * 3430), 'model_state_dict': copy.deepcopy(cls.model.state_dict()), 'optimizer_state_dict': copy.deepcopy(cls.opt.state_dict()), 'rng_states': rng}
+        for n in ('model_state_dict', 'optimizer_state_dict', 'rng_states'):
+            cls.p[n + '_sha256'] = state_digest(cls.p[n])
+        with patch.dict(x.ROOTS, {'B1': cls.root / 'checkpoints'}):
+            cls.registry = x.save_checkpoint(cls.public, cls.p, cls.e, {})
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls.model, cls.opt, cls.p
+        root = cls.root
+        cls.fixture.cleanup()
+        if root.exists():
+            raise AssertionError('Disposable checkpoint fixture was not cleaned')
+
+    def fresh(self):
+        m = torch.nn.Linear(2, 1, bias=False)
+        return (m, torch.optim.AdamW(m.parameters(), lr=0.0001, foreach=False, fused=False))
+
+    def apply(self, m, o, e=None, identity=None):
+        with patch.dict(x.ROOTS, {'B1': self.root / 'checkpoints'}), patch.object(torch.cuda, 'set_rng_state_all'):
+            return x.apply_verified(identity or self.registry['FINAL'], e or self.e, m, o)
+
+    def test_01_roundtrip_last_equals_final(self):
+        self.assertEqual(self.registry['LAST'], self.registry['FINAL'])
+        with patch.dict(x.ROOTS, {'B1': self.root / 'checkpoints'}):
+            p = x.load_verified(self.registry['FINAL'], self.e)
+        self.assertEqual(state_digest(p), state_digest(self.p))
+
+    def test_02_exact_next_update_and_rng_replay(self):
+        m, o = self.fresh()
+        self.apply(m, o)
+        expected_rng = (random.random(), float(np.random.random()), torch.rand(3))
+        o.zero_grad(set_to_none=True)
+        m(self.input).square().sum().backward()
+        o.step()
+        result = (state_digest(m.state_dict()), state_digest(o.state_dict()))
+        other, oo = self.fresh()
+        self.apply(other, oo)
+        actual_rng = (random.random(), float(np.random.random()), torch.rand(3))
+        self.assertEqual(expected_rng[:2], actual_rng[:2])
+        self.assertTrue(torch.equal(expected_rng[2], actual_rng[2]))
+        oo.zero_grad(set_to_none=True)
+        other(self.input).square().sum().backward()
+        oo.step()
+        self.assertEqual(result, (state_digest(other.state_dict()), state_digest(oo.state_dict())))
+
+    def test_03_provenance_failure_applies_no_state(self):
+        m, o = self.fresh()
+        before = (state_digest(m.state_dict()), state_digest(o.state_dict()))
+        e = copy.deepcopy(self.e)
+        e['normalization']['sha256'] = 'f' * 64
+        with self.assertRaisesRegex(ValueError, 'Provenance before state'):
+            self.apply(m, o, e)
+        self.assertEqual(before, (state_digest(m.state_dict()), state_digest(o.state_dict())))
+
+    def test_04_bad_file_hash_rejects_before_deserialization(self):
+        m, o = self.fresh()
+        identity = {**self.registry['FINAL'], 'sha256': 'f' * 64}
+        with patch.object(torch, 'load', side_effect=AssertionError('No deserialization allowed')):
+            with self.assertRaises(ValueError):
+                self.apply(m, o, identity=identity)
+
+    def test_05_incompatible_shape_applies_no_state(self):
+        m = torch.nn.Linear(3, 1, bias=False)
+        o = torch.optim.AdamW(m.parameters(), lr=0.0001, foreach=False, fused=False)
+        before = (state_digest(m.state_dict()), state_digest(o.state_dict()))
+        with self.assertRaisesRegex(ValueError, 'shape/dtype'):
+            self.apply(m, o)
+        self.assertEqual(before, (state_digest(m.state_dict()), state_digest(o.state_dict())))
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

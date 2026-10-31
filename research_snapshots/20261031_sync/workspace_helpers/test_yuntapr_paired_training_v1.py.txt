@@ -1,0 +1,72 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Isolated regression closure; not a formal training execution."""
+from pathlib import Path
+import datetime, gc, hashlib, io, json, os, shutil, sys, unittest, uuid
+from unittest.mock import patch
+from contextlib import nullcontext
+BASE = Path(__file__).parent
+REPO = BASE / 'YunTAPR-Net-push-chunks'
+sys.path[:0] = [str(REPO / 'src'), str(REPO), str(REPO / 'scripts')]
+import torch
+from yuntapr.evaluation.catalogue_gate_b0 import PreflightSourceGuard
+from yuntapr.training import formal_phase_b as legacy
+active = json.loads((BASE / 'YunTAPR-active-paired-training-v1.json').read_text())
+run = Path(active['run_directory'])
+stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S_%fZ')
+attempt = run / 'pretraining_tests' / stamp
+attempt.mkdir(parents=True, exist_ok=False)
+os.environ['YUNTAPR_PROTOCOL_DRYRUN_EVIDENCE'] = str(REPO / 'docs/phase_a_optimizer_dryrun/runs/run_20261001T030242Z')
+os.environ['YUNTAPR_PHASE_B_RUNNER_EVIDENCE'] = str(REPO / 'docs/phase_b_formal_runner/runs/run_20261002T031500_884240Z')
+modules = [('NEW_AUTHORIZATION_AUDIT', ['tests.paired_phase_a_authorized.test_audit']), ('INHERITED_B1_RUNNER', ['tests.b1_training_protocol.test_protocol', 'tests.b1_training_protocol.test_preflight_artifacts']), ('INHERITED_B0_DATA_MODEL_SPATIAL', ['tests.b0_skeleton.test_b0_skeleton', 'tests.b0_skeleton.test_b13_only_candidate']), ('INHERITED_SCIENCE', ['tests.scientific_freeze.test_science_contract_v1', 'tests.scientific_freeze_v1_1.test_v1_1']), ('INHERITED_QC', ['tests.development_qc.test_development_audit']), ('INHERITED_QUANTILE', ['tests.quantile_numerical_closure.test_quantile_v4']), ('INHERITED_PHASE_A_PROTOCOL', ['tests.phase_a_protocol_v1.test_protocol_v1']), ('INHERITED_PHASE_A_FORMAL', ['tests.formal_phase_a.test_formal_run']), ('INHERITED_PHASE_B_FORMAL', ['tests.formal_phase_b.test_finalfit']), ('INHERITED_GPU', ['tests.gpu_training_feasibility.test_benchmark_safety']), ('INHERITED_B1_TEMPORAL', ['tests.b1_temporal_audit.test_b1_temporal_audit', 'tests.b1_temporal_audit.test_full_audit_artifacts']), ('INHERITED_B1_FREEZE', ['tests.b1_scientific_freeze.test_scientific_freeze', 'tests.b1_scientific_freeze.test_freeze_artifacts'])]
+if '--new-only' in sys.argv:
+    modules = modules[:1]
+inventory = json.loads((Path(os.environ['YUNTAPR_PHASE_B_RUNNER_EVIDENCE']) / 'engineering_preflight.json').read_text())['implementation_sha256']
+parent = BASE / 'tmp/paired_legacy_inventory'
+parent.mkdir(parents=True, exist_ok=True)
+fixture = parent / uuid.uuid4().hex
+fixture.mkdir()
+for rel, digest in inventory.items():
+    p = REPO / rel
+    assert hashlib.sha256(p.read_bytes()).hexdigest() == digest, rel
+    d = fixture / rel
+    d.parent.mkdir(parents=True, exist_ok=True)
+    d.write_bytes(p.read_bytes())
+original_hashes = legacy.implementation_hashes
+assert original_hashes(fixture) == inventory
+ops = {'TEST_FIXTURE_OPTIMIZER_STEPS': 0, 'TEST_FIXTURE_BACKWARD_CALLS': 0}
+old_step = torch.optim.AdamW.step
+old_backward = torch.Tensor.backward
+
+def step(self, *args, **kwargs):
+    ops['TEST_FIXTURE_OPTIMIZER_STEPS'] += 1
+    return old_step(self, *args, **kwargs)
+
+def backward(self, *args, **kwargs):
+    ops['TEST_FIXTURE_BACKWARD_CALLS'] += 1
+    return old_backward(self, *args, **kwargs)
+results = []
+log = io.StringIO()
+try:
+    with PreflightSourceGuard() as guard, patch.object(torch.optim.AdamW, 'step', step), patch.object(torch.Tensor, 'backward', backward):
+        for label, names in modules:
+            context = patch.object(legacy, 'implementation_hashes', side_effect=lambda: original_hashes(fixture)) if label == 'INHERITED_PHASE_B_FORMAL' else nullcontext()
+            with context:
+                suite = unittest.TestSuite((unittest.defaultTestLoader.loadTestsFromName(n) for n in names))
+                result = unittest.TextTestRunner(stream=log, verbosity=2).run(suite)
+            results.append({'suite': label, 'count': result.testsRun, 'passed': result.wasSuccessful(), 'failures': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped)})
+            print(json.dumps(results[-1]), flush=True)
+            gc.collect()
+        assert guard.raw_open_events == 0
+finally:
+    assert fixture.resolve().parent == parent.resolve()
+    shutil.rmtree(fixture)
+summary = {'suites': results, 'total_count': sum((r['count'] for r in results)), 'all_passed': all((r['passed'] and (not r['skipped']) for r in results)), 'TEST_FIXTURE_ONLY': True, **ops, 'FORMAL_OPTIMIZER_STEPS': 0, '2025_RAW_ACCESS': 0, '2025_PIXELS_READ': 0, 'raw_source_open_events': 0, 'all_temporary_artifacts_removed': all((r['passed'] for r in results)), 'historical_phase_b_code_inventory_fixture_sha_verified': True, 'no_frozen_test_or_evidence_modified': True}
+(attempt / 'test_results.txt').write_text(log.getvalue(), encoding='utf8')
+(attempt / 'test_summary.json').write_text(json.dumps(summary, indent=2), encoding='utf8')
+print(json.dumps({'attempt_directory': str(attempt), **summary}), flush=True)
+if not summary['all_passed']:
+    print(log.getvalue(), flush=True)
+    raise SystemExit(1)
+if '--new-only' not in sys.argv:
+    (run / 'pretraining_test_summary.json').write_text(json.dumps(summary, indent=2), encoding='utf8')

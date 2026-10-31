@@ -1,0 +1,26 @@
+# Archival copy: formatting normalized; private locators redacted.
+
+"""Stage exactly reviewed artifacts, then create one UTC-dated additive commit."""
+from pathlib import Path
+from datetime import datetime, timezone
+import json, os, subprocess, sys
+from verify_yuntapr_b1_freeze_publication import REPO, ROOT, RUN, BASE, INDEX, audit
+
+def git(*args, env=None):
+    return subprocess.check_output(['git', *args], cwd=REPO, env=env)
+assert git('rev-parse', 'HEAD').decode().strip() == BASE
+assert audit()['status'] == 'PASS'
+if sys.argv[1] == 'stage':
+    names = sorted(set(json.loads(INDEX.read_text(encoding='utf-8'))) | {INDEX.relative_to(REPO).as_posix()})
+    git('add', '--', *names)
+    assert not git('-c', 'core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol', 'diff', '--cached', '--check')
+    print(json.dumps({'reviewed_artifacts_staged': len(names)}), flush=True)
+else:
+    message = ROOT / 'YunTAPR-b1-freeze-commit-message.txt'
+    message.write_text('Freeze approved B1 M1 design, matched sample sets and train-only normalization\n\nPin 10455 Train / 10501 Validation identities and independent B0-Matched-Control.\nFit shared B13 scaler using exact scene-slot exposure weights from approved 2023 Train only.\nPreserve historical B0 and all prior audit evidence; keep 2025 outcomes sealed.\nFreeze only approved training protocol items; remaining parameters require researcher decisions.\n71 relevant closure tests pass; no training, inference, backward or optimizer operations.\n', encoding='utf-8')
+    env = os.environ.copy()
+    stamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S+00:00')
+    env.update(GIT_AUTHOR_DATE=stamp, GIT_COMMITTER_DATE=stamp)
+    git('commit', '--quiet', '--file', str(message), env=env)
+    assert not git('status', '--porcelain')
+    print(json.dumps({'commit': git('rev-parse', 'HEAD').decode().strip(), 'tree': git('rev-parse', 'HEAD^{tree}').decode().strip(), 'parent': git('rev-parse', 'HEAD^').decode().strip(), 'worktree_clean': True}), flush=True)

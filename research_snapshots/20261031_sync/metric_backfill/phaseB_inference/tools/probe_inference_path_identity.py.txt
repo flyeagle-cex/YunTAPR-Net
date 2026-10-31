@@ -1,0 +1,100 @@
+# Archival copy: formatting normalized; private locators redacted.
+# --- B2: executed commit a353021 vs readiness HEAD on the inference subset
+# candidate older copies
+# --- seed2027 per-run release pins vs readiness HEAD (inference subset only)
+# --- B3-B8: executed commit vs its frozen worktree, inference subset
+# short summary
+"""Read-only: per-run inference-path file identity checks.
+
+For each family, compares every file my infer_eval.py would import against the blob
+recorded at the executed commit (B2 / seed2027 release pins) or against the frozen
+worktree that is bit-identical to the executed commit (B3-B8).
+"""
+from __future__ import annotations
+import hashlib
+import json
+import os
+import subprocess
+WS = '<PRIVATE_LOCATOR_b393a4a28689>'
+REPO = os.path.join(WS, 'YunTAPR-B2-readiness-20261025')
+PUSH = os.path.join(WS, 'YunTAPR-Net-push-chunks', 'docs', 'phase_b_v2_formal_execution')
+OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'outputs')
+B01 = ['src/yuntapr/training/phase_b_v2_seed2026_v2/data.py', 'src/yuntapr/training/phase_b_v2_seed2026_v2/evaluation.py', 'src/yuntapr/training/phase_b_v2_seed2026_v2/checkpoint.py', 'src/yuntapr/training/phase_b_v2_seed2026_v2/resources.py', 'src/yuntapr/training/phase_b_v2_seed2026_v2/protocol.py', 'src/yuntapr/experimental/phase_b_v2_real_forward_pilot/plan.py', 'src/yuntapr/experimental/phase_b_v2_real_forward_pilot/adapter.py', 'src/yuntapr/experimental/phase_b_v2_real_forward_pilot/resources.py', 'src/yuntapr/experimental/phase_b_v2_full_payload_integrity/audit.py', 'src/yuntapr/experimental/phase_b_v2_full_payload_integrity/winio.py', 'src/yuntapr/experimental/phase_b_v2_real_data_preflight/audit.py', 'src/yuntapr/experimental/phase_b_v2_ablations/config.py', 'src/yuntapr/experimental/phase_b_v2_ablations/total.py', 'src/yuntapr/experimental/phase_b_v2_ablations/pinball.py', 'src/yuntapr/experimental/phase_b_v2_ablations/focal.py', 'src/yuntapr/experimental/phase_b_v2_ablations/validation.py', 'src/yuntapr/experimental/phase_b_v2_integration/initialization.py', 'src/yuntapr/experimental/phase_b_v2_integration/pins.py', 'src/yuntapr/experimental/phase_b_v2_formal_integration_candidate/metrics.py', 'src/yuntapr/experimental/phase_b_v2_runner_candidate/checkpoint.py', 'src/yuntapr/training/phase_a_protocol.py', 'src/yuntapr/models/quantile_v2/models.py', 'src/yuntapr/models/quantile_v2/outputs.py', 'src/yuntapr/models/quantile_v2/parameterization.py', 'src/yuntapr/models/quantile_v2/heads.py', 'src/yuntapr/models/backbone_b0.py', 'src/yuntapr/models/b1.py', 'src/yuntapr/models/blocks.py', 'src/yuntapr/models/probability_heads.py', 'src/yuntapr/data/himawari_b13.py', 'src/yuntapr/data/imerg_v07.py', 'src/yuntapr/data/sample_schema.py', 'src/yuntapr/data/dataset_b1.py', 'src/yuntapr/data/normalization.py', 'src/yuntapr/data/masks.py', 'src/yuntapr/spatial/sp04_mapping.py', 'src/yuntapr/spatial/projection.py', 'src/yuntapr/contracts/loader.py', 'config/science_v2/quantile_head_v2_frozen_v1.json', 'config/science_v2/phase_a_protocol_frozen_v1.json']
+CORE = ['src/yuntapr/experimental/core_innovation/__init__.py', 'src/yuntapr/experimental/core_innovation/grid.py', 'src/yuntapr/experimental/core_innovation/gfs.py', 'src/yuntapr/experimental/core_innovation/multispectral.py', 'src/yuntapr/experimental/core_innovation/dote.py', 'src/yuntapr/experimental/core_innovation/terrain.py', 'src/yuntapr/experimental/core_innovation/dtfm.py', 'src/yuntapr/experimental/core_innovation/stage2/__init__.py', 'src/yuntapr/experimental/core_innovation/stage2/models.py', 'src/yuntapr/experimental/core_innovation/stage2/environment.py', 'src/yuntapr/experimental/core_innovation/stage2/population.py', 'src/yuntapr/experimental/core_innovation/stage2/coupling.py', 'src/yuntapr/experimental/core_innovation/stage2/dote_v13.py', 'src/yuntapr/experimental/core_innovation/stage2/fusion.py', 'src/yuntapr/experimental/core_innovation/stage3/__init__.py', 'src/yuntapr/experimental/core_innovation/stage3/planning.py', 'src/yuntapr/experimental/core_innovation/stage3/statistics.py', 'src/yuntapr/experimental/core_innovation/stage3/metered_io.py', 'src/yuntapr/experimental/core_innovation/stage4/__init__.py', 'src/yuntapr/experimental/core_innovation/stage4/data.py', 'src/yuntapr/experimental/core_innovation/stage4/evaluation.py', 'src/yuntapr/experimental/core_innovation/stage4/launch.py', 'src/yuntapr/experimental/phase_b_v2_ablations/config.py', 'src/yuntapr/experimental/phase_b_v2_ablations/total.py', 'src/yuntapr/experimental/phase_b_v2_ablations/pinball.py', 'src/yuntapr/experimental/phase_b_v2_ablations/focal.py', 'src/yuntapr/experimental/phase_b_v2_ablations/validation.py', 'src/yuntapr/experimental/phase_b_v2_formal_integration_candidate/metrics.py', 'src/yuntapr/models/quantile_v2/models.py', 'src/yuntapr/models/quantile_v2/outputs.py', 'src/yuntapr/models/quantile_v2/parameterization.py', 'src/yuntapr/models/quantile_v2/heads.py', 'src/yuntapr/models/backbone_b0.py', 'src/yuntapr/models/blocks.py', 'src/yuntapr/models/probability_heads.py', 'src/yuntapr/data/himawari_b13.py', 'src/yuntapr/data/imerg_v07.py', 'src/yuntapr/data/sample_schema.py', 'src/yuntapr/data/normalization.py', 'src/yuntapr/data/masks.py', 'src/yuntapr/data/dataset_b1.py', 'src/yuntapr/spatial/sp04_mapping.py', 'src/yuntapr/spatial/projection.py', 'src/yuntapr/contracts/loader.py', 'config/science_v2/quantile_head_v2_frozen_v1.json', 'config/science_v2/phase_a_protocol_frozen_v1.json']
+EXTRA = {'B2': ['src/yuntapr/experimental/research_readiness/b2.py', 'src/yuntapr/experimental/research_readiness/b2_runner.py', 'src/yuntapr/experimental/research_readiness/tail_diagnostics.py'], 'B5B6': ['src/yuntapr/experimental/research_readiness/static_training.py', 'src/yuntapr/experimental/research_readiness/static_terrain.py', 'src/yuntapr/experimental/research_readiness/multiseed.py', 'src/yuntapr/experimental/research_readiness/tail_diagnostics.py'], 'B7B8': ['src/yuntapr/experimental/research_readiness/static_training.py', 'src/yuntapr/experimental/research_readiness/static_terrain.py', 'src/yuntapr/experimental/research_readiness/dynamic_training.py', 'src/yuntapr/experimental/research_readiness/dynamic_terrain.py', 'src/yuntapr/experimental/research_readiness/multiseed.py', 'src/yuntapr/experimental/research_readiness/tail_diagnostics.py']}
+WORKTREES = {'readiness_HEAD': REPO, 'recovery_exec_943da95': os.path.join(WS, 'YunTAPR-recovery-exec-943da95'), 'multiseed_exec_52a8e90': os.path.join(WS, 'YunTAPR-multiseed-exec-52a8e90'), 'static_corrected_b251fd9': os.path.join(WS, 'YunTAPR-static-corrected-exec-b251fd9'), 'dynamic_b1f072e': os.path.join(WS, 'YunTAPR-dynamic-exec-b1f072e'), 'dynamic_multiseed_e81c6e1': os.path.join(WS, 'YunTAPR-dynamic-multiseed-recovery-exec-e81c6e1'), 'b8_recovery_ef11531': os.path.join(WS, 'YunTAPR-B8-recovery-exec-ef11531'), 'b7b8_multiseed_56aae5b': os.path.join(WS, 'YunTAPR-B7-B8-multiseed-exec-56aae5b'), 'seed2029_launch_prep_5b5298f': os.path.join(WS, 'YunTAPR-seed2029-launch-prep-20261024'), 'seed2029_recovery_0ccb3e2': os.path.join(WS, 'YunTAPR-seed2029-recovery-20261024')}
+
+def git(args, cwd=REPO):
+    r = subprocess.run(['git', '-C', cwd] + args, capture_output=True, text=True, check=False)
+    return r.stdout.strip() if r.returncode == 0 else None
+
+def hash_object(path):
+    r = subprocess.run(['git', '-C', REPO, 'hash-object', path], capture_output=True, text=True, check=False)
+    return r.stdout.strip() if r.returncode == 0 else None
+
+def compare_commit_to_worktree(commit, worktree, files):
+    out = {'commit': commit, 'worktree': worktree, 'n': len(files), 'mismatch': [], 'missing': []}
+    for rel in files:
+        blob = git(['rev-parse', f'{commit}:{rel}'])
+        local = os.path.join(worktree, rel.replace('/', os.sep))
+        if not os.path.exists(local):
+            out['missing'].append(rel)
+            continue
+        if hash_object(local) != blob:
+            out['mismatch'].append(rel)
+    out['matched'] = out['n'] - len(out['mismatch']) - len(out['missing'])
+    return out
+
+def compare_pins_to_worktree(pins, worktree, label, only=None):
+    selected = {rel: h for rel, h in pins.items() if only is None or rel in only}
+    out = {'label': label, 'worktree': worktree, 'n': len(selected), 'n_total': len(pins), 'mismatch': [], 'missing': []}
+    for rel, expected in selected.items():
+        local = os.path.join(worktree, rel.replace('/', os.sep))
+        if not os.path.exists(local):
+            out['missing'].append(rel)
+            continue
+        h = hashlib.sha256(open(local, 'rb').read()).hexdigest()
+        if h != expected:
+            out['mismatch'].append(rel)
+    out['matched'] = out['n'] - len(out['mismatch']) - len(out['missing'])
+    return out
+
+def main():
+    result = {}
+    b2_commit = 'a35302186b4b5d3d7ec735885a8d93762e6d3567'
+    b2_files = CORE + EXTRA['B2']
+    result['B2_a353021_vs_readiness'] = compare_commit_to_worktree(b2_commit, REPO, b2_files)
+    for name in ('seed2029_launch_prep_5b5298f', 'seed2029_recovery_0ccb3e2'):
+        result['B2_a353021_vs_' + name] = compare_commit_to_worktree(b2_commit, WORKTREES[name], b2_files)
+    s2027 = {}
+    for rel, label in ((os.path.join(PUSH, 'seed2027_epoch2_recovery_v2', 'release.json'), 'B0_E0_s2027'), (os.path.join(PUSH, 'seed2027_b1_epoch7_recovery_v7', 'release.json'), 'B1_E0_s2027')):
+        with open(rel, 'r', encoding='utf-8') as f:
+            pins = json.load(f)['source_pins']
+        subset = {}
+        for p, h in pins.items():
+            try:
+                subprocess.run([], check=False)
+            except Exception:
+                pass
+            subset[p] = h
+        s2027[label] = compare_pins_to_worktree(subset, REPO, label, only=set(B01 + CORE + EXTRA['B2']))
+        s2027[label]['release_path'] = rel
+        s2027[label]['n_total_pins'] = len(pins)
+    result['s2027_pins_vs_readiness'] = s2027
+    mapping = {'B3_B4_s2029_E123_5b5298f': ('5b5298f41025db5b7b718fd736fc3fe6de516875', 'seed2029_launch_prep_5b5298f'), 'B3_B4_s2029_E49_7fa609e': ('7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35', 'seed2029_recovery_0ccb3e2'), 'B3_s2030_52a8e90': ('52a8e90dcea156382d7f2c510c5891c78e610329', 'multiseed_exec_52a8e90'), 'B4_s2030_B3B4_s2031_943da95': ('943da957a3af846746c21b52d05a148bcb135064', 'recovery_exec_943da95'), 'B5_B6_b251fd9': ('b251fd9ea06c0c90f48d2ac0decba0454114669d', 'static_corrected_b251fd9'), 'B7_s2029_b1f072e': ('b1f072e45fdd17b80106a774083995c350b28f04', 'dynamic_b1f072e'), 'B8_s2029_ef11531': ('ef11531a7cdeb35b767caebdb61e0e81c6123187', 'b8_recovery_ef11531'), 'B7B8_s2030_E16_56aae5b': ('56aae5bc4568df5d91354805aa5d4cb6d34b62b3', 'b7b8_multiseed_56aae5b'), 'B7B8_s2030s2031_E79_e81c6e1': ('e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c', 'dynamic_multiseed_e81c6e1')}
+    result['frozen_worktree_checks'] = {}
+    for label, (commit, wt) in mapping.items():
+        extra = EXTRA['B2'] if label.startswith('B3') or label.startswith('B4') else EXTRA['B5B6'] if label.startswith('B5') else EXTRA['B7B8'] if label.startswith('B7') or label.startswith('B8') else []
+        r = compare_commit_to_worktree(commit, WORKTREES[wt], CORE + (EXTRA['B2'] if label.startswith('B2') else extra))
+        result['frozen_worktree_checks'][label] = r
+        print(label, 'matched', r['matched'], '/', r['n'], 'mismatch', r['mismatch'][:6], 'missing', r['missing'][:4], flush=True)
+    with open(os.path.join(OUT, 'probe_inference_path_identity.json'), 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+    for k in ('B2_a353021_vs_readiness',):
+        r = result[k]
+        print(k, r['matched'], '/', r['n'], 'mismatch:', r['mismatch'], 'missing:', r['missing'][:5])
+    for k, v in result['s2027_pins_vs_readiness'].items():
+        print('s2027', k, 'matched', v['matched'], 'mismatch:', v['mismatch'], 'missing:', v['missing'][:5])
+    print('WROTE outputs/probe_inference_path_identity.json')
+if __name__ == '__main__':
+    main()
