@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-10-31极端专项审计完成（存在明确证据缺口）：[报告](../research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md)及[CSV](../research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv)。B4/B7/B8三个seed的九个E9身份通过；严格>20mm/h的A/B/C点估计全部漏掉同一717个像元时次，独立天气事件数不可识别。B7相对B4的20–50条件Pinball仅2/3改善，B8相对B7仅1/3；不能由总体收益宣称极端技能或物理机制验证。只复用原明细、补Precision与可证明的决策/峰值界，不新增训练或推理。下一步建议新增训练0，先冻结事件/边界定义并申请缺失评价明细，2025保持冻结；没有擅自选择最终模型。
+
 2026-10-31最新展示：[阶段增量对比表](../../outputs/01a17251-29bb-7172-89f8-380b42c4d290/YunTAPR-Net_V1.3_逐阶段逐seed全方案对比_20261031.xlsx)已按研究者目的改为每模型×seed×损失方案一行，共31行，保留实际E0/E1/E2。主要指标旁给同条件配对差值；表下给配对均值、样本标准差、改善次数和模型解释。B5/B6主参考均为B4，补充B6−B5；不同人口/无同seed参考不作归因配对。12条未补算点估计留空并标原因，旧4718行明细和全部训练/失败证据原样保留。新增训练、推理、原始气象及2025读取均0；[交付核验](../research_readiness/20261025/evidence/compact_stage_comparison_delivery_20261031.json)通过，科学结论边界不变。以下是此前时点的交付和执行记录。
 
 2026-10-31本轮交付完成：19/19项获批固定E9指标补算及B7_PERP_GRADIENT/2029九轮Train/Dev均已封口；一份Excel仅含“完整指标”一个工作表、一张4718行×42列的大表，覆盖31条模型/seed/损失臂记录、全部可得分组、992条分位覆盖记录及配对/seed均值与样本标准差。B0–B9和两类控制说明位于表下方，B9明确未启动。导出文件结构、数字类型、分类分母、配对源值、单seed无伪造SD、公式缓存/重算、左右/底部版面及脱敏检查通过。原19项范围外的B0/B1 E1/E2、ZERO及探针点估计缺口明确n.a.，没有追加推理或补零。该交付是获批范围与现存证据的完整版本，不代表所有方法均已计算或独立年份科学验收通过。原失败、480重放及旧时间NOT_VERIFIED全部保留，2025继续冻结。 [完整单表](../../outputs/01a17251-29bb-7172-89f8-380b42c4d290/YunTAPR-Net_V1.3_完整指标与消融对照_20261031.xlsx) · [交付核验](../research_readiness/20261025/evidence/complete_metric_workbook_delivery_20261031.json)。下方进行中/停止条目是历史记录。
