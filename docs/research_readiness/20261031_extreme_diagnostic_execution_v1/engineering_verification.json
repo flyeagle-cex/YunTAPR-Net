@@ -1,0 +1,37 @@
+{
+  "status": "PREPARATION_CHECKS_PASS_REAL_NUMERICAL_GATE_NOT_VERIFIED",
+  "at": "2026-10-31T07:36:14.552390+00:00",
+  "execution_code_commit": "721bfa979a008e0fc2bbdf031a1888a502ceaca9",
+  "unit_tests": {
+    "command": "python -B -m unittest discover -s tests/extreme_diagnostic_preparation -v",
+    "passed": 38,
+    "failed": 0,
+    "scope": "Synthetic mathematical, joint-export, read/budget/time/lifetime gates; no actual model pass",
+    "corrected_during_preparation": [
+      "Windows long/short resolved-path aliases in source whitelist",
+      "One synthetic expected-path assertion normalized to resolved path"
+    ]
+  },
+  "missing_grant_checks": {
+    "fixed_entry_rejected_without_approval": true,
+    "independent_host_rejected_before_launch": true,
+    "approval_absent": true,
+    "formal_output_absent": true,
+    "no_launch_claim": true,
+    "torch_not_imported": true
+  },
+  "resource_admission": {
+    "disk_free_bytes": 57693491200,
+    "host_available_bytes": 15745122304,
+    "gpu_free_mib": 6437.0,
+    "passed_at_snapshot": true,
+    "policy": "Recheck at approved launch and before each task; failure stops without automatic retry"
+  },
+  "optimizer_updates": 0,
+  "model_loads": 0,
+  "new_inference": 0,
+  "raw_meteorological_or_label_or_static_payload_bytes": 0,
+  "final_2025_access": false,
+  "scientific_acceptance": "PENDING_RESEARCHER_REVIEW",
+  "real_joint_adapter_gate": "NOT_VERIFIED_UNTIL_APPROVED_SINGLE_PASS"
+}
