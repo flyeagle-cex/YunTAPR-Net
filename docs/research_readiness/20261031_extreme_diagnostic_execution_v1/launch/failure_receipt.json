@@ -1,0 +1,47 @@
+{
+  "status": "STOPPED_PRELAUNCH_LIFETIME_GATE_NO_RETRY",
+  "as_of": "2026-10-31T07:50:44.491672+00:00",
+  "proposal_sha256": "b8ec5e7061c9625715d0a4954dd00cff707de999cb3a7712166373861ee00de5",
+  "execution_code_commit": "721bfa979a008e0fc2bbdf031a1888a502ceaca9",
+  "approval_sha256": "dd1e36b6a6284b9e5156f5bc0aced7baf77393e17fb27aaeec748107960ea468",
+  "target_exit_code": 1,
+  "target_started_at": "2026-10-31T07:43:46.374594+00:00",
+  "target_exited_at": "2026-10-31T07:43:49.232755+00:00",
+  "target_wall_seconds": 2.858161,
+  "supervisor_identity": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "target_identity": "Composite gate rejected; individual values were not persisted in this attempt",
+  "failure_stage": "execute: require_independent, before resource admission/output/diagnostic clock/provider import",
+  "error_type": "PermissionError",
+  "error_message": "Still in a Job/package; target not started, no fallback",
+  "evidence_sha256": {
+    "independent_launch_claim.json": "9108c11b0956647d191c66e84acd53e9b4082e060e33468ff1cf2019e344690b",
+    "independence.json": "c9b4667177ea9f4045ab11af5d687da4347995da834dfd65d60489f887fee611",
+    "target_launch.json": "a4ac54b70aa191266b7d05872d2431806194c12e8872fb06237462de05400501",
+    "target_exit.json": "6c74a1066ccf155f2657b31321a8faee2f71abedea9cd4024c3093e0c3bcf6ff",
+    "target_stderr.log": "68a8565f0d9a4b9811e1f1b9e0567bba57532880d17924018fbab4ab2615f5f1"
+  },
+  "actual": {
+    "formal_output_created": false,
+    "diagnostic_clock_started": false,
+    "science_tasks_claimed": 0,
+    "raw_weather_label_static_payload_bytes": 0,
+    "checkpoint_hash_reads": 0,
+    "model_loads": 0,
+    "model_inference": 0,
+    "optimizer_updates": 0,
+    "automatic_retry": 0,
+    "replay": 0,
+    "final_2025_access": false
+  },
+  "follow_up": {
+    "identity_only_probe": "Same virtual-environment redirector reproduced a child/job; its native base preserved direct parent and no job",
+    "identity_probe_sha256": "4a8d5c2c6d2e321a060906f05adf74a3d4258718a5edc4c6b3b4c0e627c92814",
+    "scientific_executor_restarted": false,
+    "old_approval_reused": false,
+    "correction_preparation": "Native runtime, config, version and ABI binding added; all original numerical provider/model/threshold methods preserved; 42 synthetic tests pass"
+  },
+  "scientific_acceptance": "PENDING_RESEARCHER_REVIEW_NO_NEW_RESULTS"
+}

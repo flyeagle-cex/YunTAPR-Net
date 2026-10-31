@@ -88,6 +88,7 @@ def validate_only(proposal_path, private_path, approval_path, *, worker_task=Non
         raise PermissionError("No exact new approval; scientific payload access remains disabled")
     p, v, a = read(proposal_path), read(private_path), read(approval_path)
     validate_grant(p, v, a)
+    validate_runtime_files(p, v)
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     dirty = subprocess.check_output(["git", "-c", "core.longpaths=true", "status", "--porcelain"], cwd=ROOT, text=True).strip()
     if head != p["execution_code_commit"] or dirty:
@@ -143,6 +144,30 @@ def validate_provider_files(root, manifest):
     current = {p.relative_to(root).as_posix(): sha(p) for p in sorted(files)}
     if current != manifest:
         raise ValueError("Inherited provider source/config changed; no model load permitted")
+
+
+def validate_runtime_files(proposal, private):
+    """Pin the original venv's native base, not its Windows redirector."""
+    identity = proposal.get("runtime")
+    if not identity or identity.get("direct_native_base_required") is not True:
+        raise PermissionError("An explicitly bound native-base runtime is required")
+    native, cfg = Path(private["runtime_python"]).resolve(), Path(private["inherited_venv_config"]).resolve()
+    homes = [line.split("=", 1)[1].strip() for line in cfg.read_text(encoding="utf-8-sig").splitlines()
+             if line.split("=", 1)[0].strip() == "home" and "=" in line]
+    if (len(homes) != 1 or (Path(homes[0]) / "python.exe").resolve() != native
+            or sha(native) != identity["executable_sha256"]
+            or sha(cfg) != identity["inherited_venv_config_sha256"]):
+        raise PermissionError("The inherited native interpreter/config binding differs")
+
+
+def validate_running_runtime(proposal, private):
+    validate_runtime_files(proposal, private)
+    identity = proposal["runtime"]
+    actual = dict(python_version=".".join(map(str, sys.version_info[:3])),
+                  cache_tag=sys.implementation.cache_tag, implementation=sys.implementation.name)
+    if (Path(sys.executable).resolve() != Path(private["runtime_python"]).resolve()
+            or any(actual[k] != identity[k] for k in actual)):
+        raise PermissionError("Controller/worker must use the exact bound native runtime")
 
 
 class DualDeadline:
@@ -270,6 +295,7 @@ def resources(folder, budget):
 def worker(proposal_path, private_path, approval_path, task):
     # First gate is before torch import, model loading or any science payload.
     p, v, a, runs = validate_only(proposal_path, private_path, approval_path, worker_task=task)
+    validate_running_runtime(p, v)
     host = module(ROOT / "tools/research_readiness/start_independent_process.py", "extreme_host_worker")
     host.require_independent(host.host_identity())
     package = Path(v["output_root"])
@@ -408,6 +434,7 @@ def finalize(package, proposal):
 
 def execute(proposal_path, private_path, approval_path):
     p, v, a, runs = validate_only(proposal_path, private_path, approval_path)
+    validate_running_runtime(p, v)
     host = module(ROOT / "tools/research_readiness/start_independent_process.py", "extreme_host_controller")
     host.require_independent(host.host_identity())
     output = Path(v["output_root"])

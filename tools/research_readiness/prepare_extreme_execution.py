@@ -39,13 +39,46 @@ def provider_files(root):
     return {p.relative_to(root).as_posix():sha(p) for p in sorted(files)}
 
 
-def prepare(old_private, workspace, public, execution_root):
+def native_runtime(venv):
+    cfg=Path(venv).parent.parent/'pyvenv.cfg'
+    homes=[line.split('=',1)[1].strip() for line in cfg.read_text(encoding='utf-8-sig').splitlines()
+           if '=' in line and line.split('=',1)[0].strip()=='home']
+    if len(homes)!=1:raise ValueError('Unique inherited native-base configuration required')
+    native=(Path(homes[0])/'python.exe').resolve()
+    query='import sys,json;print(json.dumps(dict(python_version=".".join(map(str,sys.version_info[:3])),cache_tag=sys.implementation.cache_tag,implementation=sys.implementation.name)))'
+    identity=json.loads(subprocess.check_output([str(native),'-B','-c',query],encoding='utf-8'))
+    identity.update(executable_sha256=sha(native),inherited_venv_config_sha256=sha(cfg),direct_native_base_required=True)
+    return native,cfg,identity
+
+
+def prepare(old_private, workspace, public, execution_root, prior_private=None):
     workspace,public,execution_root=map(lambda p:Path(p).resolve(),(workspace,public,execution_root))
     local=(ROOT/'docs/research_readiness/.local').resolve()
     if not workspace.is_relative_to(local) or workspace.exists() or public.exists():
         raise PermissionError('Fresh preparation directories required; preserve all history')
     if not public.is_relative_to((ROOT/'docs/research_readiness').resolve()):
         raise PermissionError('Public preparation must remain inside the research documentation tree')
+    correction=None
+    if prior_private is not None:
+        prior_private=Path(prior_private).resolve();prior=read(prior_private)
+        locations=read(prior_private.parent/'locations.json');previous=read(locations['proposal'])
+        service=Path(locations['spec']).parent
+        failure=read(service/'target_exit.json')
+        stderr=(service/'target_stderr.log').read_text(encoding='utf-8')
+        probe_path=ROOT/'docs/research_readiness/.local/extreme_diagnostic_lifetime_probe_20261031/result.json'
+        probe=read(probe_path);records={r['runtime']:r for r in probe['records']}
+        if (Path(prior['output_root']).exists() or failure['return_code']!=1
+                or not stderr.rstrip().endswith('PermissionError: Still in a Job/package; target not started, no fallback')
+                or records['original_venv']['in_any_job'] is not True
+                or records['same_native_base']['in_any_job'] is not False
+                or records['same_native_base']['direct_parent_matches'] is not True
+                or records['same_native_base']['package_status']!=15700):
+            raise PermissionError('Exact preserved prelaunch failure and no-payload native identity proof required')
+        correction=dict(prior_proposal_sha256=previous['proposal_sha256'],prior_code_commit=previous['execution_code_commit'],
+            prior_approval_sha256=sha(locations['approval']),prior_attempt_state='STOPPED_BEFORE_FORMAL_OUTPUT_OR_PAYLOAD_ACCESS',
+            prior_model_loads=0,prior_source_payload_bytes=0,prior_optimizer_updates=0,prior_diagnostic_clock_started=False,
+            lifetime_probe_sha256=sha(probe_path),scope='Native-base launch identity only; scientific methods and numerical model path unchanged',
+            prior_grant_reused=False,prior_outputs_and_claims_preserved=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=execution_root,text=True).strip()
     if subprocess.check_output(['git','-c','core.longpaths=true','status','--porcelain'],cwd=execution_root,text=True).strip():
         raise PermissionError('Prepare against a clean fixed execution copy')
@@ -89,7 +122,8 @@ def prepare(old_private, workspace, public, execution_root):
     labels={path:info for path,info in prepared['roles']['Train']['files'].items() if info['kind'] in ('IMERG','static_mask')}
     if len(labels)!=246 or sum(f['bytes'] for f in labels.values())!=180049094 or any(f['year']!=2023 for f in labels.values()):
         raise ValueError('Exact single 2023 label/mask scope missing')
-    output=local/'extreme_diagnostic_execution_20261031_v1'
+    runtime,cfg,runtime_identity=native_runtime('F:/pytorch/Research/.venv/Scripts/python.exe')
+    output=local/('extreme_diagnostic_execution_20261031_v2' if correction else 'extreme_diagnostic_execution_20261031_v1')
     if output.exists():raise PermissionError('Candidate formal output already exists')
     workspace.mkdir(exist_ok=False);public.mkdir(exist_ok=False)
     for name,key in [('provider_frozen.py','engine'),('run_registry.json','registry')]:
@@ -111,16 +145,19 @@ def prepare(old_private, workspace, public, execution_root):
         engine_sha256=sha(workspace/'provider_frozen.py'),registry_sha256=sha(workspace/'run_registry.json'),
         static_sha256=public_static,preparation_baseline_sha256=sha(g0_path),
         code_sha256={name:sha(execution_root/name) for name in FILES},
+        runtime=runtime_identity,correction=correction,
         weights='Only existence/size checked now; actual SHA and strict load each once after approval',
         real_end_to_end_numerical_gate='NOT_VERIFIED_UNTIL_THE_APPROVED_SINGLE_PASS; previous19 core provider gates inherited',
         source_reference='239935204070 payload bytes +964353774 checkpoint archive access +1073741824 guarded metadata cap',
         final_2025_access=False,training=False,automatic_follow_on=False)
+    if correction and (p['scientific_choices']!=previous['scientific_choices'] or p['budget']!=previous['budget']):
+        raise ValueError('A launcher correction cannot silently change the method or limits')
     p['proposal_sha256']=execution.digest(p)
     p_path=public/'proposal.json';write(p_path,p)
     private=dict(proposal_sha256=p['proposal_sha256'],engine=str(workspace/'provider_frozen.py'),
         registry=str(workspace/'run_registry.json'),output_root=str(output),torch_site=old['torch_site'],
         static_source=str(static_dir/'B6_static.npz'),label_files=labels,provider_manifests=roots,
-        runtime_python='F:/pytorch/Research/.venv/Scripts/python.exe')
+        runtime_python=str(runtime),inherited_venv_config=str(cfg))
     private_path=workspace/'private.json';write(private_path,private)
     grant=workspace/'researcher_approval.json'
     service=workspace/'service';service.mkdir()
@@ -146,4 +183,5 @@ def prepare(old_private, workspace, public, execution_root):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     for name in ('old-private','workspace','public','execution-root'):parser.add_argument('--'+name,type=Path,required=True)
-    args=parser.parse_args();prepare(args.old_private,args.workspace,args.public,args.execution_root)
+    parser.add_argument('--prior-private',type=Path)
+    args=parser.parse_args();prepare(args.old_private,args.workspace,args.public,args.execution_root,args.prior_private)

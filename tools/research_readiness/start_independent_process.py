@@ -66,8 +66,10 @@ def validate_spec(path):
         import importlib.util
         definition=importlib.util.spec_from_file_location('bounded_extreme_gate',entry)
         gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
-        gate.validate_only(diagnostic_argument('--proposal'),diagnostic_argument('--private-preparation'),
-                           diagnostic_argument('--researcher-approval'))
+        proposal,private,_,_=gate.validate_only(diagnostic_argument('--proposal'),diagnostic_argument('--private-preparation'),
+                                              diagnostic_argument('--researcher-approval'))
+        if executable.resolve()!=Path(private['runtime_python']).resolve():
+            raise PermissionError('Diagnostic specification must use the bound native interpreter')
     elif spec['kind']=='ENGINEERING_PROBE':
         if not entry.is_relative_to(PRIVATE.resolve()):raise PermissionError('Probe must be an ignored local script')
     elif spec['kind'] in ('METRIC_BACKFILL_COMPLETION','METRIC_BACKFILL_CORRECTION'):

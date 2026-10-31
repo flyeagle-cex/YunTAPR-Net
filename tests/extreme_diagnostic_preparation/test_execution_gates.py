@@ -85,6 +85,39 @@ class ExecutionGateTests(unittest.TestCase):
         code.write_text('x=1',encoding='utf-8');(src/'extra.py').write_text('pass',encoding='utf-8')
         with self.assertRaises(ValueError):runtime.validate_provider_files(self.root,manifest)
 
+    def runtime_fixture(self):
+        native=self.root/'python.exe';native.write_bytes(b'synthetic interpreter identity')
+        cfg=self.root/'pyvenv.cfg';cfg.write_text('home = '+str(self.root)+'\n',encoding='utf-8')
+        p=dict(runtime=dict(executable_sha256=runtime.sha(native),inherited_venv_config_sha256=runtime.sha(cfg),
+             direct_native_base_required=True,python_version='.'.join(map(str,sys.version_info[:3])),
+             cache_tag=sys.implementation.cache_tag,implementation=sys.implementation.name))
+        v=dict(runtime_python=str(native),inherited_venv_config=str(cfg))
+        return p,v,native,cfg
+
+    def test_native_runtime_file_identity_is_bound(self):
+        p,v,native,cfg=self.runtime_fixture();runtime.validate_runtime_files(p,v)
+        native.write_bytes(b'different interpreter')
+        with self.assertRaises(PermissionError):runtime.validate_runtime_files(p,v)
+
+    def test_venv_redirector_cannot_replace_native_runtime(self):
+        p,v,native,cfg=self.runtime_fixture()
+        other=self.root/'Scripts';other.mkdir();wrapper=other/'python.exe';wrapper.write_bytes(native.read_bytes())
+        v['runtime_python']=str(wrapper)
+        with self.assertRaises(PermissionError):runtime.validate_runtime_files(p,v)
+
+    def test_unbound_old_runtime_and_changed_config_are_rejected(self):
+        with self.assertRaises(PermissionError):runtime.validate_runtime_files({}, {})
+        p,v,native,cfg=self.runtime_fixture();cfg.write_text('home = '+str(self.root)+'\n# drift\n',encoding='utf-8')
+        with self.assertRaises(PermissionError):runtime.validate_runtime_files(p,v)
+
+    def test_actual_interpreter_version_and_abi_must_match(self):
+        p,v,native,cfg=self.runtime_fixture()
+        with self.assertRaises(PermissionError):runtime.validate_running_runtime(p,v)
+        with patch.object(runtime.sys,'executable',str(native)):
+            runtime.validate_running_runtime(p,v)
+            for key,value in [('python_version','0.0.0'),('cache_tag','wrong-abi'),('implementation','other')]:
+                changed=copy.deepcopy(p);changed['runtime'][key]=value
+                with self.subTest(key=key),self.assertRaises(PermissionError):runtime.validate_running_runtime(changed,v)
     def test_output_reservation_checked_before_write(self):
         out=self.root/'out';out.mkdir();(out/'existing').write_bytes(b'12345')
         limit=runtime.OutputLimit(out,8,runtime.DualDeadline(60))
