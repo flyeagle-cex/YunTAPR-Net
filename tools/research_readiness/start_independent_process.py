@@ -68,7 +68,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
