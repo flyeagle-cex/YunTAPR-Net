@@ -58,26 +58,45 @@ def prepare(old_private, workspace, public, execution_root, prior_private=None):
         raise PermissionError('Fresh preparation directories required; preserve all history')
     if not public.is_relative_to((ROOT/'docs/research_readiness').resolve()):
         raise PermissionError('Public preparation must remain inside the research documentation tree')
+    if prior_private is None:
+        raise PermissionError('This version requires the preserved V2 metadata-cap failure')
     correction=None
     if prior_private is not None:
         prior_private=Path(prior_private).resolve();prior=read(prior_private)
         locations=read(prior_private.parent/'locations.json');previous=read(locations['proposal'])
         service=Path(locations['spec']).parent
         failure=read(service/'target_exit.json')
-        stderr=(service/'target_stderr.log').read_text(encoding='utf-8')
+        prior_output=Path(prior['output_root'])
+        stderr=(prior_output/'TRAIN_LABELS_console.log').read_text(encoding='utf-8')
         probe_path=ROOT/'docs/research_readiness/.local/extreme_diagnostic_lifetime_probe_20261031/result.json'
         probe=read(probe_path);records={r['runtime']:r for r in probe['records']}
-        if (Path(prior['output_root']).exists() or failure['return_code']!=1
-                or not stderr.rstrip().endswith('PermissionError: Still in a Job/package; target not started, no fallback')
+        metadata_probe_path=ROOT/'docs/research_readiness/.local/extreme_diagnostic_metadata_probe_20261031_v1/checked_metadata/result.json'
+        metadata_probe=read(metadata_probe_path)
+        v1_receipt=read(ROOT/'docs/research_readiness/20261031_extreme_diagnostic_execution_v1/launch/failure_receipt.json')
+        v2_receipt=read(Path(locations['proposal']).parent/'launch/failure_receipt.json')
+        prior_target_seconds=v1_receipt['target_wall_seconds']+v2_receipt['target_wall_seconds']
+        if (not prior_output.exists() or failure['return_code']!=1
+                or not stderr.rstrip().endswith('PermissionError: Frozen metadata reservation cap exceeded')
+                or (prior_output/'TRAIN_LABELS/source_reservations.jsonl').exists()
+                or (prior_output/'TRAIN_LABELS/label_reads.sqlite').exists()
+                or any(p.is_dir() and p.name.startswith(('B4_','B7_','B8_')) for p in prior_output.iterdir())
                 or records['original_venv']['in_any_job'] is not True
                 or records['same_native_base']['in_any_job'] is not False
                 or records['same_native_base']['direct_parent_matches'] is not True
-                or records['same_native_base']['package_status']!=15700):
-            raise PermissionError('Exact preserved prelaunch failure and no-payload native identity proof required')
+                or records['same_native_base']['package_status']!=15700
+                or metadata_probe['status']!='PASS_REAL_FROZEN_METADATA_ONLY_NO_SCIENTIFIC_PAYLOAD'
+                or metadata_probe['accounting']['payload_reserved_bytes']!={}
+                or metadata_probe['accounting']['metadata_archive_reserved_bytes']>execution.LIMITS['worker_metadata_archive_cap_bytes']
+                or prior_target_seconds>execution.LIMITS['prior_target_seconds_charge']):
+            raise PermissionError('Exact preserved metadata failure and no-payload metadata/native identity proofs required')
         correction=dict(prior_proposal_sha256=previous['proposal_sha256'],prior_code_commit=previous['execution_code_commit'],
-            prior_approval_sha256=sha(locations['approval']),prior_attempt_state='STOPPED_BEFORE_FORMAL_OUTPUT_OR_PAYLOAD_ACCESS',
-            prior_model_loads=0,prior_source_payload_bytes=0,prior_optimizer_updates=0,prior_diagnostic_clock_started=False,
-            lifetime_probe_sha256=sha(probe_path),scope='Native-base launch identity only; scientific methods and numerical model path unchanged',
+            prior_approval_sha256=sha(locations['approval']),prior_attempt_state='STOPPED_AT_SHARED_LABEL_METADATA_CAP_BEFORE_SCIENTIFIC_PAYLOAD',
+            prior_model_loads=0,prior_source_payload_bytes=0,prior_optimizer_updates=0,prior_diagnostic_clock_started=True,
+            lifetime_probe_sha256=sha(probe_path),metadata_probe_sha256=sha(metadata_probe_path),
+            prior_metadata_counter='Not persisted by V2; conservatively charge its entire 64MiB/128-open worker allowance',
+            prior_target_wall_seconds=prior_target_seconds,
+            metadata_probe_accounting=metadata_probe['accounting'],
+            scope='Metadata quota, before-open package enforcement and failure accounting only; scientific methods and numerical model path unchanged',
             prior_grant_reused=False,prior_outputs_and_claims_preserved=True)
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=execution_root,text=True).strip()
     if subprocess.check_output(['git','-c','core.longpaths=true','status','--porcelain'],cwd=execution_root,text=True).strip():
@@ -123,7 +142,7 @@ def prepare(old_private, workspace, public, execution_root, prior_private=None):
     if len(labels)!=246 or sum(f['bytes'] for f in labels.values())!=180049094 or any(f['year']!=2023 for f in labels.values()):
         raise ValueError('Exact single 2023 label/mask scope missing')
     runtime,cfg,runtime_identity=native_runtime('F:/pytorch/Research/.venv/Scripts/python.exe')
-    output=local/('extreme_diagnostic_execution_20261031_v2' if correction else 'extreme_diagnostic_execution_20261031_v1')
+    output=local/'extreme_diagnostic_execution_20261031_v3'
     if output.exists():raise PermissionError('Candidate formal output already exists')
     workspace.mkdir(exist_ok=False);public.mkdir(exist_ok=False)
     for name,key in [('provider_frozen.py','engine'),('run_registry.json','registry')]:
@@ -148,10 +167,20 @@ def prepare(old_private, workspace, public, execution_root, prior_private=None):
         runtime=runtime_identity,correction=correction,
         weights='Only existence/size checked now; actual SHA and strict load each once after approval',
         real_end_to_end_numerical_gate='NOT_VERIFIED_UNTIL_THE_APPROVED_SINGLE_PASS; previous19 core provider gates inherited',
-        source_reference='239935204070 payload bytes +964353774 checkpoint archive access +1073741824 guarded metadata cap',
+        source_reference='239935204070 payload bytes +964353774 checkpoint archive access +1275068416 future metadata cap; charge previous metadata 67108864 separately',
         final_2025_access=False,training=False,automatic_follow_on=False)
-    if correction and (p['scientific_choices']!=previous['scientific_choices'] or p['budget']!=previous['budget']):
-        raise ValueError('A launcher correction cannot silently change the method or limits')
+    unchanged=('weather_static_label_bytes','weather_static_label_instances','checkpoint_archive_bytes',
+        'checkpoint_sha_passes','checkpoint_loads','checkpoint_archive_reference_bytes','payload_archive_reference_bytes',
+        'worker_metadata_open_cap','per_model_seconds','label_seconds','output_storage_cap_bytes','minimum_free_bytes',
+        'minimum_host_available_bytes','minimum_gpu_free_mib','optimizer_updates','retries','replay')
+    if p['scientific_choices']!=previous['scientific_choices'] or any(p['budget'][k]!=previous['budget'][k] for k in unchanged):
+        raise ValueError('A metadata correction cannot silently change the method, payload or compute scope')
+    p['budget_change_requiring_researcher_approval']=dict(metadata_cumulative_additional_bytes=256*1024**2,
+        worker_metadata_old_bytes=67108864,worker_metadata_new_bytes=134217728,
+        future_metadata_bytes=1275068416,prior_metadata_charge_bytes=67108864,
+        cumulative_metadata_bytes=1342177280,cumulative_source_bytes=242241735124,
+        prior_target_seconds_charge=12,future_maximum_seconds=21588,cumulative_maximum_seconds=21600,
+        reason='Frozen SQLite metadata is hashed and connected separately; previous 64MiB worker cap was insufficient')
     p['proposal_sha256']=execution.digest(p)
     p_path=public/'proposal.json';write(p_path,p)
     private=dict(proposal_sha256=p['proposal_sha256'],engine=str(workspace/'provider_frozen.py'),

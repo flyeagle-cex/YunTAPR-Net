@@ -1,0 +1,52 @@
+{
+  "status": "STOPPED_SHARED_LABEL_METADATA_CAP_NO_RETRY",
+  "as_of": "2026-10-31T08:08:43.475476+00:00",
+  "execution_code_commit": "9d63713ad7777e1624f1cc87502f97b571e95df4",
+  "proposal_sha256": "0be1a2b4e383ec0a2613c93f862d2475faa910a97194fb7361f62d4beb9fef0b",
+  "approval_sha256": "137d86f8f26d2358b9ba3ac6f0184d9728ede44a9dd6242606b46642452d9890",
+  "target_exit_code": 1,
+  "target_wall_seconds": 9.062271,
+  "failure_stage": "TRAIN_LABELS: PopulationPlan statistics.sqlite read-only connection archive reservation, before label/mask meter creation",
+  "worker_error_type": "PermissionError",
+  "worker_error_message": "Frozen metadata reservation cap exceeded",
+  "controller_status": "STOP_PRESERVE_ALL_NO_RETRY",
+  "blocked_metadata": {
+    "classification": "Previously frozen training-statistics SQLite metadata, not original meteorological or label payload",
+    "single_archive_bytes": 33804288,
+    "required_accesses_in_population_plan": 2,
+    "hash_archive_then_sqlite_connection_bytes": 67608576,
+    "worker_metadata_cap_bytes": 67108864
+  },
+  "actual": {
+    "runtime_lifetime_gate_passed": true,
+    "formal_output_created": true,
+    "diagnostic_clock_started": true,
+    "science_tasks_claimed": 1,
+    "completed_tasks": 0,
+    "raw_weather_label_static_payload_bytes": 0,
+    "checkpoint_hash_reads": 0,
+    "model_loads": 0,
+    "model_inference": 0,
+    "optimizer_updates": 0,
+    "automatic_retry": 0,
+    "replay": 0,
+    "final_2025_access": false
+  },
+  "metadata_accounting": {
+    "worker_terminal_counters_persisted": false,
+    "accepted_metadata_archive_reservations_upper_bound_bytes": 67108864,
+    "blocked_archive_not_opened": true,
+    "native_sqlite_internal_io_not_claimed_as_measured": true
+  },
+  "evidence_sha256": {
+    "independence.json": "aa4b2ceb5ec6f54ba7bbb3c35fd7258ac55a975c7986b5b6736260ef2c02b30e",
+    "target_launch.json": "d8e40694767da638457a506b14de9ef146dc6bc6233da7b793f0bb6639162825",
+    "target_exit.json": "c11317ec690d4e4733bd37b37fecbf0bf043b44469de4fc58f9e1e7e07a4b986",
+    "binding.json": "d3915ac6e7cd06401fcd573d1f790891a03c2afa7d67135a7e27e7bd6fb96e48",
+    "failure.json": "28f2c2f531beb1e8b9876ca85136d70d66265412db746503e4f0cb37cb06f387",
+    "TRAIN_LABELS_console.log": "65137e4694d67becd0a39c4f0142f3e120fb1f054fc3a463f04747e6c90bae6c"
+  },
+  "prior_grant_reused": false,
+  "restart_performed": false,
+  "scientific_acceptance": "NO_NEW_SCIENTIFIC_RESULTS_PENDING_RESEARCHER_REVIEW"
+}

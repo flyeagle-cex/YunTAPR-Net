@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import time
 import types
 import unittest
 from unittest.mock import patch
@@ -150,6 +151,46 @@ class ExecutionGateTests(unittest.TestCase):
         guard._event('open',(str(meta),'r',0));guard._event('open',(str(meta),'r',0))
         with self.assertRaises(PermissionError):guard._event('open',(str(meta),'r',0))
         self.assertEqual(guard.meta_bytes,4)
+
+    def test_sqlite_hash_then_connection_are_two_archive_reservations(self):
+        source=self.root/'fixture.nc';source.write_bytes(b'abc');database=self.root/'frozen.sqlite';database.write_bytes(b'abc')
+        guard=self.guard(source);guard.metadata_cap=5;guard.active=True
+        guard._event('open',(str(database),'r',0))
+        with self.assertRaises(PermissionError):guard._event('sqlite3.connect',(str(database),))
+        rows=[json.loads(line) for line in guard.journal.read_text(encoding='utf-8').splitlines()]
+        self.assertEqual([r['state'] for r in rows],['INTENT_BEFORE_OPEN','DENIED_BEFORE_OPEN'])
+        self.assertEqual(guard.close()['metadata_archive_reserved_bytes'],3)
+
+    def test_remaining_package_metadata_cap_applies_before_next_worker(self):
+        b=dict(runtime.LIMITS);used=b['metadata_archive_cap_bytes']-3
+        self.assertEqual(runtime.metadata_allowance(b,[dict(metadata_archive_reserved_bytes=used,metadata_open_instances=0)])[0],3)
+        with self.assertRaises(PermissionError):runtime.metadata_allowance(b,[dict(metadata_archive_reserved_bytes=used+3,metadata_open_instances=0)])
+
+    def test_prior_cost_charges_and_cumulative_caps_are_explicit(self):
+        b=runtime.LIMITS
+        self.assertEqual(b['prior_metadata_archive_charge_bytes']+b['metadata_archive_cap_bytes'],b['cumulative_metadata_archive_cap_bytes'])
+        self.assertEqual(b['payload_archive_reference_bytes']+b['cumulative_metadata_archive_cap_bytes'],b['cumulative_source_reservation_cap_bytes'])
+        self.assertEqual(b['cumulative_source_reservation_cap_bytes']-241973299668,256*1024**2)
+        self.assertEqual(b['prior_target_seconds_charge']+b['maximum_seconds'],21600)
+
+    def test_failed_worker_seals_reserved_read_accounting_without_retry(self):
+        package=self.root/'package';package.mkdir();(package/'binding.json').write_text(json.dumps(dict(absolute_wall_deadline=time.time()+60)),encoding='utf-8')
+        prepared=self.root/'prepared.json';prepared.write_text(json.dumps(dict(prepared=dict(private_inputs=dict(stage3_run=str(self.root),request=str(self.root/'request.json'))))),encoding='utf-8')
+        source=self.root/'fixture.nc';source.write_bytes(b'abc')
+        run=dict(code_root=str(self.root),private_preparation={'path':str(prepared)})
+        private=dict(output_root=str(package),static_source=str(self.root/'static.npz'),registry=str(self.root/'registry.json'),label_files={str(source):dict(bytes=3)})
+        fake_host=types.SimpleNamespace(host_identity=lambda:{},require_independent=lambda identity:None)
+        def fail(*args):
+            self.assertEqual(source.read_bytes(),b'abc')
+            raise RuntimeError('SYNTHETIC_FAILURE_AFTER_ONE_READ')
+        fake_provider=types.SimpleNamespace(run_train_labels=fail)
+        def load_module(path,name):return fake_host if path.name=='start_independent_process.py' else fake_provider
+        with patch.object(runtime,'validate_only',return_value=(dict(budget=dict(runtime.LIMITS)),private,{},dict(B4_s2029=run))),patch.object(runtime,'validate_running_runtime'),patch.object(runtime,'module',side_effect=load_module):
+            with self.assertRaisesRegex(RuntimeError,'SYNTHETIC_FAILURE_AFTER_ONE_READ'):runtime.worker('p','v','a','TRAIN_LABELS')
+        result=json.loads((package/'TRAIN_LABELS/task_failure.json').read_text(encoding='utf-8'))
+        self.assertEqual(result['accounting']['payload_reserved_bytes'],dict(labels=3))
+        self.assertEqual(result['accounting']['payload_open_instances'],1)
+        self.assertFalse((package/'TRAIN_LABELS/task_complete.json').exists())
 
     def test_forward_wrapper_calls_original_once_and_returns_same_object(self):
         class Tensor:

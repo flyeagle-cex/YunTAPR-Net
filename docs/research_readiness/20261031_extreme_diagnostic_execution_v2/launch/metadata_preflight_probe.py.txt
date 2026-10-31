@@ -1,0 +1,24 @@
+import importlib.util,json,sys,time
+from pathlib import Path
+v=json.loads(Path(sys.argv[1]).read_text(encoding='utf-8-sig'))
+r=json.loads(Path(v['registry']).read_text(encoding='utf-8-sig'));run=next(x for x in r['runs'] if x['run_id']=='B4_s2029')
+prepared=json.loads(Path(run['private_preparation']['path']).read_text(encoding='utf-8-sig'))['prepared']
+root=Path(sys.argv[2]);out=Path(sys.argv[3]);module_path=root/'tools/research_readiness/start_extreme_diagnostic.py'
+s=importlib.util.spec_from_file_location('metadata_only_guard',module_path);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
+roots=[Path(run['code_root'])/'config',Path(run['code_root'])/'docs',Path(run['private_preparation']['path']).parent,Path(prepared['private_inputs']['stage3_run']),Path(prepared['private_inputs']['request']).parent,Path(v['static_source']).parent,Path(v['registry']).parent]
+guard=m.ScientificReadGuard({},out,out/'forbidden_scientific_open.jsonl',metadata_cap=128*1024**2,metadata_opens=128,metadata_roots=roots,check=lambda:None)
+guard.install()
+try:
+ from yuntapr.experimental.core_innovation.stage4.data import PopulationPlan,read
+ from yuntapr.spatial.sp04_mapping import load_sp04
+ from yuntapr.experimental.core_innovation.grid import frozen_sp04_grid
+ p=read(run['private_preparation']['path'])['prepared']
+ plan=PopulationPlan(p['private_inputs']['stage3_run'],p['private_inputs']['request'],root=run['code_root'])
+ mapping=load_sp04(plan.root)
+ for _ in range(6):frozen_sp04_grid(plan.root)
+ # Conservative extra fixed-metadata accesses beyond the label path; no static payload.
+ for _ in range(2):read(Path(v['static_source']).parent/'production_receipt.json')
+ actual=guard.close()
+ result=dict(status='PASS_REAL_FROZEN_METADATA_ONLY_NO_SCIENTIFIC_PAYLOAD',train_scenes=len(plan.ids('Train')),development_scenes=len(plan.ids('Development')),identity=plan.identity,accounting=actual,scope='Exact shared-label metadata path plus six extra frozen grid constructions and two static production-metadata reads; no model, raw-data reader, inference, or GPU request',model_loads=0,inference=0,optimizer_updates=0,raw_scientific_payload_reads=0,final_2025_access=False)
+ with (out/'result.json').open('x',encoding='utf-8',newline=chr(10)) as f:json.dump(result,f,indent=2);f.write(chr(10))
+finally:guard.active=False

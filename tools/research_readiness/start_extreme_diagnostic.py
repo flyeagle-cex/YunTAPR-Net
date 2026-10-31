@@ -22,10 +22,14 @@ ORDER = ("TRAIN_LABELS", "B7_s2029", "B8_s2029", "B4_s2029", "B7_s2030", "B8_s20
 LIMITS = dict(weather_static_label_bytes=239935204070, weather_static_label_instances=71802,
               checkpoint_archive_bytes=482176887, checkpoint_sha_passes=9, checkpoint_loads=9,
               checkpoint_archive_reference_bytes=964353774, payload_archive_reference_bytes=240899557844,
-              metadata_archive_cap_bytes=1024**3, metadata_open_cap=2048,
-              worker_metadata_archive_cap_bytes=64*1024**2, worker_metadata_open_cap=128,
-              total_source_reservation_cap_bytes=241973299668,
-              maximum_seconds=21600, per_model_seconds=2400, label_seconds=600,
+              metadata_archive_cap_bytes=1216*1024**2, metadata_open_cap=1920,
+              worker_metadata_archive_cap_bytes=128*1024**2, worker_metadata_open_cap=128,
+              total_source_reservation_cap_bytes=242174626260,
+              prior_metadata_archive_charge_bytes=64*1024**2, prior_metadata_open_charge=128,
+              cumulative_metadata_archive_cap_bytes=1280*1024**2, cumulative_metadata_open_cap=2048,
+              cumulative_source_reservation_cap_bytes=242241735124,
+              prior_target_seconds_charge=12, cumulative_maximum_seconds=21600,
+              maximum_seconds=21588, per_model_seconds=2400, label_seconds=600,
               output_storage_cap_bytes=16*1024**3, minimum_free_bytes=32*1024**3,
               minimum_host_available_bytes=8*1024**3, minimum_gpu_free_mib=5120,
               optimizer_updates=0, retries=0, replay=0)
@@ -222,6 +226,10 @@ class ScientificReadGuard:
         self.meta_bytes = self.meta_count = 0
         self.active = False
 
+    def _journal(self, entry):
+        with self.journal.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(entry) + "\n")
+
     def _event(self, event, args):
         if not self.active or event not in ("open", "sqlite3.connect"):
             return
@@ -255,9 +263,8 @@ class ScientificReadGuard:
             self.counts[key] = count
             category = entry["category"]
             self.reserved[category] = self.reserved.get(category, 0) + entry["bytes"]
-            with self.journal.open("a", encoding="utf-8") as stream:
-                stream.write(json.dumps(dict(source_id=entry["source_id"], category=category,
-                                             state="INTENT_BEFORE_OPEN", bytes=entry["bytes"], occurrence=count)) + "\n")
+            self._journal(dict(source_id=entry["source_id"], category=category,
+                               state="INTENT_BEFORE_OPEN", bytes=entry["bytes"], occurrence=count))
             return
         if str(path).lower().endswith(self.RAW):
             raise PermissionError("Unlisted scientific payload, including any 2025 data, is forbidden")
@@ -267,8 +274,14 @@ class ScientificReadGuard:
                 raise PermissionError("Frozen metadata cannot be modified")
             size = path.stat().st_size
             if self.meta_count + 1 > self.metadata_opens or self.meta_bytes + size > self.metadata_cap:
+                self._journal(dict(category="metadata", state="DENIED_BEFORE_OPEN", bytes=size,
+                    source_id=hashlib.sha256(str(path).encode()).hexdigest(),
+                    accepted_bytes=self.meta_bytes, accepted_opens=self.meta_count))
                 raise PermissionError("Frozen metadata reservation cap exceeded")
             self.meta_count += 1; self.meta_bytes += size
+            self._journal(dict(category="metadata", state="INTENT_BEFORE_OPEN", bytes=size,
+                source_id=hashlib.sha256(str(path).encode()).hexdigest(),
+                accepted_bytes=self.meta_bytes, accepted_opens=self.meta_count))
 
     def install(self):
         sys.addaudithook(self._event)
@@ -290,6 +303,15 @@ def resources(folder, budget):
             or gpu.get("total_mib", 0) - gpu.get("used_mib", 0) < budget["minimum_gpu_free_mib"]):
         raise RuntimeError("Disk/host/GPU admission failed; do not change limits or retry")
     return status
+
+
+def metadata_allowance(budget, previous):
+    remaining_bytes = budget["metadata_archive_cap_bytes"] - sum(r["metadata_archive_reserved_bytes"] for r in previous)
+    remaining_opens = budget["metadata_open_cap"] - sum(r["metadata_open_instances"] for r in previous)
+    if remaining_bytes <= 0 or remaining_opens <= 0:
+        raise PermissionError("Package metadata allowance exhausted before task; no retry")
+    return (min(budget["worker_metadata_archive_cap_bytes"], remaining_bytes),
+            min(budget["worker_metadata_open_cap"], remaining_opens))
 
 
 def worker(proposal_path, private_path, approval_path, task):
@@ -321,9 +343,11 @@ def worker(proposal_path, private_path, approval_path, task):
                       Path(prepared["private_inputs"]["stage3_run"]),
                       Path(prepared["private_inputs"]["request"]).parent,
                       Path(v["static_source"]).parent, Path(v["registry"]).parent]
+    previous = [read(package / prior / "task_complete.json")["accounting"] for prior in ORDER[:ORDER.index(task)]]
+    metadata_bytes, metadata_opens = metadata_allowance(p["budget"], previous)
     guard = ScientificReadGuard(scientific, package, output / "source_reservations.jsonl",
-                metadata_cap=p["budget"]["worker_metadata_archive_cap_bytes"],
-                metadata_opens=p["budget"]["worker_metadata_open_cap"], metadata_roots=metadata_roots, check=clock.remaining)
+                metadata_cap=metadata_bytes, metadata_opens=metadata_opens,
+                metadata_roots=metadata_roots, check=clock.remaining)
     guard.install()
     try:
         provider = module(ROOT / "tools/research_readiness/extreme_diagnostic_provider.py", "extreme_joint_provider")
@@ -343,6 +367,12 @@ def worker(proposal_path, private_path, approval_path, task):
             raise RuntimeError("Exact scientific payload open reservation differs; no retry")
         write(output / "task_complete.json", dict(task=task, status="COMPLETE", accounting=accounting,
               verified_sha256=sha(output / "verified.json"), optimizer_updates=0, final_2025="FROZEN_NO_ACCESS"))
+    except BaseException as error:
+        accounting = guard.close()
+        write(output / "task_failure.json", dict(status="STOP_PRESERVE_ALL_NO_RETRY", task=task,
+            error_type=type(error).__name__, details=str(error), accounting=accounting,
+            optimizer_updates=0, final_2025="FROZEN_NO_ACCESS"))
+        raise
     finally:
         guard.active = False
 
@@ -424,6 +454,9 @@ def finalize(package, proposal):
             or meta > proposal["budget"]["metadata_archive_cap_bytes"]
             or opens > proposal["budget"]["metadata_open_cap"]):
         raise RuntimeError("Package source/metadata cap mismatch")
+    if (reserved + meta + proposal["budget"]["prior_metadata_archive_charge_bytes"]
+            > proposal["budget"]["cumulative_source_reservation_cap_bytes"]):
+        raise RuntimeError("Cumulative old-plus-new source reservation cap exceeded")
     write(package / "diagnostic_comparisons.json", dict(status="COMPLETE_DIAGNOSTIC_PENDING_RESEARCHER_SCIENTIFIC_REVIEW",
           comparisons=comparisons, aggregate_policy="Per-seed intervals are primary; no sign/significance invented from unresolved bounds",
           independent_events="NOT_IDENTIFIED", physics_causality="NOT_VERIFIED", final_2025="FROZEN_NO_ACCESS"))
@@ -433,13 +466,14 @@ def finalize(package, proposal):
 
 
 def execute(proposal_path, private_path, approval_path):
+    clock = DualDeadline(LIMITS["maximum_seconds"])
     p, v, a, runs = validate_only(proposal_path, private_path, approval_path)
     validate_running_runtime(p, v)
     host = module(ROOT / "tools/research_readiness/start_independent_process.py", "extreme_host_controller")
     host.require_independent(host.host_identity())
     output = Path(v["output_root"])
     admission = resources(output.parent, p["budget"])
-    clock = DualDeadline(p["budget"]["maximum_seconds"])
+    clock.remaining()
     output.mkdir(exist_ok=False)
     write(output / "binding.json", dict(controller_pid=os.getpid(), approval_sha256=sha(approval_path),
           proposal_sha256=p["proposal_sha256"], code_commit=p["execution_code_commit"],
