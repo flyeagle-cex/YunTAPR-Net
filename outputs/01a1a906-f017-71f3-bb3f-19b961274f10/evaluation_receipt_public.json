@@ -1,0 +1,2748 @@
+{
+  "status": "AUDITED_SAVED_ENDPOINTS_NO_NEW_INFERENCE",
+  "as_of": "2026-11-05 Asia/Shanghai",
+  "point_rule": "RESEARCHER_CONFIRMED_20261105_A_PHYSICAL_QUANTILE_MEAN_APPROXIMATION",
+  "day_boundary": "北京时间08:00—次日08:00（对应UTC 00:00—24:00）",
+  "original_snapshot_sha256": "6d637714deeca8ab2e5ec6764396d494020dc3fb6f5e08a607a64331d3455c28",
+  "registry_sha256": "30d04e866d554eea2af57696e750206f6b4b053ccfdf65aa9235287c98a4dc34",
+  "runs": [
+    {
+      "run_id": "B0_s2026_E0",
+      "strategy": 0,
+      "strategy_name": "策略一",
+      "seed": 2026,
+      "n_valid": 36018430,
+      "n_rain": 4496600,
+      "train": 10455,
+      "dev": 10501,
+      "protocol": "历史单通道开发集",
+      "brier": 0.09686762633953126,
+      "rmse": 0.8012766752218964,
+      "counts": {
+        "0.1": {
+          "TP": 4197161,
+          "FP": 12666634,
+          "FN": 299439,
+          "TN": 18855196
+        },
+        "1.0": {
+          "TP": 676996,
+          "FP": 607512,
+          "FN": 1055518,
+          "TN": 33678404
+        },
+        "5.0": {
+          "TP": 7305,
+          "FP": 3556,
+          "FN": 254534,
+          "TN": 35753035
+        },
+        "10.0": {
+          "TP": 32,
+          "FP": 47,
+          "FN": 54191,
+          "TN": 35964160
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 7488,
+          "TN": 36010942
+        }
+      },
+      "checkpoint_sha256": "a806db984338abe444816e50321b56169090a5f96d07bfe2f9e6bd369009ce94",
+      "checkpoint_file": "LAST_epoch_09.pt",
+      "checkpoint_present": false,
+      "checkpoint_bytes": null,
+      "checkpoint_expected_bytes": 52623081,
+      "training_commit": "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "result_sha256": "1a51061929b4b79620615233b3a7411e129cb1b5fd5d765d5465b8faab7dda8e",
+      "result_source": "SAVED_METRIC_B0_s2026_E0",
+      "evaluation_code_sha256": "42415659f5a8af0b6469d623191737462c668d075a3e914af739707046e93277",
+      "population_detail": {
+        "train": 10455,
+        "dev": 10501,
+        "train_ids_sha": "ca215cdaee737a3d88a23c4836080f9b73afc9627c04a150bf62bf99b65667eb",
+        "dev_ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+        "protocol_sha": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+        "source_inventory_sha": "67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143",
+        "mask_sha": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+        "scaler_sha": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "sp04_sha": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+      },
+      "elapsed_seconds": 797.4953849315643
+    },
+    {
+      "run_id": "B1_s2026_E0",
+      "strategy": 1,
+      "strategy_name": "策略二",
+      "seed": 2026,
+      "n_valid": 36018430,
+      "n_rain": 4496600,
+      "train": 10455,
+      "dev": 10501,
+      "protocol": "历史单通道开发集",
+      "brier": 0.09525347050913102,
+      "rmse": 0.7980259684699804,
+      "counts": {
+        "0.1": {
+          "TP": 4155622,
+          "FP": 11285913,
+          "FN": 340978,
+          "TN": 20235917
+        },
+        "1.0": {
+          "TP": 690435,
+          "FP": 594857,
+          "FN": 1042079,
+          "TN": 33691059
+        },
+        "5.0": {
+          "TP": 6133,
+          "FP": 3135,
+          "FN": 255706,
+          "TN": 35753456
+        },
+        "10.0": {
+          "TP": 8,
+          "FP": 44,
+          "FN": 54215,
+          "TN": 35964163
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 1,
+          "FN": 7488,
+          "TN": 36010941
+        }
+      },
+      "checkpoint_sha256": "ead05bd42a7548f61b434792c7c011a066e807bb9e5f135cce653ac312e79051",
+      "checkpoint_file": "LAST_epoch_09.pt",
+      "checkpoint_present": false,
+      "checkpoint_bytes": null,
+      "checkpoint_expected_bytes": 52652009,
+      "training_commit": "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "result_sha256": "dcd87a2d9c9ed0a78bf0e89f2061f8e16883e69b33fc078fe4ad9b4e0bbb6495",
+      "result_source": "SAVED_METRIC_B1_s2026_E0",
+      "evaluation_code_sha256": "42415659f5a8af0b6469d623191737462c668d075a3e914af739707046e93277",
+      "population_detail": {
+        "train": 10455,
+        "dev": 10501,
+        "train_ids_sha": "ca215cdaee737a3d88a23c4836080f9b73afc9627c04a150bf62bf99b65667eb",
+        "dev_ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+        "protocol_sha": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+        "source_inventory_sha": "67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143",
+        "mask_sha": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+        "scaler_sha": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "sp04_sha": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+      },
+      "elapsed_seconds": 1424.8060891628265
+    },
+    {
+      "run_id": "B0_s2027_E0",
+      "strategy": 0,
+      "strategy_name": "策略一",
+      "seed": 2027,
+      "n_valid": 36018430,
+      "n_rain": 4496600,
+      "train": 10455,
+      "dev": 10501,
+      "protocol": "历史单通道开发集",
+      "brier": 0.09705489099741127,
+      "rmse": 0.7971315608632401,
+      "counts": {
+        "0.1": {
+          "TP": 4212621,
+          "FP": 13160393,
+          "FN": 283979,
+          "TN": 18361437
+        },
+        "1.0": {
+          "TP": 691373,
+          "FP": 630852,
+          "FN": 1041141,
+          "TN": 33655064
+        },
+        "5.0": {
+          "TP": 18438,
+          "FP": 17275,
+          "FN": 243401,
+          "TN": 35739316
+        },
+        "10.0": {
+          "TP": 646,
+          "FP": 1259,
+          "FN": 53577,
+          "TN": 35962948
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 9,
+          "FN": 7488,
+          "TN": 36010933
+        }
+      },
+      "checkpoint_sha256": "34022dd6970a95a1fc8ef7a910d5b4a80a1f029ad3617dee577d6dff2b1f4673",
+      "checkpoint_file": "LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52669225,
+      "checkpoint_expected_bytes": 52669225,
+      "training_commit": "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "result_sha256": "f3b576849b69ba268023d978235fe0fc7bf98dbd642e9f975aa5102424fe2198",
+      "result_source": "SAVED_METRIC_B0_s2027_E0",
+      "evaluation_code_sha256": "42415659f5a8af0b6469d623191737462c668d075a3e914af739707046e93277",
+      "population_detail": {
+        "train": 10455,
+        "dev": 10501,
+        "train_ids_sha": "ca215cdaee737a3d88a23c4836080f9b73afc9627c04a150bf62bf99b65667eb",
+        "dev_ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+        "protocol_sha": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+        "source_inventory_sha": "67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143",
+        "mask_sha": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+        "scaler_sha": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "sp04_sha": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+      },
+      "elapsed_seconds": 774.60001039505
+    },
+    {
+      "run_id": "B1_s2027_E0",
+      "strategy": 1,
+      "strategy_name": "策略二",
+      "seed": 2027,
+      "n_valid": 36018430,
+      "n_rain": 4496600,
+      "train": 10455,
+      "dev": 10501,
+      "protocol": "历史单通道开发集",
+      "brier": 0.09348051269595507,
+      "rmse": 0.7861056731435071,
+      "counts": {
+        "0.1": {
+          "TP": 4179964,
+          "FP": 11711188,
+          "FN": 316636,
+          "TN": 19810642
+        },
+        "1.0": {
+          "TP": 723198,
+          "FP": 635196,
+          "FN": 1009316,
+          "TN": 33650720
+        },
+        "5.0": {
+          "TP": 22780,
+          "FP": 19499,
+          "FN": 239059,
+          "TN": 35737092
+        },
+        "10.0": {
+          "TP": 959,
+          "FP": 1493,
+          "FN": 53264,
+          "TN": 35962714
+        },
+        "20.0": {
+          "TP": 6,
+          "FP": 59,
+          "FN": 7482,
+          "TN": 36010883
+        }
+      },
+      "checkpoint_sha256": "73715f1e0a45cd364362406ea2d2d62b0dccb5b0aa16a69b02944ddd8d69dd43",
+      "checkpoint_file": "LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52729769,
+      "checkpoint_expected_bytes": 52729769,
+      "training_commit": "NOT_VERIFIED_HISTORICAL_EXECUTION_BINDING",
+      "result_sha256": "3b75040603b06730b10338bd29a5ef19eba7f561479f00db051150760ba78849",
+      "result_source": "SAVED_METRIC_B1_s2027_E0",
+      "evaluation_code_sha256": "42415659f5a8af0b6469d623191737462c668d075a3e914af739707046e93277",
+      "population_detail": {
+        "train": 10455,
+        "dev": 10501,
+        "train_ids_sha": "ca215cdaee737a3d88a23c4836080f9b73afc9627c04a150bf62bf99b65667eb",
+        "dev_ids_sha": "858232b93de73db8206120d4c847b0a9ed886d4daa5dab146b13c6d2ae7500b0",
+        "protocol_sha": "a0141f21cfa997d5adb72dff5afb32b17dc7edcf5f3397fc9c4bfe2ea42048be",
+        "source_inventory_sha": "67687abaec6cb12489ec2f2cb80abe173095bb7a3092f7c583c91b36e7c24143",
+        "mask_sha": "9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef",
+        "scaler_sha": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+        "sp04_sha": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd"
+      },
+      "elapsed_seconds": 1433.0521366596222
+    },
+    {
+      "run_id": "B2_s2029",
+      "strategy": 2,
+      "strategy_name": "策略三",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09863818096858105,
+      "rmse": 0.8476720320277039,
+      "counts": {
+        "0.1": {
+          "TP": 382127,
+          "FP": 1200521,
+          "FN": 25693,
+          "TN": 1694749
+        },
+        "1.0": {
+          "TP": 56448,
+          "FP": 47050,
+          "FN": 104899,
+          "TN": 3094693
+        },
+        "5.0": {
+          "TP": 98,
+          "FP": 107,
+          "FN": 25563,
+          "TN": 3277322
+        },
+        "10.0": {
+          "TP": 1,
+          "FP": 0,
+          "FN": 5515,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "9d79a11f223473e8d06b873f2a4f46bb12ae44b9b9cddebe358f2901858657e0",
+      "checkpoint_file": "B2_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52620843,
+      "checkpoint_expected_bytes": 52620843,
+      "training_commit": "a35302186b4b5d3d7ec735885a8d93762e6d3567",
+      "result_sha256": "5d3720775c1f71d138c5f829399b7cf4a54a935a135412b842ac93e42bf7b486",
+      "result_source": "SAVED_METRIC_B2_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1345.9803309440613
+    },
+    {
+      "run_id": "B3_s2029",
+      "strategy": 3,
+      "strategy_name": "策略四",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09957884578407393,
+      "rmse": 0.8352277080153362,
+      "counts": {
+        "0.1": {
+          "TP": 385717,
+          "FP": 1272300,
+          "FN": 22103,
+          "TN": 1622970
+        },
+        "1.0": {
+          "TP": 59640,
+          "FP": 49127,
+          "FN": 101707,
+          "TN": 3092616
+        },
+        "5.0": {
+          "TP": 816,
+          "FP": 377,
+          "FN": 24845,
+          "TN": 3277052
+        },
+        "10.0": {
+          "TP": 5,
+          "FP": 6,
+          "FN": 5511,
+          "TN": 3297568
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+      "checkpoint_file": "B3_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52823019,
+      "checkpoint_expected_bytes": 52823019,
+      "training_commit": "5b5298f41025db5b7b718fd736fc3fe6de516875_E1_3;7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35_E4_9",
+      "result_sha256": "bf8e29e55db68634014ad7a67c41a3ea4f4464c355df44675348b4597434acbb",
+      "result_source": "SAVED_METRIC_B3_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 2535.4869084358215
+    },
+    {
+      "run_id": "B4_s2029",
+      "strategy": 4,
+      "strategy_name": "策略五",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09791899181978897,
+      "rmse": 0.8279644410379078,
+      "counts": {
+        "0.1": {
+          "TP": 384941,
+          "FP": 1209570,
+          "FN": 22879,
+          "TN": 1685700
+        },
+        "1.0": {
+          "TP": 61279,
+          "FP": 45412,
+          "FN": 100068,
+          "TN": 3096331
+        },
+        "5.0": {
+          "TP": 718,
+          "FP": 268,
+          "FN": 24943,
+          "TN": 3277161
+        },
+        "10.0": {
+          "TP": 1,
+          "FP": 2,
+          "FN": 5515,
+          "TN": 3297572
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+      "checkpoint_file": "B4_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52913659,
+      "checkpoint_expected_bytes": 52913659,
+      "training_commit": "7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35",
+      "result_sha256": "97f7bf855607b4faeb6f25b624854cf41fe9f37135286e6d2d2633b376c56205",
+      "result_source": "SAVED_METRIC_B4_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 2228.461345911026
+    },
+    {
+      "run_id": "B3_s2030",
+      "strategy": 3,
+      "strategy_name": "策略四",
+      "seed": 2030,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09535216057777933,
+      "rmse": 0.8413345112779593,
+      "counts": {
+        "0.1": {
+          "TP": 376332,
+          "FP": 1080339,
+          "FN": 31488,
+          "TN": 1814931
+        },
+        "1.0": {
+          "TP": 69186,
+          "FP": 72852,
+          "FN": 92161,
+          "TN": 3068891
+        },
+        "5.0": {
+          "TP": 29,
+          "FP": 51,
+          "FN": 25632,
+          "TN": 3277378
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 5516,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "8e757e5a360a7780e32a87b6433174f25e2dd026b62a54c7d7450ee6e250f058",
+      "checkpoint_file": "B3_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52824363,
+      "checkpoint_expected_bytes": 52824363,
+      "training_commit": "52a8e90dcea156382d7f2c510c5891c78e610329",
+      "result_sha256": "46fe7c6ffc8090b6c74850a3f4b37475a606c4f146e22e7efbe4557860fe7e2c",
+      "result_source": "SAVED_METRIC_B3_s2030",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 2536.5501520633698
+    },
+    {
+      "run_id": "B4_s2030",
+      "strategy": 4,
+      "strategy_name": "策略五",
+      "seed": 2030,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09499175845511126,
+      "rmse": 0.8334462912631007,
+      "counts": {
+        "0.1": {
+          "TP": 378250,
+          "FP": 1068211,
+          "FN": 29570,
+          "TN": 1827059
+        },
+        "1.0": {
+          "TP": 75706,
+          "FP": 76839,
+          "FN": 85641,
+          "TN": 3064904
+        },
+        "5.0": {
+          "TP": 19,
+          "FP": 20,
+          "FN": 25642,
+          "TN": 3277409
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 5516,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "checkpoint_file": "B4_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52914619,
+      "checkpoint_expected_bytes": 52914619,
+      "training_commit": "943da957a3af846746c21b52d05a148bcb135064 (E1 inherited 52a8e90)",
+      "result_sha256": "456a2354767ed2285fd053f4ad6ffb5b4bc18e3ca2a67490b094c849984e4a29",
+      "result_source": "SAVED_METRIC_B4_s2030",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 2228.1315643787384
+    },
+    {
+      "run_id": "B3_s2031",
+      "strategy": 3,
+      "strategy_name": "策略四",
+      "seed": 2031,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.10021539556138473,
+      "rmse": 0.8303266362684211,
+      "counts": {
+        "0.1": {
+          "TP": 384047,
+          "FP": 1277316,
+          "FN": 23773,
+          "TN": 1617954
+        },
+        "1.0": {
+          "TP": 76983,
+          "FP": 87334,
+          "FN": 84364,
+          "TN": 3054409
+        },
+        "5.0": {
+          "TP": 1102,
+          "FP": 1229,
+          "FN": 24559,
+          "TN": 3276200
+        },
+        "10.0": {
+          "TP": 4,
+          "FP": 66,
+          "FN": 5512,
+          "TN": 3297508
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 4,
+          "FN": 717,
+          "TN": 3302369
+        }
+      },
+      "checkpoint_sha256": "bc096c45b9b1d8fcd1b22ed50231487cdb16d9653e77254fdfc7dcb79d513543",
+      "checkpoint_file": "B3_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52824299,
+      "checkpoint_expected_bytes": 52824299,
+      "training_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "result_sha256": "3a0843041aff6d2900f2e69b341ee8872f52d6200d04885d085a7967bf3467a4",
+      "result_source": "SAVED_METRIC_B3_s2031",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 2536.3617794513702
+    },
+    {
+      "run_id": "B4_s2031",
+      "strategy": 4,
+      "strategy_name": "策略五",
+      "seed": 2031,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09626313770420312,
+      "rmse": 0.8262937898964476,
+      "counts": {
+        "0.1": {
+          "TP": 381036,
+          "FP": 1122351,
+          "FN": 26784,
+          "TN": 1772919
+        },
+        "1.0": {
+          "TP": 81527,
+          "FP": 85231,
+          "FN": 79820,
+          "TN": 3056512
+        },
+        "5.0": {
+          "TP": 267,
+          "FP": 158,
+          "FN": 25394,
+          "TN": 3277271
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 5516,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "checkpoint_file": "B4_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 52914939,
+      "checkpoint_expected_bytes": 52914939,
+      "training_commit": "943da957a3af846746c21b52d05a148bcb135064",
+      "result_sha256": "6b44298aabe27b443bba9041c09e9375e0e3c5caba4e163adf8faa7f80836cb9",
+      "result_source": "SAVED_METRIC_B4_s2031",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 983.7482583522797
+    },
+    {
+      "run_id": "B5_s2029",
+      "strategy": 5,
+      "strategy_name": "策略六",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09818115425527373,
+      "rmse": 0.8309591774734773,
+      "counts": {
+        "0.1": {
+          "TP": 385778,
+          "FP": 1216769,
+          "FN": 22042,
+          "TN": 1678501
+        },
+        "1.0": {
+          "TP": 60340,
+          "FP": 45931,
+          "FN": 101007,
+          "TN": 3095812
+        },
+        "5.0": {
+          "TP": 581,
+          "FP": 238,
+          "FN": 25080,
+          "TN": 3277191
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 5516,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "1103d380519e96f64efd8ea577fc1fc514e8b20c52690e7f5a38b03d8d4a500f",
+      "checkpoint_file": "B5_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53023685,
+      "checkpoint_expected_bytes": 53023685,
+      "training_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "result_sha256": "0b23d550a2ac7a14365e1ca6909cda6893a4dcd13904a2a7d6a4cc9177fc5d07",
+      "result_source": "SAVED_METRIC_B5_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 996.9558169841766
+    },
+    {
+      "run_id": "B6_s2029",
+      "strategy": 6,
+      "strategy_name": "策略七",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09637301023497848,
+      "rmse": 0.831744325599521,
+      "counts": {
+        "0.1": {
+          "TP": 383871,
+          "FP": 1169035,
+          "FN": 23949,
+          "TN": 1726235
+        },
+        "1.0": {
+          "TP": 60862,
+          "FP": 46697,
+          "FN": 100485,
+          "TN": 3095046
+        },
+        "5.0": {
+          "TP": 415,
+          "FP": 176,
+          "FN": 25246,
+          "TN": 3277253
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 5516,
+          "TN": 3297574
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+      "checkpoint_file": "B6_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53291781,
+      "checkpoint_expected_bytes": 53291781,
+      "training_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "result_sha256": "d375d87b970aaea30928a65bfc713cb158305624c76b79fa2d7eb3d8cc6fb853",
+      "result_source": "SAVED_METRIC_B6_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 908.1070394515991
+    },
+    {
+      "run_id": "B7_s2029",
+      "strategy": 7,
+      "strategy_name": "策略八",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09673163538839748,
+      "rmse": 0.8363531635271959,
+      "counts": {
+        "0.1": {
+          "TP": 384515,
+          "FP": 1173234,
+          "FN": 23305,
+          "TN": 1722036
+        },
+        "1.0": {
+          "TP": 60675,
+          "FP": 46128,
+          "FN": 100672,
+          "TN": 3095615
+        },
+        "5.0": {
+          "TP": 249,
+          "FP": 88,
+          "FN": 25412,
+          "TN": 3277341
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 1,
+          "FN": 5516,
+          "TN": 3297573
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "checkpoint_file": "B7_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53904005,
+      "checkpoint_expected_bytes": 53904005,
+      "training_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+      "result_sha256": "e2cae84bf9661158de4e2626290a4077a01e1aaebb43829e1556d6282e53e008",
+      "result_source": "SAVED_METRIC_B7_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1030.299242258072
+    },
+    {
+      "run_id": "B8_s2029",
+      "strategy": 8,
+      "strategy_name": "策略九",
+      "seed": 2029,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09805082718912765,
+      "rmse": 0.8295888626446652,
+      "counts": {
+        "0.1": {
+          "TP": 385567,
+          "FP": 1203233,
+          "FN": 22253,
+          "TN": 1692037
+        },
+        "1.0": {
+          "TP": 66336,
+          "FP": 54704,
+          "FN": 95011,
+          "TN": 3087039
+        },
+        "5.0": {
+          "TP": 316,
+          "FP": 115,
+          "FN": 25345,
+          "TN": 3277314
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 1,
+          "FN": 5516,
+          "TN": 3297573
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+      "checkpoint_file": "B8_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53905021,
+      "checkpoint_expected_bytes": 53905021,
+      "training_commit": "ef11531a7cdeb35b767caebdb61e0e81c6123187",
+      "result_sha256": "f7ab24b7f82ab27d89bb18f3f54545414734085c2422139f1a6f05e3d916932d",
+      "result_source": "SAVED_METRIC_B8_s2029",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1029.4493470191956
+    },
+    {
+      "run_id": "B7_s2030",
+      "strategy": 7,
+      "strategy_name": "策略八",
+      "seed": 2030,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09427110457976932,
+      "rmse": 0.8312025709643596,
+      "counts": {
+        "0.1": {
+          "TP": 379531,
+          "FP": 1077424,
+          "FN": 28289,
+          "TN": 1817846
+        },
+        "1.0": {
+          "TP": 79879,
+          "FP": 87443,
+          "FN": 81468,
+          "TN": 3054300
+        },
+        "5.0": {
+          "TP": 139,
+          "FP": 228,
+          "FN": 25522,
+          "TN": 3277201
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 4,
+          "FN": 5516,
+          "TN": 3297570
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "checkpoint_file": "B7_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53905285,
+      "checkpoint_expected_bytes": 53905285,
+      "training_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "result_sha256": "6e467023fdc3a98376788b3ca46ec32dfb6b99bf706d3ac57e365b5355ec04c1",
+      "result_source": "SAVED_METRIC_B7_s2030",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1034.4799916744232
+    },
+    {
+      "run_id": "B8_s2030",
+      "strategy": 8,
+      "strategy_name": "策略九",
+      "seed": 2030,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09425849338249301,
+      "rmse": 0.8319340468293674,
+      "counts": {
+        "0.1": {
+          "TP": 379824,
+          "FP": 1085494,
+          "FN": 27996,
+          "TN": 1809776
+        },
+        "1.0": {
+          "TP": 80479,
+          "FP": 90049,
+          "FN": 80868,
+          "TN": 3051694
+        },
+        "5.0": {
+          "TP": 136,
+          "FP": 200,
+          "FN": 25525,
+          "TN": 3277229
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 6,
+          "FN": 5516,
+          "TN": 3297568
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+      "checkpoint_file": "B8_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53906237,
+      "checkpoint_expected_bytes": 53906237,
+      "training_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "result_sha256": "9fc269669a9ec3ac0949ea93c448ab4a085558d5b57b101ed1c2ffc087a93153",
+      "result_source": "SAVED_METRIC_B8_s2030",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1038.0921189785004
+    },
+    {
+      "run_id": "B7_s2031",
+      "strategy": 7,
+      "strategy_name": "策略八",
+      "seed": 2031,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09493943784545833,
+      "rmse": 0.8257715959867312,
+      "counts": {
+        "0.1": {
+          "TP": 380547,
+          "FP": 1100152,
+          "FN": 27273,
+          "TN": 1795118
+        },
+        "1.0": {
+          "TP": 84961,
+          "FP": 93939,
+          "FN": 76386,
+          "TN": 3047804
+        },
+        "5.0": {
+          "TP": 392,
+          "FP": 476,
+          "FN": 25269,
+          "TN": 3276953
+        },
+        "10.0": {
+          "TP": 1,
+          "FP": 21,
+          "FN": 5515,
+          "TN": 3297553
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "checkpoint_file": "B7_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53906245,
+      "checkpoint_expected_bytes": 53906245,
+      "training_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "result_sha256": "1a112ff02825d599247c9925265339d6b26a0bc07a8a97b2782534c973546cc6",
+      "result_source": "SAVED_METRIC_B7_s2031",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1053.2326664924622
+    },
+    {
+      "run_id": "B8_s2031",
+      "strategy": 8,
+      "strategy_name": "策略九",
+      "seed": 2031,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "train": 959,
+      "dev": 963,
+      "protocol": "四起报时次开发集",
+      "brier": 0.09527247567984089,
+      "rmse": 0.8313975135626878,
+      "counts": {
+        "0.1": {
+          "TP": 380281,
+          "FP": 1098832,
+          "FN": 27539,
+          "TN": 1796438
+        },
+        "1.0": {
+          "TP": 80565,
+          "FP": 82932,
+          "FN": 80782,
+          "TN": 3058811
+        },
+        "5.0": {
+          "TP": 104,
+          "FP": 193,
+          "FN": 25557,
+          "TN": 3277236
+        },
+        "10.0": {
+          "TP": 0,
+          "FP": 4,
+          "FN": 5516,
+          "TN": 3297570
+        },
+        "20.0": {
+          "TP": 0,
+          "FP": 0,
+          "FN": 717,
+          "TN": 3302373
+        }
+      },
+      "checkpoint_sha256": "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+      "checkpoint_file": "B8_LAST_epoch_09.pt",
+      "checkpoint_present": true,
+      "checkpoint_bytes": 53906877,
+      "checkpoint_expected_bytes": 53906877,
+      "training_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "result_sha256": "7fd97e27fe27b4b63bda9207f52aa521ca35e74fa3c3e3f47268f4990697993d",
+      "result_source": "SAVED_METRIC_B8_s2031",
+      "evaluation_code_sha256": "fd4cb37bb62675601cf685eb1d656f4fd8b88e2ba52d6019652114035908e9ce",
+      "population_detail": {
+        "train": 959,
+        "dev": 963,
+        "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+        "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+        "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+        "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+        "candidate_manifest_sha256": {
+          "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+          "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+        }
+      },
+      "elapsed_seconds": 1064.5138528347015
+    }
+  ],
+  "groups": [
+    {
+      "strategy": 0,
+      "name": "策略一",
+      "full_name": "单通道单时次反演",
+      "color": "EAF2F8",
+      "seeds": [
+        2026,
+        2027
+      ],
+      "protocol": "历史单通道开发集",
+      "train": 10455,
+      "dev": 10501,
+      "n_valid": 36018430,
+      "rmse": {
+        "mean": 0.7992041180425682,
+        "sd": 0.0029310384717995803,
+        "defined": 2,
+        "total": 2
+      },
+      "brier": {
+        "mean": 0.09696125866847127,
+        "sd": 0.00013241610946353172,
+        "defined": 2,
+        "total": 2
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9351267624427345,
+            "sd": 0.002431141492937753,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.754316682319131,
+            "sd": 0.004529152458758102,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.2415622994262416,
+            "sd": 0.0042163580284844725,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.23854889109228444,
+            "sd": 0.0076402705362738745,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.39490849713191356,
+            "sd": 0.00586781647543338,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.47503351202756805,
+            "sd": 0.0029421915766261074,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.2909243693317365,
+            "sd": 0.0022812028257885764,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.42705875015832584,
+            "sd": 0.002567441576404337,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.04915807041731751,
+            "sd": 0.030065115567008104,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.40556370645308615,
+            "sd": 0.11052603291778258,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.04679201976735939,
+            "sd": 0.027247666673640755,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.08771342137511318,
+            "sd": 0.049054003978187835,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.006251959500580935,
+            "sd": 0.008007000048845327,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.6279145486561015,
+            "sd": 0.04663770829633994,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.00611653012668375,
+            "sd": 0.007816196793743884,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.012046592936267284,
+            "sd": 0.015375859139294464,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 1,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": -2.4957223746783704e-07,
+            "sd": 3.5294844301881383e-07,
+            "defined": 2,
+            "total": 2
+          }
+        }
+      }
+    },
+    {
+      "strategy": 1,
+      "name": "策略二",
+      "full_name": "单通道六时次反演",
+      "color": "FCEFE8",
+      "seeds": [
+        2026,
+        2027
+      ],
+      "protocol": "历史单通道开发集",
+      "train": 10455,
+      "dev": 10501,
+      "n_valid": 36018430,
+      "rmse": {
+        "mean": 0.7920658208067437,
+        "sd": 0.008428921659095593,
+        "defined": 2,
+        "total": 2
+      },
+      "brier": {
+        "mean": 0.09436699160254305,
+        "sd": 0.0012536704924543853,
+        "defined": 2,
+        "total": 2
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9268765289329716,
+            "sd": 0.0038278684489709397,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.7339215302482311,
+            "sd": 0.004301016219038165,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.260601978310266,
+            "sd": 0.003823314322512621,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.27227133924343794,
+            "sd": 0.006762872398771381,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.4079715950347299,
+            "sd": 0.013371862779760973,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.46521331910803887,
+            "sd": 0.0033866926884240107,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.30105036465776835,
+            "sd": 0.0062106637807398685,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.43943229778303794,
+            "sd": 0.007116597319873501,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.05521140853730728,
+            "sd": 0.044955894982842345,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.39972945635821594,
+            "sd": 0.08692997447825111,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.05205794399758537,
+            "sd": 0.04088813407645787,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.0964288421007375,
+            "sd": 0.07305755723888975,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.008916880290651567,
+            "sd": 0.012401721574025906,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.7275222738110176,
+            "sd": 0.16777037853287297,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.008679855072883085,
+            "sd": 0.01206668647225931,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.01700406161212557,
+            "sd": 0.023634549736606367,
+            "defined": 2,
+            "total": 2
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.00040064102564102563,
+            "sd": 0.0005665919721046053,
+            "defined": 2,
+            "total": 2
+          },
+          "FAR": {
+            "mean": 0.9538461538461538,
+            "sd": 0.06527139518645055,
+            "defined": 2,
+            "total": 2
+          },
+          "CSI": {
+            "mean": 0.00039750894395123893,
+            "sd": 0.0005621625397004486,
+            "defined": 2,
+            "total": 2
+          },
+          "HSS": {
+            "mean": 0.0007925723114887255,
+            "sd": 0.0011209450288059918,
+            "defined": 2,
+            "total": 2
+          }
+        }
+      }
+    },
+    {
+      "strategy": 2,
+      "name": "策略三",
+      "full_name": "七通道单时次反演",
+      "color": "EAF4E8",
+      "seeds": [
+        2029
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8476720320277039,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "brier": {
+        "mean": 0.09863818096858105,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9369991662988574,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.7585521227714564,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.23759078454133795,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.2334537914500805,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.3498546610720993,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.4545981564861157,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.2708676228544557,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.4034988824060804,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.003819024979540938,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.5219512195121951,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0038031667184104316,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.007455290507536449,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.00018129079042784627,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.00018129079042784627,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0003619106952704778,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        }
+      }
+    },
+    {
+      "strategy": 3,
+      "name": "策略四",
+      "full_name": "七通道六时次反演",
+      "color": "F4ECF7",
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8356296185205722,
+        "sd": 0.005514932193333707,
+        "defined": 3,
+        "total": 3
+      },
+      "brier": {
+        "mean": 0.09838213397441266,
+        "sd": 0.0026432655925914656,
+        "defined": 3,
+        "total": 3
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9367662203913492,
+            "sd": 0.012276171634762096,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.7592826431144115,
+            "sd": 0.015288707046353564,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.23678799872186762,
+            "sd": 0.013964895662356862,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.2318018565081831,
+            "sd": 0.0254492756191663,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.4251891885191544,
+            "sd": 0.053835436060675805,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.4986913217165239,
+            "sd": 0.04176761887560399,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.2961137062358099,
+            "sd": 0.013116373062329508,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.43139615016832306,
+            "sd": 0.013410321500927384,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.02529129807879662,
+            "sd": 0.021653554788552735,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.4935838619723783,
+            "sd": 0.16336638092556818,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.02448282271696634,
+            "sd": 0.020792709657215813,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.04662419346916213,
+            "sd": 0.03944174459697302,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.0005438723712835388,
+            "sd": 0.0004796503464584102,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 2,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0005406860230489397,
+            "sd": 0.0004776766112501668,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.0010643403960947056,
+            "sd": 0.0009445183095302716,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 1,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": -8.028478747462452e-07,
+            "sd": 1.3905733098091908e-06,
+            "defined": 3,
+            "total": 3
+          }
+        }
+      }
+    },
+    {
+      "strategy": 4,
+      "name": "策略五",
+      "full_name": "七通道六时次融合 GFS 环境场",
+      "color": "FFF4D6",
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8292348407324853,
+        "sd": 0.0037416581201361017,
+        "defined": 3,
+        "total": 3
+      },
+      "brier": {
+        "mean": 0.09639129599303445,
+        "sd": 0.001467818859078913,
+        "defined": 3,
+        "total": 3
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9352385856505321,
+            "sd": 0.008241525453685703,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.7478772166582038,
+            "sd": 0.01010772235637262,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.247759403155079,
+            "sd": 0.009194659586113306,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.25145317870143313,
+            "sd": 0.01657198148462179,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.45143283316909105,
+            "sd": 0.06460833782619842,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.48015332433583197,
+            "sd": 0.04735404403769257,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.3149522093410568,
+            "sd": 0.01730954916851538,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.4541747428451061,
+            "sd": 0.017817649183617286,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.013041840406323474,
+            "sd": 0.013810015167584202,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.38546349751217907,
+            "sd": 0.12109016898600443,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.012924023504255828,
+            "sd": 0.013659954198733937,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.02500775677805403,
+            "sd": 0.026274067539287713,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 6.043026347594876e-05,
+            "sd": 0.00010466828665511708,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 1,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 6.040836051709556e-05,
+            "sd": 0.00010463034961754725,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.00012018988367366099,
+            "sd": 0.00020817498507857396,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          }
+        }
+      }
+    },
+    {
+      "strategy": 5,
+      "name": "策略六",
+      "full_name": "GFS 环境场融合 DEM 高程",
+      "color": "E2F0ED",
+      "seeds": [
+        2029
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8309591774734773,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "brier": {
+        "mean": 0.09818115425527373,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9459516453337257,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.7592719589503459,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.23746190574970039,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.23276628394728271,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.3739765846281617,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.4322063403938986,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.29110662974362933,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.4287811281963989,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.022641362378706988,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.2905982905982906,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.02243329858295687,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.043422480780922035,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        }
+      }
+    },
+    {
+      "strategy": 6,
+      "name": "策略七",
+      "full_name": "GFS 环境场融合完整静态地形特征",
+      "color": "F7E6EC",
+      "seeds": [
+        2029
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.831744325599521,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "brier": {
+        "mean": 0.09637301023497848,
+        "sd": null,
+        "defined": 1,
+        "total": 1
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9412755627482713,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.752804741561949,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.24344089976567282,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.24363668337663633,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.3772118477566983,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.4341524186725425,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.29254388494741496,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.4304059587655381,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.01617240169907642,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": 0.29780033840947545,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.016062236327747028,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.031277788718220186,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 1
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": null,
+            "defined": 1,
+            "total": 1
+          }
+        }
+      }
+    },
+    {
+      "strategy": 7,
+      "name": "策略八",
+      "full_name": "完整静态地形融合 DOTE 动态地形特征（简单拼接）",
+      "color": "E8EDF8",
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8311091101594289,
+        "sd": 0.005291402847534639,
+        "defined": 3,
+        "total": 3
+      },
+      "brier": {
+        "mean": 0.09531405927120838,
+        "sd": 0.001272324201815452,
+        "defined": 3,
+        "total": 3
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9355377372370164,
+            "sd": 0.00645794045685971,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.7452196149410085,
+            "sd": 0.007094530332929148,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.25036431294470796,
+            "sd": 0.00640326100406006,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.25604048286967673,
+            "sd": 0.011527409517438749,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.4659006158569212,
+            "sd": 0.07938819542519814,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.49319777840149115,
+            "sd": 0.05310176869686415,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.3154406592327839,
+            "sd": 0.020761618435348714,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.4539532000808264,
+            "sd": 0.021443166601059334,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.010132107088577997,
+            "sd": 0.004943618274477954,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.476922699735971,
+            "sd": 0.19040225762844096,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.010012416610009307,
+            "sd": 0.004823519223489829,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.019493570617043113,
+            "sd": 0.009309048774192188,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 6.043026347594876e-05,
+            "sd": 0.00010466828665511708,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.9848484848484849,
+            "sd": 0.026243194054073875,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 6.020107157907411e-05,
+            "sd": 0.0001042713146450471,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.0001149507566196774,
+            "sd": 0.00020172284660198312,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          }
+        }
+      }
+    },
+    {
+      "strategy": 8,
+      "name": "策略九",
+      "full_name": "DOTE 动态地形融合 DTFM 多尺度条件调制",
+      "color": "EDE8F5",
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "protocol": "四起报时次开发集",
+      "train": 959,
+      "dev": 963,
+      "n_valid": 3303090,
+      "rmse": {
+        "mean": 0.8309734743455734,
+        "sd": 0.0012287510562691269,
+        "defined": 3,
+        "total": 3
+      },
+      "brier": {
+        "mean": 0.09586059875048718,
+        "sd": 0.0019633811359249177,
+        "defined": 3,
+        "total": 3
+      },
+      "metrics": {
+        "0.1": {
+          "POD": {
+            "mean": 0.9364196622693018,
+            "sd": 0.00782695112445865,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.7470039686753001,
+            "sd": 0.008997552080061661,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.24869238427384913,
+            "sd": 0.008169747339168391,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.2530456857044055,
+            "sd": 0.014757315647061954,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "1.0": {
+          "POD": {
+            "mean": 0.4697535952532947,
+            "sd": 0.05076266553142942,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.4957494472171454,
+            "sd": 0.039334335151339626,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.3189914431244505,
+            "sd": 0.011426848729498956,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.4581297483578153,
+            "sd": 0.011658233669584083,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "5.0": {
+          "POD": {
+            "mean": 0.007222373770832522,
+            "sd": 0.00445369200246282,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 0.5039636969258006,
+            "sd": 0.20717742422074376,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.007180312861620757,
+            "sd": 0.004441897734472826,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.014024010918748438,
+            "sd": 0.008699838804813549,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "10.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": 1.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": -2.218212409990942e-06,
+            "sd": 1.5219105357672193e-06,
+            "defined": 3,
+            "total": 3
+          }
+        },
+        "20.0": {
+          "POD": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "FAR": {
+            "mean": null,
+            "sd": null,
+            "defined": 0,
+            "total": 3
+          },
+          "CSI": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          },
+          "HSS": {
+            "mean": 0.0,
+            "sd": 0.0,
+            "defined": 3,
+            "total": 3
+          }
+        }
+      }
+    }
+  ],
+  "daily": {
+    "calendar_dates": 245,
+    "present_dates": 245,
+    "present_windows": 963,
+    "full_dates": [],
+    "max_windows_per_date": 4,
+    "missing_windows": 10797,
+    "hours_utc": {
+      "05:30": 242,
+      "17:30": 244,
+      "23:30": 237,
+      "11:30": 240
+    },
+    "no_zero_fill": true,
+    "new_protocol_needed": "Non-analysis-hour GFS alignment and common eligible complete days",
+    "provisional_core_estimate": {
+      "new_scene_forwards": 161955,
+      "linear_wall_hours": 70.2292416445241,
+      "linear_source_bytes": 4480124857480.748,
+      "linear_source_instances": 1337011.6822429907,
+      "basis": "Linear scaling of 15 saved passes; excludes B0/B1, labels, new eligibility checks; NOT_AN_EXECUTABLE_BUDGET"
+    }
+  },
+  "terrain_budget": {
+    "saved_prediction_bytes": 9547470594,
+    "files": 1089,
+    "max_seconds": 600,
+    "max_additional_ram_bytes": 536870912,
+    "gpu_inference": 0,
+    "checkpoint_loads": 0,
+    "raw_observation_reads": 0,
+    "retries": 0
+  },
+  "new_training": 0,
+  "new_inference": 0,
+  "final_2025": "FROZEN_NO_ACCESS",
+  "source_gaps": [
+    "科研原则.txt：已查本轮附件、Downloads、Desktop、OneDrive及科研工作区，未找到原件",
+    "指定20261029导师汇报文件未找到；采用可用20261029 Tier0工作簿作格式参考、20261031核验收据作数值来源",
+    "策略一、二旧检查点及原评价报告位于当前不可用H盘；只继承已保存且通过一致性门槛的结果",
+    "策略一、二与策略三至九样本人口不同，禁止直接作严格配对归因",
+    "现有W/L/M未找到训练集冻结分位数阈值，不用开发集拟合阈值",
+    "当前策略九是单SP04条件调制实现，策略名中的多尺度不代表已有多尺度证据"
+  ]
+}
