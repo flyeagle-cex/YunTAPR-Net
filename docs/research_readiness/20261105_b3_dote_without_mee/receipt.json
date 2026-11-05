@@ -1,0 +1,86 @@
+{
+  "status": "COMPLETE_WITH_LIMITATIONS",
+  "verified_at": "2026-11-05T14:56:05.719332+00:00",
+  "conclusion_zh": "四项概率与条件分布指标小幅改善；RMSE略升，强雨检出未改善。单seed不能认定稳定或全面提升。",
+  "protocol": {
+    "seed": 2029,
+    "epochs": 9,
+    "endpoint": "FIXED_E9",
+    "train_year": 2023,
+    "dev_year": 2024,
+    "train_scenes": 959,
+    "dev_scenes": 963,
+    "dev_pixel_times": 3303090,
+    "rain_pixel_times": 407820,
+    "loss": "E0",
+    "schedule": "UNCHANGED_50_EPOCH_PREFIX",
+    "same_initial_backbone_and_heads": true,
+    "same_nine_training_orders": true,
+    "additional_parameters": 3136,
+    "direct_GFS_MEE_branch": false,
+    "direct_static_branch": false,
+    "GFS_wind_moisture_pressure_for_DOTE": true,
+    "DOTE_scale": "SP04",
+    "point_rule": "p * mean(expm1(32 conditional log1p rainfall quantiles)); researcher-confirmed approximation",
+    "classification": "FLOAT32_STRICT_GREATER",
+    "daily_interpolation_protocol_used": false
+  },
+  "actual_execution": {
+    "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+    "at": "2026-11-05T14:49:49.285782+00:00",
+    "model": "B3_DOTE_ONLY",
+    "seed": 2029,
+    "epochs": 9,
+    "optimizer_updates": 4320,
+    "source_bytes": 477571953840,
+    "source_opens": 142813,
+    "wall_seconds": 12841.046999999999,
+    "metadata_usage": {
+      "bytes": 306524643,
+      "opens": 2461
+    },
+    "proposal_sha256": "1cf0060632ab129f1370875f8151bf099f85dd0fc54d7da8bc510f6ea41c3d9e",
+    "final_2025": "FROZEN_NO_ACCESS"
+  },
+  "prior_zero_payload_startup_charge": {
+    "optimizer_updates": 0,
+    "scientific_source_bytes": 0,
+    "gpu_computations": 0,
+    "wall_seconds": 10,
+    "metadata_bytes": 67108864,
+    "metadata_opens": 2048
+  },
+  "cumulative_wall_charge_seconds": 12851.046999999999,
+  "cumulative_metadata_charge_bytes": 373633507,
+  "future_retries": 0,
+  "replay": 0,
+  "final_2025": "FROZEN_NO_ACCESS",
+  "candidate_checkpoint_receipt": {
+    "model": "B3_DOTE_ONLY",
+    "epoch": 9,
+    "updates": 4320,
+    "checkpoint_sha256": "6cc3b2ffe446ffcabfbe5f8ea3b4b0e2fbe81670219bc391e0d94c8943dc9a09",
+    "validation_receipt_sha256": "a794b0783aab29c8d07f7b9a876f7e5ed6006db89dfd3a3a3e4ac9dccb311e35",
+    "code_content_sha256": "ab44a40f0347352752036edc5671864705e1fbf8d1d3915a1e70651f26ce4c48"
+  },
+  "baseline_checkpoint_sha256": "c7780bc6e45992639c90339c88553fe3a722f6d9681bd247a82ad2dce0c08283",
+  "common_initial_sha256": "a8a0731e309d6ddd1765a753707bf334e1f1fd7f66d7b24e581748ddfe7ddc2e",
+  "baseline_bias_mm_h": 0.03503971754103649,
+  "result_sha256": "0633198797f6dcd19621f39089346003a872ab2780ccf73b3bc500f0e7ee0d74",
+  "workbook": {
+    "path": "outputs/01a1a906-f017-71f3-bb3f-19b961274f10/YunTAPR-Net_无GFS直接融合_DOTE消融对照_20261105.xlsx",
+    "sha256": "796409141f6ffadf1ca79e927f97cafa76fe5d0ca190e92e44838ec739ca7940"
+  },
+  "code_files_sha256": {
+    "src/yuntapr/experimental/research_readiness/dote_without_mee.py": "0258e1acd560f157bedb93988c447af7bc3c824848265b91e34c65a1f68d3901",
+    "tests/research_readiness/test_dote_without_mee.py": "2647a3fe30668f298104f74b85a61c4604315ca65e9f30ce3d6e90097135e945",
+    "tools/research_readiness/train_b3_dote_only_20261105.py": "9438ee4e5b6ab86e543c23a3293e5e6b2027e07ec54070e9e07632dc336244d0",
+    "tools/research_readiness/start_b3_dote_only_20261105.py": "7aac097bcc1b04d762979abdeacd47da9a0db27fb58a38871a0dffbea33e074d",
+    "tools/research_readiness/stage_evaluation_20261105.py": "c4f5c5f893b3b67ed3329d4953cee3aed767eab3ce698a655401bd31e05bc6ea"
+  },
+  "limitations": [
+    "Single seed and the same development year; no significance or final-test generalization claim.",
+    "DOTE representation and additional parameters are jointly changed; no isolated physical causal effect.",
+    "FAR with TP+FP=0 is undefined and shown as an em dash, never imputed as zero."
+  ]
+}

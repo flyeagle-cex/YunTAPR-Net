@@ -1,0 +1,169 @@
+{
+  "status": "COMPLETE_FIXED_E9_SINGLE_SEED_COMPARISON",
+  "seed": 2029,
+  "models": [
+    "B3",
+    "B3_DOTE_ONLY"
+  ],
+  "metrics": {
+    "brier": {
+      "baseline": 0.09957884578407393,
+      "candidate": 0.098840043810711,
+      "difference": -0.0007388019733629292
+    },
+    "auroc": {
+      "baseline": 0.8880247781349105,
+      "candidate": 0.890230832782724,
+      "difference": 0.002206054647813427
+    },
+    "average_precision": {
+      "baseline": 0.5707417679094422,
+      "candidate": 0.5777392723944595,
+      "difference": 0.006997504485017347
+    },
+    "conditional_pinball": {
+      "baseline": 0.12925806665118195,
+      "candidate": 0.1288159815380511,
+      "difference": -0.00044208511313084675
+    },
+    "rmse_mm_h": {
+      "baseline": 0.8352277080153362,
+      "candidate": 0.8369110714687488,
+      "difference": 0.0016833634534125785
+    }
+  },
+  "candidate_point_metrics": {
+    "n_valid": 3303090,
+    "rmse_mm_h": 0.8369110714687488,
+    "bias_mm_h": 0.03001275362547736,
+    "squared_sum": 2313550.765342378,
+    "bias_sum": 99134.82637277801,
+    "counts": {
+      "0.1": {
+        "TP": 384808,
+        "FP": 1234099,
+        "FN": 23012,
+        "TN": 1661171
+      },
+      "1.0": {
+        "TP": 57884,
+        "FP": 45135,
+        "FN": 103463,
+        "TN": 3096608
+      },
+      "5.0": {
+        "TP": 642,
+        "FP": 253,
+        "FN": 25019,
+        "TN": 3277176
+      },
+      "10.0": {
+        "TP": 0,
+        "FP": 1,
+        "FN": 5516,
+        "TN": 3297573
+      },
+      "20.0": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 717,
+        "TN": 3302373
+      }
+    },
+    "metrics": {
+      "0.1": {
+        "POD": 0.9435731450149576,
+        "FAR": 0.762303825976415,
+        "CSI": 0.23436478900603502,
+        "HSS": 0.22732822555037285
+      },
+      "1.0": {
+        "POD": 0.35875473358661764,
+        "FAR": 0.4381230646773896,
+        "CSI": 0.28033436328590383,
+        "HSS": 0.4156623514276984
+      },
+      "5.0": {
+        "POD": 0.025018510580257978,
+        "FAR": 0.28268156424581004,
+        "CSI": 0.024774253299374854,
+        "HSS": 0.04785206015766127
+      },
+      "10.0": {
+        "POD": 0.0,
+        "FAR": 1.0,
+        "CSI": 0.0,
+        "HSS": -6.053842597958243e-07
+      },
+      "20.0": {
+        "POD": 0.0,
+        "FAR": null,
+        "CSI": 0.0,
+        "HSS": 0.0
+      }
+    },
+    "point_rule": "RESEARCHER_CONFIRMED_PROBABILITY_TIMES_MEAN_PHYSICAL_32_QUANTILES_APPROXIMATION",
+    "classification": "FLOAT32_STRICT_GREATER"
+  },
+  "baseline_contingency": {
+    "0.1": {
+      "TP": 385717,
+      "FP": 1272300,
+      "FN": 22103,
+      "TN": 1622970,
+      "N": 3303090,
+      "POD": 0.9458020695404835,
+      "FAR": 0.7673624576828826,
+      "CSI": 0.22957705401995096,
+      "HSS": 0.2185533282542212
+    },
+    "1.0": {
+      "TP": 59640,
+      "FP": 49127,
+      "FN": 101707,
+      "TN": 3092616,
+      "N": 3303090,
+      "POD": 0.3696381091684382,
+      "FAR": 0.45167192255003813,
+      "CSI": 0.2833604150631432,
+      "HSS": 0.4187246846857654
+    },
+    "5.0": {
+      "TP": 816,
+      "FP": 377,
+      "FN": 24845,
+      "TN": 3277052,
+      "N": 3303090,
+      "POD": 0.03179922840107556,
+      "FAR": 0.3160100586756077,
+      "CSI": 0.031338812504800674,
+      "HSS": 0.06012430772971935
+    },
+    "10.0": {
+      "TP": 5,
+      "FP": 6,
+      "FN": 5511,
+      "TN": 3297568,
+      "N": 3303090,
+      "POD": 0.0009064539521392314,
+      "FAR": 0.5454545454545454,
+      "CSI": 0.0009054690329590728,
+      "HSS": 0.0018026646093070458
+    },
+    "20.0": {
+      "TP": 0,
+      "FP": 0,
+      "FN": 717,
+      "TN": 3302373,
+      "N": 3303090,
+      "POD": 0.0,
+      "FAR": null,
+      "CSI": 0.0,
+      "HSS": 0.0
+    }
+  },
+  "baseline_q32_coverage": 0.9350497768623413,
+  "candidate_q32_coverage": 0.9362856162032269,
+  "description": "No direct GFS/MEE or static branch; GFS still drives physical DOTE. Added representation and3136 parameters are jointly tested.",
+  "limitation": "Single seed and same2024 Development year; no significance, physical-causality or final-test generalization claim."
+}
