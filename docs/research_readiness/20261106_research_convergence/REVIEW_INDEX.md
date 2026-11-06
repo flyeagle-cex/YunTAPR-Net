@@ -118,3 +118,12 @@ Harness已完成内部初稿的一次限定内容审核，结论PASS（两处非
 研究者报告外部观测验证当前无法完成，其余原目标继续。总控d813781b仅接受隔离工程范围。3辅助代理分别实现多尺度接口、DOTE控制与元数据对齐，交叉审查修复batch/有序容器契约，并明确窗口关系未核验。人工合成CPU最终43项通过；旧回归收集缺yaml未执行，历史失败保留。
 
 工作包、讨论、测试及保留检查见 ../20261106_core_completion_prepare/。LIVE.6为14页更新版，原LIVE.5和初稿保留。当前Harness及Git最终状态待同轮REVIEW_OUTCOME补记；科学NOT_VERIFIED，外部Stage4.5 PARTIAL，研究者NOT_ASSESSED。无真实载荷、模型执行或2025访问。
+
+
+### CORE-PREP限定审核与同步最终回执
+
+Harness独立静态+43项合成CPU审核PASS，首审7073B/59701143；JSON换行纠正后追加格式核验PASS，最终8478B/0E6FB0EB，首审前缀保留。Codex首审后暂存检查拦截CRLF，提交前停止；仅四JSON规范化LF，三业务JSON解析不变、VERIFICATION仅三项指纹更新，代码/测试/PDF不变。失败日志保留，没有绕过检查。
+
+Codex主体15文件36d6fe1e39da49e05566d442fe51d262d6db230a、Harness格式补充1c2539ca8455d37ad8eed1c4cd04fd6312a86bb6均已普通推送，Codex直接ls-remote核对一致。最终REVIEW_OUTCOME解释创建时PENDING字段，不改历史记录；此回执和本索引追加并未冒称提前通过Harness审核。
+
+工程PASS限定候选/合成检查/审核/主体同步，科学NOT_VERIFIED，外部PARTIAL，掌握NOT_ASSESSED。正式模型/真实映射/训练/新评价/2025没有新增执行；下一步仅可准备单独的精确科学方案和预算。

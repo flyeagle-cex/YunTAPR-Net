@@ -1,0 +1,166 @@
+{
+  "version": "CORE-PREP-20261106.1",
+  "recorded_local": "2026-11-06T18:46:16.299822+08:00",
+  "engineering_status": "PASS_BOUNDED_CANDIDATE_IMPLEMENTATION_SYNTHETIC_TESTS_PEER_REVIEW_AND_SUBSTANTIVE_GIT_SYNC",
+  "scientific_status": "NOT_VERIFIED",
+  "external_stage_4_5": "PARTIAL_RESEARCHER_REPORTED_CURRENTLY_UNAVAILABLE_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "controller_scope_message": "d813781b-3a9c-4c85-b2f4-9c6b0a42da49",
+  "substantive_commit": {
+    "branch": "collab/codex-20261102",
+    "sha": "36d6fe1e39da49e05566d442fe51d262d6db230a",
+    "files": 15,
+    "push": "SUCCESS",
+    "remote_reference": "DIRECT_LS_REMOTE_MATCH"
+  },
+  "reviewer": {
+    "branch": "collab/dsh-20261102",
+    "initial_commit": "9763c5dddd5df3f5f82d37b8373c55ee30987466",
+    "final_commit": "1c2539ca8455d37ad8eed1c4cd04fd6312a86bb6",
+    "push": "SUCCESS_AND_CODEX_DIRECT_LS_REMOTE_MATCH",
+    "path": "docs/audits/CORE_COMPLETION_PREP_REVIEW_20261106.md",
+    "bytes": 8478,
+    "sha256": "0e6fb0eb41867a815eaaac15468eeed819e89cf7030a93ce93e23c4a958c7ade",
+    "initial_review_bytes": 7073,
+    "initial_review_sha256": "597011438b21c42943f5d939a5e22c20411a8985bcbd5e8ce6332a44dec96311",
+    "initial_review_prefix_preserved": "DIRECT_VERIFIED",
+    "reviews": [
+      "PASS_STATIC_SOURCE_PLUS_43_CPU_SYNTHETIC_TESTS",
+      "PASS_FORMAT_ONLY_ADDENDUM_NO_TEST_RERUN"
+    ],
+    "did_not_verify": [
+      "real scientific payload or mapping",
+      "native encoder/decoder integration",
+      "scientific effectiveness",
+      "independent storms",
+      "full PDF pixel review"
+    ]
+  },
+  "tests": {
+    "codex": {
+      "count": 43,
+      "groups": [
+        13,
+        10,
+        20
+      ],
+      "failures": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "harness": "Independent same43 PASS; no rerun for LF-only addendum",
+    "old_broader_regression": "NOT_RUN_collection_failed_missing_yaml_no_install"
+  },
+  "post_review_format_correction": {
+    "recorded_local": "2026-11-06T18:35:28.374402+08:00",
+    "failure": "git diff --cached --check rejected CRLF as trailing whitespace; stopped before commit",
+    "review_scope": "Harness first PASS covered pre-normalization bytes; code/tests/PDF/tex unchanged",
+    "correction": "Four new JSON files normalized to LF; three artifact size/SHA entries updated in VERIFICATION only",
+    "files": {
+      "WORK_PACKAGES.json": {
+        "reviewed": {
+          "bytes": 8540,
+          "sha256": "64f29fa7f27debb00d4835b804de708fb7e19f05ce934a773168121be4ce36c3"
+        },
+        "normalized_before_manifest_update": {
+          "bytes": 8400,
+          "sha256": "59c3a263d7efc4081c0e47809049bb90f26998f7d88eac22edbece0e7f8896ba"
+        },
+        "json_semantics_unchanged": true
+      },
+      "MULTI_AGENT_DISCUSSION.json": {
+        "reviewed": {
+          "bytes": 3768,
+          "sha256": "26b34ee1884afbfabbf9d1d5b1ccfd1fd8d742adaa42385cd63bdc07047a78b5"
+        },
+        "normalized_before_manifest_update": {
+          "bytes": 3690,
+          "sha256": "e3737058fdb89b69395ddf703842ecc7d89ce2176393037525cfefd4f9e011c1"
+        },
+        "json_semantics_unchanged": true
+      },
+      "SYNTHETIC_CHECKS.json": {
+        "reviewed": {
+          "bytes": 1789,
+          "sha256": "21e5351a5cde000816721b8ccd81fa589aa558ac5585c89ede833de08a01f70a"
+        },
+        "normalized_before_manifest_update": {
+          "bytes": 1740,
+          "sha256": "2ed91ddb845e8783617659897b2afe5b565abc36f1404a5961d7935d1e58feb2"
+        },
+        "json_semantics_unchanged": true
+      },
+      "VERIFICATION.json": {
+        "reviewed": {
+          "bytes": 6922,
+          "sha256": "8443cbd188c3ac5466310f25caa90d3d6e466598dbe75c553656ec969f6c20c0"
+        },
+        "normalized_before_manifest_update": {
+          "bytes": 6756,
+          "sha256": "38d8df77abf73943257049c538f650c12cc96a0a80e922da8ce8b144ebb11e43"
+        },
+        "json_semantics_unchanged": true,
+        "final": {
+          "bytes": 6756,
+          "sha256": "1d2a084831cf50e5f41a8f6ae47bd53a190752e004d30804b5a63522ed7e0dbe"
+        },
+        "only_semantic_change": "Three normalized artifact size/SHA entries updated; all other fields unchanged."
+      }
+    },
+    "full_failure_log": "staged_crlf_failure.txt",
+    "code_tests_pdf_unchanged": true,
+    "new_scientific_execution": false
+  },
+  "publication": {
+    "pdf": {
+      "bytes": 556620,
+      "sha256": "113cba8ea0312808c042fc7320664fe014ae950eae0ddcf93f41158eceb800f5"
+    },
+    "tex": {
+      "bytes": 36812,
+      "sha256": "cdb2a5505b36f2bfbd4016d10bc777a2dbedd61f0c84dc9df4b8cc0080ff98c7"
+    },
+    "pages": 14,
+    "visual_pages": [
+      1,
+      2,
+      11,
+      12,
+      13,
+      14
+    ],
+    "earlier_LIVE5_and_internal_draft": "UNCHANGED"
+  },
+  "safety": {
+    "old_defaults_and_contract": "SELECTED_IMPACTED_8_SOURCES_HASH_MATCH",
+    "shared_protected_files": {
+      "DECISIONS.md": {
+        "bytes": 1670,
+        "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+      },
+      "COLLABORATION_RULES.md": {
+        "bytes": 24639,
+        "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+      },
+      ".gitattributes": {
+        "bytes": 9,
+        "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+      }
+    },
+    "shared_historical_prefixes": "PROJECT_STATE_CODEX_DSH_DIRECT_VERIFIED",
+    "real_payload_or_model_evaluation": false,
+    "training_or_optimizer_updates": 0,
+    "final_test_2025_access": false,
+    "shared_git_write": false,
+    "main_update_or_force_push": false
+  },
+  "pending_work": [
+    "Original scientific DOTE control definitions and source-bound training package",
+    "Formal native multiscale encoder/mapping/decoder integration",
+    "Actual data identity/window semantics and event definition",
+    "Independent final/operational evaluation under separate approval",
+    "Researcher personal mastery confirmation"
+  ],
+  "historical_pending_fields": "WORK_PACKAGES/MULTI_AGENT_DISCUSSION/VERIFICATION are creation-time records; current limited review and Git outcome recorded here without rewriting their history.",
+  "receipt_review_boundary": "This final receipt/index are factual closure additions after substantive review, not pre-reviewed by Harness. Own final receipt commit SHA is recorded externally in handoff/controller to avoid self-reference."
+}
