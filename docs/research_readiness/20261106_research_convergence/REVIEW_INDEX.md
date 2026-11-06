@@ -111,3 +111,10 @@ Harness已完成内部初稿的一次限定内容审核，结论PASS（两处非
 非阻断编辑事项已记入 [结项回执](../20261106_internal_paper_draft/REVIEW_OUTCOME.json)：C2应读为“B5除AUROC外四项不利”；2.9节AUROC/AP应明确是发生降水R>0.1目标，非强雨R>20排序。正文与源值的实际方向未变，保留本轮已审PDF/tex字节，留待下一编辑修订；不声称建议已改进文件。
 
 工程PASS仅本轮内部写作、来源/边界审核及各自Git；科学NOT_VERIFIED、H1/H2 INCONCLUSIVE、研究者NOT_ASSESSED、Stage4.5 PARTIAL。初稿不是投稿终稿，未选择最终模型、未新增指标或2025权限。初始标记调用重复的规范偏差与排版失败真实保留；ChatGPT浏览器观察被自动审批拒绝后仅用授权API。原收据按创建时点阅读，本次仅结项回执与索引补记，不冒称新增闭环字节预先获审。
+
+
+## CORE-PREP-20261106.1：原目标核心缺口工程准备
+
+研究者报告外部观测验证当前无法完成，其余原目标继续。总控d813781b仅接受隔离工程范围。3辅助代理分别实现多尺度接口、DOTE控制与元数据对齐，交叉审查修复batch/有序容器契约，并明确窗口关系未核验。人工合成CPU最终43项通过；旧回归收集缺yaml未执行，历史失败保留。
+
+工作包、讨论、测试及保留检查见 ../20261106_core_completion_prepare/。LIVE.6为14页更新版，原LIVE.5和初稿保留。当前Harness及Git最终状态待同轮REVIEW_OUTCOME补记；科学NOT_VERIFIED，外部Stage4.5 PARTIAL，研究者NOT_ASSESSED。无真实载荷、模型执行或2025访问。

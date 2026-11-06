@@ -1,0 +1,78 @@
+{
+  "version": "CORE-PREP-20261106.1",
+  "recorded_local": "2026-11-06T18:20:34.830119+08:00",
+  "scope": "Three user-requested auxiliary agents with independent perspectives; not a substitute for Harness review",
+  "participants": [
+    {
+      "task": "dtfm_design",
+      "contribution": "Located reusable multi-scale primitive versus single-scale DynamicTerrainModel; implemented wrapper and tests",
+      "initial_report": "10 synthetic tests PASS; later cross-review requested batch/order hardening",
+      "scientific_limits": [
+        "No native encoder/decoder integration",
+        "No real mapping validation",
+        "Equal nominal parameter count is not equal effective capacity"
+      ]
+    },
+    {
+      "task": "dote_controls",
+      "contribution": "Mapped original controls; implemented direction and feature availability candidates",
+      "initial_report": "9 synthetic array tests PASS; root added existing O/W/L/M integration case",
+      "scientific_limits": [
+        "Real masks retained",
+        "32/64 structurally zero width16 projection weights for removal candidates",
+        "No no-mask reconstruction or unbound q derivation"
+      ]
+    },
+    {
+      "task": "tail_evaluation",
+      "contribution": "Separated tail amplitude/ranking/decision issues; implemented metadata alignment and calendar grouping",
+      "initial_report": "20 synthetic metadata tests PASS after declared-manifest completeness checks",
+      "scientific_limits": [
+        "Caller metadata only",
+        "Events NOT_IDENTIFIED",
+        "Calendar blocks not independent storms",
+        "H1 uniform positive scaling not an AP improvement guarantee"
+      ]
+    }
+  ],
+  "cross_reviews": [
+    {
+      "reviewer": "dtfm_design",
+      "target": "dote_control_candidates.py",
+      "result": "PASS_WITH_LIMITATIONS_SOURCE_REVIEW_ONLY",
+      "limits": "Control seeds/scene provenance still require external binding; zero-gradient weight counts conditional on historical width16 interface."
+    },
+    {
+      "reviewer": "dote_controls",
+      "target": "evaluation_alignment_candidate.py",
+      "result": "PASS_WITH_LIMITATIONS_SOURCE_REVIEW_ONLY",
+      "action": "Root added explicit calendar basis and false window-relationship/extent verification flags; no real-data alignment claim."
+    },
+    {
+      "reviewer": "tail_evaluation",
+      "target": "multiscale_candidate.py",
+      "result": "SOURCE_FINDINGS_BEFORE_FORMAL_REVIEW",
+      "findings": [
+        "Cross-scale same nonzero batch not enforced by inherited primitive",
+        "Unordered scale container not explicitly rejected"
+      ],
+      "action": "Wrapper now requires ordered Sequence and nonempty 4D Tensor features with same nonzero batch; 3 rejection tests added and passed. Source findings were not failed execution."
+    }
+  ],
+  "agreement": [
+    "Reuse completed successful experiments; no whole B0-B8 retraining",
+    "Separate current engineering preparation from future scientific execution",
+    "DOTE minimal identification controls before larger DTFM structural package",
+    "External observations currently unavailable does not complete Stage4.5",
+    "Hypotheses may fail; no outcome-driven selection of seed, threshold or method"
+  ],
+  "controller_scope": {
+    "id": "d813781b-3a9c-4c85-b2f4-9c6b0a42da49",
+    "decision": "ACCEPTED_BOUNDED_ENGINEERING_SCOPE_ONLY",
+    "researcher_experiment_authorization": false,
+    "source_thread": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+    "earlier_incomplete_reply": "504397be-ed19-46ac-b505-96fc60d120e1 contained only 我的; not treated as a plan or approval"
+  },
+  "scientific_status": "NOT_VERIFIED",
+  "harness_review": "PENDING"
+}

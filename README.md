@@ -1,3 +1,15 @@
+# 2026-11-06 CORE-PREP-20261106.1 / LIVE-20261106.6
+
+研究者明确独立观测验证当前无法完成；原Stage4.5缺口保留，不记PASS或自动豁免。其余原目标已由3个辅助代理讨论并开始隔离工程准备，总控限定范围见d813781b。
+
+- 三个新候选：显式多尺度融合接口、DOTE方向/可用性控制、场景身份与日历分组；未接旧默认、训练入口或真实数据。
+- 最终人工合成CPU检查43项通过（13/10/20）；旧扩展回归在收集阶段缺PyYAML而未执行，不安装依赖、不冒称通过。
+- 多尺度接口仍未接原生encoder/decoder和真实物理映射；元数据一致性不证明载荷正确；天气事件NOT_IDENTIFIED。
+- 最新总计划：output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_6.pdf；可修改源仍为同目录YunTAPR-Net_Master_Plan_Live.tex。旧LIVE.5及初稿保留。
+- 证据：docs/research_readiness/20261106_core_completion_prepare/。本轮工程等待Harness限定审查和Git闭环；科学NOT_VERIFIED，掌握NOT_ASSESSED。后续真实实验/2025无新增批准。
+
+---
+
 # YunTAPR-Net
 
 ## 2026-11-06 项目总进度

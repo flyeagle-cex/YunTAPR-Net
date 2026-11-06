@@ -1,0 +1,49 @@
+{
+  "version": "CORE-PREP-20261106.1",
+  "recorded_local": "2026-11-06T18:21:29.381484+08:00",
+  "scope": "ARTIFICIAL_ARRAY_AND_TENSOR_CPU_CHECKS_ONLY",
+  "suites": [
+    {
+      "path": "tests/research_readiness/test_multiscale_candidate.py",
+      "tests": 13
+    },
+    {
+      "path": "tests/research_readiness/test_dote_control_candidates.py",
+      "tests": 10
+    },
+    {
+      "path": "tests/research_readiness/test_evaluation_alignment_candidate.py",
+      "tests": 20
+    }
+  ],
+  "tests_run": 43,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "elapsed_test_seconds": 0.1202765999987605,
+  "result": "PASS",
+  "prior_collection_failure": {
+    "phase": "optional_existing_regression_collection",
+    "result": "FAIL_BEFORE_TEST_EXECUTION",
+    "exception": "ModuleNotFoundError: No module named yaml",
+    "trigger": "tests/core_stage2/test_stage2.py collection imports population -> himawari_b13 -> sp04_mapping -> contracts.loader",
+    "tests_executed": 0,
+    "action": "Stopped expanded collection; no dependency installed. Selected the three isolated new suites only. Existing regression NOT_RUN; not reported as passing."
+  },
+  "scientific_status": "NOT_VERIFIED",
+  "real_data_alignment": "NOT_VERIFIED",
+  "formal_multiscale_model": "NOT_INTEGRATED",
+  "events": "NOT_IDENTIFIED",
+  "optimizer_updates": 0,
+  "real_payload_reads": 0,
+  "new_model_evaluation": false,
+  "gpu_used": false,
+  "new_dependencies_installed": false,
+  "additional_checks_since_39": [
+    "Cross-scale nonzero equal batches",
+    "Ordered Sequence requirement",
+    "Malformed/empty feature rejection",
+    "Existing physical O/W/L/M windward-leeward-crosswind integration",
+    "Explicit unresolved timestamp/window metadata flags"
+  ]
+}

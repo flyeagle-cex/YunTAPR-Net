@@ -33,20 +33,20 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.5}\qquad 状态截至：2026年11月06日17时19分（北京时间）
+版本：\texttt{LIVE-20261106.6}\qquad 状态截至：2026年11月06日18时13分（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{IMERG参考下的开发集成果收敛与证据整理。}
+\status{IMERG参考下的成果收敛与核心缺口工程准备。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 已将既有聚合结果整理为内部Results / Discussion / Limitations初稿，包含10项主张及12份来源索引。两份旧分析/验收报告保留，不另起完整投稿终稿。\evi{S15}
-\item 正文并列呈现B3至B4、真实DOTE至ZERO、B7至B8的三Seed收益与反例，补充B5/B6和B3\_DOTE\_ONLY单Seed结果。\evi{S15}
-\item 强雨排序、点估计零检出、q32欠覆盖和P20结构界分别解释；T12历史报告及原生输出不完整性限制保留。没有重算指标或生成数据图。\evi{S4,S15}
-\item 沿用IMERG V07 Final参考路线；外部真实性、机制、H1/H2和业务验收仍未完成，2025封存。文稿完成不等于科学验收。\evi{S13,S15}
+\item 研究者明确第6项独立观测验证当前无法完成，要求其余工作由多个智能体讨论并开始解决。Stage 4.5仍PARTIAL，不自动豁免原目标或以IMERG代作独立真值。\evi{S16}
+\item 三个辅助代理分别核对多尺度融合、DOTE反驳控制、强雨尾部与场景对齐；本轮仅新增隔离候选和人工合成CPU检查，不接历史训练默认。\evi{S16}
+\item 现有多尺度融合原语可复用，正式B8仍仅单SP04；候选接口不代表原生编码器、真实网格映射或解码器已集成。\evi{S16}
+\item 原V3、三Seed和初稿继续继承。真实载荷、训练、推理、校准、新评价、最终模型与2025无新增执行额度。\evi{S16}
 \end{itemize}
 
 本轮工程状态以限定审查和Git完成回执为准；项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本版的下一步建议均为\texttt{PROPOSED}，不是实验启动书。
@@ -61,7 +61,7 @@
 \item \textbf{Q3 静态地形。}B5/B6回答高程之外的静态地形是否有用。当前单Seed、容量与变量同时变化，不支持稳定普遍收益。
 \item \textbf{Q4 动态地形。}DOTE的风、地形梯度和水汽组合是否产生可归因的收益。公式和代码实现可追溯，物理机制尚未证实。
 \item \textbf{Q5 融合方式。}DTFM是否优于concat。现有B7/B8是单SP04尺度替换对照；完整多尺度主张尚未实现并验收。
-\item \textbf{Q6 独立真实性。}模型对IMERG的结果能否迁移到独立观测。原计划要求至少一种站点、雷达或DPR-CMB支撑；当前缺少完成证据。
+\item \textbf{Q6 独立真实性。}模型对IMERG的结果能否迁移到独立观测。原计划要求至少一种站点、雷达或DPR-CMB支撑；当前缺少完成证据；研究者本轮报告当前无法完成，原目标缺口保留。
 \end{enumerate}
 以上问题来自原计划，当前答案按已有证据分级，不能由模型名称或原计划目标反推为成果。\evi{S0,S2,S3}
 
@@ -234,12 +234,47 @@ NASA说明IMERG经CORRA校准，CORRA利用DPR/GMI。这支持“存在共享上
 
 Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是项目数据划分，继续封存。此次仅修订计划、证据解释与进度，不授予下载、载荷读取、训练、推理、校准、bootstrap或新评价权限。研究者知识状态仍NOT\_ASSESSED。
 
+\pageheading{6D\quad 多智能体讨论后的最小工程起点}{CORE-PREP-20261106.1；候选实现和合成检查，不是实验结果。}
+\section*{三个隔离候选}
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+\item \textbf{显式多尺度融合接口。}复用既有FusionCandidate，要求两个以上不同尺寸、不同物理网格的尺度及逐尺度条件、掩膜。重复SP04、错位或缺少映射时拒绝，没有自动resize。仍未接原生encoder/decoder，真实映射和完整多尺度模型均PENDING。
+\item \textbf{DOTE方向与特征可用性控制。}候选固定方向和按场景稳定随机旋转只作用于控制输入，不改MEE、原DEM或旧PhysicalDote。去M、单层置零保留mask时，只称FEATURE\_AVAILABILITY；不宣称等有效容量或物理因果。
+\item \textbf{场景身份与日历分组。}只接受调用方提供的元数据，核对预测/标签和预先指定完整场景清单、UTC窗口、物理网格、mask、像元顺序及单位。日历分组不能生成独立天气事件ID，六小时样本不能冒充连续半小时轨迹。日历以场景时间分组；参考窗口端点关系和日历边界未核验，正式接入前须冻结其语义。
+\end{enumerate}
+以上模块不读取科学载荷、权重或缓存，不提供正式启动器。人工合成检查只验证接口、代数和拒绝条件，真实科学效果继续NOT\_VERIFIED。检查数量与实际结果见同轮JSON回执。\evi{S16}
+
+\section*{讨论中发现的不可直接实现项}
+\begin{itemize}
+\item 已经post-mask的场不能把false改true还原地下压力层真实风；必须有另行批准的源字段与科学定义。当前明确拒绝这种还原。
+\item 没有绑定比湿q输入时，不能临时从RH/T派生并宣称完成PWAT对q的控制。该对照的源链与单位定义仍待解决。
+\item 零输出初始化初次反向会阻塞上游梯度；人工释放零门后的可达性不代表真实训练中的同等优化机会。
+\end{itemize}
+
+\pageheading{6E\quad 后续包与失败即停条件}{不机械补训全阶梯，不为使假设成立择优重放。}
+\begin{tabularx}{\textwidth}{@{}p{1.1cm}p{3.5cm}>{\raggedright\arraybackslash}X@{}}
+\toprule 包 & 要解决的问题 & 当前下一步及边界\\\midrule
+P1 & 主表人口和重复性 & 继承已完成三Seed；B5/B6如承担正式Q3主结论，准备2030/2031配对包。早期人口和身份限制单独处理，不直接拼表。\\
+P2 & DOTE表征与机制 & 先冻结方向、mask、去M及对照问题、主指标和否证规则，再申请最小实验；q/no-mask未具备输入时保持不可执行。\\
+P3 & 多尺度DTFM & 明确原生501/251/126/63坐标和保守条件映射，集成encoder与decoder，匹配concat。现有SP04结果不可代替。\\
+P4 & 强雨与尾部 & 原ABC及P20结构界继承；H1/H2分别审查，不把统一缩放视作AP保证，不把有限分位补全假设视作唯一真实概率。\\
+P5 & 过程与业务 & 优先查已保存密集结果的合法索引；完整事件、FSS、区域及业务到达时效缺口另行设计，不自动推理填图。\\
+P6 & 最终冻结与掌握 & 开发选择结束后，由研究者冻结最终模型和一次测试协议；2025继续封存，研究者掌握仍需本人留痕。\\
+\bottomrule
+\end{tabularx}
+
+\section*{授权和科学裁定}
+新增真实实验预算尚未建立；旧更新数、读字节、6小时或24GiB仅作历史成本依据，不能自动成为新额度。需单独绑定代码/科学协议、数据路径及清单、模型/Seed、读算写/CPU/GPU/内存/磁盘/墙钟上限、单次性与停止规则。\evi{S16}
+
+场景或单位不符、掩膜及像元身份不一致、候选数值前提失败时停止相关计算，不删样本或静默修复；预算消费和失败不自动重试。独立E未落实不作确认性H1/H2，外部资料缺口不被同源IMERG填补。原假设允许被否证，不预定DTFM或DOTE胜出。
+
+总控负责路线收敛，Codex负责工程准备，Harness负责独立审核，研究者决定科学和预算。本轮限定审核与Git最终状态以外部回执为准；科学NOT\_VERIFIED，知识NOT\_ASSESSED。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
 \begin{itemize}
 \item 数据：解释半小时雨强与累计量、missing与0、mask、因果时间对齐及GFS vintage。
-\item 模型：独立说明发生概率与条件分位、DOTE单位/压力有效性、DTFM实际单尺度实现。
+\item 模型：独立说明发生概率与条件分位、DOTE单位/压力有效性、历史DTFM单尺度与新候选尚未正式集成的区别。
 \item 实验：解释人口与容量混杂、三Seed和独立事件的区别，能追溯checkpoint与评价来源。
 \item 结果：解释点估计零检出与排序信息同时存在，解释q32覆盖分母、概率界与精确概率差别。
 \item 科学质疑：指出IMERG参考偏差、外部验证源链、无显著性/因果/业务结论的边界。
@@ -262,7 +297,7 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 
 \pageheading{8\quad 来源、版本与本轮变更回执}{本页给出复核入口。完整文件指纹以同轮JSON收据及Git提交为准，避免自引用。}
 \small
-\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=6pt]
+\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=4pt]
 \item[S0] 原2026-09-24 V1.3正式计划PDF，20页，1,561,261字节。Codex前版直接核对§9、§11、Stage-Gate和知识Gate；本版继承，未改原文件。SHA256：\par\texttt{bd3af5e3ebe1fe6e28b2b31699babecdd}\\\texttt{c506412310fd96eb80d1c695aabb5fe}
 \item[S1] \path{config/science_contract_v1.1.yaml}。后续冻结的具体实验口径；不倒写原V1.3。SHA256见合并回执。
 \item[S2] \path{STAGE_ACCEPTANCE.md}、\path{EXPERIMENT_MATRIX.csv}、\path{METRICS.csv}。现有阶段与端点索引，本轮没有逐权重重验。
@@ -276,12 +311,13 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 \item[S13] \path{docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json}。研究者资料事实与条件性IMERG偏好、总控\texttt{0314e4a3}的限定文本及证据边界；并非研究者的新数据/实验批准。
 \item[S14] NASA，\textit{IMERG V07 Technical Documentation}（2023-07-13）官方说明。\url{https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation}。本轮仅核对公开说明，未获取观测；保留V07历史协议而不自动追随新版本。
 \item[S15] \path{docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json}，绑定10项主张、12份已有来源、JSON字段与反例，附排版数字绑定；对应\path{output/pdf/YunTAPR-Net_Internal_Results_Discussion_Draft_20261106.tex}和同名PDF。内部初稿，不是新实验或科学验收。
+\item[S16] \path{docs/research_readiness/}\\\path{20261106_core_completion_prepare/}。WORK\_PACKAGES、合成检查及审核回执；候选准备，不是实验或2025批准。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \end{description}
 \normalsize
-本版变更：将既有IMERG参考结果转化为内部结果/讨论/局限初稿及逐主张证据索引；保留三Seed混合方向、强雨和尾部反例、外部验证及历史归档缺口。旧方案、两份旧报告、预算与2025封存保持，不新增计算或数据获取。
+本版变更：依据研究者指令保留独立外部验证缺失，推进其余原目标的隔离工程准备；新增显式多尺度接口、DOTE控制及场景对齐候选和后续工作包。初稿与旧LIVE.5及更早版本保留，未改变旧默认、科学协议或预算，未新增科学载荷与2025访问。
 
 工程、科学、知识三状态分别记录。本轮完整工程收尾与限定审核结果追加在项目索引和各自交接中；科学仍\texttt{NOT\_VERIFIED}，研究者掌握仍\texttt{NOT\_ASSESSED}。
 \end{document}

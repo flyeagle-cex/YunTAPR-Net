@@ -1,0 +1,140 @@
+{
+  "version": "CORE-PREP-20261106.1",
+  "status": "PROPOSED_ENGINEERING_PREPARATION_NOT_EXPERIMENT_AUTHORIZATION",
+  "research": "云南全境复杂地形约束下的近实时卫星概率降水反演",
+  "researcher_direction": "第6点独立观测验证当前无法完成；其余由多个智能体讨论解决方案并开始解决。",
+  "external_validation": {
+    "availability": "RESEARCHER_REPORTED_CURRENTLY_UNAVAILABLE",
+    "scientific_status": "NOT_VERIFIED",
+    "stage_4_5": "PARTIAL",
+    "completion_waiver": false,
+    "restriction": "保留原目标缺口，不以IMERG一致性代作独立真实性验证，不推断所有公开资料不存在。"
+  },
+  "roles": {
+    "controller": "既有网页ChatGPT总控，收敛科研路线；回复不是研究者实验预算批准。",
+    "codex": "自身工作分支的隔离候选实现、合成检查、证据与计划维护。",
+    "subagents": "研究者明确授权的三个辅助工程/方法讨论代理，不替代Harness独立审核。",
+    "harness": "既有DSH对话和自身工作区的独立审核，不启动训练，不改Codex文件。",
+    "researcher": "科学方案、资源预算、最终模型、最终测试和本人知识掌握的最终决定。"
+  },
+  "current_execution_scope": {
+    "allowed": [
+      "读取源码、配置、管理文档和已保存聚合收据",
+      "新增隔离候选纯函数或融合接口，不改变旧默认、冻结执行器或科研协议",
+      "人工合成小数组/小张量CPU检查，不进行优化器更新",
+      "自身分支文档与脱敏工程证据同步，维护总计划及自己的交接"
+    ],
+    "not_authorized": [
+      "真实预测/标签NPZ、原始气象、受限缓存、权重载荷读取",
+      "训练、恢复、真实模型推理、新模型评价、拟合或bootstrap",
+      "2025 Final Test任何访问或最终模型选择",
+      "新增依赖安装、main更新、强推、历史改写、Git配置或凭据修改"
+    ],
+    "scientific_status": "NOT_VERIFIED",
+    "researcher_mastery": "NOT_ASSESSED"
+  },
+  "work_packages": [
+    {
+      "id": "P0",
+      "name": "隔离工程起点",
+      "current_deliverables": [
+        "src/yuntapr/experimental/research_readiness/multiscale_candidate.py",
+        "src/yuntapr/experimental/research_readiness/dote_control_candidates.py",
+        "src/yuntapr/experimental/research_readiness/evaluation_alignment_candidate.py"
+      ],
+      "acceptance": "人工合成检查通过、旧默认逐字节不变、Harness限定审核完成；不据此宣布科学有效。"
+    },
+    {
+      "id": "P1",
+      "name": "主消融人口和重复性",
+      "reuse": "B3/B4/B7/B8及ZERO三Seed、B5/B6的2029、PERP与B3_DOTE_ONLY的单Seed结果。",
+      "gap": "早期B0/B1人口及历史身份限制，B5/B6尚非三Seed。",
+      "next": "先区分主结论与探索性结果。B5/B6若承担原Q3正式主表，提出2030/2031重复包；不机械重训已有成功模型或补旧B0/B1。",
+      "execution": "REQUIRES_SEPARATE_FROZEN_PROTOCOL_AND_BUDGET"
+    },
+    {
+      "id": "P2",
+      "name": "DOTE机制与反驳性控制",
+      "reuse": "PhysicalDote、ZERO和PERP实现及已保存结果。",
+      "current_candidate": "固定方向、场景稳定随机旋转、去M及压力层信息可用性控制。",
+      "limits": [
+        "ZERO保留真实mask，128零输入权重无损失梯度；不能称等有效容量或物理因果。",
+        "非零方向控制改变联合分布，不保证完全等有效容量。",
+        "去M或单层置零是FEATURE_AVAILABILITY消融，仍有非活跃列。",
+        "post-mask支持不可恢复成无mask真实风；q_k输入未绑定，禁止从RH/T隐式代造。"
+      ],
+      "next": "冻结方向、种子来源、mask语义、主指标及否证规则，按辨识问题分包；不按最好Seed挑选控制。",
+      "execution": "REQUIRES_SEPARATE_SCIENTIFIC_APPROVAL_AND_BUDGET"
+    },
+    {
+      "id": "P3",
+      "name": "真正多尺度DTFM",
+      "reuse": "现有FusionCandidate支持多尺度；历史B8模型仅SP04单尺度。",
+      "current_candidate": "显式两个以上不同物理网格的融合接口，复用原公式和配对原语。",
+      "not_completed": "原生501/251/126/63编码器特征提取、各层真实坐标及条件映射、解码器接入和真实运行资源验证。",
+      "fairness": "公共条件投影和残差输出初始化、名义参数数目需核对；零输出初始化会暂时阻塞梯度，名义相等不等于函数族或有效容量相等。",
+      "next": "先冻结原生网格和映射规则，再集成候选模型；不以SP04池化冒充原生多尺度，不改变主干宽度、损失及输出分布来制造增益。",
+      "execution": "FORMAL_INTEGRATION_PENDING; NEW_TRAINING_NOT_AUTHORIZED"
+    },
+    {
+      "id": "P4",
+      "name": "强雨、尾部和完整评价",
+      "reuse": "已有V3/T12九模型排序、ABC、覆盖率及P20结构界；保留历史恢复完整性限制。",
+      "gap": "幅值不足、排序与决策问题未完全区分；完整概率质量/FSS/区域评价尚未验收。",
+      "next": "原ABC不改；H1/H2分别按已登记协议和独立性条件审查，仅选择回答问题所需的最小包。正的统一缩放不能保证AP改善；有限节点不给唯一精确P20。",
+      "execution": "NO_REAL_ARRAY_COMPUTATION_IN_THIS_PACKAGE"
+    },
+    {
+      "id": "P5",
+      "name": "场景身份、天气过程与业务时效",
+      "current_candidate": "只接收调用方元数据，验证场景/UTC/单位/窗口/grid/mask/pixel-order，保留日历分组。",
+      "limits": "scene_id与日历分组不等于独立天气事件；V3四UTC样本不能插补成连续半小时轨迹。",
+      "next": "在单独授权范围内先定位已有密集结果的实际索引，再决定缺少的连续事件、FSS和业务vintage/延迟证据；不为填图自动推理。",
+      "events": "NOT_IDENTIFIED",
+      "operational_acceptance": "NOT_VERIFIED",
+      "timestamp_limits": "按scene_time_utc日历分组；窗口端点角色和参考窗口日历边界尚未验证，结果显式False。正式接入前冻结timestamp_role、calendar_group_basis及跨日规则。"
+    },
+    {
+      "id": "P6",
+      "name": "最终冻结、独立测试与研究者掌握",
+      "next": "所有开发选择结束后，绑定最终模型、测试窗口和协议，由研究者另行决定一次性最终评价；当前2025继续封存。",
+      "knowledge_gate": "方法需本人能解释和实现简化版本；主创新需本人能质疑并设计反证。只有本人确认留痕可标CONFIRMED。",
+      "execution": "NOT_AUTHORIZED"
+    }
+  ],
+  "budget_policy": {
+    "new_experiment_budget": "NOT_ESTABLISHED",
+    "historical_costs": "只作提案测算依据，不是新额度；旧批准均已消费。",
+    "required_fields": [
+      "代码与科学协议版本",
+      "数据清单和允许路径",
+      "模型与Seed",
+      "读字节/次数",
+      "更新/推理/评价次数",
+      "CPU/GPU/内存/磁盘",
+      "墙钟",
+      "允许输出目录",
+      "单次性及失败即停",
+      "重试与重放边界"
+    ],
+    "no_promised_runtime_or_gain": true
+  },
+  "scientific_stop_rule": "允许假设被否证；不为使DOTE或DTFM胜出反复挑指标、Seed或追加方法。",
+  "sources": [
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+    "docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json",
+    "docs/research_readiness/20261106_research_convergence/EVALUATION_ENTRY_GATES.md",
+    "docs/research_readiness/20261106_research_convergence/T17_RISK_SCORE_FRAMEWORK.md",
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py",
+    "src/yuntapr/experimental/core_innovation/stage2/fusion.py",
+    "src/yuntapr/experimental/research_readiness/dote_physical_controls.py",
+    "src/yuntapr/experimental/research_readiness/dote_numeric_control.py"
+  ],
+  "controller_scope_message": {
+    "id": "d813781b-3a9c-4c85-b2f4-9c6b0a42da49",
+    "decision": "ACCEPTED_BOUNDED_ENGINEERING_SCOPE_ONLY",
+    "researcher_experiment_authorization": false,
+    "source_thread": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+    "earlier_incomplete_reply": "504397be-ed19-46ac-b505-96fc60d120e1 contained only 我的; not treated as a plan or approval"
+  }
+}
