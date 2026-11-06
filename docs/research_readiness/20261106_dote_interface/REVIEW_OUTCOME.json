@@ -1,0 +1,62 @@
+{
+  "version": "DOTE-INTERFACE-20261106.1",
+  "recorded_local": "2026-11-06T20:01:02.079607+08:00",
+  "engineering_status": "PASS_BOUNDED_INTERFACE_8_SYNTHETIC_CHECKS_PEER_REVIEW_AND_SUBSTANTIVE_GIT_SYNC",
+  "scientific_status": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "substantive_commit": {
+    "branch": "collab/codex-20261102",
+    "sha": "9ffde2a434bc7d5ccd8351adceabae8d87c869a7",
+    "files": 8,
+    "push": "SUCCESS_CODEX_DIRECT_LS_REMOTE_MATCH"
+  },
+  "reviewer": {
+    "branch": "collab/dsh-20261102",
+    "commit": "992ec28356f23b38d3b1e8591d59cb902ab4a5dd",
+    "path": "docs/audits/DOTE_INTERFACE_REVIEW_20261106.md",
+    "bytes": 5044,
+    "sha256": "bfd755a940d16dd21af518641f18a8b001ed903cab016c4ef6f0c08d8d5d262b",
+    "review": "PASS_LIMITED_INTERFACE_PREPARATION",
+    "independent_tests": 8,
+    "test_failures_errors_skips": 0,
+    "push": "SUCCESS_CODEX_DIRECT_LS_REMOTE_MATCH",
+    "prior_failure": "Three connection-reset push failures preserved in DSH handoff; one Git-only follow-up succeeded, no config/proxy/credential/permission changes and no repeated review or tests.",
+    "tree": "CLEAN"
+  },
+  "reviewed_verification": {
+    "bytes": 5109,
+    "sha256": "b8ba273807c04d8664fd8423ede0398d6d010dbc6125efe13a61d2ede1036a85"
+  },
+  "plan_pdf": {
+    "bytes": 582954,
+    "sha256": "ca884067cdfe12ae98894759c8966282c986e48ad73ef521b6f938fb31b75b37"
+  },
+  "plan_tex": {
+    "bytes": 41196,
+    "sha256": "3e2000a3c20cc88a02192c662c758d1e4b3dce41c119961d4ada054078ebd62f"
+  },
+  "unchanged_defaults": "3_SELECTED_SOURCE_FILES_DIRECT_HASH_MATCH",
+  "old_live7": "DIRECT_ORIGINAL_BYTES_PRESERVED",
+  "new_synthetic_checks": {
+    "root": 8,
+    "harness_independent": 8,
+    "old_43_rerun": false,
+    "previous_14_sources_or_8_endpoints_reaudited": false,
+    "real_data_or_model_executed": false
+  },
+  "nonblocking_observation": {
+    "item": "Explicit final complete_dote support assertion is not separately implemented. Controlled proxy support matches the reference; PWAT and masks are unchanged.",
+    "disposition": "DEFERRED_TO_SEPARATELY_AUTHORIZED_REAL_INTEGRATION; not falsely recorded as fixed, and no extra preparation/retest cycle added.",
+    "reviewer_classification": "NON_BLOCKING"
+  },
+  "remaining_gates": {
+    "real_manifest_read_or_bound": false,
+    "formal_reader_or_executor_integration": false,
+    "scientific_estimand_and_acceptance_approved": false,
+    "execution_budget_paths_and_grant_bound": false,
+    "experiment_ready": false
+  },
+  "controller_status_at_receipt_creation": "Two scope messages delivered; no new assistant answer observed. Engineering proceeded only under the researcher continuous-work authorization, not an inferred science/experiment approval.",
+  "closure_scope": "This receipt and appended index record post-review facts, not pre-reviewed bytes. The reviewed index artifact hash identifies the preserved prefix. Final closure commit is reported outside this receipt in own handoff/controller to avoid self-reference."
+}

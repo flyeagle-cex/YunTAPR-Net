@@ -148,3 +148,12 @@ LIVE.7及已审来源/候选/VERIFICATION保持原字节。当前候选仍PROPOS
 ## DOTE-INTERFACE-20261106.1：直接补接口缺口
 
 研究者要求继续并避免无效准备审查。本轮仅新增内存manifest到唯一场景身份lookup与frame-callable的DOTE局部风封装，默认读取器/PhysicalDote不改；8项人工合成CPU针对性检查通过，旧43项/14来源/8端点不重审。新增代码、检查和限定验证见 ../20261106_dote_interface/VERIFICATION.json；Harness一次差异审核与各自Git完成情况随后补记。真实清单未绑定、正式链未注册、科学判据/预算未批准，实验不可执行；科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。
+
+
+### DOTE接口一次差异审核与同步完成
+
+Harness只审本轮新增差异并独立运行8项合成检查，8/8通过；审核5044B，SHA256 BFD755A940D16DD21AF518641F18A8B001ED903CAB016C4EF6F0C08D8D5D262B，无阻断。旧43项及14来源/8端点不重审。最终complete_dote支持显式断言为非阻断建议，留待独立授权的真实接入；未冒称已修复，不为此新增准备循环。
+
+Codex主体9ffde2a434bc7d5ccd8351adceabae8d87c869a7与Harness审核992ec28356f23b38d3b1e8591d59cb902ab4a5dd均普通推送，Codex直接ls-remote核对一致。审核者前三次连接重置保留，随后仅一次Git补同步成功，没有重审/重测或配置改动。详见 ../20261106_dote_interface/REVIEW_OUTCOME.json；本回执与索引是审后事实补记，不冒称已预审。
+
+隔离lookup和frame-callable局部风接口已实现；真实manifest未绑定、正式链未注册，科学判据/预算/授权仍缺，实验不可执行。工程PASS限定本轮接口/8检查/审核/主体同步；科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。总控本轮新答复尚未观察到，不据此推断科研批准。
