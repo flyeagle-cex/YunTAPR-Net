@@ -1,0 +1,444 @@
+{
+  "task": "STAGE4_5_CMA_HOURLY_RADAR_IDENTITY_20261106",
+  "created_utc": "2026-11-06T07:44:40.234625+00:00",
+  "scope": "Public official product identity, station metadata and access-process feasibility only; no observation payload, no model execution",
+  "basis": {
+    "researcher_request": "Continue the approved plan and three-party workflow; keep actual project progress updated",
+    "controller_previous_boundary": "173c9247-14ce-4457-817a-f23e53611052",
+    "controller_this_round": "e0089e54-3fa5-425f-818a-06a08a6ea7ff",
+    "controller_historical_statement": "No specific CMA product code or acquired project permission found in its earlier plan/conversation search. SELF_REPORTED; Codex did not independently re-audit all historical conversations.",
+    "controller_code_correction": {
+      "message_id": "ecf132f9-663b-4d4c-95df-c820696c8f72",
+      "accepted": "Controller corrected earlier A.0012.0001.S011 mismerge to actual A.0012.0001 and separate Yunnan _530, based on direct GET evidence. Official source identity takes precedence over AI transcription."
+    }
+  },
+  "start_git": {
+    "codex_branch": "collab/codex-20261102",
+    "codex_head": "0621bcee1dd005c062021da52b3088abd1c6402c",
+    "codex_untracked_preserved": 26,
+    "harness_branch": "collab/dsh-20261102",
+    "harness_head": "8a2af59158a269ea2ef0db53c93babe2be02f36e",
+    "shared_branch": "main",
+    "shared_head": "4a50acb34ede8cf73b238876237cd1079cdda86e"
+  },
+  "current_surface_products": [
+    {
+      "data_code": "A.0012.0001",
+      "url": "https://data.cma.cn/data/detail/dataCode/A.0012.0001.html",
+      "title": "中国地面基本气象观测数据",
+      "resource_id": "1.2.156.416.CMA.D3.A001.001.OB.WB.CHN.MUL.FTM.ZD.1",
+      "evidence_level": "DIRECT_VERIFIED",
+      "observation_sampling_description": "3-hourly observations",
+      "precipitation_support": "3-hour accumulated precipitation; other described statistics refer to preceding hour and must not be applied to precipitation",
+      "archive_window": "recent 7 days",
+      "latency": "2 days; daily rolling update",
+      "coverage": "Chinese national surface stations (catalogue description, not measurement coverage checked)",
+      "access": "individual or organization real-name registration",
+      "suitability": "NOT_ESTABLISHED_FOR_2023_2024_HISTORICAL_HOURLY_PRECIPITATION"
+    },
+    {
+      "data_code": "A.0012.0001_530",
+      "url": "https://data.cma.cn/cmaOld/data/cdcdetail/dataCode/A.0012.0001_530.html",
+      "title": "云南地面基本气象观测数据",
+      "resource_id": "1.2.156.416.CMA.D3.A001.001.OB.WB.CHN.MUL.FTM.ZD.10",
+      "evidence_level": "DIRECT_VERIFIED",
+      "observation_sampling_description": "3-hourly observations",
+      "precipitation_support": "3-hour accumulated precipitation",
+      "archive_window": "recent 7 days; end field says present, description says lag2days",
+      "coverage": "Yunnan national surface stations (product description only)",
+      "access": "individual or organization real-name registration",
+      "quality_limitation": "The public quality prose refers to climate-normal methods; it is not a per-observation hourly precipitation QC-flag specification. No actual records or flags were read.",
+      "suitability": "NOT_ESTABLISHED_FOR_2023_2024_HISTORICAL_HOURLY_PRECIPITATION"
+    }
+  ],
+  "identity_caution": "Earlier generic hourly station-data references do not identify the current product. The legacy A.0012.0001 address now explicitly describes 3-hour precipitation and a recent7day window. Do not infer a date or cause of product change, or declare historical hourly archives nonexistent.",
+  "station_metadata": {
+    "url": "https://data.cma.cn/pic/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf",
+    "linked_from": "A.0012.0001 related-documents public link via showPDFFile viewer",
+    "bytes": 506370,
+    "sha256": "f5668cae92704070e94a738208fcafa9512b4e300fa40d4894d67843ec9d0c22",
+    "pages": 42,
+    "yunnan_identity_rows": 109,
+    "unique_yunnan_station_ids": 109,
+    "page_counts": {
+      "34": 51,
+      "35": 53,
+      "36": 5
+    },
+    "columns": [
+      "province",
+      "station_id",
+      "station_name",
+      "latitude_raw",
+      "longitude_raw",
+      "pressure_sensor_elevation_m",
+      "observation_field_elevation_m"
+    ],
+    "examples": [
+      {
+        "page": 34,
+        "station_id": "56651",
+        "name": "丽江",
+        "latitude_raw": "2685",
+        "longitude_raw": "10022",
+        "pressure_sensor_elevation_m_raw": "2379.1",
+        "observation_field_elevation_m_raw": "2377.9",
+        "source_line": "云南 56651 丽江 2685 10022 2379.1 2377.9"
+      },
+      {
+        "page": 34,
+        "station_id": "56739",
+        "name": "腾冲",
+        "latitude_raw": "2498",
+        "longitude_raw": "9851",
+        "pressure_sensor_elevation_m_raw": "1697.1",
+        "observation_field_elevation_m_raw": "1695.9",
+        "source_line": "云南 56739 腾冲 2498 9851 1697.1 1695.9"
+      },
+      {
+        "page": 34,
+        "station_id": "56751",
+        "name": "大理",
+        "latitude_raw": "2571",
+        "longitude_raw": "10018",
+        "pressure_sensor_elevation_m_raw": "1978.9",
+        "observation_field_elevation_m_raw": "1977.7",
+        "source_line": "云南 56751 大理 2571 10018 1978.9 1977.7"
+      },
+      {
+        "page": 34,
+        "station_id": "56778",
+        "name": "昆明",
+        "latitude_raw": "2501",
+        "longitude_raw": "10265",
+        "pressure_sensor_elevation_m_raw": "1889.3",
+        "observation_field_elevation_m_raw": "1888.1",
+        "source_line": "云南 56778 昆明 2501 10265 1889.3 1888.1"
+      }
+    ],
+    "coordinate_encoding": "NOT_VERIFIED; preserve strings such as Kunming2501/10265, do not infer DDMM or decimal scaling and do not collocate",
+    "effective_station_dates": "NOT_PROVIDED by table columns",
+    "precipitation_element_or_completeness": "NOT_PROVIDED by identity table",
+    "cross_dataset_binding": "NOT_VERIFIED; do not merge NOAA/CMA same-name rows or substitute differing coordinates/elevations without epoch/instrument history",
+    "visual_check": "Page34 rendered and inspected against extracted station examples; full table not visually checked page-by-page",
+    "observation_payload": false
+  },
+  "radar": {
+    "data_code": "J.0017.0009.S002",
+    "url": "https://data.cma.cn/cmaOld/data/cdcdetail/dataCode/J.0017.0009.S002.html",
+    "title": "天气雷达组网24小时降水估测图像产品",
+    "resource_id": "1.2.156.416.CMA.D3.J002.L3.OT.TX.CHN.FTP.DAY.0P01.1",
+    "provider": "中国气象局气象探测中心",
+    "evidence_level": "DIRECT_VERIFIED",
+    "product_support_from_title": "24-hour precipitation estimate image; exact window endpoint convention NOT_VERIFIED",
+    "description_time_resolution": "1 hour",
+    "page_update_frequency": "every6minutes",
+    "page_spatial_resolution_field": "0.01°×0.01°; grid spacing is not actual effective resolving skill or geographic coverage",
+    "published_online_window": "recent24h",
+    "access": "individual or organization real-name registration",
+    "quality_description": "product from quality-controlled radar base data; numeric per-pixel flags and gauge-adjustment lineage NOT_VERIFIED",
+    "semantics_caution": "Accumulation support, sampling time and publication/update cadence are distinct. Do not call this 6min or hourly precipitation amount, derive hourly increments, or treat colour images as numerical QPE. The differing fields require provider clarification, not an automatic contradiction finding.",
+    "yunnan_2023_2024_archive_and_numeric_QPE": "NOT_VERIFIED",
+    "licence_and_independence": "NOT_VERIFIED"
+  },
+  "catalogue_search_limits": {
+    "surface_category": "https://data.cma.cn/cmaOld/data/cdcindex/cid/6d1b5efbdcbf9a58.html",
+    "surface_visible_product_cards": 30,
+    "radar_category": "https://data.cma.cn/cmaOld/data/cdcindex/cid/053c0b0222f08415.html",
+    "radar_visible_product_cards": 6,
+    "finding": "No captured compatible 2023/2024 historical-hourly rainfall archive established; captured public-category pages are not an exhaustive inventory of CMA internal holdings.",
+    "cma_2023_open_catalogue_url": "https://www.cma.gov.cn/zfxxgk/gknr/wjgk/qtwj/202302/P020230224377864419023.pdf",
+    "cma_open_catalogue_finding": "Surface observations and weather-radar products including precipitation estimates appear in the official product categories; catalogue update frequency does not specify sampling/accumulation or project permission."
+  },
+  "access_process": {
+    "source_url": "https://www.cxs.gov.cn/info/14045/363408.htm",
+    "publisher": "楚雄市人民政府 / 楚雄市气象局",
+    "visible_publication_date": "2026-04-07",
+    "evidence_level": "DIRECT_VERIFIED_FOR_PUBLISHED_LOCAL_PROCESS_ONLY",
+    "published_requirements": [
+      "institution-stamped letter stating purpose, specific data contents and project contract amount",
+      "data provision/use agreement with the local bureau",
+      "approval/publication through Yunnan provincial meteorological external-service supervisory platform before provision"
+    ],
+    "project_permission": "NOT_PROVIDED",
+    "application_sent": false,
+    "limitations": "This is a published local-bureau process, not a project approval, nationwide licence conclusion or tariff. A requested contract-amount field does not establish data fees. Current project-specific applicability must be confirmed by holder."
+  },
+  "yunnan_resource_list": {
+    "source_url": "https://k.data.cma.cn/mekb/?id=42268&r=site%2Farticle",
+    "evidence": "Official news reports a 2024 provincial resource list and consolidation into provincial Tianqing. Actual list, archive station/time availability, access and external permission were not obtained.",
+    "status": "SOURCE_LEAD_ONLY_NOT_ARCHIVE_COVERAGE"
+  },
+  "metadata_request_receipts": {
+    "direct_get_count": 18,
+    "successful_count": 15,
+    "failed_count": 3,
+    "retry_count": 0,
+    "saved_response_body_bytes": 2024003,
+    "excludes": "web-search/page-parser requests and local receipt/extraction overhead",
+    "failures": [
+      {
+        "name": "cma_basic_surface_detail.html",
+        "url": "https://k.data.cma.cn/mekb/?dataCode=A.0012.0001&r=data%2Fdetail",
+        "cap_bytes": 1048576,
+        "retry_count": 0,
+        "started_utc": "2026-11-06T07:35:55.333075+00:00",
+        "status": "FAILED_NOT_RETRIED",
+        "error": "HTTP Error 500: Internal Server Error",
+        "ended_utc": "2026-11-06T07:35:55.658200+00:00"
+      },
+      {
+        "name": "cma_data_access_help.html",
+        "url": "https://data.cma.cn/article/getLeft/id/279/keyIndex/7.html?menuId=5",
+        "cap_bytes": 1048576,
+        "retry_count": 0,
+        "started_utc": "2026-11-06T07:39:17.262298+00:00",
+        "status": "FAILED_NOT_RETRIED",
+        "error": "HTTP Error 404: Not Found",
+        "ended_utc": "2026-11-06T07:39:17.413224+00:00"
+      },
+      {
+        "name": "cma_member_rights.html",
+        "url": "https://data.cma.cn/article/getLeft/id/287/keyIndex/7.html?menuId=24",
+        "cap_bytes": 1048576,
+        "retry_count": 0,
+        "started_utc": "2026-11-06T07:39:17.413224+00:00",
+        "status": "FAILED_NOT_RETRIED",
+        "error": "HTTP Error 404: Not Found",
+        "ended_utc": "2026-11-06T07:39:17.645071+00:00"
+      }
+    ]
+  },
+  "raw_fingerprints": [
+    {
+      "file": "cma_hourly_product_entry.html",
+      "bytes": 152553,
+      "sha256": "40e4b9e243f7e41cd29970ea3625826b676687c5c1b9151ac2c79bb246b93829",
+      "official_url": "https://data.cma.cn/data/detail/dataCode/A.0012.0001.html",
+      "started_utc": "2026-11-06T07:35:54.713872+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_radar_catalogue.html",
+      "bytes": 31796,
+      "sha256": "a6355e2328e6ceca877d85c143e093eafa5c913436d2ec82ffe5d3f3c2df8caf",
+      "official_url": "https://k.data.cma.cn/mekb/?r=radar%2Fdata",
+      "started_utc": "2026-11-06T07:35:55.658200+00:00",
+      "content_type": "text/html; charset=utf-8",
+      "http_status": 200
+    },
+    {
+      "file": "cma_open_catalogue_2023.pdf",
+      "bytes": 142536,
+      "sha256": "ba2c01ec2d573da28a077deef1c6cca35ca3f808a49ec6c6cb6ecfc702f48993",
+      "official_url": "https://www.cma.gov.cn/zfxxgk/gknr/wjgk/qtwj/202302/P020230224377864419023.pdf",
+      "started_utc": "2026-11-06T07:35:56.246632+00:00",
+      "content_type": "application/pdf",
+      "http_status": 200
+    },
+    {
+      "file": "cma_surface_category.html",
+      "bytes": 144379,
+      "sha256": "a3bc31c5cb4f024f470091a5ad2a9b7a2fca23507a402aec2f51319e29fb339d",
+      "official_url": "https://data.cma.cn/cmaOld/data/cdcindex/cid/f0fb4b55508804ca.html",
+      "started_utc": "2026-11-06T07:38:02.887247+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_radar_product_category.html",
+      "bytes": 171387,
+      "sha256": "72c8dd394b4241e07e4811a56e39b010fb66798ba55595dd912838455d8df6f0",
+      "official_url": "https://data.cma.cn/cmaOld/data/cdcindex/cid/053c0b0222f08415.html",
+      "started_utc": "2026-11-06T07:38:03.534497+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_station_metadata_viewer.html",
+      "bytes": 2650,
+      "sha256": "70d7d53c52367e74e4b6aff8a0f2bbeb0826aa8435c9e730d19e178b4a12bd49",
+      "official_url": "https://data.cma.cn/cmaOld/article/showPDFFile.html?file=/pic/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf",
+      "started_utc": "2026-11-06T07:38:04.205430+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_user_support.html",
+      "bytes": 128890,
+      "sha256": "a9400787bb67a2655cef22e2caf6d368784a0ffe8cd1f5ce392c3a89085fe1a2",
+      "official_url": "https://data.cma.cn/cmaOld/article/getLeft/id/249/keyIndex/1.html",
+      "started_utc": "2026-11-06T07:38:04.494439+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_surface_products.html",
+      "bytes": 266643,
+      "sha256": "86e23b0f96218a8a35b5db62acf293f0a5da5e4e5ca7c2c86406179df00343f0",
+      "official_url": "https://data.cma.cn/cmaOld/data/cdcindex/cid/6d1b5efbdcbf9a58.html",
+      "started_utc": "2026-11-06T07:39:15.620618+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_radar_24h_detail.html",
+      "bytes": 151710,
+      "sha256": "a033f66a83c13d853b20c2e4c50061052f7b3475babf00ee7b386fbd78c5f6c2",
+      "official_url": "https://data.cma.cn/cmaOld/data/cdcdetail/dataCode/J.0017.0009.S002.html",
+      "started_utc": "2026-11-06T07:39:16.266564+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "cma_station_metadata.pdf",
+      "bytes": 506370,
+      "sha256": "f5668cae92704070e94a738208fcafa9512b4e300fa40d4894d67843ec9d0c22",
+      "official_url": "https://data.cma.cn/pic/static/doc/A/A.0012.0001/SURF_CHN_MUL_HOR_STATION.pdf",
+      "started_utc": "2026-11-06T07:39:16.975849+00:00",
+      "content_type": "application/pdf",
+      "http_status": 200
+    },
+    {
+      "file": "cma_yunnan_surface_detail.html",
+      "bytes": 152495,
+      "sha256": "8fc61698be3fca18204ccce25ad1676fddc00780f51cebf98bfea695f4020529",
+      "official_url": "https://data.cma.cn/cmaOld/data/cdcdetail/dataCode/A.0012.0001_530.html",
+      "started_utc": "2026-11-06T07:41:58.232005+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "chuxiong_data_request_procedure.html",
+      "bytes": 21563,
+      "sha256": "7ad09973fc516e92a2e30fdf38bacf322509fa128e3218b780849a193db00da1",
+      "official_url": "https://www.cxs.gov.cn/info/14045/363408.htm",
+      "started_utc": "2026-11-06T07:41:59.017945+00:00",
+      "content_type": "text/html",
+      "http_status": 200
+    },
+    {
+      "file": "yunnan_resource_inventory_news.html",
+      "bytes": 25303,
+      "sha256": "a13308dace983c918c7ef1ff1d4636659d414254a1e05c6df2d1af211f987020",
+      "official_url": "https://k.data.cma.cn/mekb/?id=42268&r=site%2Farticle",
+      "started_utc": "2026-11-06T07:41:59.363529+00:00",
+      "content_type": "text/html; charset=utf-8",
+      "http_status": 200
+    },
+    {
+      "file": "attempt_01_receipt.json",
+      "bytes": 20451,
+      "sha256": "8d79d85ab764c080bed0b7a3a8db0ecb48005d9336c5cd862278ee263dbe8fa8",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "attempt_02_receipt.json",
+      "bytes": 50643,
+      "sha256": "5e4118c1cbd91efe62f35b9bc8c3cccb6de5f4f8535d4dc2624d61c05d48bf97",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "attempt_03_receipt.json",
+      "bytes": 66551,
+      "sha256": "b0196d09c2ac22c6a234a3a60bb6bf74c562064f57291cb92e7c1ee84a097abc",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "attempt_04_receipt.json",
+      "bytes": 10487,
+      "sha256": "dadd4dc2379164ed9489d3aba2e1633aff068c5c8e20f545db7f8b0e603672dc",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "yunnan_station_metadata_extraction.json",
+      "bytes": 34820,
+      "sha256": "2b6f6300fc555ecded1534e6f7154622396119745bb39376c2d0d544acda8f8b",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "station_metadata_selected_text.json",
+      "bytes": 7375,
+      "sha256": "5d7d27aeb771936db8c0a7a6c6e0edf38bbc275b8798e2c83372d9743ba0d466",
+      "kind": "local request receipt or metadata text extraction; not observations"
+    },
+    {
+      "file": "yunnan_hourly_archive_lead.html",
+      "bytes": 33842,
+      "sha256": "24a04b2fa141615f2ca4357e1f80e75c9d78fd8591e80b6e463bd2b72a92c497",
+      "official_url": "https://k.data.cma.cn/mekb/?id=42991&r=site%2Farticle",
+      "started_utc": "2026-11-06T07:52:35.784891+00:00",
+      "content_type": "text/html; charset=utf-8",
+      "http_status": 200
+    },
+    {
+      "file": "radar_hourly_definition_lead.html",
+      "bytes": 91886,
+      "sha256": "675f389061173e8dde8995f53bfd0f52462a37b8e57be0daeb973ceefcb6af50",
+      "official_url": "https://k.data.cma.cn/mekb/?r=radar%2Findex",
+      "started_utc": "2026-11-06T07:52:36.301752+00:00",
+      "content_type": "text/html; charset=utf-8",
+      "http_status": 200
+    },
+    {
+      "file": "attempt_05_receipt.json",
+      "bytes": 29315,
+      "sha256": "6255a1a456e26741e91fa214e19191e24553422e2e440d51eb87485a0b5c8379",
+      "kind": "local request receipt; not observations"
+    }
+  ],
+  "private_archive": "docs/research_readiness/.local/cma_hourly_radar_metadata_20261106_v1",
+  "safety": {
+    "observations_downloaded": false,
+    "images_of_current_weather_downloaded": false,
+    "account_login_registration_or_credential_use": false,
+    "provider_contact": false,
+    "read_predictions_labels_weights_or_restricted_cache": false,
+    "model_training_inference_calibration_evaluation": false,
+    "project_2025_final_test_access": false,
+    "DPR_expansion": false
+  },
+  "holder_metadata_needed_before_payload_proposal": [
+    "exact historical hourly precipitation product code/version and lawful provider",
+    "2023/2024 Yunnan station IDs with operation/move dates and element-level availability without observation values",
+    "timezone/window timestamps and accumulation semantics; missing/trace/QC codes",
+    "rain-gauge instrument and station source lineage incl GPCC/GTS/IMERG connections",
+    "historical radar product IDs, numeric versus image format, gauge correction, blockage/beam support and QC",
+    "institution/project permit and allowed use, redistribution/derivative limits",
+    "reliable file/record counts, bytes/fees needed for a bounded acquisition budget"
+  ],
+  "next_step": "Two concrete leads retained: P0 Yunnan hourly precipitation mentioned in official archive-application news, P1 hourly radar accumulation method described on official service homepage. Both METADATA_INSUFFICIENT after bounded public-source checks. Need researcher/qualified holder technical metadata and permission before a payload budget; no further broad search, no product substitution or contact without specific researcher instruction.",
+  "engineering_status": "PENDING_INDEPENDENT_REVIEW",
+  "stage4_5": "PARTIAL",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "observation_acquisition_status": "NOT_AUTHORIZED",
+  "acquisition_budget": "NOT_ESTIMABLE",
+  "controller_two_specific_leads": {
+    "scope_message": "759c69c4-7725-4c5a-bf15-2b80ab79be4a",
+    "P0": {
+      "name": "云南地面逐小时降水",
+      "official_url": "https://k.data.cma.cn/mekb/?id=42991&r=site%2Farticle",
+      "evidence_level": "DIRECT_VERIFIED_FOR_OFFICIAL_NEWS_MENTION_ONLY",
+      "reported_developer": "云南省气象台等单位",
+      "reported_origin": "historical precipitation archives were mined and reanalysed; wording does not identify a particular atmospheric reanalysis product or prove raw-gauge-only provenance",
+      "reported_use": "reference for Yunnan multi-model forecast correction; this is article description, not a performance result verified by this project",
+      "product_code_version_years_station_scope_time_support_QC_custodian_permission": "NOT_VERIFIED",
+      "public_technical_document_link_on_captured_page": "NONE_FOUND",
+      "status": "METADATA_INSUFFICIENT",
+      "stop": "No observations fetched or invented specs; no external request sent"
+    },
+    "P1": {
+      "name": "雷达1小时累计降水",
+      "official_url": "https://k.data.cma.cn/mekb/?r=radar%2Findex",
+      "evidence_level": "DIRECT_VERIFIED_FOR_SERVICE_METHOD_DESCRIPTION_ONLY",
+      "method_description": "Time integration of each 2km by 1degree sample-bin rain rate over an hour; output after each volume scan",
+      "separate_from": "J.0017.0009.S002 is a different 24-hour-image catalogue identity; do not transfer code or 0.01degree spacing to hourly-method description",
+      "formal_product_code_version_numeric_format_Yunnan_2023_2024_archive_QC_permission": "NOT_VERIFIED",
+      "public_technical_or_archive_link_on_captured_page": "NONE_FOUND",
+      "status": "METADATA_INSUFFICIENT",
+      "stop": "No archive evidence, so no observation acquisition"
+    }
+  }
+}

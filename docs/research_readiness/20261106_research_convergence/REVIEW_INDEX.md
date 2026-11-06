@@ -80,3 +80,7 @@ MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指�
 已取得NOAA站点身份与2023/2024 DPR候选颗粒元数据；独立观测验证仍NOT_VERIFIED。发现框命中不等于省内配对或事件数。见 [实际元数据收据](../20261106_external_reference_metadata/METADATA_FEASIBILITY.json) 和 LIVE-20261106.2 总计划；不改变本页历史审核结论。
 
 Harness已完成一次限定公开元数据审核并给出PASS；记录5852B，SHA256 `8BBF616509903CEECE4A93E403BCAB9C3054ABFF80EC65452C708E5AF5F9F108`，审核分支提交 `8a2af59158a269ea2ef0db53c93babe2be02f36e` 已独立核对远端。此PASS不构成Stage4.5完成、观测验证、数据/实验批准或研究者掌握。获取收据创建时的待审状态由 [结项回执](../20261106_external_reference_metadata/REVIEW_OUTCOME.json) 解释；元数据原记录不改写。
+
+## CMA产品身份继续核实（2026-11-06）
+
+当前公开三小时/近7日站点产品、109条云南身份附件与近24h雷达24小时估测图像不能替代目标历史小时观测。详见 [产品身份收据](../20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json) 及LIVE-20261106.3。新的限定审核待完成；旧审核结论保持各自范围。
