@@ -72,3 +72,17 @@ Codex 当前起点 `5f358de424764c43808e3a383e39f5dee06ecce4`，本轮 15 文件
 - 研究者掌握：**NOT_ASSESSED**
 
 本轮未读取真实 NPZ/预测/标签/权重/原始气象/受限缓存/2025，未训练/推理/新评价/校准/bootstrap，未安装依赖，未修改 Codex/Shared 共同决策/规则或 main。
+
+## 6. 格式纠正补充核验（2026-11-06）
+
+- 触发：提交前 `git diff --cached --check` 将四个新 JSON 的 CRLF 判为 trailing whitespace；Codex 未 commit，保存 `staged_crlf_failure.txt`，仅将四个 JSON 规范化为 LF。
+- 独立比较 `.reviewed_before_lf.bin` 与当前文件：
+  - `WORK_PACKAGES.json`：8,400 B / `59C3A263...896BA`，解析语义与旧 8,540 B 版本完全相同；
+  - `MULTI_AGENT_DISCUSSION.json`：3,690 B / `E3737058...11C1`，解析语义相同；
+  - `SYNTHETIC_CHECKS.json`：1,740 B / `2ED91DDB...E58FEB2`，解析语义相同；
+  - `VERIFICATION.json`：6,756 B / `1D2A0848...7E0DBE`，与旧 6,922 B 版本仅三个 artifact 的 size/SHA 条目不同，其他字段相同；这三个条目正好对应前三份规范化的 JSON。
+- 当前 `VERIFICATION` 的 14 个 artifact 指纹全部重新核对通过；三模块、三测试、LIVE.6 PDF/tex 的字节/SHA 与首审时一致，未重跑 43 项测试。
+- 四个当前 JSON 均无 CRLF；首审 PASS 的代码/契约结论与历史保持，不被本格式补丁改写。
+- 结论：**PASS（格式补充核验）**；仍为限定工程准备，不是真实集成、科学验收或实验授权。
+
+补充核验本身未读取真实 NPZ/预测/标签/权重/原始气象/2025，未训练/推理/评价/校准/bootstrap，未安装依赖，未修改 Codex 文件或 Shared 共同决策/规则。
