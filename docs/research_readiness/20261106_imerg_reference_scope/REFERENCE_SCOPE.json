@@ -1,0 +1,88 @@
+{
+  "task": "IMERG_REFERENCE_SCOPE_20261106",
+  "recorded_utc": "2026-11-06T08:25:01.440701+00:00",
+  "researcher_statement": {
+    "verbatim_private_record": "retained in ignored local baseline",
+    "normalized_report": "No external reference data currently held or implemented; use IMERG as reference if no feasible public alternative.",
+    "evidence": "DIRECT_RESEARCHER_REPLY; data absence is researcher-reported, not exhaustive public-source proof",
+    "does_not_establish": [
+      "No public alternatives exist worldwide",
+      "New data or computation approval",
+      "Scientific acceptance or researcher mastery"
+    ]
+  },
+  "controller_scope_message": "0314e4a3-d996-45d9-888c-a281ac2c169b",
+  "controller_clarification_sent": "Statistical E use-history independence differs from observational source-chain independence; Final Run/algorithm V07/project Final Test are separate.",
+  "frozen_contract": {
+    "path": "config/science_contract_v1.1.yaml",
+    "bytes": 14085,
+    "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+  },
+  "supervised_product": "IMERG_V07_Final",
+  "early_late_substitution": false,
+  "mixed_v07_v08": false,
+  "official_documentation": {
+    "title": "NASA IMERG V07 Technical Documentation",
+    "document_updated": "2023-07-13",
+    "url": "https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation",
+    "access": "web parser of official HTML only; no observation payload downloaded",
+    "facts": "Final is satellite-gauge estimate produced after monthly gauge analysis; not error-free physical truth.",
+    "source_chain_evidence": "official source description; product-choice does not establish independent station/radar truth"
+  },
+  "claim_boundaries": [
+    {
+      "claim": "Agreement with frozen IMERG reference on already-used 2024 Dev",
+      "status": "SUPPORTED_WITH_EXISTING_LIMITATIONS",
+      "requires": "Bind saved result identity, mask, time, units, model/seed and protocol; no new calculation this round"
+    },
+    {
+      "claim": "Independent station/radar physical-truth validation",
+      "status": "NOT_VERIFIED",
+      "requires": "Actual lawful observation, coverage, QC, collocation and source-chain assessment"
+    },
+    {
+      "claim": "New confirmatory H1/H2 claim on independent E",
+      "status": "INCONCLUSIVE",
+      "requires": "Unused evaluation-population history and applicable protocol/execution approval; not satisfied by relabelling reused Dev or choosing IMERG"
+    },
+    {
+      "claim": "DOTE physical causality, general/multiscale DTFM superiority or operational near-real-time performance",
+      "status": "NOT_VERIFIED",
+      "requires": "Distinct mechanism and operational evidence, not just agreement with IMERG"
+    }
+  ],
+  "statistical_E_clarification": "E independence is about fitting/method-selection use history and dependence; it is distinct from observation-source independence. A future unused IMERG population is not automatically eligible or categorically disqualified solely by product identity; separate review and approval are required. No E search/read this round.",
+  "allowed_now": "Plan, evidence-meaning and progress maintenance; organize existing saved evidence without numerical recomputation; one limited Harness difference review and each own work-branch sync.",
+  "not_authorized": [
+    "New downloads or provider contact/accounts",
+    "Scientific payload/labels/prediction/checkpoint/restricted-cache reads",
+    "Training, inference, calibration, bootstrap or new model evaluation",
+    "Final model selection or 2025 Final Test access"
+  ],
+  "current_status": {
+    "engineering": "PENDING_LIMITED_REVIEW_AND_SYNC",
+    "stage_4_5": "PARTIAL",
+    "H1_H2": "INCONCLUSIVE / INDEPENDENT_NOT_VERIFIED",
+    "science": "NOT_VERIFIED",
+    "researcher_mastery": "NOT_ASSESSED"
+  },
+  "plan_version": "LIVE-20261106.4",
+  "changes": [
+    "Cover/current-stage and current progress links",
+    "Define strong-rain thresholds as IMERG-reference labels",
+    "Current Stage4.5 row and next-step scope without removing historical metadata",
+    "New section6C differentiating four evidence types and execution boundaries",
+    "Append evaluation-entry gate clarification and review index"
+  ],
+  "inherited_evidence_not_reaudited": [
+    "Prior CMA/NOAA/DPR metadata receipts and independent reviews",
+    "Historical saved workbook/result summaries",
+    "T16/T18 theoretical protocols and prior reviews"
+  ],
+  "independent_review": "PENDING",
+  "old_plan_pdf": {
+    "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_3.pdf",
+    "bytes": 492717,
+    "sha256": "8cd615e70aaea9982e44c07bdb77513adf4a47a107d2117c62a3ae2d3ae3e882"
+  }
+}
