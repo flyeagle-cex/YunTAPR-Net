@@ -143,3 +143,8 @@ Harness已完成14份来源指纹、8个历史E9端点字段及非执行设计�
 Codex主体8文件 `e50a93ccc8e189468b69f23e7e90a3a545a5f65f` 已普通推送并直接核对远端。详见 [结项回执](../20261106_dote_direction_freeze/REVIEW_OUTCOME.json)。非阻断路径表达已在回执中明确：SOURCE_BINDINGS的actually_matches是说明性定位，真实扁平键为B6/development_09.json，机器JSON Pointer须用 `/sources/B6~1development_09.json/sha256`；精确键查询直接验证，已审来源不改写。
 
 LIVE.7及已审来源/候选/VERIFICATION保持原字节。当前候选仍PROPOSED且executable=false，主指标/效应/退化/推断规则、场景映射/正式wrapper、执行commit/允许路径/预算/研究者实验批准均未落实。工程PASS只限本轮准备/审核/主体同步；科学NOT_VERIFIED，外部Stage4.5 PARTIAL，研究者NOT_ASSESSED。原创建时PENDING状态由本回执解释，不覆盖历史记录；此次回执及索引追加未冒称已提前获得审核。
+
+
+## DOTE-INTERFACE-20261106.1：直接补接口缺口
+
+研究者要求继续并避免无效准备审查。本轮仅新增内存manifest到唯一场景身份lookup与frame-callable的DOTE局部风封装，默认读取器/PhysicalDote不改；8项人工合成CPU针对性检查通过，旧43项/14来源/8端点不重审。新增代码、检查和限定验证见 ../20261106_dote_interface/VERIFICATION.json；Harness一次差异审核与各自Git完成情况随后补记。真实清单未绑定、正式链未注册、科学判据/预算未批准，实验不可执行；科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。

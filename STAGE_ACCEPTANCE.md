@@ -1,3 +1,15 @@
+# 2026-11-06 DOTE场景映射与局部风接口 / LIVE-20261106.8
+
+按研究者“继续，避免大量无效准备审查”的指令，只补LIVE.7已定位的接口阻塞。新增SceneManifestLookup与DirectionDoteTransform；不改默认BatchReader/PhysicalDote，不注册正式执行器。
+
+- 内存中的既有scene_records结构按冻结digest口径核对，拒绝重复/缺失/冲突；canonical时间角色显式选择，不从frame猜sample_id。
+- 在原生pressure mask与目标网格映射之后干预DOTE局部风，重算O/W/L/M；保持frame/MEE/DEM/PS/PWAT及真实mask，支持变化或数值溢出即停。
+- 本轮8项人工合成CPU检查通过，旧43项和14来源/8历史端点直接继承，不重复全量审核；限定新增差异的Harness审核及Git状态见回执。
+- 真实manifest尚未读取/绑定，正式接线、科学判据和新预算/授权均未完成；候选不是可执行科研实验。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。
+- 接口与检查：docs/research_readiness/20261106_dote_interface/VERIFICATION.json。最新计划output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_8.pdf及同目录可编辑LaTeX源；旧LIVE.7保留。
+
+---
+
 # 2026-11-06 DOTE方向控制冻结候选 / LIVE-20261106.7
 
 在LIVE.6工程准备已经闭环后，按总控6115f59a修正意见，仅核对源码和保存元数据，形成PROPOSED、不可执行的方向控制冻结候选。没有运行新模型、梯度检查、训练或评价。
