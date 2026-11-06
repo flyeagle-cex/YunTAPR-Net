@@ -134,3 +134,12 @@ Codex主体15文件36d6fe1e39da49e05566d442fe51d262d6db230a、Harness格式补�
 按总控6115f59a只读源码和已保存元数据推进方向控制冻结候选：绑定8个旧E9身份、确认B6评价JSON与权重指纹对象类型、限制ZERO的128零梯度权重解释，明确DOTE内部风干预点和scene lookup缺口。候选随机旋转/朝东定义、科学门槛、正式接入及预算都仍待批准，execution=false。
 
 SOURCE_BINDINGS/DOTE_FREEZE_CANDIDATE及VERIFICATION见 ../20261106_dote_direction_freeze/。LIVE.7为16页更新版；LIVE.6及既有代码/43测试保留，本阶段没有模型/梯度/新科学计算。工程等待限定方案审核与Git闭环，科学NOT_VERIFIED、外部PARTIAL、知识NOT_ASSESSED。
+
+
+### DOTE方向候选限定审核与同步回执
+
+Harness已完成14份来源指纹、8个历史E9端点字段及非执行设计的限定审核，结论PASS；正式记录6159B，SHA256 `354DA56B65DD3F34F241F8054492369E866B139487E6D3B526B3C0698888BDEA`。审核者自身提交 `b5b47c3b2dc8241df533b61e7a954ac73d678fd6` 已普通推送，Codex直接ls-remote核对一致，DSH树干净。本阶段未运行模型/梯度/测试，也未把权重元数据核对冒充权重载荷复算或PDF逐页独立视觉复核。
+
+Codex主体8文件 `e50a93ccc8e189468b69f23e7e90a3a545a5f65f` 已普通推送并直接核对远端。详见 [结项回执](../20261106_dote_direction_freeze/REVIEW_OUTCOME.json)。非阻断路径表达已在回执中明确：SOURCE_BINDINGS的actually_matches是说明性定位，真实扁平键为B6/development_09.json，机器JSON Pointer须用 `/sources/B6~1development_09.json/sha256`；精确键查询直接验证，已审来源不改写。
+
+LIVE.7及已审来源/候选/VERIFICATION保持原字节。当前候选仍PROPOSED且executable=false，主指标/效应/退化/推断规则、场景映射/正式wrapper、执行commit/允许路径/预算/研究者实验批准均未落实。工程PASS只限本轮准备/审核/主体同步；科学NOT_VERIFIED，外部Stage4.5 PARTIAL，研究者NOT_ASSESSED。原创建时PENDING状态由本回执解释，不覆盖历史记录；此次回执及索引追加未冒称已提前获得审核。

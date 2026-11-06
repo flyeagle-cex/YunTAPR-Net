@@ -1,0 +1,93 @@
+{
+  "version": "DOTE-DIRECTION-FREEZE-CANDIDATE-20261106.1",
+  "recorded_local": "2026-11-06T19:19:21.049582+08:00",
+  "engineering_status": "PASS_BOUNDED_SOURCE_METADATA_DESIGN_REVIEW_AND_SUBSTANTIVE_GIT_SYNC",
+  "scientific_status": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL_CURRENTLY_UNAVAILABLE_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "controller_scope_message": "6115f59a-1aa9-462b-beab-63bc84ab9f93",
+  "controller_review_gate_message": "360c180f-f00d-442e-a505-efd4e20fd0c8",
+  "substantive_commit": {
+    "branch": "collab/codex-20261102",
+    "sha": "e50a93ccc8e189468b69f23e7e90a3a545a5f65f",
+    "files": 8,
+    "push": "SUCCESS",
+    "remote_reference": "CODEX_DIRECT_LS_REMOTE_MATCH"
+  },
+  "reviewer": {
+    "branch": "collab/dsh-20261102",
+    "commit": "b5b47c3b2dc8241df533b61e7a954ac73d678fd6",
+    "path": "docs/audits/DOTE_DIRECTION_FREEZE_REVIEW_20261106.md",
+    "bytes": 6159,
+    "sha256": "354da56b65dd3f34f241f8054492369e866b139487e6d3b526b3c0698888bdea",
+    "conclusion": "PASS_LIMITED_NONEXECUTABLE_DESIGN_PREPARATION",
+    "push": "SUCCESS_AND_CODEX_DIRECT_LS_REMOTE_MATCH",
+    "tree": "CLEAN",
+    "review_scope": "Independent selected-source, saved-metadata, endpoint-field and design checks; no model, gradient or test execution; PDF visual checks remained executor-only."
+  },
+  "checks": {
+    "reviewed_artifact_hashes": 7,
+    "source_fingerprints": 14,
+    "saved_endpoint_field_equalities": 8,
+    "weight_payload_rehashed": false,
+    "model_or_gradient_or_test_execution": false,
+    "scientific_payload_reads": 0,
+    "default_source_changed_this_phase": false,
+    "LIVE6_original_bytes_preserved": true,
+    "READMESTAGE_old_suffix_and_index_old_prefix_preserved": "DIRECT_VERIFIED"
+  },
+  "reviewed_identity": {
+    "verification": {
+      "bytes": 3001,
+      "sha256": "7fe1ed4f3621b41809ca02317ebc6890d07dd98db3288fd141647fbbc2f62275"
+    },
+    "source_bindings": {
+      "bytes": 12160,
+      "sha256": "ee85a1db5bd55790fc3364c867c6aebe103857bbe1ba4193aeebc047ee5fec89"
+    },
+    "candidate": {
+      "bytes": 6928,
+      "sha256": "ca5d92502c1010018f9b088f22c921d33c11a303b3812d374db30d4656995995"
+    },
+    "plan_pdf": {
+      "bytes": 587127,
+      "sha256": "1624f80a4b0dafacdc0359be0c78d6c63bedd3a9801a05ed7cbadc44b84d32d8"
+    },
+    "plan_tex": {
+      "bytes": 41050,
+      "sha256": "883eb34a667ad71685be9cdde25e8558946f0733bc55d9a0fa2e3377887df423"
+    },
+    "pages": 16
+  },
+  "nonblocking_locator_clarification": {
+    "reviewed_source_field": "field_type_correction.actually_matches",
+    "reviewed_value_is": "HUMAN_READABLE_DESCRIPTION_NOT_EXECUTABLE_JSON_POINTER",
+    "source": "docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json",
+    "sources_key": "B6/development_09.json",
+    "escaped_json_pointer": "/sources/B6~1development_09.json/sha256",
+    "value": "5f3e94c3c9656dac6fbb1dc59069a70d65da72e568d07c50b8f907058a9947df",
+    "clarification_check": "DIRECT_EXACT_KEY_LOOKUP",
+    "reviewed_source_bytes_preserved": true,
+    "future_formalization": "Use explicit sources_key or the escaped JSON Pointer; do not pass the unescaped descriptive locator to a JSON Pointer resolver."
+  },
+  "remaining_gates": {
+    "status": "PROPOSED_NON_EXECUTABLE_NOT_RESEARCHER_FROZEN",
+    "estimand_and_fairness": "PENDING_RESEARCHER_SCIENTIFIC_DECISION",
+    "primary_metric_effect_degradation_and_inference": "NOT_APPROVED",
+    "scene_identity_manifest_lookup": "NOT_IMPLEMENTED_NOT_BOUND",
+    "canonical_scene_time": "PROPOSED_NOT_BOUND",
+    "formal_transform_wrapper": "NOT_IMPLEMENTED",
+    "execution_commit_allowed_paths_and_budget": "NOT_ESTABLISHED_NOT_AUTHORIZED",
+    "researcher_experiment_grant": null,
+    "executable": false
+  },
+  "preserved_limits": [
+    "ZERO is nominal-structure-matched, not equal effective trainable capacity; 128 structurally zero-gradient projection weights remain a limitation.",
+    "B6 to B7 changes fusion and parameter count and does not independently identify DOTE effects.",
+    "Random scene rotation and fixed toward-east controls are proposed definitions, not evidence of physical causality or guaranteed nonzero gradients.",
+    "Training seeds are not independent weather events; event identity remains NOT_IDENTIFIED.",
+    "Historical E9 identities are saved-metadata bindings, not current weight-payload hashes.",
+    "No old successful baseline, ZERO, scientific tests or inference rerun; no new training, evaluation, calibration, bootstrap, payload, restricted-cache or 2025 access."
+  ],
+  "receipt_scope": "This receipt and appended review-index closure record facts after Harness review; their new bytes were not pre-reviewed by Harness. VERIFICATION PENDING fields describe its creation time. The reviewed index hash identifies the preserved prefix, not the later appended whole file. The final closure commit is reported externally in the own handoff and controller receipt, avoiding self-referential commit claims."
+}
