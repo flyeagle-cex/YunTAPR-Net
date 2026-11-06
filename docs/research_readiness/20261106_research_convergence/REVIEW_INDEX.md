@@ -84,3 +84,8 @@ Harness已完成一次限定公开元数据审核并给出PASS；记录5852B，S
 ## CMA产品身份继续核实（2026-11-06）
 
 当前公开三小时/近7日站点产品、109条云南身份附件与近24h雷达24小时估测图像不能替代目标历史小时观测。详见 [产品身份收据](../20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json) 及LIVE-20261106.3。新的限定审核待完成；旧审核结论保持各自范围。
+
+
+Harness已对修正提交3efb20a完成一次限定独立审核，结论PASS；正式记录5437B，SHA256 `365C2499073346A4D6C1C9EFFB7D1EFED0B844B8079B24030BAC1A33C06CABB0`，自身提交 `976b1816d48dfeb0dcf617cd9e3b7e2543f7bf2c` 已普通推送且由Codex独立核对远端一致。22/22保存证据指纹、109站号/51+53+5及产品语义通过；该审核未重做网络获取或逐页像素视觉检查。S011独立身份主要在计划文本，JSON当前产品数组仅全国/云南两项，作为非阻断观察登记。原失败7831641及三文件修正3efb20a完整保留，未改写为旧版本通过。
+
+结项见 [本轮回执](../20261106_cma_hourly_radar_metadata/REVIEW_OUTCOME.json)。工程PASS仅限本轮公开元数据/文档、独立审核和各自分支同步；Stage4.5 PARTIAL，科学NOT_VERIFIED，研究者NOT_ASSESSED。小时档案、QC、源链和项目许可仍缺，P0/P1为METADATA_INSUFFICIENT；预算NOT_ESTIMABLE，观测获取及实验NOT_AUTHORIZED。计划PDF/tex保持已审LIVE-20261106.3，不为结项补记另增版本；本次仅回执与本索引事实补记，未声称Harness预审过新增字节。

@@ -1,0 +1,114 @@
+{
+  "task": "STAGE4_5_CMA_HOURLY_RADAR_IDENTITY_20261106",
+  "recorded_utc": "2026-11-06T08:11:14.688315+00:00",
+  "controller_scope_message": "ecf132f9-663b-4d4c-95df-c820696c8f72",
+  "engineering_status": "PASS_LIMITED_METADATA_DOCUMENTS_REVIEW_AND_BRANCH_SYNC",
+  "stage_4_5_status": "PARTIAL",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "reviewed_codex_delivery": {
+    "branch": "collab/codex-20261102",
+    "start": "0621bcee1dd005c062021da52b3088abd1c6402c",
+    "primary_commit": "78316415092e5cd15cac8e97551e0e24e42f44ab",
+    "corrected_reviewed_commit": "3efb20a3889b45b2fbde18ec683a9eb5ec0c735f",
+    "remote_verified_directly": true,
+    "correction_files": 3,
+    "preserved_preexisting_untracked_files": 26,
+    "closure_commit_reported_externally": true
+  },
+  "independent_review": {
+    "reviewer": "Harness",
+    "status": "PASS_LIMITED_PUBLIC_METADATA_AND_DOCUMENT_REVIEW",
+    "file": "docs/audits/CMA_HOURLY_RADAR_IDENTITY_REVIEW_20261106.md",
+    "bytes": 5437,
+    "sha256": "365c2499073346a4d6c1c9effb7d1efed0b844b8079b24030bac1a33c06cabb0",
+    "branch": "collab/dsh-20261102",
+    "commit": "976b1816d48dfeb0dcf617cd9e3b7e2543f7bf2c",
+    "remote_verified_independently_by_codex": true,
+    "commit_contains_only_own_review_file": true,
+    "tracked_and_untracked_tree_clean": true,
+    "url": "https://github.com/flyeagle-cex/YunTAPR-Net/blob/976b1816d48dfeb0dcf617cd9e3b7e2543f7bf2c/docs/audits/CMA_HOURLY_RADAR_IDENTITY_REVIEW_20261106.md",
+    "limitations": [
+      "Reviewer verified saved local official responses and fingerprints; did not repeat network acquisition.",
+      "Independent page count, hashes, text and station extraction checks are not pixel-level inspection of all PDF pages.",
+      "Protected baseline snapshot alone is not a full independent OS operation monitor."
+    ]
+  },
+  "nonblocking_review_observations": [
+    "The JSON current_surface_products lists nationwide and Yunnan _530 only; S011 separation is explicit in reviewed plan/correction text. This closure records that scope without silently editing reviewed evidence.",
+    "Historical hourly archive, QC, source lineage, permit and actual size remain unverified."
+  ],
+  "verification_status_note": "VERIFICATION.json preserves the failed final document check, mistaken premature local primary commit, subsequent correction and recheck. This outcome resolves pending review/sync; it does not rewrite original acquisition facts or claim the old failed version passed.",
+  "protected_shared_files_unchanged": {
+    "DECISIONS.md": {
+      "bytes": 1670,
+      "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+    },
+    "COLLABORATION_RULES.md": {
+      "bytes": 24639,
+      "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+    },
+    ".gitattributes": {
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    }
+  },
+  "dsh_append_prefix": {
+    "preserved_bytes": 34598,
+    "sha256": "f8c5f250675440d86033448f737a997645b5df3a5f7648fed3614f805b0d4484",
+    "current": {
+      "bytes": 36719,
+      "sha256": "3eb9b74cdb41f5aac4c69b29bc303956db66ab4faff6788af6c67181a9102dff"
+    },
+    "verified_by": "Codex direct prefix digest check; append authored by Harness"
+  },
+  "artifacts": [
+    {
+      "path": "docs/research_readiness/20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json",
+      "bytes": 22586,
+      "sha256": "88ae1468ef4e2178c258e0b7852ef3c93da1fb9eca84d3031a680ff8faa368d3"
+    },
+    {
+      "path": "docs/research_readiness/20261106_cma_hourly_radar_metadata/VERIFICATION.json",
+      "bytes": 3083,
+      "sha256": "256252f3202e5904b15d3ca4cefa8640a8a2444b49ed5c662626d2d008cb01da"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+      "bytes": 28174,
+      "sha256": "10c40a54b480545b57edea677942990eac1c51789de1cdf7601573521be2326c"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_3.pdf",
+      "bytes": 492717,
+      "sha256": "8cd615e70aaea9982e44c07bdb77513adf4a47a107d2117c62a3ae2d3ae3e882"
+    }
+  ],
+  "evidence_meaning": {
+    "109": "unique Yunnan station identity rows, not verified usable 2023/2024 precipitation series",
+    "A.0012.0001_and_530": "current three-hour observations/three-hour precipitation accumulation in near-seven-day window; not verified historical hourly product",
+    "A.0012.0001.S011": "separate international-exchange-station entry; not merged with the above",
+    "J.0017.0009.S002": "24-hour accumulated radar QPE image, recent-24-hour online window; update cadence and grid spacing do not establish hourly rainfall numeric payload",
+    "P0_P1": "official Yunnan hourly-rain product mention and radar accumulation method respectively; both METADATA_INSUFFICIENT"
+  },
+  "direct_gets": {
+    "requests": 18,
+    "successful": 15,
+    "failed": 3,
+    "retries": 0,
+    "saved_response_body_bytes": 2024003,
+    "excludes": "web-search/parser calls and local overhead"
+  },
+  "payload_acquisition": "NOT_AUTHORIZED",
+  "payload_budget": "NOT_ESTIMABLE",
+  "new_training_inference_evaluation_calibration": "NOT_AUTHORIZED",
+  "final_test_2025": "SEALED_NOT_ACCESSED_THIS_ROUND",
+  "remaining_gaps": [
+    "Specific historical hourly product specifications and 2023/2024 archive coverage",
+    "Station record validity, time/accumulation semantics and QC",
+    "Historical numeric radar QPE identity, archive and station-adjustment/source chain",
+    "Project access permit, actual size/cost and bounded acquisition approval",
+    "Actual collocation and independent scientific evaluation"
+  ],
+  "next_step": "Stop generic source searching. Await controller/researcher decision on specific documentary/holder confirmation and later bounded acquisition; no provider contact, account application or payload access authorized."
+}
