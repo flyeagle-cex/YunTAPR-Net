@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "task": "STAGE4_5_PUBLIC_METADATA_20261106",
+  "status": "METADATA_PREPARATION_COMPLETE_WITH_LIMITATIONS",
+  "created_utc": "2026-11-06T07:09:09.699659+00:00",
+  "research_scope": "Yunnan near-real-time probabilistic satellite precipitation QPE; public metadata feasibility, not observation validation",
+  "authority": "Researcher requested plan-based continuous preparation, plan updates, controller/executor/reviewer workflow and own-branch synchronization. No new observational payload or model execution approval inferred.",
+  "controller_priority": {
+    "thread": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+    "message_id": "c0ae5f4a-4b53-45f5-92f5-d72cf7e29ade",
+    "priority": [
+      "station/radar",
+      "DPR/CMB"
+    ],
+    "evidence_level": "SELF_REPORTED_FOR_V1_1_ORIGINAL_PRIORITY",
+    "limitation": "Controller cites V1.1 section3.1; original V1.1 PDF not re-read by Codex this round. V1.3 independent-validation requirement was directly checked in previous round."
+  },
+  "safety": {
+    "observation_payload_downloaded": false,
+    "model_inference_or_training_or_evaluation": false,
+    "project_2025_final_test_access": false,
+    "account_login_or_registration": false,
+    "provider_contact_or_application": false,
+    "global_product_metadata_may_describe_long_lifetimes": true,
+    "raw_metadata_archive": "docs/research_readiness/.local/external_reference_metadata_20261106_v1",
+    "no_retry": true
+  },
+  "station": {
+    "homr_query_url": "https://www.ncei.noaa.gov/access/homr/services/station/search?name=KUNMING&nameMod=contains&begindate=2023-03-01&enddate=2024-10-31&phrData=false&definitions=false",
+    "homr_record_count": 2,
+    "identity_confirmed": {
+      "ncdcStnId": "30078701",
+      "ghcnd": "CHM00056778",
+      "wmo": "56778",
+      "latitude": 25.017,
+      "longitude": 102.683,
+      "elevation_m": 1892
+    },
+    "homr_period": "Unknown/Present; search date parameters do not prove measurement availability",
+    "station_list_url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh-station-list.txt",
+    "rectangle_station_identity_count": 176,
+    "rectangle_lonlat": [
+      98,
+      21,
+      107,
+      30
+    ],
+    "rectangle_is_province_mask": false,
+    "duplicates_and_foreign_records_not_deduplicated": true,
+    "identity_examples": {
+      "CHM00056778": [],
+      "CHU00056778": [
+        "CHU00056778  25.0300  102.7200 1893.0    KUN-MING CHINA                               CN"
+      ],
+      "CHM00056651": [
+        "CHM00056651  26.8333  100.2167 2382.0    LIJING                                 56651 CN"
+      ],
+      "CHM00056739": [
+        "CHM00056739  24.9833   98.5000 1696.9    TENGCHONG                              56739 CN"
+      ],
+      "CHM00056751": [
+        "CHM00056751  25.7000  100.1833 1992.0    DALI                                   56751 CN"
+      ],
+      "CHI0000ZPPP": [
+        "CHI0000ZPPP  24.9924  102.7435 1894.9    WUJIABA                                      CN"
+      ]
+    },
+    "kunming_cross_dataset_binding": "NOT_VERIFIED: HOMR/GHCND CHM00056778 absent from retrieved GHCNh list; CHU00056778 and other Kunming identifiers are not automatically substituted",
+    "hourly_precipitation_2023_2024_completeness": "NOT_VERIFIED",
+    "inventory_directory_attempt": {
+      "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/inventory/",
+      "result": "HTTP404; no filename guessed or observation file fetched"
+    },
+    "time_support": "GHCNh precipitation can have variable accumulation intervals; element flags and QC must be resolved before hourly/half-hourly comparison",
+    "independence_status": "INDEPENDENCE_UNVERIFIED; no GPCC/GTS station lineage proof"
+  },
+  "dpr": {
+    "collection": "C2179081499-GES_DISC",
+    "short_name": "GPM_2ADPR",
+    "version": "07",
+    "discovery": [
+      {
+        "year": 2023,
+        "temporal": [
+          "2023-03-01T00:00:00Z",
+          "2023-10-31T23:59:59Z"
+        ],
+        "bounding_box_lonlat": [
+          98,
+          21,
+          107,
+          30
+        ],
+        "cmr_hits": 325,
+        "returned_count": 3,
+        "query_url": "https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=C2179081499-GES_DISC&temporal=2023-03-01T00%3A00%3A00Z%2C2023-10-31T23%3A59%3A59Z&bounding_box=98%2C21%2C107%2C30&page_size=3&sort_key=start_date",
+        "examples": [
+          {
+            "id": "G2624447454-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20211125.20230301-S090610-E103838.051162.V07A.HDF5",
+            "time_start": "2023-03-01T09:06:10.966Z",
+            "time_end": "2023-03-01T10:38:39.499Z"
+          },
+          {
+            "id": "G2624452695-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20211125.20230301-S182114-E195345.051168.V07A.HDF5",
+            "time_start": "2023-03-01T18:21:14.080Z",
+            "time_end": "2023-03-01T19:53:46.386Z"
+          },
+          {
+            "id": "G2625716458-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20211125.20230303-S085437-E102708.051193.V07A.HDF5",
+            "time_start": "2023-03-03T08:54:37.910Z",
+            "time_end": "2023-03-03T10:27:09.912Z"
+          }
+        ]
+      },
+      {
+        "year": 2024,
+        "temporal": [
+          "2024-03-01T00:00:00Z",
+          "2024-10-31T23:59:59Z"
+        ],
+        "bounding_box_lonlat": [
+          98,
+          21,
+          107,
+          30
+        ],
+        "cmr_hits": 324,
+        "returned_count": 3,
+        "query_url": "https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=C2179081499-GES_DISC&temporal=2024-03-01T00%3A00%3A00Z%2C2024-10-31T23%3A59%3A59Z&bounding_box=98%2C21%2C107%2C30&page_size=3&sort_key=start_date",
+        "examples": [
+          {
+            "id": "G2891605599-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20240130.20240302-S081023-E094336.056859.V07C.HDF5",
+            "time_start": "2024-03-02T08:10:23.531Z",
+            "time_end": "2024-03-02T09:43:37.378Z"
+          },
+          {
+            "id": "G2891613544-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20240130.20240302-S220927-E234240.056868.V07C.HDF5",
+            "time_start": "2024-03-02T22:09:27.397Z",
+            "time_end": "2024-03-02T23:42:41.179Z"
+          },
+          {
+            "id": "G2891552256-GES_DISC",
+            "title": "GPM_2ADPR.07:2A.GPM.DPR.V9-20240130.20240303-S072849-E090202.056874.V07C.HDF5",
+            "time_start": "2024-03-03T07:28:49.499Z",
+            "time_end": "2024-03-03T09:02:03.325Z"
+          }
+        ]
+      }
+    ],
+    "version_caution": "2023 returned examples V07A; 2024 examples V07C. Do not infer all granules share these suffixes or merge versions without binding.",
+    "cmr_hits_meaning": "Number of metadata search hits overlapping the discovery rectangle/time query; not a Yunnan matched-pixel count, independent-weather-event count, or proof of usable rain/QC. Only three entries per year retained.",
+    "independence_status": "ALGORITHM_LINKED / OBSERVATION_LINKED_CANDIDATE; not certified independent truth",
+    "source_lineage_evidence": "NASA IMERG V07 technical documentation describes CORRA calibration; CORRA uses DPR and GMI. Inference: shared upstream chain makes complete independence unestablished.",
+    "actual_overlap_rain_quality_and_collocation": "NOT_VERIFIED",
+    "payload_access": "Earthdata login required by GES DISC help; this round did not login, request entitlement or fetch HDF5."
+  },
+  "cma_and_radar": {
+    "recent_surface": {
+      "product_code": "A.0012.0001.S011",
+      "url": "https://k.data.cma.cn/mekb/?dataCode=A.0012.0001.S011&r=data%2Fdetail",
+      "published_window": "recent 7 days",
+      "access": "real-name individual/organization registration",
+      "decision": "Does not establish availability of 2023/2024 historical hourly precipitation"
+    },
+    "monthly_surface": {
+      "product_code": "A.0019.0001.S001",
+      "url": "https://k.data.cma.cn/mekb/?dataCode=A.0019.0001.S001&r=data%2Fdetail",
+      "access": "education/research real-name registration",
+      "decision": "Monthly product not substituted for hourly/half-hourly precipitation"
+    },
+    "basic_surface_detail_attempt": "Official catalogue link A.0012.0001 timed out in web parser; historical hourly product/coverage not confirmed",
+    "radar_catalog": "https://k.data.cma.cn/mekb/?CategoryID=70102&r=site%2Findexdata",
+    "radar_result": "Catalogue category opened; no usable 2023/2024 Yunnan radar QPE product identity or permission confirmed; reflectivity imagery is not rainfall truth",
+    "licence_project_scope_and_redistribution": "NOT_VERIFIED"
+  },
+  "sources": [
+    {
+      "url": "https://www.ncei.noaa.gov/products/global-historical-climatology-network-hourly",
+      "purpose": "GHCNh product and official station metadata link"
+    },
+    {
+      "url": "https://www.ncei.noaa.gov/oa/global-historical-climatology-network/hourly/doc/ghcnh_DOCUMENTATION.pdf",
+      "purpose": "Station-list formats, inventory description, precipitation interval and flags"
+    },
+    {
+      "url": "https://www.ncei.noaa.gov/access/homr/api",
+      "purpose": "HOMR query semantics"
+    },
+    {
+      "url": "https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html",
+      "purpose": "CMR collection and temporal/spatial metadata search"
+    },
+    {
+      "url": "https://gpm.nasa.gov/data/directory/2a-dpr-ges-disc",
+      "purpose": "Official DPR product entry"
+    },
+    {
+      "url": "https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation",
+      "purpose": "CORRA calibration/source-lineage caution"
+    },
+    {
+      "url": "https://gpm.nasa.gov/sites/default/files/2023-07/IMERG_TechnicalDocumentation_final_230713.pdf",
+      "purpose": "CORRA uses DPR/GMI, page41; document search excerpt, not locally downloaded"
+    },
+    {
+      "url": "https://disc.gsfc.nasa.gov/help",
+      "purpose": "GES DISC account/download requirements"
+    },
+    {
+      "url": "https://github.com/nasa/gesdisc-tutorials/blob/main/user-guidance/GES_DISC_Migration_to_Earthdata_Website_and_Earthdata_Cloud.md",
+      "purpose": "Current cloud migration warning; old endpoints not assumed current payload access"
+    },
+    {
+      "url": "https://k.data.cma.cn/mekb/",
+      "purpose": "Official current catalogue; not access authorization"
+    }
+  ],
+  "raw_artifact_fingerprints": [
+    {
+      "file_name": "homr_kunming_2023_2024.json",
+      "bytes": 2747,
+      "sha256": "933eb3a108267409e18c438abbaa9b32e887e229a3c5e9ffc3ca0422b1574b8f"
+    },
+    {
+      "file_name": "cmr_2adpr_v07_collection.json",
+      "bytes": 30731,
+      "sha256": "be4922c038c655c58f64ca380daf96088d24f91742752e9effcd51ea4f8762ba"
+    },
+    {
+      "file_name": "cmr_2adpr_v07_2023_discovery.json",
+      "bytes": 20411,
+      "sha256": "b6f5c3871be4d2ec3544a17b9a84ace2a1fccef80fbf22baa989bddadab39b1a"
+    },
+    {
+      "file_name": "cmr_2adpr_v07_2024_discovery.json",
+      "bytes": 20395,
+      "sha256": "465b4bf29d3509a497d3eb3023de1eb4e4fa32a771c34bc486eb07ff64b4a978"
+    },
+    {
+      "file_name": "ghcnh_documentation.pdf",
+      "bytes": 423879,
+      "sha256": "df5694efdc2d498f006a343165bae65701d14809174b9bed660149bd4fe591b7"
+    },
+    {
+      "file_name": "ghcnh-station-list.txt",
+      "bytes": 3459429,
+      "sha256": "ff451fafc8f251560029e9ed31ebf0f4d12a2ddd492516c0b166c3744cad182a"
+    },
+    {
+      "file_name": "attempt_01_receipt.json",
+      "bytes": 7843,
+      "sha256": "860775ce220d6788bdd020d2833a94e0b0d9b92a4cb9ab9e77cf590d789b8941"
+    },
+    {
+      "file_name": "attempt_02_receipt.json",
+      "bytes": 26829,
+      "sha256": "e5192b065b16c7b989804acd693ae1cc91c60526d2b8117fbbf8802f6bad2a07"
+    },
+    {
+      "file_name": "attempt_03_receipt.json",
+      "bytes": 17627,
+      "sha256": "85d5ea8a7f2daf2fe9b394ee5e7fe99f90c5f3954e1440f094eeb92492d6d58c"
+    }
+  ],
+  "readiness": {
+    "station_product_identity": "PARTIAL",
+    "station_element_time_coverage": "NOT_VERIFIED",
+    "radar_product_and_coverage": "NOT_VERIFIED",
+    "dpr_collection_and_candidate_granules": "DIRECT_VERIFIED",
+    "independent_observation_validation": "NOT_VERIFIED",
+    "study_mastery": "NOT_ASSESSED"
+  },
+  "next_minimum": "First verify the official CMA historical hourly precipitation product identity, station directory, accumulation semantics, 2023/2024 archive, QC, licence and GPCC/GTS lineage. Second verify historical Yunnan radar product/archive identity. Retain DPR candidate without expanding this round. Observation payload acquisition awaits exact source, period, fields, size/time budget and researcher approval.",
+  "engineering_status": "PENDING_INDEPENDENT_REVIEW_AND_GIT_SYNC",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "controller_scope_decision": {
+    "message_id": "7bceee8c-10ee-4356-a0f4-64b8179cefd2",
+    "status": "Stage4.5 PARTIAL; metadata delivery only; no payload or experiment approval",
+    "next_priority": [
+      "CMA historical hourly station precipitation product metadata",
+      "CMA historical Yunnan radar archive metadata",
+      "DPR retained candidate; no further expansion this round"
+    ]
+  },
+  "acquisition_budget_status": "NOT_ESTIMABLE"
+}

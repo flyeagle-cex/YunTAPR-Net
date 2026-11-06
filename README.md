@@ -4,13 +4,14 @@
 
 当前处于开发资料证据收敛与独立验证准备阶段。研究主线为云南复杂地形约束下的近实时卫星概率降水反演，既有实证采用 2023 Train 与反复使用的 2024 Dev。
 
+- 2026-11-06 Stage 4.5公开元数据实查：NOAA发现框内176条身份记录（非云南可用站数）；DPR V07在2023/2024暖季发现框CMR命中325/324，每年仅保存3条元数据。昆明跨产品站号未绑定、小时降水覆盖/许可未核实；DPR与IMERG存在共享上游链，不能标记完全独立真值。未获取观测或执行模型。详见 [可追溯元数据收据](docs/research_readiness/20261106_external_reference_metadata/METADATA_FEASIBILITY.json)。
 - B0–B8 及既有控制实验的完成范围继承下方历史收据。本轮没有新增训练或重新评价。
 - 11月5日已提交的 B3_DOTE_ONLY / seed2029 收据报告固定 E9、4320 更新完成。四项发生概率/条件分布指标小幅改善，RMSE 上升，强雨点检出仍为 TP/FP/FN=0/0/717。该单 seed 既有收据处于原 V3 九模型比较范围之外，AP 使用降水发生标签，与强雨排序 AP 的标签不同。单 seed 结论与参数变化局限保留。详见 [既有收据](docs/research_readiness/20261105_b3_dote_without_mee/receipt.json)。
 - 本轮已只读核实11月5日后续工作簿保存了182个完整2024日期、19个固定端点、每Seed624260像元日的日累计结果。旧交付收据的零完整日是历史快照。高程评价仍只覆盖策略五/八/九，坡度/坡向和Train W/L/M分组未补齐。保存结果存在不等于本轮独立复算，详见 [补全回执](docs/research_readiness/20261106_research_convergence/HISTORICAL_EVIDENCE_RECOVERY.json)。
 - T12–T14 的限定排序证据与科研收敛结论继承。T15 理论结项，T16 原稿保留 Harness 的 NEEDS_REVISION，T16-R1 经总控接受，T17 理论结项并保留补充定义。完整来源与覆盖缺口见 [本轮证据索引](docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md)。
 - T18-R1 已获 Harness 限定 PASS，仅限 PROPOSED 纸面推断候选。初稿 NEEDS_REVISION 与修订关系保留；C1/C2 数值为必要拒判保护，不能证明真实覆盖。独立 E、联合 AP/Top1 推断适用性材料和精确执行批准仍缺失。详见 [T18 审查状态](docs/research_readiness/20261106_research_convergence/T18_REVIEW_STATUS.md)。
 - 原V1.3开发池与后续2023Train/2024Dev具体口径分开登记。原计划已有独立外部验证，额外E是T16–T18确认性要求，不能作为所有原计划工作的共同阻塞。H1/H2仍INCONCLUSIVE / INDEPENDENT_NOT_VERIFIED，具体执行预算与批准仍须满足。已有外部参考候选调查，实际许可/观测/独立源链未落实。详见 [入口条件](docs/research_readiness/20261106_research_convergence/EVALUATION_ENTRY_GATES.md)。
-- 总项目计划书按研究者要求建立持续维护的 [执行状态更新版PDF](output/pdf/YunTAPR-Net_Master_Plan_Live.pdf) 和 [可修改LaTeX源文件](output/pdf/YunTAPR-Net_Master_Plan_Live.tex)，原20260924方案保留，不以文档更新自动批准科研变更。
+- 总项目计划书按研究者要求建立持续维护的 [执行状态更新版PDF](output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_2.pdf) 和 [可修改LaTeX源文件](output/pdf/YunTAPR-Net_Master_Plan_Live.tex)，原20260924方案保留，不以文档更新自动批准科研变更。
 - 科学状态 NOT_VERIFIED，研究者掌握 NOT_ASSESSED。网页 GPT 总控、Codex 执行、Harness 独立审核，研究者保留最终科学决定。
 - 本轮记录与 Git 同步限定在各自工作分支。2025 Final Test 保持封存。下方记录按各自历史时点阅读。
 
