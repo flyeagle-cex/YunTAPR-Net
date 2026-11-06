@@ -1,0 +1,188 @@
+{
+  "version": "PARALLEL-CORE-20261106.1",
+  "recorded_local": "2026-11-06T20:23:25.832966+08:00",
+  "researcher_scope": "Explicit multi-agent continuation, avoid ineffective preparation/review; no promise of perfect or positive experimental results.",
+  "start_branch": "collab/codex-20261102",
+  "start_commit": "4f94c18c01794939690bee2f6780258e10d7ce83",
+  "controller_messages": {
+    "scope": "024a5480-6d08-4aaa-89af-4bce6108ee5a",
+    "science_boundary_correction": "657329d1-a46c-427d-8d44-7c6738859aaa",
+    "prior_LIVE8_closed": "c5f8fcd9-9ce2-4e41-8812-5e82d1e36b04"
+  },
+  "artifacts": {
+    "src/yuntapr/experimental/research_readiness/native_multiscale_adapter.py": {
+      "bytes": 8679,
+      "sha256": "afe127aef0dd5bc9ba440fabb9732724cb10ccd9844a4f77ea82517d637f7019"
+    },
+    "tests/research_readiness/test_native_multiscale_adapter.py": {
+      "bytes": 9675,
+      "sha256": "b062bf725e18de56dc60b6f4470b1a34b9f5b5fa9b4c7feeacc8eec81e6e98ee"
+    },
+    "src/yuntapr/experimental/research_readiness/dote_transform_factory.py": {
+      "bytes": 11111,
+      "sha256": "2a8acdfdb4150c20eb761f1fae3200d93dd094ab5fa53254d0f9ba4442b66e6e"
+    },
+    "tests/research_readiness/test_dote_transform_factory.py": {
+      "bytes": 11083,
+      "sha256": "ae6450333cadfb5fc6d4272ee2869f262ae3a26fabc13cd88a56a9eaedd38e38"
+    },
+    "src/yuntapr/experimental/research_readiness/tail_identifiability.py": {
+      "bytes": 5367,
+      "sha256": "e1596d9dd3b97e73959505bfa53a6d2366f0f3784543bf247d24a1de8bd89f9f"
+    },
+    "tests/research_readiness/test_tail_identifiability.py": {
+      "bytes": 6735,
+      "sha256": "72a0830ca86836d9ab4a8cdd4a938e872c9f470bd9732b8ae8a4a3fb9eae7a44"
+    },
+    "README.md": {
+      "bytes": 21450,
+      "sha256": "ab756fca014be5e6288e50e1711fcb7a6034989b0474932f0e6206734eeb04eb"
+    },
+    "STAGE_ACCEPTANCE.md": {
+      "bytes": 33489,
+      "sha256": "755266588a6c8ad61f9031e18c358eb125a7eddd0422cb14451ec8aa8f279467"
+    },
+    "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": {
+      "bytes": 22891,
+      "sha256": "57b528dc85b70c772826811c84013b2672f450492f02f326d0228f72f93df62e"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 43629,
+      "sha256": "b88a8180ce4ef4d026cf775e9447cbed892cb9721046839e216c1e38212d9eb8"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_9.pdf": {
+      "bytes": 599761,
+      "sha256": "ef90ed55d13d514db1e708be809c90bbf98d50e51e0773e3b7d82e48aa3a4085"
+    }
+  },
+  "agent_contributions": {
+    "dtfm_design": {
+      "files": [
+        "src/yuntapr/experimental/research_readiness/native_multiscale_adapter.py",
+        "tests/research_readiness/test_native_multiscale_adapter.py"
+      ],
+      "agent_targeted_tests": 9,
+      "implemented": "Actual existing encoder tensors at explicit 2+ taps -> unchanged multi-scale fusion -> actual original decoder. No new encoder/decoder layer or implicit spatial mapping.",
+      "limitation": "Actual underlying B0Backbone plus same existing 42-channel stem artificial construction; complete Stage2 wrapper NOT_RUN because unrelated YAML loader import failed before any forward. Failure is agent self-report, not root independent replay."
+    },
+    "dote_controls": {
+      "files": [
+        "src/yuntapr/experimental/research_readiness/dote_transform_factory.py",
+        "tests/research_readiness/test_dote_transform_factory.py"
+      ],
+      "agent_targeted_stub_tests": 6,
+      "root_added_end_to_end_test": 1,
+      "implemented": "Explicit already-loaded full original Train/Development manifests plus PopulationPlan identity/rows/ordered IDs -> actual two-argument transform factory and exact analysis routing.",
+      "limitation": "Old run_task does not pass plan and PopulationPlan does not retain original manifest bodies; no automatic binding, manifest discovery or formal registration."
+    },
+    "tail_evaluation": {
+      "files": [
+        "src/yuntapr/experimental/research_readiness/tail_identifiability.py",
+        "tests/research_readiness/test_tail_identifiability.py"
+      ],
+      "agent_new_tests": 12,
+      "existing_reuse_entry_tests_executed": 14,
+      "existing_reuse_entry_tests_evidence": "AGENT_SELF_REPORTED_14_PASS_0.163S; root did not rerun these 14.",
+      "implemented": "Reuse existing strict exceedance/decision API; add inclusive tails, CDF left/right limits and conservative atom-mass bounds without interpolation or tail completion.",
+      "limitation": "Repository tools module must be importable; input support/quantile assumptions and nonrain component are explicit caller declarations, not verified physical distribution."
+    }
+  },
+  "root_combined_checks": {
+    "recorded_local": "2026-11-06T20:17:18.512398+08:00",
+    "counts": {
+      "test_native_multiscale_adapter.py": 9,
+      "test_dote_transform_factory.py": 7,
+      "test_tail_identifiability.py": 12
+    },
+    "run": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "success": true,
+    "scope": "Artificial CPU arrays and actual underlying encoder/decoder forwards only; no backward, optimizer or scientific payload.",
+    "old_43_or_8_tests_repeated": false
+  },
+  "root_test_log": {
+    "bytes": 5255,
+    "sha256": "f219ed9513f4247f983504abaf2f6316e05313fd9be55ce4ee4c3148c5b323b1"
+  },
+  "unchanged_selected_sources": {
+    "src/yuntapr/experimental/research_readiness/dote_direction_transform.py": {
+      "bytes": 11696,
+      "sha256": "f1cf44ebade31cf4469c00361f0ebfaafccc6c031bb86d6b19d33d935ab0e9b2"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": {
+      "bytes": 17995,
+      "sha256": "4b9403bf3d32bd6920c659ef8b5ead5d4e198b3ca41ee68e9ceb8090fdd0b03e"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": {
+      "bytes": 7718,
+      "sha256": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07"
+    },
+    "src/yuntapr/experimental/research_readiness/multiscale_candidate.py": {
+      "bytes": 7187,
+      "sha256": "8a36d47e6526e37bf8372c972363ff26728c369061164db41ec46fb0945a062d"
+    },
+    "tools/research_readiness/extreme_diagnostic_candidates.py": {
+      "bytes": 4559,
+      "sha256": "987eb893ba0e73217698463052bc6fd5077e2d75e628423e4c37d77f41f61334"
+    },
+    "src/yuntapr/models/backbone_b0.py": {
+      "bytes": 2484,
+      "sha256": "79f35a29349eae9dcba705b7e127899972d0bcea723773043547f0d7f341819f"
+    },
+    "src/yuntapr/experimental/core_innovation/stage2/models.py": {
+      "bytes": 7050,
+      "sha256": "9573fd013c797c5e846d0b08d1eeb4049167c6f35944cd4b78dd8b72dd4cdb0c"
+    }
+  },
+  "old_LIVE8": {
+    "bytes": 582954,
+    "sha256": "ca884067cdfe12ae98894759c8966282c986e48ad73ef521b6f938fb31b75b37"
+  },
+  "history_retention": "README/STAGE old suffix and review-index old prefix DIRECT_BYTE_VERIFIED",
+  "known_failures_and_limits": {
+    "first_baseline_command": "Mislocated code filename caused FileNotFoundError; corrected using actual tools source location; no scientific file accessed.",
+    "complete_stage2_import": "Agent-reported ModuleNotFoundError yaml before forward; no install or mixed-environment injection; full wrapper remains NOT_RUN.",
+    "pdf_first_build": "32.61066pt overfull in source index; stopped before Git/review, shortened wording.",
+    "pdf_second_build": "18 pages with redundant final change paragraph alone; removed duplication already on cover/6H; final17 pages.",
+    "pdf_final": "17 pages; no overfull/missing character; changed pages 1/11/12/15/17 visually checked; remaining layout inherited.",
+    "pdf_operation_marker_successes": 1
+  },
+  "proposed_next_science_only": {
+    "experiment": "DOTE-DIRECTION-MINIMAL-01",
+    "estimand": "Direction-specific predictive representation benefit relative to a fixed label-free scene rotation; not physical causality.",
+    "primary_metric": "AP20[q32]_PROPOSED_NOT_APPROVED",
+    "label": "IMERG_V07_Final strictly >20 mm/h",
+    "score": "conditional highest quantile, not P20 probability calibration",
+    "evaluation_status": "2024_REUSED_DEVELOPMENT_NOT_INDEPENDENT_CONFIRMATORY",
+    "historical_B7": "Reuse only after actual pairing equivalence is verifiable; do not automatically retrain successful real group.",
+    "capacity": "Matched nominal structure/parameter groups/common initialization/no artificially constant-zero columns; natural activations/gradients need not be equal.",
+    "effect_threshold_degradation_inference": "PENDING_RESEARCHER_DECISION"
+  },
+  "execution_gates": {
+    "real_manifests_or_grid_mapping_bound": false,
+    "complete_model_heads_and_default_executor_integrated": false,
+    "scientific_acceptance_approved": false,
+    "execution_commit_budget_paths_and_grant_bound": false,
+    "real_training_inference_evaluation_authorized": false,
+    "execution": false
+  },
+  "scientific_actions": {
+    "real_dataset_checkpoint_or_restricted_cache_reads": 0,
+    "final_test_access": false,
+    "optimizer_or_backward": 0,
+    "real_training_inference_evaluation_calibration_bootstrap": 0,
+    "artificial_actual_backbone_CPU_forwards": "YES_ENGINEERING_ONLY"
+  },
+  "not_repeated": [
+    "old43 synthetic suites",
+    "old8 DOTE interface suite",
+    "previous14 scientific source / 8 E9 identity audit"
+  ],
+  "engineering": "PASS_ROOT_TARGETED_ENGINEERING_PENDING_HARNESS_AND_GIT",
+  "scientific_status": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "all_project_defects_resolved": false
+}

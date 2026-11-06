@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.8}\qquad 状态截至：2026年11月06日19时37分（北京时间）
+版本：\texttt{LIVE-20261106.9}\qquad 状态截至：2026年11月06日20时19分（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
@@ -43,10 +43,10 @@
 
 \section*{本次实际更新}
 \begin{itemize}
-\item LIVE.7候选方案已由Harness限定审核通过，双方Git及Shared闭环；不重复旧43项测试、14来源或8端点身份审计。\evi{S17}
-\item 本轮直接补唯一场景映射及DOTE局部风封装，兼容原frame调用形式，保持默认读取器和物理计算路径不变。\evi{S18}
-\item 8项针对性合成CPU检查通过：唯一场景映射、先映射后干预、O/W/L/M、真实支持不变及异常即停。不是模型效果评价。\evi{S18}
-\item 真实清单未读取/绑定，正式执行链未接入，科学判据/新预算未批准；候选仍不可执行。外部PARTIAL，科学与掌握状态保持。
+\item 三代理并行补真实接缝：原生编码器多尺度融合返回原解码器、内存清单到DOTE工厂、严格/包含等号尾概率界。\evi{S19}
+\item root合并28项人工CPU检查通过，数量为原生9、DOTE桥接7、尾部12；旧43/8不重复运行。代理另验证旧尾部入口14项。\evi{S19}
+\item 原默认及冻结链不改，完整Stage2封装因缺PyYAML未运行；真实网格映射、清单绑定、概率头和正式执行仍未完成。
+\item 总控建议AP20[q32]仍PROPOSED；优先核验复用B7，不机械重训或承诺梯度相同。无新增预算批准，不保证正向或完美结果。
 \end{itemize}
 
 本轮工程状态以限定审查和Git完成回执为准；项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本版的下一步建议均为\texttt{PROPOSED}，不是实验启动书。
@@ -237,7 +237,7 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 \pageheading{6D\quad 多智能体讨论后的最小工程起点}{CORE-PREP-20261106.1；候选实现和合成检查，不是实验结果。}
 \section*{三个隔离候选}
 \begin{enumerate}[leftmargin=2em,itemsep=6pt]
-\item \textbf{显式多尺度融合接口。}复用既有FusionCandidate，要求两个以上不同尺寸、不同物理网格的尺度及逐尺度条件、掩膜。重复SP04、错位或缺少映射时拒绝，没有自动resize。仍未接原生encoder/decoder，真实映射和完整多尺度模型均PENDING。
+\item \textbf{显式多尺度融合接口。}复用既有FusionCandidate，要求两个以上不同尺寸、不同物理网格的尺度及逐尺度条件、掩膜。重复SP04、错位或缺少映射时拒绝，没有自动resize。该旧候选当时未接原生encoder/decoder；6H记录本轮接缝进展，真实映射与完整模型仍PENDING。
 \item \textbf{DOTE方向与特征可用性控制。}候选固定方向和按场景稳定随机旋转只作用于控制输入，不改MEE、原DEM或旧PhysicalDote。去M、单层置零保留mask时，只称FEATURE\_AVAILABILITY；不宣称等有效容量或物理因果。
 \item \textbf{场景身份与日历分组。}只接受调用方提供的元数据，核对预测/标签和预先指定完整场景清单、UTC窗口、物理网格、mask、像元顺序及单位。日历分组不能生成独立天气事件ID，六小时样本不能冒充连续半小时轨迹。日历以场景时间分组；参考窗口端点关系和日历边界未核验，正式接入前须冻结其语义。
 \end{enumerate}
@@ -255,7 +255,7 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 \toprule 包 & 要解决的问题 & 当前下一步及边界\\\midrule
 P1 & 主表人口和重复性 & 继承已完成三Seed；B5/B6如承担正式Q3主结论，准备2030/2031配对包。早期人口和身份限制单独处理，不直接拼表。\\
 P2 & DOTE表征与机制 & 先冻结方向、mask、去M及对照问题、主指标和否证规则，再申请最小实验；q/no-mask未具备输入时保持不可执行。\\
-P3 & 多尺度DTFM & 明确原生501/251/126/63坐标和保守条件映射，集成encoder与decoder，匹配concat。现有SP04结果不可代替。\\
+P3 & 多尺度DTFM & 隔离encoder/decoder接缝已补；501/251/126/63真实条件映射、完整残差与概率头仍待接入，现有SP04结果不可代替。\\
 P4 & 强雨与尾部 & 原ABC及P20结构界继承；H1/H2分别审查，不把统一缩放视作AP保证，不把有限分位补全假设视作唯一真实概率。\\
 P5 & 过程与业务 & 优先查已保存密集结果的合法索引；完整事件、FSS、区域及业务到达时效缺口另行设计，不自动推理填图。\\
 P6 & 最终冻结与掌握 & 开发选择结束后，由研究者冻结最终模型和一次测试协议；2025继续封存，研究者掌握仍需本人留痕。\\
@@ -305,6 +305,21 @@ DirectionDoteTransform复用原物理公式，在原生/目标pressure mask及�
 
 本阶段新增的是\textbf{隔离接口和8项针对性检查}，不是正式冻结或科学成功。限定差异审核及Git实际结项另记，不扩展重复理论审查；科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
 
+\pageheading{6H\quad 三代理实际接缝与剩余阻塞}{PARALLEL-CORE-20261106.1；隔离工程实现，不是完整模型或科学验收。}
+\section*{本轮实际完成}
+\begin{enumerate}[leftmargin=2em,itemsep=7pt]
+\item \textbf{原生多尺度接缝。}直接调用既有四层编码器，按显式2+tap送入既有融合，回填skip/bottleneck并进入同一解码器。不是SP04池化。人工9方格输入取得9/5/3/2尺度；零初始化保持原路径，人工非零残差能影响解码器。未接真实条件映射、MEE/static残差、SP04投影和概率头。
+\item \textbf{DOTE两参数工厂。}明确接收已在内存的原manifest正文、plan身份和角色ID；Train/Dev分别保留原SHA，通过analysis唯一分派。缺正文立即拒绝，不能用accepted rows重建并冒称原SHA。原run\_task不传plan，正式调度器仍须显式绑定。root新增人工100方格两角色贯通检查，调用实际O/W/L/M公式且保留输入和mask。
+\item \textbf{概率尾部识别。}复用旧严格超阈实现，补充包含等号、CDF左右极限及阈值质量的保守包络。离散分布反例验证相同32节点可以有不同上尾；不进行CDF插值、尾形拟合或精确概率伪造。发生边界须显式声明非雨分量，未知即保留范围。
+\end{enumerate}
+\section*{实际检查与限制}
+root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入口14项通过。旧43/8不重跑。原生检查仅为实际底层backbone及原42通道stem人工构造，完整Stage2封装导入缺PyYAML而零前向；未安装依赖、未冒称整模型通过。旧默认代码及历史结果保留。\evi{S19}
+
+\section*{下一真实问题仍须批准}
+总控建议只研究真实方向相对固定场景随机旋转的表征增益，主评分候选为\textbf{AP20[q32]}，标签严格IMERG参考大于20；不是P20校准。2024仍是开发集，指标/效应/退化及推断规则未冻结。B7仅在完整配对等价可核验时复用，不默认重训；自然ReLU/梯度差异公开，不能承诺强等有效容量。\evi{S19}
+
+真实资料身份/路径、正式接线、执行commit和新预算/专项授权仍缺，\texttt{execution=false}。工程检查或更多代理不能产生科研批准；外部Stage4.5仍PARTIAL，科学NOT\_VERIFIED，研究者NOT\_ASSESSED。原假设允许失败，不以“完美结果”为停止条件。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -350,12 +365,12 @@ DirectionDoteTransform复用原物理公式，在原生/目标pressure mask及�
 \item[S16] \path{docs/research_readiness/}\\\path{20261106_core_completion_prepare/}。WORK\_PACKAGES、合成检查及审核回执；候选准备，不是实验或2025批准。
 \item[S17] \path{docs/research_readiness/}\\\path{20261106_dote_direction_freeze/}。SOURCE\_BINDINGS及DOTE\_FREEZE\_CANDIDATE；8个历史端点、对象类型更正、场景接入缺口和未批准字段。
 \item[S18] \path{docs/research_readiness/20261106_dote_interface/VERIFICATION.json}。内存场景lookup、局部风封装与8项合成检查；无真实数据绑定或科研执行。
+\item[S19] \path{docs/research_readiness/}\\\path{20261106_parallel_core/VERIFICATION.json}。三代理接缝、28项合并检查、旧尾部14项及真实限制；科学建议仍待研究者批准。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \end{description}
 \normalsize
-本版变更：直接补DOTE唯一场景lookup与局部风接口，8项合成检查通过；不重复旧审计。真实绑定/正式接线与科学预算门槛保留，无模型执行、载荷读取或新增实验额度。
 
 
 \end{document}

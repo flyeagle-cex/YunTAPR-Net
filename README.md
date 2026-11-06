@@ -1,3 +1,16 @@
+# 2026-11-06 三代理实际接口补缺 / LIVE-20261106.9
+
+本轮只补三项可执行工程接缝，不承诺“完美指标”，不注册正式模型或启动科研实验。
+
+- 原生多尺度：实际四层encoder的显式2+tap经旧融合返回同一decoder；真实条件映射、MEE/static/SP04投影及概率头仍未接。
+- DOTE桥接：完整已内存原manifest和已验证plan显式绑定到两参数factory；分角色保留SHA，缺正文即拒绝。原run_task未自动提供这些上下文，不伪造绑定。
+- 尾部：复用已有严格P(R>r)实现，补P(R>=r)、CDF左右极限及阈值原子质量的保守界，不补全CDF或伪造精确尾概率。
+- root合并28项人工CPU检查通过（原生9/桥接7/尾部12），其中1项新贯通实际DOTE公式；旧43/8不重跑。代理另验证复用尾部入口14项，单独记载。
+- 总控024a5480及657329d1确认本轮三接口、一次新增差异审核；AP20[q32]仅PROPOSED，B7优先核验复用，不机械重训，不要求逐样本梯度相等。科学/预算门槛未批。
+- 实际证据：docs/research_readiness/20261106_parallel_core/VERIFICATION.json；最新计划output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_9.pdf及可编辑LaTeX。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。
+
+---
+
 # 2026-11-06 DOTE场景映射与局部风接口 / LIVE-20261106.8
 
 按研究者“继续，避免大量无效准备审查”的指令，只补LIVE.7已定位的接口阻塞。新增SceneManifestLookup与DirectionDoteTransform；不改默认BatchReader/PhysicalDote，不注册正式执行器。
