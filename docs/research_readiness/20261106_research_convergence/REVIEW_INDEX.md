@@ -1,3 +1,8 @@
+## 2026-11-06 多代理性能路线讨论闭环
+
+- 三代理+总控+Harness讨论建议已取得，无根本分歧；不是新实验或科学验收。先固定T17候选开发pilot，训练候选独立决策；本轮未执行。
+- 收据：docs/research_readiness/20261106_performance_route/DISCUSSION.json。LIVE.11文档维护为审后root检查，不新增审核轮次；旧26项PASS属于旧代码/统计恢复，不用于本轮。
+
 ## 2026-11-06 B7精度恢复限定审核已结项
 
 - Harness：docs/audits/Q32_BASELINE_REVIEW_20261106.md，26项新人工检查通过；PASS仅代码/收据审核，未独立重读真实数组AP。DSH分支ea672a3cafa4d574f4b5e892c7e481dfc544845f已普通推送并直接核对远端。

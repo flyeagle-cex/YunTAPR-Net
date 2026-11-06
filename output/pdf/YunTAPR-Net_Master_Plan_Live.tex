@@ -33,23 +33,23 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.10}\qquad 状态截至：2026年11月06日21时33分（北京时间）
+版本：\texttt{LIVE-20261106.11}\qquad 状态截至：2026年11月06日23时08分（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{IMERG参考下的成果收敛与核心缺口工程准备。}
+\status{强雨性能改进路线已收敛，实际干预尚未执行。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者委托多代理讨论决策；Codex、三个代理和总控就下一主对照、AP20[q32]、固定三Seed及判据达成一致，无实质分歧。\evi{S20}
-\item 只研究真实DOTE相对逐场景固定刚性随机旋转；2029、2030、2031串行，不按首Seed结果决定是否扩展，不重训成功B7。
-\item 低内存评分13项、恢复入口11项及清单边界2项人工检查由root通过；另有同规模人工Job内存检查，旧28/43/8继承。
-\item 对已有B7三Seed 2024预测作一次有界AP精度恢复；实际结果及一次Harness审核见6I与新收据。不启动训练或模型推理。
+\item 三名独立代理分别讨论输出、训练及目标错配；网页总控收敛建议，Harness独立意见已实际取得。仅为路线讨论，未开展新实验。\evi{S21}
+\item 优先候选为一次固定T17 $P20_c$ 开发性评分试验；DOTE方向对照和多尺度DTFM补证后移，不以补证替代性能改善。
+\item 固定网络及A/B/C时，原点雨强及其强雨零检出保持不变；新评分只能检验排序和固定报警数量下的命中效用。
+\item 全局分位损失占比调整保留为独立训练候选；不因评分试验成败自动启动。既有训练、失败、基线及LIVE.10原件保留。
 \end{itemize}
 
-项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本轮一致方案依研究者决策委托固化；正式控制训练尚未启动，有限执行身份仍需补齐。治理规则及2025封存不变。
+本轮没有新增性能结果。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。路线共识不构成统计、模型执行或预算批准；2025继续封存。6I保留前轮基线恢复，当前优先级见6J。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -320,7 +320,7 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 
 真实资料身份/路径、正式接线、执行commit和新预算/专项授权仍缺，\texttt{execution=false}。工程检查或更多代理不能产生科研批准；外部Stage4.5仍PARTIAL，科学NOT\_VERIFIED，研究者NOT\_ASSESSED。原假设允许失败，不以“完美结果”为停止条件。
 
-\pageheading{6I\quad 委托共识与既有预测精度恢复}{DOTE-Q32-20261106-DECISION-01；无分歧不逐项请示，不产生无限预算。}
+\pageheading{6I\quad 委托共识与既有预测精度恢复}{前轮基线恢复快照；本轮性能路线优先级见6J，不改原执行记录。}
 \section*{已作出的一致决定}
 主问题为真实方向相对场景固定刚性随机旋转的\textbf{开发集表征排序增益}。控制seed固定20261106、规范时间为analysis UTC；同场景两层和各像元共用一个角度。主指标AP20[q32]使用严格float32 $R>20$、FP64物理q32、自然全人口和精确并列组末端非插值AP；不是P20校准。\evi{S20}
 
@@ -341,6 +341,28 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 新控制包历史科学源成本候选为12,960更新、1,432,715,861,520字节、428,439次，含静态938,484字节；18小时、72GiB初始/24GiB逐任务、零重放重试。\textbf{完整元数据、预检、真实接线与新路径尚未绑定，不是可启动包。}旧评价器AP为发生概率AP，同次E9 Dev还须显式接入q32主评分，不能靠额外推理补取。
 
 本轮工程结项以新收据/一次Harness审核/Git为准；科学NOT\_VERIFIED、外部Stage4.5 PARTIAL、知识NOT\_ASSESSED。2024非独立确认人口，2025封存，不承诺正向或完美结果。
+
+\pageheading{6J\quad 从证据补齐转向性能干预}{路线讨论已收敛；PROPOSED，不是实验启动书或科学验收。}
+\section*{各方意见与取舍}
+输出代理和独立反对者首选固定读出试验，训练代理在训练候选中首选全局$\lambda_q:1\to2$。交叉讨论后，训练代理明确不反对低成本读出先行，但它不检验训练中的任务权衡。Harness独立同意先读出、暂不训练；总控收件与原始意见类型见S21。\evi{S21}
+
+\textbf{唯一优先候选。}复用已有B7三个Seed的2024预测，保持T17规定的线性CDF插值及指数尾假设，只比较固定$P20_c$评分与q32。按同一完整自然人口、严格$R>20$、真实并列规则报告逐Seed AP，以及事先固定Top-K下的TP/FP。不选最好Seed，不扫尾形，不事后更换主指标。
+
+\begin{tabularx}{\textwidth}{@{}p{2.7cm}X X@{}}
+\toprule 对象 & 能检验 & 不能由此推出\\\midrule
+AP与固定Top-K & 排序、同报警数的命中和误报 & 校准、低FPR或业务可用\\
+固定A/B/C雨强 & 原有表现继续保留 & 评分试验修复幅值或原TP=0\\
+候选$P20_c$ & 给定补全假设的风险读出 & 32节点唯一识别真实P20\\
+\bottomrule
+\end{tabularx}
+
+\section*{不制造表观成功}
+严格单调变换保持原排序；Top-K报警数量不等于固定FPR。稳定log风险仅可作为数学等价排序，需保留真实并列和$p=0$最低结构组，不能把指数下溢当结构零。$\Delta$AP大于0.001仍只是代理的筛选建议，未冻结为业务或科学达标线。实际同人口AP增加可如实记为开发性排序收益，不能因尾形假设一概抹去，也不能据此证明物理归因、校准或泛化。
+
+\section*{训练候选独立决策}
+若仍需训练，候选为同B7 E9起点的E0与全局$\lambda_q=2$等步数配对。仅同权重不够：还须核对模型、AdamW/RNG、顺序、学习率与终点；完整可恢复状态尚未直接核实。当前Stage4固定E0及九轮，E2原注册仅B0/B1；新入口未就绪，Seed/步数/预算未冻结。不能拿新短训与旧E9比较，也不能自动接续训练补救。
+
+候选无有用收益就停止该候选，不扩模块或扫参数追正结果。2024重复开发集、三Seed非独立天气、独立E及外部资料缺口继续保留。工程讨论记录完成不等于实际干预PASS；本轮无新统计、推理、训练或2025访问。
 
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
@@ -370,7 +392,7 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 
 \pageheading{8\quad 来源、版本与本轮变更回执}{本页给出复核入口。完整文件指纹以同轮JSON收据及Git提交为准，避免自引用。}
 \small
-\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=1pt]
+\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=0pt]
 \item[S0] 原2026-09-24 V1.3正式计划PDF，20页，1,561,261字节。Codex前版直接核对§9、§11、Stage-Gate和知识Gate；本版继承，未改原文件。SHA256：\par\texttt{bd3af5e3ebe1fe6e28b2b31699babecdd}\\\texttt{c506412310fd96eb80d1c695aabb5fe}
 \item[S1] \path{config/science_contract_v1.1.yaml}。后续冻结的具体实验口径；不倒写原V1.3。SHA256见合并回执。
 \item[S2] \path{STAGE_ACCEPTANCE.md}、\path{EXPERIMENT_MATRIX.csv}、\path{METRICS.csv}。现有阶段与端点索引，本轮没有逐权重重验。
@@ -389,6 +411,7 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 \item[S18] \path{docs/research_readiness/20261106_dote_interface/VERIFICATION.json}。内存场景lookup、局部风封装与8项合成检查；无真实数据绑定或科研执行。
 \item[S19] \path{docs/research_readiness/}\\\path{20261106_parallel_core/VERIFICATION.json}。三代理接缝、28项合并检查、旧尾部14项及真实限制；科学建议仍待研究者批准。
 \item[S20] \path{docs/research_readiness/20261106_q32_baseline/}中的\path{CONSENSUS.json}、\path{RESULT.json}及\path{VERIFICATION.json}；本轮委托共识、实际统计与新增差异复核；两尝试累计计费，非新推理或科学验收。
+\item[S21] \path{docs/research_readiness/20261106_performance_route/DISCUSSION.json}。三代理、总控及Harness路线讨论；无新实验，记录不冒称科学批准。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
