@@ -231,7 +231,7 @@
     "tables_source_message": "321e5946-95d8-4554-9274-00821b910b98",
     "pages": 9
   },
-  "engineering": "PASS_LIMITED_REVIEW; GIT_SYNC_PENDING_AT_PRECOMMIT_SNAPSHOT",
+  "engineering": "PASS_LIMITED_EVIDENCE_DOCUMENT_REVIEW_AND_ARCHIVE_SYNC",
   "science": "NOT_VERIFIED",
   "researcher_mastery": "NOT_ASSESSED",
   "no_new_training": true,
@@ -297,5 +297,19 @@
     "v1_1_final_test_scope": "Codex directly read YAML; Harness inherits this aspect, not independent revalidation",
     "science_not_approved": true
   },
-  "record_type": "pre_commit_evidence_and_document_receipt; post_commit Git receipt belongs in Shared handoff and chat"
+  "record_type": "post_archive_and_peer_sync_receipt; final closure-only commit is reported externally",
+  "git_receipt": {
+    "codex_artifact_commit": "85203ff71209e05d771822692c557d133a5191a8",
+    "codex_branch": "collab/codex-20261102",
+    "codex_artifact_remote_sha_verified": "85203ff71209e05d771822692c557d133a5191a8",
+    "harness_review_commit": "d8c4069a506cb9427cf80029f1400445f60448a1",
+    "harness_branch": "collab/dsh-20261102",
+    "harness_remote_sha_independently_verified": "d8c4069a506cb9427cf80029f1400445f60448a1",
+    "harness_review_bytes": 6166,
+    "harness_review_sha256": "1EBCD1F1DC5909F95C255EB6AADF0812AEB3D4BCFE0BD40936EAE1BC907AF290",
+    "harness_native_permission": "Researcher confirmed clicking allow once; Codex did not act on permission",
+    "shared_main_not_committed": true,
+    "existing_26_untracked_preserved": true,
+    "closure_changes": "Only this receipt and REVIEW_INDEX factual post-sync status; reviewed PDF/tex remain identical"
+  }
 }
