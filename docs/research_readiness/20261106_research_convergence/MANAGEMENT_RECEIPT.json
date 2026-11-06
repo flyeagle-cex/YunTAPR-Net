@@ -1,0 +1,89 @@
+{
+  "task": "MANAGEMENT_SYNC_20261106",
+  "phase": "PRECOMMIT_FILE_VERIFICATION",
+  "at_beijing": "2026-11-06T11:32:21.1255381+08:00",
+  "maintainer": "Codex",
+  "base_branch": "collab/codex-20261102",
+  "base_head": "0d2fa01f99fabb2a9290aeec3eb848f0965c0f3d",
+  "scope": "Management records, progress and theory archive only",
+  "authorization": "Current direct researcher instruction for this task; no permanent exception or new experiment budget",
+  "checks": {
+    "new_archive_private_path_scan": "PASS",
+    "stage_acceptance_original_bytes_preserved": "PASS",
+    "git_diff_check": "PASS",
+    "strict_utf8": "PASS",
+    "historical_shared_prefix_checks": "PASS",
+    "readme_original_bytes_preserved": "PASS"
+  },
+  "archive_coverage": {
+    "current_harness_review": "PENDING_NOT_DELIVERED",
+    "T16_original_harness": "NEEDS_REVISION",
+    "T16_R1": "CONTROLLER_ACCEPTED_ONLY",
+    "T12_T14_complete_original_records": "PARTIAL",
+    "T15_T17_theory_and_amendments": "ARCHIVED"
+  },
+  "harness_delivery": "Native message entry did not receive supplied text; attachment cached-control failure. No incorrect message sent. Request retained locally, outside public commit.",
+  "engineering": "PENDING_EXTERNAL_REVIEW_AND_SYNC",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "H1_H2": "INCONCLUSIVE / INDEPENDENT_NOT_VERIFIED",
+  "new_training": 0,
+  "new_inference": 0,
+  "new_calibration": 0,
+  "new_metric_calculation": 0,
+  "prediction_npz_reads": 0,
+  "final_test": "FROZEN",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 13609,
+      "sha256": "AE1531A2F56D0348205C8A53FFCE744A6199220707EA43A2555BCCC0462B51D1"
+    },
+    {
+      "path": "STAGE_ACCEPTANCE.md",
+      "bytes": 25648,
+      "sha256": "801BFF72F3A7E7844839BCBA1313695933BD8671A2E7AF371DB38393D037D980"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/EVALUATION_ENTRY_GATES.md",
+      "bytes": 2221,
+      "sha256": "1AA1811908D90ADC3013AB528293E8188A1FECB43447977C7B39F379D84C4D64"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md",
+      "bytes": 5561,
+      "sha256": "86EA55D4F31E345391594BE47BC1064DDA5F05434E106EC7AF9E7B49AD761145"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/T15_THEORY_RECORD.md",
+      "bytes": 14988,
+      "sha256": "E6FFD0023AF39225F2695DA1843E5CCC80D3A1D259672F013AFE4A3B354C80BA"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/T16_INITIAL_PROTOCOL.md",
+      "bytes": 12483,
+      "sha256": "3948815FFF43494A8D673D0C973F4BACCA8BEE9634AE77AB9EAE6BF3FD101385"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/T16_R1_AMENDMENT.md",
+      "bytes": 9017,
+      "sha256": "64BE58352DBB39006AC1100A429A09896FEE768EC682782EA967284C223E1EF6"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/T17_DEFINITION_ADDENDUM.md",
+      "bytes": 2547,
+      "sha256": "AAB41847619C6742461739A7EBFB252B41376B6C9B458CB6483D6D43C30068FB"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/T17_RISK_SCORE_FRAMEWORK.md",
+      "bytes": 10041,
+      "sha256": "D40D749FB79B7EC316873D870AAB1B5E815478DBD34F70005D928707B7AB1AD1"
+    }
+  ],
+  "management_check_corrections": [
+    "Read-only checker pipeline syntax corrected",
+    "Private V3 location redacted before staging",
+    "Progress insertion line endings corrected with historical-byte checks",
+    "Staged new-document trailing blank lines and receipt CRLF corrected before commit"
+  ]
+}
