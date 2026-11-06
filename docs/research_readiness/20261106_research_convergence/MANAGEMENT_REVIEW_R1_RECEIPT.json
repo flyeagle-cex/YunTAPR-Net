@@ -1,0 +1,69 @@
+{
+  "task": "MANAGEMENT_SYNC_20261106_R1",
+  "phase": "REVISION_AFTER_INDEPENDENT_MANAGEMENT_REVIEW",
+  "at_beijing": "2026-11-06T11:49:29.1612777+08:00",
+  "base_commit": "9b02e2c26be83f1300943cb3843de0c3a2e6130b",
+  "prior_receipt": {
+    "scope": "Historical precommit snapshot in base_commit",
+    "sha256": "4B89CA4167EA32B67D21E477F965374D476ED531E3DB3DEE47EC14EA65B27A42",
+    "path": "docs/research_readiness/20261106_research_convergence/MANAGEMENT_RECEIPT.json"
+  },
+  "harness_review": {
+    "record": "docs/audits/MANAGEMENT_SYNC_20261106_REVIEW.md",
+    "bytes": 6608,
+    "workspace": "YunTAPR-Collab-DSH",
+    "reviewed_commit": "9b02e2c26be83f1300943cb3843de0c3a2e6130b",
+    "evidence": "Directly read review file. Scientific execution claims remain outside management review.",
+    "sha256": "C15833E5C30E5F7C8A339BFCC9D755101E023BA7ED03DCFDA76876E8DC27AAC8",
+    "verdict": "NEEDS_REVISION"
+  },
+  "F1": "Text amended in three files; revised independent review pending",
+  "F2": {
+    "times_beijing": [
+      "2026-11-05 08:31:04",
+      "2026-11-05 08:41:55"
+    ],
+    "record_id": "YT-GOV-20261105-001",
+    "same_rule_sha256": "8631C186735E46DDFE7D07CC5DB2D82CF8E4F484AFDCD100F98510CDC6072440",
+    "action": "Ambiguity recorded; original approval ledger preserved",
+    "status": "OPEN_RESEARCHER_DECISION"
+  },
+  "F3": "Delivery and review now recorded. Prior not-delivered snapshots retained as history.",
+  "harness_git": {
+    "sync": "PENDING",
+    "reported_block": "Reviewer reported index.lock workspace-write permission denial and remote credential error",
+    "block_evidence": "SELF_REPORTED in Harness handoff; Codex directly checked unchanged HEAD and untracked review file",
+    "local_head": "f8878eddeb0699d3ab22f5ad829dca1bfd5a0eec"
+  },
+  "engineering": "PENDING_HARNESS_REVISION_REVIEW_AND_OWN_SYNC",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "scientific_computations": 0,
+  "training": 0,
+  "inference": 0,
+  "calibration": 0,
+  "final_test": "FROZEN",
+  "checks": {
+    "strict_utf8": "PASS",
+    "historical_progress_bytes": "PASS",
+    "diff_check": "PASS",
+    "private_path_scan": "PASS"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 13743,
+      "sha256": "C229118FBDF6D6E5095895B982A02FD5FCD5BEFA9C87079A993CAC80EDECA537"
+    },
+    {
+      "path": "STAGE_ACCEPTANCE.md",
+      "bytes": 25782,
+      "sha256": "6CE77E8D298B8919EA4D1FCD4E8409351D6257E0EDCCC7AFE85D7663FA456DB0"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md",
+      "bytes": 6702,
+      "sha256": "E6667BE15B4B179229AE14830D83D9929392FC64CA6AEE5A036068047EFB4F36"
+    }
+  ]
+}

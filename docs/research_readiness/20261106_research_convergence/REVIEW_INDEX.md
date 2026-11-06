@@ -15,7 +15,7 @@
 | T16 初稿 | Harness 审查 NEEDS_REVISION | T16_INITIAL_PROTOCOL.md 与下述五项问题，原稿保留 |
 | T16-R1 | 已由总控接受，科学 NOT_VERIFIED | T16_R1_AMENDMENT.md。未发生 Harness 对 R1 的第二轮独立审查 |
 | T17 | 理论框架结项，H2 执行推断方案仍待冻结 | T17_RISK_SCORE_FRAMEWORK.md 与 T17_DEFINITION_ADDENDUM.md |
-| B3_DOTE_ONLY / seed2029 | 既有收据报告 E9/4320 更新完成，单 seed、收益混合 | 本轮直接读取 ../20261105_b3_dote_without_mee/receipt.json、result.json、validation.json。权重载荷及计算过程本轮未复核 |
+| B3_DOTE_ONLY / seed2029 | 既有收据报告 E9/4320 更新完成，单 seed、收益混合，处于原 V3 九模型比较范围之外 | 本轮直接读取 ../20261105_b3_dote_without_mee/receipt.json、result.json、validation.json。AP 使用降水发生标签，与强雨排序 AP 的标签不同。权重载荷及计算过程本轮未复核 |
 | 2026-11-05 三类反演表 | 已提交版本收据报告 19 固定终点，部分日尺度及地形项目有缺口 | outputs/01a1a906-f017-71f3-bb3f-19b961274f10/delivery_receipt_public.json。后续两个未跟踪工作簿的覆盖进展本轮 NOT_VERIFIED |
 
 DIRECT_VERIFIED 仅用于本轮实际读取的文本、Git 状态及随后文件完整性检查。继承的统计与执行收据本轮按来源转述，不能升级为本轮载荷直接核验或独立科学验收。T12–T14 完整原始对话及计算收据的长期归档仍有缺口，不能把此索引称为全部原始证据归档完成。
@@ -48,7 +48,11 @@ T16-R1 已针对五项问题修订。总控接受与独立审核通过分别记�
 
 本目录理论方法 PROPOSED。H1/H2 均为 INCONCLUSIVE / INDEPENDENT_NOT_VERIFIED。科学状态 NOT_VERIFIED，研究者掌握 NOT_ASSESSED。管理归档工程检查与远端同步结果以本轮完成回执为准。
 
-已批准治理文件 0.2.0-T07-R1 的指纹在 Shared/DECISIONS.md 的 YT-GOV-20261105-001 引用，正文保留 PROPOSED 历史快照。本轮直接聊天指令仅用于限定工作分支记录同步，未改写该制度或代填新的研究者批准编号。Shared 的 main 提交与远程配置继续由研究者管理。
+Shared/DECISIONS.md 存在两条同名 YT-GOV-20261105-001，分别登记于 2026-11-05 08:31:04 和 08:41:55（Asia/Shanghai），均记为 APPROVED 并引用规则 0.2.0-T07-R1 的同一 SHA256 8631C186735E46DDFE7D07CC5DB2D82CF8E4F484AFDCD100F98510CDC6072440。此处登记直接读到的文本事实，唯一正式批准时间及重复登记的处置待研究者裁定。正文保留 PROPOSED 历史快照。本轮直接聊天指令仅用于限定工作分支记录同步，未改写该制度或代填新的研究者批准编号。Shared 的 main 提交与远程配置继续由研究者管理。
+
+Harness 已对提交 9b02e2c 的管理记录独立审核，完整性与证据等级主体 PASS，最终 NEEDS_REVISION。上述 B3 范围文字已按 F1 补齐，F2 的重复批准记录歧义已明确登记为待研究者裁定。其原审核由 Harness 自行保存在自身工作区 docs/audits/MANAGEMENT_SYNC_20261106_REVIEW.md，当前只读版本 SHA256 为 C15833E5C30E5F7C8A339BFCC9D755101E023BA7ED03DCFDA76876E8DC27AAC8。修订后的限定复核及 Harness 远端同步仍待回执。
+
+MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指纹适用于该提交。随后修订的现值见 MANAGEMENT_REVIEW_R1_RECEIPT.json。前序“未送达”描述按当时状态保留，当前交接已送达并取得上述审核。
 
 ## 5. 后续最短路线
 
