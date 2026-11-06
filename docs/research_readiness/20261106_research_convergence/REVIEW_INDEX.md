@@ -127,3 +127,10 @@ Harness独立静态+43项合成CPU审核PASS，首审7073B/59701143；JSON换行
 Codex主体15文件36d6fe1e39da49e05566d442fe51d262d6db230a、Harness格式补充1c2539ca8455d37ad8eed1c4cd04fd6312a86bb6均已普通推送，Codex直接ls-remote核对一致。最终REVIEW_OUTCOME解释创建时PENDING字段，不改历史记录；此回执和本索引追加并未冒称提前通过Harness审核。
 
 工程PASS限定候选/合成检查/审核/主体同步，科学NOT_VERIFIED，外部PARTIAL，掌握NOT_ASSESSED。正式模型/真实映射/训练/新评价/2025没有新增执行；下一步仅可准备单独的精确科学方案和预算。
+
+
+## DOTE-DIRECTION-FREEZE-CANDIDATE-20261106.1 / LIVE.7
+
+按总控6115f59a只读源码和已保存元数据推进方向控制冻结候选：绑定8个旧E9身份、确认B6评价JSON与权重指纹对象类型、限制ZERO的128零梯度权重解释，明确DOTE内部风干预点和scene lookup缺口。候选随机旋转/朝东定义、科学门槛、正式接入及预算都仍待批准，execution=false。
+
+SOURCE_BINDINGS/DOTE_FREEZE_CANDIDATE及VERIFICATION见 ../20261106_dote_direction_freeze/。LIVE.7为16页更新版；LIVE.6及既有代码/43测试保留，本阶段没有模型/梯度/新科学计算。工程等待限定方案审核与Git闭环，科学NOT_VERIFIED、外部PARTIAL、知识NOT_ASSESSED。

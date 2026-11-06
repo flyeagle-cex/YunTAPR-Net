@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.6}\qquad 状态截至：2026年11月06日18时13分（北京时间）
+版本：\texttt{LIVE-20261106.7}\qquad 状态截至：2026年11月06日19时00分（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
@@ -43,10 +43,10 @@
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者明确第6项独立观测验证当前无法完成，要求其余工作由多个智能体讨论并开始解决。Stage 4.5仍PARTIAL，不自动豁免原目标或以IMERG代作独立真值。\evi{S16}
-\item 三个辅助代理分别核对多尺度融合、DOTE反驳控制、强雨尾部与场景对齐；本轮仅新增隔离候选和人工合成CPU检查，不接历史训练默认。\evi{S16}
-\item 现有多尺度融合原语可复用，正式B8仍仅单SP04；候选接口不代表原生编码器、真实网格映射或解码器已集成。\evi{S16}
-\item 原V3、三Seed和初稿继续继承。真实载荷、训练、推理、校准、新评价、最终模型与2025无新增执行额度。\evi{S16}
+\item LIVE.6三候选、43项合成CPU检查及Harness独立复跑/格式补审已经闭环；双方Git最终SHA已核对。本版不重跑这些检查。\evi{S16}
+\item 继续按总控修正后的范围，只核对DOTE源码与保存元数据，形成非零方向控制冻结候选。旧ZERO仅为名义结构匹配，不是等有效容量对照；不重训。\evi{S17}
+\item 已绑定8个历史固定E9身份，明确只是收据中的权重指纹。B6旧提案的一个baseline\_E9字段实际指向评价JSON，已按对象类型澄清，不改历史文件。\evi{S17}
+\item 主指标、实质门槛、正式场景lookup/包装器和新资源预算仍待冻结；当前候选不可执行。外部验证缺失、2025封存、科学和本人掌握状态保持。\evi{S17}
 \end{itemize}
 
 本轮工程状态以限定审查和Git完成回执为准；项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本版的下一步建议均为\texttt{PROPOSED}，不是实验启动书。
@@ -269,6 +269,42 @@ P6 & 最终冻结与掌握 & 开发选择结束后，由研究者冻结最终模
 
 总控负责路线收敛，Codex负责工程准备，Harness负责独立审核，研究者决定科学和预算。本轮限定审核与Git最终状态以外部回执为准；科学NOT\_VERIFIED，知识NOT\_ASSESSED。
 
+\pageheading{6F\quad DOTE方向控制冻结候选}{DOTE-DIRECTION-FREEZE-CANDIDATE-20261106.1；PROPOSED且不可执行。}
+\section*{先把历史证据放在正确位置}
+\begin{itemize}
+\item B6/2029、真实B7三Seed、旧ZERO三Seed、PERP/2029共8个固定E9身份已按保存JSON字段绑定。没有加载权重或重新计算其SHA；直接读到收据，不等于本轮直接验证历史执行或载荷。\evi{S17}
+\item 旧ZERO保留真实mask与相同输入/模块形状，但width16中128个权重恒无损失梯度。它只回答给定mask时显式数值表征效用，不排除有效容量、梯度传播或优化难度差异。
+\item B6到B7同时改变融合与参数，保存参数数分别为4,360,866和4,411,058，不能单独归因DOTE。B6只有2029，不构成三Seed静态基线。
+\item 旧提案B6的baseline\_E9值对应development\_09.json；权重须取LAST\_epoch\_09.pt对应字段。两类对象不同，不据此制造权重SHA冲突。历史文件未改。
+\end{itemize}
+
+\section*{新候选的定义和可检验问题}
+建议主方向候选为场景固定刚性随机旋转：由规范scene ID、analysis UTC及独立控制seed生成一个角度，同场景所有像元和两压力层共用；全部训练Seed也共用这套场景映射。候选seed为20261106，仅为待批建议，不调角度或择优重抽。
+
+另保留原计划固定方向候选：0度toward east，按每个有效像元风速令u为正风速、v为0；不是气象wind-from east。主次角色均待科学批准，不能看到结果后互换。
+
+两候选只改变DOTE内部局部风副本，并重新计算O/W/L/M；不改MEE真实风、DEM、PS、PWAT、真实mask和监督人口，不旋转已ReLU后的W/L/M。它们检验特定方向扰动下的\textbf{预测表征敏感性}，不能证明真实抬升因果或等有效容量。非零风也不保证所有通道及梯度非零。
+
+\pageheading{6G\quad 冻结前必须补的接入与裁定}{本阶段只读源码/已有元数据，没有模型、梯度或科学数组执行。}
+\section*{场景接口是当前工程缺口}
+BatchReader现仅调用dynamic\_transform(frame)，没有传sample ID。原TargetBinding区分window start和analysis，监督窗为前者到后者的半小时；气象frame.valid对应analysis。
+
+未来候选包装器应使用\textbf{冻结manifest中analysis UTC到唯一sample ID及声明canonical时间的映射}。不能临时从frame时间猜scene ID，不能静默减30分钟代替实际清单；若映射不唯一则拒绝，另行准备显式context接口。现有数组函数还不是这个正式包装器。
+
+干预点须位于原生及目标pressure mask、真实网格映射之后，dote\_proxy点积之前；只替换局部u/v副本，输入frame不原地修改。q输入未绑定、post-mask无mask还原均保持NOT\_AVAILABLE。\evi{S17}
+
+\section*{尚未批准的科学与执行字段}
+\begin{itemize}
+\item 三个历史训练Seed、E0、九轮/4320更新和固定E9只作配对设计来源；不是新训练批准。旧成功模型和ZERO不重训。
+\item 新方向控制唯一主指标、最小有意义效应、允许退化、跨Seed通过及多重比较/推断规则尚无批准依据，保持待研究者裁定。不移用T16/T17针对其他假设的阈值。
+\item 新执行commit、正式模型ID、scene lookup/包装器、允许路径、真实预检及读算写/进程/内存/磁盘/墙钟预算尚未绑定。旧每模型成本不能自动成为新额度。
+\item 若未来获批真实预检，需同帧核对MEE/DEM/PS/PWAT不变、风速保持、dynamic及moisture mask逐位相同、通道支持和梯度机会，不能用参数数目承诺有效容量相等。
+\end{itemize}
+
+场景/人口/mask/单位或初值顺序不符、有效位置数值异常、预算或授权未绑定时停止。不丢样本、裁剪或静默修复。2024继续是反复使用的开发集，独立天气事件仍NOT\_IDENTIFIED；外部观测缺口不会被方向控制填补。
+
+本阶段可完成的是\textbf{有来源的冻结候选与公平性审查}，不是正式冻结或科学成功。源码/记录复核、Harness设计审查与Git实际结项分别记录；科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -297,7 +333,7 @@ P6 & 最终冻结与掌握 & 开发选择结束后，由研究者冻结最终模
 
 \pageheading{8\quad 来源、版本与本轮变更回执}{本页给出复核入口。完整文件指纹以同轮JSON收据及Git提交为准，避免自引用。}
 \small
-\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=4pt]
+\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=3pt]
 \item[S0] 原2026-09-24 V1.3正式计划PDF，20页，1,561,261字节。Codex前版直接核对§9、§11、Stage-Gate和知识Gate；本版继承，未改原文件。SHA256：\par\texttt{bd3af5e3ebe1fe6e28b2b31699babecdd}\\\texttt{c506412310fd96eb80d1c695aabb5fe}
 \item[S1] \path{config/science_contract_v1.1.yaml}。后续冻结的具体实验口径；不倒写原V1.3。SHA256见合并回执。
 \item[S2] \path{STAGE_ACCEPTANCE.md}、\path{EXPERIMENT_MATRIX.csv}、\path{METRICS.csv}。现有阶段与端点索引，本轮没有逐权重重验。
@@ -312,12 +348,13 @@ P6 & 最终冻结与掌握 & 开发选择结束后，由研究者冻结最终模
 \item[S14] NASA，\textit{IMERG V07 Technical Documentation}（2023-07-13）官方说明。\url{https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation}。本轮仅核对公开说明，未获取观测；保留V07历史协议而不自动追随新版本。
 \item[S15] \path{docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json}，绑定10项主张、12份已有来源、JSON字段与反例，附排版数字绑定；对应\path{output/pdf/YunTAPR-Net_Internal_Results_Discussion_Draft_20261106.tex}和同名PDF。内部初稿，不是新实验或科学验收。
 \item[S16] \path{docs/research_readiness/}\\\path{20261106_core_completion_prepare/}。WORK\_PACKAGES、合成检查及审核回执；候选准备，不是实验或2025批准。
+\item[S17] \path{docs/research_readiness/}\\\path{20261106_dote_direction_freeze/}。SOURCE\_BINDINGS及DOTE\_FREEZE\_CANDIDATE；8个历史端点、对象类型更正、场景接入缺口和未批准字段。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \end{description}
 \normalsize
-本版变更：依据研究者指令保留独立外部验证缺失，推进其余原目标的隔离工程准备；新增显式多尺度接口、DOTE控制及场景对齐候选和后续工作包。初稿与旧LIVE.5及更早版本保留，未改变旧默认、科学协议或预算，未新增科学载荷与2025访问。
+本版变更：在LIVE.6已闭环的候选工程基础上，核对DOTE旧执行身份、ZERO容量限制和新方向控制接入点，形成不可执行的冻结候选。原来源/旧结果保留，不运行模型、梯度检查或真实数据计算，不新增实验额度。
 
-工程、科学、知识三状态分别记录。本轮完整工程收尾与限定审核结果追加在项目索引和各自交接中；科学仍\texttt{NOT\_VERIFIED}，研究者掌握仍\texttt{NOT\_ASSESSED}。
+
 \end{document}

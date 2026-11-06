@@ -1,0 +1,135 @@
+{
+  "version": "DOTE-DIRECTION-FREEZE-CANDIDATE-20261106.1",
+  "status": "PROPOSED_NON_EXECUTABLE_NOT_RESEARCHER_FROZEN",
+  "controller_scope_message": "6115f59a-1aa9-462b-beab-63bc84ab9f93",
+  "researcher_experiment_authorization": null,
+  "research": "云南全境复杂地形约束下的近实时卫星概率降水反演",
+  "estimand": "Predictive representation sensitivity to predeclared DOTE-internal wind-direction substitutions in the frozen B7 architecture/population; not physical uplift causality",
+  "reuse_evidence": "Eight historical fixed-E9 endpoint identities bound in SOURCE_BINDINGS; no baseline or ZERO rerun",
+  "old_zero": {
+    "mask": "REAL_MASKS_RETAINED",
+    "nominal_structure_matched": true,
+    "strong_effective_capacity_matched": false,
+    "structurally_zero_width16_projection_weights": 128,
+    "interpretation": "Conditional-on-mask numerical representation comparison only",
+    "repeat_training": false
+  },
+  "B6_to_B7": "Overall configuration comparison, confounded by additional fusion and parameters; B6 only2029 cannot supply three paired baseline seeds",
+  "proposed_new_controls": [
+    {
+      "id": "SCENE_RIGID_ROTATION_CANDIDATE",
+      "priority": "PROPOSED_MAIN_DIRECTION_CONTROL_NOT_APPROVED",
+      "definition": "One scene-level rigid angle, shared across both pressure levels and all pixels, derived by current SHA256_V1_LENGTH_PREFIXED_ID_TOP53_BITS",
+      "proposed_control_seed": 20261106,
+      "seed_status": "PROPOSED_ONLY; independent of model seeds/outcomes and never tuned",
+      "canonical_scene_time_proposal": "ANALYSIS_TIME_UTC; requires explicit manifest binding before freeze",
+      "all_training_seeds_share_same_scene_angle": true,
+      "angle_selection_from_labels_or_results": false
+    },
+    {
+      "id": "FIXED_EAST_CANDIDATE",
+      "priority": "PROPOSED_ORIGINAL_PLAN_DIRECTION_CONTROL_NOT_APPROVED",
+      "direction_degrees_toward_east_north": 0,
+      "definition": "u=hypot(u,v), v=0 on valid wind support; not meteorological wind-from east",
+      "angle_sweep": false
+    }
+  ],
+  "paired_training_reference": {
+    "proposed_model_seeds": [
+      2029,
+      2030,
+      2031
+    ],
+    "seed_status": "REUSE_HISTORICAL_SET_AS_PROPOSAL_NOT_NEW_RUN_GRANT",
+    "historical_E0_epochs": 9,
+    "historical_updates": 4320,
+    "endpoint_proposal": "FIXED_EPOCH_9_LAST, no BEST selection",
+    "new_controls_registered": false,
+    "new_execution_commit": null,
+    "new_budget": null,
+    "allowed_real_paths": null
+  },
+  "injection_contract": {
+    "location": "dynamic_terrain.PhysicalDote.physical after actual native/target pressure mask and grid mapping, before dote_proxy dot product",
+    "replace": "Local u/v copies only, then recompute O/W/L/M using unchanged physical gradients and PWAT",
+    "preserve": [
+      "original EnvironmentFrame.fields",
+      "MEE real winds and other inputs",
+      "DEM/static branch",
+      "PS/PWAT and their validity",
+      "original dynamic/moisture/region/supervision masks",
+      "PWAT frozen Train reference and explicit1m/s scale",
+      "eight-channel order and numerical precision",
+      "B7 initialization, optimizer, sample ordering and loss"
+    ],
+    "forbidden": [
+      "Rotate already ReLU-transformed W/L/M",
+      "Recover discarded post-mask wind values",
+      "Implicit RH/T-to-q substitution",
+      "Clip or drop changed-mask samples",
+      "Change MEE winds to match the artificial direction"
+    ]
+  },
+  "scene_context_gap": {
+    "current_call": "stage4/data.py BatchReader.batch calls dynamic_transform(frame), without sample_id",
+    "required_lookup": "Frozen manifest analysis_time UTC -> unique(sample_id, declared canonical scene_time)",
+    "lookup_currently_implemented": false,
+    "must_not_infer": "Do not invent scene_id from frame.valid or silently subtract30min; TargetBinding distinguishes analysis from [window_start,analysis) reference window",
+    "one_to_many_action": "Reject and prepare explicit scene-context interface; no filename/timing guess"
+  },
+  "unavailable_controls": {
+    "q_k": "NOT_AVAILABLE_NO_BOUND_SOURCE_OR_FORMULA",
+    "no_mask": "NOT_AVAILABLE_FROM_POST_MASK_BOUNDARY"
+  },
+  "fairness_limits": [
+    "Equal structure/parameter count does not establish equal effective capacity or optimization",
+    "Nonzero wind does not ensure all O/W/L/M channels or gradients are nonzero; calm/flat/ReLU/masks remain",
+    "Rigid rotation changes scalar distributions and weather-terrain correspondence",
+    "Real winds retained in MEE may allow recovery of related information",
+    "One control seed is one perturbation realization; three training seeds are not three perturbation realizations or independent storms"
+  ],
+  "evaluation": {
+    "inherit_metrics_only": [
+      "Occurrence Brier/AUROC/AP",
+      "Conditional Pinball and q32 rain-population coverage",
+      "Existing ABC errors and threshold counts with exact boundaries",
+      "Existing strong-rain/terrain/moisture strata with common masks and missing counts"
+    ],
+    "primary_metric": null,
+    "minimum_meaningful_effect": null,
+    "allowed_degradation_tolerance": null,
+    "cross_seed_acceptance_rule": null,
+    "multiplicity_or_inference_plan": null,
+    "unset_status": "PENDING_RESEARCHER_SCIENTIFIC_DECISION; T16/T17 thresholds must not be imported for this hypothesis",
+    "reporting": "Per-seed paired differences and counterexamples; no best-seed or post-hoc primary/control switching",
+    "2024_reuse": "DEVELOPMENTAL_NOT_INDEPENDENT_CONFIRMATION",
+    "events": "NOT_IDENTIFIED"
+  },
+  "future_real_preflight_only_after_separate_grant": [
+    "Source/grid/units/f006 identity and actual scene lookup match",
+    "Unchanged MEE/DEM/PS/PWAT arrays and full dynamic/moisture masks",
+    "Wind speed tolerance and deterministic cross-seed/epoch scene angle",
+    "No mutated input, clipping, population deletion or normalization refit",
+    "Initial full state/parameter groups/sample ordering match",
+    "Report actual channel support and gradient opportunities without claiming equal capacity by construction"
+  ],
+  "execution_gate": {
+    "formal_transform_wrapper": false,
+    "manifest_lookup_bound": false,
+    "scientific_acceptance_thresholds_approved": false,
+    "budget_and_paths_bound": false,
+    "researcher_grant_present": false,
+    "executable": false,
+    "capacity_status": "CAPACITY_CONTROL_INSUFFICIENT_UNTIL_DEFINITION_INTEGRATION_AND_AUTHORIZED_PREFLIGHT; not an assertion that strong equality can be proven"
+  },
+  "science": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL_CURRENTLY_UNAVAILABLE_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "this_phase": [
+    "Source and saved-metadata reading",
+    "Candidate definition and provenance reconciliation",
+    "No model/gradient tests or real payload access",
+    "No train/infer/evaluate/fit/bootstrap/2025"
+  ],
+  "review": "PENDING_HARNESS_DESIGN_REVIEW"
+}

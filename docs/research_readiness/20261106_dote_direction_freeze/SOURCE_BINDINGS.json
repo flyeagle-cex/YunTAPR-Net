@@ -1,0 +1,287 @@
+{
+  "version": "DOTE-DIRECTION-FREEZE-CANDIDATE-20261106.1",
+  "recorded_local": "2026-11-06T18:58:46.683171+08:00",
+  "evidence_scope": "DIRECT_READ_OF_SELECTED_SAVED_METADATA_AND_SOURCE; historical execution/weight payload not reverified",
+  "source_documents": {
+    "docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json": {
+      "bytes": 353184,
+      "sha256": "a2ca0b49ec59e16ce295f3f8533e10533aa9e2c44d2fe746838c1a381e8f5161"
+    },
+    "docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json": {
+      "bytes": 399020,
+      "sha256": "196b5efb6008cb0590ed73acf91e3daa1037851e49d1d433bc1e576f6f3d2729"
+    },
+    "docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json": {
+      "bytes": 678449,
+      "sha256": "d12a7919da8aac7775300204a2f12d4dfe938e5efbd68f52118ae0bab9edd3f3"
+    },
+    "docs/research_readiness/20261025/evidence/dote_control_completion_20261029.json": {
+      "bytes": 326276,
+      "sha256": "063501c8b563f0c8bb9dd46662ec3ddec3ad4c60bfc004f83f0ffde4c807c611"
+    },
+    "docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json": {
+      "bytes": 747110,
+      "sha256": "188f0305ec0faa7bd0077cc950dd0d5ec50e104bb54978bcdf8a2878ce2d5adf"
+    },
+    "docs/research_readiness/20261025/evidence/dote_physical_control_completion_20261030.json": {
+      "bytes": 176670,
+      "sha256": "05fd5a0a2f107d1d3928069265801b9afbcf6e5d436447c3333cd7e2a4295391"
+    },
+    "docs/research_readiness/20261025/evidence/b7_b8_training_proposal.json": {
+      "bytes": 95406,
+      "sha256": "1e3eb1f34df503344984532d0f9cc5416373bf74504ff3368e6ab9c28c56bc0e"
+    },
+    "docs/research_readiness/20261025/evidence/dote_control_proposal_20261029.json": {
+      "bytes": 97123,
+      "sha256": "a2a86f0611f9c5f805d9929788179deb13d2daa399ba4e4a831cdbaf70c7379d"
+    },
+    "docs/research_readiness/20261025/evidence/dote_physical_negative_protocol_20261030.json": {
+      "bytes": 10314,
+      "sha256": "d1fc6df50d7fe0c0a3adc7fb477182c1d559a6c210d46c5d351452956e891f90"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": {
+      "bytes": 7718,
+      "sha256": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07"
+    },
+    "src/yuntapr/experimental/research_readiness/dote_numeric_control.py": {
+      "bytes": 1070,
+      "sha256": "6ba77e06864892d34b4f397a9a19e862432dc538fd494023cb375d8ad9773e89"
+    },
+    "src/yuntapr/experimental/research_readiness/dote_control_candidates.py": {
+      "bytes": 9459,
+      "sha256": "e3cae616132e271c030a9dacf6addb902527ba3e66dd0be74f8814b11e3dad16"
+    },
+    "src/yuntapr/experimental/core_innovation/stage4/data.py": {
+      "bytes": 16023,
+      "sha256": "f0ae14926c98caae6fe226f86303cf3326821623833fe60651cf99f62e2a3404"
+    },
+    "src/yuntapr/experimental/core_innovation/stage2/coupling.py": {
+      "bytes": 3101,
+      "sha256": "463da4a7a115114395f81b8355a81d80c35416da194c9976840038dcf6c2629d"
+    }
+  },
+  "historical_endpoints": [
+    {
+      "model": "B6",
+      "seed": 2029,
+      "source": "b5_b6_completion_and_paired_evidence.json",
+      "endpoint_pointer": "/tasks/1/endpoint_sha256",
+      "historical_weight_sha256": "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+      "execution_commit": "b251fd9ea06c0c90f48d2ac0decba0454114669d",
+      "proposal_sha256": "36fc5dfbbc94c5576442ab95691595a7d4c3a130f373363015b5db13db6b57f1",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {}
+    },
+    {
+      "model": "B7",
+      "seed": 2029,
+      "source": "b7_b8_terminal_20261028.json",
+      "endpoint_pointer": "/tasks/0/fixed_E9_sha256",
+      "historical_weight_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "execution_commit": "b1f072e45fdd17b80106a774083995c350b28f04",
+      "proposal_sha256": "64e8d0f3c4b458b56e7cfaa1b81459eb4f61db0d947aceff62aa6e2ec579f5c8",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {}
+    },
+    {
+      "model": "B7",
+      "seed": 2030,
+      "source": "b7_b8_three_seed_completion_20261029.json",
+      "endpoint_pointer": "/tasks/0/fixed_E9_sha256",
+      "historical_weight_sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "proposal_sha256": "3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {
+        "replay_updates": 441,
+        "cumulative_attempt_updates": 4761,
+        "inherited_epochs": 6
+      }
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "source": "b7_b8_three_seed_completion_20261029.json",
+      "endpoint_pointer": "/tasks/2/fixed_E9_sha256",
+      "historical_weight_sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "execution_commit": "e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c",
+      "proposal_sha256": "3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {
+        "replay_updates": 0,
+        "cumulative_attempt_updates": 4320,
+        "inherited_epochs": 0
+      }
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2030,
+      "source": "dote_control_three_seed_completion_20261029.json",
+      "endpoint_pointer": "/tasks/0/fixed_E9_sha256",
+      "historical_weight_sha256": "b03ee41cd190dc7579a1fb993afb1f5598997fca91af3b1c2addc6eed430f0ba",
+      "execution_commit": "8a4668377dbd40013245b54550c0963d10c286fb",
+      "proposal_sha256": "a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {
+        "replay_updates": 0
+      }
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2031,
+      "source": "dote_control_three_seed_completion_20261029.json",
+      "endpoint_pointer": "/tasks/1/fixed_E9_sha256",
+      "historical_weight_sha256": "f99952905157d8e649e567af671d0ee3ff02f11530a9996b80306ef758acdac0",
+      "execution_commit": "8a4668377dbd40013245b54550c0963d10c286fb",
+      "proposal_sha256": "a53d38293e9b783b787e84baca7c9c0f1502cbae051828e4578a24051733a6c6",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "replay_history": {
+        "replay_updates": 0
+      }
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2029,
+      "source": "dote_control_completion_20261029.json",
+      "endpoint_pointer": "/endpoint_sha256",
+      "historical_weight_sha256": "445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21",
+      "execution_commit": "0c91ff0f36d5cce3f4516d38663482650f61b03a",
+      "proposal_sha256": "d7604c03d38585deca056994b119128cd2b6c2c7cbc50451a491e38b5cd4ea75",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "lineage": null
+    },
+    {
+      "model": "B7_PERP_GRADIENT",
+      "seed": 2029,
+      "source": "dote_physical_control_completion_20261030.json",
+      "endpoint_pointer": "/endpoint_sha256",
+      "historical_weight_sha256": "5406e20e241a3697b867ba4f44519397c2943b2381bc047d938c4eb141ce34e6",
+      "execution_commit": "7d4970d726aba1316f27fc7eea25817db6eca305",
+      "proposal_sha256": "ebd2391e0d6e95b1aa0a573df21416822f5173e1a6a11a8eafd6b74679e1f0d6",
+      "reuse": "DO_NOT_RETRAIN",
+      "evidence": "DIRECT_DOCUMENT_READING_NOT_CURRENT_PAYLOAD_HASH_VERIFICATION",
+      "lineage": {
+        "inherited_epochs": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "inherited_commit": "9b4046a655e2ec91633104eaa64bd507cca81aad",
+        "recovery_epochs": [
+          6,
+          7,
+          8,
+          9
+        ],
+        "recovery_commit": "7d4970d726aba1316f27fc7eea25817db6eca305",
+        "original_proposal_sha256": "0444d92ef9b10afa2b661c58b32fe57782c3ab5750879bec675f04967c68ce67",
+        "failure_evidence": "docs/research_readiness/20261025/evidence/dote_physical_control_failure_20261031.json",
+        "failure_evidence_sha256": "b28da613ba7d513a7448a169698ff24e6499c592151f6e7e16d55561808e6528"
+      }
+    }
+  ],
+  "shared_population_from_record": {
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+    "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "lead": 6,
+    "mode": "retrospective",
+    "train": 959,
+    "dev": 963,
+    "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+    "candidate_manifest_sha256": {
+      "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+      "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+    }
+  },
+  "historical_protocol": {
+    "seed": 2029,
+    "models": [
+      "B7"
+    ],
+    "lead": 6,
+    "mode": "retrospective",
+    "MEE_variables": 13,
+    "MEE_width": 16,
+    "fusion": "TARGET_SP04_RESIDUAL",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "train": 959,
+    "development": 963,
+    "loss": "E0",
+    "epochs": 9,
+    "batch": 2,
+    "validation_batch": 8,
+    "updates_per_epoch": 480,
+    "updates_per_model": 4320,
+    "paired_attempt_cap": 4320,
+    "replay_allowance": 0,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "BEST_selection": false
+  },
+  "physical_definition": {
+    "pwat_reference_kg_m2": 31.85768219039871,
+    "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+    "moisture_basis": "windward_W",
+    "velocity_reference_m_s": 1.0
+  },
+  "historical_budget_reference_not_new_grant": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840
+    },
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "normalization_refits": 0,
+    "startup_source_metadata_checks": 1,
+    "startup_source_payload_bytes": 0,
+    "startup_metadata_seconds_cap": 15,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "field_type_correction": {
+    "source": "b7_b8_training_proposal.json",
+    "pointer": "/baseline_E9_sha256/B6",
+    "stored_value": "5f3e94c3c9656dac6fbb1dc59069a70d65da72e568d07c50b8f907058a9947df",
+    "actually_matches": "b5_b6_completion_and_paired_evidence.json/sources/B6/development_09.json/sha256",
+    "weight_identity_instead": {
+      "sha256": "3b3ec78e22931f3c48184cd15bcbf75fb6303abe930aeb9fc2bdda61fdab1d98",
+      "bytes": 53291781,
+      "visibility": "LOCAL_ONLY"
+    },
+    "historical_source_modified": false,
+    "conclusion": "Field name alone cannot establish object type; no weight conflict inferred."
+  },
+  "payload_reads": 0,
+  "model_executions": 0,
+  "scientific_status": "NOT_VERIFIED",
+  "historical_parameter_counts": {
+    "B6": 4360866,
+    "B7": 4411058,
+    "B8": 4411058
+  },
+  "parameter_count_source": "b7_b8_training_proposal.json/parameter_counts; saved metadata, not current model construction"
+}

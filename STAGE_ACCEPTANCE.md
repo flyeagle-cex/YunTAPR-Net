@@ -1,3 +1,15 @@
+# 2026-11-06 DOTE方向控制冻结候选 / LIVE-20261106.7
+
+在LIVE.6工程准备已经闭环后，按总控6115f59a修正意见，仅核对源码和保存元数据，形成PROPOSED、不可执行的方向控制冻结候选。没有运行新模型、梯度检查、训练或评价。
+
+- 旧B6/B7/ZERO/PERP共8个固定E9身份按原收据绑定；本轮没有重新读取权重。旧ZERO不重训，128无梯度权重不冒充等有效容量。
+- 澄清B6旧提案baseline_E9字段对应的是development JSON，权重SHA另按LAST_epoch_09.pt绑定；旧文件不改。
+- 新建议为场景稳定刚性随机旋转及固定toward-east控制，仅改DOTE局部物理风。场景ID/analysis窗口映射和正式包装器尚未接入。
+- 主指标/效应门槛/退化规则/推断/资源与允许路径均待明确批准；不可自动执行。q和no-mask保持NOT_AVAILABLE，外部PARTIAL、科学NOT_VERIFIED、研究者NOT_ASSESSED。
+- 方案与来源：docs/research_readiness/20261106_dote_direction_freeze/；最新计划output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_7.pdf及同目录可修改LaTeX源。旧LIVE.6与43项合成检查历史保留，未重跑。
+
+---
+
 # 2026-11-06 CORE-PREP-20261106.1 / LIVE-20261106.6
 
 研究者明确独立观测验证当前无法完成；原Stage4.5缺口保留，不记PASS或自动豁免。其余原目标已由3个辅助代理讨论并开始隔离工程准备，总控限定范围见d813781b。
