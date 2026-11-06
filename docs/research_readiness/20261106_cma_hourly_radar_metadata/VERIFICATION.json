@@ -1,6 +1,6 @@
 {
-  "recorded_utc": "2026-11-06T07:50:03.689174+00:00",
-  "raw_documents_receipts_and_extractions_hashes_match": 19,
+  "recorded_utc": "2026-11-06T07:57:46.801258+00:00",
+  "raw_documents_receipts_and_extractions_hashes_match": 22,
   "yunnan_identity_rows": 109,
   "station_document_pages": 42,
   "yunnan_pages": [
@@ -12,7 +12,25 @@
   "STAGE_ACCEPTANCE.md_historical_suffix_preserved": true,
   "pdf_pages": 11,
   "layout_log": "PASS_NO_OVERFULL_OR_MISSING_CHARACTER",
-  "visual_check": "PENDING_FINAL_CHANGED_PAGES7_9",
+  "visual_check": {
+    "result": "PASS",
+    "changed_pages_inspected": [
+      1,
+      3,
+      7,
+      8,
+      9,
+      11
+    ],
+    "unchanged_layout_inherited_pages": [
+      2,
+      4,
+      5,
+      6,
+      10
+    ],
+    "station_metadata_visual_page": 34
+  },
   "previous_pdfs_unchanged": true,
   "shared_unchanged_before_own_append": {
     "PROJECT_STATE.md": {
@@ -43,18 +61,32 @@
   "artifacts": [
     {
       "path": "docs/research_readiness/20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json",
-      "bytes": 19292,
-      "sha256": "dbb9bc252c74f9050d71d608bdf067bf4990ab9de68611ecd84507d3affba2cf"
+      "bytes": 22586,
+      "sha256": "88ae1468ef4e2178c258e0b7852ef3c93da1fb9eca84d3031a680ff8faa368d3"
     },
     {
       "path": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
-      "bytes": 27823,
-      "sha256": "4cc4bf31153b3cb23f3167afbfba260ec4acd73665f62ce7723f71e3ae474a60"
+      "bytes": 28174,
+      "sha256": "10c40a54b480545b57edea677942990eac1c51789de1cdf7601573521be2326c"
     },
     {
       "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_3.pdf",
-      "bytes": 490321,
-      "sha256": "53c9619b5d4d1aa5394c8e2c5b7482030df712a4dde4cc9746c7ab520e09712c"
+      "bytes": 492717,
+      "sha256": "8cd615e70aaea9982e44c07bdb77513adf4a47a107d2117c62a3ae2d3ae3e882"
     }
-  ]
+  ],
+  "direct_gets": {
+    "requests": 18,
+    "successful": 15,
+    "failed": 3,
+    "retries": 0,
+    "saved_response_body_bytes": 2024003,
+    "excludes": "web-search/parser calls and local overhead"
+  },
+  "failed_document_check_preserved": {
+    "local_commit": "78316415092e5cd15cac8e97551e0e24e42f44ab",
+    "result": "FAIL: overfull hbox35.34163pt at TeX212-213 and pre-final VERIFICATION pending/stale artifact hashes",
+    "handling": "Primary local commit was mistakenly executed after failed check, before result inspection. No push or Harness review at failure. Retain commit, correct layout and receipt in follow-up commit; no reset/amend/history rewrite. Scientific data/metrics unaffected.",
+    "recheck": "PASS after replacing long inline status token with plain Chinese and recomputing actual artifact fingerprints; final source/PDF/receipt are review targets"
+  }
 }
