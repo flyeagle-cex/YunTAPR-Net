@@ -1,0 +1,83 @@
+{
+  "task": "Q32-BASELINE-20261106.1",
+  "at": "2026-11-06T13:47:55.483430+00:00",
+  "engineering": "PASS_LIMITED_SAVED_PREDICTION_STATISTICS_CODE_RECEIPT_REVIEW_AND_SYNC",
+  "science": "NOT_VERIFIED",
+  "external_stage_4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "review": {
+    "file": "DSH/docs/audits/Q32_BASELINE_REVIEW_20261106.md",
+    "bytes": 5705,
+    "sha256": "8d54d604ef6feeaea415772f4aaed9cbcbaf06822627863460ac4036514e688e",
+    "conclusion": "PASS_LIMITED_CODE_AND_RECEIPTS",
+    "peer_tests": {
+      "count": 26,
+      "breakdown": [
+        13,
+        11,
+        2
+      ],
+      "result": "OK",
+      "evidence": "formal independent reviewer record; root own matching26 also passed",
+      "real_arrays_recomputed": false
+    },
+    "peer_observed_HEAD": "ea672a3cafa4d574f4b5e892c7e481dfc544845f",
+    "peer_remote_direct_verified": "ea672a3cafa4d574f4b5e892c7e481dfc544845f",
+    "peer_tracked_and_staged_clean": true,
+    "limitations": [
+      "No independent real-array AP recomputation; code/receipt review only",
+      "Peer copied reviewed tests to temporary private workspace after DSH directory ACL denial; peer reports byte equality and cleanup, root did not independently inspect deleted fixtures",
+      "Review original description staged/uncommitted is its observation time; Codex subsequently committed same files",
+      "Review phrase full read then count does not replace executed code: reservations charged before open, delivered bytes after complete read",
+      "Scientific endpoint is a delegated consensus decision; no formal control-training package grant or governance-rule approval follows"
+    ]
+  },
+  "git": {
+    "own_branch": "collab/codex-20261102",
+    "main_change_commit": "2a891cbbdd2bc4f11720bdbf0d9e6b86f67670fd",
+    "main_change_remote_direct_verified": true,
+    "review_branch": "collab/dsh-20261102",
+    "post_review_commit_scope": [
+      "REVIEW_OUTCOME.json",
+      "REVIEW_INDEX.md navigation only"
+    ],
+    "no_main_merge_or_Shared_git_write": true
+  },
+  "pre_review_snapshot": {
+    "commit": "2a891cbbdd2bc4f11720bdbf0d9e6b86f67670fd",
+    "manifest": "VERIFICATION.json",
+    "manifest_sha256": "3f8069a43592cde4770585ac1d43e3db89b3fd01423805500bd210a488cc4920",
+    "artifact_scope": 14,
+    "index_before_bytes": 24376,
+    "index_before_sha256": "c6f3a72236be880940337cc8387b9c189e520f2035003b98a366e89ea02e4f84",
+    "index_after_bytes": 25099,
+    "index_after_sha256": "06d4b97b4178ee890b487f69ed82c1a74f6a9016ff415abc74db42015561de86",
+    "not_represented_as_pre_review": "this closure receipt and added navigation are post-review engineering records"
+  },
+  "execution": {
+    "v1": "FAILED_CLOSED and retained",
+    "v2": "SUCCESS, 7.781s, all363SHA/strict alignment",
+    "actual_attempts": 2,
+    "corrections": 1,
+    "further_attempts_allowed": 0,
+    "archive_bytes_cumulative": 4243320264,
+    "archive_content_reads_cumulative": 484,
+    "metadata_bytes_cumulative": 8883044,
+    "metadata_content_reads_cumulative": 18,
+    "preparation_separate": true
+  },
+  "preserved_limits": {
+    "formal_control_training_started": false,
+    "new_inference": 0,
+    "new_optimizer_updates": 0,
+    "final_2025_access": 0,
+    "scientific_acceptance_granted": false,
+    "external_reference_gap_waived": false
+  },
+  "remaining_real_work": [
+    "bind complete original manifests/plan and precise metadata budget",
+    "connect same-pass E9 Dev q32 AP callback",
+    "freeze real control dispatch/resource identity/new output namespace and bounded preflight"
+  ],
+  "no_extra_theory_review_or_experiment_scheduled": true
+}

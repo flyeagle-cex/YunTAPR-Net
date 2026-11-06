@@ -1,3 +1,9 @@
+## 2026-11-06 B7精度恢复限定审核已结项
+
+- Harness：docs/audits/Q32_BASELINE_REVIEW_20261106.md，26项新人工检查通过；PASS仅代码/收据审核，未独立重读真实数组AP。DSH分支ea672a3cafa4d574f4b5e892c7e481dfc544845f已普通推送并直接核对远端。
+- Codex主体2a891cbbdd2bc4f11720bdbf0d9e6b86f67670fd已推送，原15文件/14artifact预审快照绑定该commit；本次仅新增REVIEW_OUTCOME回执与此索引导航，不改代码/统计/PDF。科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED；本轮不再启动统计或训练。
+- 完整结项：docs/research_readiness/20261106_q32_baseline/REVIEW_OUTCOME.json。下方待审核段是较早快照，保留原文。
+
 ## 2026-11-06 B7精度恢复与委托共识
 
 - 新范围：q32 AP精确排名与有界保存预测统计、lookup排除边界、LIVE.10。原v1失败保留、新v2一次纠正成功，累计消费见RESULT.json；科学NOT_VERIFIED。只审核新增差异与新26项检查，不重跑旧28/43/8或读真实NPZ。
