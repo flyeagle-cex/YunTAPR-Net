@@ -50,12 +50,14 @@ T16-R1 已针对五项问题修订。总控接受与独立审核通过分别记�
 
 Shared/DECISIONS.md 存在两条同名 YT-GOV-20261105-001，分别登记于 2026-11-05 08:31:04 和 08:41:55（Asia/Shanghai），均记为 APPROVED 并引用规则 0.2.0-T07-R1 的同一 SHA256 8631C186735E46DDFE7D07CC5DB2D82CF8E4F484AFDCD100F98510CDC6072440。此处登记直接读到的文本事实，唯一正式批准时间及重复登记的处置待研究者裁定。正文保留 PROPOSED 历史快照。本轮直接聊天指令仅用于限定工作分支记录同步，未改写该制度或代填新的研究者批准编号。Shared 的 main 提交与远程配置继续由研究者管理。
 
-Harness 已对提交 9b02e2c 的管理记录独立审核，完整性与证据等级主体 PASS，最终 NEEDS_REVISION。上述 B3 范围文字已按 F1 补齐，F2 的重复批准记录歧义已明确登记为待研究者裁定。其原审核由 Harness 自行保存在自身工作区 docs/audits/MANAGEMENT_SYNC_20261106_REVIEW.md，当前只读版本 SHA256 为 C15833E5C30E5F7C8A339BFCC9D755101E023BA7ED03DCFDA76876E8DC27AAC8。修订后的限定复核及 Harness 远端同步仍待回执。
+Harness 已对提交 9b02e2c 的管理记录独立审核，完整性与证据等级主体 PASS，最终 NEEDS_REVISION。上述 B3 范围文字已按 F1 补齐，F2 的重复批准记录歧义已明确登记为待研究者裁定。其原审核由 Harness 自行保存在自身工作区 docs/audits/MANAGEMENT_SYNC_20261106_REVIEW.md，当前只读版本 SHA256 为 C15833E5C30E5F7C8A339BFCC9D755101E023BA7ED03DCFDA76876E8DC27AAC8。其后 Harness 已对 fc608c78bb4170d99104ae09490d7455a67aaee2 完成 R1 限定复核，结论 PASS。R1 审核记录为 4257 字节，SHA256 DA7CF3C8A15D6A5CF23ADBD5EA4BC4E3D758CB34299C3243CDC891350C7F2B8C。两份独立审核均由 Harness 自行提交到 collab/dsh-20261102 的 8242607d4e0cb4eecc93543865b4c5c413c8825c，并普通推送。Codex 已只读核对该提交仅包含两份审核记录、工作树干净，另用 git ls-remote 独立核对远端同名 SHA 一致。
 
-MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指纹适用于该提交。随后修订的现值见 MANAGEMENT_REVIEW_R1_RECEIPT.json。前序“未送达”描述按当时状态保留，当前交接已送达并取得上述审核。
+MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指纹适用于该提交。F1/F2 修订版本 fc608c7 的文件指纹见 MANAGEMENT_REVIEW_R1_RECEIPT.json。本段属于其后的闭环状态补记，原回执按其绑定提交阅读。前序“未送达”描述按当时状态保留，当前交接已送达并取得上述审核。
 
 ## 5. 后续最短路线
 
 先完成当前管理同步和独立审核，再完成 E 的合法身份与独立性材料、H2 推断方案和精确执行授权。条件满足后依次验证 H1、H2。新方法或训练由结果和研究者决定。现有理论阶段已封口，继续工作围绕实质缺口展开。
 
 执行入口的待满足项目见 EVALUATION_ENTRY_GATES.md。
+
+本轮管理归档、限定差异复核及双方各自分支同步的闭环状态为 PASS。该范围不包含 F2 的正式时间裁决、T12–T14 原始归档缺口补齐、H1/H2 验证或最终科研验收。F2 待研究者裁定，科学 NOT_VERIFIED，研究者掌握 NOT_ASSESSED。下一阶段门槛继续按 EVALUATION_ENTRY_GATES.md 登记。
