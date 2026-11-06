@@ -14,7 +14,8 @@
 | T15 | 理论结项，方法 PROPOSED | T15_THEORY_RECORD.md，保存 Codex 已提交文本并脱敏本机定位 |
 | T16 初稿 | Harness 审查 NEEDS_REVISION | T16_INITIAL_PROTOCOL.md 与下述五项问题，原稿保留 |
 | T16-R1 | 已由总控接受，科学 NOT_VERIFIED | T16_R1_AMENDMENT.md。未发生 Harness 对 R1 的第二轮独立审查 |
-| T17 | 理论框架结项，H2 执行推断方案仍待冻结 | T17_RISK_SCORE_FRAMEWORK.md 与 T17_DEFINITION_ADDENDUM.md |
+| T17 | 理论框架结项，后续推断候选见 T18 | T17_RISK_SCORE_FRAMEWORK.md 与 T17_DEFINITION_ADDENDUM.md |
+| T18 / T18-R1 | Harness 对 R1 限定 PASS，保持 PROPOSED | T18_INITIAL_PROTOCOL.md、T18_R1_AMENDMENT.md、T18_REVIEW_STATUS.md；初稿 NEEDS_REVISION 保留，真实适用性及执行门控未解除 |
 | B3_DOTE_ONLY / seed2029 | 既有收据报告 E9/4320 更新完成，单 seed、收益混合，处于原 V3 九模型比较范围之外 | 本轮直接读取 ../20261105_b3_dote_without_mee/receipt.json、result.json、validation.json。AP 使用降水发生标签，与强雨排序 AP 的标签不同。权重载荷及计算过程本轮未复核 |
 | 2026-11-05 三类反演表 | 已提交版本收据报告 19 固定终点，部分日尺度及地形项目有缺口 | outputs/01a1a906-f017-71f3-bb3f-19b961274f10/delivery_receipt_public.json。后续两个未跟踪工作簿的覆盖进展本轮 NOT_VERIFIED |
 
@@ -56,7 +57,7 @@ MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指�
 
 ## 5. 后续最短路线
 
-先完成当前管理同步和独立审核，再完成 E 的合法身份与独立性材料、H2 推断方案和精确执行授权。条件满足后依次验证 H1、H2。新方法或训练由结果和研究者决定。现有理论阶段已封口，继续工作围绕实质缺口展开。
+管理同步已完成。T18-R1 纸面候选已获限定独立 PASS，接下来须满足 E 的合法身份与独立性、真实联合推断适用性材料和精确执行授权。条件满足后依次验证 H1、H2。新方法或训练由结果和研究者决定。现有理论阶段已封口，继续工作围绕实质缺口展开。
 
 执行入口的待满足项目见 EVALUATION_ENTRY_GATES.md。
 
