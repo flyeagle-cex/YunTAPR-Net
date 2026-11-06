@@ -4,6 +4,7 @@
 
 当前处于IMERG参考下的开发资料成果收敛与证据整理阶段。研究主线为云南复杂地形约束下的近实时卫星概率降水反演，既有实证采用 2023 Train 与反复使用的 2024 Dev。
 
+- 2026-11-06 论文成果收敛：已编写内部 Results/Discussion/Limitations 初稿，10项主张、12份来源与反例索引；仅引用已有保存结果，无新指标/图表/训练或2025读取。B3/B4、真实DOTE/ZERO、B7/B8三seed及B5/B6、B3_DOTE_ONLY单seed分列，科学NOT_VERIFIED。见 [可编辑初稿](output/pdf/YunTAPR-Net_Internal_Results_Discussion_Draft_20261106.tex) 和 [证据索引](docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json)。
 - 2026-11-06 研究者报告目前没有已落实外部参考资料，并提出无可落实公开替代来源时采用IMERG。监督参考既已冻结为IMERG V07 Final，本轮沿用；只整理既有参考一致性结果，不能替代独立外部真实性或自动获得确认性E。Stage4.5仍PARTIAL，不再泛搜；H1/H2 INCONCLUSIVE，2025封存，无新增数据/计算授权。见 [本轮参考路线与证据边界](docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json)。
 - 2026-11-06 CMA进一步核实：A.0012.0001及云南_530当前为近7日/三小时累计降水；公开附件109条云南站号不是有效历史序列；J.0017.0009.S002为近24h的24小时降水估测图像，更新6分钟不代表6分钟雨量。历史小时档案、QC及项目许可未落实，不能用这些产品替代2023/2024外部验证。见 [本轮产品身份收据](docs/research_readiness/20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json)。
 - 2026-11-06 Stage 4.5公开元数据实查：NOAA发现框内176条身份记录（非云南可用站数）；DPR V07在2023/2024暖季发现框CMR命中325/324，每年仅保存3条元数据。昆明跨产品站号未绑定、小时降水覆盖/许可未核实；DPR与IMERG存在共享上游链，不能标记完全独立真值。未获取观测或执行模型。详见 [可追溯元数据收据](docs/research_readiness/20261106_external_reference_metadata/METADATA_FEASIBILITY.json)。
@@ -13,7 +14,7 @@
 - T12–T14 的限定排序证据与科研收敛结论继承。T15 理论结项，T16 原稿保留 Harness 的 NEEDS_REVISION，T16-R1 经总控接受，T17 理论结项并保留补充定义。完整来源与覆盖缺口见 [本轮证据索引](docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md)。
 - T18-R1 已获 Harness 限定 PASS，仅限 PROPOSED 纸面推断候选。初稿 NEEDS_REVISION 与修订关系保留；C1/C2 数值为必要拒判保护，不能证明真实覆盖。独立 E、联合 AP/Top1 推断适用性材料和精确执行批准仍缺失。详见 [T18 审查状态](docs/research_readiness/20261106_research_convergence/T18_REVIEW_STATUS.md)。
 - 原V1.3开发池与后续2023Train/2024Dev具体口径分开登记。原计划已有独立外部验证，额外E是T16–T18确认性要求，不能作为所有原计划工作的共同阻塞。H1/H2仍INCONCLUSIVE / INDEPENDENT_NOT_VERIFIED，具体执行预算与批准仍须满足。已有外部参考候选调查，实际许可/观测/独立源链未落实。详见 [入口条件](docs/research_readiness/20261106_research_convergence/EVALUATION_ENTRY_GATES.md)。
-- 总项目计划书按研究者要求建立持续维护的 [执行状态更新版PDF](output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_4.pdf) 和 [可修改LaTeX源文件](output/pdf/YunTAPR-Net_Master_Plan_Live.tex)，原20260924方案保留，不以文档更新自动批准科研变更。
+- 总项目计划书按研究者要求建立持续维护的 [执行状态更新版PDF](output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_5.pdf) 和 [可修改LaTeX源文件](output/pdf/YunTAPR-Net_Master_Plan_Live.tex)，原20260924方案保留，不以文档更新自动批准科研变更。
 - 科学状态 NOT_VERIFIED，研究者掌握 NOT_ASSESSED。网页 GPT 总控、Codex 执行、Harness 独立审核，研究者保留最终科学决定。
 - 本轮记录与 Git 同步限定在各自工作分支。2025 Final Test 保持封存。下方记录按各自历史时点阅读。
 

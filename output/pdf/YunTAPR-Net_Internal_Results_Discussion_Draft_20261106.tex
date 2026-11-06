@@ -1,0 +1,195 @@
+\documentclass[UTF8,10.5pt,a4paper,fontset=none]{ctexart}
+\usepackage[margin=21mm,headheight=16pt]{geometry}
+\usepackage{fontspec,amsmath,xcolor,enumitem,fancyhdr,hyperref}
+\setmainfont{Times New Roman}\setCJKmainfont{Microsoft YaHei}
+\definecolor{ink}{HTML}{183A50}\definecolor{muted}{HTML}{536675}
+\hypersetup{colorlinks=true,linkcolor=ink,urlcolor=ink,pdftitle={YunTAPR-Net 内部结果、讨论与局限初稿}}
+\emergencystretch=2em
+\setlength{\parindent}{2em}\setlength{\parskip}{5pt}\linespread{1.12}
+\setlist[itemize]{leftmargin=1.5em,itemsep=4pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad INTERNAL DRAFT}
+\fancyhead[R]{\small\color{muted}2026-11-06}\fancyfoot[L]{\footnotesize\color{muted}IMERG参考开发结果；不构成科学验收}\fancyfoot[R]{\small\thepage}
+\newcommand{\evi}[1]{\textsuperscript{\textcolor{muted}{[#1]}}}
+\newcommand{\nextpart}[1]{\clearpage\section*{#1}}
+\newcommand{\claim}[2]{\subsection*{#1}\noindent\textbf{可支持主张：}#2\par}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+{\Large YunTAPR-Net V1.3}\par\vspace{5mm}
+{\LARGE\bfseries 既有科研结果收敛}\par\vspace{3mm}
+{\Large Results / Discussion / Limitations}\par\vspace{3mm}
+{\large 内部工作初稿与逐项证据索引}\par\vspace{4mm}
+\texttt{INTERNAL-DRAFT-20261106.1}\par
+2026年11月06日17时18分（北京时间）
+\end{center}
+\section*{0\quad 文档状态与证据范围}
+本文是基于已有保存结果的中文结果与讨论初稿，用于研究者审阅和后续论文整合。研究主线为云南全境复杂地形约束下的近实时卫星概率降水反演；已有实证以固定协议的回顾性开发集评价为主，并非未来降水短临预测。本文不另起完整期刊论文，不包含未经核验的方法全文或文献综述。
+
+数值来自已存在的聚合JSON、公开科研记录和恢复的历史报告。本轮没有重算指标、重跑统计推断，也没有读取预测数组、真实标签载荷、权重、原始气象或2025资料。两份较早的分析/验收LaTeX报告保留原状。数字的直接读取仅证明保存记录的内容，不等于独立重现其底层计算。\evi{S1--S12}
+
+\section*{1\quad 研究结果口径}
+监督参考产品沿用冻结的IMERG V07 Final，不使用Early/Late替代或混用V07/V08。该产品是卫星与雨量站融合估计，具有参考误差；模型与它的一致性、真实降水准确性和独立观测验证应分别判断。Final Run是延迟处理流，V07是算法版本，2025 Final Test是本项目封存的数据划分，三者不同。\evi{C10;S1,S11}
+
+主要配对涉及2023 Train的959场景和2024 Development的963场景、固定E9 LAST及Seed 2029、2030和2031。
+
+核心Dev保存人口为3,303,090个有效像元时次，有雨人口407,820。2024已反复参与开发；三个Seed描述训练随机性，不是三个独立天气年份。不同人口、损失方案和日累计协议不能无说明混比。以下$R$均指IMERG参考标签雨强，单位mm/h。\evi{S2,S4,S6--S9}
+
+\nextpart{2\quad 主要实验结果：环境与静态地形}
+\subsection*{2.1\quad B3至B4：总体收益可复现，强雨并非同步改善}
+在既有三Seed配对中，B4相对B3的总体Brier、发生概率AUROC、发生概率AP和有雨条件Pinball均向有利方向变化。三个Seed的Brier差值依次为$-0.00165985396428$、$-0.000360402122668$和$-0.00395225785718$。保存的三Seed平均差值分别为：Brier -0.001990837981、AUROC $+0.005838836201$、AP $+0.018472015337$及条件Pinball -0.001182030362。这些结果支持当前人口和训练协议下加入GFS环境融合路径的描述性收益。\evi{C1;S2:/summary/metrics}
+
+总体改善没有覆盖所有雨强和时次。已有记录显示，$(30,50]$雨强层的条件Pinball在三个Seed均退化；Seed 2029的06 UTC和Seed 2030的18 UTC也存在Brier反例。q32方向不一致，Seed 2031的B4覆盖低于B3。因此，GFS融合对总体指标的收益不能改写成强雨、所有时段和概率尾部的全面改进。\evi{C1;S12:B3/B4反例}
+
+B3至B4同时改变环境输入、融合结构和参数量。配对结果支持的是这一路径的整体增量，尚不足以把收益唯一归因于某个GFS物理变量，也不证明业务时效或独立年份泛化。这里的AUROC/AP以有雨标签为目标，与后文严格$R>20$的排序指标不同。\evi{C1;S1,S2,S12}
+
+\subsection*{2.2\quad B5与B6：单Seed静态地形证据混合}
+Seed 2029下，增加海拔输入的B5相对B4仅总体AUROC略有改善，Brier、AP、条件Pinball和q32距名义误差均不利。六静态通道的B6相对B4改善Brier和AUROC，保存差值为$-0.00154598158481$及$+0.000842620746572$；AP下降、条件Pinball上升，q32覆盖也下降。不能将少数总体指标的收益概括为静态地形已稳定有效。\evi{C2;S3:/summary/differences}
+
+B5在部分强雨层有改善而总体退化，B6则在$(20,30]$和$(30,50]$层存在退化。单Seed、输入和适配器容量共同变化，以及静态地理编码携带的空间信息，都限制了物理归因。本文保留这些结果作为探索性地形消融，不把缺少其他Seed的部分补成稳定结论。\evi{C2;S3,S12}
+
+\nextpart{2\quad 主要实验结果：DOTE数值控制}
+\subsection*{2.3\quad 真实DOTE相对ZERO：Brier收益与其他指标分化}
+在真实B7与B7\_ZERO\_DOTE的三Seed比较中，保存差值统一为真实B7减ZERO。Brier差值依次为$-0.00164552334109$、$-0.000425722974357$和$-0.000606637739566$，平均为-0.000892628018。这说明在现有配对初始化、顺序、人口和固定E9协议内，显式DOTE数值的Brier收益并非只出现在最早的Seed 2029。\evi{C3;S4:/summary/groups/all/brier}
+
+其余指标没有同样的重复性。总体AUROC和AP仅Seed 2029改善，另外两个Seed退化；条件Pinball改善两个Seed；q32距名义绝对误差仅Seed 2031改善。$(20,30]$与$(30,50]$的Pinball收益也只在Seed 2029出现。即使某个三Seed平均差值有利，也不能掩盖方向不一致或由一个Seed主导的现象。\evi{C3;S4,S12}
+
+控制保持真实mask及其他GFS/DEM输入，仅把DOTE的八个数值通道置零。已有控制说明指出，名义参数量相同，但128个零输入权重没有损失梯度，不能视为有效训练容量相等；真实mask也仍携带条件信息。因此，该对照支持有限架构中显式数值表征的预测效用，尚不能无混杂地识别迎风抬升或背风过程的物理因果。\evi{C3;S4:limitations,S12}
+
+\subsection*{2.4\quad 经验可靠性分解：描述现象，不反推原因}
+后续保存的精确分数经验分解显示，真实B7相对ZERO的经验可靠性项在三个Seed均下降，差值分别为$-0.00126605892759$、$-0.000615881672431$和$-0.000666077216217$。但是经验分辨能力项在两个Seed下降，排序指标也未稳定改善。Brier收益可以与多类分布变化共同出现。\evi{C4;S5:/real\_B7\_minus\_ZERO\_DOTE}
+
+该分解针对有限样本和原生概率分数组，其中部分组仅含单个像元时次。它不等于总体真实校准，不消除时空依赖，也不是损失函数如何产生结果的因果解释。分辨能力项与AUROC/AP定义不同，不能直接互换。旧B7/B8时间块区间也不能移用于DOTE减ZERO。\evi{C4;S5:/limitations}
+
+\nextpart{2\quad 主要实验结果：B7至B8融合替换}
+\subsection*{2.5\quad 总体AUROC同向，其他收益不稳定}
+B8相对B7的保存比较针对concat融合与有界DTFM调制的替换；不是在已训B7上叠加一个独立模块。三个Seed的总体AUROC差值为$+0.000233838970293$、$+0.000631205009536$和$+0.0000143839502181$，平均$+0.000293142643$。最后一个Seed增量很小，本文仅按既有记录描述方向，不作显著性或实用等效判断。\evi{C5;S6:/summary/metrics/auroc}
+
+Brier在Seed 2029和2031退化，Seed 2030略改善；三Seed平均差值为$+0.000546539479$。AP平均差值为-0.000412246870，条件Pinball平均差值为$+0.000294718121$。条件Pinball只有2029改善，另外两组退化；q32距名义误差也只有2029改善。总体AUROC的同向微小增益不足以支持B8全面优于B7。\evi{C5;S6:/summary/metrics}
+
+$(20,30]$与$(30,50]$强雨层Pinball仅在2029改善，2030/2031均退化；保存的三Seed平均差值分别为$+0.00466719335459$和$+0.00400147654605$。这些反例直接限制“DTFM稳定改善强降水”的主张。海拔分层和UTC结果也存在有利与不利方向，不能只展示总体正向量。\evi{C5;S6,S12}
+
+\subsection*{2.6\quad 单SP04证据的适用范围}
+现有B7/B8对照使用width16、单SP04尺度。其共享输入、配对初始化和训练顺序有利于限定融合比较，但不构成完整多尺度实现或多尺度科学验收。真实空间尺度、条件输入和评价协议均须绑定实际记录，不能仅由模块名称推导分辨率或物理机制。\evi{C5;S6,S12}
+
+因此，当前可以进入论文的结论是融合方式会改变不同输出指标及分层结果，且收益存在训练随机性和指标依赖。是否在未参与方法选择的资料上改善、是否需要其他融合结构，以及能否形成稳定业务增益，均未由本轮既有开发结果回答。本文不选择最终模型。\evi{C5,C10}
+
+\nextpart{2\quad 主要实验结果：强降水与概率尾部}
+\subsection*{2.7\quad 点估计零检出与排序信息并存}
+恢复的T12历史报告记载，B4/B7/B8各三Seed共九模型的共同963场景中，严格$R>20$有717个IMERG参考像元时次。既有A/B/C点估计在该阈值下均为TP=0、FP=0、FN=717。其含义是这些点估计没有超过阈值，不是717场独立暴雨全部漏报，也不能据此断言模型没有任何强雨信息。\evi{C6;S7}
+
+同一历史报告中，q32对严格$R>20$的AUROC范围为0.965004--0.968773，AP为0.012238--0.020566。相对排序信息存在，但绝对AP较低；全域Top1\%策略固定选中33,031个像元时次，q32命中341--374个正例，同时产生大量误报。固定Top比例约束报警数量，不等于控制FAR。以上数值均沿用保存报告，未重新计算。\evi{C6;S7:§1--2}
+
+在强雨子集上，历史记录中的发生概率$p$并非普遍接近零；其表示发生降水的概率，不是$P(R>20)$。q32是有雨条件分位数，也不是概率。未乘$p$的32分位雨强均值代理$U$在全部717个强雨点均不超过20，说明移除发生概率乘子也不足以在这些点产生严格阈值检出。该$U$不是由32节点唯一确定的完整分布均值。\evi{C6;S7:§3}
+
+\subsection*{2.8\quad q32欠覆盖与P20结构界}
+历史九模型汇总给出的q32有雨人口覆盖率为93.48241871\%--95.05933990\%，分母为407,820；最高值来自B7/2030，最低来自B7/2029。名义水平为98.4375\%，因此该固定人口下存在经验欠覆盖。不能沿用93.5\%--94.6\%作为九模型完整范围。按参考结果雨强条件化的各分层覆盖率则不具有逐层同一名义水平的保证。\evi{C7;S7:§6}
+
+已有分位约束下，全体像元的P20上界最大值为0.19317626953125，小于0.5。故在这些相容分布界和0.5阈值下均确定为阴性；该界不是精确P20，也不是概率校准置信区间。32个分位节点不能唯一确定未指定的完整尾部分布。排序、幅值偏低和决策规则的限制同时存在，不能简化为“仅换阈值就解决强雨识别”。\evi{C8;S7:§6}
+
+上述T12结果来自已恢复报告。历史原生计算输出仍有截断与归档缺口，本轮没有读取NPZ或独立复算，故本文将其作为带溯源局限的已有证据，而非重新验证的原始数值。\evi{S7,S10}
+
+\nextpart{2\quad 补充实验与3\quad 跨阶段综合分析}
+\subsection*{2.9\quad B3\_DOTE\_ONLY：独立列示的单Seed结果}
+后续B3\_DOTE\_ONLY/2029固定E9结果处于原V3九模型集合之外。它没有直接GFS/MEE或静态分支，但仍由GFS风、水汽和压力信息驱动DOTE，不能称为“完全不用GFS”。它相对B3额外增加3,136参数，表征和容量同时变化。\evi{C9;S8:/protocol,S9}
+
+保存的候选减B3差值如下，四项概率/条件分布指标均向有利方向变化：
+\[
+\begin{aligned}
+\Delta\mathrm{Brier}&=-0.000738801973,&\quad\Delta\mathrm{AUROC}&=+0.002206054648,\\
+\Delta\mathrm{AP}&=+0.006997504485,&\quad\Delta\mathrm{Pinball}&=-0.000442085113.
+\end{aligned}
+\]
+RMSE却上升$+0.001683363453$mm/h。
+
+严格20mm/h下仍TP=0、FP=0、FN=717，FAR因没有预测阳性而未定义，不能填0。单Seed与同一Dev年限制保留。\evi{C9;S9}
+
+\section*{3\quad 跨阶段综合分析}
+已有结果形成了几条并行、不能相互替代的证据链。B3至B4的四项总体指标三Seed同向，表明环境融合路径在该固定开发人口内具有较一致的整体收益；静态地形B5/B6尚只有单Seed混合证据。真实DOTE对ZERO的Brier改善三Seed复现，却没有形成排序和强雨的普遍优势。B8对B7总体AUROC同向微增，也没有消除概率误差、强雨和尾部反例。\evi{C1--C5}
+
+发生概率排序、概率误差、有雨条件分位损失和物理雨强点估计针对不同输出与目标。某项改善不能担保其他项改善。对于强雨，较高AUROC与低绝对AP、较多误报以及点估计零检出可同时成立；它们分别描述排序、稀有正例检索与幅值阈值决策。\evi{C6--C9}
+
+比较还受到人口与协议约束。B0/B1历史人口不与核心959/963直接混排；日累计保存结果采用的连续时间准入、输入保持及插值约定不同于四UTC单时次，不能把两者差异全部解释成累积效应。地形联合分层、日累计分层与独立事件统计也不可互相替代。\evi{S10--S12}
+
+因此，本文保留分阶段、分Seed及分输出头的有限主张，不形成综合“最佳模型”排名。对不利结果的报告是当前科研结论的一部分，而非等待后续正向结果将其覆盖的临时状态。\evi{C10}
+
+\nextpart{4\quad 科学讨论}
+\subsection*{4.1\quad 支持的是表征效用，尚非地形机制闭环}
+DOTE将已有风场、米制地形梯度和水汽信息组合成确定性代理。即使这些输入与降水过程有关，确定性构造也不产生新的独立观测。真实数值对ZERO的Brier收益说明显式表征在有限网络和现有mask条件下有用；128个零输入权重、mask信息与空间/环境关联的混杂，仍阻止把全部增量解释为真实抬升的因果效果。\evi{C3,C4;S4,S12}
+
+DTFM的名称同样不能替代机制证据。现有单SP04替换比较表明融合路径会重新分配不同指标的收益和代价，但没有证实多尺度普遍优势。独立地形过程观测、可识别的对应关系控制和业务时效证据尚未完成，故机制层面保留NOT\_VERIFIED。\evi{C5,C10}
+
+\subsection*{4.2\quad 强雨问题不能归结为单一原因}
+点估计幅值不足、q32经验欠覆盖、发生概率门控以及0.5决策阈值均有相关证据，但这些现象不能确定训练损失、样本稀少、网络容量和时空尺度各自的因果份额。强雨子集上的低预测或低覆盖也不能单独证明所有条件下的分布失准。\evi{C6--C8}
+
+现有结果已经排除了“完全没有强雨排序信息”这一过强解释，也不支持“只有阈值掩盖、分布本身已足够”的相反极端。较低绝对AP及高误报意味着排序信息尚未转化为可靠识别。如何改进需要后续有针对性的证据与单独批准，不由本文写作自动决定。\evi{C6--C8}
+
+\subsection*{4.3\quad 以IMERG为参考时的论文定位}
+当前能够形成的是带局限的开发性消融、概率输出与稀有强雨识别诊断。对IMERG标签的收益具有明确参考口径，不能直接升级为实际降水更准确。没有已落实的外部观测不阻塞已有结果的解释、整理和论文初稿，但独立真实性与业务适用性的目标须保持未完成。\evi{C10;S11}
+
+新的H1校准及H2风险排序确认性方案仍INCONCLUSIVE。它们的评价人口使用历史独立性不同于观测源链独立性。不能重新切分反复使用的Dev来恢复独立性，也不能仅因同为IMERG而一概排除将来未使用的人口；未来资格和执行权限需要分别核查。\evi{S11}
+
+\nextpart{5\quad 局限性}
+\subsection*{5.1\quad 参考、采样与统计独立性}
+IMERG融合估计的误差会进入监督与评价。缺少可追溯、合法并已配准的独立站点/雷达观测，限制真实性结论。2024 Dev被反复用于模型开发和诊断；核心四UTC采样不能自动代表连续暖季或完整暴雨过程。像元、相邻时次和Seed都不能当独立天气事件，独立事件数仍未识别。\evi{S1,S7,S10,S11}
+
+三Seed仅检验部分训练随机性，既有训练排列还有已记录的移位重叠。本文没有进行新的不确定性计算或显著性检验，也没有把旧探索性时间块区间移作独立事件推断。B5/B6和B3\_DOTE\_ONLY只有单Seed；“没有稳定证据”不等于已证明真实收益为零。\evi{S2--S6,S8--S12}
+
+\subsection*{5.2\quad 容量、分层与尾部}
+环境和地形增量常与结构/参数改变耦合；DOTE零控制并不满足有效容量相等，B8只有单SP04证据。已有地形评价只覆盖部分高程和联合条件；坡度、坡向及其他未保存分层不能从边际聚合量重建。不同高程边界约定也不能无说明混用。\evi{S3,S4,S6,S10,S12}
+
+严格强雨像元时次数少，尤其$>50$仅6个，不足以支持稳定极端事件结论。q32经验欠覆盖未解决，32节点未唯一规定完整上尾；有限分数分组的经验可靠性不等于总体校准。发生概率AP、有雨强度分位损失和强雨排序AP必须保持各自标签与分母。\evi{C4,C6--C9}
+
+\subsection*{5.3\quad 可复现性、业务与最终验收}
+T12/T13原生输出仍存在截断及完整归档缺口；读取历史报告不是复算。原始厂商/DEM发布链与业务数据到达时间等证据也未全部完成。已有f006回顾口径、演示页面或日累计表不证明端到端近实时延迟、吞吐和业务效果。缺失数值统一记为\path{NOT_RETRIEVABLE}，只表示当前允许证据中无法恢复，不能解释为原始数据不存在。\evi{S10--S12}
+
+2025 Final Test继续封存，本轮没有选择最终模型、执行FinalFit或评价该时期。工程写作交付与科学验收分开：Stage 4.5为PARTIAL，科学NOT\_VERIFIED，H1/H2为INCONCLUSIVE，研究者掌握NOT\_ASSESSED。\evi{S11}
+
+\nextpart{6\quad 逐主张证据索引：主要消融}
+\noindent 本索引按总控要求逐项列明主张、出处、反例及限定。下列路径均相对Codex工作区；完整文件指纹与原值定位见同轮\path{CLAIM_EVIDENCE.json}。它是文档证据映射，不是新指标矩阵或新统计检验。
+\claim{C1\quad 环境融合路径}{三Seed总体四指标同向改善，仅支持固定协议内的整体增量。}
+\noindent 出处S2，\path{/summary/metrics}；反例出处S12的B3/B4与“必须保留的反例”段。强雨、UTC、q32反例与容量耦合限制均进入正文2.1，不把均值代替逐Seed方向。
+\claim{C2\quad 静态地形}{B5/B6单Seed混合结果。}
+\noindent 出处S3，\path{/summary/values}和\path{/summary/differences}；B5总体四项不利、B6 AP/Pinball/q32不利。正文2.2不作一般性地形收益结论。
+\claim{C3\quad DOTE数值控制}{Brier在三个保存Seed下降，其他收益不稳定。}
+\noindent 出处S4，\path{/summary/groups/all}及S12三SeedZERO段；真实mask、128个无损失梯度权重和强雨反例保留于正文2.3。
+\claim{C4\quad 经验可靠性}{样本精确分数经验REL下降，不能视作总体校准或机制因果。}
+\noindent 出处S5，\path{/real_B7_minus_ZERO_DOTE}和\path{/limitations}；RES在两Seed下降、稀疏分数组等限制进入正文2.4。
+\claim{C5\quad 融合替换}{B8对B7总体AUROC同向，其他量混合。}
+\noindent 出处S6，\path{/summary/metrics}，强雨分层另见S12；Brier/Pinball/q32反例、单SP04以及没有多尺度/普遍优势的限制进入正文2.5--2.6。
+
+\nextpart{6\quad 逐主张证据索引：强雨与适用范围}
+\claim{C6\quad 排序与点检出}{历史报告同时保存A/B/C严格20mm/h零检出与强雨排序信息。}
+\noindent 出处S7的§1--3；报告来源和原生输出完整性限制见S10。低绝对AP、大量FP、$U\le20$及像元非事件限制进入正文2.7，不冒称本轮重新验证数组。
+\claim{C7\quad q32覆盖}{九模型有雨人口覆盖范围93.48241871\%--95.05933990\%。}
+\noindent 出处S7的§6逐行覆盖表，分母407,820。正文2.8保留98.4375\%名义水平、B7/2030最高值及按结果条件化分层的解释限制。
+\claim{C8\quad 概率尾部界}{保存P20上界最大0.19317626953125，小于0.5。}
+\noindent 出处S7的§6逐模型上界表及最大值定位；正文2.8只解释可识别界，不生成精确概率，不声称调阈值即可取得可靠识别。
+\claim{C9\quad 补充单Seed}{B3\_DOTE\_ONLY四项改善，RMSE与强雨点检出反例保留。}
+\noindent 出处S8的\path{/protocol}，S9的\path{/metrics}及\path{/candidate_point_metrics/counts/20.0}；不属于V3九模型，GFS仍经DOTE进入，见正文2.9。
+\claim{C10\quad 整体成果边界}{内部IMERG参考开发证据，不是独立真实性、物理因果或业务验收。}
+\noindent 出处S1的时间/产品契约、S11的\path{/claim_boundaries}和S10已有覆盖限制；本文没有新增独立E、最终模型选择或2025权限。
+
+\nextpart{7\quad 可复现性说明与来源文件}
+\subsection*{7.1\quad 当前可追溯与尚未闭合的环节}
+每项主张均绑定保存文件、JSON字段或历史报告章节；已有差值、均值和Seed统计直接沿用源值，数字仅为排版舍入，未重新聚合。S2--S6的固定E9、配对和完成身份来自既有执行方收据，本轮不加载checkpoint以重新核验载荷。S7是恢复的历史消息，不是原生计算收据，两者证据等级不同。
+
+当前文档证据检查可验证来源存在、所选JSON字段和指纹、引用文字及排版，但不代替独立重演。后续若需要重算、读取缺失载荷或获取外部观测，必须另行确定范围和批准；本初稿没有运行入口。图表不在本轮新增，已有主表不重排或重新导出。
+
+\subsection*{7.2\quad 来源清单}
+\small\raggedright
+\noindent\textbf{S1}\quad\path{config/science_contract_v1.1.yaml}\par
+\noindent\textbf{S2}\quad\path{docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json}\par
+\noindent\textbf{S3}\quad\path{docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json}\par
+\noindent\textbf{S4}\quad\path{docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json}\par
+\noindent\textbf{S5}\quad\path{docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json}\par
+\noindent\textbf{S6}\quad\path{docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json}\par
+\noindent\textbf{S7}\quad\path{docs/research_readiness/20261106_research_convergence/history/T12_RECOVERED_REDACTED.md}\par
+\noindent\textbf{S8}\quad\path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}\par
+\noindent\textbf{S9}\quad\path{docs/research_readiness/20261105_b3_dote_without_mee/result.json}\par
+\noindent\textbf{S10}\quad\path{docs/research_readiness/20261106_research_convergence/HISTORICAL_EVIDENCE_RECOVERY.json}\par
+\noindent\textbf{S11}\quad\path{docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json}\par
+\noindent\textbf{S12}\quad\path{SCIENTIFIC_ANALYSIS.md}\par
+\normalsize
+\subsection*{7.3\quad 版本与审阅状态}
+本文版本\texttt{INTERNAL-DRAFT-20261106.1}，与旧两报告并存。初稿内容的独立审核及各自Git完成结果以同轮验证/结项收据和交接为准。研究者尚未对全部科学结论或本人掌握作最终确认；本文不能直接当作投稿终稿或已通过科学验收的成果。
+\end{document}

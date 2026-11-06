@@ -99,3 +99,8 @@ Harness已对修正提交3efb20a完成一次限定独立审核，结论PASS；�
 Harness已对66a2a13的八文件差异完成一次限定独立审核，结论PASS；正式记录5372B，SHA256 `C3CD9114773F7EEA4FD64A396C04EA62100385E816B543F15C4899CB6F9F95FF`，审核者自身分支提交 `8cdd0d4d2e357c0944211370364d3f468ee03ba9` 已普通推送，Codex独立ls-remote核对一致、提交仅审核文件且树干净。审核未逐字重算历史前后缀或逐页像素检查，未把保护快照升级为OS监控。
 
 [结项回执](../20261106_imerg_reference_scope/REVIEW_OUTCOME.json)登记此后事实，原记录中的待审状态按创建时点阅读；计划PDF/tex和两份原收据保持已审字节，不为闭环另增版本。本次仅回执与本索引补记，不声称新增字节已被预审。工程PASS限本轮文档/边界/审核/各自Git，Stage4.5 PARTIAL、H1/H2 INCONCLUSIVE、科学NOT_VERIFIED、研究者NOT_ASSESSED。按冻结IMERG参考整理既有成果，外部资料缺口不阻塞所有整理工作；没有新载荷、计算、训练或2025权限。
+
+
+## 内部结果/讨论/局限初稿（2026-11-06）
+
+按总控d88c7bbc，本轮把既有保存结果转成唯一内部INTERNAL-DRAFT-20261106.1，保留两份旧分析/验收报告，不另起完整投稿终稿。包含10项逐主张证据映射、12份来源指纹与字段、14个直接数值排版绑定；其他历史报告数字按章节标注。正文保留B3/B4三seed、真实DOTE/ZERO三seed、B7/B8混合方向、V3强雨排序/点估计/尾部反例及补充单seed，科学NOT_VERIFIED、研究者NOT_ASSESSED。见 [主张索引](../20261106_internal_paper_draft/CLAIM_EVIDENCE.json)；计划更新LIVE-20261106.5。限定内容审核待完成，不重算指标/推理/训练、不新增数据图、不访问2025。

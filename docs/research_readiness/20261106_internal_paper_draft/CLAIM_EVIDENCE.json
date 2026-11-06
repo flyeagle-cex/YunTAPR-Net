@@ -1,0 +1,758 @@
+{
+  "task": "INTERNAL_RESULTS_DISCUSSION_DRAFT_20261106",
+  "version": "INTERNAL-DRAFT-20261106.1",
+  "status": "INTERNAL_DRAFT_NOT_SCIENTIFIC_ACCEPTANCE",
+  "controller_message": "d88c7bbc-bfda-4b0c-93c2-a67a2d32d32b",
+  "created_utc": "2026-11-06T09:14:11.181013+00:00",
+  "maintenance": "Codex own manuscript/evidence files; Harness independent own review; researcher scientific authority",
+  "sources": {
+    "S1": {
+      "path": "config/science_contract_v1.1.yaml",
+      "bytes": 14085,
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S2": {
+      "path": "docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json",
+      "bytes": 133311,
+      "sha256": "e101ebd17b267d4fc0d93b53afe0ab432ce3e7a54f226f9058eac54237eecde4",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S3": {
+      "path": "docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json",
+      "bytes": 353184,
+      "sha256": "a2ca0b49ec59e16ce295f3f8533e10533aa9e2c44d2fe746838c1a381e8f5161",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S4": {
+      "path": "docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json",
+      "bytes": 747110,
+      "sha256": "188f0305ec0faa7bd0077cc950dd0d5ec50e104bb54978bcdf8a2878ce2d5adf",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S5": {
+      "path": "docs/research_readiness/20261025/evidence/dote_reliability_increment_20261030.json",
+      "bytes": 22551,
+      "sha256": "ae10d7cdf9e519531dad2e9e8bb7a7c8374e130e74d67a2347d374922371c005",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S6": {
+      "path": "docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json",
+      "bytes": 678449,
+      "sha256": "d12a7919da8aac7775300204a2f12d4dfe938e5efbd68f52118ae0bab9edd3f3",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S7": {
+      "path": "docs/research_readiness/20261106_research_convergence/history/T12_RECOVERED_REDACTED.md",
+      "bytes": 19877,
+      "sha256": "650362c6db73899c25e44197488e254eb911678e26ec124ec6cbed3060ee5635",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S8": {
+      "path": "docs/research_readiness/20261105_b3_dote_without_mee/receipt.json",
+      "bytes": 3986,
+      "sha256": "a8bcde9b09d69c9a50fca76a173ea1a6101c1c2b538358bab359b1e6c60ce160",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S9": {
+      "path": "docs/research_readiness/20261105_b3_dote_without_mee/result.json",
+      "bytes": 4293,
+      "sha256": "0633198797f6dcd19621f39089346003a872ab2780ccf73b3bc500f0e7ee0d74",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S10": {
+      "path": "docs/research_readiness/20261106_research_convergence/HISTORICAL_EVIDENCE_RECOVERY.json",
+      "bytes": 14431,
+      "sha256": "4d9f1989552dd09bf733247e21a6b7afdb5e80b138c2e7a65424e892f1d732b9",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S11": {
+      "path": "docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json",
+      "bytes": 4712,
+      "sha256": "77d2503d1f91f239c441c1efa483cd765420625fc589974a8371d7a0b6f9097e",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    },
+    "S12": {
+      "path": "SCIENTIFIC_ANALYSIS.md",
+      "bytes": 92597,
+      "sha256": "cece3f57ff4fa620075ee3ed815955c2e1566664f2c8736adfac3ee2d73489c0",
+      "evidence_level": "DIRECT_DOCUMENT_READ; saved aggregate or report, not current independent raw-payload verification"
+    }
+  },
+  "selected_aggregates_verbatim": [
+    {
+      "source": "S2",
+      "pointer": "/summary/metrics",
+      "value": {
+        "brier": {
+          "B4_minus_B3_by_seed": {
+            "2029": -0.0016598539642849602,
+            "2030": -0.00036040212266806593,
+            "2031": -0.003952257857181604
+          },
+          "mean": -0.00199083798137821,
+          "sample_sd": 0.0018186587692769185,
+          "favorable_direction": "negative"
+        },
+        "auroc": {
+          "B4_minus_B3_by_seed": {
+            "2029": 0.006853626623328668,
+            "2030": 0.005467696300541669,
+            "2031": 0.005195185678984138
+          },
+          "mean": 0.005838836200951492,
+          "sample_sd": 0.0008893341389639521,
+          "favorable_direction": "positive"
+        },
+        "average_precision": {
+          "B4_minus_B3_by_seed": {
+            "2029": 0.021896515476796607,
+            "2030": 0.015463825594083436,
+            "2031": 0.01805570493927522
+          },
+          "mean": 0.018472015336718422,
+          "sample_sd": 0.003236488921973098,
+          "favorable_direction": "positive"
+        },
+        "conditional_pinball": {
+          "B4_minus_B3_by_seed": {
+            "2029": -0.0020643797733051195,
+            "2030": -0.0008244481360207001,
+            "2031": -0.0006572631772355786
+          },
+          "mean": -0.0011820303621871326,
+          "sample_sd": 0.0007686956908206194,
+          "favorable_direction": "negative"
+        },
+        "q32_coverage": {
+          "B4_minus_B3_by_seed": {
+            "2029": 0.0011769898484624841,
+            "2030": 0.004796233632484936,
+            "2031": -0.0015423471139228706
+          },
+          "mean": 0.0014769587890081832,
+          "sample_sd": 0.0031799194162198544,
+          "favorable_direction": "positive_for_undercoverage_only"
+        },
+        "q32_signed_bias": {
+          "B4_minus_B3_by_seed": {
+            "2029": 0.0011769898484624841,
+            "2030": 0.004796233632484936,
+            "2031": -0.0015423471139228706
+          },
+          "mean": 0.0014769587890081832,
+          "sample_sd": 0.0031799194162198544,
+          "favorable_direction": "positive_for_undercoverage_only"
+        },
+        "q32_absolute_error": {
+          "B4_minus_B3_by_seed": {
+            "2029": -0.0011769898484624841,
+            "2030": -0.004796233632484936,
+            "2031": 0.0015423471139228706
+          },
+          "mean": -0.0014769587890081832,
+          "sample_sd": 0.0031799194162198544,
+          "favorable_direction": "negative"
+        }
+      }
+    },
+    {
+      "source": "S3",
+      "pointer": "/summary",
+      "value": {
+        "seed": 2029,
+        "endpoint": "FIXED_EPOCH_9_LAST",
+        "values": {
+          "B4": {
+            "brier": 0.09791899181978897,
+            "auroc": 0.8948784047582392,
+            "average_precision": 0.5926382833862388,
+            "conditional_pinball": 0.12719368687787683,
+            "q32_coverage": 0.9362267667108037,
+            "q32_signed_bias": -0.04814823328919626,
+            "q32_absolute_error": 0.04814823328919626
+          },
+          "B5": {
+            "brier": 0.09818115425527373,
+            "auroc": 0.8950869439563437,
+            "average_precision": 0.5907729607715951,
+            "conditional_pinball": 0.12731034235976943,
+            "q32_coverage": 0.9345985974204306,
+            "q32_signed_bias": -0.04977640257956939,
+            "q32_absolute_error": 0.04977640257956939
+          },
+          "B6": {
+            "brier": 0.09637301023497848,
+            "auroc": 0.8957210255048111,
+            "average_precision": 0.5918758139388839,
+            "conditional_pinball": 0.12719945304919317,
+            "q32_coverage": 0.9314722181354519,
+            "q32_signed_bias": -0.05290278186454811,
+            "q32_absolute_error": 0.05290278186454811
+          }
+        },
+        "differences": {
+          "B5_minus_B4": {
+            "brier": 0.0002621624354847557,
+            "auroc": 0.00020853919810448485,
+            "average_precision": -0.0018653226146436719,
+            "conditional_pinball": 0.00011665548189260244,
+            "q32_coverage": -0.001628169290373127,
+            "q32_signed_bias": -0.001628169290373127,
+            "q32_absolute_error": 0.001628169290373127
+          },
+          "B6_minus_B4": {
+            "brier": -0.0015459815848104935,
+            "auroc": 0.0008426207465719315,
+            "average_precision": -0.0007624694473549187,
+            "conditional_pinball": 5.766171316340385e-06,
+            "q32_coverage": -0.004754548575351847,
+            "q32_signed_bias": -0.004754548575351847,
+            "q32_absolute_error": 0.004754548575351847
+          },
+          "B6_minus_B5": {
+            "brier": -0.0018081440202952492,
+            "auroc": 0.0006340815484674467,
+            "average_precision": 0.0011028531672887532,
+            "conditional_pinball": -0.00011088931057626206,
+            "q32_coverage": -0.0031263792849787198,
+            "q32_signed_bias": -0.0031263792849787198,
+            "q32_absolute_error": 0.0031263792849787198
+          }
+        },
+        "descriptive_only": true,
+        "significance": "NOT_CLAIMED"
+      }
+    },
+    {
+      "source": "S4",
+      "pointer": "/summary/groups/all",
+      "value": {
+        "brier": {
+          "by_seed": {
+            "2029": -0.0016455233410926084,
+            "2030": -0.00042572297435714,
+            "2031": -0.0006066377395664846
+          },
+          "mean": -0.0008926280183387444,
+          "sample_sd": 0.00065827126880654,
+          "improvement_direction": "LOWER",
+          "improvement_seeds": 3,
+          "negative_seeds": 3,
+          "positive_seeds": 0,
+          "zero_seeds": 0,
+          "direction_consistent": true
+        },
+        "auroc": {
+          "by_seed": {
+            "2029": 0.0008349697086184049,
+            "2030": -0.0007819477353661064,
+            "2031": -0.0003381248996572328
+          },
+          "mean": -9.503430880164476e-05,
+          "sample_sd": 0.0008354192251123028,
+          "improvement_direction": "HIGHER",
+          "improvement_seeds": 1,
+          "negative_seeds": 2,
+          "positive_seeds": 1,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        },
+        "average_precision": {
+          "by_seed": {
+            "2029": 0.004693578429989298,
+            "2030": -0.001451980631480665,
+            "2031": -0.0004859218162684975
+          },
+          "mean": 0.0009185586607467119,
+          "sample_sd": 0.0033047538640935945,
+          "improvement_direction": "HIGHER",
+          "improvement_seeds": 1,
+          "negative_seeds": 2,
+          "positive_seeds": 1,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        },
+        "conditional_pinball": {
+          "by_seed": {
+            "2029": -0.0008828710787321115,
+            "2030": -0.00036087624754133074,
+            "2031": 0.000651098343787071
+          },
+          "mean": -0.0001975496608287904,
+          "sample_sd": 0.0007799180904116376,
+          "improvement_direction": "LOWER",
+          "improvement_seeds": 2,
+          "negative_seeds": 2,
+          "positive_seeds": 1,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        },
+        "q32_coverage": {
+          "by_seed": {
+            "2029": -0.0042690402628610125,
+            "2030": -0.001010249619930348,
+            "2031": 0.0018611151978814577
+          },
+          "mean": -0.0011393915616366341,
+          "sample_sd": 0.0030671174943337977,
+          "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+          "improvement_seeds": 1,
+          "negative_seeds": 2,
+          "positive_seeds": 1,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        },
+        "q32_signed_bias": {
+          "by_seed": {
+            "2029": -0.0042690402628610125,
+            "2030": -0.001010249619930348,
+            "2031": 0.0018611151978814577
+          },
+          "mean": -0.0011393915616366341,
+          "sample_sd": 0.0030671174943337977,
+          "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+          "improvement_seeds": 1,
+          "negative_seeds": 2,
+          "positive_seeds": 1,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        },
+        "q32_absolute_error": {
+          "by_seed": {
+            "2029": 0.0042690402628610125,
+            "2030": 0.001010249619930348,
+            "2031": -0.0018611151978814577
+          },
+          "mean": 0.0011393915616366341,
+          "sample_sd": 0.0030671174943337977,
+          "improvement_direction": "LOWER",
+          "improvement_seeds": 1,
+          "negative_seeds": 1,
+          "positive_seeds": 2,
+          "zero_seeds": 0,
+          "direction_consistent": false
+        }
+      }
+    },
+    {
+      "source": "S5",
+      "pointer": "/real_B7_minus_ZERO_DOTE",
+      "value": {
+        "2029": {
+          "brier": -0.0016455233410925113,
+          "empirical_score_reliability": -0.0012660589275870215,
+          "empirical_score_resolution": 0.00037946441350557303,
+          "uncertainty": 0.0
+        },
+        "2030": {
+          "brier": -0.0004257229743570845,
+          "empirical_score_reliability": -0.0006158816724310852,
+          "empirical_score_resolution": -0.00019015869807396252,
+          "uncertainty": 0.0
+        },
+        "2031": {
+          "brier": -0.000606637739566554,
+          "empirical_score_reliability": -0.0006660772162172535,
+          "empirical_score_resolution": -5.9439476650754997e-05,
+          "uncertainty": 0.0
+        }
+      }
+    },
+    {
+      "source": "S6",
+      "pointer": "/summary/metrics",
+      "value": {
+        "brier": {
+          "by_seed": {
+            "2029": 0.001319191800730174,
+            "2030": -1.2611197276315989e-05,
+            "2031": 0.0003330378343825574
+          },
+          "mean": 0.0005465394792788051,
+          "sample_sd": 0.0006910947986020595,
+          "improvement": "LOWER"
+        },
+        "auroc": {
+          "by_seed": {
+            "2029": 0.00023383897029272127,
+            "2030": 0.0006312050095356181,
+            "2031": 1.4383950218133101e-05
+          },
+          "mean": 0.00029314264334882417,
+          "sample_sd": 0.000312657558732945,
+          "improvement": "HIGHER"
+        },
+        "average_precision": {
+          "by_seed": {
+            "2029": 0.0006938316577447257,
+            "2030": 0.00026171971103006175,
+            "2031": -0.0021922919776716787
+          },
+          "mean": -0.0004122468696322971,
+          "sample_sd": 0.0015566311777728803,
+          "improvement": "HIGHER"
+        },
+        "conditional_pinball": {
+          "by_seed": {
+            "2029": -0.0005184234368824647,
+            "2030": 0.0009174744450897443,
+            "2031": 0.0004851033536855398
+          },
+          "mean": 0.0002947181206309398,
+          "sample_sd": 0.0007366380281977096,
+          "improvement": "LOWER"
+        },
+        "q32_coverage": {
+          "by_seed": {
+            "2029": 0.005718209013780617,
+            "2030": -0.0024496101221126443,
+            "2031": -0.006429307047226773
+          },
+          "mean": -0.0010535693851862666,
+          "sample_sd": 0.006192918045435172,
+          "improvement": "CLOSER_TO_NOMINAL"
+        },
+        "q32_signed_bias": {
+          "by_seed": {
+            "2029": 0.005718209013780617,
+            "2030": -0.0024496101221126443,
+            "2031": -0.006429307047226773
+          },
+          "mean": -0.0010535693851862666,
+          "sample_sd": 0.006192918045435172,
+          "improvement": "CLOSER_TO_NOMINAL"
+        },
+        "q32_absolute_error": {
+          "by_seed": {
+            "2029": -0.005718209013780617,
+            "2030": 0.0024496101221126443,
+            "2031": 0.006429307047226773
+          },
+          "mean": 0.0010535693851862666,
+          "sample_sd": 0.006192918045435172,
+          "improvement": "LOWER"
+        }
+      }
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics",
+      "value": {
+        "brier": {
+          "baseline": 0.09957884578407393,
+          "candidate": 0.098840043810711,
+          "difference": -0.0007388019733629292
+        },
+        "auroc": {
+          "baseline": 0.8880247781349105,
+          "candidate": 0.890230832782724,
+          "difference": 0.002206054647813427
+        },
+        "average_precision": {
+          "baseline": 0.5707417679094422,
+          "candidate": 0.5777392723944595,
+          "difference": 0.006997504485017347
+        },
+        "conditional_pinball": {
+          "baseline": 0.12925806665118195,
+          "candidate": 0.1288159815380511,
+          "difference": -0.00044208511313084675
+        },
+        "rmse_mm_h": {
+          "baseline": 0.8352277080153362,
+          "candidate": 0.8369110714687488,
+          "difference": 0.0016833634534125785
+        }
+      }
+    },
+    {
+      "source": "S9",
+      "pointer": "/candidate_point_metrics/counts/20.0",
+      "value": {
+        "TP": 0,
+        "FP": 0,
+        "FN": 717,
+        "TN": 3302373
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Adding the B4 GFS/MEE pathway yields same-direction overall Brier/AUROC/AP/conditional-Pinball changes across three training seeds relative to B3 in the recorded development population.",
+      "sources": [
+        {
+          "id": "S2",
+          "pointer": "/summary/metrics"
+        },
+        {
+          "id": "S12",
+          "locator": "B3/B4：全部三个seed; 必须保留的反例"
+        }
+      ],
+      "counterevidence": "30-50mm/h conditional Pinball worsens in all three seeds; q32 direction mixed; some UTC Brier counterexamples.",
+      "limits": "Information, capacity and fusion changes are coupled; reused2024 Dev; not significance, physical causality or independent-year success."
+    },
+    {
+      "id": "C2",
+      "claim": "B5/B6 static-terrain additions have mixed single-seed results, not general terrain superiority.",
+      "sources": [
+        {
+          "id": "S3",
+          "pointer": "/summary/values"
+        },
+        {
+          "id": "S3",
+          "pointer": "/summary/differences"
+        }
+      ],
+      "counterevidence": "B5 only AUROC improves overall; B6 Brier/AUROC improve but AP/conditional Pinball/q32 worsen relative to B4.",
+      "limits": "Seed2029 only; variable and adapter changes coupled."
+    },
+    {
+      "id": "C3",
+      "claim": "Real B7 DOTE numerical features reduce Brier relative to ZERO in all three saved seed comparisons.",
+      "sources": [
+        {
+          "id": "S4",
+          "pointer": "/summary/groups/all"
+        }
+      ],
+      "counterevidence": "AUROC/AP improve only2029; conditional Pinball2/3; q32 nominal absolute error1/3; strong-rain gains only2029.",
+      "limits": "Real mask retained;128 zero-input weights have no loss gradient; nominal equality does not establish equal effective capacity or physical causality."
+    },
+    {
+      "id": "C4",
+      "claim": "Saved empirical exact-score reliability term decreases for real B7 versus ZERO across three seeds.",
+      "sources": [
+        {
+          "id": "S5",
+          "pointer": "/real_B7_minus_ZERO_DOTE"
+        },
+        {
+          "id": "S5",
+          "pointer": "/limitations"
+        }
+      ],
+      "counterevidence": "Resolution falls in two seeds; sparse score groups and spatial/temporal dependence.",
+      "limits": "Empirical decomposition is not population calibration or training-cause identification."
+    },
+    {
+      "id": "C5",
+      "claim": "B8 fusion replacement versus B7 has mixed effects: AUROC improves in all seeds, other quantities are not uniformly favorable.",
+      "sources": [
+        {
+          "id": "S6",
+          "pointer": "/summary/metrics"
+        },
+        {
+          "id": "S12",
+          "locator": "B7/B8三seed固定E9完成; 全部雨强层"
+        }
+      ],
+      "counterevidence": "Brier worsens in2029/2031; AP mean negative; Pinball and strong-rain gains only2029; q32 error improves only2029.",
+      "limits": "Single SP04 width16 evidence; no general/multiscale or causal claim."
+    },
+    {
+      "id": "C6",
+      "claim": "Historical V3/T12 report records zero point-estimate detection at strictR>20 for A/B/C across nine models, while relative ranking information persists.",
+      "sources": [
+        {
+          "id": "S7",
+          "locator": "§1九模型AUROC/AP; §3强雨漏检分解"
+        },
+        {
+          "id": "S10",
+          "locator": "T12/T13 recovered output and native-receipt completeness limitations"
+        }
+      ],
+      "counterevidence": "Low absolute AP and high false-alarm fraction; q32>20 overlaps some positives with substantial false positives.",
+      "limits": "Report evidence, not fresh NPZ verification;717 pixel-times not storms; native stdout completeness remains partial."
+    },
+    {
+      "id": "C7",
+      "claim": "Saved T12 q32 rain-population coverage range across all nine models is93.48241871%-95.05933990%, below nominal98.4375%.",
+      "sources": [
+        {
+          "id": "S7",
+          "locator": "§6九模型逐行coverage, denominator407820"
+        }
+      ],
+      "counterevidence": "Outcome-conditioned intensity strata do not individually have the same nominal coverage requirement.",
+      "limits": "Do not infer exact full-tail probability, cause, or conditional calibration from coverage alone."
+    },
+    {
+      "id": "C8",
+      "claim": "Historical report gives global P20 upper-bound maximum0.19317626953125, so a0.5 decision threshold cannot select positives under those compatible-distribution bounds.",
+      "sources": [
+        {
+          "id": "S7",
+          "locator": "§6P20上界逐模型表与全局最大值"
+        }
+      ],
+      "counterevidence": "Ranking and finite-tail amplitude limitations coexist; changing threshold alone does not establish reliable alarms.",
+      "limits": "Upper bound is not an exact probability or confidence interval; not new calibration evidence."
+    },
+    {
+      "id": "C9",
+      "claim": "B3_DOTE_ONLY/2029 improves four stored probability/conditional metrics but RMSE increases and strict20mm/h TP remains zero.",
+      "sources": [
+        {
+          "id": "S8",
+          "pointer": "/protocol"
+        },
+        {
+          "id": "S9",
+          "pointer": "/metrics"
+        },
+        {
+          "id": "S9",
+          "pointer": "/candidate_point_metrics/counts/20.0"
+        }
+      ],
+      "counterevidence": "Added3136 parameters; no stable multi-seed evidence; RMSE and strong-rain detection counterexamples.",
+      "limits": "Separate from V3 nine-model set; no direct MEE/static branch but GFS still enters through DOTE; occurrence AP differs from strong-rain AP."
+    },
+    {
+      "id": "C10",
+      "claim": "Current results support bounded IMERG-reference developmental description, not independent physical-truth validation or operational acceptance.",
+      "sources": [
+        {
+          "id": "S1",
+          "locator": "temporal_data_role; time"
+        },
+        {
+          "id": "S11",
+          "pointer": "/claim_boundaries"
+        },
+        {
+          "id": "S10",
+          "locator": "original-plan and inherited-evidence coverage limitations"
+        }
+      ],
+      "counterevidence": "No implemented external observations/licence/source-chain validation; repeated development use; partial terrain/event coverage.",
+      "limits": "Stage4.5PARTIAL;H1/H2INCONCLUSIVE;scienceNOT_VERIFIED;masteryNOT_ASSESSED;2025sealed."
+    }
+  ],
+  "numeric_policy": "Copy existing saved numerical leaves and published text only. Formatting/rounding for prose permitted; no metric recomputation, new differences/means/uncertainty or payload reads.",
+  "missing_numeric_marker": "NOT_RETRIEVABLE means missing from allowed existing evidence, not impossible to obtain in general.",
+  "preserved_old_documents": {
+    "docs/phase_b_v2_seed2026_scientific_analysis/v1/paper/main.tex": {
+      "bytes": 19808,
+      "sha256": "e3d02f02fc691a2e74698ada529e5065d723494da0ff7475bde6ec6b2414ed9f"
+    },
+    "docs/research_readiness/20261029/paper_acceptance/main.tex": {
+      "bytes": 14949,
+      "sha256": "5edfadae0337806f5374261cb6f5d2407d76df198f1f0545e316eefd208debdf"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_4.pdf": {
+      "bytes": 523367,
+      "sha256": "84712a9ff60e25ac7953e0eac2178a9f11a75954d96c52e6c93dc5c40f8f0a99"
+    }
+  },
+  "scientific_status": "NOT_VERIFIED",
+  "H1_H2": "INCONCLUSIVE",
+  "researcher_mastery": "NOT_ASSESSED",
+  "review": "PENDING",
+  "formatted_numeric_bindings": [
+    {
+      "source": "S2",
+      "pointer": "/summary/metrics/brier/mean",
+      "stored_value": -0.00199083798137821,
+      "format": ".12f",
+      "rendered": "-0.001990837981"
+    },
+    {
+      "source": "S2",
+      "pointer": "/summary/metrics/auroc/mean",
+      "stored_value": 0.005838836200951492,
+      "format": ".12f",
+      "rendered": "0.005838836201"
+    },
+    {
+      "source": "S2",
+      "pointer": "/summary/metrics/average_precision/mean",
+      "stored_value": 0.018472015336718422,
+      "format": ".12f",
+      "rendered": "0.018472015337"
+    },
+    {
+      "source": "S2",
+      "pointer": "/summary/metrics/conditional_pinball/mean",
+      "stored_value": -0.0011820303621871326,
+      "format": ".12f",
+      "rendered": "-0.001182030362"
+    },
+    {
+      "source": "S4",
+      "pointer": "/summary/groups/all/brier/mean",
+      "stored_value": -0.0008926280183387444,
+      "format": ".12f",
+      "rendered": "-0.000892628018"
+    },
+    {
+      "source": "S6",
+      "pointer": "/summary/metrics/brier/mean",
+      "stored_value": 0.0005465394792788051,
+      "format": ".12f",
+      "rendered": "0.000546539479"
+    },
+    {
+      "source": "S6",
+      "pointer": "/summary/metrics/auroc/mean",
+      "stored_value": 0.00029314264334882417,
+      "format": ".12f",
+      "rendered": "0.000293142643"
+    },
+    {
+      "source": "S6",
+      "pointer": "/summary/metrics/average_precision/mean",
+      "stored_value": -0.0004122468696322971,
+      "format": ".12f",
+      "rendered": "-0.000412246870"
+    },
+    {
+      "source": "S6",
+      "pointer": "/summary/metrics/conditional_pinball/mean",
+      "stored_value": 0.0002947181206309398,
+      "format": ".12f",
+      "rendered": "0.000294718121"
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics/brier/difference",
+      "stored_value": -0.0007388019733629292,
+      "format": ".12f",
+      "rendered": "-0.000738801973"
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics/auroc/difference",
+      "stored_value": 0.002206054647813427,
+      "format": ".12f",
+      "rendered": "0.002206054648"
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics/average_precision/difference",
+      "stored_value": 0.006997504485017347,
+      "format": ".12f",
+      "rendered": "0.006997504485"
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics/conditional_pinball/difference",
+      "stored_value": -0.00044208511313084675,
+      "format": ".12f",
+      "rendered": "-0.000442085113"
+    },
+    {
+      "source": "S9",
+      "pointer": "/metrics/rmse_mm_h/difference",
+      "stored_value": 0.0016833634534125785,
+      "format": ".12f",
+      "rendered": "0.001683363453"
+    }
+  ]
+}

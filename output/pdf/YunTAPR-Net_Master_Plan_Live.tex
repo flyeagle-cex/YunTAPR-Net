@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.4}\qquad 状态截至：2026年11月06日16时25分（北京时间）
+版本：\texttt{LIVE-20261106.5}\qquad 状态截至：2026年11月06日17时19分（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
@@ -43,10 +43,10 @@
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者报告目前没有已落实的外部参考资料，并提出无可落实公开替代来源时以IMERG为参考；不推断所有公开资料不存在。\evi{S13}
-\item 既有监督产品已冻结为IMERG V07 Final；保留版本与处理流，不使用Early/Late替换或混用V07/V08。\evi{S1,S13}
-\item 继续整理既有IMERG参考结果、消融和负面结果；独立观测真实性、确认性评价与物理机制证据分别登记。\evi{S13}
-\item Stage 4.5仍PARTIAL。保留已完成的CMA/NOAA/DPR元数据核查，不重复泛搜；无新增数据获取或计算授权。\evi{S11,S12,S13}
+\item 已将既有聚合结果整理为内部Results / Discussion / Limitations初稿，包含10项主张及12份来源索引。两份旧分析/验收报告保留，不另起完整投稿终稿。\evi{S15}
+\item 正文并列呈现B3至B4、真实DOTE至ZERO、B7至B8的三Seed收益与反例，补充B5/B6和B3\_DOTE\_ONLY单Seed结果。\evi{S15}
+\item 强雨排序、点估计零检出、q32欠覆盖和P20结构界分别解释；T12历史报告及原生输出不完整性限制保留。没有重算指标或生成数据图。\evi{S4,S15}
+\item 沿用IMERG V07 Final参考路线；外部真实性、机制、H1/H2和业务验收仍未完成，2025封存。文稿完成不等于科学验收。\evi{S13,S15}
 \end{itemize}
 
 本轮工程状态以限定审查和Git完成回执为准；项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本版的下一步建议均为\texttt{PROPOSED}，不是实验启动书。
@@ -249,6 +249,8 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 \section*{论文和成果转化}
 论文骨架沿用Introduction、Related Work、Data、Method、Experiments、Results、Discussion、Conclusion。当前可整理内部消融、负面/混合结果与局限；独立真实性、机制和业务主张须对应证据。演示页面和竞赛原型不能反向替代论文科学结论。\evi{S0，pp.16--18}
 
+本轮已形成\texttt{INTERNAL-DRAFT-20261106.1}：结果、跨阶段分析、讨论、局限、逐主张索引及复现说明。数字来自既有JSON和历史报告，14个关键排版数值直接绑定保存字段，不是新指标；其余报告值按出处引用。初稿不包含未核验的完整方法或文献综述，不选择最终模型。限定内容审核和各自Git回执另行记录，科学与知识状态不变。\evi{S15}
+
 \section*{本计划怎样持续更新}
 \begin{itemize}
 \item 每轮实质任务结束后，依据新取得且可追溯的证据更新本LaTeX源与最新PDF，标明北京时间、版本和变更摘要；没有新证据不重复改写。
@@ -273,12 +275,13 @@ Final Run是产品的延迟处理流，V07是算法版本；2025 Final Test是�
 \item[S12] \path{docs/research_readiness/}\\\path{20261106_cma_hourly_radar_metadata/CMA_PRODUCT_IDENTITY.json}。前轮官方产品/站点附件/当地办理流程、访问时间、原响应指纹和限制；无观测载荷。18次直接GET中15份文档/元数据成功，3次500/404失败，重试0；不含搜索/页面解析开销。
 \item[S13] \path{docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json}。研究者资料事实与条件性IMERG偏好、总控\texttt{0314e4a3}的限定文本及证据边界；并非研究者的新数据/实验批准。
 \item[S14] NASA，\textit{IMERG V07 Technical Documentation}（2023-07-13）官方说明。\url{https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation}。本轮仅核对公开说明，未获取观测；保留V07历史协议而不自动追随新版本。
+\item[S15] \path{docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json}，绑定10项主张、12份已有来源、JSON字段与反例，附排版数字绑定；对应\path{output/pdf/YunTAPR-Net_Internal_Results_Discussion_Draft_20261106.tex}和同名PDF。内部初稿，不是新实验或科学验收。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \end{description}
 \normalsize
-本版变更：登记研究者目前无已落实外部资料的事实，沿用已冻结的IMERG V07 Final监督参考；区分参考一致性、外部真实性、确认性E和物理/业务证据。前轮元数据调查、历史恢复和日累计纠正继承，不重复搜索或计算。旧实验、预算、科学批准及2025封存均未改变。
+本版变更：将既有IMERG参考结果转化为内部结果/讨论/局限初稿及逐主张证据索引；保留三Seed混合方向、强雨和尾部反例、外部验证及历史归档缺口。旧方案、两份旧报告、预算与2025封存保持，不新增计算或数据获取。
 
 工程、科学、知识三状态分别记录。本轮完整工程收尾与限定审核结果追加在项目索引和各自交接中；科学仍\texttt{NOT\_VERIFIED}，研究者掌握仍\texttt{NOT\_ASSESSED}。
 \end{document}
