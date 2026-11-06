@@ -1,0 +1,111 @@
+{
+  "task": "Q32-BASELINE-20261106.1",
+  "recorded_at": "2026-11-06T13:37:28.602446+00:00",
+  "base_HEAD": "43d10a9947100ff931e93af7fa4fd68bd4e02eeb",
+  "artifact_count_excluding_this_manifest": 14,
+  "artifacts": {
+    "src/yuntapr/experimental/research_readiness/general_score_ranking.py": {
+      "bytes": 4571,
+      "sha256": "55cd7191700dca152ab6f79dc3b00e5388bedec5dbb9ef75b4f6a0cd9759965a"
+    },
+    "tests/research_readiness/test_general_score_ranking.py": {
+      "bytes": 6331,
+      "sha256": "a820134290e6d467ad49c91bb28732264e428c2ecd23d0248c945187ed8cedf9"
+    },
+    "tools/research_readiness/restore_saved_q32_ap.py": {
+      "bytes": 28235,
+      "sha256": "2414741b2fca3ee65e98b39b90c69e59ab42befeab24fc87d7c738793c4bc2ac"
+    },
+    "tests/research_readiness/test_restore_saved_q32_ap.py": {
+      "bytes": 13438,
+      "sha256": "8d56d1aea2b788cbb57a9ff805589827729aa109613d5e629f5cba03c82bd9af"
+    },
+    "src/yuntapr/experimental/research_readiness/dote_direction_transform.py": {
+      "bytes": 12600,
+      "sha256": "7eee6817d99dd771e91edadb5e5e5ae7d56089005a1f9b05339a244fa3c82584"
+    },
+    "tests/research_readiness/test_dote_direction_transform.py": {
+      "bytes": 12984,
+      "sha256": "70c08d99458fb63887da10fb2867458639b9455577c3783767e034b8d9be3129"
+    },
+    "docs/research_readiness/20261106_q32_baseline/CONSENSUS.json": {
+      "bytes": 11461,
+      "sha256": "d01a9aaa8fca3715ad586c4cfa96188652ea2eee2c82afbb7868947b6626139f"
+    },
+    "docs/research_readiness/20261106_q32_baseline/RESULT.json": {
+      "bytes": 8527,
+      "sha256": "13192945954e251ecaa3d785d2c0a376a7f649407a803a469484de8f53fe10f3"
+    },
+    "docs/research_readiness/20261106_q32_baseline/ATTEMPT_V1_FAILED.json": {
+      "bytes": 2217,
+      "sha256": "ee7f4efe5987a18e5a2a0195d781b9b2d7b663b3d9e6fdf2461f17a1b16d9027"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261106_10.pdf": {
+      "bytes": 617386,
+      "sha256": "070ac82a9dd8ad45fb439711472b1f7acf269c8298955c111bda8610429c60e7"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 46533,
+      "sha256": "8ee83aa39ed320063f228930ed833851e05026793585e4e628282ef0ae84d3ae"
+    },
+    "README.md": {
+      "bytes": 22939,
+      "sha256": "caa4a982153904a2fda0e0931448c1a3ba3c1fde34aecbd788e8b24f11aeeb23"
+    },
+    "STAGE_ACCEPTANCE.md": {
+      "bytes": 34978,
+      "sha256": "215688e7146775526ab69abbb80a15ca9da5a860b4e0324449157c9389729d6a"
+    },
+    "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": {
+      "bytes": 24376,
+      "sha256": "c6f3a72236be880940337cc8387b9c189e520f2035003b98a366e89ea02e4f84"
+    }
+  },
+  "root_checks": {
+    "initial_score_tests": {
+      "count": 10,
+      "seconds": 0.012,
+      "exit_code": 0
+    },
+    "new_boundary_tests": {
+      "count": 2,
+      "seconds": 0.001,
+      "exit_code": 0
+    },
+    "initial_restore_fixture_tests": {
+      "count": 11,
+      "seconds": 0.414,
+      "exit_code": 0
+    },
+    "corrected_score_and_restore_tests": {
+      "count": 24,
+      "seconds": 0.424,
+      "exit_code": 0
+    },
+    "current_new_distinct_tests": 26,
+    "old_28_43_8": "inherited not rerun",
+    "synthetic_full_N_probe": "CONSENSUS.json/correction_decision/root_full_population_synthetic_probe"
+  },
+  "results": "RESULT.json; v1 failure fully retained in ATTEMPT_V1_FAILED.json",
+  "history_protection": "CODEX/PROJECT_STATE append only, byte-prefix verification at close; DECISIONS/rules/.gitattributes/config unchanged; DSH only peer writes",
+  "PDF": {
+    "pages": 18,
+    "visual_QA": "root pages1/13/14/15/16/18; final cover and scope wording check; remaining layout inherited",
+    "old_LIVE9_retained": true,
+    "nonfatal_build_history": "first native argument produced literal $buildDir, safely verified and moved to private attempt1_generated; source orphan page fixed; no dependency or ACL changes",
+    "source_whitespace_note": "Only3 TeX table trailing blanks removed after rendering; no content or layout change."
+  },
+  "test_environment_incident": "agent first2 fixture attempts each 5PASS/6WinError5 due mode0700 tempdirs, inherited-permission UUID fixture corrected; inaccessible emptydirs retained, no ACL change",
+  "evidence_limits": [
+    "Source file bytes/opens are content reads, not physical disk traffic or every OS handle",
+    "V1 MemoryError directly verified; allocation-point commit not captured, precise cause NOT_VERIFIED",
+    "E9 weight hashes inherited from verified metadata, no weight payload read/hash",
+    "No real-array independent recomputation by Harness requested; independent code and receipt review only",
+    "2024 reused development, no physical causality or scientific acceptance"
+  ],
+  "engineering": "PENDING_INDEPENDENT_REVIEW_AND_GIT",
+  "science": "NOT_VERIFIED",
+  "external_stage_4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "git_temp_directory_limitation": "git status warns6 inaccessible empty agent-created tempfile(mode0700) fixture directories under tests/research_readiness; preserved without ACL modification; untracked counts refer to visible entries."
+}

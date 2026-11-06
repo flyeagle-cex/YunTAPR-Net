@@ -1,3 +1,8 @@
+## 2026-11-06 B7精度恢复与委托共识
+
+- 新范围：q32 AP精确排名与有界保存预测统计、lookup排除边界、LIVE.10。原v1失败保留、新v2一次纠正成功，累计消费见RESULT.json；科学NOT_VERIFIED。只审核新增差异与新26项检查，不重跑旧28/43/8或读真实NPZ。
+- 限定独立审核与各自Git同步回执待补；证据目录：docs/research_readiness/20261106_q32_baseline/。
+
 # 2026-11-06 科研证据归档索引
 
 本目录由 Codex 维护。它保存现有理论文本及修订关系。项目当前总进度继续由仓库 README.md、STAGE_ACCEPTANCE.md 与本地 Shared/PROJECT_STATE.md 登记。

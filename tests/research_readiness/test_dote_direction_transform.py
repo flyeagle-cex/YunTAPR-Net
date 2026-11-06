@@ -60,6 +60,41 @@ def transform(f, *, t=None, scene_lookup=None, control=None):
 
 
 class DoteDirectionTransformTests(unittest.TestCase):
+    def test_excluded_month_boundary_retains_original_manifest_and_accepted_population(self):
+        admitted = manifest()['scene_records'][0]
+        for year in (2023, 2024):
+            boundary = dict(sample_id=f'{year}-10-31T23:30:00Z',
+                            window_start=f'{year}-10-31T23:30:00Z',
+                            analysis_time=f'{year}-11-01T00:00:00Z')
+            m = manifest([admitted, boundary]); before = copy.deepcopy(m)
+            value = lookup(m, ids=[admitted['sample_id']])
+            self.assertEqual(value.manifest_sha256, m['manifest_sha256'])
+            self.assertEqual(tuple(b.sample_id for b in value.bindings),
+                             (admitted['sample_id'],))
+            self.assertEqual(m, before)
+            rejected_analysis = datetime(year, 11, 1, tzinfo=timezone.utc)
+            with self.assertRaises(ValueError):
+                value.resolve(rejected_analysis)
+            with self.assertRaises(PermissionError):
+                lookup(m, ids=[boundary['sample_id']])
+
+    def test_excluded_rows_still_require_structure_half_hour_and_global_utc_uniqueness(self):
+        admitted = manifest()['scene_records'][0]
+        boundary = dict(sample_id='2024-10-31T23:30:00Z',
+                        window_start='2024-10-31T23:30:00Z',
+                        analysis_time='2024-11-01T00:00:00Z')
+        alias = dict(sample_id='2024-11-01T07:30:00+08:00',
+                     window_start='2024-11-01T07:30:00+08:00',
+                     analysis_time='2024-11-01T08:00:00+08:00')
+        missing = dict(boundary); del missing['analysis_time']
+        cases = ([admitted, boundary, boundary], [admitted, boundary, alias],
+                 [admitted, dict(boundary, analysis_time='2024-11-01T00:30:00Z')],
+                 [admitted, dict(boundary, sample_id='2024-10-31T23:00:00Z')],
+                 [admitted, missing])
+        for rows in cases:
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                lookup(manifest(rows), ids=[admitted['sample_id']])
+
     def test_manifest_digest_exact_identity_explicit_time_role_and_snapshot(self):
         m = manifest(); original = copy.deepcopy(m); a = lookup(m)
         local = datetime(2024, 6, 1, 20, tzinfo=timezone(timedelta(hours=8)))

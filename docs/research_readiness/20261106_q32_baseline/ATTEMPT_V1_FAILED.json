@@ -1,0 +1,63 @@
+{
+  "task": "B7 saved2024 q32 AP fullprecision recovery",
+  "attempt": "v1_consumed_failed_no_retry",
+  "result": {
+    "status": "FAIL",
+    "at": "2026-11-06T13:22:09.444219+00:00",
+    "failure": {
+      "error_class": "MemoryError",
+      "error": "Unable to allocate 24.4 MiB for an array with shape (3204543,) and data type int64"
+    },
+    "scope": "FORMAL_FIXED_V3",
+    "models": [],
+    "io": {
+      "reserved_bytes": {
+        "metadata": 4441522,
+        "archive": 1060830066
+      },
+      "open_attempts": {
+        "metadata": 9,
+        "archive": 121
+      },
+      "delivered_bytes": {
+        "metadata": 4441522,
+        "archive": 1060830066
+      },
+      "peak_rss_bytes": 117354496,
+      "retries": 0,
+      "scope": "NAMED_DATA_METADATA_AND_ARCHIVES_ONLY_NOT_CODE_OR_RECEIPTS"
+    },
+    "elapsed_seconds": 2.8280000000013388,
+    "new_inference_passes": 0,
+    "optimizer_updates": 0,
+    "extra_retries": 0,
+    "final_2025_access": 0,
+    "scientific_acceptance": "NOT_VERIFIED",
+    "independent_events": "NOT_IDENTIFIED"
+  },
+  "parent_end": {
+    "status": "FAIL",
+    "at": "2026-11-06T13:22:09.478167+00:00",
+    "failure": {
+      "error_class": "RuntimeError",
+      "error": "Owned worker failed"
+    },
+    "elapsed_seconds": 3.2030000000013388,
+    "owned_cleanup_verified": true,
+    "monitor": {},
+    "extra_retries": 0,
+    "scientific_acceptance": "NOT_VERIFIED"
+  },
+  "private_receipt_sha256": "b18e860608bc1e75e201d58b79193a4504d9251d857da22a432a3fc835c36705",
+  "private_parent_end_sha256": "d0f76d73646e14dd964f485ec2343edd966c2a6e7958842d08a9e8ecb697c418",
+  "source_ledger_sha256": "4f5ab5461c1a7829aa66837719a5eaed1283192de70e8fc0e3e5884c003ee33d",
+  "fullprecision_AP_recovered": 0,
+  "seeds_archive_not_read": [
+    2030,
+    2031
+  ],
+  "interpretation": "Memory allocation failed at ranking; observed IO counters valid; reported worker peak RSS was sampled before the failed AP allocation, not a measured allocation-point commit or a proven whole-run peak. Failure cause beyond allocation is NOT_VERIFIED. No automatic replay or limit increase.",
+  "engineering": "FAIL_FOR_AP_RECOVERY",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED"
+}

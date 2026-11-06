@@ -1,0 +1,244 @@
+{
+  "task": "B7 saved2024 q32 AP fullprecision recovery",
+  "status": "SUCCESS_ON_ONE_EXPLICIT_CORRECTIVE_ATTEMPT",
+  "result": {
+    "status": "SUCCESS",
+    "at": "2026-11-06T13:31:56.439097+00:00",
+    "failure": null,
+    "scope": "FORMAL_FIXED_V3",
+    "models": [
+      {
+        "seed": 2029,
+        "checkpoint_sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+        "counts": {
+          "n": 3303090,
+          "positive": 717,
+          "equal20": 2,
+          "ge50": 6,
+          "wet": 407820
+        },
+        "joint_summary_sha256": "99cfadf91d321dc4c4e632225f7700c2af74a3437723e7e472a5e59654e353ae",
+        "label_bytes_sha256": "93055b55f1836fe45085d879b571a9ef74bc8f0d4c112c2c2ec34b684787b64c",
+        "pixel_bytes_sha256": "a87de63130088f64c664c3f040d891e0080d3658de40b0f2d3a16cf01fb53fe8",
+        "ranking": {
+          "AP": 0.020566094533768432,
+          "AUROC": 0.968765682493729,
+          "n": 3303090,
+          "positive": 717,
+          "negative": 3302373,
+          "exact_score_groups": 3204542,
+          "score_semantics": "CONDITIONAL_Q32_MM_H_R_GT20_LABEL",
+          "input_score_dtype": "float64",
+          "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+          "AUROC_convention": "GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+          "undefined": {
+            "AP": null,
+            "AUROC": null
+          },
+          "interpretation": "DESCRIPTIVE_RANKING_NOT_PROBABILITY_CALIBRATION_OR_EVENT_INFERENCE"
+        },
+        "AP_float64_hex": "0x1.50f473db7467ap-6",
+        "AUROC_float64_hex": "0x1.f0020e37986a4p-1"
+      },
+      {
+        "seed": 2030,
+        "checkpoint_sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+        "counts": {
+          "n": 3303090,
+          "positive": 717,
+          "equal20": 2,
+          "ge50": 6,
+          "wet": 407820
+        },
+        "joint_summary_sha256": "d45e3dacd065e923063422f8657e4b5cb351e309174128c2a8f614ef9cf23f6f",
+        "label_bytes_sha256": "93055b55f1836fe45085d879b571a9ef74bc8f0d4c112c2c2ec34b684787b64c",
+        "pixel_bytes_sha256": "a87de63130088f64c664c3f040d891e0080d3658de40b0f2d3a16cf01fb53fe8",
+        "ranking": {
+          "AP": 0.014264745852766623,
+          "AUROC": 0.9682905938817696,
+          "n": 3303090,
+          "positive": 717,
+          "negative": 3302373,
+          "exact_score_groups": 3189868,
+          "score_semantics": "CONDITIONAL_Q32_MM_H_R_GT20_LABEL",
+          "input_score_dtype": "float64",
+          "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+          "AUROC_convention": "GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+          "undefined": {
+            "AP": null,
+            "AUROC": null
+          },
+          "interpretation": "DESCRIPTIVE_RANKING_NOT_PROBABILITY_CALIBRATION_OR_EVENT_INFERENCE"
+        },
+        "AP_float64_hex": "0x1.d36d5c763174cp-7",
+        "AUROC_float64_hex": "0x1.efc3c8e37e44cp-1"
+      },
+      {
+        "seed": 2031,
+        "checkpoint_sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+        "counts": {
+          "n": 3303090,
+          "positive": 717,
+          "equal20": 2,
+          "ge50": 6,
+          "wet": 407820
+        },
+        "joint_summary_sha256": "746c9e02dcfbe54eeb54d418e51ae83fbac2e6570333fd4adf9e7aa460ddd7b3",
+        "label_bytes_sha256": "93055b55f1836fe45085d879b571a9ef74bc8f0d4c112c2c2ec34b684787b64c",
+        "pixel_bytes_sha256": "a87de63130088f64c664c3f040d891e0080d3658de40b0f2d3a16cf01fb53fe8",
+        "ranking": {
+          "AP": 0.01350099359125544,
+          "AUROC": 0.968772956118832,
+          "n": 3303090,
+          "positive": 717,
+          "negative": 3302373,
+          "exact_score_groups": 3197676,
+          "score_semantics": "CONDITIONAL_Q32_MM_H_R_GT20_LABEL",
+          "input_score_dtype": "float64",
+          "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+          "AUROC_convention": "GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+          "undefined": {
+            "AP": null,
+            "AUROC": null
+          },
+          "interpretation": "DESCRIPTIVE_RANKING_NOT_PROBABILITY_CALIBRATION_OR_EVENT_INFERENCE"
+        },
+        "AP_float64_hex": "0x1.ba668af80eabap-7",
+        "AUROC_float64_hex": "0x1.f00302478f2b3p-1"
+      }
+    ],
+    "io": {
+      "reserved_bytes": {
+        "metadata": 4441522,
+        "archive": 3182490198
+      },
+      "open_attempts": {
+        "metadata": 9,
+        "archive": 363
+      },
+      "delivered_bytes": {
+        "metadata": 4441522,
+        "archive": 3182490198
+      },
+      "peak_rss_bytes": 139558912,
+      "retries": 0,
+      "scope": "NAMED_DATA_METADATA_AND_ARCHIVES_ONLY_NOT_CODE_OR_RECEIPTS"
+    },
+    "elapsed_seconds": 7.4210000000020955,
+    "new_inference_passes": 0,
+    "optimizer_updates": 0,
+    "extra_retries": 0,
+    "final_2025_access": 0,
+    "scientific_acceptance": "NOT_VERIFIED",
+    "independent_events": "NOT_IDENTIFIED"
+  },
+  "parent_end": {
+    "status": "SUCCESS",
+    "at": "2026-11-06T13:31:56.495189+00:00",
+    "failure": null,
+    "elapsed_seconds": 7.780999999995402,
+    "owned_cleanup_verified": true,
+    "monitor": {
+      "peak_sampled_rss_bytes": 146993152,
+      "exit_codes": {
+        "44704": 0,
+        "24756": 0
+      }
+    },
+    "extra_retries": 0,
+    "scientific_acceptance": "NOT_VERIFIED"
+  },
+  "v1_failure_retained": "ATTEMPT_V1_FAILED.json",
+  "actual_attempts": 2,
+  "v1_direct_retries": 0,
+  "v2_direct_retries": 0,
+  "correction_attempts": 1,
+  "further_attempts_allowed_this_round": 0,
+  "cumulative_source_content_reads": {
+    "archive_bytes": 4243320264,
+    "archive_reads": 484,
+    "metadata_bytes": 8883044,
+    "metadata_reads": 18,
+    "preparation_reads_separate": true,
+    "not_physical_disk_IO_or_all_OS_handles": true
+  },
+  "input_metadata_fingerprints": [
+    {
+      "relative_file": "B7_s2029/joint/joint_summary.json",
+      "bytes": 1442149,
+      "sha256": "99cfadf91d321dc4c4e632225f7700c2af74a3437723e7e472a5e59654e353ae"
+    },
+    {
+      "relative_file": "B7_s2029/joint/chunks.jsonl",
+      "bytes": 34114,
+      "sha256": "c823fcecf4a91e0bbc38e5856675cc5dee64c1285ed4b4855112aa70398409a1"
+    },
+    {
+      "relative_file": "B7_s2029/verified.json",
+      "bytes": 2990,
+      "sha256": "8e57f280f56b200caf35f072be7aa87c3518b655a60d19da2ec63b26fe4292e4"
+    },
+    {
+      "relative_file": "B7_s2030/joint/joint_summary.json",
+      "bytes": 1444139,
+      "sha256": "d45e3dacd065e923063422f8657e4b5cb351e309174128c2a8f614ef9cf23f6f"
+    },
+    {
+      "relative_file": "B7_s2030/joint/chunks.jsonl",
+      "bytes": 34114,
+      "sha256": "0546fab4a951b7de6d265ef27efde91bd887578bba4daabf66079c02cc8e894d"
+    },
+    {
+      "relative_file": "B7_s2030/verified.json",
+      "bytes": 2990,
+      "sha256": "793325e5dfb7525defd10034702f14405334ea162cee613993ed7228965d67b4"
+    },
+    {
+      "relative_file": "B7_s2031/joint/joint_summary.json",
+      "bytes": 1443922,
+      "sha256": "746c9e02dcfbe54eeb54d418e51ae83fbac2e6570333fd4adf9e7aa460ddd7b3"
+    },
+    {
+      "relative_file": "B7_s2031/joint/chunks.jsonl",
+      "bytes": 34114,
+      "sha256": "1400fd4b81ac0b82026d38544ad285c2310cb86a64de39963bb2d2591dfbe107"
+    },
+    {
+      "relative_file": "B7_s2031/verified.json",
+      "bytes": 2990,
+      "sha256": "3daa5a0c3e3f8475eef384f1428a6825199664777de10c3ec495ab9d6ddc4600"
+    }
+  ],
+  "receipts": {
+    "receipt.json": {
+      "bytes": 4618,
+      "sha256": "440bdcc779daa889eb23fc31c0d7541eb788b2c81ffd5d2da93ad924a3e22e0c"
+    },
+    "parent_end.json": {
+      "bytes": 350,
+      "sha256": "135845b0bafb4206a850e8826224ab9ad124da25457857c4b48b9c1f36191d4f"
+    },
+    "source_reads.jsonl": {
+      "bytes": 181623,
+      "sha256": "d577f8f1827f2c0c260090dd6008f67309331ffeec338eabe4b4df3ae2fe94ad"
+    }
+  },
+  "old_rounded_AP_compatibility": {
+    "2029": {
+      "old_six_decimal": "0.020566",
+      "new_rounded": "0.020566"
+    },
+    "2030": {
+      "old_six_decimal": "0.014265",
+      "new_rounded": "0.014265"
+    },
+    "2031": {
+      "old_six_decimal": "0.013501",
+      "new_rounded": "0.013501"
+    }
+  },
+  "evidence": "DIRECT executed read-only statistics; E9 weight identities inherited from verified metadata, not weight payloads rehashed; independent code/receipt review pending, no independent real-array recomputation yet",
+  "science": "NOT_VERIFIED",
+  "external_stage_4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED"
+}

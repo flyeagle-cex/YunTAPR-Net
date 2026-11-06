@@ -1,0 +1,244 @@
+{
+  "id": "DOTE-Q32-20261106-DECISION-01",
+  "status": "CONSENSUS_REACHED_UNDER_RESEARCHER_DECISION_DELEGATION",
+  "research_object": "云南全境复杂地形约束下的近实时卫星概率降水反演",
+  "authority": {
+    "researcher_instruction": "这些全部由你和其他agent进行讨论，决策不一致时列出理由再来让我操作",
+    "scope": "本轮科学方案、判据及有限执行包的讨论决策；不构成无限训练预算或封存数据解禁",
+    "participants": [
+      "Codex root",
+      "dote_controls",
+      "dtfm_design",
+      "tail_evaluation",
+      "网页GPT总控"
+    ],
+    "controller_consensus_message": "831e9b1b-8fa9-4571-b05c-c4bd6684cf82",
+    "material_disagreement": false,
+    "not_an_approval_of_collaboration_rules": true,
+    "controller_AP_package_message": "f3062b8b-7d94-4bcd-82de-5b1ba0802047",
+    "controller_direct_instruction_scope_clarified": "9a42d227-4221-4cb8-876a-7ec9e10cd374"
+  },
+  "decisions": {
+    "next_scientific_control": "真实B7 DOTE对比逐场景固定刚性随机旋转控制；本轮不追加fixed-east或DTFM训练",
+    "primary_endpoint": "AP20[q32]",
+    "truth": "IMERG_V07_Final; float32 R > float32(20) mm/h",
+    "score": "expm1(FP64条件log1p雨强的第32个分位数)，不是P20概率",
+    "population": "同一完整2024 Development监督mask自然人口，无抽样、重新加权或基于结果删样本",
+    "AP_convention": "非插值AP；完全相同评分值整组末端；不舍入评分",
+    "seed_order": [
+      2029,
+      2030,
+      2031
+    ],
+    "outcome_dependent_expansion": false,
+    "control_rotation_seed": 20261106,
+    "canonical_scene_key": "ANALYSIS_TIME_UTC",
+    "seed_selection": "沿既有候选值固定，不搜索或按评价结果更换",
+    "existing_B7": "先核对相同训练/评价身份并复用既有三seed；不机械重训；保留2030的441次历史replay记录",
+    "valid_execution": "共同人口、输入/配置、E9身份、控制变换和有限预算均满足，且无工程/数值失败",
+    "descriptive_success": "三个固定seed的Delta AP(real minus rotation)均>0，只支持重复使用Dev上的方向一致性",
+    "mixed_delta": "方向不稳定，不用跨seed平均掩盖",
+    "all_nonpositive": "不支持正向排序优势",
+    "identity_failure": "比较无效，不纳入科学成功或失败统计",
+    "no_invented_effect_threshold": "不移植T16/T17的0.001/0.005，不临时制定实质效应量或显著性标准",
+    "secondary_outputs": [
+      "occurrence Brier",
+      "conditional Pinball",
+      "q32 coverage error",
+      "A/B/C",
+      "固定Top预算"
+    ],
+    "secondary_cannot_rescue_primary": true,
+    "no_causal_or_independent_event_claim": true,
+    "training_storage": {
+      "initial_free_GiB": 72,
+      "per_task_free_GiB": 24,
+      "do_not_lower_to_fit_disk": true
+    }
+  },
+  "saved_prediction_AP_recovery": {
+    "purpose": "恢复既有B7三seed AP20[q32]完整精度基线；旧值仅六位小数",
+    "authorization_basis": "研究者既有T12允许对已保存2024 Dev预测作只读内存统计，加本轮有限方案决策委托；不是复用已消费训练批准",
+    "models": [
+      "B7_s2029",
+      "B7_s2030",
+      "B7_s2031"
+    ],
+    "archive_opens_cap": 363,
+    "archive_bytes_cap": 3182490198,
+    "metadata_opens_cap": 12,
+    "metadata_bytes_cap": 8388608,
+    "wall_seconds_cap": 600,
+    "observed_peak_RSS_bytes_cap": 1073741824,
+    "Windows_job_commit_bytes_cap": 1073741824,
+    "extra_retries": 0,
+    "checks": [
+      "summary与verified身份",
+      "journal一致",
+      "每archive一次读取、内存SHA、BytesIO无pickle解码",
+      "逐场景时间/像元/标签跨seed对齐",
+      "963场景、3303090像元时次、717个R>20"
+    ],
+    "output": "新的本轮统计和失败收据；不覆盖旧成果，不公开私有定位",
+    "does_compute_statistics": true,
+    "does_run_model": false,
+    "does_read_weights_or_weather_cache_or_2025": false,
+    "archive_uncompressed_bytes_cap": 33554432,
+    "metadata_scope": "9 explicit data metadata files: 3 joint_summary.json + 3 chunks.jsonl + 3 verified.json; code/runtime loads and earlier preparation reads accounted separately",
+    "preparation_disclosure": "Previous management JSON/source reads occurred before the one-shot run and are not claimed within its 8MiB cap; separate preparation record will enumerate observed agent chain reads."
+  },
+  "formal_training": {
+    "started": false,
+    "execution_ready": false,
+    "remaining_binding": [
+      "真实训练入口和完整原始manifest/plan",
+      "旧C与现D管理路径身份",
+      "实际输入映射和控制注入",
+      "固定执行代码及逐任务有限资源清单",
+      "新输出路径及72/24GiB门槛",
+      "同次固定E9 Dev输出的AP20[q32]回调；旧average_precision为发生概率AP，不能代替"
+    ],
+    "historical_consumed_grants_reused": false,
+    "historical_scientific_source_budget_candidate_not_new_grant": {
+      "each_optimizer_updates": 4320,
+      "total_optimizer_updates": 12960,
+      "each_source_bytes": 477571953840,
+      "total_source_bytes": 1432715861520,
+      "each_source_opens": 142813,
+      "total_source_opens": 428439,
+      "static_already_included_total_bytes": 938484,
+      "wall_seconds_each": 21600,
+      "wall_seconds_whole_package": 64800,
+      "replay": 0,
+      "extra_retries": 0,
+      "not_complete_package_budget": "管理元数据、真实预检、E9主评分保存及输出校验尚需精确绑定；不可挪用AP恢复额度或执行中扩额",
+      "source": "docs/research_readiness/20261106_dote_direction_freeze/SOURCE_BINDINGS.json"
+    }
+  },
+  "states": {
+    "engineering": "PENDING_INDEPENDENT_REVIEW_AND_GIT",
+    "science": "NOT_VERIFIED",
+    "external_stage_4_5": "PARTIAL_NOT_WAIVED",
+    "researcher_mastery": "NOT_ASSESSED"
+  },
+  "limits": "此记录固化本轮已委托的一致决定，不自行批准治理规则、不承诺完美结果、不改变2025封存及原始资料保护。",
+  "recorded_at": "2026-11-06T13:12:12.070823+00:00",
+  "management_chain_progress": {
+    "C_D_preparation_file_same_identity": "DIRECT_VERIFIED by os.path.samefile and strict resolve; applies to named wrapper, not all arbitrary C/D paths",
+    "request_file_bytes": 6048,
+    "request_file_sha256": "0546619c45b56ba607add31e56360e491e143b2b25eb854ac10e6186d2728cdb",
+    "request_embedded_content_digest": "32b1802a0058627f67ba46d8dffe9c24619404149bd5837618fe0236383d4481",
+    "request_status": "PROPOSED_NOT_AUTHORIZED_DO_NOT_EXECUTE (historical metadata; not an authority grant)",
+    "role_index_upper_bounds": [
+      960,
+      964
+    ],
+    "time_compatible_upper_bounds": [
+      959,
+      963
+    ],
+    "boundary_exclusion": "10-31T23:30 window / 11-01T00:00 analysis",
+    "manifest_payloads_read": false,
+    "manifest_files_stat_combined_bytes": 14405042,
+    "warning": "request upper bounds do not independently establish final population; complete plan/manifest identities remain to bind",
+    "lookup_boundary_fix": "Separate structural timestamp parsing for all original rows from accepted-ID time admission; keep original complete digest and global uniqueness checks",
+    "root_new_boundary_tests": 2,
+    "root_new_boundary_tests_result": "PASS 0.001 s; old8 not rerun",
+    "agent_chain_read_accounting": {
+      "source": "dote_controls SELF_REPORTED, root only directly repeated small request and samefile check",
+      "unique_documents": 5,
+      "content_reads": 8,
+      "content_bytes": 6403102
+    },
+    "root_additional_small_request_read_bytes": 6048,
+    "not_charged_to_AP_run_budget": true
+  },
+  "correction_decision": {
+    "id": "DOTE-Q32-20261106-CORRECTION-01",
+    "basis": "研究者本轮直接有限方案/预算决策委托及T12原始读取计算任务；不以代理回执授予权限",
+    "controller_message": "bb076e6b-863a-4813-9bd9-96ff4bf8b18a",
+    "agents": "dote_controls/dtfm_design/tail_evaluation all conditionally agreed; exactness and same-limit synthetic memory condition now satisfied",
+    "old_attempt": "v1 FAILED_CLOSED, never resumed, all receipts and executed source preserved",
+    "new_attempt": "v2 single corrective execution, not pretending zero total attempts",
+    "new_archive_bytes": 3182490198,
+    "new_archive_reads": 363,
+    "necessary_repeated_2029_archive_bytes": 1060830066,
+    "necessary_repeated_2029_archive_reads": 121,
+    "old_plus_new_archive_cap_bytes": 4243320264,
+    "old_plus_new_archive_reads": 484,
+    "old_metadata_actual_bytes": 4441522,
+    "old_metadata_actual_reads": 9,
+    "new_metadata_bytes_cap": 8388608,
+    "new_metadata_reads_cap": 12,
+    "old_plus_new_metadata_cap_bytes": 12830130,
+    "old_plus_new_metadata_read_cap": 21,
+    "whole_new_package_seconds": 600,
+    "compute_seconds_max": 595,
+    "cleanup_seconds_reserved": 5,
+    "new_peak_RSS_bytes_cap": 1073741824,
+    "new_Job_commit_bytes_cap": 1073741824,
+    "additional_corrective_attempts_after_v2": 0,
+    "third_attempt": "FORBIDDEN_THIS_ROUND; failure stops and reports, no repeated renaming",
+    "new_output_alias": "private new q32_ap_restore_execution_20261106_v2",
+    "algorithm": "Same exact AP/AUROC by sorting values once and counting only positive score groups with exact searchsorted ties; no approximation/sampling/rounding",
+    "numerical_limit": "floating summation order may alter last bits; not bitwise equivalence claim",
+    "root_corrected_small_tests": {
+      "tests": 24,
+      "seconds": 0.424,
+      "exit_code": 0
+    },
+    "root_full_population_synthetic_probe": {
+      "sha256": "32515656291bd00bdeacd674073983800aa6e6e4a09ea7b0d35dcc00258e9d1b",
+      "data": {
+        "scope": "ARTIFICIAL_ONLY_NOT_SCIENTIFIC_RESULT",
+        "ranking": {
+          "AP": 1.0,
+          "AUROC": 1.0,
+          "n": 3303090,
+          "positive": 717,
+          "negative": 3302373,
+          "exact_score_groups": 3303090,
+          "score_semantics": "ARTIFICIAL_FULL_SIZE_HIGH_UNIQUENESS_NO_PROJECT_DATA",
+          "input_score_dtype": "float64",
+          "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+          "AUROC_convention": "GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+          "undefined": {
+            "AP": null,
+            "AUROC": null
+          },
+          "interpretation": "DESCRIPTIVE_RANKING_NOT_PROBABILITY_CALIBRATION_OR_EVENT_INFERENCE"
+        },
+        "memory": {
+          "working_set_bytes": 126820352,
+          "peak_working_set_bytes": 166375424,
+          "private_bytes": 920338432,
+          "peak_pagefile_bytes": 966598656
+        },
+        "elapsed_seconds": 0.4059999999954016,
+        "project_source_reads": 0,
+        "additional_touched_reference_and_decode_bytes": 59979152,
+        "owned_job": {
+          "peak_sampled_rss_bytes": 174759936,
+          "exit_codes": {
+            "28232": 0,
+            "46164": 0
+          }
+        },
+        "configured_job_commit_bytes": 1073741824,
+        "owned_cleanup_verified": true
+      },
+      "not_a_scientific_result": true
+    },
+    "recorded_at": "2026-11-06T13:31:39.134246+00:00"
+  },
+  "execution_outcome": {
+    "v1": "FAILED_CLOSED",
+    "v2": "SUCCESS",
+    "actual_attempts": 2,
+    "corrections": 1,
+    "no_further_attempts": true,
+    "result": "RESULT.json",
+    "science": "NOT_VERIFIED",
+    "formal_training_started": false
+  }
+}

@@ -27,13 +27,23 @@ EXPERIMENT_READY = False
 _TIME_ROLES = ('ANALYSIS_TIME_UTC', 'WINDOW_START_UTC')
 
 
-def _time(value):
+def _parse_metadata_time(value):
+    """Parse all original rows for structural and UTC-uniqueness checks.
+
+    This is not an admission to a scientific population. The frozen source
+    manifests can include rejected October31 -> November1 boundary records.
+    """
     if not isinstance(value, str) or value != value.strip():
         raise ValueError('Explicit timestamp string required')
     stamp = datetime.fromisoformat(value.replace('Z', '+00:00'))
     if stamp.tzinfo is None or stamp.utcoffset() is None:
         raise ValueError('Timezone-aware timestamp required')
-    stamp = stamp.astimezone(timezone.utc)
+    return stamp.astimezone(timezone.utc)
+
+
+def _time(value):
+    """Enforce the research time scope only for already accepted scene IDs."""
+    stamp = _parse_metadata_time(value)
     if stamp.year not in (2023, 2024) or not 3 <= stamp.month <= 10:
         raise PermissionError('Only March-October 2023/2024 scene metadata')
     return stamp
@@ -81,19 +91,29 @@ class SceneManifestLookup:
         records = body.get('scene_records')
         if not isinstance(records, list) or not records:
             raise ValueError('Existing scene_records list required')
-        by_id, analyses = {}, set()
+        by_id, analyses, seen_ids = {}, set(), set()
+        accepted = set(accepted_ids)
         for row in records:
             if not isinstance(row, Mapping):
                 raise ValueError('Explicit scene record required')
             sid = row.get('sample_id')
-            start, analysis = _time(row.get('window_start')), _time(row.get('analysis_time'))
+            start = _parse_metadata_time(row.get('window_start'))
+            analysis = _parse_metadata_time(row.get('analysis_time'))
             if not isinstance(sid, str) or not sid or sid != sid.strip():
                 raise ValueError('Explicit sample_id required')
-            if _time(sid) != start or analysis - start != timedelta(minutes=30):
+            if _parse_metadata_time(sid) != start or analysis - start != timedelta(minutes=30):
                 raise ValueError('Inherited sample ID / half-hour window conflict')
-            if sid in by_id or analysis in analyses:
+            if sid in seen_ids or analysis in analyses:
                 raise ValueError('Duplicate scene or ambiguous analysis time')
+            seen_ids.add(sid)
             analyses.add(analysis)
+            if sid not in accepted:
+                continue
+            # Retain the complete original digest/row validation above. Only
+            # membership already fixed by the caller's PopulationPlan controls
+            # time admission; no source manifest or accepted ID is rewritten.
+            _time(row['window_start'])
+            _time(row['analysis_time'])
             canonical = analysis if canonical_time_role == 'ANALYSIS_TIME_UTC' else start
             by_id[sid] = SceneBinding(sid, start, analysis, canonical)
         if any(sid not in by_id for sid in accepted_ids):
