@@ -94,3 +94,8 @@ Harness已对修正提交3efb20a完成一次限定独立审核，结论PASS；�
 ## IMERG参考路线与证据边界（2026-11-06）
 
 研究者报告无已落实的外部资料，提出无可落实公开替代来源时采用IMERG参考。总控0314e4a3据此限定LIVE-20261106.4文档修订、一次差异审核和各自Git同步；研究者回复及本轮维护不产生科研执行批准。既有冻结产品IMERG_V07_Final保持，参考一致性、外部真实性、确认性E及物理/业务主张分开。详见 [本轮记录](../20261106_imerg_reference_scope/REFERENCE_SCOPE.json)。原元数据核查与审核保持各自历史范围，不重复泛搜或理论审查。新差异审查待完成，Stage4.5 PARTIAL，科学NOT_VERIFIED，研究者NOT_ASSESSED。
+
+
+Harness已对66a2a13的八文件差异完成一次限定独立审核，结论PASS；正式记录5372B，SHA256 `C3CD9114773F7EEA4FD64A396C04EA62100385E816B543F15C4899CB6F9F95FF`，审核者自身分支提交 `8cdd0d4d2e357c0944211370364d3f468ee03ba9` 已普通推送，Codex独立ls-remote核对一致、提交仅审核文件且树干净。审核未逐字重算历史前后缀或逐页像素检查，未把保护快照升级为OS监控。
+
+[结项回执](../20261106_imerg_reference_scope/REVIEW_OUTCOME.json)登记此后事实，原记录中的待审状态按创建时点阅读；计划PDF/tex和两份原收据保持已审字节，不为闭环另增版本。本次仅回执与本索引补记，不声称新增字节已被预审。工程PASS限本轮文档/边界/审核/各自Git，Stage4.5 PARTIAL、H1/H2 INCONCLUSIVE、科学NOT_VERIFIED、研究者NOT_ASSESSED。按冻结IMERG参考整理既有成果，外部资料缺口不阻塞所有整理工作；没有新载荷、计算、训练或2025权限。
