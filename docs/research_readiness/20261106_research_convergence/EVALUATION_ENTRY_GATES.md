@@ -1,4 +1,11 @@
-# 独立评价与后续执行的入口条件
+# H1/H2确认性评价与后续执行的入口条件
+## 2026-11-06 原计划溯源与适用范围更正
+
+原V1.3 §9规定2023/2024开发池、2025最终测试与独立外部观测验证，没有单独命名E。后续工程2023Train/2024Dev为具体实验口径。以下E门控仅针对T16–T18新的确认性主张，不是原计划全部工作的一概阻塞；在具体授权内仍可开展明确标记的开发性工作。原最终测试与外部真实性验证继续按各自科学方案及精确预算执行。
+
+实际外部参考准备已经存在：docs/phase_b_v2_protocol_candidates/v1_20261010/INDEPENDENT_REFERENCE_INVENTORY.md列R1–R9（含辅助源），状态RESEARCHER_DECISION_REQUIRED / INDEPENDENCE_UNVERIFIED。尚无经核实的实际观测、许可、完整性、独立源链与匹配完成证据。不能把候选调查写成无准备，也不能写成验证完成。
+
+旧v1.1 Final Test为3–9月，原V1.3与10/30未冻结草案为3–10月，最终范围留待研究者绑定版本裁定；不自行选择2025窗口，不访问载荷。具体溯源见HISTORICAL_EVIDENCE_RECOVERY.json与总计划执行状态更新版。
 
 状态 PROPOSED / AUTHORIZATION_PENDING。维护人为 Codex，Harness 独立审查，研究者决定资料、科学方案及预算。这里只登记条件，没有搜索数据或确认 E 已存在。
 

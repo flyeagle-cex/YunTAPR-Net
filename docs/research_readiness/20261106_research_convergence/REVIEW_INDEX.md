@@ -8,16 +8,16 @@
 
 | 对象 | 当前结论 | 本轮证据与核验范围 |
 |---|---|---|
-| T12 既有 V3 排序统计 | 存在强雨排序信息，概率校准和独立泛化待验证 | 继承前序对话记录。本目录未取得 T12 完整原始计算输出，未重算 |
-| T13 独立复核 | q32 的 27 个 TopK 锚点及 p/A 的限定范围已有独立复核，全部 81 个历史锚点覆盖仍为 PARTIAL | 继承原审核范围。本轮未独立重复统计 |
-| T14 科研收敛 | 条件雨强与上尾表达优先于立即加模块，属于 PROPOSED 研究方向 | 继承总控结项记录，本目录未保存 T14 全文 |
+| T12 既有 V3 排序统计 | 存在强雨排序信息，概率校准和独立泛化待验证 | T12完整报告消息已实际恢复，原始消息逐字导出与公开脱敏副本可追溯；计算stdout仅截断节选，完整原始计算输出仍PARTIAL，未重算 |
+| T13 独立复核 | q32 的 27 个 TopK 锚点及 p/A 的限定范围已有独立复核，全部 81 个历史锚点覆盖仍为 PARTIAL | T13原始回传全文及Codex审核回传已恢复；未取得审核者原始收据，不替代原审核范围。本轮未重复统计 |
+| T14 科研收敛 | 条件雨强与上尾表达优先于立即加模块，属于 PROPOSED 研究方向 | T14原始回传全文已实际恢复并保留脱敏副本，来源与原消息SHA见HISTORICAL_EVIDENCE_RECOVERY.json |
 | T15 | 理论结项，方法 PROPOSED | T15_THEORY_RECORD.md，保存 Codex 已提交文本并脱敏本机定位 |
 | T16 初稿 | Harness 审查 NEEDS_REVISION | T16_INITIAL_PROTOCOL.md 与下述五项问题，原稿保留 |
 | T16-R1 | 已由总控接受，科学 NOT_VERIFIED | T16_R1_AMENDMENT.md。未发生 Harness 对 R1 的第二轮独立审查 |
 | T17 | 理论框架结项，后续推断候选见 T18 | T17_RISK_SCORE_FRAMEWORK.md 与 T17_DEFINITION_ADDENDUM.md |
 | T18 / T18-R1 | Harness 对 R1 限定 PASS，保持 PROPOSED | T18_INITIAL_PROTOCOL.md、T18_R1_AMENDMENT.md、T18_REVIEW_STATUS.md；初稿 NEEDS_REVISION 保留，真实适用性及执行门控未解除 |
 | B3_DOTE_ONLY / seed2029 | 既有收据报告 E9/4320 更新完成，单 seed、收益混合，处于原 V3 九模型比较范围之外 | 本轮直接读取 ../20261105_b3_dote_without_mee/receipt.json、result.json、validation.json。AP 使用降水发生标签，与强雨排序 AP 的标签不同。权重载荷及计算过程本轮未复核 |
-| 2026-11-05 三类反演表 | 已提交版本收据报告 19 固定终点，部分日尺度及地形项目有缺口 | outputs/01a1a906-f017-71f3-bb3f-19b961274f10/delivery_receipt_public.json。后续两个未跟踪工作簿的覆盖进展本轮 NOT_VERIFIED |
+| 2026-11-05 三类反演表 | 后续保存表已记录182完整日/19端点；地形仍PARTIAL | 本轮只读比较原版及两份后续表，日期/数值/公式差异与限制见HISTORICAL_EVIDENCE_RECOVERY.json，未运行评价器 |
 
 DIRECT_VERIFIED 仅用于本轮实际读取的文本、Git 状态及随后文件完整性检查。继承的统计与执行收据本轮按来源转述，不能升级为本轮载荷直接核验或独立科学验收。T12–T14 完整原始对话及计算收据的长期归档仍有缺口，不能把此索引称为全部原始证据归档完成。
 
@@ -62,3 +62,11 @@ MANAGEMENT_RECEIPT.json 是 9b02e2c 内的预提交历史快照，其文件指�
 执行入口的待满足项目见 EVALUATION_ENTRY_GATES.md。
 
 本轮管理归档、限定差异复核及双方各自分支同步的闭环状态为 PASS。该范围不包含 F2 的正式时间裁决、T12–T14 原始归档缺口补齐、H1/H2 验证或最终科研验收。F2 待研究者裁定，科学 NOT_VERIFIED，研究者掌握 NOT_ASSESSED。下一阶段门槛继续按 EVALUATION_ENTRY_GATES.md 登记。
+
+## 6. 历史证据补全与总计划维护（2026-11-06）
+
+当前已找回T12报告、T13/T14原始回传全文与T13审核回传，逐字原消息在本地忽略归档保留，公开副本在history/。这些是原始消息恢复，不是重写总结或原生计算收据。接口标识T12/T13输出原长54141/65536字符，仅恢复20000字符，更早完整性未核实，完整计算归档继续PARTIAL。
+
+总项目计划书新增output/pdf/YunTAPR-Net_Master_Plan_Live.tex及PDF，作为原V1.3执行状态附录，按每轮实质工作维护。已直接核对原PDF第9–11页与知识Gate；不改变原科学批准。额外E并非原V1.3预留集，外部验证已在原计划中；已有R1–R9参考候选调查，实际观测与许可/源链未验收。各自状态不能相互代替。
+
+本轮合并回执HISTORICAL_EVIDENCE_RECOVERY.json记录来源、工作簿差异、计划溯源和指纹。Harness已完成一次限定独立审核，结论PASS，仅覆盖来源/状态分类、保存工作簿差异与计划书边界，不构成科学验收。审核快照6166字节、SHA256 1EBCD1F1DC5909F95C255EB6AADF0812AEB3D4BCFE0BD40936EAE1BC907AF290。另有4处说明文字调整的非阻断观察已在合并回执补记；PDF与tex保持审核版本。双方Git完成结果以提交后Shared/聊天回执为准，科学NOT_VERIFIED，研究者NOT_ASSESSED。

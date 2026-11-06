@@ -1,0 +1,218 @@
+\documentclass[UTF8,10.5pt,a4paper,fontset=none]{ctexart}
+\usepackage[margin=20mm,headheight=16pt]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setCJKmainfont{Microsoft YaHei}
+\usepackage{xcolor,booktabs,tabularx,array,enumitem,fancyhdr,hyperref}
+\definecolor{ink}{HTML}{183A50}
+\definecolor{muted}{HTML}{536675}
+\hypersetup{colorlinks=true,linkcolor=ink,urlcolor=ink,pdftitle={YunTAPR-Net 总项目计划书执行状态更新版},pdfauthor={YunTAPR-Net 研究协作}}
+\setlist[itemize]{leftmargin=1.6em,itemsep=4pt,topsep=5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\linespread{1.13}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
+\fancyhead[R]{\small\color{muted}2026-11-06}
+\fancyfoot[L]{\footnotesize\color{muted}执行事实更新；科研改动仍须研究者批准}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\newcommand{\evi}[1]{\textsuperscript{\color{muted}[#1]}}
+\newcommand{\status}[1]{\textbf{\textcolor{ink}{#1}}}
+\newcommand{\pageheading}[2]{\clearpage\section*{#1}\textcolor{muted}{#2}\par\vspace{3pt}}
+\newcommand{\stage}[3]{\textbf{#1}\quad #2\par #3\par}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{13mm}
+{\Large\color{ink}YunTAPR-Net V1.3\par}
+\vspace{6mm}
+{\huge\bfseries 总项目计划书\par}
+\vspace{3mm}
+{\Large 执行状态更新版\par}
+\vspace{7mm}
+{\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
+\vspace{10mm}
+版本：\texttt{LIVE-20261106.1}\qquad 状态截至：2026年11月6日（北京时间）
+
+本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
+
+\section*{目前处于什么阶段}
+\status{开发集成果收敛、证据补全与独立验证准备。}
+已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
+
+\section*{本次实际更新}
+\begin{itemize}
+\item 找回 T12 完整报告、T13/T14原始回传文本和T13审核回传。完整计算终端输出仍有截断，不能写成全部原始收据恢复完成。\evi{S4}
+\item 核实两份既有后续工作簿已记录182个共同完整日、19个固定端点的日累计结果。旧交付收据的“日累计缺失”是历史状态，不再代表当前保存表格。\evi{S5}
+\item 原计划未单独命名E；它已有2025最终测试与独立站点/雷达/DPR-CMB验证。后续H1/H2确认性E要求不能倒写成原始研究者决定。\evi{S0,S6}
+\item 已有外部参考候选调查，尚未核实实际资料许可、完整性、源链独立性及匹配。不能把“候选清单存在”写成独立验证完成。\evi{S7}
+\end{itemize}
+
+本轮工程状态以限定审查和Git完成回执为准；项目科学状态\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。本版的下一步建议均为\texttt{PROPOSED}，不是实验启动书。
+
+\pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
+\textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
+
+原V1.3的六项问题继续作为总项目主线：
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+\item \textbf{Q1 时序与多光谱。}B0--B3回答过去约一小时卫星信息是否有助于反演。已有内部对照，跨人口和少Seed限制须保留。
+\item \textbf{Q2 GFS环境。}B3/B4回答水汽、稳定度和风环境是否提供增量。总体指标有较一致的开发集改善，强雨和尾部仍有反例。
+\item \textbf{Q3 静态地形。}B5/B6回答高程之外的静态地形是否有用。当前单Seed、容量与变量同时变化，不支持稳定普遍收益。
+\item \textbf{Q4 动态地形。}DOTE的风、地形梯度和水汽组合是否产生可归因的收益。公式和代码实现可追溯，物理机制尚未证实。
+\item \textbf{Q5 融合方式。}DTFM是否优于concat。现有B7/B8是单SP04尺度替换对照；完整多尺度主张尚未实现并验收。
+\item \textbf{Q6 独立真实性。}模型对IMERG的结果能否迁移到独立观测。原计划要求至少一种站点、雷达或DPR-CMB支撑；当前缺少完成证据。
+\end{enumerate}
+以上问题来自原计划，当前答案按已有证据分级，不能由模型名称或原计划目标反推为成果。\evi{S0,S2,S3}
+
+\section*{目前可以写与不能写}
+可以保留：可追溯内部消融、固定Development人口上的局部增益和负面结果、强雨像元排序信号、点估计零检出及q32经验欠覆盖。
+
+尚不能宣称：DOTE/DTFM物理因果成立、地形条件下稳定强雨增益、多尺度DTFM已完成、独立事件可靠性、跨年泛化、业务近实时可用或总体最优模型。最终模型未在本轮选择。\evi{S2,S3,S4}
+
+\pageheading{2\quad 数据划分、实现口径与独立验证}{原方案与后续实验协议各自绑定版本，不将二者混写。}
+\section*{原V1.3与后续具体实验}
+原计划§9：2023年3--10月与2024年3--10月构成开发池，Train/Validation按完整连续块或天气过程划分；2025年3--10月锁定Final Test。外部真实性验证优先覆盖2025，使用不同观测链。\evi{S0，p.9}
+
+后续冻结契约及f006工程实验采用2023 Train、2024 Validation/Development。核心配对实验959个Train场景、963个Dev场景，四个UTC分析时次；B0/B1的历史评价人口不同。不能把这一具体采样口径当作整个暖季连续覆盖，也不能倒写为V1.3最初的唯一划分。\evi{S1,S2,S3}
+
+\section*{原计划、当前实现与尚缺证据}
+\begin{itemize}
+\item \textbf{时间与单位。}核心监督为半小时平均雨强，单位mm/h。日量需要48个完整半小时窗口相加再乘0.5小时。缺测不能填0。
+\item \textbf{GFS时效。}当前主要实证为固定f006回顾式口径。它不证明当时资料到达链、端到端延迟或全天近实时可用；业务vintage/发布时间仍需专门验收。
+\item \textbf{日累计协议。}既有日累计表记载GFS上一有效时刻保持不超过5.5小时、孤立10分钟卫星缺帧的因果亮温插值。它与原四UTC单时次人口、准入不同；不插值标签或降水预测。其收益不能直接解释为单一“时间累积效应”。\evi{S5}
+\item \textbf{外部参考。}已存在2026-10-10候选调查。实际站号/雷达/轨道范围、许可、时间支撑、QC、IMERG源链关联和匹配仍须核实；融合产品或再分析不能自动作为独立真值。\evi{S7}
+\end{itemize}
+\section*{E与2025的准确位置}
+原计划没有单独指定名为E的数据集。T16--T18针对新的校准及风险评分确认性主张，引入未参与拟合/方法选择的评价人口要求。E未落实不等于原计划没有独立验证，也不阻止在具体授权内进行明确标记的开发性工作。\evi{S6}
+
+2024 Dev不能因重分割而自动恢复独立性。旧v1.1 Final Test条目为3--9月，而原V1.3和10月30日未冻结草案提及3--10月，最终测试范围须由研究者绑定正式版本裁定；本轮不选择或访问任何2025载荷。历史catalogue/QC访问与最终模型测试分别记载，不能声称历史上从未接触任何2025资料。\evi{S0,S1,S8}
+
+\pageheading{3\quad B0--B8与控制实验完成到哪里}{完成范围继承已有实验收据。本轮没有加载权重或重跑训练/评价。}
+\begin{tabularx}{\textwidth}{@{}p{0.8cm}p{4.4cm}>{\raggedright\arraybackslash}X@{}}
+\toprule 阶段 & 既有工程范围 & 当前科学边界\\\midrule
+B0 & 2026/2027，E0/E1/E2；各9轮 & 最小概率基线。历史T10仍有一份E9载荷未定位，不能把完成收据当当前载荷重验。\\
+B1 & 2026/2027，E0/E1/E2；各9轮 & B13六时次通道堆叠。与B2--B8人口不同，完整历史执行绑定仍有限制。\\
+B2 & 2029，E0；9轮/4320更新 & 七通道单时次，单Seed，不声称稳定总体收益。\\
+B3 & 2029/2030/2031，E0；固定E9 & 七通道六时次基线；B2/B3同时改变时序输入与参数。\\
+B4 & 2029/2030/2031，E0；固定E9 & 加入GFS MEE，总体四指标3/3同向改善；强雨、q32非全面改善，参数量归因有限。\\
+B5 & 2029，E0；9轮/4320更新 & 增加高程单通道，单Seed收益混合。\\
+B6 & 2029，E0；9轮/4320更新 & 六通道静态地形，缺少完整等容量归因和重复性证据。\\
+B7 & 2029/2030/2031，E0；固定E9 & DOTE及融合路径已实现；相对B4还改变静态输入和结构，不作DOTE因果归因。\\
+B8 & 2029/2030/2031，E0；固定E9 & width16、单SP04调制替换concat；不是完整多尺度验证，指标收益混合。\\
+\bottomrule
+\end{tabularx}
+\par
+B0/B1的Train/Dev为10,455/10,501场景；B2--B8核心f006人口为959/963。上述均为带局限工程完成，不是B0--B8整体科学验收。本表据网页总控状态表整理，B0载荷限制另核对历史T10原消息，未重新定位权重。\evi{S2,S3,S10}
+\section*{另外保存的控制结果}
+ZERO\_DOTE三Seed：Brier改善3/3，其他排序、条件分位和强雨收益不稳定；128个零输入权重无损失梯度，真实mask保留，不能称等有效容量或物理因果证明。方向性PERP探针仅单Seed，存在分布/空间混杂。\evi{S3}
+
+B3\_DOTE\_ONLY/2029已有九轮、E9/4320更新收据。四项概率/条件分布指标小幅改善，RMSE上升，强雨点检出未改善。它在原V3九模型之外，AP使用雨发生标签，不能与R>20排序AP混比。\evi{S9}
+
+B9/ERA5蒸馏仍为可选方向，当前不自动立项，不为填满阶段表追加训练、恢复任务或Seed。
+
+\pageheading{4\quad 强降水、概率尾部与机制证据}{所有数字绑定既有2024 Development与原报告；不是本轮新评价。}
+\section*{已经记录的事实}
+九模型B4/B7/B8 $\times$ Seed2029/2030/2031共用963场景，3,303,090个有效像元时次，其中有雨407,820；严格$R>20$为717，$R\ge20$为719，$R\ge50$为6。独立天气事件数\texttt{NOT\_IDENTIFIED}，不能说717场暴雨。\evi{S4}
+
+A/B/C点估计在严格20mm/h判据下均为TP=0、FP=0、FN=717。q32对$R>20$的AUROC约0.9650--0.9688，AP约0.01224--0.02057；说明有相对排序信息。q32全域Top1\%选33,031个像元时次，TP341--374、POD47.56\%--52.16\%、Precision约1.03\%--1.13\%。这些是回顾性预算，不是在线业务阈值。\evi{S4}
+
+q32有雨人口经验覆盖率为$93.48241871\%$至$95.05933990\%$，名义为$98.4375\%$。\par
+相容分布下P20上界最大为$0.19317626953125<0.5$。不能把结构界改写为精确P20或校准置信区间。\evi{S4}
+
+\section*{可以支持的解释}
+排序信息部分存在；点估计幅值偏低、尾部经验欠覆盖与所选决策规则共同构成需要解释的现象。不能确认损失函数、稀缺样本、容量或时空尺度各自造成多少误差；只挑真实强雨子集后看到预测偏低，也不单独证明整个条件分布失准。
+
+DOTE是风与米制地形梯度、水汽的确定性代理，不等于真实垂直运动观测。DTFM现有对照是单尺度融合替换。联合分层是像元时次统计，不是天气事件追踪；相关性不等于机制因果。\evi{S3,S4}
+
+\section*{H1/H2处于什么状态}
+T15--T18已完成理论准备。T16初稿NEEDS\_REVISION保留，R1由总控接受，未冒充Harness二次科学通过。T18-R1获Harness限定纸面PASS，仍\texttt{PROPOSED / AUTHORIZATION\_PENDING}。
+
+H1校准是否有效、H2完整节点候选是否优于q32均\texttt{INCONCLUSIVE}。真实人口下联合AP/Top1移动块推断的适用性尚未建立；C1/C2数值仅为必要拒判保护，不提供有限样本95\%保证。\evi{S6}
+
+\pageheading{5\quad 原评价体系与现有保存成果的覆盖}{日尺度、地形和独立验证分别验收。}
+\section*{本轮纠正的日累计状态}
+旧交付收据记录共同完整日期为0，日期为2026-11-05的旧工作簿相应填“待评价”。后续全版与精简版均已保存182个共同完整日、19个固定端点、每Seed 624,260个像元日；日期从2024-03-02至2024-10-22，包含缺口，并非其间每天都有完整结果。\evi{S5}
+
+评价阈值为0.1、10、25、50mm/day，保存POD/FAR/CSI/HSS、RMSE与Bias；追溯页有76行端点/阈值统计和checkpoint指纹。读取到保存结果只证明这些记录存在，不证明本轮重新核验了预测载荷、计费账本或计算正确性。
+
+全版01/02/04页的保存值和公式与原版完全相同，新增日累计及追溯。精简版移除地形展示页，数值与全版对应页一致；公式差异仅为缺失值标记“未定义”改为“—”。零预测阳性的FAR仍未定义，不能视为0。
+
+\section*{仍然存在的地形缺口}
+全版高程评价实际仅策略五、八、九，各三Seed；其他六策略仍待评价。坡度、坡向和Train参考W/L/M分组仍待确认/评价。高程表使用$H<1000$、$1000\le H\le2000$、$H>2000$m，不能与另一份采用$\ge2000$m高组的V3分层无说明拼接。\evi{S5}
+
+已有V3强雨$\times$海拔/迎背风/PWAT联合统计不再误写为全缺失；它与日累计工作簿、Train W/L/M分位组并非相同口径。\evi{S4,S5}
+
+\section*{论文还需要什么}
+原§11列出的空间结构FSS/可选PSD、完整概率质量、区域分层、独立观测验证、典型连续事件及端到端效率，不能因主指标表存在而统称全部完成。本轮没有为这些项目取得完整验收，继续\texttt{NOT\_VERIFIED}。\evi{S0，p.10}
+
+原始输出归档仍\texttt{PARTIAL}：接口标识T12/T13历史输出原长分别54,141/65,536字符，仅恢复前20,000字符，更早是否截断未核实。T13审核回传不是审核者原始收据，81项历史Top锚点独立覆盖限制保留。\evi{S4}
+
+\pageheading{6\quad Stage-Gate当前进度与最短路线}{保留原阶段目标；不把训练完成视作科研Gate全部通过。}
+\begin{tabularx}{\textwidth}{@{}p{1.2cm}>{\raggedright\arraybackslash}p{5.3cm}>{\raggedright\arraybackslash}X@{}}
+\toprule 原阶段 & 当前实际进度 & 下一必要条件与验收边界\\\midrule
+0 & 关键QC、网格、输入和账本已有记录 & 原计划全部数据/知识Gate本轮未重验；补齐版本关系、业务可用时间，非全期全模态验收。\\
+1 & B0训练与Dev结果已有记录 & 保留历史权重载荷/执行绑定缺口；Dev不是最终测试。\\
+2 & B1--B3工程结果已保存 & 人口和少Seed限制保留；不宣称整个阶梯稳定收益已证明。\\
+3 & B4三Seed总体指标改善 & 强雨和尾部有反例，业务vintage待验收；限定开发集成果可保留。\\
+4 & B5--B8及若干控制训练完成 & 完整消融、物理机制、强雨地形收益和多尺度DTFM尚未成立。\\
+4.5 & 外部参考候选调查已存在 & R1--R9含辅助源，实际许可/观测/独立源链/配准未落实；候选调查不是验证完成。\\
+5 & B9可选，未启动 & 无稳定多Seed和独立验证增益证据，不自动追加。\\
+6 & 已有182日的回顾日累计表 & 不等于业务回放；端到端延迟、吞吐、内存和连续事件尚未完整验收。\\
+\bottomrule
+\end{tabularx}
+\par
+本表沿用网页总控给定Stage-Gate状态表，并按已读候选清单校正为R1--R9，明确R8/R9为辅助材料，不作为独立真值。\evi{S0,S7}
+\section*{后续最少必要工作（PROPOSED）}
+\begin{enumerate}[leftmargin=2em,itemsep=4pt]
+\item 完成本轮历史证据、总计划状态和一次限定独立复核，关闭可恢复的记录缺口。
+\item 以原外部参考候选清单核实实际来源/许可/源链与匹配身份；如需联系、下载或读取，绑定明确范围后执行，当前不擅自获取。
+\item 对H1/H2分开标记开发性诊断与确认性验证。仅当具体资料和读算写预算获批后实施，不因理论结项自动拟合、bootstrap或推理。
+\item 收敛可被证据支持的论文主张。只有必要对照能回答尚存问题、且获得单独科学方案和预算批准时才考虑新训练。
+\item 最终模型、FinalFit、测试时期和一次性揭盲须研究者正式决定。2025不用于当前方法探索。
+\end{enumerate}
+
+\pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
+\section*{知识Gate}
+当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
+\begin{itemize}
+\item 数据：解释半小时雨强与累计量、missing与0、mask、因果时间对齐及GFS vintage。
+\item 模型：独立说明发生概率与条件分位、DOTE单位/压力有效性、DTFM实际单尺度实现。
+\item 实验：解释人口与容量混杂、三Seed和独立事件的区别，能追溯checkpoint与评价来源。
+\item 结果：解释点估计零检出与排序信息同时存在，解释q32覆盖分母、概率界与精确概率差别。
+\item 科学质疑：指出IMERG参考偏差、外部验证源链、无显著性/因果/业务结论的边界。
+\end{itemize}
+这些是原掌握要求的执行清单，本轮不代研究者作答或填验收。
+
+\section*{论文和成果转化}
+论文骨架沿用Introduction、Related Work、Data、Method、Experiments、Results、Discussion、Conclusion。当前可整理内部消融、负面/混合结果与局限；独立真实性、机制和业务主张须对应证据。演示页面和竞赛原型不能反向替代论文科学结论。\evi{S0，pp.16--18}
+
+\section*{本计划怎样持续更新}
+\begin{itemize}
+\item 每轮实质任务结束后，依据新取得且可追溯的证据更新本LaTeX源与最新PDF，标明北京时间、版本和变更摘要；没有新证据不重复改写。
+\item 保留Git历史和原2026-09-24 PDF；正文区分原计划、执行事实、PROPOSED建议及研究者批准，不覆盖旧失败或旧审查。
+\item 总控收敛路线，Codex维护实现/状态和自己的分支，Harness维护独立审核和自己的分支，研究者负责科学决定、预算及最终验收。
+\item 项目进度同步到README、STAGE\_ACCEPTANCE和Shared/PROJECT\_STATE；双方只写各自交接。Shared决策/规则与main按保护要求保持。
+\item 此处“持续更新”指每轮有证据的状态维护，不代表后台无条件实时运行或新增实验授权。
+\end{itemize}
+
+\pageheading{8\quad 来源、版本与本轮变更回执}{本页给出复核入口。完整文件指纹以同轮JSON收据及Git提交为准，避免自引用。}
+\small
+\begin{description}[leftmargin=2.7em,labelwidth=2.2em,itemsep=6pt]
+\item[S0] 原2026-09-24 V1.3正式计划PDF，20页，1,561,261字节。Codex本轮直接核对§9、§11、Stage-Gate和知识Gate；未改原文件。SHA256：\par\texttt{bd3af5e3ebe1fe6e28b2b31699babecdd}\\\texttt{c506412310fd96eb80d1c695aabb5fe}
+\item[S1] \path{config/science_contract_v1.1.yaml}。后续冻结的具体实验口径；不倒写原V1.3。SHA256见合并回执。
+\item[S2] \path{STAGE_ACCEPTANCE.md}、\path{EXPERIMENT_MATRIX.csv}、\path{METRICS.csv}。现有阶段与端点索引，本轮没有逐权重重验。
+\item[S3] \path{SCIENTIFIC_ANALYSIS.md}及20261025证据目录。带局限消融、ZERO/PERP、DOTE/DTFM结论。
+\item[S4] \path{docs/research_readiness/20261106_research_convergence/history/}恢复的T12、T13、T14脱敏消息和审核回传；完整本地消息逐字导出指纹、截断状态见\path{HISTORICAL_EVIDENCE_RECOVERY.json}。原报告阅读不等于本轮重算。
+\item[S5] \path{outputs/01a1a906-f017-71f3-bb3f-19b961274f10/}中的旧交付收据、原三类表及两个后续工作簿；本轮只读保存值/公式/追溯。
+\item[S6] \path{docs/research_readiness/20261106_research_convergence/}中的T15--T18、\path{REVIEW_INDEX.md}与\path{EVALUATION_ENTRY_GATES.md}。新确认性要求保持PROPOSED。
+\item[S7] \path{docs/phase_b_v2_protocol_candidates/v1_20261010/INDEPENDENT_REFERENCE_INVENTORY.md}。R1--R9候选历史调查，含辅助源，默认独立性未验证；不是当前下载许可或验证结果。
+\item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
+\item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。本轮仅恢复原消息，不查权重。
+\item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
+\end{description}
+\normalsize
+本版变更：恢复历史文本；修正日累计覆盖；溯源原数据划分及E含义；补记已有外部参考准备；建立总计划持续维护入口。旧实验、预算、科学批准及2025封存均未因本次文档更新改变。
+
+工程、科学、知识三状态分别记录。本轮完整工程收尾与限定审核结果追加在项目索引和各自交接中；科学仍\texttt{NOT\_VERIFIED}，研究者掌握仍\texttt{NOT\_ASSESSED}。
+\end{document}

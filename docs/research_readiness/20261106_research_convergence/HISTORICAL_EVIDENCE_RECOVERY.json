@@ -1,0 +1,301 @@
+{
+  "task": "Historical research evidence completion and live master plan",
+  "as_of": "2026-11-06 Asia/Shanghai",
+  "work_scope": "P0 original message recovery; P1 saved workbook comparison; P2 original plan/source registration; editable status appendix",
+  "authorization_source": "Researcher instructions to continue missing work, ask existing web controller, and keep master plan current; earlier three-party collaboration and own work-branch sync instructions",
+  "codex_start": {
+    "branch": "collab/codex-20261102",
+    "head": "72436c3031a4678f62f57a188c5e45169f78083b",
+    "existing_untracked_files": 26
+  },
+  "peer_start": {
+    "branch": "collab/dsh-20261102",
+    "head": "3a7bc62852851501a65e7dfd8959abf2e8507c55"
+  },
+  "P0": {
+    "overall": "PARTIAL",
+    "recovered_messages": [
+      {
+        "task": "T12",
+        "source_type": "agentMessage.text",
+        "turn_id": "01a1abb0-d827-7423-9fe2-c8e2aa25f31a",
+        "item_id": "msg_0e2b831a2081504b016aec7a628b0887d0b9bbb9f639054495",
+        "original_export": "T12_ORIGINAL_MESSAGE.txt",
+        "bytes": 19563,
+        "sha256": "2d433c51733271db80b3f258edb2a7061df2126e1effdcf338759b0f2ccaa8c5",
+        "public_copy": "history/T12_RECOVERED_REDACTED.md",
+        "archive_status": "ORIGINAL_RECOVERED",
+        "artifact_type": "original_chat_message_export",
+        "original_export_location": "local_ignored_archive",
+        "source_thread": "01a1a6fd-8403-7803-9a53-c307271f2fe0",
+        "full_message_recovered": true,
+        "not_original_native_calculation_receipt": true
+      },
+      {
+        "task": "T13",
+        "source_type": "mcpToolCall.arguments.prompt",
+        "turn_id": "01a1ae6f-c87d-7a32-8521-7b7b5b58da22",
+        "item_id": "exec-ff1e1916-ebee-42ba-95ad-0fcd466e38fd",
+        "original_export": "T13_ORIGINAL_MESSAGE.txt",
+        "bytes": 11121,
+        "sha256": "433bddc2577798ad95868421c45725f6d9403387074b2fae67d5e2bd6460ce66",
+        "public_copy": "history/T13_RECOVERED_REDACTED.md",
+        "archive_status": "ORIGINAL_RECOVERED",
+        "artifact_type": "original_chat_message_export",
+        "original_export_location": "local_ignored_archive",
+        "source_thread": "01a1a6fd-8403-7803-9a53-c307271f2fe0",
+        "full_message_recovered": true,
+        "not_original_native_calculation_receipt": true
+      },
+      {
+        "task": "T14",
+        "source_type": "mcpToolCall.arguments.prompt",
+        "turn_id": "01a1ae91-5de1-7890-808f-ffb80bfe0084",
+        "item_id": "exec-c3e8b37c-445f-416b-91af-1154ab4d0e95",
+        "original_export": "T14_ORIGINAL_MESSAGE.txt",
+        "bytes": 10198,
+        "sha256": "fa84e1ae678ba79f397e4031835f830772f56510fd504fe13a5b1bb7aa3cad69",
+        "public_copy": "history/T14_RECOVERED_REDACTED.md",
+        "archive_status": "ORIGINAL_RECOVERED",
+        "artifact_type": "original_chat_message_export",
+        "original_export_location": "local_ignored_archive",
+        "source_thread": "01a1a6fd-8403-7803-9a53-c307271f2fe0",
+        "full_message_recovered": true,
+        "not_original_native_calculation_receipt": true
+      },
+      {
+        "task": "T13_REVIEW_RELAY",
+        "source_type": "mcpToolCall.arguments.prompt",
+        "turn_id": "01a1ae6f-c87d-7a32-8521-7b7b5b58da22",
+        "item_id": "exec-379026e1-8559-4cf6-ab31-c8eaa7ffe354",
+        "original_export": "T13REVIEWRELAY_ORIGINAL_MESSAGE.txt",
+        "bytes": 5055,
+        "sha256": "0916a8ac6780ad693599e8da5985563aa1b2044f21040a91adc9966b7473c909",
+        "public_copy": "history/T13REVIEWRELAY_RECOVERED_REDACTED.md",
+        "reviewer_original": false,
+        "archive_status": "ORIGINAL_RECOVERED",
+        "artifact_type": "original_chat_message_export",
+        "original_export_location": "local_ignored_archive",
+        "source_thread": "01a1a6fd-8403-7803-9a53-c307271f2fe0",
+        "full_message_recovered": true,
+        "not_original_native_calculation_receipt": true
+      }
+    ],
+    "stdout_excerpts": [
+      {
+        "task": "T12",
+        "item_id": "exec-1cf4636f-9fca-4627-aec6-3b8e05040b8f",
+        "reported_original_chars": 54141,
+        "recovered_chars": 20000,
+        "truncated": true,
+        "complete_native_receipt": "MISSING",
+        "upstream_completeness": "NOT_VERIFIED"
+      },
+      {
+        "task": "T13",
+        "item_id": "exec-a9cf6368-9d13-4229-bd53-6aa2587aa68e",
+        "reported_original_chars": 65536,
+        "recovered_chars": 20000,
+        "truncated": true,
+        "complete_native_receipt": "MISSING",
+        "upstream_completeness": "NOT_VERIFIED"
+      }
+    ],
+    "t13_independent_review_original": "MISSING; Codex relay recovered, not substituted for reviewer original",
+    "all_81_anchor_independent_coverage": "PARTIAL inherited; not recomputed"
+  },
+  "P1": {
+    "method": "Read-only openpyxl cached values and formula text; no recalculate, no evaluator, no scientific payload read",
+    "workbooks": [
+      {
+        "role": "original_baseline",
+        "file": "YunTAPR-Net_三类反演评价_20261105.xlsx",
+        "bytes": 96187,
+        "sha256": "5d5ae33fa0f9fd2b6b861bfb62d61cd6f587bedbf9ca6585f67a6de2b67a3fa7"
+      },
+      {
+        "role": "later_full",
+        "file": "YunTAPR-Net_三类反演评价_含完整日累计_20261105.xlsx",
+        "bytes": 123798,
+        "sha256": "1aab5559abd269855ec708d281ce36c1d20f1e6d541f8ead2e4e6acb2b188173"
+      },
+      {
+        "role": "later_compact",
+        "file": "YunTAPR-Net_单时次与日累计评价_20261105.xlsx",
+        "bytes": 104469,
+        "sha256": "032a263c58dc9c5900d194c0c648a359fd9477d4b673687ab9ad68316f19ee18"
+      }
+    ],
+    "parent_directory": "outputs/01a1a906-f017-71f3-bb3f-19b961274f10",
+    "historical_delivery_receipt": "delivery_receipt_public.json",
+    "corrections": {
+      "old_complete_common_daily_dates": 0,
+      "later_recorded_complete_dates": 182,
+      "year": 2024,
+      "first_date": "2024-03-02",
+      "last_date": "2024-10-22",
+      "not_all_dates_in_span": true,
+      "fixed_endpoints": 19,
+      "pixel_days_per_seed": 624260,
+      "raw_daily_rows": 76,
+      "thresholds_mm_day": [
+        0.1,
+        10,
+        25,
+        50
+      ]
+    },
+    "original_to_full": {
+      "sheet_01_all_saved_values_and_formulas_equal": true,
+      "sheet_02_all_saved_values_and_formulas_equal": true,
+      "sheet_04_all_saved_values_and_formulas_equal": true
+    },
+    "full_to_compact": {
+      "matching_sheets": [
+        "02",
+        "03",
+        "05"
+      ],
+      "numeric_differences": 0,
+      "formula_differences_after_replacing_undefined_marker": 0,
+      "marker_change": "未定义 to —",
+      "terrain_sheet_04_not_displayed": true,
+      "additional_explanatory_note_changes": 4
+    },
+    "coverage": {
+      "daily": "RECORDED_COVERED; calculation/payload independently NOT_VERIFIED",
+      "terrain": "PARTIAL; only strategies 5/8/9 elevation, three seeds each",
+      "other_six_strategies_elevation": "MISSING",
+      "slope_aspect": "PENDING_DEFINITION_AND_EVALUATION",
+      "train_WLM_groups": "PENDING_DEFINITION_AND_EVALUATION",
+      "independent_weather_events": "NOT_IDENTIFIED"
+    },
+    "protocol_notes": [
+      "Daily GFS hold at most 5.5h and isolated 10-minute satellite brightness-temperature causal interpolation",
+      "Daily labels/predictions not temporally interpolated",
+      "Different population/input admission from four-UTC single-time V3; no causal accumulation or independent-E claim",
+      "Elevation workbook uses H<1000, 1000<=H<=2000, H>2000; other V3 boundaries differ at 2000",
+      "Zero positive forecasts leave FAR undefined, not zero"
+    ],
+    "evidence_cells": {
+      "daily_display": "03 日累计反演指标!A5:Y20",
+      "daily_raw": "05 评价定义与证据追溯!A274:T350",
+      "daily_notes": "05 评价定义与证据追溯!A356:C365",
+      "terrain": "04 地形分层反演指标!A5:N212"
+    },
+    "cached_errors_detected": 0,
+    "missing_formula_cache_detected": 0,
+    "source_unchanged_on_initial_read": true
+  },
+  "P2": {
+    "original_plan": {
+      "name": "YunTAPR-Net_V1.3_云南全境近实时降水反演_科研主体掌握与成果转化正式方案.pdf",
+      "date": "2026-09-24",
+      "pages": 20,
+      "bytes": 1561261,
+      "sha256": "bd3af5e3ebe1fe6e28b2b31699babecddc506412310fd96eb80d1c695aabb5fe",
+      "directly_read_sections": [
+        "9/9.1 p9",
+        "11 p10",
+        "Stage-Gate p11",
+        "Knowledge gates pp14-17",
+        "AppendixA p19"
+      ],
+      "original_retained": true
+    },
+    "original_split": {
+      "development_pool": "2023 March-October plus 2024 March-October",
+      "train_val": "whole continuous blocks/weather processes",
+      "final_test": "2025 March-October, sealed",
+      "external_validation": "at least one station/radar/DPR-CMB, preferentially 2025"
+    },
+    "later_execution": "2023 Train/2024 Dev; f006 four UTC 959/963 core scenes",
+    "additional_E": "No separately named E in original V1.3; later H1/H2 confirmatory population requirement, not retroactive original decision",
+    "named_E_designation": "NOT_VERIFIED in reviewed records; not claimed nonexistent everywhere",
+    "external_reference_inventory": {
+      "path": "docs/phase_b_v2_protocol_candidates/v1_20261010/INDEPENDENT_REFERENCE_INVENTORY.md",
+      "sha256": "E952725256C7C12A844AE6E7C819123A01714EA92ADAB81CDD0EE5CD8835DCBB",
+      "status": "RESEARCHER_DECISION_REQUIRED / INDEPENDENCE_UNVERIFIED",
+      "candidates": "R1-R9, including auxiliary sources",
+      "actual_permission_observations_completeness_collocation": "NOT_VERIFIED"
+    },
+    "final_test_scope_conflict": "Original V1.3 March-October, older v1.1 March-September, 20261030 DRAFT March-October; researcher-bound final scope unresolved, no selection or data access",
+    "governance_ledger": "No specific new E/data/experiment grant found in checked Shared DECISIONS; original decisions retained"
+  },
+  "live_plan": {
+    "source": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+    "pdf": "output/pdf/YunTAPR-Net_Master_Plan_Live.pdf",
+    "version": "LIVE-20261106.1",
+    "role": "Execution-status companion appendix, not replacement scientific approval",
+    "maintenance": "Update after each substantive task from verified receipts; no unconditional background automation",
+    "tables_source_message": "321e5946-95d8-4554-9274-00821b910b98",
+    "pages": 9
+  },
+  "engineering": "PASS_LIMITED_REVIEW; GIT_SYNC_PENDING_AT_PRECOMMIT_SNAPSHOT",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "no_new_training": true,
+  "no_new_inference": true,
+  "no_new_evaluation": true,
+  "no_prediction_or_label_payload_reads": true,
+  "no_2025_access_this_round": true,
+  "no_acl_or_config_changes": true,
+  "limitations": [
+    "Historical reports preserve claims as reported, not new independent re-computation",
+    "Original private exports retained locally and excluded from public Git",
+    "Public copies are explicitly redacted derivatives",
+    "No blanket statement that historical 2025 access never occurred"
+  ],
+  "artifacts": [
+    {
+      "file": "docs/research_readiness/20261106_research_convergence/history/T12_RECOVERED_REDACTED.md",
+      "bytes": 19877,
+      "sha256": "650362c6db73899c25e44197488e254eb911678e26ec124ec6cbed3060ee5635"
+    },
+    {
+      "file": "docs/research_readiness/20261106_research_convergence/history/T13_RECOVERED_REDACTED.md",
+      "bytes": 10726,
+      "sha256": "9e2522653c9cc84a9f9470283c0d7e267fb25764c55d9c6e7019c52c1132da82"
+    },
+    {
+      "file": "docs/research_readiness/20261106_research_convergence/history/T13REVIEWRELAY_RECOVERED_REDACTED.md",
+      "bytes": 5424,
+      "sha256": "da918d7f7017b7b6a091249c8079197798ed4f5a45f3d9bebb38a1e3aeded5d0"
+    },
+    {
+      "file": "docs/research_readiness/20261106_research_convergence/history/T14_RECOVERED_REDACTED.md",
+      "bytes": 10564,
+      "sha256": "7d3e401b5a20bdc17252634ebb2379b9a6c7c76e6c35564d17bf7c2d917e09a8"
+    },
+    {
+      "file": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+      "bytes": 21640,
+      "sha256": "4c86760731068068b6c70501b23600896623839efcfef707d0b388ed92c1eee4"
+    },
+    {
+      "file": "output/pdf/YunTAPR-Net_Master_Plan_Live.pdf",
+      "bytes": 436565,
+      "sha256": "2f20dbbb0e3a0dc0733e19f2810428742722a125ca23ca6c52a6a4d56e6dcd11"
+    }
+  ],
+  "validation": {
+    "source_message_export_hashes": "PASS",
+    "public_private_locator_scan": "PASS",
+    "workbook_hashes_unchanged": "PASS",
+    "xelatex": "PASS, no shell escape or dependency installation",
+    "visual_review": "All nine initial pages and changed four pages checked; no overfull/missing glyph errors",
+    "scientific_recomputation": "NOT_PERFORMED"
+  },
+  "independent_review": {
+    "reviewer": "Harness",
+    "path": "docs/audits/HISTORICAL_EVIDENCE_AND_LIVE_PLAN_REVIEW_20261106.md",
+    "repository": "YunTAPR-Collab-DSH",
+    "result": "PASS_LIMITED_EVIDENCE_STATUS_AND_DOCUMENT_REVIEW",
+    "review_snapshot_bytes": 6166,
+    "review_snapshot_sha256": "1EBCD1F1DC5909F95C255EB6AADF0812AEB3D4BCFE0BD40936EAE1BC907AF290",
+    "scope": "Saved workbook values/formulas, source/status distinctions, original V1.3 text and status appendix; not historical metric re-computation",
+    "v1_1_final_test_scope": "Codex directly read YAML; Harness inherits this aspect, not independent revalidation",
+    "science_not_approved": true
+  },
+  "record_type": "pre_commit_evidence_and_document_receipt; post_commit Git receipt belongs in Shared handoff and chat"
+}
