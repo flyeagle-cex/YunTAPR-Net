@@ -1,3 +1,9 @@
+## 2026-11-07 DTFM合成检查限定审核完成
+
+- Harness一次差异审核PASS_WITH_LIMITATIONS，独立7项检查/一次CLI/10次合成更新。DSH审核3863B/3812B9E532D2B6EECC34938378359BE473F04EA61CF423E88F7C304297FA22FA，自身提交5eda1b67已普通推送，root直接ls-remote一致。
+- Codex主体3fb707b451188cbbef42ab7b54f446a066006309已推送并直接核对。审后仅新增REVIEW_OUTCOME及此导航，不改代码、测试、RESULT或PDF。原VERIFICATION的8artifact绑定主体提交，本轮导航新指纹另列结项收据。
+- 完整结项见docs/research_readiness/20261107_dtfm_gradient_release/REVIEW_OUTCOME.json。root与peer合计20次合成optimizer.step，科研更新0。B8五步条件投影参数delta仍0，真实学习和性能NOT_VERIFIED。
+
 ## 2026-11-07 DTFM真实初始化合成检查
 
 - 新入口probe_dtfm_gradient_release.py及7项回归。每臂5步CPU诊断SGD，一次CLI总10次合成更新。B7条件梯度第2次反向、B8第3次出现，B8条件投影五步参数delta仍0。

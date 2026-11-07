@@ -1,0 +1,51 @@
+{
+  "id": "DTFM_GRADIENT_RELEASE_REVIEW_OUTCOME_20261107",
+  "scope": "one new synthetic CPU gradient-path review and work-branch synchronization",
+  "result": "PASS_WITH_LIMITATIONS",
+  "reviewed_Codex_commit": "3fb707b451188cbbef42ab7b54f446a066006309",
+  "review_file": {
+    "repository": "YunTAPR-Collab-DSH",
+    "path": "docs/audits/DTFM_GRADIENT_RELEASE_REVIEW_20261107.md",
+    "bytes": 3863,
+    "sha256": "3812b9e532d2b6eecc34938378359be473f04ea61cf423e88f7c304297fa22fa"
+  },
+  "reviewer_git": {
+    "branch": "collab/dsh-20261102",
+    "commit": "5eda1b67ca9076b58afd4aa16de56a8230d78760",
+    "normal_push_and_root_ls_remote_match": true,
+    "tree_clean": true
+  },
+  "root_checks": {
+    "suite_tests": 7,
+    "CLI_invocations": 1,
+    "synthetic_optimizer_steps": 10
+  },
+  "independent_review_checks": {
+    "suite_tests": 7,
+    "CLI_invocations": 1,
+    "synthetic_optimizer_steps": 10,
+    "evidence": "peer audit and native UI completion, no root replay"
+  },
+  "combined_synthetic_steps": 20,
+  "scientific_optimizer_updates": 0,
+  "raw_vs_qualified_status": "RESULT.probe preserves original CLI PASS; outer result and controller interpretation PASS_WITH_LIMITATIONS",
+  "nonblocking_observations": [
+    "new tests do not assert B8 GFS/terrain zero parameter deltas at every step, saved result contains all5 and root separately checked them without rerunning probe",
+    "first handoff request tex hash belongs an earlier draft, exact current8artifact snapshot verified at review time",
+    "PDF pixel review was root self-check, not independent reviewer inspection"
+  ],
+  "source_of_effective_learning": "NOT_VERIFIED",
+  "real_AdamW_BF16_and_training_dynamics": "NOT_VERIFIED",
+  "future_scientific_gate": "historical E0 inheritance, exact factorial protocol and new bounded scientific authorization",
+  "reviewed_snapshot": "RESULT/VERIFICATION contain pre-review pending labels and are retained unchanged at reviewed_Codex_commit; this receipt records the later review outcome",
+  "post_review_changes": "this receipt and index navigation only, no code/test/result/PDF changes",
+  "final_Codex_sync": "actual closure commit and remote SHA recorded in own Shared handoff to avoid self-reference",
+  "engineering": "PASS_WITH_LIMITATIONS",
+  "science": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL",
+  "researcher_mastery": "NOT_ASSESSED",
+  "post_review_index": {
+    "bytes": 27750,
+    "sha256": "99de443682dbefa012fbece6f61013b3f7c15cfca07fbb04a2fa1166c04d6efb"
+  }
+}
