@@ -1,0 +1,206 @@
+{
+  "id": "DYNAMIC_LAMBDA_ENTRY_20261107",
+  "recorded_at": "2026-11-07T19:29:33.607509+08:00",
+  "base_commit": "bc62b8b69d2e12e570bd6db60e695632f03a21c2",
+  "branch": "collab/codex-20261102",
+  "controller_task_message": "da7cd945-bd0d-4c8d-b1ab-8ebeaa7e31df",
+  "scope": "code wiring and CPU synthetic output-loss checks only",
+  "objective": "(S_occ + lambda_q*S_qr)/N_valid; existing closed E0/E2 candidate_loss",
+  "closed_weights": [
+    1,
+    2
+  ],
+  "E2_scope": {
+    "models": [
+      "B7",
+      "B8"
+    ],
+    "seed": 2029,
+    "origin_only": true,
+    "recovery_allowed": false
+  },
+  "normal_entry": [
+    "dynamic_training.RunSpec",
+    "dynamic_training.run_task(lambda_q=...)",
+    "stage4.PairedExecutor(lambda_q=...)",
+    "stage4.forward(loss_config=...)",
+    "existing candidate_loss"
+  ],
+  "legacy_protocol_preserved": "old B0/B1 RunSpec and18 proposed_runs unchanged; existing dynamic dispatchers still default1",
+  "proposal_binding": "protocol.loss and protocol.lambda_q must match explicit parameter before any source IO; legacy E0 cannot select2",
+  "new_loss_identity_receipts": [
+    "update ledger identity",
+    "train loss_arm and lambda_q",
+    "checkpoint identity",
+    "LAST receipt",
+    "completion"
+  ],
+  "E0_default_receipt_schema": "unchanged; new loss identity fields only for nondefault2",
+  "checks": {
+    "new_tests": 8,
+    "passed": 8,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "test_seconds": 0.143,
+    "environment": {
+      "python": "3.11.15",
+      "torch": "2.11.0+cu128",
+      "compiled_cuda": "12.8",
+      "device": "CPU; CUDA_VISIBLE_DEVICES empty"
+    },
+    "loss_and_output_gradients_at1": "bitwise equal against existing E0, default and explicit1, B7/B8 artificial3430point tensors",
+    "weight2": "unchanged occurrence, S_qr, valid/rain denominators and scientific conditional Pinball; qlog derivative doubled only",
+    "all_dry": "connected zero conditional gradient and unchanged occurrence",
+    "entry_wiring": "real run_task and actual executor construction/forward/candidate_loss; source boundaries and executor.run mocked",
+    "full_cuda_loop": "NOT_EXECUTED; AST verifies both Train/Dev callsites pass selected config",
+    "network_parameter_gradients": "NOT_VERIFIED; gradients checked at artificial logit/qlog outputs",
+    "optimizer_steps": 0,
+    "real_model_instantiations": 0,
+    "real_model_forward_calls": 0,
+    "scientific_payload_reads": 0,
+    "prediction_or_weight_loads": 0,
+    "restricted_cache_or_2025_access": 0,
+    "unchanged_engine_functions": [
+      "seed_all",
+      "paired_models",
+      "epoch_order"
+    ],
+    "protected_sources_and_old_PDF_match": true,
+    "navigation_history_suffixes_byte_identical": true,
+    "git_diff_check": "PASS",
+    "staging_empty_before_review": true,
+    "pass_log_sha256": "2fee18c0661e570496426e6ee2f74523f407712cbd0921c61cabf48dd0f83c16"
+  },
+  "initial_failures_preserved": [
+    "document runtime lacked torch before suite import",
+    "base conda Python had torch2.7.1 but lacked yaml before suite import",
+    "conda environment listing failed UTF8/GBK decode and reporting permission error; no packages installed",
+    "first complete8-test CPU run failed9 subcases due synthetic qlog below conditional support and mock plan lacking strong_scene_ids; corrected fixtures only",
+    "format-only source wrapping after passed suite; independent reviewer will inspect exact current hashes"
+  ],
+  "PDF_checks": {
+    "pages": 24,
+    "xelatex_passes": 2,
+    "overfull": 0,
+    "missing_characters": 0,
+    "visual_review_pages": [
+      1,
+      21,
+      24
+    ],
+    "visual_review": "Codex viewed1/21/24; no clipping/overlap observed"
+  },
+  "artifact_fingerprints_excluding_self": [
+    {
+      "path": "README.md",
+      "bytes": 29810,
+      "sha256": "475268fd82a877022061e207dac0d2cd435bcd713e354ecc301cc1963a2e9794"
+    },
+    {
+      "path": "STAGE_ACCEPTANCE.md",
+      "bytes": 41849,
+      "sha256": "ec35f1298a20173295f237b476368955b1fd4aed02264b9fa5d6bc2c8067fa4a"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md",
+      "bytes": 29220,
+      "sha256": "d23a9f27a647960ea6b6150d129da22eacd45ea24798d151e7329fd4df6a8a01"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+      "bytes": 61133,
+      "sha256": "6a199f57e64b3e0f214b953554220b4ac4553c36fc5ea5c4ffaf19ad24aeaaa9"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_15.pdf",
+      "bytes": 678471,
+      "sha256": "9904abeb59b34648d2de69243825984c1196933eca1d3160d76d01f796ba9635"
+    },
+    {
+      "path": "src/yuntapr/experimental/core_innovation/stage4/engine.py",
+      "bytes": 18215,
+      "sha256": "459cb600aa8ce390f78b607344bcbc2a70efe2865934d9b49cf3378d5c1356c7"
+    },
+    {
+      "path": "src/yuntapr/experimental/research_readiness/dynamic_training.py",
+      "bytes": 19146,
+      "sha256": "f8ab5a627bf9cd383f540d84217aa9bcdde6d9d62dfeb0cab21df32f90119e40"
+    },
+    {
+      "path": "tests/research_readiness/test_dynamic_loss_entry.py",
+      "bytes": 11038,
+      "sha256": "97429668be514541835a5d7ac94b6c8106325088e030fdb6959fd7830e9a7331"
+    }
+  ],
+  "unchanged_fingerprints": [
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_14.pdf",
+      "bytes": 669421,
+      "sha256": "3e719b31078e7fda56aa3807595c09f720a2f35f622385ea51c441223707d876"
+    },
+    {
+      "path": "src/yuntapr/experimental/phase_b_v2_ablations/config.py",
+      "bytes": 3388,
+      "sha256": "5ae850c28417b555dc7825bd204f95f8275bc3ddc5b64cbfa230a2517d4d5e3a"
+    },
+    {
+      "path": "src/yuntapr/experimental/phase_b_v2_ablations/total.py",
+      "bytes": 3200,
+      "sha256": "9ce37393d2af2fbc762d198b2088cb4645d104d35f81b507c236bc3b39cf1ec1"
+    },
+    {
+      "path": "src/yuntapr/experimental/phase_b_v2_runner_candidate/optimizer.py",
+      "bytes": 3016,
+      "sha256": "ff3d3c301e792a17124622f5ad7e352f3af400cc0651cb181ea56f828c638a21"
+    },
+    {
+      "path": "src/yuntapr/training/phase_a_protocol.py",
+      "bytes": 12424,
+      "sha256": "95ed5a182590a8a84ee7659720a89ea7e36687800cb7e7441f60d30d795a8b19"
+    },
+    {
+      "path": "Shared/PROJECT_STATE.md",
+      "bytes": 58686,
+      "sha256": "42f4b3a8d27277a2820634a5ac3e3db3fe4f40cfbbfc9699175926ef99ba8f52"
+    },
+    {
+      "path": "Shared/DECISIONS.md",
+      "bytes": 1670,
+      "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+    },
+    {
+      "path": "Shared/COLLABORATION_RULES.md",
+      "bytes": 24639,
+      "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+    },
+    {
+      "path": "Shared/.gitattributes",
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    {
+      "path": "Shared/handoffs/CODEX.md",
+      "bytes": 146734,
+      "sha256": "2adfdd80572e205a43d5f8f355f07b2da956634d300cc748e852647285c70f36"
+    },
+    {
+      "path": "Shared/handoffs/DSH.md",
+      "bytes": 56443,
+      "sha256": "000ab540d52dbc77d3b15f7c09835c3df1e1164d8fc3d693af39882fe47e7dde"
+    }
+  ],
+  "independent_review": "PENDING one difference-only Harness review; historical audits not repeated",
+  "engineering": "SELF_CHECK_PASS_SYNTHETIC_ENTRY_ONLY",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL",
+  "researcher_mastery": "NOT_ASSESSED",
+  "execution_ready": false,
+  "new_training_authorization": null,
+  "outstanding": [
+    "approved scientific primary/guardrails and numerical acceptance limits",
+    "actual original init/order/mask and scientific runtime match",
+    "new exact proposal/output directory/update/source/time budgets and formal once-only approval",
+    "new approval-bound dispatcher explicitly selects2; current default dispatchers remainE0"
+  ]
+}

@@ -1,3 +1,9 @@
+## 2026-11-07 显式lambda_q入口准备
+
+- 新增动态RunSpec并传递run_task→PairedExecutor→forward/candidate_loss。原E0默认保持，新E2限2029原初单架构、提案显式匹配；旧18格RunSpec不变。
+- 8项CPU合成检查通过，真实完整训练循环未执行。科研载荷/权重读取、模型前向及optimizer.step均0。仅新增差异的一次必要独立审核，回执另列。
+- 当前证据docs/research_readiness/20261107_lambda_entry/VERIFICATION.json，计划LIVE.15，历史E0沿用LIVE.14有条件结论。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。正式指标/环境/预算未冻结，训练保持未启动。
+
 ## 2026-11-07 首Seed历史E0继承核对
 
 - Seed2029 B7/B8历史E0均CONDITIONALLY_REUSABLE_FROM_ORIGIN。18份epoch、顺序/完整初态摘要、人口及E9沿保存身份链一致。E9完整续训加载另记NOT_VERIFIED。

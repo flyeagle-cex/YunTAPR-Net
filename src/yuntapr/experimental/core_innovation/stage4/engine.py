@@ -1,4 +1,4 @@
-"""Small paired executor using existing V2/E0/AdamW; CLI exposes dry-run only."""
+"""Paired executor with default E0 and explicit, origin-only dynamic E2."""
 from dataclasses import dataclass,asdict
 from pathlib import Path
 import ctypes,gc,json,os,random,sqlite3
@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from yuntapr.training.phase_a_protocol import state_digest,parameter_groups,lr_for_update
 from yuntapr.experimental.phase_b_v2_runner_candidate.optimizer import new_adamw,clip_and_check,check_finite
-from yuntapr.experimental.phase_b_v2_ablations.config import get_config
+from yuntapr.experimental.phase_b_v2_ablations.config import get_config,finite_number
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -57,14 +57,15 @@ def paired_models(seed,root):
     return dict(zip(('B3','B4'),paired_spectral_candidates(numerics=CandidateNumerics(1e-4,1e-4),mee_width=16,mee_keys=MEE_V13_KEYS,root=root)))
 
 
-def forward(model,batch):
+def forward(model,batch,*,loss_config=None):
     if batch.identity['population_sha256']!=POPULATION_SHA:raise ValueError('Wrong population tensor binding')
     extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
     if model.kind in ('B7','B8'):
         if batch.dynamic is None or batch.dynamic_valid is None:raise ValueError('DOTE physical transform was not connected to the reader')
         extra.update(dynamic=batch.dynamic,dynamic_valid=batch.dynamic_valid,dynamic_grid=model.grid)
     output=model(batch.x,batch.native_valid,channel_order=CHANNELS,**extra)
-    loss=candidate_loss(output.rain_logit,output.conditional_quantiles_log,batch.rate,batch.valid,batch.region,config=get_config('E0'))
+    loss=candidate_loss(output.rain_logit,output.conditional_quantiles_log,batch.rate,batch.valid,batch.region,
+                        config=get_config('E0') if loss_config is None else loss_config)
     if loss.n_valid!=len(batch.ids)*3430:raise ValueError('Frozen supervision denominator')
     return output,loss
 
@@ -114,13 +115,23 @@ class UpdateLedger:
 
 class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
-                 kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None):
+                 kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None,
+                 lambda_q=1.0):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
         self.tail_factory=tail_factory;self.code_commit=code_commit
         self.pair_reference=Path(pair_reference) if pair_reference is not None else None
         self.model_factory=model_factory
+        self.lambda_q=finite_number('lambda_q',lambda_q)
+        if self.lambda_q not in (1.0,2.0):
+            raise ValueError('Only closed E0/E2 quantile weights are supported')
+        if self.lambda_q==2.0 and (
+            self.kinds not in (('B7',),('B8',)) or recovery is not None
+            or getattr(decision,'seed',None)!=2029
+        ):
+            raise PermissionError('E2 requires one origin-only B7/B8 seed2029 task')
+        self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
@@ -133,6 +144,7 @@ class PairedExecutor:
         resources();self.folder.mkdir(exist_ok=False)
         if len(self.plan.ids('Train'))!=TRAIN_N or len(self.plan.ids('Development'))!=DEV_N:raise ValueError('Wrong population')
         models=(self.model_factory or paired_models)(self.decision.seed,self.plan.root);identity=dict(decision=asdict(self.decision),data=self.plan.identity)
+        if self.lambda_q!=1.0:identity['loss_config']=asdict(self.loss_config)
         ledger=UpdateLedger(self.folder/'updates.sqlite',identity,allowed_models=self.kinds if static else ('B3','B4')) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
         initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
         if self.recovery is not None:self.recovery.check_initial(initial_identity)
@@ -171,7 +183,7 @@ class PairedExecutor:
                             if b.identity!=self.plan.identity or b.role!='Train' or b.ids!=order[pos:pos+BATCH]:raise ValueError('Training batch identity/order differs')
                             lr=lr_for_update(u+1,steps_per_epoch=STEPS)
                             for group in optimizer.param_groups:group['lr']=lr
-                            with torch.autocast('cuda',dtype=torch.bfloat16):out,loss=forward(model,b)
+                            with torch.autocast('cuda',dtype=torch.bfloat16):out,loss=forward(model,b,loss_config=self.loss_config)
                             loss.training_objective.backward();clip_and_check(model)
                             self.deadline();ledger.reserve(kind,u+1);optimizer.step();u+=1;ledger.returned(kind,u)
                             check_finite(model.state_dict());check_finite(optimizer.state_dict());visited.extend(b.ids)
@@ -181,7 +193,8 @@ class PairedExecutor:
                     finally:reader.close()
                     if tuple(visited)!=order or u!=epoch*STEPS or nvalid!=TRAIN_N*3430 or state_digest(dict(model.named_buffers()))!=buffer_sha:raise RuntimeError('Epoch coverage/state mismatch')
                     training=dict(scenes=TRAIN_N,batches=STEPS,updates=u,n_valid=nvalid,n_rain=nrain,s_occ_unweighted=socc,s_qr_unweighted=sqr,
-                        weighted_mean=(socc+sqr)/nvalid,loss_arm='E0',train_order_sha256=digest(order))
+                        weighted_mean=(socc+self.lambda_q*sqr)/nvalid,loss_arm=self.loss_config.experiment_id,train_order_sha256=digest(order))
+                    if self.lambda_q!=1.0:training['lambda_q']=self.lambda_q
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()
@@ -195,7 +208,7 @@ class PairedExecutor:
                                 self.deadline()
                                 b=reader.batch('Development',ids[pos:pos+VAL_BATCH]).to('cuda')
                                 if b.identity!=self.plan.identity or b.role!='Development' or b.ids!=ids[pos:pos+VAL_BATCH]:raise ValueError('Development batch identity/order differs')
-                                with torch.autocast('cuda',dtype=torch.bfloat16):out,_=forward(model,b)
+                                with torch.autocast('cuda',dtype=torch.bfloat16):out,_=forward(model,b,loss_config=self.loss_config)
                                 ev.add(out,b)
                                 if tail is not None:tail.add_batch(out,b)
                                 del b,out
@@ -208,10 +221,12 @@ class PairedExecutor:
                         model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),scheduler=dict(completed=u,steps_per_epoch=STEPS,original_horizon=50*STEPS),
                         rng=dict(python=random.getstate(),numpy=np.random.get_state(),torch_cpu=torch.get_rng_state(),torch_cuda=torch.cuda.get_rng_state_all()),
                         train_order_sha256=digest(order),training=training,validation=report,optimizer_groups=groups)
+                    if self.lambda_q!=1.0:payload['identity']['loss_config']=asdict(self.loss_config)
                     path=self.folder/f'{kind}_LAST_epoch_{epoch:02d}.pt'
                     with path.open('xb') as f:torch.save(payload,f);f.flush();os.fsync(f.fileno())
                     from .data import sha
                     receipt=dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=sha(path),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report))
+                    if self.lambda_q!=1.0:receipt['loss_config']=asdict(self.loss_config)
                     if self.code_commit is not None:receipt['code_commit']=self.code_commit
                     write(path.with_suffix('.receipt.json'),receipt)
                     self.deadline()

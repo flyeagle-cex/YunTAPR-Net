@@ -1,7 +1,7 @@
 """B7/B8 approval-bound serial package; reuses Stage4 optimization/evaluation."""
 import os,shutil,sqlite3,subprocess,sys,time
 from pathlib import Path
-from dataclasses import asdict
+from dataclasses import asdict,dataclass
 import numpy as np
 from ..core_innovation.stage3.planning import digest
 from ..core_innovation.stage3.metered_io import SourceMeter,path_key
@@ -13,12 +13,34 @@ from .multiseed import load_inherited,code_hashes,endpoint,BatchTail,metric_valu
 from .static_training import unpack,validate_approval
 from .dynamic_terrain import DoteDefinition,PhysicalDote,model_factory
 from .tail_diagnostics import TailDiagnostics
+from ..phase_b_v2_ablations.config import finite_number,get_config
 
 ENTRY='tools/research_readiness/start_dynamic_pair.py'
 TASKS=(('B7',2029),('B8',2029))
 NEW_FILES=(ENTRY,'tools/research_readiness/check_dynamic_cached_real.py',
            'src/yuntapr/experimental/research_readiness/dynamic_terrain.py',
            'src/yuntapr/experimental/research_readiness/dynamic_training.py')
+
+
+@dataclass(frozen=True)
+class RunSpec:
+    """Dynamic task identity, separate from the old B0/B1 ablation matrix."""
+    kind:str
+    seed:int
+    lambda_q:float=1.0
+
+    def __post_init__(self):
+        if self.kind not in ('B7','B8') or type(self.seed)!=int:
+            raise PermissionError('Explicit dynamic model/seed required')
+        weight=finite_number('lambda_q',self.lambda_q)
+        if weight not in (1.0,2.0):
+            raise ValueError('Only closed E0/E2 quantile weights are supported')
+        if weight==2.0 and self.seed!=2029:
+            raise PermissionError('New E2 task is limited to seed2029')
+
+    @property
+    def loss_config(self):
+        return get_config('E0' if self.lambda_q==1.0 else 'E2')
 
 
 def hashes(root):
@@ -144,10 +166,13 @@ def worker(root,proposal,private,approval,commit,index):
     return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=Path(v['historical_pair']),static_name=f'{kind}_static_source.sqlite')
 
 
-def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote):
+def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
+    spec=RunSpec(kind,seed,lambda_q)
+    protocol=p.get('protocol',{})
+    if protocol.get('loss','E0')!=spec.loss_config.experiment_id or finite_number('protocol.lambda_q',protocol.get('lambda_q',1.0))!=spec.lambda_q:
+        raise PermissionError('Explicit loss weight must match the approved proposal protocol')
     package=Path(v['output_root'])
-    if kind not in ('B7','B8') or type(seed)!=int:raise PermissionError('Explicit dynamic model/seed required')
     if os.environ.get('PYTHONHASHSEED')!=str(seed) or shutil.disk_usage(package).free<p['budget']['minimum_task_free_bytes']:raise RuntimeError('Seed/storage admission differs')
     db=sqlite3.connect(package/static_name);db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)');db.execute("INSERT INTO jobs VALUES ('static','PENDING')");db.commit()
     path=Path(v['terrain'])/'B6_static.npz';meter=SourceMeter(db,{str(path):dict(bytes=312828,sha=p['static_source_sha256'][kind],job_id='static')},max_files=1,max_bytes=312828);meter.active={path_key(path)}
@@ -164,9 +189,10 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     folder=package/f'{kind}_s{seed}'
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:TerrainTail(pack),code_commit=commit,
-                   pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit'])).run(
+                   pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
+    if spec.lambda_q!=1.0:result.update(loss_arm=spec.loss_config.experiment_id,lambda_q=spec.lambda_q)
     deadline();write(folder/'completion.json',result);return result
 
 

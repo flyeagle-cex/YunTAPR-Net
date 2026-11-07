@@ -33,25 +33,25 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261107.14}\qquad 状态截至2026年11月07日（北京时间）
+版本 \texttt{LIVE-20261107.15}\qquad 状态截至2026年11月07日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{首Seed历史E0身份链核对完成，未来新格配对条件待绑定。}
+\status{显式分位数损失权重入口已接通，CPU合成回归通过。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 预指定首项Seed2029，仅核对既有元数据。B7/B8各九轮E0、完整初态摘要、九轮顺序及固定E9身份链一致。\evi{S24}
-\item B8沿已登记E6恢复链接上E7--E9，有效4320更新，实际4382含62重放。旧中断快照保留。
-\item 原初训练四格的历史E0有条件可复用。E9终态完整续训加载能力尚未验证。
-\item 新$\lambda_q=2$格子仍须原初态、顺序和科学环境匹配，配套新损失入口及精确方案/预算。复用既有审核，本轮新增Harness审核0次。
+\item B7/B8新增独立RunSpec，显式$\lambda_q$由run\_task传入实际engine及原candidate\_loss。旧B0/B1的18格规格保持。\evi{S25}
+\item 8项CPU合成检查通过。权重1的旧E0损失及输出梯度逐元素一致；权重2仅加倍分位数项，发生项与有效分母保持。
+\item 新权重限B7/B8、Seed2029、从原初态开始。旧E0提案不能启用新权重，恢复路径拒绝E2。
+\item 历史E0仍为有条件可复用。正式运行环境、完整配对预检、主指标/保护指标和精确预算尚未冻结。
 \end{itemize}
 
-本轮只读保存记录和选定源码身份，没有模型或优化器执行。DTFM合成结果保持前轮限定。
+本轮只执行人工输出张量的损失/导数计算及mock入口检查，optimizer.step为0。真实模型前向、数据/权重/缓存读取及正式训练均为0。默认执行器仍选择E0。
 
-科学尚未验收，外部验证部分完成，研究者掌握尚未评估。状态代码见6M。候选四格仍为PROPOSED。
+科学尚未验收，外部验证部分完成，研究者掌握尚未评估。当前入口证据见6N。候选四格仍为PROPOSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -448,6 +448,32 @@ B8/2029 & \texttt{8abcf208...04f0} & 有条件可复用 & NOT\_VERIFIED\\
 
 本轮没有新实质身份冲突，按研究者减少审核要求及主控判据复用既有审核，新增理论/代码测试与Harness审核均0。工程结论仅为保存身份链的限定核对，科学\texttt{NOT\_VERIFIED}，正式四格未启动。
 
+\pageheading{6N\quad 显式分位数损失权重入口}{限定工程接入。历史E0核对继承6M结论，正式实验尚未启动。}
+\section*{唯一目标函数变化}
+\[
+L_{\lambda_q}=\frac{S_{\mathrm{occ}}+\lambda_q S_{\mathrm{qr}}}{N_{\mathrm{valid}}},
+\qquad \lambda_q\in\{1,2\}.
+\]
+沿用closed E0/E2及既有candidate\_loss。发生项仍为原focal，分位数仍为32节点log1p条件Pinball，分母保持全部有效监督点。权重2加强整个条件分位任务，对上尾改善尚无实验证据。\evi{S25}
+
+\section*{实际接通与拒绝边界}
+\begin{itemize}
+\item dynamic\_training.RunSpec保存kind、seed、lambda\_q。与旧B0/B1、2026--2028的RunSpec分开，旧18格协议原文件未改。
+\item run\_task核对proposal.protocol中的loss与lambda\_q。E2必须显式匹配，拒绝沿用旧E0提案；该调用仍是已有批准检查器之后的内部入口。
+\item PairedExecutor选择E0/E2，Train和Dev的forward均传入所选配置。非默认仅允许单个B7或B8、2029、无recovery。现有dispatcher调用仍使用默认权重1。
+\item 新权重写入train、update身份、checkpoint及receipt和completion。旧E0记录布局保持，网络、初始化、顺序、优化器/LR和评价公式未改。
+\end{itemize}
+
+\section*{最小合成回归的实际证据}
+8项测试通过。人工3430点输出张量覆盖干湿混合与全干情形。默认及显式权重1对旧E0的损失和logit/qlog导数逐元素相同；权重2保持发生导数，加倍qlog导数。B7/B8两种权重均经mock数据边界运行实际run\_task、真实executor构造及实际forward/loss。
+
+完整CUDA训练循环未执行。两处循环配置传递另用AST检查；网络参数梯度、真实数据配对和正式性能仍未验证。没有optimizer.step，没有模型创建/真实前向或数据、权重、缓存、2025读取。
+
+测试使用既有Python3.11.15、Torch2.11.0+cu128并强制CPU。初始运行时缺依赖、合成分位数下界与mock人口字段问题已修正，失败日志保留。未安装依赖。独立限定审核回执另归档，不重复历史审查。
+
+\section*{停止位置}
+工程入口准备后停止。正式环境和原初态/九轮顺序须实际配对；唯一主指标、保护指标/允许退化和精确更新、读取、时间预算及输出位置须在训练前冻结。当前训练授权未新增，科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -500,6 +526,7 @@ B8/2029 & \texttt{8abcf208...04f0} & 有条件可复用 & NOT\_VERIFIED\\
 \item[S22] \path{docs/research_readiness/20261107_innovation_resolution/DISCUSSION.json}。新三代理、网页总控及DeepSeek Harness纠偏讨论。源码的双零初始化与旧测试覆盖为直接文本证据，梯度释放和性能原因尚未实测。新探针/训练/预算均未批准或执行。
 \item[S23] \path{docs/research_readiness/20261107_dtfm_gradient_release/}的RESULT与VERIFICATION。固定CPU合成探针、7项回归及源文件保护证据。S22为前轮历史快照，当前只补图可达性，不改其真实训练与性能未验证状态。
 \item[S24] \path{docs/research_readiness/20261107_e0_inheritance/MATRIX.json}。双对象继承矩阵、保存初态/顺序/E0端点链及选定源码差异。原始JSON和实际权重证据级别分开，后续新格仍须配对预检与精确批准。
+\item[S25] \path{docs/research_readiness/20261107_lambda_entry/VERIFICATION.json}。显式损失权重入口、8项CPU合成检查、改动和保护指纹。mock调用与完整训练循环的证据范围分别列明。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。

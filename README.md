@@ -1,3 +1,13 @@
+# 2026-11-07 显式分位数损失入口 / LIVE-20261107.15
+
+B7/B8新增独立RunSpec，lambda_q由run_task传至实际engine和既有closed E0/E2损失。默认1保持旧E0；新2限Seed2029、单架构、原初非恢复路径，须显式匹配提案protocol。旧B0/B1的18格RunSpec与网络、数据顺序、AdamW/LR源码保持。
+
+- 8项CPU合成测试通过。默认/显式1损失和输出导数与旧E0逐元素一致，2仅加倍分位数项及qlog导数。实际run_task/真实executor构造/forward通过mock数据边界验证，完整CUDA循环只核对配置传递。
+- optimizer.step=0、真实模型前向=0、真实数据/权重/缓存/2025读取=0。初始环境和夹具失败已修正并保留日志，未安装依赖。
+- 入口准备不证明幅值或创新收益。历史E0仍有条件继承，正式主指标/保护指标、配对预检、运行环境、输出及限额预算未冻结。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。
+
+证据与必要限定审核另见 `docs/research_readiness/20261107_lambda_entry/VERIFICATION.json` 及本目录审核回执。可修改LaTeX与 `output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_15.pdf` 同步维护，旧LIVE.14保留。以下为历史快照。
+
 # 2026-11-07 首Seed历史E0继承 / LIVE-20261107.14
 
 按网页主控限额完成Seed2029的B7/B8元数据核对。18份保存epoch记录、完整原初态摘要、九轮顺序、人口/mask及固定E9身份链一致。历史E0端点裁定为CONDITIONALLY_REUSABLE_FROM_ORIGIN，未来新λq=2两格仍为PROPOSED。
