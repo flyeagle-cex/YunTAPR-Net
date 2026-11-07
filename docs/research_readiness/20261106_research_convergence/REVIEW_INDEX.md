@@ -1,3 +1,10 @@
+## 2026-11-07 首Seed历史E0继承核对
+
+- Seed2029 B7/B8历史E0均CONDITIONALLY_REUSABLE_FROM_ORIGIN。18份epoch、顺序/完整初态摘要、人口及E9沿保存身份链一致。E9完整续训加载另记NOT_VERIFIED。
+- B8恢复源码与ef11531逐字节一致。E6/2880后1440更新，有效4320，62旧未保存尝试不叠加终点。fresh AdamW/LR仅源码支持，实际初始optimizer指纹/逐步LR遥测未核验。
+- 收据为docs/research_readiness/20261107_e0_inheritance/MATRIX.json，计划LIVE.14。未来新损失入口、完整配对预检、效应阈值和预算待完成，无训练启动。
+- 新Harness0轮、新测试0项。保存证据断言与文档自检由Codex完成，不外推已有Harness结论。科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。
+
 ## 2026-11-07 DTFM合成检查限定审核完成
 
 - Harness一次差异审核PASS_WITH_LIMITATIONS，独立7项检查/一次CLI/10次合成更新。DSH审核3863B/3812B9E532D2B6EECC34938378359BE473F04EA61CF423E88F7C304297FA22FA，自身提交5eda1b67已普通推送，root直接ls-remote一致。

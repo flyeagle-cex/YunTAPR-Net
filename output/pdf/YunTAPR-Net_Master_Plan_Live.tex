@@ -33,23 +33,25 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261107.13}\qquad 状态截至2026年11月07日（北京时间）
+版本 \texttt{LIVE-20261107.14}\qquad 状态截至2026年11月07日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{DTFM合成梯度通路检查完成，真实训练收益仍待验证。}
+\status{首Seed历史E0身份链核对完成，未来新格配对条件待绑定。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 按网页主控限定规格，实际执行B7/B8融合各5步CPU合成SGD，保留原初始化。一次CLI、10次合成更新、7项检查通过。\evi{S23}
-\item B7条件投影第2次反向出现非零梯度，B8第3次出现。B8内部调制从第2次反向开始可达。
-\item B8的GFS和terrain投影五步内参数变化仍为零。图可达与有效参数学习分开记录，真实AdamW及长期行为未验证。
-\item 条件性四格仍须历史E0身份继承及精确方案/预算。评分保持辅助地位，科研初始化和默认执行链保持原版本。
+\item 预指定首项Seed2029，仅核对既有元数据。B7/B8各九轮E0、完整初态摘要、九轮顺序及固定E9身份链一致。\evi{S24}
+\item B8沿已登记E6恢复链接上E7--E9，有效4320更新，实际4382含62重放。旧中断快照保留。
+\item 原初训练四格的历史E0有条件可复用。E9终态完整续训加载能力尚未验证。
+\item 新$\lambda_q=2$格子仍须原初态、顺序和科学环境匹配，配套新损失入口及精确方案/预算。复用既有审核，本轮新增Harness审核0次。
 \end{itemize}
 
-主控将本轮汇总登记为\texttt{PASS\_WITH\_LIMITATIONS}，限定人工融合输入和SGD。原始CLI门槛结果PASS保留，B8条件投影实际更新仍待验证。科研更新及真实载荷读取均为0。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。当前事实见6L，候选四格仍为PROPOSED。
+本轮只读保存记录和选定源码身份，没有模型或优化器执行。DTFM合成结果保持前轮限定。
+
+科学尚未验收，外部验证部分完成，研究者掌握尚未评估。状态代码见6M。候选四格仍为PROPOSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -416,6 +418,36 @@ B8第5次反向时GFS/terrain梯度L2约为$7.93\times10^{-13}$与$1.05\times10^
 \section*{下一门槛}
 保持一次新增差异Harness审核及各自工作分支同步。后续科学步骤仍是历史E0可继承性与四格精确方案、数值效应/退化容忍及新预算冻结，不从本工程PASS自动启动训练。工程结果、独立审核与Git实际收据分别归档。科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，知识\texttt{NOT\_ASSESSED}。
 
+\pageheading{6M\quad 首Seed历史E0能否复用}{仅2029作继承裁定。2030/2031仅登记已有端点完整性，减少重复核查。}
+\section*{两个问题分别处理}
+主控接受双对象判据。原初训练四格复用历史E0结果，未来$\lambda_q=2$从各自原初态开始。E9完整续训则另需终态模型、AdamW动量、scheduler和RNG可加载性。两者目标不同，E0与新损失的终态轨迹自然分化。\evi{S24}
+
+\begin{tabularx}{\textwidth}{@{}p{1.7cm}p{3.0cm}X X@{}}
+\toprule 架构/Seed & 保存E9身份 & 原初训练E0结果 & E9完整续训\\\midrule
+B7/2029 & \texttt{019a6dfa...2e35} & 有条件可复用 & NOT\_VERIFIED\\
+B8/2029 & \texttt{8abcf208...04f0} & 有条件可复用 & NOT\_VERIFIED\\
+\bottomrule
+\end{tabularx}
+
+\section*{本轮已经核对的必要证据}
+\begin{itemize}
+\item 原报告加B8恢复报告构成18份完整epoch记录。各自E1--E9无缺项，更新数逐轮为480的整数倍，终点为4320。
+\item 18份train记录的\texttt{loss\_arm=E0}，保存的weighted mean均严格等于$(S_{occ}+S_{qr})/N_{valid}$，支持实际$\lambda_q=1$的记录身份。
+\item B7/B8的九轮顺序摘要逐轮一致，paired orders完整文件指纹一致。原始和恢复的initial identity文件指纹一致，各架构完整原初state摘要可追溯。
+\item 公共backbone/head摘要一致，不要求不同融合层完整state相等。B8恢复后E9及人口/manifest摘要沿原身份链一致，权重载荷本轮未读取或重哈希。
+\end{itemize}
+
+恢复源码绑定E6/2880并恢复model、AdamW、scheduler进度及RNG；完成收据记载随后1440更新。62次旧未保存更新被E6恢复替代，计入实际4382次尝试，不叠加到有效4320。该证据不证明无中断轨迹逐位相同。
+
+选定8份关键源码中7份与旧提案指纹相同。engine差异仅既有恢复准入条件，原初路径同义。源码支持从零创建AdamW及既定LR规则，实际初始优化器指纹、逐步LR遥测及终态加载未核验。历史Torch2.11.0+cu128快照不能代替未来运行环境核验。
+
+\section*{有条件复用的边界}
+未来新格仍须实际复现各自完整初态摘要、九轮顺序、人口/mask和科学数值环境，并冻结保持E0路径的独立损失入口。当前Stage4仍固定E0，B7/B8新E2入口尚未实现。主指标/允许退化、执行版本、源读取及时间预算仍待精确冻结。
+
+4份保存元数据加准备文档保守计1523513字节，低于16MiB/80文件上限。源码与治理读取另列，载荷/新计算均0。科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
+
+本轮没有新实质身份冲突，按研究者减少审核要求及主控判据复用既有审核，新增理论/代码测试与Harness审核均0。工程结论仅为保存身份链的限定核对，科学\texttt{NOT\_VERIFIED}，正式四格未启动。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -467,6 +499,7 @@ B8第5次反向时GFS/terrain梯度L2约为$7.93\times10^{-13}$与$1.05\times10^
 \item[S21] \path{docs/research_readiness/20261106_performance_route/DISCUSSION.json}。三代理、总控及Harness路线讨论；无新实验，记录不冒称科学批准。
 \item[S22] \path{docs/research_readiness/20261107_innovation_resolution/DISCUSSION.json}。新三代理、网页总控及DeepSeek Harness纠偏讨论。源码的双零初始化与旧测试覆盖为直接文本证据，梯度释放和性能原因尚未实测。新探针/训练/预算均未批准或执行。
 \item[S23] \path{docs/research_readiness/20261107_dtfm_gradient_release/}的RESULT与VERIFICATION。固定CPU合成探针、7项回归及源文件保护证据。S22为前轮历史快照，当前只补图可达性，不改其真实训练与性能未验证状态。
+\item[S24] \path{docs/research_readiness/20261107_e0_inheritance/MATRIX.json}。双对象继承矩阵、保存初态/顺序/E0端点链及选定源码差异。原始JSON和实际权重证据级别分开，后续新格仍须配对预检与精确批准。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。

@@ -1,3 +1,17 @@
+# 2026-11-07 首Seed历史E0继承 / LIVE-20261107.14
+
+按网页主控限额完成Seed2029的B7/B8元数据核对。18份保存epoch记录、完整原初态摘要、九轮顺序、人口/mask及固定E9身份链一致。历史E0端点裁定为CONDITIONALLY_REUSABLE_FROM_ORIGIN，未来新λq=2两格仍为PROPOSED。
+
+- B8从E6/2880恢复后完成1440更新，有效4320。62次旧未保存更新由恢复替代，累计尝试4382，不叠加有效终点，不主张与无中断轨迹逐位一致。
+- 固定源码支持fresh AdamW和既定LR规则，保存epoch支持实际E0。初始optimizer实际指纹、逐步LR遥测及E9完整终态加载仍NOT_VERIFIED。
+- 原初四格复用历史端点与E9续训分开裁定。未来新格须匹配各自原初态、九轮顺序和科学环境，独立损失入口、成败阈值和精确执行预算尚待完成。
+- 2030/2031仅登记已有完整端点，不外推继承资格。4份保存元数据及准备文档保守计1,523,513B；没有权重/manifest正文、真实数据、受限缓存或2025访问，没有模型执行、新指标或训练。
+- 本轮新增Harness审核0次、新测试0项。必要的元数据断言、源码身份与文档自检已执行。科学NOT_VERIFIED、外部Stage4.5 PARTIAL、研究者NOT_ASSESSED。
+
+证据为 `docs/research_readiness/20261107_e0_inheritance/MATRIX.json`。总计划为 `output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_14.pdf`，可修改LaTeX同步维护。旧LIVE.13及下列历史内容保留。
+
+以下为前轮历史快照。
+
 # 2026-11-07 DTFM合成梯度检查 / LIVE-20261107.13
 
 按网页主控限定规格完成隔离CPU探针。真实fusion初始化保持，48/26/28通道、width16、工程Seed20261107，每臂5步诊断SGD，weight_decay=0。7项回归通过，一次CLI合计10次合成optimizer.step，科研更新和真实载荷读取均0。
