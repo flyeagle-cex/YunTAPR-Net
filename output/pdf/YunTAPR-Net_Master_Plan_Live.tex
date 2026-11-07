@@ -14,7 +14,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
-\fancyhead[R]{\small\color{muted}2026-11-06}
+\fancyhead[R]{\small\color{muted}2026-11-07}
 \fancyfoot[L]{\footnotesize\color{muted}据研究者委托更新；不自动批准正式训练}
 \fancyfoot[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
@@ -33,23 +33,23 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本：\texttt{LIVE-20261106.11}\qquad 状态截至：2026年11月06日23时08分（北京时间）
+版本 \texttt{LIVE-20261107.12}\qquad 状态截至2026年11月07日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{强雨性能改进路线已收敛，实际干预尚未执行。}
+\status{创新增益问题已形成新候选路线，实际干预尚未执行。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 三名独立代理分别讨论输出、训练及目标错配；网页总控收敛建议，Harness独立意见已实际取得。仅为路线讨论，未开展新实验。\evi{S21}
-\item 优先候选为一次固定T17 $P20_c$ 开发性评分试验；DOTE方向对照和多尺度DTFM补证后移，不以补证替代性能改善。
-\item 固定网络及A/B/C时，原点雨强及其强雨零检出保持不变；新评分只能检验排序和固定报警数量下的命中效用。
-\item 全局分位损失占比调整保留为独立训练候选；不因评分试验成败自动启动。既有训练、失败、基线及LIVE.10原件保留。
+\item 研究者质疑二次评分与已有分位数头的研究增量。三名新代理、网页总控和Harness完成讨论，撤下评分试验的优先位置。\evi{S22}
+\item 首先检查DTFM真实初始化下的梯度通路。内外零初始化只支持早期梯度延迟的代码推导，长期作用仍待验证。
+\item 条件性候选为B7/B8与全局$\lambda_q\in\{1,2\}$的四格对照。历史E0严格可继承时，首个预指定Seed仅需新增两个$\lambda_q=2$条件。
+\item 分开判断损失调整、融合方式及二者交互。DOTE保留已有有限收益和限制，方向控制与多尺度扩展继续后移。
 \end{itemize}
 
-本轮没有新增性能结果。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。路线共识不构成统计、模型执行或预算批准；2025继续封存。6I保留前轮基线恢复，当前优先级见6J。
+本轮只有源码与既有记录阅读、路线讨论及文档维护。探针和新训练均未执行。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。候选仍为PROPOSED，预算未批准。当前优先级见6K，6I/6J保留历史。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -320,7 +320,7 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 
 真实资料身份/路径、正式接线、执行commit和新预算/专项授权仍缺，\texttt{execution=false}。工程检查或更多代理不能产生科研批准；外部Stage4.5仍PARTIAL，科学NOT\_VERIFIED，研究者NOT\_ASSESSED。原假设允许失败，不以“完美结果”为停止条件。
 
-\pageheading{6I\quad 委托共识与既有预测精度恢复}{前轮基线恢复快照；本轮性能路线优先级见6J，不改原执行记录。}
+\pageheading{6I\quad 委托共识与既有预测精度恢复}{前轮基线恢复快照；当前路线见6K，不改原执行记录。}
 \section*{已作出的一致决定}
 主问题为真实方向相对场景固定刚性随机旋转的\textbf{开发集表征排序增益}。控制seed固定20261106、规范时间为analysis UTC；同场景两层和各像元共用一个角度。主指标AP20[q32]使用严格float32 $R>20$、FP64物理q32、自然全人口和精确并列组末端非插值AP；不是P20校准。\evi{S20}
 
@@ -342,7 +342,7 @@ root合并28项通过：原生9、桥接7、尾部12；代理另跑旧尾部入�
 
 本轮工程结项以新收据/一次Harness审核/Git为准；科学NOT\_VERIFIED、外部Stage4.5 PARTIAL、知识NOT\_ASSESSED。2024非独立确认人口，2025封存，不承诺正向或完美结果。
 
-\pageheading{6J\quad 从证据补齐转向性能干预}{路线讨论已收敛；PROPOSED，不是实验启动书或科学验收。}
+\pageheading{6J\quad 从证据补齐转向性能干预}{2026-11-06历史讨论快照。评分优先顺序已由6K修订，以下保留当时建议。}
 \section*{各方意见与取舍}
 输出代理和独立反对者首选固定读出试验，训练代理在训练候选中首选全局$\lambda_q:1\to2$。交叉讨论后，训练代理明确不反对低成本读出先行，但它不检验训练中的任务权衡。Harness独立同意先读出、暂不训练；总控收件与原始意见类型见S21。\evi{S21}
 
@@ -363,6 +363,30 @@ AP与固定Top-K & 排序、同报警数的命中和误报 & 校准、低FPR或�
 若仍需训练，候选为同B7 E9起点的E0与全局$\lambda_q=2$等步数配对。仅同权重不够：还须核对模型、AdamW/RNG、顺序、学习率与终点；完整可恢复状态尚未直接核实。当前Stage4固定E0及九轮，E2原注册仅B0/B1；新入口未就绪，Seed/步数/预算未冻结。不能拿新短训与旧E9比较，也不能自动接续训练补救。
 
 候选无有用收益就停止该候选，不扩模块或扫参数追正结果。2024重复开发集、三Seed非独立天气、独立E及外部资料缺口继续保留。工程讨论记录完成不等于实际干预PASS；本轮无新统计、推理、训练或2025访问。
+
+\pageheading{6K\quad 怎样处理创新点增益不足}{2026-11-07多代理、网页总控与Harness讨论。PROPOSED，尚未执行。}
+\section*{先查路径，再分离收益}
+真实B8为SP04单尺度调制，宽16。外层融合卷积及内部$\gamma/\beta$投影均零初始化，首次反向会阻断部分内层梯度。既有梯度检查先手填非零参数，只覆盖释放后的可导性。未来使用合成输入、冻结真初态及少量受限更新，观察梯度、参数和残差幅度的自然释放。短暂延迟本身不足以解释4320更新后的退化。若需改初始化，历史E0复用资格须重新审查。\evi{S22}
+
+\textbf{本轮取舍。}二次评分转为辅助分析。DOTE已有Brier的有限收益，强雨不稳定。先聚焦输入配对更清晰的B7/B8融合比较，DOTE数值/方向贡献及新多尺度结构后移。
+
+\begin{tabularx}{\textwidth}{@{}p{3.5cm}X X@{}}
+\toprule 融合方式 & 原目标$\lambda_q=1$ & 候选$\lambda_q=2$\\\midrule
+B7 concat & 历史E0有条件继承 & 从B7原初态训练\\
+B8 单尺度DTFM & 历史E0有条件继承 & 从B8原初态训练\\
+\bottomrule
+\end{tabularx}
+
+逐架构复现自己的历史完整初态，公共骨干/头/条件投影配对。不同融合层不要求跨架构全state相等。还须匹配科学代码、全部样本顺序、人口/mask、AdamW规则与起点、学习率、数值环境和固定E9终点。损失改变后的轨迹自然分化。继承失败即停止缩减方案，另行定界和预算。各E9续训只能回答历史条件下的继续训练响应。
+
+\section*{最小顺序与判定}
+先预指定一个Seed筛查。严格继承时只新增两个条件，历史工作量参考为8640更新，\textbf{尚无本轮预算或训练批准}。阳性且护栏通过，再讨论其余两个Seed。改变$\lambda_q$加强全部湿像元、全部32分位任务，尾部改善仍是假设。
+
+共同主评价建议为未加权条件Pinball，辅助报告上尾损失、覆盖与锐度、固定A/B/C强雨误差及q32 AP，发生Brier与整体误差作护栏。效应门槛、允许退化、上尾节点、Seed及精确资源额度在未来执行前冻结，当前未伪造数值。Top-K保持精确并列及固定报警数。
+
+若记同口径损失为$L$，逐Seed报告$d_1=L_{B8,1}-L_{B7,1}$、$d_2=L_{B8,2}-L_{B7,2}$及交互$d_2-d_1$。两模型共同改善只支持损失调整。$d_2-d_1<0$而$d_2>0$时，B8仍落后。稳定同目标增益且护栏可接受才支持保留具体DTFM实现。持续无有用增益时简化或移出核心创新，单Seed阴性不足以宣称普遍无效。
+
+DOTE若仍有独立决策价值，可后续比较REAL/ZERO与目标的交互，保留128零梯度权重及mask限制。单一负对照不足以证明物理因果。2024仍是重复开发人口，三Seed共享天气，2025封存，科学\texttt{NOT\_VERIFIED}。
 
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
@@ -406,12 +430,14 @@ AP与固定Top-K & 排序、同报警数的命中和误报 & 校准、低FPR或�
 \item[S13] \path{docs/research_readiness/20261106_imerg_reference_scope/REFERENCE_SCOPE.json}。研究者资料事实与条件性IMERG偏好、总控\texttt{0314e4a3}的限定文本及证据边界；并非研究者的新数据/实验批准。
 \item[S14] NASA，\textit{IMERG V07 Technical Documentation}（2023-07-13）官方说明。\url{https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation}。本轮仅核对公开说明，未获取观测；保留V07历史协议而不自动追随新版本。
 \item[S15] \path{docs/research_readiness/20261106_internal_paper_draft/CLAIM_EVIDENCE.json}，绑定10项主张、12份已有来源、JSON字段与反例，附排版数字绑定；对应\path{output/pdf/YunTAPR-Net_Internal_Results_Discussion_Draft_20261106.tex}和同名PDF。内部初稿，不是新实验或科学验收。
+\newpage
 \item[S16] \path{docs/research_readiness/}\\\path{20261106_core_completion_prepare/}。WORK\_PACKAGES、合成检查及审核回执；候选准备，不是实验或2025批准。
 \item[S17] \path{docs/research_readiness/}\\\path{20261106_dote_direction_freeze/}。SOURCE\_BINDINGS及DOTE\_FREEZE\_CANDIDATE；8个历史端点、对象类型更正、场景接入缺口和未批准字段。
 \item[S18] \path{docs/research_readiness/20261106_dote_interface/VERIFICATION.json}。内存场景lookup、局部风封装与8项合成检查；无真实数据绑定或科研执行。
 \item[S19] \path{docs/research_readiness/}\\\path{20261106_parallel_core/VERIFICATION.json}。三代理接缝、28项合并检查、旧尾部14项及真实限制；科学建议仍待研究者批准。
 \item[S20] \path{docs/research_readiness/20261106_q32_baseline/}中的\path{CONSENSUS.json}、\path{RESULT.json}及\path{VERIFICATION.json}；本轮委托共识、实际统计与新增差异复核；两尝试累计计费，非新推理或科学验收。
 \item[S21] \path{docs/research_readiness/20261106_performance_route/DISCUSSION.json}。三代理、总控及Harness路线讨论；无新实验，记录不冒称科学批准。
+\item[S22] \path{docs/research_readiness/20261107_innovation_resolution/DISCUSSION.json}。新三代理、网页总控及DeepSeek Harness纠偏讨论。源码的双零初始化与旧测试覆盖为直接文本证据，梯度释放和性能原因尚未实测。新探针/训练/预算均未批准或执行。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。

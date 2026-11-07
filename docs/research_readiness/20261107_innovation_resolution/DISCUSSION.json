@@ -1,0 +1,282 @@
+{
+  "id": "INNOVATION_ROUTE_DISCUSSION_20261107",
+  "status": "PROPOSED_CONDITIONAL_CONSENSUS_NO_EXECUTION",
+  "research_object": "云南全境复杂地形约束下的近实时卫星概率降水反演",
+  "user_request": "就DOTE/DTFM加入效果不理想开展多agent和网页讨论，提出解决方案",
+  "scope": "只读既有源码与记录，独立讨论和交叉质疑，按既有指令维护计划及自身交接",
+  "participants": {
+    "innovation_dote": "limited numerical-information benefit, confounding, and DOTE controls",
+    "innovation_dtfm": "actual single-scale implementation and initialization/optimization hypothesis",
+    "innovation_training": "loss semantics, factorial identification and historical E0 reuse",
+    "Codex_root": "source checks, cross-examination, conditional synthesis and document maintenance",
+    "web_controller": {
+      "thread_id": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+      "message_id": "9ba14af2-3cc4-4ac6-8dc0-4591b7d495cd",
+      "reply_observed": "Chrome UI and subsequent app-thread reading",
+      "opinion": "accept gradient-path check, historical baseline equivalence, conditional 2x2 and separated gains"
+    },
+    "DeepSeek_Harness": {
+      "reply_observed": "native UI accessibility transcription, first reply17:11 and clarification17:13 Beijing time",
+      "opinion": "accept 2x2 priority and the clarified per-architecture initialization, one-seed screening and limited DOTE evidence",
+      "new_formal_review_or_tests_or_Git_commit": false,
+      "raw_Markdown_byte_export": false
+    }
+  },
+  "revision_of_previous_advice": {
+    "previous_record_preserved": "docs/research_readiness/20261106_performance_route/DISCUSSION.json",
+    "fixed_P20_c_pilot": "deprioritized to auxiliary output interpretation",
+    "reason": "deterministic readout cannot add model information or repair frozen rain-intensity estimates, and cannot establish module contribution",
+    "root_correction": "previous priority given to a readout pilot was too high for the researcher current innovation/performance question"
+  },
+  "direct_source_findings": {
+    "B8": "SP04 single-scale, feature48/projection16/modulation_limit0.1, replaces concat fusion",
+    "zero_initialization": [
+      "src/yuntapr/experimental/core_innovation/stage2/fusion.py:34-35 outer fuse weight/bias zero",
+      "src/yuntapr/experimental/core_innovation/dtfm.py:52-58 inner gamma/beta projection weight/bias zero"
+    ],
+    "existing_gradient_tests": "test_dynamic_terrain.py:78-92 and test_dtfm.py:34-48 set nonzero weights before backward, checking released paths",
+    "derived_hypothesis": "chain rule predicts zero first-step gradients on parts of the inner path and potentially different early conditional learning dynamics",
+    "not_yet_observed": "natural gradient-release trajectory, persistent inactivity, saturation, actual contribution to final performance",
+    "loss": "J=(S_occ+lambda_q*S_qr)/N_valid, wet-only log1p pinball averaged over32 taus then summed",
+    "loss_reporting": "scientific conditional pinball uses N_wet, current training objective uses N_valid; different declared purposes",
+    "lambda2_semantics": "increases entire conditional task relative to occurrence, not a selective heavy-rain or upper-tail weighting",
+    "engine_limit": "stage4 forward and reporting hardcode E0/lambda1; existing E2 RunSpec does not support B7/B8"
+  },
+  "existing_results_read_not_recomputed": {
+    "DTFM_B8_minus_B7": {
+      "source": "SCIENTIFIC_ANALYSIS.md:390-424",
+      "occurrence_Brier_mean_delta": 0.0005465394792788051,
+      "occurrence_AP_mean_delta": -0.000412246869632,
+      "conditional_pinball_mean_delta": 0.000294718120631,
+      "heavy_20_30_pinball_mean_delta": 0.004667193354587466,
+      "heavy_30_50_pinball_mean_delta": 0.004001476546053502,
+      "interpretation": "mixed overall gains and stronger-rain degradation, no stable general superiority"
+    },
+    "heavy_rain_ranking": {
+      "source": "docs/research_readiness/20261106_research_convergence/history/T12_RECOVERED_REDACTED.md:219-224",
+      "result": "B8 five score AP values below B7 for all three seeds",
+      "evidence_scope": "recovered historical report, not current array recomputation"
+    },
+    "DOTE": {
+      "source": "SCIENTIFIC_ANALYSIS.md:688-700",
+      "real_minus_ZERO_Brier_by_seed": [
+        -0.00164552334109,
+        -0.000425722974357,
+        -0.000606637739567
+      ],
+      "interpretation": "limited occurrence-quality benefit with mixed resolution and conditional-tail results",
+      "limitations": "128 zero-input loss-gradient weights and retained real masks; no pure physical-causal proof"
+    }
+  },
+  "preferred_candidate_sequence": [
+    "Bounded synthetic true-initialization gradient-release probe, no manual nonzero replacement and no scientific payloads",
+    "If persistent defect found, isolate it and re-evaluate historical baseline comparability before changing design",
+    "Verify historical E0 reuse for each architecture and pre-specified seed",
+    "Conditional B7/B8 x lambda1/2 factorial from each architecture original initialization",
+    "Report loss response, same-loss module contrast and interaction separately",
+    "Extend other seeds only under predeclared screening and new bounded execution decision"
+  ],
+  "factorial_design": {
+    "cells": [
+      "B7/lambda1",
+      "B8/lambda1",
+      "B7/lambda2",
+      "B8/lambda2"
+    ],
+    "E0_reuse": "conditional, not verified in this discussion",
+    "matching": [
+      "per-architecture full original state",
+      "paired common backbone/heads/condition projections",
+      "scientific code path",
+      "all epoch orders",
+      "population/mask",
+      "optimizer initial state and grouping rules",
+      "LR and update horizon",
+      "numerical environment",
+      "fixed E9 evaluation endpoint"
+    ],
+    "different_architectures": "distinct mix/modulation states are not required to be equal across B7/B8",
+    "later_optimizer_states": "may and should diverge with changed loss; matching applies to starting state and rules",
+    "first_screen": "one pre-specified seed, exact identity reuse permits only two new lambda2 conditions",
+    "historical_workload_reference": "2x4320=8640 updates, arithmetic reference only, no resource budget or execution approval",
+    "inheritance_failure": "stop reduced package, report gap and redefine budget, no automatic four-arm retraining",
+    "E9_continuation": "can identify conditional continuation responses/interaction given training histories, cannot substitute original-training architecture contribution",
+    "initialization_change": "invalidates automatic reuse of old B8 E0, must redefine relevant comparison",
+    "DOTE": "common to B7/B8, not isolated by this factorial"
+  },
+  "evaluation_candidate": {
+    "primary_suggestion": "common unweighted wet-conditional pinball",
+    "auxiliary": [
+      "predefined upper-quantile loss",
+      "q32 coverage together with sharpness",
+      "fixed ABC heavy-rain MAE/RMSE/Bias",
+      "q32 AP for strict R>20",
+      "fixed alarm count TP/FP preserving exact ties"
+    ],
+    "guardrails": [
+      "occurrence Brier",
+      "overall precipitation errors"
+    ],
+    "not_frozen": [
+      "effect sizes",
+      "allowed deterioration",
+      "upper-quantile nodes",
+      "seed",
+      "bounded runtime/source/output budget"
+    ],
+    "contrast": "d_lambda=L(B8,lambda)-L(B7,lambda), interaction=d2-d1 for lower-is-better loss",
+    "interpretation": "negative interaction alone is insufficient if B8 remains worse than B7 at lambda2",
+    "TopK": "fixed alarm quantity, not fixed FPR or FAR",
+    "population": "same reused2024 Development, no independent-weather claim or FinalTest access"
+  },
+  "decision_rules_proposed": [
+    "Both models improve similarly while B8 remains worse: attribute gain to training target choice and simplify DTFM claim",
+    "B8 stable same-loss benefit across seeds with acceptable guardrails: retain the specific single-scale implementation contribution",
+    "Only lambda2 supports B8 benefit: describe training-protocol-conditional contribution",
+    "Ranking improves but amplitude/probability quality worsens: disclose tradeoff and evaluate fixed guardrails",
+    "Repeated controlled lack of useful benefit: simplify or remove from core contribution, no endless candidate search",
+    "One-seed negative result does not prove universal ineffectiveness"
+  ],
+  "DOTE_next_condition": "Only if further DOTE attribution has decision value, consider REAL/ZERO x loss using matched saved E0 and new corresponding cells, preserving capacity/mask limits. Direction controls come after predictive benefit, no automatic launch.",
+  "strongest_objections": [
+    "lambda2 is a broad task-weight perturbation and may not improve the upper tail",
+    "historical E0 reuse across executions depends on more than common initialization hashes",
+    "fixed-budget one-seed screening is developmental and may be seed sensitive",
+    "module comparison includes its defined initialization and optimization protocol, not a pure physical mechanism"
+  ],
+  "disagreement_resolution": {
+    "priority": "three agents, controller and Harness accept gradient/equivalence/2x2 priority",
+    "three_seeds_vs_screen": "Harness accepted one pre-specified seed first and all six new lambda2 conditions only if later pursuing three-seed replication",
+    "E9_and_initialization_claims": "Harness accepted conditional-continuation estimand and per-architecture matching clarification",
+    "unresolved_fundamental_route_disagreement": false,
+    "scientific_thresholds_and_authorization": "still not frozen, consensus is not approval"
+  },
+  "primary_literature": [
+    {
+      "url": "https://arxiv.org/html/2212.09748v2",
+      "use": "identity/zero-initialized residuals have successful precedents, not project-specific effectiveness evidence"
+    },
+    {
+      "url": "https://sites.stat.washington.edu/people/raftery/Research/PDF/Gneiting2007jasa.pdf",
+      "use": "proper quantile scoring and fixed common evaluation, not a guarantee that lambda2 improves this project"
+    }
+  ],
+  "actual_execution": {
+    "new_scientific_statistics": 0,
+    "new_tests": 0,
+    "new_gradient_probes": 0,
+    "new_model_inference": 0,
+    "optimizer_updates": 0,
+    "scientific_payload_reads": 0,
+    "Final2025_access": 0,
+    "new_training_budget": false
+  },
+  "document_checks": {
+    "PDF_pages": 21,
+    "no_overfull_or_missing_characters": true,
+    "root_visual_pages": [
+      1,
+      16,
+      17,
+      18,
+      20,
+      21
+    ],
+    "other_page_layout": "inherited except header date",
+    "old_LIVE11_bytes_preserved": true,
+    "source_files_unchanged": true,
+    "early_layout_failures_retained": [
+      "v1 references orphaned on page21",
+      "v2 smaller references caused overfull; stopped before final replacement"
+    ],
+    "notation_correction": "lambda values explicitly {1,2}, avoids fractional ambiguity",
+    "new_code_tests_run": false
+  },
+  "Harness_reviewed_new_PDF": false,
+  "engineering": "PASS_DISCUSSION_AND_ROOT_DOCUMENT_CHECKS_ONLY",
+  "new_interventions": "NOT_STARTED",
+  "science": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL_NOT_WAIVED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "recorded_at": "2026-11-07T17:21:05.520675+08:00",
+  "source_bindings": {
+    "SCIENTIFIC_ANALYSIS.md": {
+      "bytes": 92597,
+      "sha256": "cece3f57ff4fa620075ee3ed815955c2e1566664f2c8736adfac3ee2d73489c0"
+    },
+    "src/yuntapr/experimental/core_innovation/stage2/fusion.py": {
+      "bytes": 7144,
+      "sha256": "ed0206fc954b051c6e5d074352f4166ce7c917a56b241dd06410531bb2ad847d"
+    },
+    "src/yuntapr/experimental/core_innovation/dtfm.py": {
+      "bytes": 6040,
+      "sha256": "131a43c2d238692e90120888563e8bb9da52f34bfa1adcfa34e4d4eb56d1c965"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": {
+      "bytes": 7718,
+      "sha256": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07"
+    },
+    "tests/research_readiness/test_dynamic_terrain.py": {
+      "bytes": 6864,
+      "sha256": "bb89b28955cd188001053ec052a19a04303e79b236ff1100a6e10a340069b427"
+    },
+    "tests/core_innovation/test_dtfm.py": {
+      "bytes": 6039,
+      "sha256": "06c0cd3b260bad0cb11fe5e9faac1098c1ea874f2eebaf5700d48068af7d05b9"
+    },
+    "src/yuntapr/experimental/phase_b_v2_ablations/total.py": {
+      "bytes": 3200,
+      "sha256": "9ce37393d2af2fbc762d198b2088cb4645d104d35f81b507c236bc3b39cf1ec1"
+    },
+    "src/yuntapr/experimental/phase_b_v2_ablations/pinball.py": {
+      "bytes": 2377,
+      "sha256": "cc4c4c742a2ce5c465dc8c2eee786b85378d4d8845d7e065783f986bc264e25f"
+    },
+    "src/yuntapr/experimental/phase_b_v2_ablations/config.py": {
+      "bytes": 3388,
+      "sha256": "5ae850c28417b555dc7825bd204f95f8275bc3ddc5b64cbfa230a2517d4d5e3a"
+    },
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": {
+      "bytes": 17136,
+      "sha256": "2b823ed130c6d5625aa308cf2283e83576a1678c94d638e4ec2e577d61cbe5b7"
+    },
+    "docs/research_readiness/20261106_research_convergence/history/T12_RECOVERED_REDACTED.md": {
+      "bytes": 19877,
+      "sha256": "650362c6db73899c25e44197488e254eb911678e26ec124ec6cbed3060ee5635"
+    },
+    "docs/research_readiness/20261105_b3_dote_without_mee/result.json": {
+      "bytes": 4293,
+      "sha256": "0633198797f6dcd19621f39089346003a872ab2780ccf73b3bc500f0e7ee0d74"
+    }
+  },
+  "artifacts_excluding_this_record": {
+    "README.md": {
+      "bytes": 25723,
+      "sha256": "e35ea1d5b574de79665c7c287cc357ff2729be90ca81bba0979dca615ab97195"
+    },
+    "STAGE_ACCEPTANCE.md": {
+      "bytes": 37762,
+      "sha256": "c69444848282c66a773b8e999dddb8bb6e7d7ab9fa98a910704bd609c2ff627d"
+    },
+    "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": {
+      "bytes": 26252,
+      "sha256": "54f837a7d0b1f83ff6864a41dee7926e9e4e90d6d5155ef7c2717e8fb6380a8a"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 52386,
+      "sha256": "71d828dfc3489bb47338e9a24e07cd0662ed7fb0615ca6041ce656737cd79d77"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_12.pdf": {
+      "bytes": 648445,
+      "sha256": "a34c2e8d32fce07a4dddcaba8ccbda044a5e2e32b8b7c63385ea78888e55fe3b"
+    }
+  },
+  "Git": {
+    "branch": "collab/codex-20261102",
+    "base_commit": "2c48277405e53b91a61076d4c3e5b698c0a1316b",
+    "sync_receipt": "actual final commit/push will be recorded in own Shared handoff, no self-reference",
+    "Shared_Git_write": false,
+    "peer_branch": "collab/dsh-20261102",
+    "peer_HEAD_unchanged": "ea672a3cafa4d574f4b5e892c7e481dfc544845f"
+  }
+}

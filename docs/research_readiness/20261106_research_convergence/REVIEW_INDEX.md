@@ -1,3 +1,10 @@
+## 2026-11-07 创新增益问题讨论闭环
+
+- 三名新代理、网页GPT总控和DeepSeek Harness有条件接受新顺序，评分优先已撤下。DTFM真实初始化梯度通路 → 历史E0继承核对 → 条件性B7/B8×λq∈{1,2}四格 → 分开判断收益。
+- 当前收据 `docs/research_readiness/20261107_innovation_resolution/DISCUSSION.json`。LIVE.12仅讨论及文档维护。合成探针、科学计算和训练均未执行，没有新预算。
+- Harness只在原生聊天给出独立讨论和澄清，无新正式审核文件、测试或DSH提交。旧审核PASS不用于新PDF。科研NOT_VERIFIED，研究者NOT_ASSESSED，外部PARTIAL。
+- 下列LIVE.11及旧路线保留为历史记录。
+
 ## 2026-11-06 多代理性能路线讨论闭环
 
 - 三代理+总控+Harness讨论建议已取得，无根本分歧；不是新实验或科学验收。先固定T17候选开发pilot，训练候选独立决策；本轮未执行。
