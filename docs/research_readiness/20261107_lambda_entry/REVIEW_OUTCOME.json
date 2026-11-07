@@ -1,0 +1,49 @@
+{
+  "id": "DYNAMIC_LAMBDA_ENTRY_REVIEW_OUTCOME_20261107",
+  "recorded_at": "2026-11-07T19:37:48.993385+08:00",
+  "implementation_commit": "ffcd5b7480b7b1f1aad985c3336aca3a191398d2",
+  "implementation_remote_sha_directly_verified": "ffcd5b7480b7b1f1aad985c3336aca3a191398d2",
+  "branch": "collab/codex-20261102",
+  "verification": {
+    "path": "docs/research_readiness/20261107_lambda_entry/VERIFICATION.json",
+    "bytes": 7849,
+    "sha256": "5dfe1dbcb65fb629742f8d543c007d56eb24e9ca5bdb5fbcbabad4ec9898cc1a"
+  },
+  "reviewer": "Harness in researcher-designated independent DSH chat",
+  "review": {
+    "path_in_DSH_repo": "docs/audits/DYNAMIC_LAMBDA_ENTRY_REVIEW_20261107.md",
+    "bytes": 3771,
+    "sha256": "f9929330ed41b50f40c3f8b21fd8b329d0bcbad5b921aa1cc2df0273bceb6c9b",
+    "result": "PASS_LIMITED_CODE_WIRING_AND8_CPU_SYNTHETIC_CHECKS",
+    "independent_new_suite_passed": 8,
+    "independent_optimizer_steps": 0,
+    "peer_branch": "collab/dsh-20261102",
+    "peer_local_commit": "e2851dd4a1750e6bf1cb53d9a88e14c0a99aca68",
+    "peer_remote_commit_directly_verified_by_Codex": "e2851dd4a1750e6bf1cb53d9a88e14c0a99aca68",
+    "peer_tracked_worktree": "clean"
+  },
+  "root_verification": {
+    "all8_artifacts_match_reviewed_commit": true,
+    "no_reviewed_source_test_or_PDF_modified_after_review": true,
+    "DSH_old_handoff_prefix_byte_identical": true,
+    "protected_Shared_files_and_own_handoff_still_unchanged_before_append": true
+  },
+  "nonblocking_limits": [
+    "formal prepare/worker stillE0; new approval-bound E2 dispatcher/output/budget absent",
+    "complete CUDA loop not executed; output gradients and mocked wiring only",
+    "real AdamW/BF16/network parameter gradients and4320-step dynamics unverified",
+    "PDF pixel review done by Codex only",
+    "initial missing dependencies and fixture failures preserved; no install"
+  ],
+  "next_boundary": "stop after engineering closure; actual primary/guardrails, pairing/runtime and exact new execution authorization required before formal training",
+  "engineering": "PASS_LIMITED_SYNTHETIC_LOSS_ENTRY",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL",
+  "researcher_mastery": "NOT_ASSESSED",
+  "new_Harness_review_rounds": 1,
+  "scientific_execution": 0,
+  "real_model_forward": 0,
+  "optimizer_steps": 0,
+  "2025_access": 0,
+  "closure_change_scope": "this outcome receipt only; all reviewed9 artifacts unchanged"
+}
