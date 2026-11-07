@@ -1,0 +1,278 @@
+{
+  "id": "DYNAMIC_E2_DISPATCH_20261107",
+  "time": "2026-11-07T20:20:04.509139+08:00",
+  "base_commit": "5687c42d6843fab21d367863df331552a9c3e1c8",
+  "branch": "collab/codex-20261102",
+  "proposal_sha256": "0d5afe6d97b25a163a8adecd95664ffe0b0b0468f157fd20a15cddf4ba44f53f",
+  "status": "PREPARED_WAITING_EXACT_RESEARCHER_APPROVAL",
+  "training_started": false,
+  "affirmative_approval_created": false,
+  "controller_primary_decision": "479f2d40-10e8-4ce0-9bfa-5cfbb9345c24; unweighted conditional Pinball S_qr/N_rain",
+  "synthetic_checks": {
+    "passed": 19,
+    "new_dispatch_tests": 11,
+    "inherited_loss_tests": 8,
+    "seconds": 0.262,
+    "model_forward_calls": 0,
+    "optimizer_step": 0,
+    "test_scope": "CLI, parent/child/worker, exact origin/order gate, runtime mismatch, summary denominator/tradeoffs, independently isolated launch scope; subprocess calls mocked"
+  },
+  "origin_check": {
+    "scope": "CPU_ORIGINAL_INITIALIZATION_ONLY",
+    "seed": 2029,
+    "torch": "2.11.0+cu128",
+    "static_source_reads": 1,
+    "static_source_bytes": 312828,
+    "static_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+    "original_initializations": [
+      {
+        "model": "B7",
+        "actual_initial_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+        "expected_initial_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+        "match": true
+      },
+      {
+        "model": "B8",
+        "actual_initial_sha256": "be600e873192065dad6f7c4b0a1b3c524de54a4cf8ac0f44549f4d887116b0d6",
+        "expected_initial_sha256": "be600e873192065dad6f7c4b0a1b3c524de54a4cf8ac0f44549f4d887116b0d6",
+        "match": true
+      }
+    ],
+    "model_forward": 0,
+    "optimizer_step": 0,
+    "weather_or_IMERG_reads": 0,
+    "checkpoint_loads": 0,
+    "2025_access": 0,
+    "seconds": 2.2969999999986612
+  },
+  "population_and_order_check": {
+    "inherited_metadata_bytes": 4720736,
+    "data_identity_match": true,
+    "train_ids": 959,
+    "dev_ids": 963,
+    "nine_epoch_order_match": true,
+    "first_source_of_each_kind_location": [
+      {
+        "role": "Train",
+        "kind": "satellite",
+        "exists": false,
+        "size_matches": false,
+        "payload_read": false
+      },
+      {
+        "role": "Train",
+        "kind": "GFS_main",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Train",
+        "kind": "GFS_thermo",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Train",
+        "kind": "IMERG",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Train",
+        "kind": "static_mask",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Development",
+        "kind": "satellite",
+        "exists": false,
+        "size_matches": false,
+        "payload_read": false
+      },
+      {
+        "role": "Development",
+        "kind": "GFS_main",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Development",
+        "kind": "GFS_thermo",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Development",
+        "kind": "IMERG",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      },
+      {
+        "role": "Development",
+        "kind": "static_mask",
+        "exists": true,
+        "size_matches": true,
+        "payload_read": false
+      }
+    ]
+  },
+  "source_reconnected": [
+    {
+      "role": "Train",
+      "exists": true,
+      "expected_bytes": 4948959,
+      "expected_sha256": "6e873ec05fa5c04cb8806faf4bf1ceaa9f7bd8c47add781eeb0d61448ac27e65",
+      "actual_bytes": 4948959,
+      "actual_sha256": "6e873ec05fa5c04cb8806faf4bf1ceaa9f7bd8c47add781eeb0d61448ac27e65",
+      "sha_match": true
+    },
+    {
+      "role": "Development",
+      "exists": true,
+      "expected_bytes": 4950844,
+      "expected_sha256": "78e4c6bd666b2803e5335883b70f514efa04e7ace4bf97c78c357817dd6bc992",
+      "actual_bytes": 4950844,
+      "actual_sha256": "78e4c6bd666b2803e5335883b70f514efa04e7ace4bf97c78c357817dd6bc992",
+      "sha_match": true
+    }
+  ],
+  "current_source_location_status": "H reconnected, two originally missing satellite files now byte/SHA match; other first-of-kind locations existed with matching sizes; not a full raw-data audit",
+  "preparation_cost": {
+    "static_source_bytes": 312828,
+    "static_source_files": 1,
+    "reconnected_satellite_sha_bytes": 9899803,
+    "reconnected_satellite_sha_files": 2,
+    "total_new_source_bytes": 10212631,
+    "total_new_source_files": 3,
+    "training_updates": 0,
+    "model_forward_calls": 0,
+    "optimizer_steps": 0,
+    "2025_access": 0
+  },
+  "runtime_binding": {
+    "python_version": "3.11.15",
+    "python_executable_sha256": "0562f573871cb16a2fb8de16e3d486e3dfd74bb83c7e87db265561917d05ad1a",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "numpy_version": "2.4.4"
+  },
+  "resource_gate": "PASS existing host/GPU/disk floors; no independent hardRSS cap",
+  "gate_changes": "existing WMI launcher admits new start_dynamic_pair only for exact B7->B8 seed2029 E2, matching interpreter and externally approved proposal/commit/output; no system security or Git configuration changed",
+  "ledger_order": "create update ledger after initial/order/reference gates, so origin mismatch leaves no open update ledger",
+  "historical_runtime_limit": "Full historical Python/NumPy/driver fingerprints unavailable; CPU full state and nine orders match, historical torch/CUDA/device coarse identity matches. E0 inheritance remains conditional; uninterrupted bitwise equivalence not claimed.",
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828,
+      "B8": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840,
+      "B8": 477571953840
+    },
+    "total_source_bytes": 955143907680,
+    "total_source_files": 285626,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43200,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "AP20_q32": "NOT_VERIFIED auxiliary; no new saved-prediction recovery or scoring callback",
+  "failures_preserved": [
+    "H absent on first location probe, user reconnected, two exact files then matched",
+    "two first synthetic dispatch temporary-directory cases failed Windows access/cleanup; directories left ignored, final tests use filesystem mocks without directory creation",
+    "one proposal refresh lacked temporary PYTHONPATH and failed before mutation, corrected",
+    "staged proposal CRLF flagged as trailing whitespace under existing attributes; normalized to LF only, canonical proposal SHA unchanged, no code/PDF/test rerun"
+  ],
+  "pdf": {
+    "pages": 25,
+    "passes": 2,
+    "overfull": 0,
+    "missing_characters": 0,
+    "visual_pages": [
+      1,
+      22,
+      25
+    ],
+    "visual_review": "Codex viewed1/22/25; no clipping/overlap observed"
+  },
+  "history": "README/STAGE/INDEX previous bytes preserved as suffix; oldLIVE.15 unchanged",
+  "artifact_fingerprints_excluding_self": [
+    {
+      "path": "src/yuntapr/experimental/core_innovation/stage4/engine.py",
+      "bytes": 19167,
+      "sha256": "d200aa727636d00f2987bc0300f77885bb374506d0403e7c11dc2b3d86cf0fd2"
+    },
+    {
+      "path": "src/yuntapr/experimental/research_readiness/dynamic_training.py",
+      "bytes": 22483,
+      "sha256": "f8670f6e6a5795228b5a70be108adf68c9d6c2d1a5640b085c0034f13fb07233"
+    },
+    {
+      "path": "tools/research_readiness/start_dynamic_pair.py",
+      "bytes": 2242,
+      "sha256": "6f03c2bde76b0e54afa1af3adf57e71d6add5497adfdb69c2b67c41f91168b8b"
+    },
+    {
+      "path": "tools/research_readiness/start_independent_process.py",
+      "bytes": 11992,
+      "sha256": "dca42e7f08ccfed98fa9b4fe363428a10a53e37065c8f5e72eaa8f0951ecc45e"
+    },
+    {
+      "path": "tests/research_readiness/test_dynamic_loss_dispatch.py",
+      "bytes": 10885,
+      "sha256": "7dc8702b5f42b5c8a8a08993d55123b43476477b4fbcbd6fa84fd573a90d2173"
+    },
+    {
+      "path": "docs/research_readiness/20261107_lambda_dispatch/EXECUTION_PROPOSAL.json",
+      "bytes": 102186,
+      "sha256": "1174883c1a2f0c616e73725adca315ae5728f74abed73d06fed7b9a0c58e243f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 31036,
+      "sha256": "4198722d09f16f14b3a15fe151efea68f714fae4e29708e1716b41076f2fbdfa"
+    },
+    {
+      "path": "STAGE_ACCEPTANCE.md",
+      "bytes": 43075,
+      "sha256": "348962e08fd4412b7c39f1a3cea8b64796f2f7e026601e9e197a7ef59300653b"
+    },
+    {
+      "path": "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md",
+      "bytes": 29911,
+      "sha256": "62d1e4e978bace453fc0712231c9e1a733eca8eda7ce4cc49cd64b1e80809038"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live.tex",
+      "bytes": 63855,
+      "sha256": "6330ca5627b8b88922649b905cf63919b2e3f6d2208adb886d5a67a96ed153a5"
+    },
+    {
+      "path": "output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_16.pdf",
+      "bytes": 692264,
+      "sha256": "5f23ce4b861d66e3e83f9ad8004e2cc4180b7c0b82abbdf6e2b559d77f5d9711"
+    }
+  ],
+  "new_Harness_review": "PENDING once on new dispatch/startup differences; do not rerun old8 loss tests",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL",
+  "researcher_mastery": "NOT_ASSESSED"
+}

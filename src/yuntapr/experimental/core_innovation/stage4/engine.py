@@ -116,7 +116,7 @@ class UpdateLedger:
 class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
                  kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None,
-                 lambda_q=1.0):
+                 lambda_q=1.0,origin_reference=None):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
@@ -132,10 +132,22 @@ class PairedExecutor:
         ):
             raise PermissionError('E2 requires one origin-only B7/B8 seed2029 task')
         self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
+        self.origin_reference=origin_reference
+
+    def check_origin_pair(self,initial_identity,orders):
+        if self.lambda_q==1.0:return
+        reference=self.origin_reference
+        kind=self.kinds[0]
+        if (initial_identity[kind]['full_state_sha256']!=reference['original_model_state_sha256']
+                or [digest(orders[e]) for e in range(1,EPOCHS+1)]!=reference['epoch_order_sha256']):
+            raise RuntimeError('E2 original initialization or epoch order differs from historical E0')
+
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
+        if self.lambda_q!=1.0 and not isinstance(self.origin_reference,dict):
+            raise PermissionError('E2 requires an explicitly bound historical origin reference')
         static=self.kinds in (('B5',),('B6',),('B7',),('B8',)) and self.model_factory is not None
         if (self.kinds not in (('B3','B4'),('B3',),('B4',)) and not static) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
@@ -144,8 +156,9 @@ class PairedExecutor:
         resources();self.folder.mkdir(exist_ok=False)
         if len(self.plan.ids('Train'))!=TRAIN_N or len(self.plan.ids('Development'))!=DEV_N:raise ValueError('Wrong population')
         models=(self.model_factory or paired_models)(self.decision.seed,self.plan.root);identity=dict(decision=asdict(self.decision),data=self.plan.identity)
-        if self.lambda_q!=1.0:identity['loss_config']=asdict(self.loss_config)
-        ledger=UpdateLedger(self.folder/'updates.sqlite',identity,allowed_models=self.kinds if static else ('B3','B4')) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
+        if self.lambda_q!=1.0:
+            identity['loss_config']=asdict(self.loss_config)
+            identity['origin_reference']=self.origin_reference
         initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
         if self.recovery is not None:self.recovery.check_initial(initial_identity)
         write(self.folder/'paired_initial_identity.json',initial_identity)
@@ -155,6 +168,7 @@ class PairedExecutor:
             raise RuntimeError('Static arm changed common backbone/heads initialization')
         models={k:v for k,v in models.items() if k in self.kinds}
         orders={e:epoch_order(self.plan.ids('Train'),self.decision.seed,e) for e in range(1,EPOCHS+1)}
+        self.check_origin_pair(initial_identity,orders)
         if self.recovery is not None:self.recovery.check_orders(orders)
         write(self.folder/'paired_orders.json',{str(e):dict(ids=o,sha256=digest(o)) for e,o in orders.items()})
         if self.pair_reference is not None:
@@ -163,6 +177,7 @@ class PairedExecutor:
                 if static and name=='paired_initial_identity.json':actual={k:actual[k] for k in reference}
                 if actual!=reference:
                     raise RuntimeError('B4 initialization/order differs from its completed B3 pair')
+        ledger=UpdateLedger(self.folder/'updates.sqlite',identity,allowed_models=self.kinds if static else ('B3','B4')) if self.recovery is None else self.recovery.ledger(self.folder/'updates.sqlite',identity)
         results={};self.poisoned=False
         try:
             for kind in self.kinds:
@@ -221,7 +236,9 @@ class PairedExecutor:
                         model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),scheduler=dict(completed=u,steps_per_epoch=STEPS,original_horizon=50*STEPS),
                         rng=dict(python=random.getstate(),numpy=np.random.get_state(),torch_cpu=torch.get_rng_state(),torch_cuda=torch.cuda.get_rng_state_all()),
                         train_order_sha256=digest(order),training=training,validation=report,optimizer_groups=groups)
-                    if self.lambda_q!=1.0:payload['identity']['loss_config']=asdict(self.loss_config)
+                    if self.lambda_q!=1.0:
+                        payload['identity']['loss_config']=asdict(self.loss_config)
+                        payload['identity']['origin_reference']=self.origin_reference
                     path=self.folder/f'{kind}_LAST_epoch_{epoch:02d}.pt'
                     with path.open('xb') as f:torch.save(payload,f);f.flush();os.fsync(f.fileno())
                     from .data import sha

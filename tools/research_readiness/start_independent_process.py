@@ -45,6 +45,20 @@ def require_independent(identity):
         raise PermissionError('Still in a Job/package; target not started, no fallback')
 
 
+def validate_dynamic_loss_scope(command,proposal,executable):
+    """Admit this new controller only with the exact two-task E2 protocol."""
+    try:
+        weight=command[command.index('--lambda-q')+1]
+    except (ValueError,IndexError):
+        raise PermissionError('Explicit lambda2 controller argument required')
+    if (weight not in ('2','2.0') or proposal.get('protocol',{}).get('loss')!='E2'
+            or proposal['protocol'].get('lambda_q')!=2.0
+            or proposal.get('tasks')!=[dict(model='B7',seed=2029),dict(model='B8',seed=2029)]):
+        raise PermissionError('Only the new B7 then B8 seed2029 E2 package is supported')
+    if sha(executable)!=proposal.get('runtime_binding',{}).get('python_executable_sha256'):
+        raise PermissionError('Bound E2 interpreter differs')
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -90,7 +104,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -98,7 +112,11 @@ def validate_spec(path):
         approval=read(argument('--researcher-approval'));proposal=read(argument('--proposal'));private=read(argument('--private-preparation'))
         if approval.get('approved_by_researcher') is not True or not approval.get('decision_id'):raise PermissionError('Explicit research decision required')
         if any(approval.get(k)!=proposal[k] for k in ('proposal_sha256','tasks','budget','scientific_choices')):raise PermissionError('Exact approved grant required')
-        if approval['code_commit']!=proposal['execution_code_commit'] or approval['output_root']!=private['output_root'] or Path(private['output_root']).exists():raise PermissionError('Consumed or mismatched grant; never restart')
+        if entry.name=='start_dynamic_pair.py':
+            validate_dynamic_loss_scope(command,proposal,executable)
+            expected_commit=approval['code_commit']  # Bound below to the actual clean snapshot HEAD.
+        else:expected_commit=proposal['execution_code_commit']
+        if approval['code_commit']!=expected_commit or approval['output_root']!=private['output_root'] or Path(private['output_root']).exists():raise PermissionError('Consumed or mismatched grant; never restart')
         commit=subprocess.check_output(['git','-C',spec['cwd'],'rev-parse','HEAD'],text=True).strip()
         dirty=subprocess.check_output(['git','-C',spec['cwd'],'status','--porcelain'],text=True).strip()
         if commit!=approval['code_commit'] or dirty or entry.parent.parent.parent!=Path(spec['cwd']).resolve():raise PermissionError('Clean approved checkout required')

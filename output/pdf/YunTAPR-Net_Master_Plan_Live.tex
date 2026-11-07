@@ -33,25 +33,25 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261107.15}\qquad 状态截至2026年11月07日（北京时间）
+版本 \texttt{LIVE-20261107.16}\qquad 状态截至2026年11月07日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{显式分位数损失权重入口已接通，CPU合成回归通过。}
+\status{两模型E2执行包已具体化，等待研究者限定专项批准。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item B7/B8新增独立RunSpec，显式$\lambda_q$由run\_task传入实际engine及原candidate\_loss。旧B0/B1的18格规格保持。\evi{S25}
-\item 8项CPU合成检查通过。权重1的旧E0损失及输出梯度逐元素一致；权重2仅加倍分位数项，发生项与有效分母保持。
-\item 新权重限B7/B8、Seed2029、从原初态开始。旧E0提案不能启用新权重，恢复路径拒绝E2。
-\item 历史E0仍为有条件可复用。正式运行环境、完整配对预检、主指标/保护指标和精确预算尚未冻结。
+\item 命令行、控制器、子进程和worker已传递显式E2。原初态及九轮顺序设为优化器创建前的强制门槛。19项合成检查通过，其中11项针对本轮调度。\evi{S26}
+\item CPU实测B7/B8完整原初态摘要分别匹配历史E0，九轮顺序及人口身份一致。H盘已重连，指定2023/2024卫星文件完整指纹匹配。
+\item 唯一主指标为未加权条件Pinball，按湿像元分母计算。AP20仅列辅助缺口，发生概率AP明确单列。
+\item 新增B7→B8、Seed2029、各9轮。整包8640更新、955143907680逻辑源字节、285626次打开、12小时，零重放和额外重试。
 \end{itemize}
 
-本轮只执行人工输出张量的损失/导数计算及mock入口检查，optimizer.step为0。真实模型前向、数据/权重/缓存读取及正式训练均为0。默认执行器仍选择E0。
+本轮准备读取静态包1份及重连核验卫星文件2份，共10212631字节。完成CPU初始化及资源准入，没有真实模型前向或optimizer.step。训练输出目录尚未创建，专项批准记录尚未生成。
 
-科学尚未验收，外部验证部分完成，研究者掌握尚未评估。当前入口证据见6N。候选四格仍为PROPOSED。
+科学尚未验收，外部验证部分完成，研究者掌握尚未评估。当前执行边界见6O。历史E0继续有条件继承，候选四格仍为PROPOSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -474,6 +474,25 @@ L_{\lambda_q}=\frac{S_{\mathrm{occ}}+\lambda_q S_{\mathrm{qr}}}{N_{\mathrm{valid
 \section*{停止位置}
 工程入口准备后停止。正式环境和原初态/九轮顺序须实际配对；唯一主指标、保护指标/允许退化和精确更新、读取、时间预算及输出位置须在训练前冻结。当前训练授权未新增，科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
 
+\pageheading{6O\quad 单Seed两模型E2执行包}{只新增两个原初态训练格。旧成功模型不重训，专项预算尚待研究者确认。}
+\section*{最小科学设计}
+B7和B8各从自己的历史原初态开始，新AdamW、相同九轮顺序和原学习率计划，固定E9端点。唯一拟干预为全局$\lambda_q:1\to2$。历史E0按6M边界复用，单Seed、反复使用的2024 Development只作开发性证据。\evi{S26}
+
+主指标为$S_{qr}/N_{rain}$，历史B7为0.12740129422354954，B8为0.12688287078666707。$S_{qr}/N_{valid}$另列。Brier或q32距名义覆盖误差任何增加都如实列为权衡，不预设虚构非劣效界值。AP20[q32]为尚未验证的辅助项，不能用发生概率AP代替，也不把Pinball改善解释为强雨幅值已修复。
+
+\section*{已经落实的执行约束}
+\begin{itemize}
+\item 显式参数贯穿CLI、控制器、独立子进程、worker及engine。非默认E2绑定原初态和九轮顺序；不匹配即停，优化器尚未创建。新E9摘要分别报告loss效应、B8--B7和交互。
+\item 复用既有独立WMI监督器。新增入口仅准入B7→B8、2029、E2，核对解释器指纹、研究者批准、实际干净提交与新输出目录；保留旧入口限制。
+\item 正式解释器Python3.11.15、Torch2.11.0+cu128、CUDA12.8、NumPy2.4.4已绑定。GPU空闲内存至少5GiB、启动主机可用至少8GiB，周期至少2GiB。沿用可用内存门槛，没有额外硬RSS上限。
+\item H盘恢复后两份指定卫星源SHA匹配，CPU完整初态B7为ab749c88…6326、B8为be600e87…b0d6，九轮顺序全部匹配。未进行模型前向、反向训练或权重加载。
+\end{itemize}
+
+\section*{待批准的准确额度}
+每模型4320更新、477571953840逻辑源字节、142813次打开、6小时。整包8640更新、955143907680字节、285626次打开、12小时。初始空闲48GiB、每任务24GiB，重放0、额外重试0。B7失败不启动B8，B8失败保留B7。准备已消费3份源文件共10212631字节，另行留痕。
+
+历史Python、NumPy及驱动的完整指纹缺失，不能宣称无中断逐位等价。新环境和身份门槛已明确，科学验收仍未通过。当前无肯定批准文件、无正式输出目录，后续仅在研究者批准绑定具体提案、提交和输出位置后单次启动。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -527,6 +546,7 @@ L_{\lambda_q}=\frac{S_{\mathrm{occ}}+\lambda_q S_{\mathrm{qr}}}{N_{\mathrm{valid
 \item[S23] \path{docs/research_readiness/20261107_dtfm_gradient_release/}的RESULT与VERIFICATION。固定CPU合成探针、7项回归及源文件保护证据。S22为前轮历史快照，当前只补图可达性，不改其真实训练与性能未验证状态。
 \item[S24] \path{docs/research_readiness/20261107_e0_inheritance/MATRIX.json}。双对象继承矩阵、保存初态/顺序/E0端点链及选定源码差异。原始JSON和实际权重证据级别分开，后续新格仍须配对预检与精确批准。
 \item[S25] \path{docs/research_readiness/20261107_lambda_entry/VERIFICATION.json}。显式损失权重入口、8项CPU合成检查、改动和保护指纹。mock调用与完整训练循环的证据范围分别列明。
+\item[S26] \path{docs/research_readiness/20261107_lambda_dispatch/EXECUTION_PROPOSAL.json}及同目录VERIFICATION。完整原初态、九轮顺序、重连源指纹、调度约束、准确额度及待专项批准状态。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。

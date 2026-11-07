@@ -1,3 +1,13 @@
+# 2026-11-07 原初态E2调度包 / LIVE-20261107.16
+
+CLI→控制器→worker→engine显式E2已接通，原初态/九轮顺序设为优化器创建前的必要门槛，独立WMI入口仅接受两模型2029/E2及准确批准。19项合成检查通过（11新调度+8原损失），训练更新0。
+
+- CPU实测两架构完整原初态及九轮顺序匹配。H盘重连后指定2023/2024卫星源SHA一致。准备读取静态1份、卫星2份共10,212,631B，元数据另列，无2025访问。
+- 主指标为未加权条件Pinball Sqr/Nrain，Sqr/Nvalid与发生概率AP另列。AP20辅助缺失为NOT_VERIFIED。历史完整数值环境指纹缺失，E0继续有条件复用，不宣称逐位无中断等价。
+- 待专项批准包为B7→B8、2029、各9轮，合计8640更新/955143907680逻辑源字节/285626次打开/12小时，初始48GiB、每任务24GiB，重放0、额外重试0。当前没有肯定批准文件或训练输出目录。
+
+方案见 `docs/research_readiness/20261107_lambda_dispatch/EXECUTION_PROPOSAL.json`，实际检查见同目录VERIFICATION。总计划与可修改LaTeX同步为LIVE.16，旧LIVE.15保留。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。以下为历史快照。
+
 # 2026-11-07 显式分位数损失入口 / LIVE-20261107.15
 
 B7/B8新增独立RunSpec，lambda_q由run_task传至实际engine和既有closed E0/E2损失。默认1保持旧E0；新2限Seed2029、单架构、原初非恢复路径，须显式匹配提案protocol。旧B0/B1的18格RunSpec与网络、数据顺序、AdamW/LR源码保持。

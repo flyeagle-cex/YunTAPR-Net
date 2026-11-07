@@ -3,6 +3,7 @@ import os,shutil,sqlite3,subprocess,sys,time
 from pathlib import Path
 from dataclasses import asdict,dataclass
 import numpy as np
+import torch
 from ..core_innovation.stage3.planning import digest
 from ..core_innovation.stage3.metered_io import SourceMeter,path_key
 from ..core_innovation.stage4.data import PopulationPlan,read,sha
@@ -17,7 +18,7 @@ from ..phase_b_v2_ablations.config import finite_number,get_config
 
 ENTRY='tools/research_readiness/start_dynamic_pair.py'
 TASKS=(('B7',2029),('B8',2029))
-NEW_FILES=(ENTRY,'tools/research_readiness/check_dynamic_cached_real.py',
+NEW_FILES=(ENTRY,'tools/research_readiness/start_independent_process.py','tools/research_readiness/check_dynamic_cached_real.py',
            'src/yuntapr/experimental/research_readiness/dynamic_terrain.py',
            'src/yuntapr/experimental/research_readiness/dynamic_training.py')
 
@@ -42,11 +43,20 @@ class RunSpec:
     def loss_config(self):
         return get_config('E0' if self.lambda_q==1.0 else 'E2')
 
+    def validate_protocol(self,protocol):
+        if protocol.get('loss','E0')!=self.loss_config.experiment_id or finite_number('protocol.lambda_q',protocol.get('lambda_q',1.0))!=self.lambda_q:
+            raise PermissionError('Explicit loss weight must match the approved proposal protocol')
+
 
 def hashes(root):
     h=code_hashes(root)
     h.update({n:sha(root/n) for n in NEW_FILES})
     return h
+
+
+def runtime_binding():
+    return dict(python_version=sys.version.split()[0],python_executable_sha256=sha(Path(sys.executable)),
+                torch_version=torch.__version__,cuda_build=torch.version.cuda,numpy_version=np.__version__)
 
 
 def budget(prepared,static_bytes):
@@ -151,27 +161,29 @@ def checked(root,proposal_path,private_path,approval_path,commit):
     p,v,a=map(read,(proposal_path,private_path,approval_path));validate_approval(a,p,v,commit)
     if digest({k:x for k,x in p.items() if k!='proposal_sha256'})!=p['proposal_sha256'] or v['proposal_sha256']!=p['proposal_sha256']:raise ValueError('Proposal changed')
     if hashes(root)!=p['code_sha256']:raise ValueError('Exact approved code changed')
+    if p.get('protocol',{}).get('loss')=='E2' and runtime_binding()!=p.get('runtime_binding'):
+        raise ValueError('Approved E2 numerical runtime differs')
     _,prepared=load_inherited(v['inherited'])
     if prepared['data']!=p['data'] or budget(prepared,312828)!=p['budget']:raise ValueError('Frozen data or exact pass budget drift')
     if any(sha(Path(v['baseline_paths'][m]))!=h for m,h in p['baseline_E9_sha256'].items()):raise ValueError('Baseline endpoint changed')
     return p,v,a,prepared
 
 
-def worker(root,proposal,private,approval,commit,index):
+def worker(root,proposal,private,approval,commit,index,*,lambda_q=1.0):
     started=time.monotonic();p,v,a,prepared=checked(root,proposal,private,approval,commit)
+    RunSpec('B7',2029,lambda_q).validate_protocol(p.get('protocol',{}))
     if type(index)!=int or not 0<=index<2:raise PermissionError('Only the two approved tasks')
     package=Path(v['output_root']);binding=read(package/'authorization_binding.json');claim=read(package/f'task_{index+1}_claim.json')
     if binding['controller_pid']!=os.getppid() or binding['approval']!=a or claim!=dict(index=index,controller_pid=os.getppid(),code_commit=commit):raise PermissionError('Live once-only parent binding required')
     kind,seed=TASKS[index]
-    return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=Path(v['historical_pair']),static_name=f'{kind}_static_source.sqlite')
+    pair_reference=None if lambda_q==2.0 else Path(v['historical_pair'])
+    return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=pair_reference,static_name=f'{kind}_static_source.sqlite',lambda_q=lambda_q)
 
 
 def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
-    protocol=p.get('protocol',{})
-    if protocol.get('loss','E0')!=spec.loss_config.experiment_id or finite_number('protocol.lambda_q',protocol.get('lambda_q',1.0))!=spec.lambda_q:
-        raise PermissionError('Explicit loss weight must match the approved proposal protocol')
+    spec.validate_protocol(p.get('protocol',{}))
     package=Path(v['output_root'])
     if os.environ.get('PYTHONHASHSEED')!=str(seed) or shutil.disk_usage(package).free<p['budget']['minimum_task_free_bytes']:raise RuntimeError('Seed/storage admission differs')
     db=sqlite3.connect(package/static_name);db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)');db.execute("INSERT INTO jobs VALUES ('static','PENDING')");db.commit()
@@ -189,15 +201,45 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     folder=package/f'{kind}_s{seed}'
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:TerrainTail(pack),code_commit=commit,
-                   pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q).run(
+                   pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q,
+                   origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind)).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
     if spec.lambda_q!=1.0:result.update(loss_arm=spec.loss_config.experiment_id,lambda_q=spec.lambda_q)
     deadline();write(folder/'completion.json',result);return result
 
 
-def execute(root,proposal,private,approval,commit):
+def loss_pair_summary(proposal,output):
+    """Same-population E9 differences against saved, pinned E0 summaries."""
+    historical=proposal['scientific_choices']['historical_e0']
+    values={};loss_effects={}
+    for kind,_ in TASKS:
+        reference=historical[kind]
+        report=read(Path(output)/f'{kind}_s2029/{kind}_development_09.json')
+        summary=report['groups']['all']['summary']
+        if (report['source_identity']!=proposal['data']
+                or (summary['n_valid'],summary['n_rain'])!=(reference['n_valid'],reference['n_rain'])):
+            raise ValueError('E0/E2 population or wet denominator differs')
+        actual=metric_values(report)
+        actual['qr_per_valid']=summary['s_qr']/summary['n_valid']
+        values[kind]={'E0':reference['metrics'],'E2':actual}
+        loss_effects[kind]={name:actual[name]-reference['metrics'][name] for name in actual}
+    architecture={arm:{name:values['B8'][arm][name]-values['B7'][arm][name]
+                       for name in values['B7'][arm]} for arm in ('E0','E2')}
+    interaction={name:architecture['E2'][name]-architecture['E0'][name] for name in architecture['E0']}
+    return dict(seed=2029,endpoint='FIXED_EPOCH_9_LAST',values=values,
+                lambda2_minus_lambda1=loss_effects,B8_minus_B7=architecture,interaction=interaction,
+                primary='conditional_pinball=S_qr/N_rain; unweighted',
+                average_precision_semantics='OCCURRENCE_AP_NOT_AP20_Q32',AP20_q32='NOT_VERIFIED',
+                guardrail_degradation={kind:{'brier':delta['brier']>0,'q32_absolute_error':delta['q32_absolute_error']>0}
+                                       for kind,delta in loss_effects.items()},
+                descriptive_only=True,scientific_acceptance='NOT_VERIFIED',
+                interpretation='One-seed repeatedly-used Development comparison; no independent confirmation')
+
+
+def execute(root,proposal,private,approval,commit,*,lambda_q=1.0):
     started=time.monotonic();p,v,a,prepared=checked(root,proposal,private,approval,commit);out=Path(v['output_root'])
+    RunSpec('B7',2029,lambda_q).validate_protocol(p.get('protocol',{}))
     if out.exists():raise PermissionError('Approval consumed/output exists; no replay or restart')
     if shutil.disk_usage(out.parent).free<p['budget']['initial_free_bytes']:raise RuntimeError('Initial48GiB reserve')
     admission=resources();out.mkdir();write(out/'authorization_binding.json',dict(approval=a,controller_pid=os.getpid(),admission=admission))
@@ -209,6 +251,7 @@ def execute(root,proposal,private,approval,commit):
             write(out/f'task_{index+1}_claim.json',dict(index=index,controller_pid=os.getpid(),code_commit=commit))
             env=dict(os.environ,PYTHONHASHSEED='2029',CUBLAS_WORKSPACE_CONFIG=':4096:8',OMP_NUM_THREADS='1',MKL_NUM_THREADS='1',PYTHONUTF8='1')
             cmd=[sys.executable,'-B',str(root/ENTRY),'worker','--proposal',str(proposal),'--private-preparation',str(private),'--researcher-approval',str(approval),'--task-index',str(index)]
+            if lambda_q!=1.0:cmd.extend(('--lambda-q',str(lambda_q)))
             with (out/f'{kind}_console.log').open('xb') as f:
                 active=subprocess.Popen(cmd,cwd=root,env=env,stdout=f,stderr=subprocess.STDOUT,creationflags=worker_creation_flags())
                 try:rc=active.wait(timeout=min(remaining,p['budget']['max_model_seconds']))
@@ -219,6 +262,13 @@ def execute(root,proposal,private,approval,commit):
             if r['status']!='COMPLETE_TRAIN_AND_DEV_EVALUATION' or r['code_commit']!=commit or r['optimizer_updates']!=4320 or r['total_logical_source_bytes']!=p['budget']['total_source_bytes_per_model'][kind]:raise RuntimeError('Task exact closure differs')
             total_updates+=r['optimizer_updates'];total_bytes+=r['total_logical_source_bytes'];total_files+=r['total_logical_source_files']
         if total_updates!=8640 or total_bytes!=p['budget']['total_source_bytes'] or total_files!=p['budget']['total_source_files']:raise RuntimeError('Package exact closure differs')
+        if lambda_q==2.0:
+            write(out/'loss_pair_summary.json',loss_pair_summary(p,out))
+            if time.monotonic()-started>p['budget']['max_package_seconds']:raise RuntimeError('Closure12h cap')
+            write(out/'completion.json',dict(status='COMPLETE_TRAIN_AND_DEV_EVALUATION',updates=total_updates,
+                total_logical_source_bytes=total_bytes,total_logical_source_files=total_files,
+                code_commit=commit,loss_arm='E2',lambda_q=2.0))
+            return
         reports={m:read(path) for m,path in v['baseline_paths'].items()}
         reports.update({m:read(out/f'{m}_s2029/{m}_development_09.json') for m,_ in TASKS})
         for m in reports:paired_difference(reports['B6'],reports[m])

@@ -1,3 +1,9 @@
+## 2026-11-07 原初态E2调度执行准备
+
+- 命令行至engine的显式E2、原初态/九轮顺序门槛、独立监督器精确范围、运行环境绑定和E9四格摘要已准备。19项合成检查通过，只新增差异核对。
+- 两完整原初态及九轮顺序实际匹配，H重连两源SHA匹配。EXECUTION_PROPOSAL给出准确8640更新/955143907680字节/285626次/12h/零重放重试，仍等待具体提案/提交/输出的研究者专项批准。
+- 主指标回到未加权条件Pinball，AP20辅助为NOT_VERIFIED。执行证据docs/research_readiness/20261107_lambda_dispatch/；计划LIVE.16。训练0，科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。
+
 ## 2026-11-07 显式lambda_q入口准备
 
 - 新增动态RunSpec并传递run_task→PairedExecutor→forward/candidate_loss。原E0默认保持，新E2限2029原初单架构、提案显式匹配；旧18格RunSpec不变。

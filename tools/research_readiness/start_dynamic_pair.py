@@ -8,6 +8,7 @@ def main():
     q=sub.add_parser('prepare');q.add_argument('--static-private',type=Path,required=True);q.add_argument('--output-root',type=Path,required=True)
     for mode in ('execute','worker'):
         q=sub.add_parser(mode);q.add_argument('--researcher-approval',type=Path,required=True)
+        q.add_argument('--lambda-q',type=float,choices=(1.0,2.0),default=1.0)
         if mode=='worker':q.add_argument('--task-index',type=int,required=True)
     for q in sub.choices.values():
         q.add_argument('--proposal',type=Path,required=True);q.add_argument('--private-preparation',type=Path,required=True)
@@ -22,6 +23,6 @@ def main():
         print(json.dumps({k:public[k] for k in ('status','proposal_sha256','budget','authorized')}));return
     if subprocess.check_output(['git','-C',str(ROOT),'status','--porcelain'],text=True).strip():raise PermissionError('Exact reviewed execution copy must be clean')
     commit=subprocess.check_output(['git','-C',str(ROOT),'rev-parse','HEAD'],text=True).strip()
-    if a.mode=='worker':worker(ROOT,a.proposal,a.private_preparation,a.researcher_approval,commit,a.task_index)
-    else:execute(ROOT,a.proposal,a.private_preparation,a.researcher_approval,commit)
+    if a.mode=='worker':worker(ROOT,a.proposal,a.private_preparation,a.researcher_approval,commit,a.task_index,lambda_q=a.lambda_q)
+    else:execute(ROOT,a.proposal,a.private_preparation,a.researcher_approval,commit,lambda_q=a.lambda_q)
 if __name__=='__main__':main()
