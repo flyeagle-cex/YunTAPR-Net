@@ -1,0 +1,109 @@
+{
+  "id": "DTFM_GRADIENT_RELEASE_VERIFICATION_20261107",
+  "recorded_at": "2026-11-07T18:35:37.466437+08:00",
+  "base_commit": "48878aef4bb9c5c81487d534c86dd6c4dae6d7ca",
+  "branch": "collab/codex-20261102",
+  "scope": "root new CPU synthetic check and document maintenance",
+  "artifacts_excluding_this_receipt": {
+    "tools/research_readiness/probe_dtfm_gradient_release.py": {
+      "bytes": 9098,
+      "sha256": "e2a9bc737e29a96bac5f015a01346d2f961143dea67ac5b968b10060c1ea06ec"
+    },
+    "tests/research_readiness/test_dtfm_gradient_release.py": {
+      "bytes": 4393,
+      "sha256": "d91bc4b8845932be1d10aad8027b7d7b56c8a043a0032e44e422a6591bc80c5f"
+    },
+    "docs/research_readiness/20261107_dtfm_gradient_release/RESULT.json": {
+      "bytes": 48065,
+      "sha256": "0120554716eca667015edda5569556476266ebb9cfd8d18dbcd4fc4a3ac83e35"
+    },
+    "README.md": {
+      "bytes": 27036,
+      "sha256": "9a5a4fec4c8612214092f9b967f8d8aae617e8348b2648903df5c580bebb5f1b"
+    },
+    "STAGE_ACCEPTANCE.md": {
+      "bytes": 39075,
+      "sha256": "5336dd5ae47e8e530480d0d5fefbbe7acf04f72e27bdda1845f121ec389e1de3"
+    },
+    "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": {
+      "bytes": 26968,
+      "sha256": "53ab439ac58d994632d1a38cc81fa8a5346d94fcee71bcbf87c369a3b8c824a0"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 55390,
+      "sha256": "2ed1ad4fc4b38e3ee47b15ec033fe517f63d46b92b8e9767a0befb632e269180"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_13.pdf": {
+      "bytes": 659782,
+      "sha256": "44a8789bfc5390c81679d5a7b32f4f70f4bd61481c499bd334900b104f9eb380"
+    }
+  },
+  "tests": {
+    "run": 7,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "CLI_invocations": 1,
+    "synthetic_optimizer_steps": 10,
+    "scientific_updates": 0,
+    "command": "existing CPU Python -B unittest DtfmGradientReleaseTests, one cached CLI invocation"
+  },
+  "protected_before_after_equal": {
+    "D:\\研究\\极端降水预测\\YunTAPR-Collab-Codex\\output\\pdf\\YunTAPR-Net_Master_Plan_Live_20261107_12.pdf": {
+      "bytes": 648445,
+      "sha256": "a34c2e8d32fce07a4dddcaba8ccbda044a5e2e32b8b7c63385ea78888e55fe3b"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Collab-Codex\\src\\yuntapr\\experimental\\core_innovation\\stage2\\fusion.py": {
+      "bytes": 7144,
+      "sha256": "ed0206fc954b051c6e5d074352f4166ce7c917a56b241dd06410531bb2ad847d"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Collab-Codex\\src\\yuntapr\\experimental\\core_innovation\\dtfm.py": {
+      "bytes": 6040,
+      "sha256": "131a43c2d238692e90120888563e8bb9da52f34bfa1adcfa34e4d4eb56d1c965"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Collab-Codex\\src\\yuntapr\\experimental\\research_readiness\\dynamic_terrain.py": {
+      "bytes": 7718,
+      "sha256": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Collab-Codex\\config\\science_contract_v1.1.yaml": {
+      "bytes": 14085,
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Shared\\DECISIONS.md": {
+      "bytes": 1670,
+      "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Shared\\COLLABORATION_RULES.md": {
+      "bytes": 24639,
+      "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Shared\\.gitattributes": {
+      "bytes": 9,
+      "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+    },
+    "D:\\研究\\极端降水预测\\YunTAPR-Shared\\handoffs\\DSH.md": {
+      "bytes": 54472,
+      "sha256": "75f75e1013d78243def429768793ea6c2c1e68e8376f18d30f0bcb645a088258"
+    }
+  },
+  "old_plan_preserved": true,
+  "PDF": {
+    "pages": 22,
+    "root_visual_pages": [
+      1,
+      18,
+      19,
+      22
+    ],
+    "other_layout": "inherited",
+    "no_overfull_or_missing_chars": true,
+    "minor_header_wrap_corrected_before_review": true
+  },
+  "Harness_review": "PENDING_NEW_DIFFERENCE_REVIEW",
+  "scientific_payload_reads": 0,
+  "new_dependencies_installed": false,
+  "engineering": "PASS_ROOT_CHECKS_ONLY",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "controller_qualification": "PASS_WITH_LIMITATIONS, raw numerical probe unchanged, no new check execution"
+}

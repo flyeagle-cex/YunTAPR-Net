@@ -1,0 +1,1414 @@
+{
+  "id": "DTFM_GRADIENT_RELEASE_20261107",
+  "recorded_at": "2026-11-07T18:32:58.657772+08:00",
+  "controller_spec_message": "24903675-5575-4b76-adfb-c0926410ccec",
+  "user_execution_basis": "研究者明确要求遵循网页主控操作并同步GitHub",
+  "probe": {
+    "SYNTHETIC_GRADIENT_PATH_CHECK": "PASS",
+    "scope": "CPU_SYNTHETIC_FUSION_GRAPH_ONLY",
+    "torch_version": "2.7.1+cu118",
+    "seed": 20261107,
+    "input_shape": [
+      2,
+      48,
+      9,
+      9
+    ],
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "threads_during_probe": 1,
+    "condition_channels": [
+      26,
+      28
+    ],
+    "condition_value_masks": "synthetic value channels and explicit all-one indicator channels",
+    "initialization": "unchanged paired_fusion_candidates, no manual parameter assignment",
+    "optimizer": {
+      "kind": "SGD",
+      "lr": 0.01,
+      "momentum": 0.0,
+      "weight_decay": 0.0,
+      "scientific_AdamW_trajectory": false
+    },
+    "updates_per_arm": 5,
+    "synthetic_optimizer_step_calls": 10,
+    "scientific_optimizer_updates": 0,
+    "scientific_payload_reads": 0,
+    "real_training_cause": "NOT_VERIFIED",
+    "performance_improvement": "NOT_VERIFIED",
+    "models": {
+      "B7": {
+        "initial_state_sha256": "5640e63607e52281803bb66a238ffa7defb612df099cd220d04a9f55a15c91d6",
+        "final_state_sha256": "a278d53c90afd80186c58dd2057783b9881023ccae777b67c74ce9c25e283e58",
+        "fusion_parameters": 50192,
+        "first_nonzero_gradient_backward": {
+          "fuse": 1,
+          "mix": 2,
+          "gfs": 2,
+          "terrain": 2
+        },
+        "verdict": "RELEASE_OBSERVED",
+        "steps": [
+          {
+            "backward_update": 1,
+            "synthetic_mse": 0.0408150851726532,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.0,
+              "max_abs": 0.0,
+              "nonzero": 0,
+              "elements": 7776
+            },
+            "modulation_before_update": null,
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.06252994773030102,
+                  "max_abs": 0.0017788870027288795,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0006252994631266246,
+                  "max_abs": 1.7788870536605828e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 7776
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.722054868399898,
+                  "max_abs": 0.11179258674383163,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 7776
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 2,
+            "synthetic_mse": 0.04077601060271263,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.01323817145745842,
+              "max_abs": 0.0006192326545715332,
+              "nonzero": 7775,
+              "elements": 7776
+            },
+            "modulation_before_update": null,
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.062457952100045136,
+                  "max_abs": 0.0017670206725597382,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0006252994631266246,
+                  "max_abs": 1.7788870536605828e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0006245795072397948,
+                  "max_abs": 1.767020694387611e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.082306316835916e-05,
+                  "max_abs": 6.29888290859526e-07,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.722054868399898,
+                  "max_abs": 0.11179258674383163,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 7.763003185346923e-08,
+                  "max_abs": 7.450580596923828e-09,
+                  "nonzero": 1201,
+                  "elements": 7776
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 3.971178315668927e-06,
+                  "max_abs": 4.594537585944636e-07,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 3.63339381075662e-08,
+                  "max_abs": 7.450580596923828e-09,
+                  "nonzero": 93,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 3.3928303603762118e-06,
+                  "max_abs": 4.42356281382672e-07,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 2.418869757786871e-08,
+                  "max_abs": 7.450580596923828e-09,
+                  "nonzero": 55,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 3,
+            "synthetic_mse": 0.04073702171444893,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.02642855069539198,
+              "max_abs": 0.0012355446815490723,
+              "nonzero": 7774,
+              "elements": 7776
+            },
+            "modulation_before_update": null,
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.06238639358007196,
+                  "max_abs": 0.001755239674821496,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0012498785257328046,
+                  "max_abs": 3.545907748048194e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0006238639212161154,
+                  "max_abs": 1.7552396457176656e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 2.157656291771e-05,
+                  "max_abs": 1.24756763852929e-06,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.72205487790164,
+                  "max_abs": 0.11179258674383163,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 2.468707196642955e-07,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 3020,
+                  "elements": 7776
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 7.875015661384038e-06,
+                  "max_abs": 9.10133110210154e-07,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831945165524,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 8.48769293944413e-08,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 159,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 6.730516515945783e-06,
+                  "max_abs": 8.76576791597472e-07,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.432898118267414,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 7.446732440566644e-08,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 110,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 4,
+            "synthetic_mse": 0.04069812595844269,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.03957141325323099,
+              "max_abs": 0.0018489062786102295,
+              "nonzero": 7775,
+              "elements": 7776
+            },
+            "modulation_before_update": null,
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.062315269801178186,
+                  "max_abs": 0.0017435402842238545,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0018737411233020597,
+                  "max_abs": 5.301147393765859e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0006231526834503608,
+                  "max_abs": 1.7435402696719393e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 3.2261769076547884e-05,
+                  "max_abs": 1.8532380181568442e-06,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.72205498513461,
+                  "max_abs": 0.11179258674383163,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 3.525971287041374e-07,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 4279,
+                  "elements": 7776
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.1712673135408054e-05,
+                  "max_abs": 1.3521820392270456e-06,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.21288320887835,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 1.2802081310415886e-07,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 200,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.001403230755062e-05,
+                  "max_abs": 1.302791815760429e-06,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.4328981288842,
+                  "max_abs": 0.18858718872070312,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 1.022223478564033e-07,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 164,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 5,
+            "synthetic_mse": 0.04065931215882301,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.05266731020236554,
+              "max_abs": 0.0024593770503997803,
+              "nonzero": 7774,
+              "elements": 7776
+            },
+            "modulation_before_update": null,
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.06224457420133552,
+                  "max_abs": 0.001731924363411963,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.002496891179806766,
+                  "max_abs": 7.044687663437799e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0006224457287500909,
+                  "max_abs": 1.7319245671387762e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 4.28799243778835e-05,
+                  "max_abs": 2.447096903779311e-06,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.722055182618099,
+                  "max_abs": 0.11179259419441223,
+                  "nonzero": 7776,
+                  "elements": 7776
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 4.5138293525381185e-07,
+                  "max_abs": 2.2351741790771484e-08,
+                  "nonzero": 5016,
+                  "elements": 7776
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.548529274433861e-05,
+                  "max_abs": 1.7857414604804944e-06,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128832287838893,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 1.5978477905163814e-07,
+                  "max_abs": 1.862645149230957e-08,
+                  "nonzero": 260,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.3244334754231568e-05,
+                  "max_abs": 1.7211293652508175e-06,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.4328981474287423,
+                  "max_abs": 0.18858720362186432,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 1.332468841898254e-07,
+                  "max_abs": 1.862645149230957e-08,
+                  "nonzero": 209,
+                  "elements": 464
+                }
+              }
+            }
+          }
+        ]
+      },
+      "B8": {
+        "initial_state_sha256": "6969f4b902134de83f93a4b5597d89747ccc896a1225ea0e2d694ba4baea7161",
+        "final_state_sha256": "8828264671ead0c0ebbe83cec1e97a4a0a6ffd8a31e45f251a1937f643202804",
+        "fusion_parameters": 50192,
+        "first_nonzero_gradient_backward": {
+          "fuse": 1,
+          "mix": 2,
+          "modulation": 2,
+          "gfs": 3,
+          "terrain": 3
+        },
+        "verdict": "RELEASE_OBSERVED",
+        "steps": [
+          {
+            "backward_update": 1,
+            "synthetic_mse": 0.0408150851726532,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.0,
+              "max_abs": 0.0,
+              "nonzero": 0,
+              "elements": 7776
+            },
+            "modulation_before_update": {
+              "gamma": {
+                "finite": true,
+                "l2": 0.0,
+                "max_abs": 0.0,
+                "nonzero": 0,
+                "elements": 7776
+              },
+              "beta": {
+                "finite": true,
+                "l2": 0.0,
+                "max_abs": 0.0,
+                "nonzero": 0,
+                "elements": 7776
+              },
+              "tanh_saturation_fraction": 0.0
+            },
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.07254983332378548,
+                  "max_abs": 0.0018143223132938147,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0007254983169237092,
+                  "max_abs": 1.8143222405342385e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 4608
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.6564352831040425,
+                  "max_abs": 0.14429175853729248,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 4608
+                }
+              },
+              "modulation": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 3168
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 3168
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 3168
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 2,
+            "synthetic_mse": 0.04076247662305832,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.014659566203961074,
+              "max_abs": 0.0006265640258789062,
+              "nonzero": 7776,
+              "elements": 7776
+            },
+            "modulation_before_update": {
+              "gamma": {
+                "finite": true,
+                "l2": 0.0,
+                "max_abs": 0.0,
+                "nonzero": 0,
+                "elements": 7776
+              },
+              "beta": {
+                "finite": true,
+                "l2": 0.0,
+                "max_abs": 0.0,
+                "nonzero": 0,
+                "elements": 7776
+              },
+              "tanh_saturation_fraction": 0.0
+            },
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.07247365805242426,
+                  "max_abs": 0.0018119636224582791,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0007254983169237092,
+                  "max_abs": 1.8143222405342385e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0007247365644018466,
+                  "max_abs": 1.811963738873601e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.1178923995660596e-05,
+                  "max_abs": 7.657060905330582e-07,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.6564352831040425,
+                  "max_abs": 0.14429175853729248,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 6.52881498591559e-08,
+                  "max_abs": 7.450580596923828e-09,
+                  "nonzero": 694,
+                  "elements": 4608
+                }
+              },
+              "modulation": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 2.047651347723642e-06,
+                  "max_abs": 1.529126620880561e-07,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 3168
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 2.0476513003701235e-08,
+                  "max_abs": 1.5291266031169926e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 3,
+            "synthetic_mse": 0.04070998355746269,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.029299374003950305,
+              "max_abs": 0.0012520551681518555,
+              "nonzero": 7776,
+              "elements": 7776
+            },
+            "modulation_before_update": {
+              "gamma": {
+                "finite": true,
+                "l2": 6.88023209940346e-08,
+                "max_abs": 1.5388572638386222e-09,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "beta": {
+                "finite": true,
+                "l2": 4.9728554271803736e-09,
+                "max_abs": 1.9374013504602772e-10,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "tanh_saturation_fraction": 0.0
+            },
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.07239760813287173,
+                  "max_abs": 0.001809608074836433,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0014502348244946007,
+                  "max_abs": 3.6262859794078395e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0007239760639835794,
+                  "max_abs": 1.809608147596009e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 2.2321053861156158e-05,
+                  "max_abs": 1.5284340406651609e-06,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.656435291233846,
+                  "max_abs": 0.14429175853729248,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 2.462268559785179e-07,
+                  "max_abs": 1.4901161193847656e-08,
+                  "nonzero": 1961,
+                  "elements": 4608
+                }
+              },
+              "modulation": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 4.088841359786869e-06,
+                  "max_abs": 3.05319417748251e-07,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.0476513003701235e-08,
+                  "max_abs": 1.5291266031169926e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 4.088841270470805e-08,
+                  "max_abs": 3.053194141955373e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 6.639867584616994e-14,
+                  "max_abs": 9.016528504184572e-15,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 8.767165267869602e-14,
+                  "max_abs": 1.0031445075650569e-14,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 4,
+            "synthetic_mse": 0.04065759852528572,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.04391945328764026,
+              "max_abs": 0.0018767118453979492,
+              "nonzero": 7776,
+              "elements": 7776
+            },
+            "modulation_before_update": {
+              "gamma": {
+                "finite": true,
+                "l2": 2.0618991978615306e-07,
+                "max_abs": 4.611472537163763e-09,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "beta": {
+                "finite": true,
+                "l2": 1.490359778572631e-08,
+                "max_abs": 5.805617653287243e-10,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "tanh_saturation_fraction": 0.0
+            },
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.07232168625374576,
+                  "max_abs": 0.0018072578823193908,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0021742107181326534,
+                  "max_abs": 5.4358941270038486e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0007232168461016388,
+                  "max_abs": 1.807257649488747e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 3.3426514418578564e-05,
+                  "max_abs": 2.2881931727170013e-06,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.6564354171553966,
+                  "max_abs": 0.14429175853729248,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 3.8452211024489277e-07,
+                  "max_abs": 2.2351741790771484e-08,
+                  "nonzero": 2901,
+                  "elements": 4608
+                }
+              },
+              "modulation": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 6.123590630201018e-06,
+                  "max_abs": 4.5722180175289395e-07,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 6.136492551402287e-08,
+                  "max_abs": 4.582320745072366e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 6.123590506844898e-08,
+                  "max_abs": 4.572217715548277e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 2.9800968384422104e-13,
+                  "max_abs": 4.0467697010222736e-14,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 3.9348407036087823e-13,
+                  "max_abs": 4.502243711309792e-14,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          },
+          {
+            "backward_update": 5,
+            "synthetic_mse": 0.040605321526527405,
+            "residual_before_update": {
+              "finite": true,
+              "l2": 0.05851988199138323,
+              "max_abs": 0.0025004148483276367,
+              "nonzero": 7775,
+              "elements": 7776
+            },
+            "modulation_before_update": {
+              "gamma": {
+                "finite": true,
+                "l2": 4.1194644177892275e-07,
+                "max_abs": 9.212762996924084e-09,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "beta": {
+                "finite": true,
+                "l2": 2.977730717556573e-08,
+                "max_abs": 1.1598082494401751e-09,
+                "nonzero": 7776,
+                "elements": 7776
+              },
+              "tanh_saturation_fraction": 0.0
+            },
+            "blocks": {
+              "fuse": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 0.07224589140453373,
+                  "max_abs": 0.0018049104837700725,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 0.0028974272238366772,
+                  "max_abs": 7.243151776492596e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0007224588979820701,
+                  "max_abs": 1.8049104255624115e-05,
+                  "nonzero": 41520,
+                  "elements": 41520
+                }
+              },
+              "mix": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 4.4495430008580765e-05,
+                  "max_abs": 3.0449953101197025e-06,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 5.656435685725465,
+                  "max_abs": 0.14429175853729248,
+                  "nonzero": 4608,
+                  "elements": 4608
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 4.878748561949331e-07,
+                  "max_abs": 2.9802322387695312e-08,
+                  "nonzero": 3430,
+                  "elements": 4608
+                }
+              },
+              "modulation": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 8.151919736173805e-06,
+                  "max_abs": 6.086215762479696e-07,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 1.2260082987632905e-07,
+                  "max_abs": 9.154538460620643e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 8.151919584146501e-08,
+                  "max_abs": 6.086215975642517e-09,
+                  "nonzero": 3168,
+                  "elements": 3168
+                }
+              },
+              "gfs": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 7.926074906874799e-13,
+                  "max_abs": 1.0763028109820466e-13,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.2128831921288006,
+                  "max_abs": 0.19589339196681976,
+                  "nonzero": 432,
+                  "elements": 432
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 432
+                }
+              },
+              "terrain": {
+                "gradient_is_none": false,
+                "gradient": {
+                  "finite": true,
+                  "l2": 1.046530594295416e-12,
+                  "max_abs": 1.197432994773373e-13,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "parameter_before": {
+                  "finite": true,
+                  "l2": 2.43289811753252,
+                  "max_abs": 0.18858717381954193,
+                  "nonzero": 464,
+                  "elements": 464
+                },
+                "update_delta": {
+                  "finite": true,
+                  "l2": 0.0,
+                  "max_abs": 0.0,
+                  "nonzero": 0,
+                  "elements": 464
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "checks": {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "entry_invocations": 1,
+    "synthetic_optimizer_steps_total_this_root_check": 10,
+    "scientific_optimizer_updates": 0
+  },
+  "source_bindings_unchanged": {
+    "src/yuntapr/experimental/core_innovation/stage2/fusion.py": {
+      "bytes": 7144,
+      "sha256": "ed0206fc954b051c6e5d074352f4166ce7c917a56b241dd06410531bb2ad847d"
+    },
+    "src/yuntapr/experimental/core_innovation/dtfm.py": {
+      "bytes": 6040,
+      "sha256": "131a43c2d238692e90120888563e8bb9da52f34bfa1adcfa34e4d4eb56d1c965"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": {
+      "bytes": 7718,
+      "sha256": "369376e1c22231d20e93aa358c60d065322de4b233056afe427afceb9a034f07"
+    },
+    "config/science_contract_v1.1.yaml": {
+      "bytes": 14085,
+      "sha256": "14209321d82107f58df96f234485cc56a806971cb62e8b9804ce4d25d05756c3"
+    }
+  },
+  "interpretation": {
+    "graph_reachability": "B7 condition projection gradient from backward2, B8 from backward3 in this finite CPU synthetic case",
+    "parameter_updates": "B8 GFS/terrain projection deltas remain exactly zero through five SGD updates although later gradients are nonzero",
+    "scope_limit": "gradient reachability does not establish effective conditional learning, scientific AdamW behaviour, 4320-update training dynamics or performance cause",
+    "initialization_action": "unchanged, no evidence here requiring scientific initialization replacement",
+    "next_scientific_gate": "historical E0 inheritance and exact factorial proposal/budget, not executed"
+  },
+  "evidence_level": "DIRECT_VERIFIED_CPU_SYNTHETIC_ONLY",
+  "engineering": "PASS_WITH_LIMITATIONS",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED",
+  "external_stage4_5": "PARTIAL",
+  "Harness_review": "PENDING",
+  "SYNTHETIC_GRADIENT_PATH_CHECK": "PASS_WITH_LIMITATIONS",
+  "controller_feedback_message": "71b8c04d-6422-4e3a-99fa-4f1b532f6f80",
+  "raw_probe_result_preserved": "probe field equals original CLI JSON; raw PASS checks graph reachability, outer PASS_WITH_LIMITATIONS adds learning/update limits, no rerun"
+}

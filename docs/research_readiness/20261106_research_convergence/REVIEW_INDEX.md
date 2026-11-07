@@ -1,3 +1,9 @@
+## 2026-11-07 DTFM真实初始化合成检查
+
+- 新入口probe_dtfm_gradient_release.py及7项回归。每臂5步CPU诊断SGD，一次CLI总10次合成更新。B7条件梯度第2次反向、B8第3次出现，B8条件投影五步参数delta仍0。
+- 记录docs/research_readiness/20261107_dtfm_gradient_release/RESULT.json和VERIFICATION.json，独立审核与Git实际收据另列。主控汇总PASS_WITH_LIMITATIONS，原始CLI门槛PASS保留，真实条件学习/强雨性能仍NOT_VERIFIED。
+- LIVE.13记录实测边界，旧LIVE.12保持。没有真实数据/权重/manifest/缓存/2025读取或正式训练，没有科研初始化/默认执行链改动。E0继承及四格精确方案/预算尚未完成。
+
 ## 2026-11-07 创新增益问题讨论闭环
 
 - 三名新代理、网页GPT总控和DeepSeek Harness有条件接受新顺序，评分优先已撤下。DTFM真实初始化梯度通路 → 历史E0继承核对 → 条件性B7/B8×λq∈{1,2}四格 → 分开判断收益。

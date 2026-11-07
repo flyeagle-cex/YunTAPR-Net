@@ -33,23 +33,23 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261107.12}\qquad 状态截至2026年11月07日（北京时间）
+版本 \texttt{LIVE-20261107.13}\qquad 状态截至2026年11月07日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{创新增益问题已形成新候选路线，实际干预尚未执行。}
+\status{DTFM合成梯度通路检查完成，真实训练收益仍待验证。}
 已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者质疑二次评分与已有分位数头的研究增量。三名新代理、网页总控和Harness完成讨论，撤下评分试验的优先位置。\evi{S22}
-\item 首先检查DTFM真实初始化下的梯度通路。内外零初始化只支持早期梯度延迟的代码推导，长期作用仍待验证。
-\item 条件性候选为B7/B8与全局$\lambda_q\in\{1,2\}$的四格对照。历史E0严格可继承时，首个预指定Seed仅需新增两个$\lambda_q=2$条件。
-\item 分开判断损失调整、融合方式及二者交互。DOTE保留已有有限收益和限制，方向控制与多尺度扩展继续后移。
+\item 按网页主控限定规格，实际执行B7/B8融合各5步CPU合成SGD，保留原初始化。一次CLI、10次合成更新、7项检查通过。\evi{S23}
+\item B7条件投影第2次反向出现非零梯度，B8第3次出现。B8内部调制从第2次反向开始可达。
+\item B8的GFS和terrain投影五步内参数变化仍为零。图可达与有效参数学习分开记录，真实AdamW及长期行为未验证。
+\item 条件性四格仍须历史E0身份继承及精确方案/预算。评分保持辅助地位，科研初始化和默认执行链保持原版本。
 \end{itemize}
 
-本轮只有源码与既有记录阅读、路线讨论及文档维护。探针和新训练均未执行。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。候选仍为PROPOSED，预算未批准。当前优先级见6K，6I/6J保留历史。
+主控将本轮汇总登记为\texttt{PASS\_WITH\_LIMITATIONS}，限定人工融合输入和SGD。原始CLI门槛结果PASS保留，B8条件投影实际更新仍待验证。科研更新及真实载荷读取均为0。科学\texttt{NOT\_VERIFIED}，外部验证\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。当前事实见6L，候选四格仍为PROPOSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -364,7 +364,7 @@ AP与固定Top-K & 排序、同报警数的命中和误报 & 校准、低FPR或�
 
 候选无有用收益就停止该候选，不扩模块或扫参数追正结果。2024重复开发集、三Seed非独立天气、独立E及外部资料缺口继续保留。工程讨论记录完成不等于实际干预PASS；本轮无新统计、推理、训练或2025访问。
 
-\pageheading{6K\quad 怎样处理创新点增益不足}{2026-11-07多代理、网页总控与Harness讨论。PROPOSED，尚未执行。}
+\pageheading{6K\quad 怎样处理创新点增益不足}{候选设计快照。合成探针的实际结果见6L，正式训练仍未执行。}
 \section*{先查路径，再分离收益}
 真实B8为SP04单尺度调制，宽16。外层融合卷积及内部$\gamma/\beta$投影均零初始化，首次反向会阻断部分内层梯度。既有梯度检查先手填非零参数，只覆盖释放后的可导性。未来使用合成输入、冻结真初态及少量受限更新，观察梯度、参数和残差幅度的自然释放。短暂延迟本身不足以解释4320更新后的退化。若需改初始化，历史E0复用资格须重新审查。\evi{S22}
 
@@ -387,6 +387,34 @@ B8 单尺度DTFM & 历史E0有条件继承 & 从B8原初态训练\\
 若记同口径损失为$L$，逐Seed报告$d_1=L_{B8,1}-L_{B7,1}$、$d_2=L_{B8,2}-L_{B7,2}$及交互$d_2-d_1$。两模型共同改善只支持损失调整。$d_2-d_1<0$而$d_2>0$时，B8仍落后。稳定同目标增益且护栏可接受才支持保留具体DTFM实现。持续无有用增益时简化或移出核心创新，单Seed阴性不足以宣称普遍无效。
 
 DOTE若仍有独立决策价值，可后续比较REAL/ZERO与目标的交互，保留128零梯度权重及mask限制。单一负对照不足以证明物理因果。2024仍是重复开发人口，三Seed共享天气，2025封存，科学\texttt{NOT\_VERIFIED}。
+
+\pageheading{6L\quad DTFM真实初始化合成梯度检查}{研究者要求遵循网页主控操作。工程检查通过，科研效果仍待验证。}
+\section*{实际执行}
+采用未改的\texttt{paired\_fusion\_candidates}，48特征、26 GFS条件、28地形条件通道，width16，调制限幅0.1。固定工程Seed20261107，人工$2\times9\times9$网格、全有效mask、固定非零回归目标。每臂5次CPU/FP32更新，诊断SGD学习率0.01、momentum与weight decay均0。原参数初始化规则保留，没有手填非零权重。\evi{S23}
+
+正式AdamW辅助模块依赖本环境缺失的PyYAML。主控明确选择独立SGD图可达性检查，保持现有依赖。该入口只检查融合块，不接骨干、MEE、概率头或真实数据。
+
+\begin{tabularx}{\textwidth}{@{}p{4cm}X X@{}}
+\toprule 首个非零梯度反向 & B7 concat & B8 DTFM\\\midrule
+外层fuse & 1 & 1\\
+内部mix & 2 & 2\\
+调制投影 & 无此层 & 2\\
+GFS条件投影 & 2 & 3\\
+terrain条件投影 & 2 & 3\\
+\bottomrule
+\end{tabularx}
+
+每臂融合参数50192。首个前向严格恒等，首步内部零梯度后出现非零梯度，所有已记录梯度非None且有限。新增7项回归在一次真实CLI调用上检查，root合成optimizer.step共10次，科研优化器更新0。逐步梯度范数、参数更新量、残差和$\gamma/\beta$统计保存在RESULT。\evi{S23}
+
+\section*{仍须保留的限定}
+B8第5次反向时GFS/terrain梯度L2约为$7.93\times10^{-13}$与$1.05\times10^{-12}$，两投影五步参数差均为0。与此同时，调制投影及融合层已有非零更新。\textbf{梯度可达与可测参数更新是不同证据。}当前结果只证明这个合成例子的图通路可达，不说明真实条件信息已被有效利用。
+
+主控反馈将汇总状态限定为\texttt{PASS\_WITH\_LIMITATIONS}。原始CLI的PASS表示预定五步内各块出现非零梯度，原始输出逐字保留。汇总解释及限定状态另列，未重跑探针或扩大步数。
+
+残差从0变为非零，人工MSE变化只作工程记录。不能据此判断正式AdamW/BF16、真实mask与损失、4320更新后的学习、强雨低估原因或模块性能改善。当前没有据此修改科研初始化的依据。新增依赖、真实载荷/权重/manifest/缓存/2025读取与正式训练均为0。
+
+\section*{下一门槛}
+保持一次新增差异Harness审核及各自工作分支同步。后续科学步骤仍是历史E0可继承性与四格精确方案、数值效应/退化容忍及新预算冻结，不从本工程PASS自动启动训练。工程结果、独立审核与Git实际收据分别归档。科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，知识\texttt{NOT\_ASSESSED}。
 
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
@@ -438,6 +466,7 @@ DOTE若仍有独立决策价值，可后续比较REAL/ZERO与目标的交互，�
 \item[S20] \path{docs/research_readiness/20261106_q32_baseline/}中的\path{CONSENSUS.json}、\path{RESULT.json}及\path{VERIFICATION.json}；本轮委托共识、实际统计与新增差异复核；两尝试累计计费，非新推理或科学验收。
 \item[S21] \path{docs/research_readiness/20261106_performance_route/DISCUSSION.json}。三代理、总控及Harness路线讨论；无新实验，记录不冒称科学批准。
 \item[S22] \path{docs/research_readiness/20261107_innovation_resolution/DISCUSSION.json}。新三代理、网页总控及DeepSeek Harness纠偏讨论。源码的双零初始化与旧测试覆盖为直接文本证据，梯度释放和性能原因尚未实测。新探针/训练/预算均未批准或执行。
+\item[S23] \path{docs/research_readiness/20261107_dtfm_gradient_release/}的RESULT与VERIFICATION。固定CPU合成探针、7项回归及源文件保护证据。S22为前轮历史快照，当前只补图可达性，不改其真实训练与性能未验证状态。
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。

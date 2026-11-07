@@ -1,3 +1,15 @@
+# 2026-11-07 DTFM合成梯度检查 / LIVE-20261107.13
+
+按网页主控限定规格完成隔离CPU探针。真实fusion初始化保持，48/26/28通道、width16、工程Seed20261107，每臂5步诊断SGD，weight_decay=0。7项回归通过，一次CLI合计10次合成optimizer.step，科研更新和真实载荷读取均0。
+
+- B7条件投影从第2次反向出现非零梯度，B8从第3次出现，调制投影从第2次出现。梯度均有限且非None。
+- B8 GFS/terrain投影五步内实际参数delta仍为0。图可达不证明有效学习，正式AdamW、真实mask/损失及长期性能原因仍NOT_VERIFIED。
+- 主控将汇总登记为SYNTHETIC_GRADIENT_PATH_CHECK=PASS_WITH_LIMITATIONS。原始CLI的PASS逐字保留，B8条件投影实际更新仍未验证。默认执行链和科研初始化保持原版本，按主控采用诊断SGD，现有依赖保持。
+- 结果见 `docs/research_readiness/20261107_dtfm_gradient_release/RESULT.json`，检查与指纹见 `VERIFICATION.json`，独立审核及同步实际收据另列。后续E0继承/正式四格仍待精确方案和新预算。
+- 科学NOT_VERIFIED，外部Stage4.5 PARTIAL，研究者NOT_ASSESSED。计划为 `output/pdf/YunTAPR-Net_Master_Plan_Live_20261107_13.pdf`，旧LIVE.12和历史记录保留。
+
+以下为前轮历史快照。
+
 # 2026-11-07 DOTE/DTFM增益不足讨论 / LIVE-20261107.12
 
 三名独立代理、网页GPT总控与DeepSeek Harness接受新的候选顺序。先检查DTFM真实初始化下的梯度通路，再核对历史E0可继承性，有条件地做B7/B8 × 全局λq∈{1,2}四格对照。二次评分转为辅助分析。当前仅讨论和文档维护，探针及新训练均未执行，预算未批准。
