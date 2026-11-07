@@ -1,0 +1,83 @@
+{
+  "id": "DYNAMIC_E2_START_20261107",
+  "recorded_at": "2026-11-07T12:46:48.353691+00:00",
+  "decision_id": "YT-E2-20261107-001",
+  "approval_evidence": "researcher direct reply to the exact displayed bounded package: 批准这一限定包并立即启动",
+  "approved_at": "2026-11-07T20:40:59.803171+08:00",
+  "approval_record_bytes": 7851,
+  "approval_record_sha256": "6dee77a870eb0a136fd44866e56748288ac289cfbcd207c4c62ddeeaa92b4286",
+  "execution_code_commit": "8339fe407fdd084b0271c1af2ae42f98888bbd8e",
+  "proposal_canonical_sha256": "0d5afe6d97b25a163a8adecd95664ffe0b0b0468f157fd20a15cddf4ba44f53f",
+  "started_at": "2026-11-07T12:41:06.444002+00:00",
+  "independent_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700,
+    "automatic_retry": false
+  },
+  "observed_runtime_loss_config": {
+    "alpha": 0.5,
+    "experiment_id": "E2",
+    "gamma": 2.0,
+    "lambda_q": 2.0
+  },
+  "observed_runtime_seed": 2029,
+  "origin_reference_in_runtime_ledger_matches": true,
+  "approval_consumed": true,
+  "automatic_restart_authorized": false,
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "weather_source_bytes_per_model": 477571641012,
+    "weather_source_files_per_model": 142812,
+    "static_source_bytes_per_model": {
+      "B7": 312828,
+      "B8": 312828
+    },
+    "static_source_files_per_model": 1,
+    "total_source_bytes_per_model": {
+      "B7": 477571953840,
+      "B8": 477571953840
+    },
+    "total_source_bytes": 955143907680,
+    "total_source_files": 285626,
+    "dynamic_extra_raw_source_bytes": 0,
+    "dynamic_formal_cache_reads": 0,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43200,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776
+  },
+  "initial_progress_snapshot": {
+    "snapshot_utc": "2026-11-07T12:44:33.734953+00:00",
+    "state": "RUNNING",
+    "returned": 116,
+    "reserved": 116,
+    "uncertain": 0,
+    "runs": [
+      {
+        "model": "B7",
+        "seed": 2029,
+        "state": "RUNNING",
+        "returned": 116,
+        "sealed_epochs": 0
+      },
+      {
+        "model": "B8",
+        "seed": 2029,
+        "state": "PENDING",
+        "returned": 0,
+        "sealed_epochs": 0
+      }
+    ]
+  },
+  "monitor": "existing request-driven local read-only page active; URL and process identifiers retained in private runtime record",
+  "training": "IN_PROGRESS",
+  "new_E9_results": "NOT_YET_AVAILABLE",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "external_stage4_5": "PARTIAL",
+  "researcher_mastery": "NOT_ASSESSED",
+  "execution_limits": "B7 then B8 only, failure stops later tasks, no extra seeds/replay/retry or2025 access"
+}
