@@ -1,0 +1,84 @@
+{
+  "status": "RECOVERY_RUNNING",
+  "recorded_utc": "2026-11-08T01:08:54.320182+00:00",
+  "execution_commit": "f3b90f654b67fda538f4f156422841b69cc50b23",
+  "proposal_sha256": "9feaa59397a95ab3c97dd0f26b15a2520f91b62370687e7e6ff48a5ce61c2713",
+  "researcher_authority": {
+    "source": "Direct current researcher message",
+    "verbatim": "恢复",
+    "scope": "Previously displayed B8/E2/2029/E8-to-E9,480 replay updates,full2024 Development,3600s,24GiB,zero extra retries",
+    "implementation_commit_binding": "Selected by Codex after focused checks within the researcher-directed scope",
+    "approval_record_sha256": "e0842e5283b3f5f2da6aef6596c986a7791dd2c83cfd2f7410df2fc69d189cad",
+    "consumed": true
+  },
+  "independent_launch": {
+    "started_utc": "2026-11-08T01:05:58.870877+00:00",
+    "in_any_job": false,
+    "package_status": 15700,
+    "automatic_retry": false
+  },
+  "observed": {
+    "new_returned_updates": 59,
+    "B8_effective_updates": 3899,
+    "cumulative_returned_attempts": 8699,
+    "inherited_B7_E9": "COMPLETE",
+    "inherited_B8_epochs": 8,
+    "new_phase": "TRAINING",
+    "loss_config": {
+      "experiment_id": "E2",
+      "alpha": 0.5,
+      "gamma": 2,
+      "lambda_q": 2
+    },
+    "restore_evidence": "First returned update occurs after pinned-checkpoint SHA,model/AdamW/schedule/RNG restoration checks in the fixed executor"
+  },
+  "budget": {
+    "new_updates": 480,
+    "replayed_updates": 480,
+    "new_source_bytes": 53063828496,
+    "new_source_files": 15869,
+    "new_weather_source_bytes": 53063515668,
+    "new_static_source_bytes": 312828,
+    "max_wall_seconds": 3600,
+    "minimum_initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "checkpoint_sha_reads": 1,
+    "checkpoint_deserializations": 1,
+    "cumulative_updates": 9120,
+    "cumulative_source_bytes": 1004416034948,
+    "cumulative_source_files": 300232,
+    "prior_package_seconds": 35144,
+    "cumulative_package_seconds": 38744,
+    "prior_B8_worker_seconds": 21600,
+    "cumulative_B8_worker_seconds": 25200,
+    "additional_retry_allowance": 0
+  },
+  "independent_review": {
+    "status": "PASS_WITH_LIMITATIONS",
+    "review_file_bytes": 4695,
+    "review_file_sha256": "a9a301098ad10028066a00a529db51f7d6078d7686eb93155c60aceb00c099e5",
+    "independent_new_tests": 10,
+    "reviewer_scientific_payload_reads": 0,
+    "execution_authority": "Separate direct researcher instruction in current Codex conversation; reviewer did not inspect private authorization object",
+    "scientific_acceptance": "NOT_VERIFIED"
+  },
+  "tests": {
+    "Codex_total_passed": 29,
+    "Harness_new_passed": 10,
+    "monitor_metadata_checks_passed": 2
+  },
+  "progress_page": {
+    "read_only": true,
+    "same_local_address": true,
+    "HTTP_checked": true,
+    "source_commit_and_exact_limits_checked": true
+  },
+  "limitations": [
+    "One-seed2024 Development comparison; scientific result pending fixedE9 closure",
+    "Historical E0 complete runtime fingerprints unavailable",
+    "The new one-hour bound is strict and no additional retry is authorized"
+  ],
+  "engineering": "PASS_WITH_LIMITATIONS_REAL_RECOVERY_STARTED",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED"
+}

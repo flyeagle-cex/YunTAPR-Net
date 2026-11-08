@@ -33,23 +33,25 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.18}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.19}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{E2包因B8单模型6小时上限停止，B7固定E9完成，B8终点待补齐。}
-两模型各4320次训练更新均已返回。B8第九轮评价完成808/963场景时停止，最新完整权重为E8。2025 Final Test继续封存。\evi{S28}
+\status{研究者限定恢复指令已执行，B8正在从E8继续最后一轮。}
+B7固定E9已完成。原失败包保留，当前单次恢复仅B8/2029/E2，目标为补齐固定E9和完整2024 Development。\evi{S30}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 北京时间2026年11月08日06:26:52，控制器触发21600秒上限并封口失败，退出码1。直接日志为TimeoutExpired及Deadline reached。\evi{S28}
-\item B7九轮Train/Dev和E9权重已核实。B8九轮Train完成、八轮Dev封口；E9内存状态随进程退出，恢复须从E8重放480更新并完整评价。
-\item 累计8640更新、951352206452逻辑源字节、284363次打开；无额外重试或重放。失败账本、部分评价与历史权重均保留。
-\item 最小恢复范围仅为B8/2029/E2的E9。候选新增480更新（全部重放）、53063828496字节/15869次及1小时。当前仅范围设计，入口适配和精确新批准尚待完成。
+\item 研究者本轮直接回复“恢复”。Codex在前述480重放、1小时范围内实现并冻结f3b90f6，提案及新目录另行绑定，私有批准依据保存原话。
+\item 29项针对性CPU检查通过，Harness独立10项新检查通过，限定审核PASS\_WITH\_LIMITATIONS。真实源存在性/大小及RAM/GPU准入通过。\evi{S30}
+\item 北京时间09:05:58独立WMI单次启动。实际E2账本已观察3841--3899更新返回，即新增59次重放。启动快照用于追溯，实时进度由只读页面展示。
+\item 新增上限480更新、53063828496逻辑源字节/15869次打开、3600秒、24GiB，检查点重哈希和加载各1次，额外重试0。累计尝试上限9120，包含480恢复重放。
 \end{itemize}
 
-本次单模型预算未覆盖B8完整Train/Dev耗时，评价后才保存权重使480更新失去可恢复状态。该停止原因可直接核实；运行变慢的根因尚未验证。科学验收NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。
+恢复代码核对E2身份及模型、AdamW、调度、Python/NumPy/CPU/CUDA随机数状态。执行器只接收B8第九轮的Train和Development。完成时核对重放训练摘要与旧保存值逐字段相等。B7完整结果从旧目录继承。
+
+当前恢复尚在执行，固定E9及完整配对比较待封口。科学NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -495,6 +497,32 @@ B7未加权条件Pinball由历史E0的0.127401降至0.126805；Brier由0.096732�
 
 当前仅为范围设计。E2恢复入口、针对性测试、准确commit/提案/输出绑定和必要一次独立审核尚待完成。原包失败与所有历史结果保留。工程包FAIL、科学NOT\_VERIFIED、外部PARTIAL、知识NOT\_ASSESSED。
 
+\pageheading{6P\quad B8限定恢复已真实启动}{执行f3b90f6，准确提案与研究者本轮直接恢复指令绑定。旧失败证据保留。}
+\section*{恢复执行与检查}
+研究者在上一轮已显示480重放和1小时范围后直接回复“恢复”。本轮代码由Codex实现、针对性检查后冻结并推送，执行副本为干净固定提交。外部授权收据明确记录该指令来源及工程版本绑定方式。\evi{S30}
+
+原B8 E8权重SHA为accc2aba\ldots c77984，恢复模型、AdamW、原调度及全部随机数状态。原始初态和九轮样本顺序继续核对，读取器仅接受B8 E9 Train/Development。新恢复账本只接收3841--4320。B7已完成结果直接继承。
+
+\begin{tabularx}{\textwidth}{@{}p{4.3cm}X@{}}
+\toprule 证据 & 已观察状态\\\midrule
+Codex CPU检查 & 29项通过，含10新恢复和19受影响旧检查\\
+Harness限定审核 & PASS\_WITH\_LIMITATIONS，独立10项通过\\
+真实输入准入 & 指定2023/2024来源10项存在性及大小通过，载荷读取0\\
+独立启动 & 09:05:58，监督器无Job及应用包身份\\
+实际更新快照 & 新增59次返回，B8有效进度3899/4320\\
+只读进度页 & 原地址，实际HTTP核对任务身份与累计额度\\
+\bottomrule
+\end{tabularx}
+
+\section*{准确新增额度与封口}
+仅新增480次更新，全部属于必要重放。53063828496源字节/15869次打开，3600秒，至少24GiB空闲。检查点重哈希及反序列化各1次，后续重试0。累计尝试9120、源1004416034948字节/300232次。新恢复上限与原已消费单模型上限分别留痕。
+
+新E9训练摘要必须与停止前已保存的E9 Train记录逐字段一致，再封口新权重和完整Dev。最终复用既有汇总函数，以原B7 E9和新B8 E9组成同人口比较，主指标仍为未加权条件Pinball，Brier及q32误差退化单列。
+
+审核未读取真实检查点或私有授权对象，其“未批准”限定于审核者自身范围。研究者直接指令、Codex外部绑定及真实启动分开记录。审核端缺失临时目录已恢复，权限请求由研究者手动处理，未改ACL或配置。
+
+历史E0完整环境指纹仍缺失。当前工程启动为限定通过，恢复执行中。\par 科学状态为\texttt{NOT\_VERIFIED}，研究者掌握为\texttt{NOT\_ASSESSED}。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -554,6 +582,7 @@ B7未加权条件Pinball由历史E0的0.127401降至0.126805；Brier由0.096732�
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \item[S28] 本轮失败终态与未批准恢复范围。\par\path{docs/research_readiness/20261108_lambda2_stop/}\par\path{TERMINAL_VERIFICATION.json}、\path{RECOVERY_SCOPE.json}。直接核对新账本及两份最新权重SHA。
+\item[S30] 本轮限定恢复提案、审核与真实启动回执。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{EXECUTION_PROPOSAL.json}、\path{REVIEW_OUTCOME.json}及\path{START_RECEIPT.json}。最新完整指纹见同目录启动核验。
 \end{description}
 \normalsize
 

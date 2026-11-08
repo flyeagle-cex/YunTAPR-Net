@@ -381,27 +381,40 @@ class B8RecoveryReader(base.Reader):
         self.cache,self.cached_at=None,0
         self.lock,self.fixed=threading.Lock(),{}
         binding=self.document('authorization_binding.json');self.approval=binding['approval'];self.budget=self.approval['budget']
-        if (binding['controller_pid']!=pid or self.approval['tasks']!=[dict(model='B8',seed=2029)]
-                or self.budget['new_updates']!=1440 or self.budget['replayed_updates']!=62):raise ValueError('Not the approved B8 recovery')
-        self.stop=json.loads((ROOT/'docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json').read_text(encoding='utf-8'))
-        if self.stop['tasks'][1]['last_saved_sha256']!=self.approval['approved_checkpoint_sha256']:raise ValueError('E6 identity differs')
+        if binding['controller_pid']!=pid or self.approval['tasks']!=[dict(model='B8',seed=2029)]:raise ValueError('Not the approved B8 recovery')
+        self.loss_recovery=self.budget['new_updates']==480
+        if self.loss_recovery:
+            self.stop=json.loads((ROOT/'docs/research_readiness/20261108_lambda2_stop/TERMINAL_VERIFICATION.json').read_text(encoding='utf-8'))
+            reference=self.approval['scientific_choices']['recovery']
+            if (self.budget['replayed_updates']!=480 or reference['checkpoint_epoch']!=8
+                    or reference['checkpoint_sha256']!=self.stop['tasks'][1]['latest_checkpoint_sha256']):raise ValueError('E2 E8 recovery identity differs')
+            prior=self.stop['actual']
+            self.cost=dict(actual_source_files=prior['source_files'],actual_source_bytes=prior['delivered_source_bytes'],reserved_source_bytes=prior['reserved_source_bytes'])
+            self.inherited_epochs,self.saved_updates,self.prior_attempts=8,3840,8640
+        else:
+            if self.budget['new_updates']!=1440 or self.budget['replayed_updates']!=62:raise ValueError('Not the approved E6 recovery')
+            self.stop=json.loads((ROOT/'docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json').read_text(encoding='utf-8'))
+            if self.stop['tasks'][1]['last_saved_sha256']!=self.approval['approved_checkpoint_sha256']:raise ValueError('E6 identity differs')
+            self.cost=self.stop['budget_closure']
+            self.inherited_epochs,self.saved_updates,self.prior_attempts=6,2880,7262
+        self.segment_limit=self.budget['new_updates'];self.replay_limit=self.budget['replayed_updates']
         self.started=datetime.fromtimestamp((self.folder/'authorization_binding.json').stat().st_mtime,timezone.utc)
 
     def snapshot(self,include_resources=True):
         with self.lock:
             if self.cache and time.monotonic()-self.cached_at<10:return self.cache
-            cost=self.stop['budget_closure'];caps=self.budget
-            io=dict(files=cost['actual_source_files']+caps['diagnostic_files_already_spent'],bytes=cost['actual_source_bytes']+caps['diagnostic_bytes_already_spent'],reserved_bytes=cost['reserved_source_bytes']+caps['diagnostic_bytes_already_spent'],sealed=0)
+            cost=self.cost;caps=self.budget
+            io=dict(files=cost['actual_source_files']+caps.get('diagnostic_files_already_spent',0),bytes=cost['actual_source_bytes']+caps.get('diagnostic_bytes_already_spent',0),reserved_bytes=cost['reserved_source_bytes']+caps.get('diagnostic_bytes_already_spent',0),sealed=0)
             folder=self.folder/'B8_s2029';n=reserved=0
             if (folder/'updates.sqlite').exists():
                 rows=base.query(folder/'updates.sqlite','SELECT model,state,COUNT(*),MIN(u),MAX(u) FROM updates GROUP BY model,state')
-                if any(k!='B8' or state not in ('RETURNED','INTENT') or lo<2881 or hi>4320 for k,state,count,lo,hi in rows):raise ValueError('Unexpected B8 segment ledger')
+                if any(k!='B8' or state not in ('RETURNED','INTENT') or lo<self.saved_updates+1 or hi>4320 for k,state,count,lo,hi in rows):raise ValueError('Unexpected B8 segment ledger')
                 n=sum(count for k,state,count,lo,hi in rows if state=='RETURNED');reserved=sum(count for k,state,count,lo,hi in rows)
             runs=[]
-            for kind,effective in (('B7',4320),('B8',2880+n)):
+            for kind,effective in (('B7',4320),('B8',self.saved_updates+n)):
                 epochs=[]
                 for e in range(1,10):
-                    inherited=kind=='B7' or e<=6
+                    inherited=kind=='B7' or e<=self.inherited_epochs
                     source=(self.parent if inherited else self.folder)/f'{kind}_s2029';active=False
                     if not inherited:
                         for role in ('train','dev'):
@@ -426,17 +439,17 @@ class B8RecoveryReader(base.Reader):
                 for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
             failure=self.document('failure.json');completion=self.document('completion.json');live=self.token is not None and base.process_token(self.pid)==self.token
             if failure:runs[1]['state']='FAILED'
-            state='FAILED' if failure else 'COMPLETE' if completion and n==1440 and all(x['state']=='COMPLETE' for x in runs) else 'RUNNING' if live else 'UNKNOWN'
-            if reserved>1440 or io['reserved_bytes']>caps['cumulative_source_bytes'] or io['files']>caps['cumulative_source_files']:state='BUDGET_ALERT'
+            state='FAILED' if failure else 'COMPLETE' if completion and n==self.segment_limit and all(x['state']=='COMPLETE' for x in runs) else 'RUNNING' if live else 'UNKNOWN'
+            if reserved>self.segment_limit or io['reserved_bytes']>caps['cumulative_source_bytes'] or io['files']>caps['cumulative_source_files']:state='BUDGET_ALERT'
             now=datetime.now(timezone.utc);terminal=self.folder/('failure.json' if failure else 'completion.json')
             stopped=datetime.fromtimestamp(terminal.stat().st_mtime,timezone.utc) if (failure or completion) else now;elapsed=max(0,(stopped-self.started).total_seconds())
-            result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,returned=7262+n,reserved=7262+reserved,uncertain=reserved-n,
+            result=dict(state=state,snapshot_utc=now.isoformat(),read_only=True,process_observed=live,runs=runs,returned=self.prior_attempts+n,reserved=self.prior_attempts+reserved,uncertain=reserved-n,
                         io=io,sealed_epochs=sum(x['sealed_epochs'] for x in runs),completed_models=sum(x['state']=='COMPLETE' for x in runs),
-                        limits=dict(updates=8702,bytes=caps['cumulative_source_bytes'],files=caps['cumulative_source_files'],epochs=18,seconds=caps['max_wall_seconds']),
-                        recovery=True,b8_recovery=True,innovation=True,static=False,replay_returned=min(62,n),segment_returned=n,segment_limit=1440,
+                        limits=dict(updates=self.prior_attempts+self.segment_limit,bytes=caps['cumulative_source_bytes'],files=caps['cumulative_source_files'],epochs=18,seconds=caps['max_wall_seconds']),
+                        recovery=True,b8_recovery=True,innovation=True,static=False,replay_returned=min(self.replay_limit,n),segment_returned=n,segment_limit=self.segment_limit,
                         elapsed_seconds=elapsed,remaining_limit_seconds=max(0,caps['max_wall_seconds']-elapsed),started_at=self.started.isoformat(),source_commit=self.approval['code_commit'],
                         resources=base.resources(self.folder) if include_resources else {},message='B8恢复已停止；保留新旧账本，不自动重试。' if failure else None)
-            if state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
+            if state=='COMPLETE':result['paired_summary']=self.document('loss_pair_summary.json' if self.loss_recovery else 'innovation_paired_summary.json')
             self.cache,self.cached_at=result,time.monotonic();return result
 
 
