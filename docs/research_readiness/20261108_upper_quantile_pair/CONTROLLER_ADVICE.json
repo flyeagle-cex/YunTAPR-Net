@@ -1,0 +1,29 @@
+{
+  "status": "PROPOSED_NOT_RESEARCHER_APPROVAL",
+  "controller_thread": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+  "observed_message": "a13a4bbb-0e1a-415d-9566-39416d015910",
+  "title": "最小实验方案收敛：采用温和线性τ权重",
+  "observation": "DIRECT_TEXT_READ_VIA_THREAD_CONNECTOR",
+  "recommendation": {
+    "weight_rule": "2*(1+tau)/3",
+    "architecture": "B7_CONCAT_DIAGNOSTIC_ONLY",
+    "control": "FRESH_E0_SAME_RUNTIME_SAME_ORIGIN_SEED2029",
+    "required_improvements": ["strong_log_pinball", "strong_physical_pinball"],
+    "guardrails": ["all_log_pinball", "all_physical_pinball", "brier", "occurrence_ap", "occurrence_auroc"],
+    "scientific_deterioration_allowance": 0,
+    "q32": "AUXILIARY",
+    "additional_retry": 0,
+    "replay": 0
+  },
+  "codex_concretization": {
+    "absolute_roundoff_tolerance": 1e-10,
+    "status": "PROPOSED_PENDING_RESEARCHER_APPROVAL",
+    "empirical_ranking_of_weight_functions": "NOT_VERIFIED"
+  },
+  "limits": [
+    "Upper-quantile node weights do not specially upweight strong-rain samples.",
+    "This is one-seed reused-Development screening, without significance or final-model selection.",
+    "Controller advice does not grant training or budget authority.",
+    "An unsuccessful candidate does not authorize a weight sweep or fallback experiment."
+  ]
+}

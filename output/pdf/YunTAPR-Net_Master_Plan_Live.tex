@@ -33,23 +33,22 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.24}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.25}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{Seed2029模块与loss的四格结果已封口，科学效果呈取舍。}
-B7、B8的E2固定E9与完整2024 Development均完成。B8限定恢复于09:44:38正常退出，工程状态PASS，科学验收仍为NOT\_VERIFIED。\evi{S31}
+\status{既有E2四格实验已封口，新上分位加权配对包已完成工程准备。}
+历史B7/B8强雨Pinball均退化，模型改进仍待检验。网页总控建议温和固定分位节点权重，现已实现为一个候选。新训练尚未启动，准确科学方案和新增预算待研究者批准。\evi{S31,S33,S34}
 
 \section*{本次实际更新}
-研究者回复“开始吧”后，三份保存JSON的七雨强层数值分解已完成，Harness独立数值复核相符。模型与评价输出均沿用已有结果。\evi{S33}
 \begin{itemize}
-\item B7总体Pinball改善来自低雨强与5--20 mm/h；B7/B8在$R>20$三个分层的32节点条件Pinball均退化。
-\item $R>20$汇总Pinball，B7退化0.6759\%，B8退化2.9862\%。q32达到真实值分别39到30、41到44/717，覆盖与损失方向存在取舍。
-\item 总控建议将固定正分位节点权重保留为唯一候选，具体权重、架构、容忍线与预算尚未选择。路线状态为\texttt{PROPOSED}。
+\item 唯一候选为$w(\tau)=2(1+\tau)/3$，32节点权重均值1，发生项与$\lambda_q=1$沿用原E0。
+\item 拟用B7/Seed2029同环境从相同原初态重跑E0和候选，各九轮固定E9。B7只作诊断载体，未选择最终模型。
+\item 强雨未加权log及物理雨强Pinball共同改善，五项总体/发生指标不退化。绝对数值容差$10^{-10}$，科学退化容限0。
+\item 48项合成与影响回归检查通过，独立执行副本648项代码指纹匹配。Harness限定新增差异审核通过，19项新合成检查独立通过。
 \end{itemize}
-
-本轮保存统计工程\texttt{PASS}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6R保留讨论时提案，6S--6T记录实际结果和候选边界。
+工程\texttt{PASS}限代码与准备检查，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6U记录本轮准确提案，6T保留此前方向建议快照。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -641,6 +640,52 @@ B8 & 0.86894667 & 0.89489487 & $+2.9862\%$ & $41\to44$\\\bottomrule
 
 总控建议未来以$R>20$的未加权32节点Pinball为主指标，总体Pinball、Brier、发生AP/AUROC作保护指标，q32仅作辅助。该建议尚待研究者确定具体权重、架构、容忍线与准确预算。仅改变loss的对照、原初态及既有协议可作为设计方向，正式B8仍单SP04。当前不据此选择最终模型。
 
+\pageheading{6U\quad 温和上分位加权的准确配对提案}{PROPOSED。仅工程准备完成，等待研究者准确科学方案与新增额度批准。}
+\section*{固定干预与对照}
+原32个分位中点$\tau_k=(k-0.5)/32$保持。按网页总控本轮建议，只提出
+\[w_k=\frac{2(1+\tau_k)}{3},\qquad \sum_k w_k=32,\qquad w_k\in[65/96,127/96].\]
+训练的分位项为
+\[S_{qr,w}=\sum_{i\in wet}\frac{\sum_{k=1}^{32}w_k\rho_{\tau_k}(\log(1+R_i)-q_{i,k})}{\sum_{k=1}^{32}w_k},\qquad J=\frac{S_{occ}+S_{qr,w}}{N_{valid}}.\]
+E0对照使用原均匀节点权重。两臂发生损失$\alpha=0.5,\gamma=2$及$\lambda_q=1$保持。原科研$s_{qr}$、评价和报告继续使用未加权定义，加权目标另列，不覆盖历史E0/E2。正权重保留理想分位目标，有限共享网络的取舍尚待实验。\evi{S34}
+
+两臂均为B7 concat/Seed2029，从同一原初态按相同九轮数据顺序训练，固定E9 LAST。B7只作诊断载体。历史E0完整运行时指纹不足，因此拟重跑同环境对照。两臂初始参数SHA和九轮顺序摘要必须匹配。仅候选分位节点权重发生变化。
+
+\section*{预先冻结的结果判据}
+\begin{itemize}
+\item 共同必要改善为$R>20$的未加权32节点log Pinball及物理Pinball。物理分位为$\exp(q)-1$，固定除以20 mm/h。
+\item 五项保护指标为全部湿像元log/物理Pinball、全部有效像元发生Brier、发生AP与AUROC。科学退化容限0，绝对舍入容差$10^{-10}$。
+\item q32覆盖辅助记录。原七雨强层、717强雨像元时次的分层边界沿用。物理分数复用原Dev前向，不加独立推理遍历，非有限值立即失败且不裁剪。
+\end{itemize}
+分层于观测强雨的评分仅作条件诊断，不能替代全人口概率评价。单Seed与重复Dev的筛查没有独立确认或显著性含义，独立事件仍未识别。
+
+\newpage
+\section*{准确预算与工程证据}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule 项目 & 唯一提案\\\midrule
+执行顺序 & B7 E0对照，然后B7 UQ\_MILD\_V1候选\\
+更新 & 每臂4,320，合计8,640\\
+逻辑源 & 每臂477,571,953,840字节/142,813次\\
+合计源 & 955,143,907,680字节/285,626次\\
+时限 & 每臂21,600秒，整包43,200秒\\
+存储 & 初始48 GiB，每臂启动24 GiB，RAM/GPU沿既有下限\\
+恢复边界 & 新原初态，checkpoint加载0，重放0，额外重试0\\\bottomrule
+\end{tabularx}
+
+准确代码提交\texttt{f43b4225fef462a31035d59a06b85f31e5b257dc}已推送。新提案的规范内容摘要为\par
+\texttt{842d5304b4bc549f6c9859cf2c5edbb56}\par
+\texttt{b5e012051df7bb75ea89122f637640c}。
+提案文件97,042字节，完整文件SHA为\par
+\texttt{de5ea32ec5f078b747bbe24accacd3fa09}\par
+\texttt{a6d56afd103af3055d7599187b787d}。
+完整文件指纹与规范摘要分别用于文件完整性与外部批准绑定，不自引用批准。
+
+最新48项检查通过，包括19项新合成检查、19项既有E0/E2入口调度与10项恢复回归。初始测试夹具的缺字段与预期精度已更正，新增收据文件名与原真实入口对齐后再次通过。未运行真实模型、优化器更新、气象载荷读取或新模型评价。独立执行副本的648项代码指纹匹配提案。Harness本轮限定审核为PASS\_WITH\_LIMITATIONS，19项新合成检查独立通过。审核提交731dd28已推送并直接核对远端。编辑工作区有文档变更，正式执行副本由Codex核验干净且与已审提交一致，该副本未由Harness独立复核。详细指纹和范围见同目录REVIEW\_OUTCOME。
+
+\section*{执行门与解释边界}
+实际执行需要研究者批准准确提交、规范提案摘要、两臂任务、预算、科学判据和新输出目录。旧训练及恢复批准已经消耗。当前\texttt{authorized=false}，不自动启动或重放。
+
+tau权重强调所有湿像元的高分位节点，不能保证真实强雨改善。它不增加输入信息，也不证明DOTE/DTFM物理因果。$R>50$仅6个像元时次。失败后停止，不扫描权重、不自动切换物理损失、不扩Seed。2025继续封存。工程准备与科学效果、研究者本人掌握分别登记。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -704,6 +749,7 @@ B8 & 0.86894667 & 0.89489487 & $+2.9862\%$ & $41\to44$\\\bottomrule
 \item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}及\path{TERMINAL_REVIEW_ACK.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。Harness独立复核4071字节报告的SHA为85eb17a8\ldots514d569，限定工程与算术通过。审核报告已归档到e6c8901，回执见\path{PEER_GIT_SYNC.json}。
 \item[S32] 本轮多方讨论与候选路线。\par\path{docs/research_readiness/20261108_next_step_discussion/DISCUSSION.json}。记录三名代理的初始意见、模块代理后续收敛、Harness第42轮及网页总控最终回复。三份保存JSON的准确路径、SHA和字段入口见该记录。讨论结论为PROPOSED，B尚未执行，新增统计/训练/推理/评价均0。
 \item[S33] 三JSON保存分层统计与复核。\par\path{docs/research_readiness/20261108_saved_strata_analysis/}\par\path{analyze_saved_strata.py}、\path{RESULTS.json}、\path{REVIEW_AND_CANDIDATE.json}及\path{VERIFICATION.json}。输入完整路径、指纹及字段语义均随结果保存。七层四格计数、贡献分解与q32计数经过独立小数复算及Harness第43轮有限数值复核。总控候选建议仍PROPOSED，科学状态未升级。
+\item[S34] 本轮温和上分位配对包与48项检查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}、\path{VERIFICATION.json}及审后回执。总控温和函数建议待研究者批准，准确代码与提案指纹见6U。无真实训练或科学验收。
 \end{description}
 \normalsize
 

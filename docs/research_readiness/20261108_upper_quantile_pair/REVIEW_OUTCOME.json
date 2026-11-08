@@ -1,0 +1,46 @@
+{
+  "at": "2026-11-08T05:38:40.233029+00:00",
+  "conclusion": "PASS_WITH_LIMITATIONS",
+  "reviewer": "HARNESS",
+  "reviewed_execution_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+  "audit": {
+    "path": "YunTAPR-Collab-DSH/docs/audits/UPPER_QUANTILE_PAIR_REVIEW_20261108.md",
+    "bytes": 6421,
+    "sha256": "564fdeb1a5a0e73838f3d302a472f3805b7c38e58a6084c0e49355794f75709f"
+  },
+  "independent_tests": {
+    "suite": "test_upper_quantile",
+    "passed": 19,
+    "seconds": 0.13,
+    "evidence": "HARNESS_WRITTEN_REPORT_DIRECTLY_READ",
+    "synthetic_only": true,
+    "old_29_rerun_by_harness": false
+  },
+  "peer_git": {
+    "branch": "collab/dsh-20261102",
+    "local_head": "731dd281e7723c26fe2f5e1cbce3405ba9a1adc2",
+    "remote_head_direct_ls_remote": "731dd281e7723c26fe2f5e1cbce3405ba9a1adc2",
+    "status": "PASS"
+  },
+  "review_observations": [
+    {
+      "observation": "EDITING_WORKTREE_DIRTY",
+      "resolution": "EXECUTE_ONLY_CLEAN_ISOLATED_SNAPSHOT_AT_REVIEWED_COMMIT",
+      "evidence": "CODEX_DIRECT_GIT_STATUS_EMPTY_AND_648_EXECUTABLE_HASHES_MATCH",
+      "independently_checked_by_harness": false
+    },
+    {
+      "observation": "NO_EXACT_RESEARCHER_APPROVAL",
+      "resolution": "PENDING_RESEARCHER_APPROVAL_NO_EXECUTION"
+    }
+  ],
+  "limits": [
+    "CPU synthetic/mock only. Real CUDA, two-arm successful execution and measured numerical effect remain unverified.",
+    "Physical expm1 quantiles must be finite and strictly ordered; overflow or crossing stops execution.",
+    "Single seed reused Development screening, without significance, causal mechanism or final-model claim."
+  ],
+  "engineering": "PASS_WITH_LIMITATIONS",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "external_reference": "PARTIAL",
+  "researcher_knowledge": "NOT_ASSESSED"
+}
