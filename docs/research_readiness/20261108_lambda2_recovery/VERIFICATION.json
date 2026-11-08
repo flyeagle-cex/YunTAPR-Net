@@ -1,0 +1,68 @@
+{
+  "status": "PASS_PREPARED_SINGLE_E2_RECOVERY",
+  "authorization_basis": "Current researcher instruction to recover the immediately preceding B8 E9 scope",
+  "proposal_sha256": "9feaa59397a95ab3c97dd0f26b15a2520f91b62370687e7e6ff48a5ce61c2713",
+  "tests": {
+    "new": 10,
+    "inherited_affected": 19,
+    "total_passed": 29,
+    "CPU_only": true,
+    "scientific_optimizer_updates": 0,
+    "source_payload_reads": 0,
+    "checkpoint_loads": 0
+  },
+  "artifacts": {
+    "docs/research_readiness/20261108_lambda2_recovery/EXECUTION_PROPOSAL.json": {
+      "bytes": 100638,
+      "sha256": "2d74177fa5ffa6eec746b8725be17337e4ab5db657308e6a374a128d0665225d"
+    },
+    "src/yuntapr/experimental/core_innovation/stage4/engine.py": {
+      "bytes": 19391,
+      "sha256": "b7a6a54fc4589ff357bd42d9a960d3c958e29ec7bb2dc7fdea2f3efbfe145d67"
+    },
+    "src/yuntapr/experimental/core_innovation/stage4/recovery.py": {
+      "bytes": 14327,
+      "sha256": "98a3fbe152f7d1084e0ddcaded4300614b2aa05ba10721779036448acd4dd9ef"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_loss_recovery.py": {
+      "bytes": 19199,
+      "sha256": "5370707f2155d7db72ce5fe3ac569ee82b2a397c1ec5f73801101db974c10919"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py": {
+      "bytes": 22568,
+      "sha256": "d47dd135cc19b97852dcca6048db5d362ef48fa6274097d474aa7d65016d6b46"
+    },
+    "tests/research_readiness/test_dynamic_loss_recovery.py": {
+      "bytes": 9504,
+      "sha256": "e86991d04d5f3372bba0a2541ce416e293b7d5724ef1f7624652afc28b3adbd0"
+    },
+    "tools/research_readiness/start_dynamic_loss_recovery.py": {
+      "bytes": 2182,
+      "sha256": "ee09718ed66875146f74568857208b5ac6e8f48366123af4b32b370fb1d94c3b"
+    },
+    "tools/research_readiness/start_independent_process.py": {
+      "bytes": 13161,
+      "sha256": "b98857124a272755e5fbf7b86b2e8f21b85245b16710cbea6816c2ed09a3bc4b"
+    }
+  },
+  "scope": {
+    "model": "B8",
+    "seed": 2029,
+    "epoch": 9,
+    "loss": "E2",
+    "lambda_q": 2,
+    "new_updates": 480,
+    "replay": 480,
+    "new_source_bytes": 53063828496,
+    "new_source_files": 15869,
+    "seconds": 3600
+  },
+  "limits": [
+    "Preparation validates metadata and source-code identities, without deserializing scientific checkpoints",
+    "Full CUDA resume and deterministic replay summary will be checked during the single authorized execution",
+    "Original E2 complete runtime fingerprints are retained; historical E0 comparison remains conditional"
+  ],
+  "independent_review": "PENDING_ONE_LIMITED_REVIEW",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED"
+}

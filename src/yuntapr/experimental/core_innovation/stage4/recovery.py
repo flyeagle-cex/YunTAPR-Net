@@ -112,7 +112,7 @@ def verify_source(request,folder,decision_id):
         finally:meter.uninstall();cache.close()
 
 
-def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=None,seed=None):
+def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=None,seed=None,loss_config=None):
     """Shared LAST restoration; no optimizer step and no source-data access."""
     import random,numpy as np,torch
     from yuntapr.training.phase_a_protocol import state_digest
@@ -120,7 +120,8 @@ def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=
     if (payload['identity']['data']!=data_identity or payload['optimizer_groups']!=groups
             or payload['epoch']!=epoch or payload['updates']!=updates
             or (kind is not None and payload['identity']['model']!=kind)
-            or (seed is not None and payload['identity']['decision']['seed']!=seed)):
+            or (seed is not None and payload['identity']['decision']['seed']!=seed)
+            or (loss_config is not None and payload['identity'].get('loss_config')!=loss_config)):
         raise ValueError('Checkpoint state/grouping identity differs')
     if payload['scheduler']!=dict(completed=updates,steps_per_epoch=480,original_horizon=24000):raise ValueError('Original schedule differs')
     model.load_state_dict(payload['model'],strict=True);optimizer.load_state_dict(payload['optimizer'])

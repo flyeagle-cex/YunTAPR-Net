@@ -209,13 +209,14 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     deadline();write(folder/'completion.json',result);return result
 
 
-def loss_pair_summary(proposal,output):
+def loss_pair_summary(proposal,output,*,report_paths=None):
     """Same-population E9 differences against saved, pinned E0 summaries."""
     historical=proposal['scientific_choices']['historical_e0']
+    paths=report_paths or {kind:Path(output)/f'{kind}_s2029/{kind}_development_09.json' for kind,_ in TASKS}
     values={};loss_effects={}
     for kind,_ in TASKS:
         reference=historical[kind]
-        report=read(Path(output)/f'{kind}_s2029/{kind}_development_09.json')
+        report=read(paths[kind])
         summary=report['groups']['all']['summary']
         if (report['source_identity']!=proposal['data']
                 or (summary['n_valid'],summary['n_rain'])!=(reference['n_valid'],reference['n_rain'])):

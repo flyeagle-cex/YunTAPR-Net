@@ -126,12 +126,16 @@ class PairedExecutor:
         self.lambda_q=finite_number('lambda_q',lambda_q)
         if self.lambda_q not in (1.0,2.0):
             raise ValueError('Only closed E0/E2 quantile weights are supported')
+        self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
         if self.lambda_q==2.0 and (
-            self.kinds not in (('B7',),('B8',)) or recovery is not None
+            self.kinds not in (('B7',),('B8',))
             or getattr(decision,'seed',None)!=2029
         ):
-            raise PermissionError('E2 requires one origin-only B7/B8 seed2029 task')
-        self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
+            raise PermissionError('E2 requires one B7/B8 seed2029 task')
+        if self.lambda_q==2.0 and recovery is not None and (
+            self.kinds!=('B8',) or getattr(recovery,'loss_config',None)!=self.loss_config
+        ):
+            raise PermissionError('E2 recovery requires the explicit B8 E2 restoration contract')
         self.origin_reference=origin_reference
 
     def check_origin_pair(self,initial_identity,orders):

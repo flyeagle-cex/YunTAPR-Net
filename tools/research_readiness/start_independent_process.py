@@ -59,6 +59,20 @@ def validate_dynamic_loss_scope(command,proposal,executable):
         raise PermissionError('Bound E2 interpreter differs')
 
 
+def validate_dynamic_loss_recovery_scope(proposal, executable):
+    """Admit only the single E8-to-E9 recovery requested by the researcher."""
+    recovery = proposal.get('scientific_choices', {}).get('recovery', {})
+    if (proposal.get('tasks') != [dict(model='B8', seed=2029)]
+            or proposal.get('protocol') != dict(loss='E2', lambda_q=2.0, seed=2029, endpoint='FIXED_EPOCH_9', epochs=[9])
+            or recovery.get('checkpoint_epoch') != 8 or recovery.get('execute_epochs') != [9]
+            or proposal.get('budget', {}).get('new_updates') != 480
+            or proposal['budget'].get('replayed_updates') != 480
+            or proposal['budget'].get('max_wall_seconds') != 3600):
+        raise PermissionError('Only B8 seed2029 E2 E9 with480 replay updates is allowed')
+    if sha(executable) != proposal.get('runtime_binding', {}).get('python_executable_sha256'):
+        raise PermissionError('Bound E2 recovery interpreter differs')
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -104,7 +118,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -115,6 +129,9 @@ def validate_spec(path):
         if entry.name=='start_dynamic_pair.py':
             validate_dynamic_loss_scope(command,proposal,executable)
             expected_commit=approval['code_commit']  # Bound below to the actual clean snapshot HEAD.
+        elif entry.name=='start_dynamic_loss_recovery.py':
+            validate_dynamic_loss_recovery_scope(proposal,executable)
+            expected_commit=approval['code_commit']
         else:expected_commit=proposal['execution_code_commit']
         if approval['code_commit']!=expected_commit or approval['output_root']!=private['output_root'] or Path(private['output_root']).exists():raise PermissionError('Consumed or mismatched grant; never restart')
         commit=subprocess.check_output(['git','-C',spec['cwd'],'rev-parse','HEAD'],text=True).strip()
