@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.22}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.23}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
@@ -42,16 +42,14 @@
 B7、B8的E2固定E9与完整2024 Development均完成。B8限定恢复于09:44:38正常退出，工程状态PASS，科学验收仍为NOT\_VERIFIED。\evi{S31}
 
 \section*{本次实际更新}
+三名Codex代理、Harness与网页总控完成独立讨论，收敛为以下条件性路线。原四格结果和终态审核继续保留在6Q，本轮没有新增科学计算。\evi{S32}
 \begin{itemize}
-\item B8从E8完成480次必要重放，当前有效4320次更新。恢复耗时2319.634秒，源读取53063828496字节/15869次，额外重试0。
-\item 新B8 E9为53905789字节，实际SHA为ed3438be\ldots7168220c，与收据一致。新旧第九轮训练摘要逐字段相等，完整Dev为963场景、3303090有效像元时次、407820有雨像元时次。
-\item 主指标未加权条件Pinball随$\lambda_q$由1到2，B7改善0.4683\%，B8退化0.1536\%。B7的Brier退化，B7/B8的发生AP均下降，整体q32覆盖率均上升。
-\item 同$\lambda_q=2$下，B8比B7的Brier、发生AUROC/AP改善，而主指标条件Pinball退化。四格与交互按原冻结口径保存。
+\item 先以三份保存JSON做七雨强层分解，定位E0/E2在B7/B8中各层的Pinball变化贡献，保留发生指标保护线。
+\item 根据已有证据再讨论一个强雨目标干预或DTFM机制诊断，补Seed后置。下一科学目标、容忍线和预算仍须研究者决定。
+\item 原多方分歧和限定明确保存。单层覆盖改善不能独立宣告成功，雨强分层不能单独证明地形机制。
 \end{itemize}
 
-本轮提供单Seed、反复使用Development上的开发性结果。历史E0完整环境指纹仍缺，比较按已登记条件解释。强雨改善、DTFM去留及追加Seed仍须依据科学证据决定。终态独立复核为\texttt{PASS\_WITH\_LIMITATIONS}，覆盖保存证据与算术。Harness审核报告已普通推送，远端分支与本地提交e6c8901一致。
-
-项目进入本轮结果收敛阶段。科学NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。后文6P保留启动时快照，6Q记录本次终态。
+路线状态\texttt{PROPOSED}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。后文6R记录范围及停止条件。本轮仅讨论与文档维护。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -549,6 +547,30 @@ q32覆盖率(\%) & 93.4824 & 94.5341 & 94.0542 & 94.6324\\
 
 科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。
 
+\pageheading{6R\quad 多方讨论后的最小科研路线}{PROPOSED。三名代理、Harness第42轮与网页总控意见已收敛，尚无新统计或训练。}
+\section*{第一步B，限定三份保存JSON}
+以6Q的Seed2029固定E9四格为对象，读取两份历史E0终态JSON及当前E2的RESULTS。只用已有\texttt{n\_rain}、\texttt{q32\_covered}和\texttt{conditional\_pinball}，保留$(0.1,1]$、$(1,5]$、$(5,10]$、$(10,20]$、$(20,30]$、$(30,50]$、$(50,\infty)$全部七层。\evi{S32}
+
+先核对原始边界与四格分母。人口一致时，每层对整体变化的贡献为
+\[\Delta L_b=\frac{n_b}{N_{\mathrm{rain}}}\bigl(L_{E2,b}-L_{E0,b}\bigr).\]
+贡献和须还原已有整体差分并登记舍入误差。一次交付四格分层表、贡献分解及一个候选假说，然后结束本步骤。Brier、发生AP/AUROC沿用已有总体保护指标，q32覆盖只作幅值辅助诊断。
+
+该步骤能定位变化来源，不能证明因果或跨Seed稳定性。717是强雨像元时次，独立事件未识别；$R>50$仅6个。E0场景充分统计实际读取路径未确认，完整四格场景/UTC敏感性为\texttt{NOT\_VERIFIED}，不扩大到数组或缓存。
+
+\section*{C、D与A按证据进入}
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule 路线 & 进入条件 & 最小后续问题\\\midrule
+C 目标干预 & 明确上尾幅值或损失问题 & 一个可否证、语义明确的loss-only候选\\
+D 模块机制 & 另有地形或B8路径证据 & 有界正式AdamW状态诊断\\
+A 追加Seed & 候选有价值或需检验重复性 & 准确对照与限额方案\\
+\bottomrule
+\end{tabularx}
+
+模块代理最初优先D，讨论后接受B先行。雨强层本身无法识别地形原因。B8仍为单SP04；AdamW非零状态不能证明功能有效，合成SGD也不能替代正式训练证据。固定正分位节点权重$w(\tau)$仅为候选，按真实雨强加权会改变目标分布，需另作语义论证。
+
+\section*{停止条件与研究者决策}
+输入不足或人口冲突即停止相关比较。覆盖单项提高不宣告成功，混合结果不触发自动扫参。不同架构方向相反仅限制通用收益主张，不能事后挑赢家冒充预设证据。新训练须有具体假设、主指标与保护指标容忍线、公平对照及研究者准确批准。优先目标、是否接受架构特异改进和容忍线仍待本人裁定。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -610,6 +632,7 @@ q32覆盖率(\%) & 93.4824 & 94.5341 & 94.0542 & 94.6324\\
 \item[S28] 本轮失败终态与未批准恢复范围。\par\path{docs/research_readiness/20261108_lambda2_stop/}\par\path{TERMINAL_VERIFICATION.json}、\path{RECOVERY_SCOPE.json}。直接核对新账本及两份最新权重SHA。
 \item[S30] 本轮限定恢复提案、审核与真实启动回执。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{EXECUTION_PROPOSAL.json}、\path{REVIEW_OUTCOME.json}及\path{START_RECEIPT.json}。最新完整指纹见同目录启动核验。
 \item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}及\path{TERMINAL_REVIEW_ACK.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。Harness独立复核4071字节报告的SHA为85eb17a8\ldots514d569，限定工程与算术通过。审核报告已归档到e6c8901，回执见\path{PEER_GIT_SYNC.json}。
+\item[S32] 本轮多方讨论与候选路线。\par\path{docs/research_readiness/20261108_next_step_discussion/DISCUSSION.json}。记录三名代理的初始意见、模块代理后续收敛、Harness第42轮及网页总控最终回复。三份保存JSON的准确路径、SHA和字段入口见该记录。讨论结论为PROPOSED，B尚未执行，新增统计/训练/推理/评价均0。
 \end{description}
 \normalsize
 

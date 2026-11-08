@@ -1,3 +1,9 @@
+# 2026-11-08 多代理与总控科研路线收敛 / LIVE.23
+
+三个Codex代理、Harness第42轮及网页总控完成独立讨论。路线为先做一次三份保存JSON的七雨强层四格分解，再依据证据选择强雨目标干预或DTFM机制诊断，补Seed后置。模块代理最初优先checkpoint机制检查，讨论后接受JSON先行。路线为PROPOSED，本轮未执行新统计或实验，未批准新预算。
+
+具体范围、分歧和停止条件见 `docs/research_readiness/20261108_next_step_discussion/DISCUSSION.json`。七层贡献只能定位既有指标变化，不能证明物理因果、跨Seed稳定性或独立事件泛化。q32覆盖不能单独作为成功标准。科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。以下保留历史快照。
+
 # 2026-11-08 终态审核分支归档完成 / LIVE.22
 
 Harness已将本轮唯一终态审核报告提交并普通推送至collab/dsh-20261102，提交e6c8901b29f173467b33641a21f9bd0fc25246cc。Codex已直接查询远端同名分支，SHA与本地一致，并核对提交仅含该4071字节报告，Git blob与原审查文件SHA相同。Git归档待办已关闭，回执见 `docs/research_readiness/20261108_lambda2_recovery/PEER_GIT_SYNC.json`。
