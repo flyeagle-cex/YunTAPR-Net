@@ -1,3 +1,9 @@
+# 2026-11-08 终态审核分支归档完成 / LIVE.22
+
+Harness已将本轮唯一终态审核报告提交并普通推送至collab/dsh-20261102，提交e6c8901b29f173467b33641a21f9bd0fc25246cc。Codex已直接查询远端同名分支，SHA与本地一致，并核对提交仅含该4071字节报告，Git blob与原审查文件SHA相同。Git归档待办已关闭，回执见 `docs/research_readiness/20261108_lambda2_recovery/PEER_GIT_SYNC.json`。
+
+本轮训练、完整Dev、独立终态复核及审核报告归档均已完成。工程PASS_WITH_LIMITATIONS，科学NOT_VERIFIED，外部PARTIAL，研究者NOT_ASSESSED。四格混合结果及科学限制沿用已核验记录。以下为历史快照。
+
 # 2026-11-08 Harness终态独立复核完成 / LIVE.21
 
 Harness已完成E2工程终态、保存证据身份与四格算术独立复核，结论PASS_WITH_LIMITATIONS。报告4071字节，SHA256 85eb17a8cefc202d24ce16b2eb090af51a99ea889eb3794c89268fe88514d569，已直接读取。终态与指标解释继续沿用LIVE.20，科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。

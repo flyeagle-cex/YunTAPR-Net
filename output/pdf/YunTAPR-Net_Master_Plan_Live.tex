@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.21}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.22}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
@@ -49,7 +49,7 @@ B7、B8的E2固定E9与完整2024 Development均完成。B8限定恢复于09:44:
 \item 同$\lambda_q=2$下，B8比B7的Brier、发生AUROC/AP改善，而主指标条件Pinball退化。四格与交互按原冻结口径保存。
 \end{itemize}
 
-本轮提供单Seed、反复使用Development上的开发性结果。历史E0完整环境指纹仍缺，比较按已登记条件解释。强雨改善、DTFM去留及追加Seed仍须依据科学证据决定。终态独立复核为\texttt{PASS\_WITH\_LIMITATIONS}，覆盖保存证据与算术。Harness审核分支待提交和推送。
+本轮提供单Seed、反复使用Development上的开发性结果。历史E0完整环境指纹仍缺，比较按已登记条件解释。强雨改善、DTFM去留及追加Seed仍须依据科学证据决定。终态独立复核为\texttt{PASS\_WITH\_LIMITATIONS}，覆盖保存证据与算术。Harness审核报告已普通推送，远端分支与本地提交e6c8901一致。
 
 项目进入本轮结果收敛阶段。科学NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。后文6P保留启动时快照，6Q记录本次终态。
 
@@ -545,7 +545,7 @@ q32覆盖率(\%) & 93.4824 & 94.5341 & 94.0542 & 94.6324\\
 \section*{尾部与科学限制}
 整体q32名义覆盖为98.4375\%，两E2实测仍低于名义水平。在717个真实$R>20$像元时次上，B7/B8的q32达到真实值分别30/44个。这是按真实雨强分层的幅值诊断，不等于POD。独立天气事件未识别，AP20[q32]仍未核验。
 
-历史E0完整环境指纹缺失，当前四格为条件继承的单Seed筛查。工程PASS及混合指标结果都不能替代科学验收。Harness终态独立审核为\texttt{PASS\_WITH\_LIMITATIONS}，覆盖工程终态、保存证据身份与四格算术。审核分支因Git权限及凭据问题待同步。DTFM去留和额外训练仍待研究者据证决定。
+历史E0完整环境指纹缺失，当前四格为条件继承的单Seed筛查。工程PASS及混合指标结果都不能替代科学验收。Harness终态独立审核为\texttt{PASS\_WITH\_LIMITATIONS}，覆盖工程终态、保存证据身份与四格算术。研究者批准一次限定Git执行后，审核报告已提交并推送到审核分支，远端SHA核对一致。DTFM去留和额外训练仍待研究者据证决定。
 
 科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。
 
@@ -609,7 +609,7 @@ q32覆盖率(\%) & 93.4824 & 94.5341 & 94.0542 & 94.6324\\
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \item[S28] 本轮失败终态与未批准恢复范围。\par\path{docs/research_readiness/20261108_lambda2_stop/}\par\path{TERMINAL_VERIFICATION.json}、\path{RECOVERY_SCOPE.json}。直接核对新账本及两份最新权重SHA。
 \item[S30] 本轮限定恢复提案、审核与真实启动回执。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{EXECUTION_PROPOSAL.json}、\path{REVIEW_OUTCOME.json}及\path{START_RECEIPT.json}。最新完整指纹见同目录启动核验。
-\item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}及\path{TERMINAL_REVIEW_ACK.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。Harness独立复核4071字节报告的SHA为85eb17a8\ldots514d569，限定工程与算术通过，审核分支待同步。
+\item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}及\path{TERMINAL_REVIEW_ACK.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。Harness独立复核4071字节报告的SHA为85eb17a8\ldots514d569，限定工程与算术通过。审核报告已归档到e6c8901，回执见\path{PEER_GIT_SYNC.json}。
 \end{description}
 \normalsize
 
