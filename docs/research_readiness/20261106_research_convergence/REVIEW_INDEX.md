@@ -1,3 +1,9 @@
+# 2026-11-08 Harness终态独立复核完成 / LIVE.21
+
+Harness已完成E2工程终态、保存证据身份与四格算术独立复核，结论PASS_WITH_LIMITATIONS。报告4071字节，SHA256 85eb17a8cefc202d24ce16b2eb090af51a99ea889eb3794c89268fe88514d569，已直接读取。终态与指标解释继续沿用LIVE.20，科学NOT_VERIFIED、外部PARTIAL、研究者NOT_ASSESSED。
+
+审核分支Git同步PENDING。DSH HEAD仍471f5b45c4936d9e5bfedcde3049534a8358516a，审核报告尚未提交，执行方记录index.lock权限拒绝及SEC_E_NO_CREDENTIALS。复核完成与远端归档分别登记，回执见 `docs/research_readiness/20261108_lambda2_recovery/TERMINAL_REVIEW_ACK.json`。以下为历史快照。
+
 # 2026-11-08 E2固定E9完整封口 / LIVE.20
 
 B8限定恢复于北京时间09:44:38正常退出0，480必要重放完成、有效4320更新，完整963场景2024 Dev和新E9权重已核验。新增53063828496源字节/15869次，2319.634秒，额外重试0。重放第九轮训练摘要与原停止前记录逐字段一致。工程PASS。
