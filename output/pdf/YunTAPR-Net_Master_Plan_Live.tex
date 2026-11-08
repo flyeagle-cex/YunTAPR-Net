@@ -33,25 +33,25 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.19}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.20}\qquad 状态截至2026年11月08日（北京时间）
 
-本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
+本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{研究者限定恢复指令已执行，B8正在从E8继续最后一轮。}
-B7固定E9已完成。原失败包保留，当前单次恢复仅B8/2029/E2，目标为补齐固定E9和完整2024 Development。\evi{S30}
+\status{Seed2029模块与loss的四格结果已封口，科学效果呈取舍。}
+B7、B8的E2固定E9与完整2024 Development均完成。B8限定恢复于09:44:38正常退出，工程状态PASS，科学验收仍为NOT\_VERIFIED。\evi{S31}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者本轮直接回复“恢复”。Codex在前述480重放、1小时范围内实现并冻结f3b90f6，提案及新目录另行绑定，私有批准依据保存原话。
-\item 29项针对性CPU检查通过，Harness独立10项新检查通过，限定审核PASS\_WITH\_LIMITATIONS。真实源存在性/大小及RAM/GPU准入通过。\evi{S30}
-\item 北京时间09:05:58独立WMI单次启动。实际E2账本已观察3841--3899更新返回，即新增59次重放。启动快照用于追溯，实时进度由只读页面展示。
-\item 新增上限480更新、53063828496逻辑源字节/15869次打开、3600秒、24GiB，检查点重哈希和加载各1次，额外重试0。累计尝试上限9120，包含480恢复重放。
+\item B8从E8完成480次必要重放，当前有效4320次更新。恢复耗时2319.634秒，源读取53063828496字节/15869次，额外重试0。
+\item 新B8 E9为53905789字节，实际SHA为ed3438be\ldots7168220c，与收据一致。新旧第九轮训练摘要逐字段相等，完整Dev为963场景、3303090有效像元时次、407820有雨像元时次。
+\item 主指标未加权条件Pinball随$\lambda_q$由1到2，B7改善0.4683\%，B8退化0.1536\%。B7的Brier退化，B7/B8的发生AP均下降，整体q32覆盖率均上升。
+\item 同$\lambda_q=2$下，B8比B7的Brier、发生AUROC/AP改善，而主指标条件Pinball退化。四格与交互按原冻结口径保存。
 \end{itemize}
 
-恢复代码核对E2身份及模型、AdamW、调度、Python/NumPy/CPU/CUDA随机数状态。执行器只接收B8第九轮的Train和Development。完成时核对重放训练摘要与旧保存值逐字段相等。B7完整结果从旧目录继承。
+本轮提供单Seed、反复使用Development上的开发性结果。历史E0完整环境指纹仍缺，比较按已登记条件解释。强雨改善、DTFM去留及追加Seed仍须依据科学证据决定。终态独立复核待完成。
 
-当前恢复尚在执行，固定E9及完整配对比较待封口。科学NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。
+项目进入本轮结果收敛阶段。科学NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。后文6P保留启动时快照，6Q记录本次终态。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -523,6 +523,32 @@ Harness限定审核 & PASS\_WITH\_LIMITATIONS，独立10项通过\\
 
 历史E0完整环境指纹仍缺失。当前工程启动为限定通过，恢复执行中。\par 科学状态为\texttt{NOT\_VERIFIED}，研究者掌握为\texttt{NOT\_ASSESSED}。
 
+\pageheading{6Q\quad E2四格结果与恢复终态}{执行f3b90f6。北京时间09:44:38正常退出0，限定恢复完成。}
+\section*{工程闭环}
+B8从E8/3840恢复，第3841--4320次共480次RETURNED，全部为必要重放。新源读取53063828496字节/15869次，三个SQLite账本全部READ\_COMPLETE，恢复墙钟2319.634秒，小于3600秒上限。累计9120次尝试包含480次重放。B7完整E9结果继承。\evi{S31}
+
+B8固定E9实际SHA为ed3438be\ldots7168220c。E9验证摘要的规范摘要与检查点收据相符，重放训练记录与原停止前保存记录逐字段一致。两个E2模型的source identity、场景ID、分区及各组有效/有雨分母匹配。新的963场景Dev已完整封口。
+
+\section*{同人口、固定E9、Seed2029的四格}
+\begin{tabularx}{\textwidth}{@{}lrrrr@{}}
+\toprule 指标 & B7/E0 & B7/E2 & B8/E0 & B8/E2\\\midrule
+条件Pinball $\downarrow$ & 0.127401 & 0.126805 & 0.126883 & 0.127078\\
+Brier $\downarrow$ & 0.096732 & 0.098521 & 0.098051 & 0.097627\\
+发生AUROC $\uparrow$ & 0.895924 & 0.894850 & 0.896158 & 0.896096\\
+发生AP $\uparrow$ & 0.593455 & 0.589720 & 0.594148 & 0.590763\\
+q32覆盖率(\%) & 93.4824 & 94.5341 & 94.0542 & 94.6324\\
+\bottomrule
+\end{tabularx}
+
+主指标仍为$S_{qr}/N_{rain}$，未加权。B7随loss权重改变改善0.4683\%，B8退化0.1536\%。B8减B7的主指标差从E0的$-0.0005184234$变为E2的$+0.0002730022$，交互为$+0.0007914256$。同一loss下的结构比较与同一结构下的loss比较分别报告。
+
+\section*{尾部与科学限制}
+整体q32名义覆盖为98.4375\%，两E2实测仍低于名义水平。在717个真实$R>20$像元时次上，B7/B8的q32达到真实值分别30/44个。这是按真实雨强分层的幅值诊断，不等于POD。独立天气事件未识别，AP20[q32]仍未核验。
+
+历史E0完整环境指纹缺失，当前四格为条件继承的单Seed筛查。工程PASS及混合指标结果都不能替代科学验收。终态独立审核待完成，强雨问题已解决的主张尚无依据，DTFM去留和额外训练须由研究者据此决定。
+
+科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -583,6 +609,7 @@ Harness限定审核 & PASS\_WITH\_LIMITATIONS，独立10项通过\\
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
 \item[S28] 本轮失败终态与未批准恢复范围。\par\path{docs/research_readiness/20261108_lambda2_stop/}\par\path{TERMINAL_VERIFICATION.json}、\path{RECOVERY_SCOPE.json}。直接核对新账本及两份最新权重SHA。
 \item[S30] 本轮限定恢复提案、审核与真实启动回执。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{EXECUTION_PROPOSAL.json}、\path{REVIEW_OUTCOME.json}及\path{START_RECEIPT.json}。最新完整指纹见同目录启动核验。
+\item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}与\path{RESULTS.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。终态独立复核状态另行登记。
 \end{description}
 \normalsize
 

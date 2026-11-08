@@ -1,0 +1,179 @@
+{
+  "id": "YT-E2-20261107-001-R1_TERMINAL_20261108",
+  "verified_at_utc": "2026-11-08T01:50:53.881895+00:00",
+  "status": "VERIFIED_COMPLETE_FIXED_E9_AND_2024_DEV",
+  "execution_commit": "f3b90f654b67fda538f4f156422841b69cc50b23",
+  "canonical_proposal_sha256": "9feaa59397a95ab3c97dd0f26b15a2520f91b62370687e7e6ff48a5ce61c2713",
+  "exit": {
+    "at_utc": "2026-11-08T01:44:38.504904+00:00",
+    "return_code": 0,
+    "automatic_retry": false,
+    "wall_seconds_launch_to_exit": 2319.634027
+  },
+  "actual": {
+    "new_returned_updates": 480,
+    "new_update_range": [
+      3841,
+      4320
+    ],
+    "replayed_updates": 480,
+    "effective_B8_updates": 4320,
+    "cumulative_updates": 9120,
+    "new_source_bytes": 53063828496,
+    "new_source_files": 15869,
+    "cumulative_source_bytes": 1004416034948,
+    "cumulative_source_files": 300232,
+    "source_passes": {
+      "static": {
+        "files": 1,
+        "delivered_bytes": 312828,
+        "reserved_bytes": 312828,
+        "states": {
+          "READ_COMPLETE": 1
+        }
+      },
+      "train": {
+        "files": 7918,
+        "delivered_bytes": 26424262556,
+        "reserved_bytes": 26424262556,
+        "states": {
+          "READ_COMPLETE": 7918
+        }
+      },
+      "dev": {
+        "files": 7950,
+        "delivered_bytes": 26639253112,
+        "reserved_bytes": 26639253112,
+        "states": {
+          "READ_COMPLETE": 7950
+        }
+      }
+    },
+    "extra_retries": 0
+  },
+  "B8_E9_checkpoint": {
+    "bytes": 53905789,
+    "sha256": "ed3438be2add635cd8dc7ccb28ed48268cd5c327bc85d7e08ff5a5077168220c"
+  },
+  "B8_E9_receipt": {
+    "model": "B8",
+    "epoch": 9,
+    "updates": 4320,
+    "checkpoint_sha256": "ed3438be2add635cd8dc7ccb28ed48268cd5c327bc85d7e08ff5a5077168220c",
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "validation_receipt_sha256": "c3529106e3c3f67764a32f372f12b4a50e5fc59e495117fff2d0b76a0d48c5ed",
+    "loss_config": {
+      "experiment_id": "E2",
+      "alpha": 0.5,
+      "gamma": 2.0,
+      "lambda_q": 2.0
+    },
+    "code_commit": "f3b90f654b67fda538f4f156422841b69cc50b23"
+  },
+  "replayed_E9_train_summary": {
+    "all_fields_equal_to_stopped_original": true,
+    "file_bytes_equal": true
+  },
+  "evaluation_identity": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "population_ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+    "partition_sha256": "01b95f12d26a3f6f4ff05620414cdae66c5cec23bd2808b0af2de40e4615291c",
+    "source_identity": {
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "lead": 6,
+      "mode": "retrospective",
+      "train": 959,
+      "dev": 963,
+      "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+      "candidate_manifest_sha256": {
+        "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+        "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+      }
+    },
+    "B7_B8_all_groups_same_population": true,
+    "groups_checked": [
+      "all",
+      "analysis_UTC_00",
+      "analysis_UTC_06",
+      "analysis_UTC_12",
+      "analysis_UTC_18",
+      "scene_max_ge20"
+    ],
+    "new_E9_canonical_report_digest_matches_checkpoint_receipt": true
+  },
+  "sources": {
+    "completion.json": {
+      "bytes": 320,
+      "sha256": "b67915ad88975595637dde026c8775df92c615c04512d1817890ff5833218f2c"
+    },
+    "loss_pair_summary.json": {
+      "bytes": 4254,
+      "sha256": "90b1b64112556a7f21351115fa8d1ca0a50d9f5fbddec2c36a6ec5c84a6c7e20"
+    },
+    "B8_s2029/completion.json": {
+      "bytes": 1182,
+      "sha256": "13a3420c059b5a6a893aaad2fc53759d02e8f604b05f2da95e192b1f4728d500"
+    },
+    "B8_s2029/B8_LAST_epoch_09.receipt.json": {
+      "bytes": 515,
+      "sha256": "62581e5546ff27290ce4b412e160795db7c51b9cc115946f1baca50e9fc9a8f5"
+    },
+    "B8_s2029/B8_development_09.json": {
+      "bytes": 1881213,
+      "sha256": "971f04f3a1119c5ce4246a93de2dab0465f33547e75619956d8b9689e943936c"
+    },
+    "B8_s2029/B8_tail_09.json": {
+      "bytes": 1512084,
+      "sha256": "b01869c77b3b006d895e8f99982340cbf55cc289c918f30d39e21fb1d98ff2fa"
+    },
+    "B8_s2029/B8_train_09.json": {
+      "bytes": 361,
+      "sha256": "9563081c9d4da248ccaa131ca8f41513bff1a89ac88882428af882ae72349c6d"
+    },
+    "B8_s2029/updates.sqlite": {
+      "bytes": 36864,
+      "sha256": "ad960ebfd3929f2133c60c2aa9bfc1cc3181457480666e476402a8425d5c0bcf"
+    },
+    "B8_static_source.sqlite": {
+      "bytes": 20480,
+      "sha256": "653168c1e1eecadb5473ec9438c58ec47724afe482a83c594e104242e2a70f21"
+    },
+    "B8_s2029/B8_train_reads_09/pass_receipt.json": {
+      "bytes": 369,
+      "sha256": "c0f302d2195e56447a9df9fd37a021bf78d588b514746f321f6b9d55da632782"
+    },
+    "B8_s2029/B8_dev_reads_09/pass_receipt.json": {
+      "bytes": 369,
+      "sha256": "bf976de452f751e06edb45b8191261b7363d315168fdfdf1fa8b6631bef2c731"
+    }
+  },
+  "inherited_B7_E9": {
+    "sha256": "349f33212a1ddd305ca1d2ae4e3d8fee02d6fbec67f0aff293f7d261f2e34b47",
+    "evidence": "Previously directly verified E9 checkpoint and this-round saved E9 report; checkpoint payload not reopened"
+  },
+  "readonly_verification": {
+    "new_generated_checkpoint_hash_reads": 1,
+    "new_generated_checkpoint_bytes_hashed": 53905789,
+    "checkpoint_deserializations": 0,
+    "scientific_inference_or_evaluation_runs": 0,
+    "training_updates": 0,
+    "raw_source_payload_reads": 0,
+    "SQLite_mode": "file bytes deserialized into in-memory SQLite"
+  },
+  "saved_metric_arithmetic": "PASS_ALL_FOUR_CELLS_DIFFERENCES_AND_INTERACTION",
+  "progress_page_terminal": "COMPLETE",
+  "limitations": [
+    "Single seed2029 and repeatedly used2024 Development",
+    "Historical E0 full numerical-environment fingerprint unavailable, conditional reuse only",
+    "Exact replayed Train summary equality does not establish bitwise equality to an unsaved uninterrupted checkpoint",
+    "AP fields are occurrence AP, AP20[q32] remains NOT_VERIFIED",
+    "Independent precipitation events NOT_IDENTIFIED"
+  ],
+  "engineering": "PASS",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED"
+}
