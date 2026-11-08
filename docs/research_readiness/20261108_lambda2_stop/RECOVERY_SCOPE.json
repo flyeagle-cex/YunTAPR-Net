@@ -1,0 +1,48 @@
+{
+  "status": "PROPOSED_RECOVERY_SCOPE_ONLY_NOT_EXECUTABLE_NOT_APPROVED",
+  "authorized": false,
+  "created_at_utc": "2026-11-08T00:23:28.648547+00:00",
+  "terminal_verification_sha256": "8def1c7bbccab1abd56bcb1e3dbd7e354c264e38a7fc555619dbe620747f11ea",
+  "model": "B8",
+  "seed": 2029,
+  "loss_arm": "E2",
+  "lambda_q": 2,
+  "restore": {
+    "epoch": 8,
+    "updates": 3840,
+    "checkpoint_sha256": "accc2aba0ae53a9a1fe5bff28b9de689b7b41b3474f32195b8b6a68173c77984",
+    "model_optimizer_scheduler_rng": "RESTORE_ALL_REQUIRED"
+  },
+  "execute_epochs": [
+    9
+  ],
+  "fixed_endpoint": "E9_LAST_AND_FULL_2024_DEVELOPMENT",
+  "new_updates": 480,
+  "replayed_updates": 480,
+  "new_weather_source_bytes": 53063515668,
+  "new_static_source_bytes": 312828,
+  "new_source_bytes": 53063828496,
+  "new_source_files": 15869,
+  "checkpoint_sha_reads": 1,
+  "checkpoint_deserializations": 1,
+  "checkpoint_reference_bytes": 53905085,
+  "proposed_additional_seconds": 3600,
+  "minimum_free_bytes": 25769803776,
+  "additional_retries": 0,
+  "cumulative_updates": 9120,
+  "cumulative_source_bytes": 1004416034948,
+  "cumulative_source_files": 300232,
+  "proposed_cumulative_package_seconds": 38744,
+  "prior_consumed_B8_seconds": 21600,
+  "proposed_cumulative_B8_seconds": 25200,
+  "proposed_B8_time_accounting_note": "Prior worker was killed at 21600s; orchestration endpoint timestamps recorded separately",
+  "estimated_duration_basis": "B8 completed epochs about40.2 minutes each, with one-hour proposed new cap",
+  "required_before_execution": [
+    "Explicit E2 recovery entry implementation and focused tests",
+    "Exact approved execution commit/proposal/output binding",
+    "Researcher approval explicitly adds480 replay updates and extends B8 wall allowance",
+    "One necessary limited independent review"
+  ],
+  "no_new_algorithm_or_seed": true,
+  "raw_source_reads_or_checkpoint_loads_in_preparation": 0
+}

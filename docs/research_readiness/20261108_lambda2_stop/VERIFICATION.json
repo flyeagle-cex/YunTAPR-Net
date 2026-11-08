@@ -1,0 +1,48 @@
+{
+  "status": "PASS_READ_ONLY_FAILURE_DIAGNOSIS_AND_DOCUMENTATION",
+  "verified_at_utc": "2026-11-08T00:25:40.875739+00:00",
+  "artifacts": {
+    "README.md": {
+      "bytes": 33205,
+      "sha256": "26dcbad1447e37c5942bebb9dc972543b550b0e6ed62ca798eab9c0c2299c4cf"
+    },
+    "STAGE_ACCEPTANCE.md": {
+      "bytes": 45244,
+      "sha256": "7dcc156a06fedcc421582fbeab44aae3290922321470736c665a97261a2a3fa6"
+    },
+    "docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": {
+      "bytes": 31553,
+      "sha256": "a2fb7fc7503567060169e96f5a0d7fc92c9a0e8df10aa8a97a563d70f4203fcd"
+    },
+    "docs/research_readiness/20261108_lambda2_stop/TERMINAL_VERIFICATION.json": {
+      "bytes": 20856,
+      "sha256": "8def1c7bbccab1abd56bcb1e3dbd7e354c264e38a7fc555619dbe620747f11ea"
+    },
+    "docs/research_readiness/20261108_lambda2_stop/RECOVERY_SCOPE.json": {
+      "bytes": 1909,
+      "sha256": "1779c23542b9005fa181727c3ae99a8b2f1e1d2a7ea66c64cfc178cd3aca3761"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 63832,
+      "sha256": "bb0a1713e7fc3cc4d2a61bb31c5bd3f40e1ad4aafe14fc37b1e0dfc7e3ae07d9"
+    },
+    "output/pdf/YunTAPR-Net_Master_Plan_Live_20261108_18.pdf": {
+      "bytes": 689353,
+      "sha256": "2cca1912bd290ba6810aee73c23f58ebd56a0adc86e0e1a0ba356a10e43b0494"
+    }
+  },
+  "checks": {
+    "update_ledgers": "B7=4320/B8=4320 RETURNED, exact E2 identity",
+    "source_accounting": "38 new source ledgers read into in-memory SQLite, all READ_COMPLETE; exact byte/open totals",
+    "partial_population": "scores block=-1, 2771440 pixel-times /3430=808 scenes",
+    "latest_two_checkpoint_full_SHA": "Directly checked B7 E9 and B8 E8 against receipts in this task",
+    "scientific_new_computations": "Saved metadata arithmetic only, no model evaluation",
+    "pdf": "25 pages, two corrected XeLaTeX passes, no overfull or missing characters, visual pages1/22/25 passed",
+    "protected_files": "Checked separately after append",
+    "training_restarts": 0,
+    "recovery_implementation": "NOT_PREPARED; scope-only candidate"
+  },
+  "engineering_package": "FAIL_PARTIAL_RESULTS_PRESERVED",
+  "science": "NOT_VERIFIED",
+  "researcher_mastery": "NOT_ASSESSED"
+}

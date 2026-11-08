@@ -14,7 +14,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
-\fancyhead[R]{\small\color{muted}2026-11-07}
+\fancyhead[R]{\small\color{muted}2026-11-08}
 \fancyfoot[L]{\footnotesize\color{muted}据研究者委托更新；不自动批准正式训练}
 \fancyfoot[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
@@ -33,25 +33,23 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261107.17}\qquad 状态截至2026年11月07日（北京时间）
+版本 \texttt{LIVE-20261108.18}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者要求维护原 V1.3 总计划的当前执行状态。原2026年9月24日正式方案保留为历史基准；本版不改写原批准记录，也不自动批准新的实验或数据操作。
 
 \section*{目前处于什么阶段}
-\status{研究者专项批准已消费，B7真实E2训练正在运行。}
-已有多阶段 Train/Development 结果和带局限的科学分析；尚未完成独立外部真实性验证、DOTE/DTFM机制验收及近实时业务验收。2025 Final Test继续封存。\evi{S0,S2,S3}
+\status{E2包因B8单模型6小时上限停止，B7固定E9完成，B8终点待补齐。}
+两模型各4320次训练更新均已返回。B8第九轮评价完成808/963场景时停止，最新完整权重为E8。2025 Final Test继续封存。\evi{S28}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 研究者明确批准YT-E2-20261107-001，绑定8339fe4、准确提案和输出。独立WMI监督器于北京时间20:41单次启动，Job和应用包隔离证明通过。\evi{S27}
-\item 真实更新账本确认E2、$\alpha=0.5$、$\gamma=2$、$\lambda_q=2$及Seed2029，原初态引用一致。启动核验快照为B7返回116更新，B8排队。
-\item 本机只读进度页已启用，按请求读取账本和评价收据。地址保存在私有运行定位并交由研究者查看。
-\item 已批准B7→B8、各9轮，整包8640更新、955143907680逻辑源字节、285626次打开、12小时，重放0、额外重试0。B8由同一控制器串行接续。
+\item 北京时间2026年11月08日06:26:52，控制器触发21600秒上限并封口失败，退出码1。直接日志为TimeoutExpired及Deadline reached。\evi{S28}
+\item B7九轮Train/Dev和E9权重已核实。B8九轮Train完成、八轮Dev封口；E9内存状态随进程退出，恢复须从E8重放480更新并完整评价。
+\item 累计8640更新、951352206452逻辑源字节、284363次打开；无额外重试或重放。失败账本、部分评价与历史权重均保留。
+\item 最小恢复范围仅为B8/2029/E2的E9。候选新增480更新（全部重放）、53063828496字节/15869次及1小时。当前仅范围设计，入口适配和精确新批准尚待完成。
 \end{itemize}
 
-固定科学执行副本保持8339fe4，独立审核与19项工程检查沿用LIVE.16。启动收据、批准来源和运行状态另行归档。原初态与九轮顺序匹配，历史E0继续有条件继承。
-
-本包处于训练执行阶段，固定E9新结果尚待封口。科学验收尚未通过，外部验证部分完成，研究者掌握尚未评估。当前执行边界见6O。
+本次单模型预算未覆盖B8完整Train/Dev耗时，评价后才保存权重使480更新失去可恢复状态。该停止原因可直接核实；运行变慢的根因尚未验证。科学验收NOT\_VERIFIED，外部PARTIAL，研究者掌握NOT\_ASSESSED。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -390,7 +388,7 @@ B8 单尺度DTFM & 历史E0有条件继承 & 从B8原初态训练\\
 
 DOTE若仍有独立决策价值，可后续比较REAL/ZERO与目标的交互，保留128零梯度权重及mask限制。单一负对照不足以证明物理因果。2024仍是重复开发人口，三Seed共享天气，2025封存，科学\texttt{NOT\_VERIFIED}。
 
-\pageheading{6L\quad DTFM真实初始化合成梯度检查}{研究者要求遵循网页主控操作。工程检查通过，科研效果仍待验证。}
+\pageheading{6L\quad DTFM原始零初始化合成梯度检查}{研究者要求遵循网页主控操作。工程检查通过，科研效果仍待验证。}
 \section*{实际执行}
 采用未改的\texttt{paired\_fusion\_candidates}，48特征、26 GFS条件、28地形条件通道，width16，调制限幅0.1。固定工程Seed20261107，人工$2\times9\times9$网格、全有效mask、固定非零回归目标。每臂5次CPU/FP32更新，诊断SGD学习率0.01、momentum与weight decay均0。原参数初始化规则保留，没有手填非零权重。\evi{S23}
 
@@ -474,27 +472,28 @@ L_{\lambda_q}=\frac{S_{\mathrm{occ}}+\lambda_q S_{\mathrm{qr}}}{N_{\mathrm{valid
 \section*{停止位置}
 工程入口准备后停止。正式环境和原初态/九轮顺序须实际配对；唯一主指标、保护指标/允许退化和精确更新、读取、时间预算及输出位置须在训练前冻结。当前训练授权未新增，科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
 
-\pageheading{6O\quad 单Seed两模型E2执行包}{研究者已批准准确额度并单次启动，B7训练中，B8由同一控制器接续。}
-\section*{最小科学设计}
-B7和B8各从自己的历史原初态开始，新AdamW、相同九轮顺序和原学习率计划，固定E9端点。唯一拟干预为全局$\lambda_q:1\to2$。历史E0按6M边界复用，单Seed、反复使用的2024 Development只作开发性证据。\evi{S26}
+\pageheading{6O\quad E2实验失败终态与最小恢复范围}{原包YT-E2-20261107-001已消费。恢复范围为PROPOSED，尚待精确执行方案及新批准。}
+\section*{直接核实的终态}
+固定执行8339fe4。B7于00:26封口九轮Train/Dev及E9。B8于00:26启动，06:10完成第九轮训练，06:26:52在第九轮Dev中达到单任务21600秒上限。父控制器停止worker并退出1。\evi{S28}
 
-主指标为$S_{qr}/N_{rain}$，历史B7为0.12740129422354954，B8为0.12688287078666707。$S_{qr}/N_{valid}$另列。Brier或q32距名义覆盖误差任何增加都如实列为权衡，不预设虚构非劣效界值。AP20[q32]为尚未验证的辅助项，不能用发生概率AP代替，也不把Pinball改善解释为强雨幅值已修复。
+\begin{tabularx}{\textwidth}{@{}p{3.1cm}X X@{}}
+\toprule 状态 & B7/2029/E2 & B8/2029/E2\\\midrule
+已返回训练更新 & 4320 & 4320\\
+完整Train/Dev轮 & 9/9 & 9/8\\
+最新完整权重 & E9/4320更新 & E8/3840更新\\
+第九轮Dev & 963场景完整 & 808/963已计分\\
+\bottomrule
+\end{tabularx}
 
-\section*{已经落实的执行约束}
-\begin{itemize}
-\item 显式参数贯穿CLI、控制器、独立子进程、worker及engine。非默认E2绑定原初态和九轮顺序；不匹配即停，优化器尚未创建。新E9摘要分别报告loss效应、B8--B7和交互。
-\item 复用既有独立WMI监督器。新增入口仅准入B7→B8、2029、E2，核对解释器指纹、研究者批准、实际干净提交与新输出目录；保留旧入口限制。
-\item 正式解释器Python3.11.15、Torch2.11.0+cu128、CUDA12.8、NumPy2.4.4已绑定。GPU空闲内存至少5GiB、启动主机可用至少8GiB，周期至少2GiB。沿用可用内存门槛，没有额外硬RSS上限。
-\item 准备阶段H盘恢复后两份指定卫星源SHA匹配，CPU完整初态B7为ab749c88…6326、B8为be600e87…b0d6，九轮顺序全部匹配。该次预检仅作初始化，实际训练见下方启动证据。
-\end{itemize}
+B7 E9实际SHA为349f3321\ldots e34b47，B8 E8为accc2aba\ldots c77984，均直接全文件核对并匹配收据。累计源951352206452字节/284363次，全部已打开条目READ\_COMPLETE。8640更新已全部消费。B8第九轮模型仅存在于已退出进程内存，部分评价SQLite不能恢复其状态。
 
-\section*{已批准的准确额度}
-每模型4320更新、477571953840逻辑源字节、142813次打开、6小时。整包8640更新、955143907680字节、285626次打开、12小时。初始空闲48GiB、每任务24GiB，重放0、额外重试0。B7失败不启动B8，B8失败保留B7。准备已消费3份源文件共10212631字节，另行留痕。
+\section*{已保存结果及解释}
+B7未加权条件Pinball由历史E0的0.127401降至0.126805；Brier由0.096732增至0.098521，q32覆盖由93.4824\%升至94.5341\%。发生AUROC/AP均下降。结果存在取舍，历史环境指纹不完整，单Seed结论为条件性描述。B8缺少固定E9，完整四格比较待补齐。
 
-\section*{真实启动证据}
-研究者在准确包确认中直接回复“批准这一限定包并立即启动”。20:41的独立监督器证明无Job、无应用包身份；控制器真实更新账本记录E2及权重2。启动核验快照B7返回116次更新、B8为PENDING，进度页只读且额度、执行提交均匹配。批准已消费，失败按本包零额外重试约束封口。\evi{S27}
+\section*{最小恢复范围}
+仅B8从E8/3840恢复模型、AdamW、调度与随机数状态，执行第九轮480更新并完整2024 Dev。候选新增源53063828496字节/15869次，检查点重哈希及反序列化各1次，新增墙钟1小时，磁盘至少24GiB。累计更新9120（含480重放）、源1004416034948字节/300232次。新增B8时间上限及重放需专项批准。
 
-历史Python、NumPy及驱动的完整指纹缺失，E0继续有条件继承。新模型固定E9及科学结果尚待完成，科学NOT\_VERIFIED，外部PARTIAL，研究者NOT\_ASSESSED。
+当前仅为范围设计。E2恢复入口、针对性测试、准确commit/提案/输出绑定和必要一次独立审核尚待完成。原包失败与所有历史结果保留。工程包FAIL、科学NOT\_VERIFIED、外部PARTIAL、知识NOT\_ASSESSED。
 
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
@@ -554,6 +553,7 @@ B7和B8各从自己的历史原初态开始，新AdamW、相同九轮顺序和�
 \item[S8] \path{docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json}。状态DRAFT\_NON\_EXECUTABLE\_NOT\_RESEARCHER\_FROZEN。
 \item[S10] 历史T10原报告，消息\texttt{msg\_0e2b831a2081504b016aebf5c577a887d08f75d73792e8771d}；B0/E1/2027完成收据与载荷未定位可同时成立。前版仅恢复原消息，本版继承，不查权重。
 \item[S9] \path{docs/research_readiness/20261105_b3_dote_without_mee/receipt.json}。单Seed、混合收益，处于原V3九模型外。
+\item[S28] 本轮失败终态与未批准恢复范围。\par\path{docs/research_readiness/20261108_lambda2_stop/}\par\path{TERMINAL_VERIFICATION.json}、\path{RECOVERY_SCOPE.json}。直接核对新账本及两份最新权重SHA。
 \end{description}
 \normalsize
 
