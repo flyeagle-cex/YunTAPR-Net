@@ -1,0 +1,112 @@
+{
+  "verified_at": "2026-11-08T15:37:34.080358+00:00",
+  "status": "ENGINEERING_COMPLETE_SCREEN_FAILED",
+  "code_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+  "decision_id": "YT-UQ-20261108-001-R1",
+  "exit": {
+    "at": "2026-11-08T15:26:34.841524+00:00",
+    "pid": 38300,
+    "return_code": 0,
+    "return_code_u32_hex": "0x0",
+    "automatic_retry": false
+  },
+  "target_elapsed_seconds": 34920.439852,
+  "completion": {
+    "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+    "code_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+    "updates": 8640,
+    "source_bytes": 955143907680,
+    "source_files": 285626
+  },
+  "arms": {
+    "CONTROL_E0": {
+      "completion": {
+        "bytes": 4576,
+        "sha256": "c06e4c60b0ad2bf1f595ad1cc6bde6e5c38817672b74ba1ad5e94215f28aac90"
+      },
+      "updates_ledger": [
+        [
+          "B7",
+          "RETURNED",
+          4320,
+          1,
+          4320
+        ]
+      ],
+      "train_dev_seals": 9,
+      "weather_passes_checked": 18,
+      "source_bytes_including_static": 477571953840,
+      "source_opens_including_static": 142813,
+      "e9_checkpoint": {
+        "bytes": 53904005,
+        "sha256": "a3f9208aa4e25e786c6797e658cc5fda4da9a29a05c87a693aa6a3fdc571565f"
+      },
+      "e9_report": {
+        "bytes": 1882415,
+        "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+      },
+      "e9_tail": {
+        "bytes": 1514365,
+        "sha256": "84652e83b806bdb1277a5021dea0dec7c6caec0c71e842a5bb5c35a15f8d27df"
+      },
+      "population": {
+        "scenes": 963,
+        "valid": 3303090,
+        "wet": 407820,
+        "strong_R_gt20": 717
+      }
+    },
+    "CANDIDATE_UQ_MILD": {
+      "completion": {
+        "bytes": 8486,
+        "sha256": "4a8f3d0b7c4d8372b16d860b4762fe137472e91a4e72bd027d6301ea61f842fd"
+      },
+      "updates_ledger": [
+        [
+          "B7",
+          "RETURNED",
+          4320,
+          1,
+          4320
+        ]
+      ],
+      "train_dev_seals": 9,
+      "weather_passes_checked": 18,
+      "source_bytes_including_static": 477571953840,
+      "source_opens_including_static": 142813,
+      "e9_checkpoint": {
+        "bytes": 53905029,
+        "sha256": "06c384b971b4834b7b954c6275f1a0dd634b2e386e3d50bebf51a50eb7e12635"
+      },
+      "e9_report": {
+        "bytes": 1881710,
+        "sha256": "158381658dcb5290fb91884e9bc0c493fcbfb57124c978befac1388a3bc6a63b"
+      },
+      "e9_tail": {
+        "bytes": 1513023,
+        "sha256": "3889d02a91a8ad73d474195a00a2078eafca7e782a16184d545f322904bd0a77"
+      },
+      "population": {
+        "scenes": 963,
+        "valid": 3303090,
+        "wet": 407820,
+        "strong_R_gt20": 717
+      }
+    }
+  },
+  "pair_identity": {
+    "same_B7_initial_full_state": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+    "same_nine_epoch_orders": true,
+    "same_population_and_six_groups": true
+  },
+  "newly_hashed_checkpoints": 2,
+  "historical_checkpoint_payloads_not_rehashed": 16,
+  "reads_this_verification": "SAVED_JSON_SQLITE_METADATA_PLUS_TWO_FINAL_CHECKPOINT_SHA_ONLY",
+  "training_starts": 0,
+  "new_inference_or_model_evaluation": 0,
+  "final_test_access": false,
+  "engineering": "PASS",
+  "development_screen": "FAIL",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED"
+}

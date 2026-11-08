@@ -1,0 +1,343 @@
+{
+  "source": "EXISTING_FIXED_E9_SAVED_REPORTS_AND_TAILS",
+  "input_identities": {
+    "CONTROL_E0/completion.json": {
+      "bytes": 4576,
+      "sha256": "c06e4c60b0ad2bf1f595ad1cc6bde6e5c38817672b74ba1ad5e94215f28aac90"
+    },
+    "CONTROL_E0/B7_development_09.json": {
+      "bytes": 1882415,
+      "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+    },
+    "CONTROL_E0/B7_tail_09.json": {
+      "bytes": 1514365,
+      "sha256": "84652e83b806bdb1277a5021dea0dec7c6caec0c71e842a5bb5c35a15f8d27df"
+    },
+    "CONTROL_E0/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CONTROL_E0/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CONTROL_E0/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 402,
+      "sha256": "4dc63e9f547561298920e4b00b9e01f9f137e611747c2265ea637e712a81ac78"
+    },
+    "CANDIDATE_UQ_MILD/completion.json": {
+      "bytes": 8486,
+      "sha256": "4a8f3d0b7c4d8372b16d860b4762fe137472e91a4e72bd027d6301ea61f842fd"
+    },
+    "CANDIDATE_UQ_MILD/B7_development_09.json": {
+      "bytes": 1881710,
+      "sha256": "158381658dcb5290fb91884e9bc0c493fcbfb57124c978befac1388a3bc6a63b"
+    },
+    "CANDIDATE_UQ_MILD/B7_tail_09.json": {
+      "bytes": 1513023,
+      "sha256": "3889d02a91a8ad73d474195a00a2078eafca7e782a16184d545f322904bd0a77"
+    },
+    "CANDIDATE_UQ_MILD/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CANDIDATE_UQ_MILD/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CANDIDATE_UQ_MILD/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 783,
+      "sha256": "24cc843c275165edeb77926b1003429808d6c90cc6c076f0140308b61da8e58d"
+    }
+  },
+  "pair_summary_identity": {
+    "bytes": 2321,
+    "sha256": "ef81dd7c8d1ae6d89473824220b84516336d7f0586b62816b3f0e59c5f687437"
+  },
+  "metrics": [
+    {
+      "metric": "all_log_pinball",
+      "control": 0.12740129422354954,
+      "candidate": 0.12753815183063594,
+      "delta": 0.00013685760708639916,
+      "relative_percent": 0.10742246216608815,
+      "gate_passed": false
+    },
+    {
+      "metric": "all_physical_pinball",
+      "control": 0.019610600071569055,
+      "candidate": 0.019599873546433805,
+      "delta": -1.0726525135250353e-05,
+      "relative_percent": -0.0546975875093256,
+      "gate_passed": true
+    },
+    {
+      "metric": "strong_log_pinball",
+      "control": 0.8982487808534173,
+      "candidate": 0.8973089050661304,
+      "delta": -0.0009398757872869368,
+      "relative_percent": -0.10463424023731711,
+      "gate_passed": true
+    },
+    {
+      "metric": "strong_physical_pinball",
+      "control": 0.5409483556362883,
+      "candidate": 0.5404426720236376,
+      "delta": -0.000505683612650687,
+      "relative_percent": -0.09348094090347657,
+      "gate_passed": true
+    },
+    {
+      "metric": "brier",
+      "control": 0.09673163538839748,
+      "candidate": 0.09701111768999805,
+      "delta": 0.0002794823016005754,
+      "relative_percent": 0.28892543838258944,
+      "gate_passed": false
+    },
+    {
+      "metric": "occurrence_ap",
+      "control": 0.5934546324623617,
+      "candidate": 0.5920422686238742,
+      "delta": -0.0014123638384875292,
+      "relative_percent": -0.23799019524497597,
+      "gate_passed": false
+    },
+    {
+      "metric": "occurrence_auroc",
+      "control": 0.8959240618810312,
+      "candidate": 0.8958980523000758,
+      "delta": -2.6009580955443923e-05,
+      "relative_percent": -0.0029031010620292623,
+      "gate_passed": false
+    }
+  ],
+  "arms": {
+    "CONTROL_E0": {
+      "population": {
+        "scenes": 963,
+        "valid": 3303090,
+        "wet": 407820,
+        "strong_R_gt20": 717
+      },
+      "q32_all": {
+        "covered": 381240,
+        "denominator": 407820,
+        "coverage": 0.9348241871413859
+      },
+      "q32_strong": {
+        "covered": 39,
+        "denominator": 717
+      },
+      "bins": [
+        {
+          "lower": 0.1,
+          "upper": 1.0,
+          "n_rain": 246473,
+          "q32_covered": 246096,
+          "q32_coverage": 0.9984704206951674,
+          "conditional_pinball": 0.08245987385940791,
+          "q32_shortfall_log_sum": 22.029823792579656,
+          "physical_pinball_mm_h": 0.14825513329029158,
+          "physical_normalized_pinball": 0.007412756664514579
+        },
+        {
+          "lower": 1.0,
+          "upper": 5.0,
+          "n_rain": 135686,
+          "q32_covered": 122227,
+          "q32_coverage": 0.9008077472989107,
+          "conditional_pinball": 0.1494552376643456,
+          "q32_shortfall_log_sum": 2942.48668660062,
+          "physical_pinball_mm_h": 0.41622610758296896,
+          "physical_normalized_pinball": 0.020811305379148447
+        },
+        {
+          "lower": 5.0,
+          "upper": 10.0,
+          "n_rain": 20145,
+          "q32_covered": 11590,
+          "q32_coverage": 0.5753288657235046,
+          "conditional_pinball": 0.3871092925514754,
+          "q32_shortfall_log_sum": 3301.6476413331634,
+          "physical_pinball_mm_h": 1.8600903881360507,
+          "physical_normalized_pinball": 0.09300451940680253
+        },
+        {
+          "lower": 10.0,
+          "upper": 20.0,
+          "n_rain": 4799,
+          "q32_covered": 1288,
+          "q32_coverage": 0.26838924775995,
+          "conditional_pinball": 0.6066511499171625,
+          "q32_shortfall_log_sum": 2068.5627738687776,
+          "physical_pinball_mm_h": 4.523074605951235,
+          "physical_normalized_pinball": 0.22615373029756175
+        },
+        {
+          "lower": 20.0,
+          "upper": 30.0,
+          "n_rain": 564,
+          "q32_covered": 38,
+          "q32_coverage": 0.0673758865248227,
+          "conditional_pinball": 0.8617804385025136,
+          "q32_shortfall_log_sum": 479.23462461717133,
+          "physical_pinball_mm_h": 9.526562511732577,
+          "physical_normalized_pinball": 0.47632812558662885
+        },
+        {
+          "lower": 30.0,
+          "upper": 50.0,
+          "n_rain": 147,
+          "q32_covered": 1,
+          "q32_coverage": 0.006802721088435374,
+          "conditional_pinball": 1.0194341348792397,
+          "q32_shortfall_log_sum": 165.27606279359767,
+          "physical_pinball_mm_h": 15.099698672842452,
+          "physical_normalized_pinball": 0.7549849336421226
+        },
+        {
+          "lower": 50.0,
+          "upper": null,
+          "n_rain": 6,
+          "q32_covered": 0,
+          "q32_coverage": 0.0,
+          "conditional_pinball": 1.3572317882057163,
+          "q32_shortfall_log_sum": 10.994351795892676,
+          "physical_pinball_mm_h": 27.42707638322672,
+          "physical_normalized_pinball": 1.371353819161336
+        }
+      ]
+    },
+    "CANDIDATE_UQ_MILD": {
+      "population": {
+        "scenes": 963,
+        "valid": 3303090,
+        "wet": 407820,
+        "strong_R_gt20": 717
+      },
+      "q32_all": {
+        "covered": 384737,
+        "denominator": 407820,
+        "coverage": 0.9433990485998724
+      },
+      "q32_strong": {
+        "covered": 39,
+        "denominator": 717
+      },
+      "bins": [
+        {
+          "lower": 0.1,
+          "upper": 1.0,
+          "n_rain": 246473,
+          "q32_covered": 246250,
+          "q32_coverage": 0.9990952355836136,
+          "conditional_pinball": 0.08337169466372976,
+          "q32_shortfall_log_sum": 12.439051670537552,
+          "physical_pinball_mm_h": 0.14972160479038946,
+          "physical_normalized_pinball": 0.007486080239519472
+        },
+        {
+          "lower": 1.0,
+          "upper": 5.0,
+          "n_rain": 135686,
+          "q32_covered": 124914,
+          "q32_coverage": 0.9206108220450157,
+          "conditional_pinball": 0.1481627941327216,
+          "q32_shortfall_log_sum": 2231.6907957854214,
+          "physical_pinball_mm_h": 0.4130241952499105,
+          "physical_normalized_pinball": 0.020651209762495525
+        },
+        {
+          "lower": 5.0,
+          "upper": 10.0,
+          "n_rain": 20145,
+          "q32_covered": 12159,
+          "q32_coverage": 0.6035740878629933,
+          "conditional_pinball": 0.3876531145631032,
+          "q32_shortfall_log_sum": 2902.402426244866,
+          "physical_pinball_mm_h": 1.8622557551133305,
+          "physical_normalized_pinball": 0.09311278775566653
+        },
+        {
+          "lower": 10.0,
+          "upper": 20.0,
+          "n_rain": 4799,
+          "q32_covered": 1375,
+          "q32_coverage": 0.28651802458845593,
+          "conditional_pinball": 0.6058508060466774,
+          "q32_shortfall_log_sum": 1934.3666262911663,
+          "physical_pinball_mm_h": 4.512478523937212,
+          "physical_normalized_pinball": 0.22562392619686059
+        },
+        {
+          "lower": 20.0,
+          "upper": 30.0,
+          "n_rain": 564,
+          "q32_covered": 38,
+          "q32_coverage": 0.0673758865248227,
+          "conditional_pinball": 0.8622273210209275,
+          "q32_shortfall_log_sum": 462.4073667828102,
+          "physical_pinball_mm_h": 9.526702485501383,
+          "physical_normalized_pinball": 0.47633512427506913
+        },
+        {
+          "lower": 30.0,
+          "upper": 50.0,
+          "n_rain": 147,
+          "q32_covered": 1,
+          "q32_coverage": 0.006802721088435374,
+          "conditional_pinball": 1.0131128980039605,
+          "q32_shortfall_log_sum": 158.1683786450192,
+          "physical_pinball_mm_h": 15.050944230859148,
+          "physical_normalized_pinball": 0.7525472115429575
+        },
+        {
+          "lower": 50.0,
+          "upper": null,
+          "n_rain": 6,
+          "q32_covered": 0,
+          "q32_coverage": 0.0,
+          "conditional_pinball": 1.3577799783383562,
+          "q32_shortfall_log_sum": 10.703936903504186,
+          "physical_pinball_mm_h": 27.39981884331478,
+          "physical_normalized_pinball": 1.369990942165739
+        }
+      ]
+    }
+  },
+  "evaluation_contract": {
+    "strong_definition": "R>20 mm/h, original valid mask",
+    "required_improvements": [
+      "strong_log_pinball",
+      "strong_physical_pinball"
+    ],
+    "lower_guardrails": [
+      "all_log_pinball",
+      "all_physical_pinball",
+      "brier"
+    ],
+    "higher_guardrails": [
+      "occurrence_ap",
+      "occurrence_auroc"
+    ],
+    "physical_scale_mm_h": 20.0,
+    "scientific_deterioration_allowance": 0,
+    "absolute_roundoff_tolerance": 1e-10,
+    "endpoint": "FIXED_EPOCH_9_LAST",
+    "q32_coverage": "AUXILIARY_NOT_A_SUCCESS_GATE",
+    "independent_event_count": "NOT_IDENTIFIED",
+    "interpretation": "ONE_SEED_REUSED_DEVELOPMENT_SCREEN_NOT_SCIENTIFIC_ACCEPTANCE"
+  },
+  "screen_passed": false,
+  "interpretation": "TWO_STRONG_DIAGNOSTICS_IMPROVE_SLIGHTLY_FOUR_GUARDRAILS_FAIL",
+  "limits": [
+    "ONE_SEED_REUSED_2024_DEVELOPMENT",
+    "717_PIXEL_TIMES_NOT_INDEPENDENT_EVENTS",
+    "R_GT50_ONLY_6_PIXEL_TIMES",
+    "NO_CAUSAL_MECHANISM_OR_SIGNIFICANCE_CLAIM",
+    "NO_FINAL_MODEL_SELECTION"
+  ],
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED"
+}
