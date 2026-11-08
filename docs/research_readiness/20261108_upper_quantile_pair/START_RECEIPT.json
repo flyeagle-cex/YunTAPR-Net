@@ -1,0 +1,95 @@
+{
+  "status": "STARTED_EXECUTION_IN_PROGRESS",
+  "approval": {
+    "decision_id": "YT-UQ-20261108-001-R1",
+    "researcher_reply": "批准一次纠正启动并立即执行",
+    "approved_at": "2026-11-08T05:44:28.214190+00:00",
+    "approval_sha256": "5284a033e0109ea534afa4d95cd59d001e6319937483dda03d7c449f37722d74",
+    "initial_decision": "YT-UQ-20261108-001",
+    "one_time_dispatch_correction_approved": true
+  },
+  "code_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+  "proposal_sha256": "842d5304b4bc549f6c9859cf2c5edbb56b5e012051df7bb75ea89122f637640c",
+  "proposal_file_sha256": "de5ea32ec5f078b747bbe24accacd3fa09a6d56afd103af3055d7599187b787d",
+  "started_beijing": "2026-11-08T13:44:34.401672+08:00",
+  "observation_beijing": "2026-11-08T13:47:53.248065+08:00",
+  "independent_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700,
+    "wmi_return_value": 0,
+    "evidence": {
+      "bytes": 140,
+      "sha256": "2acadf9aa268dd6ef351ecfbcedd3ca9648ff7413595664cbbff7e3754096d08"
+    }
+  },
+  "target_launch": {
+    "bytes": 247,
+    "sha256": "e2c832e9a29794c8b8d01521939cd99b898e13902c3be984f0d19138a7b0fca9"
+  },
+  "budget": {
+    "models": 2,
+    "updates_per_model": 4320,
+    "total_updates": 8640,
+    "source_bytes_per_model": 477571953840,
+    "source_files_per_model": 142813,
+    "total_source_bytes": 955143907680,
+    "total_source_files": 285626,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 43200,
+    "initial_free_bytes": 51539607552,
+    "minimum_task_free_bytes": 25769803776,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "checkpoint_loads": 0
+  },
+  "startup_snapshot": {
+    "state": "RUNNING",
+    "returned": 78,
+    "reserved": 78,
+    "sealed_epochs": 0,
+    "completed_models": 0,
+    "runs": [
+      {
+        "name": "CONTROL_E0",
+        "state": "RUNNING",
+        "returned": 78,
+        "sealed_epochs": 0
+      },
+      {
+        "name": "CANDIDATE_UQ_MILD",
+        "state": "PENDING",
+        "returned": 0,
+        "sealed_epochs": 0
+      }
+    ],
+    "source_io_delivered_snapshot": 4366542545,
+    "source_opened_snapshot": 1382,
+    "evidence": {
+      "bytes": 5540,
+      "sha256": "5365fd61fd56b697c78e4b6ce49ee557459b72fc4cbfcb2856c6e5d33daacbf2"
+    }
+  },
+  "monitor": {
+    "read_only": true,
+    "bind": "LOOPBACK_ONLY",
+    "identities": "DISTINCT_ARM_LABELS_SAME_B7_SEED2029",
+    "synthetic_tests_passed": 8,
+    "new_tests": 2,
+    "affected_existing_tests": 6,
+    "test_log": {
+      "bytes": 1685,
+      "sha256": "bb56beccca11dfde639395ff9d02ce9c9082a86a6df8a12ec962468556f627fa"
+    },
+    "initial_errors": [
+      "Restricted tool environment denied temporary directory access.",
+      "New SQLite fixture needed explicit close before Windows cleanup; corrected."
+    ],
+    "test_errors_after_correction": 0
+  },
+  "first_dispatch": "STOPPED_BEFORE_TARGET_CREATION_ZERO_UPDATES_ZERO_SOURCE_SEPARATE_STOP_RECORD",
+  "training_final_status": "NOT_COMPLETE",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "additional_retry_allowance": 0,
+  "final_test_access": false
+}

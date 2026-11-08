@@ -33,22 +33,22 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.25}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.26}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{既有E2四格实验已封口，新上分位加权配对包已完成工程准备。}
-历史B7/B8强雨Pinball均退化，模型改进仍待检验。网页总控建议温和固定分位节点权重，现已实现为一个候选。新训练尚未启动，准确科学方案和新增预算待研究者批准。\evi{S31,S33,S34}
+\status{新上分位加权配对包已获准确批准并进入正式训练。}
+YT-UQ-20261108-001首次调度被受限工具环境WMI拒绝访问，未创建实验目标，训练与源读取均0。研究者明确批准仅一次纠正调度R1后，于北京时间13:44:34成功启动已审f43b422副本。\evi{S35}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 唯一候选为$w(\tau)=2(1+\tau)/3$，32节点权重均值1，发生项与$\lambda_q=1$沿用原E0。
-\item 拟用B7/Seed2029同环境从相同原初态重跑E0和候选，各九轮固定E9。B7只作诊断载体，未选择最终模型。
-\item 强雨未加权log及物理雨强Pinball共同改善，五项总体/发生指标不退化。绝对数值容差$10^{-10}$，科学退化容限0。
-\item 48项合成与影响回归检查通过，独立执行副本648项代码指纹匹配。Harness限定新增差异审核通过，19项新合成检查独立通过。
+\item 固定$w(\tau)=2(1+\tau)/3$，B7/Seed2029原初态E0对照后接候选，两臂各9轮固定E9。模型改进效果仍待实际结果。
+\item 启动快照E0已完成78/4320次更新，候选等待。整包8,640更新、955,143,907,680源字节/285,626次、12小时，重放及后续重试均0。
+\item 独立监督确认无Job、无包身份。首个失败与新成功记录分别保存，不覆盖旧失败，也没有改动Windows权限或配置。
+\item 只读页面区分两臂标签，8项页面合成/回归通过。48项原准备检查和Harness独立19项结果继承，未开展重复全量审核。
 \end{itemize}
-工程\texttt{PASS}限代码与准备检查，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6U记录本轮准确提案，6T保留此前方向建议快照。
+工程运行\texttt{IN\_PROGRESS}，启动核验\texttt{PASS}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6U保留批准前提案，6V登记准确批准与启动事实。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -686,6 +686,25 @@ E0对照使用原均匀节点权重。两臂发生损失$\alpha=0.5,\gamma=2$及
 
 tau权重强调所有湿像元的高分位节点，不能保证真实强雨改善。它不增加输入信息，也不证明DOTE/DTFM物理因果。$R>50$仅6个像元时次。失败后停止，不扫描权重、不自动切换物理损失、不扩Seed。2025继续封存。工程准备与科学效果、研究者本人掌握分别登记。
 
+\pageheading{6V\quad 上分位配对包准确批准与实际启动}{运行中。时点快照不代表九轮完成或科学效果改善。}
+\section*{研究者批准与首次停止}
+研究者对准确包YT-UQ-20261108-001直接回复“批准这一限定包并立即启动”。准确代码f43b422、原规范提案摘要及全部科学/预算字段写入外部批准记录。第一次WMI进程创建在受限工具环境拒绝访问，错误为\texttt{0x80041003}。正式目录、目标进程、优化器更新、源读取与checkpoint加载均未发生。UTF8解码GBK错误另行记录，独立只读查询确认原始权限拒绝。失败声明保留，未自动重试。\evi{S35}
+
+研究者随后直接批准仅一次纠正启动YT-UQ-20261108-001-R1。纠正仅将工具执行放到可访问WMI的环境，不修改操作系统权限或配置。原科学方法、代码、输出目录及训练/源/时间额度保持准确批准范围，没有额外训练预算。原失败服务与新服务分别保留。
+
+\section*{直接观察到的启动事实}
+\begin{itemize}
+\item 北京时间2026-11-08 13:44:34，WMI创建返回0。独立监督记录为\par\texttt{in\_any\_job=false}，\texttt{package\_status=15700}。
+\item 新正式目录及E0原初态/九轮顺序记录已生成。新账本绑定R1决策、Seed2029及冻结人口。启动快照为78次RETURNED更新，范围1--78，候选尚未启动。
+\item 两臂各4,320更新、477,571,953,840字节/142,813次，合计8,640更新、955,143,907,680字节/285,626次。每臂6小时，整包12小时，初始48 GiB/每臂24 GiB，checkpoint加载0，重放0，后续重试0。
+\item E0九轮封口后由同一原控制器串行启动UQ\_MILD\_V1，不重新调度。真实最终效果与七项筛查结果尚未产生，科学状态仍为NOT\_VERIFIED。
+\end{itemize}
+
+\section*{页面与本轮验证范围}
+只读页面复用既有JSON/SQLite查询，增加两臂独立路径和标签，避免两个B7被合并计数。新2项和受影响旧6项页面检查均通过。第一次受限环境临时目录拒绝访问、随后新夹具SQLite未显式关闭导致Windows清理错误，均保留日志；修正夹具后8/8通过。页面不导入模型、不控制训练、不读取天气源或权重。它只在浏览请求时读取新输出元数据。
+
+冻结执行副本、原48项准备检查与Harness独立19项限定审核继承。没有新增科学审查轮次，也不把启动PASS当作完整实验完成。当前沿原控制器后台继续，2025封存。项目进度、双方各自Git与新旧证据分别记录。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -750,6 +769,7 @@ tau权重强调所有湿像元的高分位节点，不能保证真实强雨改�
 \item[S32] 本轮多方讨论与候选路线。\par\path{docs/research_readiness/20261108_next_step_discussion/DISCUSSION.json}。记录三名代理的初始意见、模块代理后续收敛、Harness第42轮及网页总控最终回复。三份保存JSON的准确路径、SHA和字段入口见该记录。讨论结论为PROPOSED，B尚未执行，新增统计/训练/推理/评价均0。
 \item[S33] 三JSON保存分层统计与复核。\par\path{docs/research_readiness/20261108_saved_strata_analysis/}\par\path{analyze_saved_strata.py}、\path{RESULTS.json}、\path{REVIEW_AND_CANDIDATE.json}及\path{VERIFICATION.json}。输入完整路径、指纹及字段语义均随结果保存。七层四格计数、贡献分解与q32计数经过独立小数复算及Harness第43轮有限数值复核。总控候选建议仍PROPOSED，科学状态未升级。
 \item[S34] 本轮温和上分位配对包与48项检查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}、\path{VERIFICATION.json}及审后回执。总控温和函数建议待研究者批准，准确代码与提案指纹见6U。无真实训练或科学验收。
+\item[S35] 本轮准确批准、首调度停止与R1真实启动。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{FIRST_DISPATCH_STOP.json}、\path{START_RECEIPT.json}与本轮验证。原始批准、独立监督、进程创建、更新和源读取账本保留本地。启动核验PASS，实验IN\_PROGRESS，科学尚未验收。
 \end{description}
 \normalsize
 

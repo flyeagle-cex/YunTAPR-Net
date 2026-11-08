@@ -127,13 +127,21 @@ class CampaignReader(base.Reader):
         self.approval=binding['approval'];self.budget=self.approval['budget']
         self.recovery_parent=Path(binding['recovery_parent']) if binding.get('recovery_parent') else None
         listed=[(x['model'],x['seed']) for x in self.approval['tasks']]
+        self.upper_quantile=self.approval['tasks']==[
+            dict(arm='CONTROL_E0',model='B7',seed=2029,quantile_profile='UNIFORM'),
+            dict(arm='CANDIDATE_UQ_MILD',model='B7',seed=2029,quantile_profile='UQ_MILD_V1')]
+        if self.upper_quantile and (
+            self.approval['code_commit']!='f43b4225fef462a31035d59a06b85f31e5b257dc'
+            or self.approval['proposal_sha256']!='842d5304b4bc549f6c9859cf2c5edbb56b5e012051df7bb75ea89122f637640c'
+            or (self.budget['total_source_bytes'],self.budget['total_source_files'])!=(955143907680,285626)):
+            raise ValueError('Not the approved upper-quantile pair')
         self.control_multi=listed==[('B7_ZERO_DOTE',2030),('B7_ZERO_DOTE',2031)]
         self.control=listed==[('B7_ZERO_DOTE',2029)] or self.control_multi
         self.static=listed==[('B5',2029),('B6',2029)]
         self.innovation=listed==[('B7',2029),('B8',2029)]
         self.innovation_multiseed=listed==[('B7',2030),('B8',2030),('B7',2031),('B8',2031)]
         self.innovation_recovery=self.innovation_multiseed and self.recovery_parent is not None
-        self.terrain=self.static or self.innovation
+        self.terrain=self.static or self.innovation or self.upper_quantile
         if self.control_multi:
             if (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(8640,955143907680,285626,0,43200):raise ValueError('Not the exact two-control budget')
             if binding.get('control')!='ZERO_NUMERIC_RETAIN_REAL_MASKS_TWO_SEEDS' or self.approval.get('approved_by_researcher') is not True:raise ValueError('Not the approved two-control identity')
@@ -198,6 +206,7 @@ class CampaignReader(base.Reader):
             for index,task in enumerate(self.tasks):
                 kind,seed=task['model'],task['seed'];name=f'{kind}_s{seed}'
                 task_root=self.recovery_parent if self.recovery_parent and not self.innovation_recovery and index==0 else self.folder
+                if self.upper_quantile:task_root=self.folder/task['arm']
                 folder=task_root/name
                 offset=2880 if self.innovation_recovery and index==0 else 480 if self.recovery_parent and not self.innovation_recovery and index==1 else 0
                 returned=reserved=offset
@@ -237,10 +246,11 @@ class CampaignReader(base.Reader):
                 current=next((e for e in epochs if e['phase']!='SEALED'),epochs[-1])
                 if self.terrain or self.innovation_multiseed or self.control:
                     static_db=self.folder/(f'B7_ZERO_DOTE_s{seed}_static_source.sqlite' if self.control_multi else 'B7_ZERO_DOTE_static_source.sqlite' if self.control else f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
+                    if self.upper_quantile:static_db=task_root/'B7_static_source.sqlite'
                     if static_db.exists():
                         counts=self.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
-                runs.append(dict(model='B7_ZERO_DOTE' if self.control else kind,seed=seed,name=name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
+                runs.append(dict(model=task['arm'] if self.upper_quantile else 'B7_ZERO_DOTE' if self.control else kind,seed=seed,name=task['arm'] if self.upper_quantile else name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
             failure=self.document('failure.json');completion=self.document('completion.json')
             if failure:
@@ -284,6 +294,7 @@ class CampaignReader(base.Reader):
             if self.innovation and state=='COMPLETE':result['paired_summary']=self.document('innovation_paired_summary.json')
             if self.innovation_multiseed and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_innovation_summary.json')
             if self.control_multi and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_dote_control_summary.json')
+            result['upper_quantile']=self.upper_quantile
             if self.innovation_recovery:result.update(segment_returned=returned-self.budget['prior_updates'],segment_limit=self.budget['total_updates'],prior_attempts=self.budget['prior_updates'])
             self.cache,self.cached_at=result,time.monotonic()
             return result
@@ -474,7 +485,7 @@ def main():
     with ThreadingHTTPServer(('127.0.0.1',a.port),base.handler_for(reader)) as server:
         service=dict(url=f'http://127.0.0.1:{server.server_port}/',pid=base.os.getpid(),read_only=True,training_pid=a.training_pid)
         (a.service_dir/'service.json').write_text(json.dumps(service,indent=2),encoding='utf-8')
-        shortcut='B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
+        shortcut='B7上分位配对训练进度.url' if getattr(reader,'upper_quantile',False) else 'B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
         (a.service_dir/shortcut).write_text('[InternetShortcut]\nURL='+service['url']+'\n',encoding='utf-8')
         print(service['url'],flush=True)
         server.serve_forever(poll_interval=1)
