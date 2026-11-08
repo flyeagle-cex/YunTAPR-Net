@@ -180,10 +180,17 @@ def worker(root,proposal,private,approval,commit,index,*,lambda_q=1.0):
     return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=pair_reference,static_name=f'{kind}_static_source.sqlite',lambda_q=lambda_q)
 
 
-def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0):
+def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0,
+             quantile_profile='UNIFORM',tail_factory=None):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
+    if quantile_profile not in ('UNIFORM','UQ_MILD_V1') or (
+        quantile_profile=='UQ_MILD_V1' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
+    ):
+        raise PermissionError('Only B7 seed2029 E0 can use UQ_MILD_V1')
+    if p.get('protocol',{}).get('quantile_profile','UNIFORM')!=quantile_profile:
+        raise PermissionError('Quantile profile must match the explicit task protocol')
     package=Path(v['output_root'])
     if os.environ.get('PYTHONHASHSEED')!=str(seed) or shutil.disk_usage(package).free<p['budget']['minimum_task_free_bytes']:raise RuntimeError('Seed/storage admission differs')
     db=sqlite3.connect(package/static_name);db.execute('CREATE TABLE jobs(id TEXT PRIMARY KEY,state TEXT)');db.execute("INSERT INTO jobs VALUES ('static','PENDING')");db.commit()
@@ -200,12 +207,13 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
         if time.monotonic()-started>p['budget']['max_model_seconds']:raise RuntimeError('Task6h cap; no retry')
     folder=package/f'{kind}_s{seed}'
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
-                   kinds=(kind,),deadline=deadline,tail_factory=lambda:TerrainTail(pack),code_commit=commit,
+                   kinds=(kind,),deadline=deadline,tail_factory=lambda:(TerrainTail if tail_factory is None else tail_factory)(pack),code_commit=commit,
                    pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q,
-                   origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind)).run(
+                   origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind),quantile_profile=quantile_profile).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
     if spec.lambda_q!=1.0:result.update(loss_arm=spec.loss_config.experiment_id,lambda_q=spec.lambda_q)
+    if quantile_profile!='UNIFORM':result.update(loss_arm=quantile_profile,lambda_q=1.0)
     deadline();write(folder/'completion.json',result);return result
 
 

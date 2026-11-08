@@ -73,6 +73,27 @@ def validate_dynamic_loss_recovery_scope(proposal, executable):
         raise PermissionError('Bound E2 recovery interpreter differs')
 
 
+def validate_upper_quantile_scope(proposal, executable):
+    """Allow only the proposed same-architecture E0/UQ_MILD_V1 pair."""
+    tasks = [
+        dict(arm='CONTROL_E0',model='B7',seed=2029,quantile_profile='UNIFORM'),
+        dict(arm='CANDIDATE_UQ_MILD',model='B7',seed=2029,quantile_profile='UQ_MILD_V1'),
+    ]
+    protocol = proposal.get('protocol', {})
+    caps = proposal.get('budget', {})
+    if (proposal.get('tasks') != tasks or protocol.get('loss') != 'E0'
+            or protocol.get('lambda_q') != 1.0 or protocol.get('seed') != 2029
+            or protocol.get('epochs') != 9 or protocol.get('endpoint') != 'FIXED_EPOCH_9'
+            or proposal.get('scientific_choices', {}).get('candidate_loss', {}).get('weight_rule') != '2*(1+tau)/3'
+            or caps.get('total_updates') != 8640 or caps.get('total_source_bytes') != 955143907680
+            or caps.get('total_source_files') != 285626 or caps.get('max_package_seconds') != 43200
+            or caps.get('max_model_seconds') != 21600 or caps.get('replay_allowance') != 0
+            or caps.get('additional_retry_allowance') != 0):
+        raise PermissionError('Only the exact B7 E0/UQ_MILD_V1 origin pair is allowed')
+    if sha(executable) != proposal.get('runtime_binding', {}).get('python_executable_sha256'):
+        raise PermissionError('Bound upper-quantile interpreter differs')
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -118,7 +139,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -131,6 +152,9 @@ def validate_spec(path):
             expected_commit=approval['code_commit']  # Bound below to the actual clean snapshot HEAD.
         elif entry.name=='start_dynamic_loss_recovery.py':
             validate_dynamic_loss_recovery_scope(proposal,executable)
+            expected_commit=approval['code_commit']
+        elif entry.name=='start_upper_quantile_pair.py':
+            validate_upper_quantile_scope(proposal,executable)
             expected_commit=approval['code_commit']
         else:expected_commit=proposal['execution_code_commit']
         if approval['code_commit']!=expected_commit or approval['output_root']!=private['output_root'] or Path(private['output_root']).exists():raise PermissionError('Consumed or mismatched grant; never restart')
