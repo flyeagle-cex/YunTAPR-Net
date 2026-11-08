@@ -1,0 +1,115 @@
+{
+  "task": "SAVED_FOUR_CELL_SEVEN_BIN_DECOMPOSITION_20261108",
+  "verified_at": "2026-11-08T11:23:54.402317+08:00",
+  "result": "PASS_FOR_BOUNDED_STATISTICS_AND_DOCUMENTATION",
+  "checks": {
+    "source_unchanged:E0_B7": true,
+    "source_unchanged:E0_B8": true,
+    "source_unchanged:E2": true,
+    "shared_unchanged_before_append:DECISIONS.md": true,
+    "shared_unchanged_before_append:COLLABORATION_RULES.md": true,
+    "shared_unchanged_before_append:.gitattributes": true,
+    "shared_unchanged_before_append:handoffs/DSH.md": true,
+    "shared_unchanged_before_append:PROJECT_STATE.md": true,
+    "shared_unchanged_before_append:handoffs/CODEX.md": true,
+    "history_suffix:README.md": true,
+    "history_suffix:STAGE_ACCEPTANCE.md": true,
+    "history_suffix:docs/research_readiness/20261106_research_convergence/REVIEW_INDEX.md": true,
+    "previous_live23_pdf_unchanged": true,
+    "reviewed_results_identity": true,
+    "harness_saved_arithmetic_matched": true,
+    "decimal_24_checks": true,
+    "pdf_30_pages": true,
+    "pdf_cover_live24": true,
+    "pdf_6S_page26": true,
+    "pdf_6T_page27": true,
+    "pdf_source_S33": true,
+    "no_overfull_or_missing_glyph": true,
+    "visual_1_26_27_30": true
+  },
+  "independent_decimal_arithmetic": {
+    "verified_at": "2026-11-08T11:18:50.127445+08:00",
+    "checks": {
+      "B7_bin1_decimal_contribution": true,
+      "B7_bin2_decimal_contribution": true,
+      "B7_bin3_decimal_contribution": true,
+      "B7_bin4_decimal_contribution": true,
+      "B7_bin5_decimal_contribution": true,
+      "B7_bin6_decimal_contribution": true,
+      "B7_bin7_decimal_contribution": true,
+      "B7_decimal_overall_reconstruction": true,
+      "B7_E0_strong_decimal": true,
+      "B7_E0_strong_count": true,
+      "B7_E2_strong_decimal": true,
+      "B7_E2_strong_count": true,
+      "B8_bin1_decimal_contribution": true,
+      "B8_bin2_decimal_contribution": true,
+      "B8_bin3_decimal_contribution": true,
+      "B8_bin4_decimal_contribution": true,
+      "B8_bin5_decimal_contribution": true,
+      "B8_bin6_decimal_contribution": true,
+      "B8_bin7_decimal_contribution": true,
+      "B8_decimal_overall_reconstruction": true,
+      "B8_E0_strong_decimal": true,
+      "B8_E0_strong_count": true,
+      "B8_E2_strong_decimal": true,
+      "B8_E2_strong_count": true
+    },
+    "decimal_delta_residuals": {
+      "B7": "-2.967036928056495512726202737E-16",
+      "B8": "9.48483227894659408562601148E-17"
+    },
+    "result": "PASS",
+    "method": "Separate Decimal arithmetic using saved JSON numeric strings, independent of float implementation",
+    "source_inputs": 3
+  },
+  "artifacts": {
+    "analyze_saved_strata.py": {
+      "bytes": 10974,
+      "sha256": "fc006333dbf6df067452cf82c6899e6bbc14c9bc6c212c7d91da3070ecfaccbb"
+    },
+    "RESULTS.json": {
+      "bytes": 21528,
+      "sha256": "0a5b7d751324085ac33084c48f5ebf1085f37ccde73defe46c8a82c713fe6838"
+    },
+    "REVIEW_AND_CANDIDATE.json": {
+      "bytes": 4476,
+      "sha256": "33045f1e48d3d5cd108f0497e3eb11b504475e59a0d2475ebf432d4abbb4cd29"
+    },
+    "editable_latex": {
+      "bytes": 77115,
+      "sha256": "a51dc7ea6f666362a1d0d2b17aa5233d0d0e3147456fb22c4944e42d52943ee1"
+    },
+    "live24_pdf": {
+      "bytes": 727755,
+      "sha256": "43f5859237bbbf9845f320d2aa7d6ac1fcad07832c3f3e6ba9a2ba5bac7c140b"
+    }
+  },
+  "review_scope": "保存汇总身份和算术交叉核验，不是逐像元预测复现或科学验收",
+  "pdf_review": {
+    "pages": [
+      1,
+      26,
+      27,
+      30
+    ],
+    "result": "PASS",
+    "notes": "继承MiKTeX更新提示及pypdf CFF可选fontTools解析提示，实际渲染清晰，无缺字/Overfull，未安装依赖"
+  },
+  "execution": {
+    "optimizer_updates": 0,
+    "new_inference": 0,
+    "new_model_evaluation": 0,
+    "npz_reads": 0,
+    "checkpoint_reads": 0,
+    "raw_source_reads": 0,
+    "final_test_2025_access": 0,
+    "scientific_input_json_count": 3
+  },
+  "states": {
+    "engineering": "PASS_FOR_BOUNDED_STATISTICS_AND_REVIEW",
+    "science": "NOT_VERIFIED",
+    "external": "PARTIAL",
+    "researcher_knowledge": "NOT_ASSESSED"
+  }
+}

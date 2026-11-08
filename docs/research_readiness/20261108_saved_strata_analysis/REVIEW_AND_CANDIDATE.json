@@ -1,0 +1,79 @@
+{
+  "task": "SAVED_FOUR_CELL_SEVEN_BIN_DECOMPOSITION_20261108",
+  "recorded_at": "2026-11-08T11:22:02.657981+08:00",
+  "reviewed_result": {
+    "bytes": 21528,
+    "sha256": "0a5b7d751324085ac33084c48f5ebf1085f37ccde73defe46c8a82c713fe6838"
+  },
+  "harness": {
+    "status": "MATCHED_WITH_LIMITATIONS",
+    "source": "DeepSeek Harness / YunTAPR-Net 双AI协作交叉核验 / 第43轮 / 2026-11-08 11:17–11:20北京时间",
+    "reply_title": "保存的四格分层复核（只读）",
+    "observation": "Complete reply and completed state directly read in native UI. Its read/command activities were shown; arithmetic execution details are reviewer-reported, not independently observed by Codex at OS level.",
+    "independently_reported_scope": "RESULTS and its three saved source JSONs only, including input bytes/SHA, seven bin counts, four-cell weighted means, contribution differences, q32 counts; no source-array reconstruction.",
+    "cross_verified_scope": [
+      "Saved summary identities",
+      "Rain bin boundaries/counts and sum407820",
+      "Four overall Pinball reconstructions",
+      "Seven E2−E0 bin contributions and changes",
+      "q32 counts overall381240/385529/383572/385930 and R>20 counts39/30/41/44"
+    ],
+    "limits": [
+      "No independent reconstruction of per-pixel predictions, labels, mask or per-tau losses",
+      "Single seed and repeatedly used Dev",
+      "No inference, evaluation, model tests, file writes or Git requested"
+    ],
+    "qualifications_by_codex": [
+      "Harness没有给出正式PASS枚举，本记录将算术相符记MATCHED_WITH_LIMITATIONS。",
+      "Harness将n_bin/407820的验证均值贡献对应到训练条件项时省略Nrain/Nvalid；本轮训练目标仍以Nvalid归一化，不能把此分母简写当作真实训练梯度证据。",
+      "占93.7%对应0.1<R≤5单组；合并5<R≤10后应约98.65%，不照录原回复含混措辞。"
+    ]
+  },
+  "controller": {
+    "source": "https://chatgpt.com/g/g-p-6a9440772f60819190c353a4a133106e-xin-yi-dai-jiang-shui-ke-yan-xiang-fa/c/6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+    "reply_title": "总控裁定：固定正分位权重值得保留，但不能直接进入训练",
+    "evidence": "Full response directly read from browser UI; scientific recommendation, not researcher authorization.",
+    "recommendation": "B完成后保留唯一PROPOSED候选，固定正tau权重的上分位节点强调。优先定义数学目标、语义和评价边界。",
+    "suggested_primary": "R>20 subset unweighted mean 32-node log1p Pinball",
+    "suggested_guardrails": [
+      "Overall conditional Pinball",
+      "Brier",
+      "Occurrence AP",
+      "Occurrence AUROC"
+    ],
+    "auxiliary": [
+      "q32 subset coverage/counts",
+      "All three strong-rain bins"
+    ],
+    "objection": "High-tau emphasis could improve ordinary-rain quantiles without improving truly strong-rain samples. Coverage can rise through wider distributions. Shared-network tradeoffs persist.",
+    "pending": [
+      "Specific positive tau weights",
+      "Architecture and fair control",
+      "Guardrail tolerances",
+      "Exact code/data/output/budget authorization"
+    ]
+  },
+  "single_candidate": {
+    "status": "PROPOSED_NOT_EXECUTABLE",
+    "name": "Upper-quantile node emphasis",
+    "normalized_definition": "S_qr,w=sum_wet_i(sum_k w_k*rho_tau_k(log1p(R_i)-qlog_i,k)/sum_k w_k); w_k>0 fixed and tau-only",
+    "normalization_reason": "All-one weights reproduce original mean over32nodes. Global lambda, per-valid denominator and other objectives require an explicitly fixed protocol.",
+    "training_total_reminder": "J=(S_occ+lambda_q*S_qr,w)/N_valid; do not replace training denominator with N_rain.",
+    "semantic_condition": "Independent population quantile optimization with positive weights preserves each ideal target. Shared constrained finite-network optimization does not guarantee simultaneous quantile accuracy.",
+    "not_selected": [
+      "tau weight vector",
+      "model architecture",
+      "lambda setting",
+      "new seed plan",
+      "guardrail tolerances",
+      "new budget"
+    ],
+    "stopping_rule": "B结束，不扩读数组或缓存。后续只有预设干预与护栏及研究者准确批准后才进入新训练，不自动扫权重。"
+  },
+  "states": {
+    "engineering": "PASS_FOR_BOUNDED_STATISTICS_AND_REVIEW",
+    "science": "NOT_VERIFIED",
+    "external": "PARTIAL",
+    "researcher_knowledge": "NOT_ASSESSED"
+  }
+}

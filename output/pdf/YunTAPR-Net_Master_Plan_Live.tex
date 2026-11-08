@@ -33,7 +33,7 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.23}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.24}\qquad 状态截至2026年11月08日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
@@ -42,14 +42,14 @@
 B7、B8的E2固定E9与完整2024 Development均完成。B8限定恢复于09:44:38正常退出，工程状态PASS，科学验收仍为NOT\_VERIFIED。\evi{S31}
 
 \section*{本次实际更新}
-三名Codex代理、Harness与网页总控完成独立讨论，收敛为以下条件性路线。原四格结果和终态审核继续保留在6Q，本轮没有新增科学计算。\evi{S32}
+研究者回复“开始吧”后，三份保存JSON的七雨强层数值分解已完成，Harness独立数值复核相符。模型与评价输出均沿用已有结果。\evi{S33}
 \begin{itemize}
-\item 先以三份保存JSON做七雨强层分解，定位E0/E2在B7/B8中各层的Pinball变化贡献，保留发生指标保护线。
-\item 根据已有证据再讨论一个强雨目标干预或DTFM机制诊断，补Seed后置。下一科学目标、容忍线和预算仍须研究者决定。
-\item 原多方分歧和限定明确保存。单层覆盖改善不能独立宣告成功，雨强分层不能单独证明地形机制。
+\item B7总体Pinball改善来自低雨强与5--20 mm/h；B7/B8在$R>20$三个分层的32节点条件Pinball均退化。
+\item $R>20$汇总Pinball，B7退化0.6759\%，B8退化2.9862\%。q32达到真实值分别39到30、41到44/717，覆盖与损失方向存在取舍。
+\item 总控建议将固定正分位节点权重保留为唯一候选，具体权重、架构、容忍线与预算尚未选择。路线状态为\texttt{PROPOSED}。
 \end{itemize}
 
-路线状态\texttt{PROPOSED}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。后文6R记录范围及停止条件。本轮仅讨论与文档维护。
+本轮保存统计工程\texttt{PASS}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6R保留讨论时提案，6S--6T记录实际结果和候选边界。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -571,6 +571,76 @@ A 追加Seed & 候选有价值或需检验重复性 & 准确对照与限额方�
 \section*{停止条件与研究者决策}
 输入不足或人口冲突即停止相关比较。覆盖单项提高不宣告成功，混合结果不触发自动扫参。不同架构方向相反仅限制通用收益主张，不能事后挑赢家冒充预设证据。新训练须有具体假设、主指标与保护指标容忍线、公平对照及研究者准确批准。优先目标、是否接受架构特异改进和容忍线仍待本人裁定。
 
+\pageheading{6S\quad 七雨强层四格数值结果}{2024 Development，Seed2029，固定E9。三份保存JSON统计，未读取数组或模型载荷。}
+\section*{条件Pinball，数值越低越好}
+单位为log1p(mm/h)空间的32节点平均损失。有雨像元时次按$n_b$加权，全部四格分层边界与计数相同，合计407820。整体评价身份沿用已交叉核验记录，本次计数相同本身不构成逐像元对齐证明。\evi{S33}
+
+{\small
+\begin{tabularx}{\textwidth}{@{}lrrrrr@{}}
+\toprule 雨强(mm/h) & $n_b$ & B7/E0 & B7/E2 & B8/E0 & B8/E2\\\midrule
+$0.1<R\leq1$ & 246473 & 0.08245987 & 0.08171410 & 0.08401221 & 0.08346247\\
+$1<R\leq5$ & 135686 & 0.14945524 & 0.14975302 & 0.14884829 & 0.14838569\\
+$5<R\leq10$ & 20145 & 0.38710929 & 0.38243303 & 0.36963096 & 0.37762698\\
+$10<R\leq20$ & 4799 & 0.60665115 & 0.60455881 & 0.57777661 & 0.59820570\\
+$20<R\leq30$ & 564 & 0.86178044 & 0.86727800 & 0.83274487 & 0.85908980\\
+$30<R\leq50$ & 147 & 1.01943413 & 1.02690273 & 0.98871362 & 1.01204168\\
+$R>50$ & 6 & 1.35723179 & 1.38295089 & 1.33762482 & 1.39047429\\
+\bottomrule
+\end{tabularx}}
+
+两种架构在$20<R\leq30$、$30<R\leq50$、$R>50$三个分层的平均Pinball都升高。该单Seed事实支持“本次全局条件任务加倍未改善强雨子集”，尚不能归因为梯度冲突、训练稀缺或DTFM失效。
+
+\section*{q32达到真实值的像元时次数}
+分母为上表同层$n_b$。判据为$\log(1+R)\leq q_{32,\log}$，是按真实雨强选层后的覆盖诊断。
+
+{\small
+\begin{tabularx}{\textwidth}{@{}lrrrrr@{}}
+\toprule 雨强(mm/h) & $n_b$ & B7/E0 & B7/E2 & B8/E0 & B8/E2\\\midrule
+$0.1<R\leq1$ & 246473 & 246096 & 246104 & 246124 & 246102\\
+$1<R\leq5$ & 135686 & 122227 & 124912 & 122800 & 125254\\
+$5<R\leq10$ & 20145 & 11590 & 13046 & 13028 & 13035\\
+$10<R\leq20$ & 4799 & 1288 & 1437 & 1579 & 1495\\
+$20<R\leq30$ & 564 & 38 & 28 & 40 & 42\\
+$30<R\leq50$ & 147 & 1 & 2 & 1 & 2\\
+$R>50$ & 6 & 0 & 0 & 0 & 0\\
+\bottomrule
+\end{tabularx}}
+
+$R>20$合计717，B7覆盖39到30，B8覆盖41到44。B8覆盖增加仍伴Pinball退化。整体新增覆盖中，$1<R\leq5$贡献B7的2685/4289，B8的2454/2358；B8其他层合计抵消96。q32覆盖不能单独作成功标准，也不能解释为POD或完整概率校准。
+
+独立天气事件\texttt{NOT\_IDENTIFIED}，$R>50$仅6个像元时次。完整四格场景敏感性、AP20、逐分位节点损失变化仍\texttt{NOT\_VERIFIED}。
+
+\pageheading{6T\quad 指标变化贡献与唯一后续候选}{B步骤已结束。固定正分位节点权重仅为PROPOSED方向。}
+\section*{每层对整体Pinball变化的贡献}
+$\Delta L_b=(n_b/407820)(L_{E2,b}-L_{E0,b})$。正号表示推高总体损失。下表统一以$10^{-6}$表示。\evi{S33}
+
+\begin{tabularx}{\textwidth}{@{}lrr@{}}
+\toprule 雨强(mm/h) & B7贡献 & B8贡献\\\midrule
+$0.1<R\leq1$ & -450.723134 & -332.246180\\
+$1<R\leq5$ & +99.074891 & -153.912855\\
+$5<R\leq10$ & -230.992148 & +394.977752\\
+$10<R\leq20$ & -24.621450 & +240.398172\\
+$20<R\leq30$ & +7.602923 & +36.434059\\
+$30<R\leq50$ & +2.692078 & +8.408672\\
+$R>50$ & +0.378389 & +0.777541\\
+\midrule 合计 & $-596.588452$ & $+194.837162$\\\bottomrule
+\end{tabularx}
+
+B7总体改善由$R\leq5$贡献$-351.648243\times10^{-6}$、$5<R\leq20$贡献$-255.613598\times10^{-6}$，强雨贡献$+10.673390\times10^{-6}$。B8前两组分别为$-486.159035$和$+635.375924$，强雨为$+45.620272$，单位均为$10^{-6}$。七层变化和还原已有总体差分，最大残差$2.99\times10^{-16}$，独立高精度小数复算一致。
+
+\begin{tabularx}{\textwidth}{@{}lrrrr@{}}
+\toprule $R>20$ & E0 Pinball & E2 Pinball & 相对变化 & q32计数\\\midrule
+B7 & 0.89824878 & 0.90431966 & $+0.6759\%$ & $39\to30$\\
+B8 & 0.86894667 & 0.89489487 & $+2.9862\%$ & $41\to44$\\\bottomrule
+\end{tabularx}
+
+\section*{下一候选的数学边界}
+网页总控建议只保留固定正分位节点权重方向。可规范化为
+\[S_{qr,w}=\sum_{i\in\mathrm{wet}}\frac{\sum_{k=1}^{32} w_k\rho_{\tau_k}(\log(1+R_i)-\widehat q_{i,k})}{\sum_{k=1}^{32}w_k},\qquad w_k>0.\]
+归一化使全1权重还原原32节点平均，避免额外引入全局倍率。$w_k$只依赖固定$\tau_k$，理想独立分位优化时保留原目标；共享有限网络中的取舍仍待实验。上分位节点强调不等同真实强雨样本加权，也未确定最优权重。
+
+总控建议未来以$R>20$的未加权32节点Pinball为主指标，总体Pinball、Brier、发生AP/AUROC作保护指标，q32仅作辅助。该建议尚待研究者确定具体权重、架构、容忍线与准确预算。仅改变loss的对照、原初态及既有协议可作为设计方向，正式B8仍单SP04。当前不据此选择最终模型。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -633,6 +703,7 @@ A 追加Seed & 候选有价值或需检验重复性 & 准确对照与限额方�
 \item[S30] 本轮限定恢复提案、审核与真实启动回执。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{EXECUTION_PROPOSAL.json}、\path{REVIEW_OUTCOME.json}及\path{START_RECEIPT.json}。最新完整指纹见同目录启动核验。
 \item[S31] E2限定恢复终态及四格结果。\par\path{docs/research_readiness/20261108_lambda2_recovery/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}及\path{TERMINAL_REVIEW_ACK.json}。原始依据为新B8与原B7的E9保存报告、权重收据、480更新及三份读取账本。历史E0引用冻结提案的已审计摘要。Harness独立复核4071字节报告的SHA为85eb17a8\ldots514d569，限定工程与算术通过。审核报告已归档到e6c8901，回执见\path{PEER_GIT_SYNC.json}。
 \item[S32] 本轮多方讨论与候选路线。\par\path{docs/research_readiness/20261108_next_step_discussion/DISCUSSION.json}。记录三名代理的初始意见、模块代理后续收敛、Harness第42轮及网页总控最终回复。三份保存JSON的准确路径、SHA和字段入口见该记录。讨论结论为PROPOSED，B尚未执行，新增统计/训练/推理/评价均0。
+\item[S33] 三JSON保存分层统计与复核。\par\path{docs/research_readiness/20261108_saved_strata_analysis/}\par\path{analyze_saved_strata.py}、\path{RESULTS.json}、\path{REVIEW_AND_CANDIDATE.json}及\path{VERIFICATION.json}。输入完整路径、指纹及字段语义均随结果保存。七层四格计数、贡献分解与q32计数经过独立小数复算及Harness第43轮有限数值复核。总控候选建议仍PROPOSED，科学状态未升级。
 \end{description}
 \normalsize
 

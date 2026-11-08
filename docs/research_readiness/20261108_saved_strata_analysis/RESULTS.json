@@ -1,0 +1,604 @@
+{
+  "task": "SAVED_FOUR_CELL_SEVEN_BIN_DECOMPOSITION_20261108",
+  "authorization": "Researcher message 开始吧 following LIVE.23 bounded three-JSON proposal",
+  "scope": "2024 Development, Seed2029, fixed E9; statistics of existing summaries only",
+  "input_identities": {
+    "E0_B7": {
+      "path": "docs/research_readiness/20261025/evidence/b7_b8_terminal_20261028.json",
+      "bytes": 399020,
+      "sha256": "196b5efb6008cb0590ed73acf91e3daa1037851e49d1d433bc1e576f6f3d2729"
+    },
+    "E0_B8": {
+      "path": "docs/research_readiness/20261025/evidence/b8_recovery_completion_20261028.json",
+      "bytes": 302359,
+      "sha256": "3fb57ebd6301d57598bca0f1bdf903160bb0f54acb3b82225616dd8a47fe0ab3"
+    },
+    "E2": {
+      "path": "docs/research_readiness/20261108_lambda2_recovery/RESULTS.json",
+      "bytes": 9527,
+      "sha256": "1d351fe3f8fc5c5dd6fc7f8d223dd52a4d79c2ffe629d3fe644bb76b5b64bdaf"
+    }
+  },
+  "semantics": {
+    "rate_unit": "mm/h",
+    "rain_bin_rule": "lower < R <= upper; final upper unbounded",
+    "conditional_pinball": "mean over 32 fixed tau log1p(R) Pinball losses, then mean over rainy valid pixel-times in the stratum",
+    "q32_coverage": "count(log1p(R) <= qlog32) / stratum n_rain, conditional on observed rainfall bin; not POD or probability calibration",
+    "tau32": 0.984375,
+    "aggregation": "n-weighted rainy pixel-time means; not a scene mean or independent event mean",
+    "evidence_code": [
+      "src/yuntapr/experimental/research_readiness/tail_diagnostics.py",
+      "src/yuntapr/experimental/phase_b_v2_ablations/pinball.py"
+    ]
+  },
+  "population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "R_gt20": 717,
+    "R_gt50": 6,
+    "R_gt20_wet_population_percent": 0.17581285861409446,
+    "historical_population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "current_evidence": "Direct bin boundary/count equality and old data_version equality. E2 whole-scene/mask/partition identity inherited from prior terminal cross-review; equal counts alone do not prove alignment.",
+    "independent_event_count": "NOT_IDENTIFIED",
+    "four_cell_scene_sensitivity": "NOT_VERIFIED_E0_ACCESSIBLE_LOCATION_NOT_CONFIRMED"
+  },
+  "four_cell_rain_table": [
+    {
+      "lower_exclusive": 0.1,
+      "upper_inclusive": 1.0,
+      "n_rain": 246473,
+      "wet_population_percent": 60.4367122750233,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 0.082459873859408,
+          "q32_covered": 246096,
+          "q32_coverage": 0.9984704206951674
+        },
+        "B7_E2": {
+          "conditional_pinball": 0.0817140968024839,
+          "q32_covered": 246104,
+          "q32_coverage": 0.9985028786114504
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.08401221488699406,
+          "q32_covered": 246124,
+          "q32_coverage": 0.9985840234021577
+        },
+        "B8_E2": {
+          "conditional_pinball": 0.08346247257401357,
+          "q32_covered": 246102,
+          "q32_coverage": 0.9984947641323796
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": -0.0007457770569241073,
+          "conditional_pinball_relative_percent": -0.9044120758608464,
+          "overall_pinball_contribution": -0.00045072313410635947,
+          "q32_covered_change": 8,
+          "overall_q32_coverage_change_contribution": 1.961649747437595e-05
+        },
+        "B8": {
+          "conditional_pinball": -0.0005497423129804946,
+          "conditional_pinball_relative_percent": -0.6543599805337358,
+          "overall_pinball_contribution": -0.00033224617995007954,
+          "q32_covered_change": -22,
+          "overall_q32_coverage_change_contribution": -5.3945368054533864e-05
+        }
+      }
+    },
+    {
+      "lower_exclusive": 1.0,
+      "upper_inclusive": 5.0,
+      "n_rain": 135686,
+      "wet_population_percent": 33.27105095385219,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 0.14945523766434507,
+          "q32_covered": 122227,
+          "q32_coverage": 0.9008077472989107
+        },
+        "B7_E2": {
+          "conditional_pinball": 0.14975301873179186,
+          "q32_covered": 124912,
+          "q32_coverage": 0.920596082130802
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.14884829201534375,
+          "q32_covered": 122800,
+          "q32_coverage": 0.9050307327211355
+        },
+        "B8_E2": {
+          "conditional_pinball": 0.14838568909104136,
+          "q32_covered": 125254,
+          "q32_coverage": 0.9231166074613446
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": 0.0002977810674467951,
+          "conditional_pinball_relative_percent": 0.19924431696102113,
+          "overall_pinball_contribution": 9.907489068114815e-05,
+          "q32_covered_change": 2685,
+          "overall_q32_coverage_change_contribution": 0.006583786964837428
+        },
+        "B8": {
+          "conditional_pinball": -0.00046260292430239103,
+          "conditional_pinball_relative_percent": -0.31078819786168893,
+          "overall_pinball_contribution": -0.00015391285465865879,
+          "q32_covered_change": 2454,
+          "overall_q32_coverage_change_contribution": 0.0060173606002648225
+        }
+      }
+    },
+    {
+      "lower_exclusive": 5.0,
+      "upper_inclusive": 10.0,
+      "n_rain": 20145,
+      "wet_population_percent": 4.939679270266294,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 0.38710929255147497,
+          "q32_covered": 11590,
+          "q32_coverage": 0.5753288657235046
+        },
+        "B7_E2": {
+          "conditional_pinball": 0.38243303452557265,
+          "q32_covered": 13046,
+          "q32_coverage": 0.6476048647307024
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.36963095819867686,
+          "q32_covered": 13028,
+          "q32_coverage": 0.6467113427649541
+        },
+        "B8_E2": {
+          "conditional_pinball": 0.3776269783892891,
+          "q32_covered": 13035,
+          "q32_coverage": 0.6470588235294118
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": -0.0046762580259023245,
+          "conditional_pinball_relative_percent": -1.2079942579214913,
+          "overall_pinball_contribution": -0.00023099214832966093,
+          "q32_covered_change": 1456,
+          "overall_q32_coverage_change_contribution": 0.003570202540336423
+        },
+        "B8": {
+          "conditional_pinball": 0.00799602019061224,
+          "conditional_pinball_relative_percent": 2.163244179973252,
+          "overall_pinball_contribution": 0.00039497775180198023,
+          "q32_covered_change": 7,
+          "overall_q32_coverage_change_contribution": 1.7164435290078956e-05
+        }
+      }
+    },
+    {
+      "lower_exclusive": 10.0,
+      "upper_inclusive": 20.0,
+      "n_rain": 4799,
+      "wet_population_percent": 1.1767446422441274,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 0.606651149917162,
+          "q32_covered": 1288,
+          "q32_coverage": 0.26838924775995
+        },
+        "B7_E2": {
+          "conditional_pinball": 0.604558814097783,
+          "q32_covered": 1437,
+          "q32_coverage": 0.29943738278808085
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.5777766121958606,
+          "q32_covered": 1579,
+          "q32_coverage": 0.329026880600125
+        },
+        "B8_E2": {
+          "conditional_pinball": 0.5982056979423532,
+          "q32_covered": 1495,
+          "q32_coverage": 0.3115232340070848
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": -0.0020923358193789543,
+          "conditional_pinball_relative_percent": -0.3448993411888632,
+          "overall_pinball_contribution": -2.462144965229661e-05,
+          "q32_covered_change": 149,
+          "overall_q32_coverage_change_contribution": 0.00036535726546025205
+        },
+        "B8": {
+          "conditional_pinball": 0.020429085746492603,
+          "conditional_pinball_relative_percent": 3.53581043525648,
+          "overall_pinball_contribution": 0.00024039817198131042,
+          "q32_covered_change": -84,
+          "overall_q32_coverage_change_contribution": -0.00020597322348094748
+        }
+      }
+    },
+    {
+      "lower_exclusive": 20.0,
+      "upper_inclusive": 30.0,
+      "n_rain": 564,
+      "wet_population_percent": 0.13829630719435043,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 0.8617804385025142,
+          "q32_covered": 38,
+          "q32_coverage": 0.0673758865248227
+        },
+        "B7_E2": {
+          "conditional_pinball": 0.8672779986148683,
+          "q32_covered": 28,
+          "q32_coverage": 0.04964539007092199
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.8327448725948591,
+          "q32_covered": 40,
+          "q32_coverage": 0.07092198581560284
+        },
+        "B8_E2": {
+          "conditional_pinball": 0.8590897983357149,
+          "q32_covered": 42,
+          "q32_coverage": 0.07446808510638298
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": 0.0054975601123541384,
+          "conditional_pinball_relative_percent": 0.637930482839348,
+          "overall_pinball_contribution": 7.6029226211753564e-06,
+          "q32_covered_change": -10,
+          "overall_q32_coverage_change_contribution": -2.4520621842969938e-05
+        },
+        "B8": {
+          "conditional_pinball": 0.026344925740855785,
+          "conditional_pinball_relative_percent": 3.163625091892091,
+          "overall_pinball_contribution": 3.643405943269742e-05,
+          "q32_covered_change": 2,
+          "overall_q32_coverage_change_contribution": 4.9041243685939874e-06
+        }
+      }
+    },
+    {
+      "lower_exclusive": 30.0,
+      "upper_inclusive": 50.0,
+      "n_rain": 147,
+      "wet_population_percent": 0.03604531410916581,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 1.0194341348792395,
+          "q32_covered": 1,
+          "q32_coverage": 0.006802721088435374
+        },
+        "B7_E2": {
+          "conditional_pinball": 1.0269027282527359,
+          "q32_covered": 2,
+          "q32_coverage": 0.013605442176870748
+        },
+        "B8_E0": {
+          "conditional_pinball": 0.9887136195131042,
+          "q32_covered": 1,
+          "q32_coverage": 0.006802721088435374
+        },
+        "B8_E2": {
+          "conditional_pinball": 1.0120416774347045,
+          "q32_covered": 2,
+          "q32_coverage": 0.013605442176870748
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": 0.007468593373496368,
+          "conditional_pinball_relative_percent": 0.732621472831208,
+          "overall_pinball_contribution": 2.692077941013109e-06,
+          "q32_covered_change": 1,
+          "overall_q32_coverage_change_contribution": 2.4520621842969937e-06
+        },
+        "B8": {
+          "conditional_pinball": 0.02332805792160031,
+          "conditional_pinball_relative_percent": 2.359435276423956,
+          "overall_pinball_contribution": 8.40867175340897e-06,
+          "q32_covered_change": 1,
+          "overall_q32_coverage_change_contribution": 2.4520621842969937e-06
+        }
+      }
+    },
+    {
+      "lower_exclusive": 50.0,
+      "upper_inclusive": null,
+      "n_rain": 6,
+      "wet_population_percent": 0.0014712373105781962,
+      "cells": {
+        "B7_E0": {
+          "conditional_pinball": 1.3572317882057163,
+          "q32_covered": 0,
+          "q32_coverage": 0.0
+        },
+        "B7_E2": {
+          "conditional_pinball": 1.3829508941179762,
+          "q32_covered": 0,
+          "q32_coverage": 0.0
+        },
+        "B8_E0": {
+          "conditional_pinball": 1.3376248217287021,
+          "q32_covered": 0,
+          "q32_coverage": 0.0
+        },
+        "B8_E2": {
+          "conditional_pinball": 1.390474293325733,
+          "q32_covered": 0,
+          "q32_coverage": 0.0
+        }
+      },
+      "E2_minus_E0": {
+        "B7": {
+          "conditional_pinball": 0.0257191059122599,
+          "conditional_pinball_relative_percent": 1.8949678408476562,
+          "overall_pinball_contribution": 3.7838908212829044e-07,
+          "q32_covered_change": 0,
+          "overall_q32_coverage_change_contribution": 0.0
+        },
+        "B8": {
+          "conditional_pinball": 0.052849471597030906,
+          "conditional_pinball_relative_percent": 3.9509936372689314,
+          "overall_pinball_contribution": 7.775411445789453e-07,
+          "q32_covered_change": 0,
+          "overall_q32_coverage_change_contribution": 0.0
+        }
+      }
+    }
+  ],
+  "overall_reconciliation": {
+    "B7": {
+      "E0": {
+        "reconstructed": {
+          "n_rain": 407820,
+          "conditional_pinball": 0.12740129422354965,
+          "q32_covered": 381240,
+          "q32_coverage": 0.9348241871413859
+        },
+        "pinball_residual": 1.1102230246251565e-16,
+        "coverage_residual": 0.0
+      },
+      "E2": {
+        "reconstructed": {
+          "n_rain": 407820,
+          "conditional_pinball": 0.1268047057717868,
+          "q32_covered": 385529,
+          "q32_coverage": 0.9453410818498357
+        },
+        "pinball_residual": -1.942890293094024e-16,
+        "coverage_residual": 0.0
+      }
+    },
+    "B8": {
+      "E0": {
+        "reconstructed": {
+          "n_rain": 407820,
+          "conditional_pinball": 0.12688287078666713,
+          "q32_covered": 383572,
+          "q32_coverage": 0.9405423961551665
+        },
+        "pinball_residual": 5.551115123125783e-17,
+        "coverage_residual": 0.0
+      },
+      "E2": {
+        "reconstructed": {
+          "n_rain": 407820,
+          "conditional_pinball": 0.12707770794817239,
+          "q32_covered": 385930,
+          "q32_coverage": 0.9463243587857388
+        },
+        "pinball_residual": 1.6653345369377348e-16,
+        "coverage_residual": 0.0
+      }
+    }
+  },
+  "loss_change_decomposition": {
+    "B7": {
+      "seven_bin_contribution_sum": -0.0005965884517628521,
+      "saved_overall_change": -0.000596588451762553,
+      "residual": -2.990229591715021e-16,
+      "groups": {
+        "0.1_lt_R_le_5": {
+          "E0": {
+            "n_rain": 382159,
+            "conditional_pinball": 0.10624665614959793,
+            "q32_covered": 368323,
+            "q32_coverage": 0.9637951742599284
+          },
+          "E2": {
+            "n_rain": 382159,
+            "conditional_pinball": 0.10587139562548709,
+            "q32_covered": 371016,
+            "q32_coverage": 0.9708419793855437
+          },
+          "pinball_change": -0.0003752605241108403,
+          "pinball_relative_change_percent": -0.35319749130030426,
+          "overall_pinball_contribution": -0.00035164824342521134
+        },
+        "5_lt_R_le_20": {
+          "E0": {
+            "n_rain": 24944,
+            "conditional_pinball": 0.429347160315183,
+            "q32_covered": 12878,
+            "q32_coverage": 0.516276459268762
+          },
+          "E2": {
+            "n_rain": 24944,
+            "conditional_pinball": 0.42516802555215366,
+            "q32_covered": 14483,
+            "q32_coverage": 0.580620590121873
+          },
+          "pinball_change": -0.004179134763029335,
+          "pinball_relative_change_percent": -0.973369606069233,
+          "overall_pinball_contribution": -0.00025561359798195754
+        },
+        "R_gt_20": {
+          "E0": {
+            "n_rain": 717,
+            "conditional_pinball": 0.8982487808534179,
+            "q32_covered": 39,
+            "q32_coverage": 0.05439330543933055
+          },
+          "E2": {
+            "n_rain": 717,
+            "conditional_pinball": 0.9043196619757959,
+            "q32_covered": 30,
+            "q32_coverage": 0.04184100418410042
+          },
+          "pinball_change": 0.00607088112237808,
+          "pinball_relative_change_percent": 0.6758574296766863,
+          "overall_pinball_contribution": 1.0673389644316757e-05
+        }
+      },
+      "strong_bin_pinball_all_worsen": true,
+      "q32_covered_change_total": 4289,
+      "q32_covered_change_1_to_5": 2685
+    },
+    "B8": {
+      "seven_bin_contribution_sum": 0.00019483716150523766,
+      "saved_overall_change": 0.00019483716150514585,
+      "residual": 9.180481895521009e-17,
+      "groups": {
+        "0.1_lt_R_le_5": {
+          "E0": {
+            "n_rain": 382159,
+            "conditional_pinball": 0.10703233991672581,
+            "q32_covered": 368924,
+            "q32_coverage": 0.9653678181071229
+          },
+          "E2": {
+            "n_rain": 382159,
+            "conditional_pinball": 0.10651353654563124,
+            "q32_covered": 371356,
+            "q32_coverage": 0.9717316614288817
+          },
+          "pinball_change": -0.00051880337109457,
+          "pinball_relative_change_percent": -0.484716461863969,
+          "overall_pinball_contribution": -0.0004861590346087383
+        },
+        "5_lt_R_le_20": {
+          "E0": {
+            "n_rain": 24944,
+            "conditional_pinball": 0.4096762995045013,
+            "q32_covered": 14607,
+            "q32_coverage": 0.5855917254650417
+          },
+          "E2": {
+            "n_rain": 24944,
+            "conditional_pinball": 0.42006432906019814,
+            "q32_covered": 14530,
+            "q32_coverage": 0.5825048107761386
+          },
+          "pinball_change": 0.010388029555696843,
+          "pinball_relative_change_percent": 2.5356676889195304,
+          "overall_pinball_contribution": 0.0006353759237832906
+        },
+        "R_gt_20": {
+          "E0": {
+            "n_rain": 717,
+            "conditional_pinball": 0.8689466654704311,
+            "q32_covered": 41,
+            "q32_coverage": 0.05718270571827057
+          },
+          "E2": {
+            "n_rain": 717,
+            "conditional_pinball": 0.894894865556763,
+            "q32_covered": 44,
+            "q32_coverage": 0.061366806136680614
+          },
+          "pinball_change": 0.02594820008633192,
+          "pinball_relative_change_percent": 2.9861671742861295,
+          "overall_pinball_contribution": 4.562027233068533e-05
+        }
+      },
+      "strong_bin_pinball_all_worsen": true,
+      "q32_covered_change_total": 2358,
+      "q32_covered_change_1_to_5": 2454
+    }
+  },
+  "existing_overall_guardrails": {
+    "B7": {
+      "E0": {
+        "brier": 0.09673163538839748,
+        "auroc": 0.8959240618810312,
+        "average_precision": 0.5934546324623617,
+        "conditional_pinball": 0.12740129422354954,
+        "q32_coverage": 0.9348241871413859,
+        "q32_signed_bias": -0.04955081285861407,
+        "q32_absolute_error": 0.04955081285861407,
+        "qr_per_valid": 0.01572975480845147
+      },
+      "E2": {
+        "brier": 0.098520879410991,
+        "auroc": 0.8948496557390384,
+        "average_precision": 0.5897196253982525,
+        "conditional_pinball": 0.12680470577178699,
+        "q32_coverage": 0.9453410818498357,
+        "q32_signed_bias": -0.039033918150164326,
+        "q32_absolute_error": 0.039033918150164326,
+        "qr_per_valid": 0.01565609629403079
+      }
+    },
+    "B8": {
+      "E0": {
+        "brier": 0.09805082718912765,
+        "auroc": 0.896157900851324,
+        "average_precision": 0.5941484641201065,
+        "conditional_pinball": 0.12688287078666707,
+        "q32_coverage": 0.9405423961551665,
+        "q32_signed_bias": -0.04383260384483345,
+        "q32_absolute_error": 0.04383260384483345,
+        "qr_per_valid": 0.0156657470320877
+      },
+      "E2": {
+        "brier": 0.09762692111748855,
+        "auroc": 0.8960957585871412,
+        "average_precision": 0.5907630682011745,
+        "conditional_pinball": 0.12707770794817222,
+        "q32_coverage": 0.9463243587857388,
+        "q32_signed_bias": -0.03805064121426116,
+        "q32_absolute_error": 0.03805064121426116,
+        "qr_per_valid": 0.015689802837774203
+      }
+    }
+  },
+  "interpretation": {
+    "verified": [
+      "Both architectures have higher mean log-space 32-node Pinball in all three R>20 bins with E2.",
+      "B7 overall improvement coexists with strong-bin degradation.",
+      "B8 strong-bin q32 coverage increases while strong-bin mean Pinball worsens.",
+      "Overall q32 coverage gains concentrate in the 1<R<=5 bin."
+    ],
+    "not_identified": [
+      "Training cause or gradient conflict",
+      "Terrain mechanism or DTFM functional failure",
+      "Cross-seed stability or independent-event generalization",
+      "Per-tau loss changes or optimal tau weights",
+      "A/B/C, P20, strong-rain AUROC/AP, MAE/RMSE/Bias from these three inputs"
+    ],
+    "candidate_hypothesis_PROPOSED": "A separately defined upper-quantile-node loss emphasis may improve conditional strong-rain amplitude more directly than raising the whole conditional task weight. Fixed positive tau-only weights preserve the ideal per-node quantile target; finite shared-network tradeoffs and wet-population dominance still require validation. No weights, architecture, new training or success tolerance selected here."
+  },
+  "execution": {
+    "optimizer_updates": 0,
+    "new_inference": 0,
+    "new_model_evaluation": 0,
+    "npz_reads": 0,
+    "checkpoint_reads": 0,
+    "raw_source_reads": 0,
+    "final_test_2025_access": 0,
+    "scientific_input_json_count": 3
+  },
+  "states": {
+    "engineering": "PASS_FOR_BOUNDED_STATISTICS",
+    "science": "NOT_VERIFIED",
+    "researcher_knowledge": "NOT_ASSESSED"
+  },
+  "completed_at": "2026-11-08T11:15:01.625727+08:00"
+}
