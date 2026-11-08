@@ -14,7 +14,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
-\fancyhead[R]{\small\color{muted}2026-11-08}
+\fancyhead[R]{\small\color{muted}2026-11-09}
 \fancyfoot[L]{\footnotesize\color{muted}据研究者委托更新；不自动批准正式训练}
 \fancyfoot[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
@@ -33,22 +33,22 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.26}\qquad 状态截至2026年11月08日（北京时间）
+版本 \texttt{LIVE-20261108.27}\qquad 状态截至2026年11月09日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{新上分位加权配对包已获准确批准并进入正式训练。}
-YT-UQ-20261108-001首次调度被受限工具环境WMI拒绝访问，未创建实验目标，训练与源读取均0。研究者明确批准仅一次纠正调度R1后，于北京时间13:44:34成功启动已审f43b422副本。\evi{S35}
+\status{上分位配对实验工程完整结束，预先冻结的开发筛查未通过。}
+两臂各9轮固定E9与完整2024 Development封口，11月8日北京时间23:26:34正常退出0。强雨两个条件评分小幅改善，四项总体/发生保护指标退化。科学验收保持NOT\_VERIFIED。\evi{S36}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 固定$w(\tau)=2(1+\tau)/3$，B7/Seed2029原初态E0对照后接候选，两臂各9轮固定E9。模型改进效果仍待实际结果。
-\item 启动快照E0已完成78/4320次更新，候选等待。整包8,640更新、955,143,907,680源字节/285,626次、12小时，重放及后续重试均0。
-\item 独立监督确认无Job、无包身份。首个失败与新成功记录分别保存，不覆盖旧失败，也没有改动Windows权限或配置。
-\item 只读页面区分两臂标签，8项页面合成/回归通过。48项原准备检查和Harness独立19项结果继承，未开展重复全量审核。
+\item 实际8,640更新、955,143,907,680源字节/285,626次、约9小时42分，训练重放及额外重试0。
+\item 强雨log及物理Pinball改善约0.1046\%和0.0935\%。全湿log、Brier、发生AP和AUROC退化，七项判据3通过、4失败。
+\item q32整体覆盖93.4824\%升至94.3399\%，强雨覆盖计数仍为39/717。该计数无POD或独立事件含义，也未核验覆盖像元集合相同。
+\item 终态、保存报告、账本与两份E9权重SHA已核验。Harness限定终态复核已完成，确认工程PASS、开发筛查FAIL。
 \end{itemize}
-工程运行\texttt{IN\_PROGRESS}，启动核验\texttt{PASS}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。6U保留批准前提案，6V登记准确批准与启动事实。
+工程\texttt{PASS}，开发筛查\texttt{FAIL}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。本包额度已消费，6W保留结果和停止边界。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -705,6 +705,46 @@ tau权重强调所有湿像元的高分位节点，不能保证真实强雨改�
 
 冻结执行副本、原48项准备检查与Harness独立19项限定审核继承。没有新增科学审查轮次，也不把启动PASS当作完整实验完成。当前沿原控制器后台继续，2025封存。项目进度、双方各自Git与新旧证据分别记录。
 
+\pageheading{6W\quad 上分位配对实验终态与筛查结果}{工程完整结束。单Seed开发性筛查FAIL，科学效果尚未验收。}
+\section*{工程证据与公平比较}
+北京时间2026-11-08 23:26:34.841524进程正常退出0，目标总耗时34,920.439852秒。两臂各4,320次更新全部RETURNED，九轮训练、Development及LAST收据齐全。36个天气读取pass与2个静态账本精确封口，合计955,143,907,680字节/285,626次。训练重放与后续额外重试均0。此前第一次WMI零载荷失败独立保留，不冒称整轮从未有启动异常。\evi{S35,S36}
+
+两臂B7原初态完整SHA相同，九轮完整样本顺序一致。Development均963场景、3,303,090有效像元时次、407,820湿像元时次、717个$R>20$像元时次，六组来源、mask/人口摘要匹配。Codex本轮直接哈希两份E9权重并匹配收据；其余16份历史权重只核保存封口，不重复读载荷。
+
+\section*{原先冻结的七项门槛}
+物理Pinball固定除以20 mm/h。下表均为未加权科研评价，方向按候选减新E0判断，科学容限0、舍入容差$10^{-10}$。
+
+\begin{tabularx}{\textwidth}{@{}Xrrl@{}}
+\toprule 指标 & E0 & UQ\_MILD & 判据\\\midrule
+强雨log Pinball & 0.898248781 & 0.897308905 & 通过\\
+强雨物理Pinball/20 & 0.540948356 & 0.540442672 & 通过\\
+全湿log Pinball & 0.127401294 & 0.127538152 & 失败\\
+全湿物理Pinball/20 & 0.019610600 & 0.019599874 & 通过\\
+发生Brier & 0.096731635 & 0.097011118 & 失败\\
+发生AP & 0.593454632 & 0.592042269 & 失败\\
+发生AUROC & 0.895924062 & 0.895898052 & 失败\\\bottomrule
+\end{tabularx}
+
+强雨log和物理评分分别改善0.104634\%与0.093481\%，全湿log退化0.107422\%，Brier退化0.288925\%。发生AP下降0.001412364，AUROC下降0.000026010。结果有取舍，\texttt{screen\_passed=false}。小幅强雨收益无法使已冻结的四项失败保护线通过。
+
+\newpage
+\section*{强雨分层与q32的实际证据}
+\begin{tabularx}{\textwidth}{@{}lrrrX@{}}
+\toprule 雨强 & 数量 & E0 log & 候选log & 分层现象\\\midrule
+$20<R\leq30$ & 564 & 0.861780439 & 0.862227321 & log/物理均微退化\\
+$30<R\leq50$ & 147 & 1.019434135 & 1.013112898 & log/物理改善\\
+$R>50$ & 6 & 1.357231788 & 1.357779978 & log退化、物理改善\\\bottomrule
+\end{tabularx}
+
+强雨合并收益主要与30--50层改善一致，并非各层同向改善。$R>50$只有6个像元时次，独立事件尚未识别，不能据此宣称尾部泛化。
+
+q32全湿覆盖从381,240/407,820升至384,737/407,820，即93.4824\%到94.3399\%，仍低于98.4375\%名义水平。三个强雨层的覆盖计数均为$38\to38$、$1\to1$、$0\to0$，合计$39\to39/717$。它表示真实强雨像元中$q32\geq R$的计数，不能称作点估计检出、P20命中或POD。计数一致不证明两臂覆盖相同像元，本轮没有读取逐像元预测数组来判断。
+
+\section*{本轮结论和停止边界}
+网页总控建议按冻结规则结项，保留本次混合/负面结果。温和分位权重在这一单Seed配对中伴随强雨评分小幅改善，同时出现总体及发生指标退化。此证据不足以把它认定为已验证的性能提升方案，不证明强雨不足的根因，也不决定DOTE/DTFM去留。
+
+Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、推理或评价，不重开全仓审计。复核已确认保存终态与七项算术相符。审核文本一处强雨log改善百分比笔误已由审核者更正为0.10463424023731711\%，原指标和判定未变。审核分支e14f8ca已推送，Codex直接核对远端一致；准确报告指纹与回执见同目录TERMINAL\_REVIEW\_ACK。工程PASS、开发筛查FAIL、科学NOT\_VERIFIED、外部PARTIAL、研究者NOT\_ASSESSED分别登记。旧权重、旧失败和本次全部结果保留，下一科研决定交由研究者，当前额度已经消费。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -770,6 +810,7 @@ tau权重强调所有湿像元的高分位节点，不能保证真实强雨改�
 \item[S33] 三JSON保存分层统计与复核。\par\path{docs/research_readiness/20261108_saved_strata_analysis/}\par\path{analyze_saved_strata.py}、\path{RESULTS.json}、\path{REVIEW_AND_CANDIDATE.json}及\path{VERIFICATION.json}。输入完整路径、指纹及字段语义均随结果保存。七层四格计数、贡献分解与q32计数经过独立小数复算及Harness第43轮有限数值复核。总控候选建议仍PROPOSED，科学状态未升级。
 \item[S34] 本轮温和上分位配对包与48项检查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}、\path{VERIFICATION.json}及审后回执。总控温和函数建议待研究者批准，准确代码与提案指纹见6U。无真实训练或科学验收。
 \item[S35] 本轮准确批准、首调度停止与R1真实启动。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{FIRST_DISPATCH_STOP.json}、\path{START_RECEIPT.json}与本轮验证。原始批准、独立监督、进程创建、更新和源读取账本保留本地。启动核验PASS，实验IN\_PROGRESS，科学尚未验收。
+\item[S36] 上分位两臂终态与完整七项筛查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}和\path{CONTROLLER_TERMINAL_ACK.json}。终态与结果159fff0已推送，输入完整SHA和字段在JSON内。Harness限定终态复核确认相符，见TERMINAL\_REVIEW\_ACK，工程、筛查与科学验收分别登记。
 \end{description}
 \normalsize
 
