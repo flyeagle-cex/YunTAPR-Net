@@ -1,0 +1,309 @@
+{
+  "scope": "READ_ONLY_SAVED_FIXED_E9_ARITHMETIC",
+  "input_identities": {
+    "CONTROL_E0/completion.json": {
+      "bytes": 4576,
+      "sha256": "c06e4c60b0ad2bf1f595ad1cc6bde6e5c38817672b74ba1ad5e94215f28aac90"
+    },
+    "CONTROL_E0/B7_development_09.json": {
+      "bytes": 1882415,
+      "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+    },
+    "CONTROL_E0/B7_tail_09.json": {
+      "bytes": 1514365,
+      "sha256": "84652e83b806bdb1277a5021dea0dec7c6caec0c71e842a5bb5c35a15f8d27df"
+    },
+    "CONTROL_E0/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CONTROL_E0/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CONTROL_E0/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 402,
+      "sha256": "4dc63e9f547561298920e4b00b9e01f9f137e611747c2265ea637e712a81ac78"
+    },
+    "CANDIDATE_COSINE9/completion.json": {
+      "bytes": 7666,
+      "sha256": "beda702c637211d564d03185a4429a3bace94af535fb95f28c7adfc65dfbade0"
+    },
+    "CANDIDATE_COSINE9/B7_development_09.json": {
+      "bytes": 1885903,
+      "sha256": "e4c030b305904a7a5e0b009460d75ab13f69d31b2f7bd6aa1d824eea660acee1"
+    },
+    "CANDIDATE_COSINE9/B7_tail_09.json": {
+      "bytes": 1515768,
+      "sha256": "1c7d4fa10c2544a10b4c60fe20509e2fb62f9aa5f10b648ffec305d3c9444144"
+    },
+    "CANDIDATE_COSINE9/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CANDIDATE_COSINE9/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CANDIDATE_COSINE9/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 675,
+      "sha256": "dadd1f0f6e89108979e0941d74c92acd441e3a463f140d4cedb7655a073c351e"
+    }
+  },
+  "pair_summary": {
+    "bytes": 6393,
+    "sha256": "9f7bed76acf74f432dfb08a10ac616a90a06b394651905ba77e71367a42ba0ca"
+  },
+  "metrics": [
+    {
+      "metric": "all_log_pinball",
+      "control": 0.12740129422354954,
+      "candidate": 0.12581832845402424,
+      "difference": -0.0015829657695252963,
+      "relative_change_percent": -1.242503680337568,
+      "lower_is_better": true,
+      "gate_passed": true
+    },
+    {
+      "metric": "all_physical_pinball",
+      "control": 0.019610600071569055,
+      "candidate": 0.019365074684425297,
+      "difference": -0.00024552538714375793,
+      "relative_change_percent": -1.2520034381799174,
+      "lower_is_better": true,
+      "gate_passed": true
+    },
+    {
+      "metric": "strong_log_pinball",
+      "control": 0.8982487808534173,
+      "candidate": 0.8084225692926007,
+      "difference": -0.0898262115608166,
+      "relative_change_percent": -10.000148452800971,
+      "lower_is_better": true,
+      "gate_passed": true
+    },
+    {
+      "metric": "strong_physical_pinball",
+      "control": 0.5409483556362883,
+      "candidate": 0.5068646309277545,
+      "difference": -0.034083724708533825,
+      "relative_change_percent": -6.300735431285855,
+      "lower_is_better": true,
+      "gate_passed": true
+    },
+    {
+      "metric": "brier",
+      "control": 0.09673163538839748,
+      "candidate": 0.09233015567445307,
+      "difference": -0.004401479713944403,
+      "relative_change_percent": -4.5501967337485345,
+      "lower_is_better": true,
+      "gate_passed": true
+    },
+    {
+      "metric": "occurrence_ap",
+      "control": 0.5934546324623617,
+      "candidate": 0.6066547555865263,
+      "difference": 0.01320012312416452,
+      "relative_change_percent": 2.2242851267997645,
+      "lower_is_better": false,
+      "gate_passed": true
+    },
+    {
+      "metric": "occurrence_auroc",
+      "control": 0.8959240618810312,
+      "candidate": 0.8990243638708331,
+      "difference": 0.0031003019898018236,
+      "relative_change_percent": 0.3460451752230659,
+      "lower_is_better": false,
+      "gate_passed": true
+    }
+  ],
+  "strata": [
+    {
+      "lower_exclusive": 0.1,
+      "upper_inclusive": 1.0,
+      "count": 246473,
+      "control_log_pinball": 0.08245987385940791,
+      "candidate_log_pinball": 0.08872231160181854,
+      "log_change_percent": 7.5945274341407965,
+      "control_physical_normalized": 0.007412756664514579,
+      "candidate_physical_normalized": 0.008317839256568945,
+      "control_q32_covered": 246096,
+      "candidate_q32_covered": 245723
+    },
+    {
+      "lower_exclusive": 1.0,
+      "upper_inclusive": 5.0,
+      "count": 135686,
+      "control_log_pinball": 0.1494552376643456,
+      "candidate_log_pinball": 0.14445626546801058,
+      "log_change_percent": -3.3447955886042435,
+      "control_physical_normalized": 0.020811305379148447,
+      "candidate_physical_normalized": 0.02096963298514855,
+      "control_q32_covered": 122227,
+      "candidate_q32_covered": 120930
+    },
+    {
+      "lower_exclusive": 5.0,
+      "upper_inclusive": 10.0,
+      "count": 20145,
+      "control_log_pinball": 0.3871092925514754,
+      "candidate_log_pinball": 0.3350766518889054,
+      "log_change_percent": -13.441330824072384,
+      "control_physical_normalized": 0.09300451940680253,
+      "candidate_physical_normalized": 0.08280939283710587,
+      "control_q32_covered": 11590,
+      "candidate_q32_covered": 12753
+    },
+    {
+      "lower_exclusive": 10.0,
+      "upper_inclusive": 20.0,
+      "count": 4799,
+      "control_log_pinball": 0.6066511499171625,
+      "candidate_log_pinball": 0.5236768976678179,
+      "log_change_percent": -13.677424374893988,
+      "control_physical_normalized": 0.22615373029756175,
+      "candidate_physical_normalized": 0.20221695820305124,
+      "control_q32_covered": 1288,
+      "candidate_q32_covered": 1811
+    },
+    {
+      "lower_exclusive": 20.0,
+      "upper_inclusive": 30.0,
+      "count": 564,
+      "control_log_pinball": 0.8617804385025136,
+      "candidate_log_pinball": 0.7733838009296278,
+      "log_change_percent": -10.257443035779467,
+      "control_physical_normalized": 0.47632812558662885,
+      "candidate_physical_normalized": 0.44346960747520037,
+      "control_q32_covered": 38,
+      "candidate_q32_covered": 88
+    },
+    {
+      "lower_exclusive": 30.0,
+      "upper_inclusive": 50.0,
+      "count": 147,
+      "control_log_pinball": 1.0194341348792397,
+      "candidate_log_pinball": 0.9241795083983761,
+      "log_change_percent": -9.343872568299593,
+      "control_physical_normalized": 0.7549849336421226,
+      "candidate_physical_normalized": 0.7158256721830867,
+      "control_q32_covered": 1,
+      "candidate_q32_covered": 12
+    },
+    {
+      "lower_exclusive": 50.0,
+      "upper_inclusive": null,
+      "count": 6,
+      "control_log_pinball": 1.3572317882057163,
+      "candidate_log_pinball": 1.2660217873205586,
+      "log_change_percent": -6.720296538717163,
+      "control_physical_normalized": 1.371353819161336,
+      "candidate_physical_normalized": 1.3464513247121974,
+      "control_q32_covered": 0,
+      "candidate_q32_covered": 0
+    }
+  ],
+  "q32_auxiliary": {
+    "CONTROL_E0": {
+      "q32_covered": 381240,
+      "wet_denominator": 407820,
+      "q32_coverage": 0.9348241871413859,
+      "strong_q32_covered": 39,
+      "strong_denominator": 717
+    },
+    "CANDIDATE_COSINE9": {
+      "q32_covered": 381317,
+      "wet_denominator": 407820,
+      "q32_coverage": 0.9350129959295768,
+      "strong_q32_covered": 100,
+      "strong_denominator": 717
+    }
+  },
+  "epoch_trajectory": [
+    {
+      "epoch": 1,
+      "last_lr": 0.0001,
+      "all_log_pinball": 0.13984705416284826,
+      "brier": 0.09076437085316642,
+      "occurrence_ap": 0.5233059471591778,
+      "occurrence_auroc": 0.8758854202327558
+    },
+    {
+      "epoch": 2,
+      "last_lr": 9.623203685930869e-05,
+      "all_log_pinball": 0.13625193843055597,
+      "brier": 0.09754117877613531,
+      "occurrence_ap": 0.5424267724210989,
+      "occurrence_auroc": 0.8838666817294953
+    },
+    {
+      "epoch": 3,
+      "last_lr": 8.55017856687341e-05,
+      "all_log_pinball": 0.14430835604210054,
+      "brier": 0.10392842903271794,
+      "occurrence_ap": 0.5637258359980912,
+      "occurrence_auroc": 0.8903269643897836
+    },
+    {
+      "epoch": 4,
+      "last_lr": 6.944282990207195e-05,
+      "all_log_pinball": 0.13485114493626132,
+      "brier": 0.0925948210588123,
+      "occurrence_ap": 0.5737812276502343,
+      "occurrence_auroc": 0.8911708426279865
+    },
+    {
+      "epoch": 5,
+      "last_lr": 5.05e-05,
+      "all_log_pinball": 0.1286126002760865,
+      "brier": 0.09159596722276121,
+      "occurrence_ap": 0.5881376468347962,
+      "occurrence_auroc": 0.8944335994211784
+    },
+    {
+      "epoch": 6,
+      "last_lr": 3.1557170097928055e-05,
+      "all_log_pinball": 0.12764845444738468,
+      "brier": 0.09886301087344401,
+      "occurrence_ap": 0.5907561402929171,
+      "occurrence_auroc": 0.8950782601480991
+    },
+    {
+      "epoch": 7,
+      "last_lr": 1.54982143312659e-05,
+      "all_log_pinball": 0.1275024998347124,
+      "brier": 0.09907675618596413,
+      "occurrence_ap": 0.5961147337600102,
+      "occurrence_auroc": 0.8975144993553539
+    },
+    {
+      "epoch": 8,
+      "last_lr": 4.767963140691306e-06,
+      "all_log_pinball": 0.1262572239894922,
+      "brier": 0.09094641862753489,
+      "occurrence_ap": 0.6053395311485934,
+      "occurrence_auroc": 0.8986959815141624
+    },
+    {
+      "epoch": 9,
+      "last_lr": 1e-06,
+      "all_log_pinball": 0.12581832845402424,
+      "brier": 0.09233015567445307,
+      "occurrence_ap": 0.6066547555865263,
+      "occurrence_auroc": 0.8990243638708331
+    }
+  ],
+  "screen_passed": true,
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "independent_event_count": "NOT_IDENTIFIED",
+  "qualifications": [
+    "ONE_SEED2029_REUSED_2024_DEVELOPMENT",
+    "CONDITIONAL_CONTROL_INHERITANCE_COMPLETE_HISTORICAL_DRIVER_CUDNN_FINGERPRINTS_UNAVAILABLE",
+    "WEAK_RAIN_BIN_LOG_PINBALL_DEGRADES",
+    "POINT_ESTIMATE_TP_FP_FN_AP20_P20_NOT_EVALUATED_BY_THIS_PACKAGE",
+    "STRONG_Q32_COVERAGE_COUNT_IS_NOT_POD"
+  ]
+}

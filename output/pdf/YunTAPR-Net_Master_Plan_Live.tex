@@ -14,7 +14,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
-\fancyhead[R]{\small\color{muted}2026-11-10}
+\fancyhead[R]{\small\color{muted}2026-11-11}
 \fancyfoot[L]{\footnotesize\color{muted}据研究者委托更新；不自动批准正式训练}
 \fancyfoot[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
@@ -33,22 +33,24 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261110.29}\qquad 状态截至2026年11月10日（北京时间）
+版本 \texttt{LIVE-20261111.30}\qquad 状态截至2026年11月11日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{SCHEDULE9已获准确批准并单次启动，实验正在进行。}
-研究者对固定执行包YT-S9-20261110-001明确回复“批准该限定包并立即启动”。独立后台控制器已启动，初始账本55次RETURNED，原初态与九轮顺序匹配。新性能结果尚未产生。\evi{S38}
+\status{SCHEDULE9九轮完整结束，七项预设开发筛查全部通过。}
+B7/E0/Seed2029在2026年11月11日04:36:20北京时间正常退出0，固定E9、4,320次更新及完整Train/2024 Development封口。强雨log Pinball下降约10.00\%，强雨物理Pinball下降约6.30\%。\evi{S39}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item B7/E0/Seed2029、均匀分位损失，唯一数值改动为50轮余弦跨度改9轮，第4,320次更新使用$10^{-6}$。
-\item 复用已完成的E0对照，仅新增一个候选；48项主入口检查和7项只读监控检查通过。
-\item 准确执行提交\texttt{e54ccc1}，总额4,320更新、477,571,953,840源字节/142,813次、6小时、24GiB；批准已消费，重放和额外重试0。
-\item 只读进度页面已通过HTTP/API验证，显示单模型九轮/4,320上限。界面截图工具初始化失败，视觉核验未取得。
+\item 全湿log/物理Pinball分别下降1.2425\%和1.2520\%；Brier下降4.5502\%，发生AP和AUROC均上升。
+\item 原七项判据7/7通过，保存对照和新候选评价人口、六组身份及完整初态/九轮顺序匹配。
+\item 同时记录局部反例，$(0.1,1]$ mm/h弱雨log Pinball上升7.5945\%。
+\item q32强雨覆盖从39增至100/717，全湿覆盖93.4824\%增至93.5013\%。这两个数值采用各自分母，未形成点估计20 mm/h检出结果。
 \end{itemize}
-本轮Harness新差异审核未取得，研究者准确批准前已明示该缺口及历史driver/cuDNN身份限制。启动工程\texttt{PASS}，实验\texttt{IN\_PROGRESS}，科学\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。\evi{S37,S38}
+实际用时19,911.821秒、477,571,953,840源字节/142,813次，重放与自动重试0。本轮核18新来源账本及一份新E9实际SHA，保存摘要算术复核通过。\evi{S39}
+
+工程\texttt{PASS}，开发筛查\texttt{PASS}，科学\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。单seed、重复Dev、条件性E0继承以及本轮Harness审查未取得的限制保留。
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -793,6 +795,35 @@ Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、�
 
 准确批准已消费，后台按固定执行器继续。预先冻结的两项强雨必要改善及五项保护判据沿用，最终结论等待固定E9与保存摘要。当前启动工程PASS，实验IN\_PROGRESS，科学NOT\_VERIFIED，研究者NOT\_ASSESSED。
 
+\pageheading{6Z\quad SCHEDULE9固定E9结果}{2026-11-11；本次余弦调度候选通过开发筛查，科学验收继续单独登记。}
+\section*{真实终态与证据}
+执行提交\texttt{e54ccc1}，准确批准YT-S9-20261110-001。九轮Train和2024 Development、4,320次RETURNED完整结束，04:36:20北京时间正常退出0。耗时19,911.821秒，约5小时31分52秒。18份新气象来源账本和1份静态账本精确对应477,571,953,840源字节/142,813次，重放与自动重试0。\evi{S39}
+
+真实E9权重53,906,821字节，SHA256为\par
+\texttt{1c9b5f8c595935674f6952da6b239a50e2}\\
+\texttt{6ca4eb4d90a217ab5593866d5b319e}。
+本轮实际重哈希该新E9一次；旧对照权重沿用前轮实际指纹与已审收据，中间八轮新权重仅核存在及执行时保存收据。九轮调度记录完整，第4,320次更新使用$10^{-6}$。
+
+\section*{相同人口的七项预设指标}
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
+\toprule 指标 & E0对照 & COSINE9 & 相对变化\\\midrule
+全湿log Pinball & 0.127401 & 0.125818 & $-1.2425\%$\\
+全湿物理Pinball/20 & 0.019611 & 0.019365 & $-1.2520\%$\\
+$R>20$ log Pinball & 0.898249 & 0.808423 & $-10.0001\%$\\
+$R>20$物理Pinball/20 & 0.540948 & 0.506865 & $-6.3007\%$\\
+Brier & 0.096732 & 0.092330 & $-4.5502\%$\\
+发生AP & 0.593455 & 0.606655 & $+2.2243\%$\\
+发生AUROC & 0.895924 & 0.899024 & $+0.3460\%$\\
+\bottomrule
+\end{tabularx}
+
+两项强雨必要改善及五项保护指标全部通过原判据。物理评分保持以20 mm/h归一化，AP属于降水发生识别。人口为963场景、3,303,090有效/407,820湿像元时次，其中717个$R>20$，六组来源与mask身份匹配。\evi{S39}
+
+\section*{局部反例与解释范围}
+$(0.1,1]$ mm/h弱雨log Pinball由0.082460增至0.088722，退化7.5945\%。该弱雨占湿人口60.44\%，对全湿log差异贡献$+0.00378481$，其他雨强合计$-0.00536778$，净变化$-0.00158297$与全湿评分差异闭合。强雨q32覆盖39增至100/717，全湿覆盖381,240增至381,317/407,820；强雨子群覆盖计数不能用作POD或独立事件数。全湿覆盖仍低于名义98.4375\%。点估计20 mm/h检出、AP20和精确P20尚未由本包核实。
+
+该结果支持在此单seed、固定Dev人口下，九轮内完成余弦衰减改善条件分布评分及发生指标。DOTE/DTFM增量、跨seed稳定性与独立泛化仍需其各自证据。旧E0完整driver/cuDNN指纹缺失，比较继续作为条件性继承。本轮Harness工具初始化报\texttt{os error 3}，新独立终态审查未取得。\evi{S39}
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -861,6 +892,7 @@ Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、�
 \item[S36] 上分位两臂终态与完整七项筛查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}和\path{CONTROLLER_TERMINAL_ACK.json}。终态与结果159fff0已推送，输入完整SHA和字段在JSON内。Harness限定终态复核确认相符，见TERMINAL\_REVIEW\_ACK，工程、筛查与科学验收分别登记。
 \item[S37] SCHEDULE9准备与必要检查。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}及\path{VERIFICATION.json}。总控\texttt{f83e6c6c}确认单变量路线；新控制继承的文件SHA、运行时与源绑定见提案。准确代码提交以Git及外部批准记录为准。48项CPU检查通过；代理复核发现并修复源卷检查时序问题。Harness初始化\texttt{os error 3}，新差异审核仍待取得；科学未验收。
 \item[S38] SCHEDULE9准确批准与真实启动。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{START_RECEIPT.json}、\path{EXECUTION_BINDING.json}与\path{MONITOR_VERIFICATION.json}。外部准确批准、独立服务和实时账本保留本地忽略目录，公开回执保存其摘要与启动时点计数。新55项合成/回归检查共通过，实际训练启动不等于实验完成或科学验收。
+\item[S39] SCHEDULE9新终态与固定E9算术。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{TERMINAL_VERIFICATION.json}\par\path{RESULTS.json}与\path{SAVED_TRADEOFF.json}。实际来源为新候选与已绑定E0的保存JSON、18份新来源账本/静态账本及一份新E9实际SHA；完整输入身份、逐层计数、七项原始值、逐轮轨迹和限定随JSON保存。独立天气事件尚未识别，研究者掌握未评估。
 \end{description}
 \normalsize
 

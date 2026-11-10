@@ -1,0 +1,230 @@
+{
+  "verified_at": "2026-11-11T07:25:10.605828+08:00",
+  "status": "ENGINEERING_COMPLETE_DEVELOPMENT_SCREEN_PASSED",
+  "decision_id": "YT-S9-20261110-001",
+  "code_commit": "e54ccc16f988628e2dc6c4b91f76051ae94c4629",
+  "exit": {
+    "at": "2026-11-10T20:36:20.793898+00:00",
+    "pid": 9368,
+    "return_code": 0,
+    "return_code_u32_hex": "0x0",
+    "automatic_retry": false
+  },
+  "target_elapsed_seconds": 19911.821309,
+  "package_completion": {
+    "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+    "code_commit": "e54ccc16f988628e2dc6c4b91f76051ae94c4629",
+    "updates": 4320,
+    "source_bytes": 477571953840,
+    "source_files": 142813,
+    "schedule": {
+      "profile": "COSINE9_V1",
+      "horizon_epochs": 9,
+      "warmup_epochs": 1,
+      "peak_lr": 0.0001,
+      "minimum_lr": 1e-06,
+      "steps_per_epoch": 480,
+      "total_updates": 4320,
+      "update_index": "ONE_BASED_LR_SET_BEFORE_OPTIMIZER_STEP"
+    }
+  },
+  "update_ledger": [
+    [
+      "B7",
+      "RETURNED",
+      4320,
+      1,
+      4320
+    ]
+  ],
+  "new_weather_passes_checked": 18,
+  "source_seals": [
+    {
+      "epoch": 1,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 1,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 2,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 2,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 3,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 3,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 4,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 4,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 5,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 5,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 6,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 6,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 7,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 7,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 8,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 8,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    },
+    {
+      "epoch": 9,
+      "role": "Train",
+      "files": 7918,
+      "bytes": 26424262556
+    },
+    {
+      "epoch": 9,
+      "role": "Development",
+      "files": 7950,
+      "bytes": 26639253112
+    }
+  ],
+  "static_ledger": [
+    1,
+    312828,
+    312828
+  ],
+  "exact_source_bytes_including_static": 477571953840,
+  "exact_source_files_including_static": 142813,
+  "initial_full_state": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+  "same_nine_orders": true,
+  "same_population_and_six_groups": true,
+  "newly_hashed_checkpoint_count": 1,
+  "new_E9_checkpoint": {
+    "bytes": 53906821,
+    "sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e"
+  },
+  "historical_checkpoint_payloads_rehashed": 0,
+  "intermediate_new_checkpoints_current_evidence": "SAVED_RECEIPTS_EXISTENCE_AND_ORIGINAL_EXECUTION_ENDPOINT_VALIDATION; NOT_REHASHED_THIS_TURN",
+  "input_identities": {
+    "CONTROL_E0/completion.json": {
+      "bytes": 4576,
+      "sha256": "c06e4c60b0ad2bf1f595ad1cc6bde6e5c38817672b74ba1ad5e94215f28aac90"
+    },
+    "CONTROL_E0/B7_development_09.json": {
+      "bytes": 1882415,
+      "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+    },
+    "CONTROL_E0/B7_tail_09.json": {
+      "bytes": 1514365,
+      "sha256": "84652e83b806bdb1277a5021dea0dec7c6caec0c71e842a5bb5c35a15f8d27df"
+    },
+    "CONTROL_E0/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CONTROL_E0/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CONTROL_E0/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 402,
+      "sha256": "4dc63e9f547561298920e4b00b9e01f9f137e611747c2265ea637e712a81ac78"
+    },
+    "CANDIDATE_COSINE9/completion.json": {
+      "bytes": 7666,
+      "sha256": "beda702c637211d564d03185a4429a3bace94af535fb95f28c7adfc65dfbade0"
+    },
+    "CANDIDATE_COSINE9/B7_development_09.json": {
+      "bytes": 1885903,
+      "sha256": "e4c030b305904a7a5e0b009460d75ab13f69d31b2f7bd6aa1d824eea660acee1"
+    },
+    "CANDIDATE_COSINE9/B7_tail_09.json": {
+      "bytes": 1515768,
+      "sha256": "1c7d4fa10c2544a10b4c60fe20509e2fb62f9aa5f10b648ffec305d3c9444144"
+    },
+    "CANDIDATE_COSINE9/paired_initial_identity.json": {
+      "bytes": 1003,
+      "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+    },
+    "CANDIDATE_COSINE9/paired_orders.json": {
+      "bytes": 311790,
+      "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+    },
+    "CANDIDATE_COSINE9/B7_LAST_epoch_09.receipt.json": {
+      "bytes": 675,
+      "sha256": "dadd1f0f6e89108979e0941d74c92acd441e3a463f140d4cedb7655a073c351e"
+    }
+  },
+  "pair_summary": {
+    "bytes": 6393,
+    "sha256": "9f7bed76acf74f432dfb08a10ac616a90a06b394651905ba77e71367a42ba0ca"
+  },
+  "checkpoint_loads_or_new_inference_evaluation": 0,
+  "new_training_starts": 0,
+  "final_test_access": false,
+  "engineering": "PASS",
+  "development_screen": "PASS",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "harness_terminal_review": "NOT_OBTAINED_KERNEL_ASSETS_OS_ERROR3"
+}
