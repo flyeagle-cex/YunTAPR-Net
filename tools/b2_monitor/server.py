@@ -127,6 +127,13 @@ class CampaignReader(base.Reader):
         self.approval=binding['approval'];self.budget=self.approval['budget']
         self.recovery_parent=Path(binding['recovery_parent']) if binding.get('recovery_parent') else None
         listed=[(x['model'],x['seed']) for x in self.approval['tasks']]
+        self.cosine9=self.approval['tasks']==[dict(model='B7',seed=2029,schedule_profile='COSINE9_V1')]
+        if self.cosine9 and (
+            self.approval['code_commit']!='e54ccc16f988628e2dc6c4b91f76051ae94c4629'
+            or self.approval['proposal_sha256']!='6e4910938eedca317d68cd047563b6c3e31868529d7fc52b52936b1c5e60642f'
+            or (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],
+                self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(4320,477571953840,142813,0,21600)):
+            raise ValueError('Not the exact single cosine9 candidate')
         self.upper_quantile=self.approval['tasks']==[
             dict(arm='CONTROL_E0',model='B7',seed=2029,quantile_profile='UNIFORM'),
             dict(arm='CANDIDATE_UQ_MILD',model='B7',seed=2029,quantile_profile='UQ_MILD_V1')]
@@ -141,7 +148,7 @@ class CampaignReader(base.Reader):
         self.innovation=listed==[('B7',2029),('B8',2029)]
         self.innovation_multiseed=listed==[('B7',2030),('B8',2030),('B7',2031),('B8',2031)]
         self.innovation_recovery=self.innovation_multiseed and self.recovery_parent is not None
-        self.terrain=self.static or self.innovation or self.upper_quantile
+        self.terrain=self.static or self.innovation or self.upper_quantile or self.cosine9
         if self.control_multi:
             if (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(8640,955143907680,285626,0,43200):raise ValueError('Not the exact two-control budget')
             if binding.get('control')!='ZERO_NUMERIC_RETAIN_REAL_MASKS_TWO_SEEDS' or self.approval.get('approved_by_researcher') is not True:raise ValueError('Not the approved two-control identity')
@@ -168,7 +175,7 @@ class CampaignReader(base.Reader):
         if self.innovation_multiseed:
             expected=('e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c','3314231ac64531bf523a06d5ff8e3dc4f688d705fc4f4324b57c1548a846aa3e',1591906721352,476044) if self.innovation_recovery else ('56aae5bc4568df5d91354805aa5d4cb6d34b62b3','27f7e3ed2052b846b626619565810f36ced9f7c8b9ba41925376ac37ce952d41',1910287815360,571252)
             if (self.approval['code_commit'],self.approval['proposal_sha256'],self.budget['total_source_bytes'],self.budget['total_source_files'])!=expected:raise ValueError('Not the approved B7/B8 multiseed identity/budget')
-        if self.terrain:
+        if self.terrain and not self.cosine9:
             if self.budget['total_updates']!=8640 or self.budget['replay_allowance']!=0:raise ValueError('Not the approved two-model terrain package')
             self.extra_io=(self.budget.get('prior_source_files',0),self.budget.get('prior_source_bytes',0),self.budget.get('prior_source_bytes',0))
         self.started=datetime.fromtimestamp(self.token/10**7-11644473600,timezone.utc) if self.token else datetime.fromtimestamp((self.folder/'authorization_binding.json').stat().st_mtime,timezone.utc)
@@ -265,7 +272,7 @@ class CampaignReader(base.Reader):
             prior_replay=441 if self.innovation_recovery else 390 if self.recovery_parent else 0
             returned=sum(r['returned'] for r in runs)+prior_replay
             reserved=sum(r['reserved'] for r in runs)+prior_replay
-            if self.control:
+            if self.control or self.cosine9:
                 limits=dict(updates=self.budget['total_updates'],bytes=self.budget['total_source_bytes'],files=self.budget['total_source_files'],epochs=9*len(self.tasks),seconds=self.budget['max_package_seconds'])
             elif self.innovation_recovery:
                 limits=dict(updates=self.budget['cumulative_updates'],bytes=self.budget['cumulative_source_bytes'],files=self.budget['cumulative_source_files'],epochs=36,seconds=self.budget['max_package_seconds'])
@@ -295,6 +302,8 @@ class CampaignReader(base.Reader):
             if self.innovation_multiseed and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_innovation_summary.json')
             if self.control_multi and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_dote_control_summary.json')
             result['upper_quantile']=self.upper_quantile
+            result['cosine9']=self.cosine9
+            if self.cosine9 and completion:result['paired_summary']=self.document('paired_schedule_summary.json')
             if self.innovation_recovery:result.update(segment_returned=returned-self.budget['prior_updates'],segment_limit=self.budget['total_updates'],prior_attempts=self.budget['prior_updates'])
             self.cache,self.cached_at=result,time.monotonic()
             return result
@@ -485,7 +494,7 @@ def main():
     with ThreadingHTTPServer(('127.0.0.1',a.port),base.handler_for(reader)) as server:
         service=dict(url=f'http://127.0.0.1:{server.server_port}/',pid=base.os.getpid(),read_only=True,training_pid=a.training_pid)
         (a.service_dir/'service.json').write_text(json.dumps(service,indent=2),encoding='utf-8')
-        shortcut='B7上分位配对训练进度.url' if getattr(reader,'upper_quantile',False) else 'B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
+        shortcut='B7九轮余弦训练进度.url' if getattr(reader,'cosine9',False) else 'B7上分位配对训练进度.url' if getattr(reader,'upper_quantile',False) else 'B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
         (a.service_dir/shortcut).write_text('[InternetShortcut]\nURL='+service['url']+'\n',encoding='utf-8')
         print(service['url'],flush=True)
         server.serve_forever(poll_interval=1)
