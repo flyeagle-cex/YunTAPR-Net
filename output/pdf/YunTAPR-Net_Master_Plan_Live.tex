@@ -33,22 +33,22 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261110.28}\qquad 状态截至2026年11月10日（北京时间）
+版本 \texttt{LIVE-20261110.29}\qquad 状态截至2026年11月10日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{SCHEDULE9单变量工程准备完成，准确新训练包尚未启动。}
-原UQ配对开发筛查失败已结项。网页总控与代理讨论后优先检验九轮内完整余弦衰减，B7/E0/Seed2029和固定E9保持。该候选能否改善性能尚无新实验结果。\evi{S36,S37}
+\status{SCHEDULE9已获准确批准并单次启动，实验正在进行。}
+研究者对固定执行包YT-S9-20261110-001明确回复“批准该限定包并立即启动”。独立后台控制器已启动，初始账本55次RETURNED，原初态与九轮顺序匹配。新性能结果尚未产生。\evi{S38}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 调度跨度24,000改为4,320更新，保留480更新warmup、峰值$10^{-4}$、下限$10^{-6}$。第4,320次更新使用下限。
-\item 已审UQ包E0对照的六份JSON、原初态、九轮顺序与运行时已匹配。复用对照，本轮只准备一个候选模型。
-\item 48项CPU合成和回归检查通过。新增代码差异经代理复核，源盘检查已移到单次调度声明之前；H盘当前可用。
-\item 新额度4,320更新、477,571,953,840源字节/142,813次、6小时、24GiB，重放/额外重试/检查点加载均0，等待准确研究者批准。
+\item B7/E0/Seed2029、均匀分位损失，唯一数值改动为50轮余弦跨度改9轮，第4,320次更新使用$10^{-6}$。
+\item 复用已完成的E0对照，仅新增一个候选；48项主入口检查和7项只读监控检查通过。
+\item 准确执行提交\texttt{e54ccc1}，总额4,320更新、477,571,953,840源字节/142,813次、6小时、24GiB；批准已消费，重放和额外重试0。
+\item 只读进度页面已通过HTTP/API验证，显示单模型九轮/4,320上限。界面截图工具初始化失败，视觉核验未取得。
 \end{itemize}
-Harness桌面工具初始化失败，本轮尚未取得其新差异审核。工程准备\texttt{PASS\_WITH\_LIMITATIONS}，实验\texttt{NOT\_STARTED}，科学\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。\evi{S37}
+本轮Harness新差异审核未取得，研究者准确批准前已明示该缺口及历史driver/cuDNN身份限制。启动工程\texttt{PASS}，实验\texttt{IN\_PROGRESS}，科学\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。\evi{S37,S38}
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -771,6 +771,28 @@ Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、�
 
 48项CPU检查验证旧调度恒等、边界、闭合任务范围、来源卷入场、初态/顺序守卫、逐轮调度身份与mock执行链。此范围没有真实优化器更新或新评价。Harness工具当前初始化失败，代理复核单独归档；尚无Harness新审核通过结论。新准确批准尚未取得，输出目录未创建。\evi{S37}
 
+\pageheading{6Y\quad SCHEDULE9准确批准与真实启动}{2026-11-10北京时间23:04:28单次调度；此处为启动快照，固定E9尚待完成。}
+研究者直接批准YT-S9-20261110-001，明确接受已披露的本轮Harness工具故障及旧E0完整驱动/cuDNN指纹缺失。批准仅覆盖固定单模型包，未代填其他实验批准。\evi{S38}
+
+\begin{tabularx}{\textwidth}{@{}p{34mm}X@{}}
+\toprule 绑定 & 准确身份\\\midrule
+执行提交 & \texttt{e54ccc16f988628e2dc6c4b91f76051ae94c4629}\\
+提案摘要 & \texttt{6e4910938eedca317d68cd047563b6c3e31}\\
+ & \texttt{868529d7fc52b52936b1c5e60642f}\\
+科学范围 & B7/E0/Seed2029，\texttt{COSINE9\_V1}，同原初态与九轮顺序\\
+新增预算 & 4,320更新、477,571,953,840字节/142,813次、21,600秒\\
+存储与失败边界 & 初始及任务24GiB；重放/额外重试/检查点加载均0\\
+\bottomrule
+\end{tabularx}
+
+独立监督器通过无Job归属、无Windows包身份门控，WMI返回0且正式控制器已存在。新输出命名空间已由该控制器创建，现有更新账本真实记录55次RETURNED；这是启动核验时点，没有任何E9封口或性能改善结论。\evi{S38}
+
+真实新工厂生成的B7完整初态摘要与已审对照相同，九轮顺序逐一相同。ledger保存的调度身份、人口、origin字段与提案一致。E0保存对照直接继承，没有重训或加载对照权重。
+
+只读进度页面实际HTTP与API返回成功，观测到控制器存活、单任务RUNNING、上限4,320更新及9轮，源字节/打开额度与提案一致。浏览器界面工具初始化报路径缺失，因此本轮页面视觉核验仍为未取得；保存计数与HTTP核验已独立完成。\evi{S38}
+
+准确批准已消费，后台按固定执行器继续。预先冻结的两项强雨必要改善及五项保护判据沿用，最终结论等待固定E9与保存摘要。当前启动工程PASS，实验IN\_PROGRESS，科学NOT\_VERIFIED，研究者NOT\_ASSESSED。
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -838,6 +860,7 @@ Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、�
 \item[S35] 本轮准确批准、首调度停止与R1真实启动。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{FIRST_DISPATCH_STOP.json}、\path{START_RECEIPT.json}与本轮验证。原始批准、独立监督、进程创建、更新和源读取账本保留本地。启动核验PASS，实验IN\_PROGRESS，科学尚未验收。
 \item[S36] 上分位两臂终态与完整七项筛查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}和\path{CONTROLLER_TERMINAL_ACK.json}。终态与结果159fff0已推送，输入完整SHA和字段在JSON内。Harness限定终态复核确认相符，见TERMINAL\_REVIEW\_ACK，工程、筛查与科学验收分别登记。
 \item[S37] SCHEDULE9准备与必要检查。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}及\path{VERIFICATION.json}。总控\texttt{f83e6c6c}确认单变量路线；新控制继承的文件SHA、运行时与源绑定见提案。准确代码提交以Git及外部批准记录为准。48项CPU检查通过；代理复核发现并修复源卷检查时序问题。Harness初始化\texttt{os error 3}，新差异审核仍待取得；科学未验收。
+\item[S38] SCHEDULE9准确批准与真实启动。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{START_RECEIPT.json}、\path{EXECUTION_BINDING.json}与\path{MONITOR_VERIFICATION.json}。外部准确批准、独立服务和实时账本保留本地忽略目录，公开回执保存其摘要与启动时点计数。新55项合成/回归检查共通过，实际训练启动不等于实验完成或科学验收。
 \end{description}
 \normalsize
 

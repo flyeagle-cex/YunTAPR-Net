@@ -1,3 +1,11 @@
+# 2026-11-10 SCHEDULE9已准确批准并单次启动 / LIVE.29
+
+研究者直接批准YT-S9-20261110-001。准确e54ccc16f988628e2dc6c4b91f76051ae94c4629副本已独立启动，初始核验55次RETURNED，原初态/九轮顺序及ledger调度人口匹配。唯一新模型B7/E0/Seed2029，余弦horizon50→9，其余科学配置继承，固定E9尚待完成。
+
+准确额度4320更新/477571953840源字节/142813次/21600秒/24GiB，replay/retry/checkpoint load均0；批准已消费。48项主入口及7项监控合成回归通过，只读页面HTTP/API成功，数值执行提交与单独监控提交区分。启动回执见 `docs/research_readiness/20261110_cosine9/START_RECEIPT.json`。
+
+研究者批准前已明示本轮Harness新delta审核未取得和旧E0完整driver/cuDNN指纹缺失。浏览器视觉工具也报kernel assets错误，未声称视觉核验。启动工程PASS，实验IN_PROGRESS，科学NOT_VERIFIED、掌握NOT_ASSESSED。LIVE.29与共享进度同步真实启动，以下保留历史快照。
+
 # 2026-11-10 SCHEDULE9单模型工程准备 / LIVE.28
 
 已实现只将余弦总跨度从50轮改9轮的闭合候选。B7/E0/Seed2029、480更新warmup、峰值1e-4、下限1e-6、4320更新及固定E9继承，第4320次更新使用下限。已审UQ包E0的六份JSON和记录运行时匹配，对照直接复用；历史driver/cuDNN完整指纹缺失保留限定，不冒称完整环境逐位一致。

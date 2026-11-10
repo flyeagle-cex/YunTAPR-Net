@@ -1,0 +1,90 @@
+{
+  "verified_at": "2026-11-10T23:06:19.822129+08:00",
+  "status": "APPROVED_ONCE_AND_RUNNING",
+  "decision_id": "YT-S9-20261110-001",
+  "researcher_verbatim": "批准该限定包并立即启动",
+  "execution_code_commit": "e54ccc16f988628e2dc6c4b91f76051ae94c4629",
+  "working_branch": "collab/codex-20261102",
+  "startup_monitor_code_commit": "094a6ddeb67fd91a4ecabd74502e09a018c0b508",
+  "proposal_sha256": "6e4910938eedca317d68cd047563b6c3e31868529d7fc52b52936b1c5e60642f",
+  "proposal_file": {
+    "bytes": 102826,
+    "sha256": "8ea11fd3a4d1693c56867847977865ab2cb8fc243d1c99093b3d625215694346"
+  },
+  "approval_file": {
+    "bytes": 9048,
+    "sha256": "c89d55c2c2c2417d982ae8a80a441da433f8c6a6172489ab4f43381725cca094"
+  },
+  "launch_spec": {
+    "bytes": 1249,
+    "sha256": "01ff972b881292d77a412d1cf2f19b7707d02f5ded47c8538d7d6e4849a574f6"
+  },
+  "launch": {
+    "at": "2026-11-10T15:04:28.972589+00:00",
+    "pid": 9368,
+    "supervisor_pid": 18444,
+    "spec_sha256": "01ff972b881292d77a412d1cf2f19b7707d02f5ded47c8538d7d6e4849a574f6",
+    "kind": "APPROVAL_BOUND_EXECUTION",
+    "automatic_retry": false
+  },
+  "independent_supervisor": {
+    "at": "2026-11-10T15:04:28.964588+00:00",
+    "pid": 18444,
+    "parent_pid": 7756,
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "source_bytes_per_model": 477571953840,
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "checkpoint_loads": 0
+  },
+  "initial_identity_matches": true,
+  "all_nine_orders_match": true,
+  "ledger_schedule_matches": true,
+  "ledger_count_snapshot": [
+    [
+      "B7",
+      "RETURNED",
+      55,
+      1,
+      55
+    ]
+  ],
+  "monitor": {
+    "url": "http://127.0.0.1:63232/",
+    "http_status": 200,
+    "read_only": true,
+    "process_observed": true,
+    "state_at_start_snapshot": "RUNNING",
+    "returned_at_start_snapshot": 55,
+    "reserved_at_start_snapshot": 55,
+    "sealed_epochs_at_start_snapshot": 0,
+    "limit_updates": 4320,
+    "limit_epochs": 9,
+    "browser_visual_verification": "NOT_OBTAINED_KERNEL_ASSETS_OS_ERROR3",
+    "HTTP_API": "VERIFIED_EXISTING_METADATA_ONLY"
+  },
+  "control_reused_without_retraining": true,
+  "approval_consumed": true,
+  "automatic_retry": false,
+  "scientific_results": "PENDING_FIXED_E9_COMPLETION",
+  "harness_new_review": "NOT_OBTAINED_DISCLOSED_BEFORE_EXACT_APPROVAL",
+  "historical_control_environment": "CONDITIONAL_REUSE_DRIVER_CUDNN_COMPLETE_FINGERPRINTS_UNAVAILABLE",
+  "engineering": "PASS_STARTUP",
+  "experiment": "IN_PROGRESS",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "final_test_access": false
+}
