@@ -4,11 +4,12 @@ from pathlib import Path
 import ctypes,gc,json,os,random,sqlite3
 import numpy as np
 import torch
-from yuntapr.training.phase_a_protocol import state_digest,parameter_groups,lr_for_update
+from yuntapr.training.phase_a_protocol import state_digest,parameter_groups
 from yuntapr.experimental.phase_b_v2_runner_candidate.optimizer import new_adamw,clip_and_check,check_finite
 from yuntapr.experimental.phase_b_v2_ablations.config import get_config,finite_number
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MILD_PROFILE,profile_identity,upper_quantile_loss
+from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
 from ..stage2 import CHANNELS,MEE_V13_KEYS
@@ -124,7 +125,7 @@ class UpdateLedger:
 class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
                  kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None,
-                 lambda_q=1.0,origin_reference=None,quantile_profile=UNIFORM):
+                 lambda_q=1.0,origin_reference=None,quantile_profile=UNIFORM,schedule_profile=ORIGINAL_50):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
@@ -142,6 +143,13 @@ class PairedExecutor:
         ):
             raise PermissionError('UQ_MILD_V1 requires one origin-only B7 seed2029 lambda1 task')
         self.modified_loss=self.lambda_q!=1.0 or quantile_profile!=UNIFORM
+        self.schedule_profile=schedule_profile
+        self.modified_schedule=schedule_profile!=ORIGINAL_50
+        if self.modified_schedule and (
+            schedule_profile!=COSINE9 or self.kinds!=('B7',)
+            or getattr(decision,'seed',None)!=2029 or self.modified_loss or recovery is not None
+        ):
+            raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 uniform E0 task')
         self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
         if self.lambda_q==2.0 and (
             self.kinds not in (('B7',),('B8',))
@@ -155,19 +163,19 @@ class PairedExecutor:
         self.origin_reference=origin_reference
 
     def check_origin_pair(self,initial_identity,orders):
-        if not self.modified_loss:return
+        if not (self.modified_loss or self.modified_schedule):return
         reference=self.origin_reference
         kind=self.kinds[0]
         if (initial_identity[kind]['full_state_sha256']!=reference['original_model_state_sha256']
                 or [digest(orders[e]) for e in range(1,EPOCHS+1)]!=reference['epoch_order_sha256']):
-            raise RuntimeError('E2 original initialization or epoch order differs from historical E0')
+            raise RuntimeError('Candidate original initialization or epoch order differs from bound E0')
 
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
         if type(self.decision) is not FormalDecision:raise PermissionError('Formal training not authorized; dry-run only')
         self.decision.validate()
-        if self.modified_loss and not isinstance(self.origin_reference,dict):
-            raise PermissionError('Modified loss requires an explicitly bound origin reference')
+        if (self.modified_loss or self.modified_schedule) and not isinstance(self.origin_reference,dict):
+            raise PermissionError('Modified loss/schedule requires an explicitly bound origin reference')
         static=self.kinds in (('B5',),('B6',),('B7',),('B8',)) and self.model_factory is not None
         if (self.kinds not in (('B3','B4'),('B3',),('B4',)) and not static) or (self.recovery is not None and self.kinds!=getattr(self.recovery,'kinds',('B3','B4'))):
             raise PermissionError('Explicit supported arms; recovery cannot use single-arm entry')
@@ -179,6 +187,8 @@ class PairedExecutor:
         if self.modified_loss:
             identity['loss_config']=self.loss_identity
             identity['origin_reference']=self.origin_reference
+        if self.modified_schedule:
+            identity.update(schedule=schedule_identity(),origin_reference=self.origin_reference)
         initial_identity={k:dict(full_state_sha256=state_digest(m.state_dict()),common_sha256=state_digest(dict(backbone=m.backbone.state_dict(),heads=m.heads.state_dict()))) for k,m in models.items()}
         if self.recovery is not None:self.recovery.check_initial(initial_identity)
         write(self.folder/'paired_initial_identity.json',initial_identity)
@@ -216,7 +226,7 @@ class PairedExecutor:
                             self.deadline()
                             b=reader.batch('Train',order[pos:pos+BATCH]).to('cuda');optimizer.zero_grad(set_to_none=True)
                             if b.identity!=self.plan.identity or b.role!='Train' or b.ids!=order[pos:pos+BATCH]:raise ValueError('Training batch identity/order differs')
-                            lr=lr_for_update(u+1,steps_per_epoch=STEPS)
+                            lr=scheduled_lr(u+1,steps_per_epoch=STEPS,profile=self.schedule_profile)
                             for group in optimizer.param_groups:group['lr']=lr
                             with torch.autocast('cuda',dtype=torch.bfloat16):out,loss=forward(model,b,loss_config=self.loss_config,quantile_profile=self.quantile_profile)
                             loss.training_objective.backward();clip_and_check(model)
@@ -231,6 +241,9 @@ class PairedExecutor:
                     training=dict(scenes=TRAIN_N,batches=STEPS,updates=u,n_valid=nvalid,n_rain=nrain,s_occ_unweighted=socc,s_qr_unweighted=sqr,
                         weighted_mean=(socc+self.lambda_q*sqr)/nvalid,loss_arm=self.loss_config.experiment_id,train_order_sha256=digest(order))
                     if self.lambda_q!=1.0:training['lambda_q']=self.lambda_q
+                    if self.modified_schedule:
+                        training.update(schedule=schedule_identity(),
+                            first_lr=scheduled_lr((epoch-1)*STEPS+1,profile=self.schedule_profile),last_lr=lr)
                     if self.quantile_profile!=UNIFORM:
                         training.update(loss_arm=self.quantile_profile,loss_config=self.loss_identity,
                                         s_qr_training_weighted=sqr_training,weighted_mean=(socc+sqr_training)/nvalid)
@@ -263,11 +276,15 @@ class PairedExecutor:
                     if self.modified_loss:
                         payload['identity']['loss_config']=self.loss_identity
                         payload['identity']['origin_reference']=self.origin_reference
+                    if self.modified_schedule:
+                        payload['identity'].update(schedule=schedule_identity(),origin_reference=self.origin_reference)
+                        payload['scheduler']=dict(completed=u,steps_per_epoch=STEPS,horizon=9*STEPS,profile=self.schedule_profile)
                     path=self.folder/f'{kind}_LAST_epoch_{epoch:02d}.pt'
                     with path.open('xb') as f:torch.save(payload,f);f.flush();os.fsync(f.fileno())
                     from .data import sha
                     receipt=dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=sha(path),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report))
                     if self.modified_loss:receipt['loss_config']=self.loss_identity
+                    if self.modified_schedule:receipt['schedule']=schedule_identity()
                     if self.code_commit is not None:receipt['code_commit']=self.code_commit
                     write(path.with_suffix('.receipt.json'),receipt)
                     self.deadline()

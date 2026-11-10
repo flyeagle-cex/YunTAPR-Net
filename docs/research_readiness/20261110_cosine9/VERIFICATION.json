@@ -1,0 +1,245 @@
+{
+  "verified_at": "2026-11-10T22:55:13.690949+08:00",
+  "status": "PREPARED_NOT_APPROVED_NOT_STARTED",
+  "start_commit": "94d213e1a774ff0bfcec50ea824d211f0c9f81fb",
+  "branch": "collab/codex-20261102",
+  "proposal": {
+    "bytes": 102826,
+    "sha256": "8ea11fd3a4d1693c56867847977865ab2cb8fc243d1c99093b3d625215694346"
+  },
+  "proposal_sha256": "6e4910938eedca317d68cd047563b6c3e31868529d7fc52b52936b1c5e60642f",
+  "only_numerical_intervention": "COSINE_HORIZON_50_TO_9_EPOCHS",
+  "control_binding": {
+    "code_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+    "data": {
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "populations_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "lead": 6,
+      "mode": "retrospective",
+      "train": 959,
+      "dev": 963,
+      "target_QC_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+      "candidate_manifest_sha256": {
+        "Train": "66905642a3285120fb5fa29cb8ceecbbc3e76beeeb5ae896dee6da087e80092a",
+        "Development": "6bd5a8102929f3c3432753a4d6fb33e7e3ea69482c88abf13eabd729e26981de"
+      }
+    },
+    "runtime_binding": {
+      "python_version": "3.11.15",
+      "python_executable_sha256": "0562f573871cb16a2fb8de16e3d486e3dfd74bb83c7e87db265561917d05ad1a",
+      "torch_version": "2.11.0+cu128",
+      "cuda_build": "12.8",
+      "numpy_version": "2.4.4"
+    },
+    "metadata_files": {
+      "completion.json": {
+        "bytes": 4576,
+        "sha256": "c06e4c60b0ad2bf1f595ad1cc6bde6e5c38817672b74ba1ad5e94215f28aac90"
+      },
+      "B7_development_09.json": {
+        "bytes": 1882415,
+        "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+      },
+      "B7_tail_09.json": {
+        "bytes": 1514365,
+        "sha256": "84652e83b806bdb1277a5021dea0dec7c6caec0c71e842a5bb5c35a15f8d27df"
+      },
+      "paired_initial_identity.json": {
+        "bytes": 1003,
+        "sha256": "ede82be857a9ef31f21b764f12777747a7b83105c2faa4caa271aeff516d9359"
+      },
+      "paired_orders.json": {
+        "bytes": 311790,
+        "sha256": "193fcbc6eab5fa3b29b02ecc3419ab7a01b45a143f08f0a7464fbcc1f4067502"
+      },
+      "B7_LAST_epoch_09.receipt.json": {
+        "bytes": 402,
+        "sha256": "4dc63e9f547561298920e4b00b9e01f9f137e611747c2265ea637e712a81ac78"
+      }
+    },
+    "checkpoint_identity": {
+      "bytes": 53904005,
+      "sha256": "a3f9208aa4e25e786c6797e658cc5fda4da9a29a05c87a693aa6a3fdc571565f"
+    },
+    "checkpoint_evidence": "PRIOR_DIRECT_HASH_AND_REVIEWED_RECEIPT; CURRENT_SIZE_STAT_ONLY_NO_LOAD",
+    "origin": {
+      "original_model_state_sha256": "ab749c88283399a8fe839e872b7dfdc64904aa80bd4d1bc560c399dbeb9a6326",
+      "epoch_order_sha256": [
+        "3d2b2b090a090855540404e4fa2e986b5a65eb6848da687bfd8e4a15d795930f",
+        "1e68765b705617a21e0640b078453810f594294978b9840b39317b9791a113c7",
+        "1e298d8c765dc3838ce23abdbc7ca721f561629ecbe36598432bcb3b4d7e0469",
+        "c9917951cc57b3795d5391630ab2a2be9dca1691a0349dc4cd40a91b1b5d6978",
+        "c37eb279b82d3a54cebf383a0f9611d51233b003a3b05cea13ec2352222d77ce",
+        "b23b76bf707d6748af0e55c05b6eb1dc0b6324ebd1e750a722c259a378add215",
+        "9ee2d8ba5139bb616cf6f5ed8922b0b91114eca034ee8d7503c8fc8c7def7827",
+        "36adfd67b315830aafea814cf083af47fb9997a2f5ab71d2e328ebdb716d5756",
+        "72f7cb6eca84ecd053d848b8cde5fe475a1dca901de00fe9177a93efce8a286b"
+      ]
+    },
+    "changed_inherited_dependencies": [
+      "src/yuntapr/experimental/core_innovation/stage4/engine.py",
+      "src/yuntapr/experimental/research_readiness/dynamic_training.py",
+      "src/yuntapr/experimental/research_readiness/upper_quantile_training.py",
+      "tools/research_readiness/start_independent_process.py"
+    ],
+    "source_delta_review_required": true,
+    "terminal_verification_sha256": "690602e1cc9d8ab713e298aa9fe32ab129a75f3a4a67bb1bde303ca86162c815",
+    "terminal_review_ack_sha256": "f198bf0e4650b7a57bb90b69e4a2d7805170ed759fdbbca91d22c8abd643179a",
+    "results_sha256": "817779ff27e8fa2f91d3b280d4a45aeb606312a6152739bdf703f305df6fdb67",
+    "hardware_binding": {
+      "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "cuda_total_bytes": 8546484224
+    },
+    "environment_limit": "RECORDED_RUNTIME_AND_GPU_MATCH; HISTORICAL_DRIVER_AND_CUDNN_FINGERPRINTS_UNAVAILABLE"
+  },
+  "tests": {
+    "python": "F:/conda_envs/rain-basics/python.exe",
+    "arguments": [
+      "-B",
+      "-m",
+      "unittest",
+      "tests.research_readiness.test_cosine9",
+      "tests.research_readiness.test_dynamic_loss_entry",
+      "tests.research_readiness.test_upper_quantile",
+      "-v"
+    ],
+    "counts": {
+      "cosine9": 21,
+      "dynamic_loss_entry": 8,
+      "upper_quantile": 19
+    },
+    "total": 48,
+    "passed": 48,
+    "exit_code": 0,
+    "unittest_seconds": 0.4,
+    "log": {
+      "bytes": 9755,
+      "sha256": "12dd15cf1f166c8f2e8bfeb41d809cea09c70b51eb9c7dffea192f02ec219b87"
+    },
+    "test_source": {
+      "bytes": 33734,
+      "sha256": "200583b4bd4b9dad1962df929ebfda263a7cd850685364522ce6d761095ee27f"
+    },
+    "activity": "CPU_SYNTHETIC_AND_MOCK_DISPATCH_NO_REAL_OPTIMIZER_STEP"
+  },
+  "code_delta_agent_review": {
+    "agent": "uq_decision_redteam",
+    "scope": "ONE_TARGETED_READ_ONLY_CHANGED_CODE_REVIEW",
+    "finding": "SOURCE_VOLUME_GATE_AFTER_OUTER_ONCE_ONLY_CLAIM",
+    "resolution": "FIXED_IN_LAUNCHER_BEFORE_CLAIM_AND_WMI_WITH_EXECUTE_RECHECK",
+    "regression": "TEST_EMPTY_VOLUME_MISSING_VOLUME_MISSING_H_ROOT_NO_CLAIM_OR_WMI",
+    "harness_review": false
+  },
+  "controller": {
+    "thread_id": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+    "message_id": "f83e6c6c-b3e9-4ae6-8d55-d106727159f7",
+    "scope": "AGREED_SINGLE_SCHEDULE_INTERVENTION_AND_CONTROL_REUSE_SUBJECT_TO_BINDINGS_NOT_TRAINING_BUDGET_APPROVAL"
+  },
+  "harness": {
+    "status": "NOT_OBTAINED_THIS_ROUND",
+    "actual_error": "failed to write kernel assets: 系统找不到指定的路径。 (os error 3)",
+    "scope": "CURRENT_TURN_ONE_INITIALIZATION_ATTEMPT_AFTER_PRIOR_BOUNDED_RECOVERY_FAILURE",
+    "prior_control_terminal_review": "INHERITED_ONLY_AT_ITS_SAVED_SCOPE"
+  },
+  "resources": {
+    "output_volume_free_bytes": 60433010688,
+    "admission": {
+      "scope": "STAGE4_ENGINEERING_RESOURCE_CHECK",
+      "host_available_bytes": 17221382144,
+      "workspace_free_bytes": 60433010688,
+      "minimum_host_bytes": 8589934592,
+      "minimum_workspace_bytes": 1073741824,
+      "full_backward": true,
+      "cuda_free_bytes": 7283408896,
+      "cuda_total_bytes": 8546484224,
+      "minimum_cuda_free_bytes": 5368709120,
+      "cuda_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "torch_version": "2.11.0+cu128",
+      "cuda_build": "12.8",
+      "available_commit_bytes": 26279763968
+    },
+    "RAM_GPU_admission": "INHERIT_AND_RECHECK_EXISTING_MINIMUM_AT_START"
+  },
+  "source_admission": {
+    "H_drive_and_frozen_root_exist": true,
+    "payload_opens": 0
+  },
+  "plan": {
+    "version": "LIVE-20261110.28",
+    "tex": {
+      "bytes": 91892,
+      "sha256": "c7dd177054ee5e939ca21e05beaae29965c23355577e71e7df216a940e2d52a1"
+    },
+    "pdf": {
+      "bytes": 767371,
+      "sha256": "528ff074e8a49cc22462a0380da6ece6fb091c7723e98480ffba01dade63364e"
+    },
+    "pages": 37,
+    "QA": "ALL_PAGE_CONTACT_SHEET_AND_FULL_CHANGED_COVER_SECTION_6X_VISUALLY_CHECKED",
+    "overfull_missing_character_count": 0,
+    "nonfatal_tool_warnings": [
+      "MikTeX user log access denied; PDF created rc0",
+      "inherited unused document option and CJKtt family warning"
+    ]
+  },
+  "protected_shared": {
+    "DECISIONS.md": {
+      "before": {
+        "bytes": 1670,
+        "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+      },
+      "after": {
+        "bytes": 1670,
+        "sha256": "6e0c786880801b148ff51180926fb858af7041c1b8c507ac7391fa4331145b0a"
+      }
+    },
+    "handoffs/DSH.md": {
+      "before": {
+        "bytes": 69833,
+        "sha256": "04fa94ed5d72a76aa3980f2b735b931323064ea0964862ff6f52f0e12472af04"
+      },
+      "after": {
+        "bytes": 69833,
+        "sha256": "04fa94ed5d72a76aa3980f2b735b931323064ea0964862ff6f52f0e12472af04"
+      }
+    },
+    ".gitattributes": {
+      "before": {
+        "bytes": 9,
+        "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+      },
+      "after": {
+        "bytes": 9,
+        "sha256": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992"
+      }
+    },
+    "COLLABORATION_RULES.md": {
+      "before": {
+        "bytes": 24639,
+        "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+      },
+      "after": {
+        "bytes": 24639,
+        "sha256": "8631c186735e46ddfe7d07cc5db2d82cf8e4f484afdcd100f98510cdc6072440"
+      }
+    }
+  },
+  "new_activity": {
+    "formal_training_starts": 0,
+    "optimizer_updates": 0,
+    "inference_or_model_evaluation": 0,
+    "raw_meteorological_payload_opens": 0,
+    "checkpoint_payload_loads_or_rehashes": 0,
+    "final_test_access": false
+  },
+  "engineering": "PASS_WITH_LIMITATIONS",
+  "experiment": "NOT_STARTED",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "pending": [
+    "EXACT_NEW_RESEARCHER_CODE_AND_BUDGET_APPROVAL",
+    "HARNESS_NEW_DELTA_REVIEW_NOT_OBTAINED",
+    "PERFORMANCE_UNKNOWN_UNTIL_EXECUTION"
+  ]
+}

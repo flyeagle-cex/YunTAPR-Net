@@ -1,3 +1,11 @@
+# 2026-11-10 SCHEDULE9单模型工程准备 / LIVE.28
+
+已实现只将余弦总跨度从50轮改9轮的闭合候选。B7/E0/Seed2029、480更新warmup、峰值1e-4、下限1e-6、4320更新及固定E9继承，第4320次更新使用下限。已审UQ包E0的六份JSON和记录运行时匹配，对照直接复用；历史driver/cuDNN完整指纹缺失保留限定，不冒称完整环境逐位一致。
+
+48项CPU合成/回归通过，代理复核的源卷检查时序问题已修复。H盘与冻结根目录已恢复。Harness工具初始化前报kernel assets路径缺失，本轮新独立审核尚未取得。代码和准确提案见 `docs/research_readiness/20261110_cosine9/`；准备PASS_WITH_LIMITATIONS，实验NOT_STARTED，科学NOT_VERIFIED、掌握NOT_ASSESSED。
+
+唯一新额度4320更新/477571953840源字节/142813次/6小时/24GiB，重放、额外重试、checkpoint加载均0。尚待准确新批准，原UQ和E2批准已消费。LIVE.28已更新计划，以下历史快照保留。
+
 # 2026-11-10 UQ失败后多agent改进方向讨论 / LIVE.27讨论索引
 
 三名代理与网页总控经交叉讨论，将固定9轮/4320更新内完成余弦学习率衰减列为第一实际候选。原代码采用50轮horizon，E9学习率仍为峰值93.63%，尚不证明未收敛或短周期有效。第二候选为独立E1发生项（精确0.5×BCE）。共享梯度诊断只在能改变决策时开展；DTFM/DOTE数值、物理损失、原生多尺度与尾部读出分别列条件候选。详见 `docs/research_readiness/20261110_post_uq_discussion/DISCUSSION.json`。

@@ -94,6 +94,26 @@ def validate_upper_quantile_scope(proposal, executable):
         raise PermissionError('Bound upper-quantile interpreter differs')
 
 
+def validate_cosine9_scope(proposal, executable):
+    """Admit the one-model fixed-E9 horizon intervention with an inherited E0."""
+    protocol, caps = proposal.get('protocol', {}), proposal.get('budget', {})
+    expected_caps = dict(models=1,updates_per_model=4320,total_updates=4320,
+        source_bytes_per_model=477571953840,source_files_per_model=142813,
+        total_source_bytes=477571953840,total_source_files=142813,
+        max_model_seconds=21600,max_package_seconds=21600,
+        initial_free_bytes=24*1024**3,minimum_task_free_bytes=24*1024**3,
+        replay_allowance=0,additional_retry_allowance=0,checkpoint_loads=0)
+    if (proposal.get('tasks') != [dict(model='B7',seed=2029,schedule_profile='COSINE9_V1')]
+            or protocol.get('loss') != 'E0' or protocol.get('lambda_q') != 1.0
+            or protocol.get('quantile_profile') != 'UNIFORM' or protocol.get('seed') != 2029
+            or protocol.get('schedule_profile') != 'COSINE9_V1' or protocol.get('epochs') != 9
+            or protocol.get('endpoint') != 'FIXED_EPOCH_9'
+            or caps != expected_caps):
+        raise PermissionError('Only the exact one-model B7 uniform E0 cosine9 package is supported')
+    if sha(executable) != proposal.get('runtime_binding', {}).get('python_executable_sha256'):
+        raise PermissionError('Bound cosine9 interpreter differs')
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -139,7 +159,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -155,6 +175,13 @@ def validate_spec(path):
             expected_commit=approval['code_commit']
         elif entry.name=='start_upper_quantile_pair.py':
             validate_upper_quantile_scope(proposal,executable)
+            expected_commit=approval['code_commit']
+        elif entry.name=='start_cosine9.py':
+            validate_cosine9_scope(proposal,executable)
+            frozen=read(private['inherited'])['prepared']
+            volumes={Path(name).anchor for scope in frozen['roles'].values() for name in scope['files']}
+            if not volumes or any(not Path(volume).is_dir() for volume in volumes) or not Path(r'H:\葵花202303_202510').is_dir():
+                raise RuntimeError('Frozen source volume/root unavailable; no launch claim or target created')
             expected_commit=approval['code_commit']
         else:expected_commit=proposal['execution_code_commit']
         if approval['code_commit']!=expected_commit or approval['output_root']!=private['output_root'] or Path(private['output_root']).exists():raise PermissionError('Consumed or mismatched grant; never restart')

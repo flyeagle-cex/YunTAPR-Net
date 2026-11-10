@@ -222,11 +222,14 @@ def verify_loss_receipts(folder, task):
             raise ValueError("Control receipt unexpectedly declares a modified loss")
 
 
-def pair_summary(output):
+def pair_summary(output, *, arm_folders=None):
+    if arm_folders is None:
+        arm_folders = {task['arm']: Path(output) / task['arm'] / 'B7_s2029' for task in TASKS}
+    if len(arm_folders) != 2:
+        raise ValueError('Exactly one control and one candidate are required')
     reports, tails, values = {}, {}, {}
-    for task in TASKS:
-        arm = task["arm"]
-        folder = Path(output) / arm / "B7_s2029"
+    for arm, folder in arm_folders.items():
+        folder = Path(folder)
         reports[arm] = read(folder / "B7_development_09.json")
         tails[arm] = read(folder / "B7_tail_09.json")
         summary = reports[arm]["groups"]["all"]["summary"]
@@ -252,7 +255,7 @@ def pair_summary(output):
         }
         if not all(math.isfinite(value) for value in values[arm].values()):
             raise ValueError("A required screen metric is not finite")
-    control, candidate = (task["arm"] for task in TASKS)
+    control, candidate = arm_folders
     paired_difference(reports[control], reports[candidate])
     for group, baseline in reports[control]["groups"].items():
         actual = reports[candidate]["groups"][group]

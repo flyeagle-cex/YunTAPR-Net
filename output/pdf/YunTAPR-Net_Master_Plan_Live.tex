@@ -14,7 +14,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[L]{\small\color{muted}YunTAPR-Net V1.3 \quad 总计划与执行状态}
-\fancyhead[R]{\small\color{muted}2026-11-09}
+\fancyhead[R]{\small\color{muted}2026-11-10}
 \fancyfoot[L]{\footnotesize\color{muted}据研究者委托更新；不自动批准正式训练}
 \fancyfoot[R]{\small\thepage}
 \renewcommand{\headrulewidth}{0.35pt}
@@ -33,22 +33,22 @@
 \vspace{7mm}
 {\large 云南全境复杂地形约束下的\\近实时卫星概率降水反演\par}
 \vspace{10mm}
-版本 \texttt{LIVE-20261108.27}\qquad 状态截至2026年11月09日（北京时间）
+版本 \texttt{LIVE-20261110.28}\qquad 状态截至2026年11月10日（北京时间）
 
 本版依据研究者委托维护原V1.3总计划。当前状态引用已保存的终态收据、评价摘要和权重指纹，历史计划与启动快照继续供追溯。
 
 \section*{目前处于什么阶段}
-\status{上分位配对实验工程完整结束，预先冻结的开发筛查未通过。}
-两臂各9轮固定E9与完整2024 Development封口，11月8日北京时间23:26:34正常退出0。强雨两个条件评分小幅改善，四项总体/发生保护指标退化。科学验收保持NOT\_VERIFIED。\evi{S36}
+\status{SCHEDULE9单变量工程准备完成，准确新训练包尚未启动。}
+原UQ配对开发筛查失败已结项。网页总控与代理讨论后优先检验九轮内完整余弦衰减，B7/E0/Seed2029和固定E9保持。该候选能否改善性能尚无新实验结果。\evi{S36,S37}
 
 \section*{本次实际更新}
 \begin{itemize}
-\item 实际8,640更新、955,143,907,680源字节/285,626次、约9小时42分，训练重放及额外重试0。
-\item 强雨log及物理Pinball改善约0.1046\%和0.0935\%。全湿log、Brier、发生AP和AUROC退化，七项判据3通过、4失败。
-\item q32整体覆盖93.4824\%升至94.3399\%，强雨覆盖计数仍为39/717。该计数无POD或独立事件含义，也未核验覆盖像元集合相同。
-\item 终态、保存报告、账本与两份E9权重SHA已核验。Harness限定终态复核已完成，确认工程PASS、开发筛查FAIL。
+\item 调度跨度24,000改为4,320更新，保留480更新warmup、峰值$10^{-4}$、下限$10^{-6}$。第4,320次更新使用下限。
+\item 已审UQ包E0对照的六份JSON、原初态、九轮顺序与运行时已匹配。复用对照，本轮只准备一个候选模型。
+\item 48项CPU合成和回归检查通过。新增代码差异经代理复核，源盘检查已移到单次调度声明之前；H盘当前可用。
+\item 新额度4,320更新、477,571,953,840源字节/142,813次、6小时、24GiB，重放/额外重试/检查点加载均0，等待准确研究者批准。
 \end{itemize}
-工程\texttt{PASS}，开发筛查\texttt{FAIL}，科学\texttt{NOT\_VERIFIED}，外部\texttt{PARTIAL}，研究者掌握\texttt{NOT\_ASSESSED}。本包额度已消费，6W保留结果和停止边界。
+Harness桌面工具初始化失败，本轮尚未取得其新差异审核。工程准备\texttt{PASS\_WITH\_LIMITATIONS}，实验\texttt{NOT\_STARTED}，科学\texttt{NOT\_VERIFIED}，研究者掌握\texttt{NOT\_ASSESSED}。\evi{S37}
 
 \pageheading{1\quad 原始科学目标与成果边界}{研究对象和原问题保持不变；把假设、实现和验证分别记录。}
 \textbf{研究定义。}利用多时相Himawari、业务可用GFS与地形信息，估计当前半小时窗口的降水发生概率和条件雨强分布。目标是概率QPE，不是未来降水短临预测。云南省界用于主评价mask；模型输入可以保留外围天气系统上下文。\evi{S0}
@@ -745,6 +745,32 @@ q32全湿覆盖从381,240/407,820升至384,737/407,820，即93.4824\%到94.3399\
 
 Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、推理或评价，不重开全仓审计。复核已确认保存终态与七项算术相符。审核文本一处强雨log改善百分比笔误已由审核者更正为0.10463424023731711\%，原指标和判定未变。审核分支e14f8ca已推送，Codex直接核对远端一致；准确报告指纹与回执见同目录TERMINAL\_REVIEW\_ACK。工程PASS、开发筛查FAIL、科学NOT\_VERIFIED、外部PARTIAL、研究者NOT\_ASSESSED分别登记。旧权重、旧失败和本次全部结果保留，下一科研决定交由研究者，当前额度已经消费。
 
+\pageheading{6X\quad SCHEDULE9单模型准备}{2026-11-10；科学方案与预算绑定记录待研究者准确批准，当前无新性能结果。}
+\section*{本次检验的问题}
+现有50轮余弦调度在第4,320次更新仍为$9.3630275854\times10^{-5}$，约峰值的93.63\%。这为检验九轮端点与衰减跨度提供具体依据，尚不能据此判定未收敛或解释强雨低估。
+
+唯一数值干预为余弦总跨度从50轮改为9轮。B7 concat、E0均匀分位损失、Seed2029、原始初始化、优化器、精度、数据人口、九轮顺序及固定E9继承。480更新warmup、峰值$10^{-4}$和下限$10^{-6}$保持，第4,320步在优化器更新之前设为$10^{-6}$。\evi{S37}
+
+\section*{复用已有E0，减少一个模型训练}
+已完成UQ包中的\texttt{CONTROL\_E0/B7\_s2029}作为保存对照。六份JSON身份与已审RESULTS逐一相符；完整初始化摘要及九轮顺序固定。Python二进制、Python/Torch/CUDA build/NumPy版本匹配，GPU名称与总显存绑定。历史未保存完整driver/cuDNN指纹，保留环境身份局限。
+
+该对照E9权重沿用前轮实际SHA及审核收据，本轮只核尺寸，不重新读载荷。候选从原工厂全新初始化，启动前会再核其真实初态和顺序。对照不加载、不重训。\evi{S35,S36,S37}
+
+\begin{tabularx}{\textwidth}{@{}p{38mm}X@{}}
+\toprule 项目 & 唯一新包范围\\\midrule
+候选 & B7/E0/Seed2029，\texttt{COSINE9\_V1}\\
+训练与端点 & 9轮、4,320更新、固定E9 LAST\\
+源上限 & 477,571,953,840逻辑字节，142,813次打开\\
+时间与存储 & 最长6小时，初始及任务启动24GiB可用\\
+重放与重试 & 均0；检查点加载0\\
+评价 & 强雨log与物理Pinball共同改善，五项全湿/发生保护指标不退化\\
+\bottomrule
+\end{tabularx}
+
+容限沿用绝对$10^{-10}$，物理Pinball仍除以20 mm/h。q32作为辅助诊断，不能替代七项筛查。单seed、重复2024 Dev及独立事件尚未识别的局限保留。一次候选失败按预设规则记录，不在同一包中追搜warmup或终点。\evi{S37}
+
+48项CPU检查验证旧调度恒等、边界、闭合任务范围、来源卷入场、初态/顺序守卫、逐轮调度身份与mock执行链。此范围没有真实优化器更新或新评价。Harness工具当前初始化失败，代理复核单独归档；尚无Harness新审核通过结论。新准确批准尚未取得，输出目录未创建。\evi{S37}
+
 \pageheading{7\quad 研究者掌握、论文与持续维护}{研究者为主体。AI解释与工程PASS不能代替本人掌握。}
 \section*{知识Gate}
 当前统一\texttt{NOT\_ASSESSED}。原V1.3要求方法至少能独立实现简化版，主创新能质疑与设计反证；只有研究者本人确认并留痕，才记\texttt{CONFIRMED}。\evi{S0，pp.14--17}
@@ -811,6 +837,7 @@ Harness本轮仅复核终态、保存结果身份与算术，不重跑训练、�
 \item[S34] 本轮温和上分位配对包与48项检查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}、\path{VERIFICATION.json}及审后回执。总控温和函数建议待研究者批准，准确代码与提案指纹见6U。无真实训练或科学验收。
 \item[S35] 本轮准确批准、首调度停止与R1真实启动。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{FIRST_DISPATCH_STOP.json}、\path{START_RECEIPT.json}与本轮验证。原始批准、独立监督、进程创建、更新和源读取账本保留本地。启动核验PASS，实验IN\_PROGRESS，科学尚未验收。
 \item[S36] 上分位两臂终态与完整七项筛查。\par\path{docs/research_readiness/20261108_upper_quantile_pair/}\par\path{TERMINAL_VERIFICATION.json}、\path{RESULTS.json}和\path{CONTROLLER_TERMINAL_ACK.json}。终态与结果159fff0已推送，输入完整SHA和字段在JSON内。Harness限定终态复核确认相符，见TERMINAL\_REVIEW\_ACK，工程、筛查与科学验收分别登记。
+\item[S37] SCHEDULE9准备与必要检查。\par\path{docs/research_readiness/20261110_cosine9/}\par\path{PROTOCOL.md}、\path{EXECUTION_PROPOSAL.json}及\path{VERIFICATION.json}。总控\texttt{f83e6c6c}确认单变量路线；新控制继承的文件SHA、运行时与源绑定见提案。准确代码提交以Git及外部批准记录为准。48项CPU检查通过；代理复核发现并修复源卷检查时序问题。Harness初始化\texttt{os error 3}，新差异审核仍待取得；科学未验收。
 \end{description}
 \normalsize
 
