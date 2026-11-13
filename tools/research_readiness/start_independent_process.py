@@ -133,6 +133,21 @@ def validate_spec(path):
         definition=importlib.util.spec_from_file_location('read_only_diagnostic_identity',entry)
         observer=importlib.util.module_from_spec(definition);definition.loader.exec_module(observer)
         if observer.Reader(config).service!=folder:raise PermissionError('Observer service namespace differs')
+    elif spec['kind']=='BOUNDED_PAIRED_POINT_EVALUATION':
+        if (entry.name!='start_paired_point_evaluation.py' or len(command)<4
+                or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve()):
+            raise PermissionError('Only the fixed two-E9 point-evaluation controller')
+        def paired_argument(flag):
+            value=Path(command[command.index(flag)+1])
+            if not value.is_absolute():raise ValueError('Absolute paired-evaluation identity required')
+            return value
+        import importlib.util
+        definition=importlib.util.spec_from_file_location('bounded_paired_point_gate',entry)
+        gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
+        proposal,private=gate.validate_entry(paired_argument('--proposal'),paired_argument('--private-preparation'),
+                                             paired_argument('--researcher-approval'))
+        if executable.resolve()!=Path(private['runtime_python']).resolve():
+            raise PermissionError('Paired evaluation requires the bound native interpreter')
     elif spec['kind']=='BOUNDED_EXTREME_DIAGNOSTIC':
         if entry.name!='start_extreme_diagnostic.py' or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve():
             raise PermissionError('Only the fixed nontraining extreme diagnostic controller')
