@@ -148,6 +148,7 @@ class ReadGuard:
         self.runtime_roots = tuple(Path(p).resolve() for p in private["runtime_roots"])
         self.output_roots = tuple(Path(p).resolve() for p in output_roots)
         self.engineering_files = {key(private["runtime_python"]), key(__file__)}
+        self.null_device = key(Path(os.devnull).resolve())
         self.counts, self.payload_bytes, self.entries = {}, {}, []
         self.active = False
         self.block_subprocess = False
@@ -193,9 +194,11 @@ class ReadGuard:
             if os.name == "nt" and value.startswith("/"):
                 value = value[1:]
         path = Path(value).resolve()
+        identity = key(path)
+        if event == "open" and identity == self.null_device:
+            return
         if any(path.is_relative_to(root) for root in self.output_roots):
             return
-        identity = key(path)
         is_write = event == "open" and bool(args[2] & WRITE_FLAGS)
         if identity in self.scientific:
             self.check()
@@ -437,7 +440,7 @@ def resources(folder):
     if (status.get("disk_free", 0) < LIMITS["minimum_free_bytes"]
             or memory.get("available", 0) < LIMITS["minimum_host_available_bytes"]
             or gpu.get("total_mib", 0) - gpu.get("used_mib", 0) < LIMITS["minimum_gpu_free_mib"]):
-        raise RuntimeError("Fixed disk/RAM/GPU admission failed")
+        raise RuntimeError("Fixed disk/RAM/GPU admission failed " + json.dumps(status, sort_keys=True))
     return status
 
 
@@ -597,6 +600,7 @@ def execute(proposal_path, private_path, approval_path):
     guard = guard_for(v, identities, initial, deadline, "controller")
     guard.install()
     child, claimed = None, False
+    started_wall = time.time()
     try:
         preflight = require_preflights(v, p, identities[key(approval_path)]["sha256"])
         started_wall = package_start(v)
@@ -652,8 +656,9 @@ def execute(proposal_path, private_path, approval_path):
         except RuntimeError as stop_error:
             termination_error = str(stop_error)
         accounting = guard.close()
-        if claimed:
-            write(package / "failure.json", dict(status="STOP_PRESERVE_ALL_NO_RETRY", error_type=type(error).__name__,
+        failure_path = package / "failure.json" if claimed else Path(v["preflight_root"]) / "controller_failure.json"
+        if failure_path.parent.is_dir():
+            write(failure_path, dict(status="STOP_PRESERVE_ALL_NO_RETRY", error_type=type(error).__name__,
                   details=str(error), termination_error=termination_error, controller_accounting=accounting,
                   elapsed_since_first_preflight_seconds=time.time() - started_wall, finished=now()))
         raise

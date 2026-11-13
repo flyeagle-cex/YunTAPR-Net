@@ -1,0 +1,76 @@
+{
+  "status": "STOPPED_BEFORE_FORMAL_OUTPUT_AND_WORKER_CREATION",
+  "engineering_status": "FAIL",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "decision_id": "YT-POINT-20261114-001",
+  "execution_code_commit": "4fada6856bcd8bef1ee92c7209cb55f6d1d6a0c6",
+  "proposal_sha256": "06340722ae532c0eeef42ac36f98e746d6a19dff376f6c0665ba9b86e1772ef9",
+  "approval_sha256": "8b4211b5159695408ff5a77ca68b467acfc8c2a65b0120dd5adc6202d2c3a373",
+  "target_exit": {
+    "at": "2026-11-14T07:08:16.976122+08:00",
+    "return_code": 1,
+    "return_code_u32_hex": "0x1",
+    "automatic_retry": false
+  },
+  "first_preflight_started": "2026-11-14T07:07:46.502659+08:00",
+  "elapsed_seconds_to_confirmed_exit": 30.473463,
+  "elapsed_conservative_seconds": 31,
+  "preflight_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "preflight_metadata_bytes": 142367912,
+  "preflight_metadata_opens": 110,
+  "controller_actual_accounting": "NOT_SEALED_BY_OLD_PRECLAIM_EXCEPTION_PATH",
+  "controller_metadata_conservative_bytes": 134217728,
+  "controller_metadata_conservative_opens": 512,
+  "total_attempt_metadata_conservative_bytes": 276585640,
+  "total_attempt_metadata_conservative_opens": 622,
+  "scientific_payload_bytes": 0,
+  "checkpoint_reads": 0,
+  "model_loads": 0,
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "extra_retries": 0,
+  "replay": 0,
+  "formal_output_created": false,
+  "candidate_started": false,
+  "approval_consumed": true,
+  "root_cause": "READ_GUARD_DENIES_SUBPROCESS_DEVNULL_OPEN_NUL_CAUSING_GPU_PROBE_TO_RETURN_NONE",
+  "historical_resource_values": "NOT_CAPTURED_AT_FAILURE",
+  "independent_harness_review": "NOT_OBTAINED",
+  "correction": "NULL_DEVICE_ONLY_EXCEPTION_AND_PRECLAIM_FAILURE_ACCOUNTING_WITH_RESOURCE_VALUES",
+  "recorded_at": "2026-11-14T07:14:45.01588+08:00",
+  "source_identities": {
+    "RESEARCHER_APPROVAL.json": {
+      "bytes": 2412,
+      "sha256": "8b4211b5159695408ff5a77ca68b467acfc8c2a65b0120dd5adc6202d2c3a373"
+    },
+    "preflight\\receipt_01.json": {
+      "bytes": 8863,
+      "sha256": "3a8cbf855a3a531a5246148c25041385ee49333fcc71e216b8947d145f55299a"
+    },
+    "preflight\\receipt_02.json": {
+      "bytes": 8863,
+      "sha256": "415aabcc9c2109d08cd6c22d537ca1df2ad013d7efcab169fce97e08df7c6927"
+    },
+    "service\\target_launch.json": {
+      "bytes": 254,
+      "sha256": "e9f304acceb79fcb4675698cdfa30a5f5fe0646d6f4e753205c357ea1210bf5f"
+    },
+    "service\\target_exit.json": {
+      "bytes": 148,
+      "sha256": "7f2b11fa0e604e8ae1384e117a7904b20eab9052eec8dac9b26cb476bbe798c1"
+    },
+    "service\\target_stderr.log": {
+      "bytes": 1116,
+      "sha256": "bfa13de48ddd33b9a681cf195c39e8bb761ad5615bb114ddeaeaa6a99e7545f3"
+    },
+    "GUARDED_RESOURCE_FAILURE_REPRO.json": {
+      "bytes": 686,
+      "sha256": "e7dec269982a029c1ece2845458281502b9e438890751b379737fa97b5a067b6"
+    }
+  }
+}

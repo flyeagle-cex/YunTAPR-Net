@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "old_guard_reproduction": {
+    "status": "REPRODUCED",
+    "scope": "RESOURCE_PROBE_ONLY_NO_MODEL_OR_SCIENTIFIC_INPUT",
+    "resources": {
+      "gpu": null,
+      "memory": {
+        "total": 33752997888,
+        "available": 17207152640,
+        "commit_available": 25529450496
+      },
+      "disk_free": 56781119488
+    },
+    "denials": [
+      {
+        "event": "open",
+        "path": "nul",
+        "reason": "Writes outside the claimed output namespace are forbidden"
+      }
+    ],
+    "accounting": {
+      "metadata_archive_reserved_bytes": 0,
+      "metadata_open_instances": 0,
+      "payload_archive_reserved_bytes": 0,
+      "payload_by_category": {},
+      "payload_open_instances": 0,
+      "reservations": []
+    }
+  },
+  "corrected_guard_resources": {
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "used_mib": 2088.0,
+      "total_mib": 8151.0,
+      "utilization": 2.0,
+      "temperature": 45.0,
+      "power": 13.15
+    },
+    "memory": {
+      "total": 33752997888,
+      "available": 17557573632,
+      "commit_available": 25532604416
+    },
+    "disk_free": 56781111296
+  },
+  "corrected_probe_accounting": {
+    "metadata_archive_reserved_bytes": 0,
+    "metadata_open_instances": 0,
+    "payload_archive_reserved_bytes": 0,
+    "payload_by_category": {},
+    "payload_open_instances": 0,
+    "reservations": []
+  },
+  "model_loads": 0,
+  "new_inference": 0,
+  "scientific_payload_reads": 0
+}

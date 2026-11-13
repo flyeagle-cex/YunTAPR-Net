@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "test_count": 59,
+  "errors": 0,
+  "failures": 0,
+  "return_code": 0,
+  "runner": "FROZEN_RESEARCH_PYTHON_3_11_15",
+  "command": "python -B -m unittest discover -s tests/research_readiness -p 'test_paired_point*.py'",
+  "observed_test_seconds": 1.326,
+  "observation": "DIRECT_TOOL_EXECUTION_OUTPUT",
+  "new_regressions": [
+    "Exact null device allowed with lookalike file writes denied",
+    "Real subprocess DEVNULL redirection under active guard",
+    "Resource admission failure persists controller accounting before output claim"
+  ],
+  "scientific_payload_reads": 0,
+  "new_inference": 0
+}

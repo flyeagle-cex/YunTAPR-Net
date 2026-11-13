@@ -136,6 +136,25 @@ class PairedPointEvaluationTests(unittest.TestCase):
         record = guard.close()
         self.assertEqual((record["metadata_archive_reserved_bytes"], record["metadata_open_instances"]), (4, 2))
 
+    def test_null_device_is_admitted_without_admitting_unlisted_files(self):
+        guard = self.guard()
+        self.open_event(guard, os.devnull, os.O_RDWR)
+        with self.assertRaises(PermissionError):
+            self.open_event(guard, self.source / "null-device.log", os.O_RDWR | os.O_CREAT)
+        self.assertEqual(guard.close()["metadata_open_instances"], 0)
+
+    def test_guarded_subprocess_devnull_redirection(self):
+        guard = self.guard()
+        guard.install()
+        try:
+            completed = subprocess.run([controller.sys.executable, "-B", "-c", "pass"],
+                                       stderr=subprocess.DEVNULL, check=False,
+                                       creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+        finally:
+            accounting = guard.close()
+        self.assertEqual(completed.returncode, 0)
+        self.assertEqual(accounting["payload_open_instances"], 0)
+
     def test_metadata_modified_length_rejected_before_charge(self):
         path, info = self.file("plan.json", b"{}")
         self.private["metadata_files"][str(path)] = info
@@ -347,6 +366,20 @@ class PairedPointEvaluationTests(unittest.TestCase):
         launch.assert_called_once()
         self.assertFalse((self.output / f"{controller.TASKS[1]}_claim.json").exists())
         self.assertTrue((self.output / "failure.json").is_file())
+
+    def test_admission_failure_seals_accounting_before_output_claim(self):
+        paths = self.prepare_mock_execution()
+        with mock.patch.object(controller, "validate_bound_inputs"), mock.patch.object(controller, "require_host"), \
+                mock.patch.object(controller, "resources", side_effect=RuntimeError("SYNTHETIC_RESOURCE_FAILURE")), \
+                mock.patch.object(controller.sys, "executable", str(self.python)), \
+                mock.patch.object(controller.subprocess, "Popen") as launch:
+            with self.assertRaises(RuntimeError):
+                controller.execute(*paths)
+        launch.assert_not_called()
+        self.assertFalse(self.output.exists())
+        failure = controller.read(self.preflight / "controller_failure.json")
+        self.assertEqual(failure["status"], "STOP_PRESERVE_ALL_NO_RETRY")
+        self.assertEqual(failure["controller_accounting"]["payload_open_instances"], 0)
 
     def test_worker_rejects_changed_parent_before_source_gates(self):
         paths = self.write_bootstrap()
