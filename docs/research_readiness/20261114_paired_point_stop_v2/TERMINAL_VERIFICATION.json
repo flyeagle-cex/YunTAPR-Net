@@ -1,0 +1,81 @@
+{
+  "status": "STOPPED_AT_RUNTIME_SEED_INITIALIZATION_BEFORE_SCIENTIFIC_INPUT",
+  "engineering_status": "FAIL",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "decision_id": "YT-POINT-CORRECT-20261114-001",
+  "execution_code_commit": "7a9c27ac28cf2cac2cc3fa918f3e1c58e63761ed",
+  "proposal_sha256": "4ae32d3790a68cb8eb32164f35311d6a5dd9fb44618e8c0f5b3869eb444ce142",
+  "approval_sha256": "1258beff297e94726b7429899fc15f99cfcf504cb7dc43a3c8fa34a980960177",
+  "target_exit": {
+    "at": "2026-11-13T23:37:13.078369+00:00",
+    "return_code": 1,
+    "return_code_u32_hex": "0x1",
+    "automatic_retry": false
+  },
+  "preflight_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "metadata_accounting_status": "SEALED_ALL_FOUR_PROCESSES",
+  "metadata_reserved_bytes": 284740136,
+  "metadata_open_instances": 220,
+  "elapsed_seconds_to_confirmed_exit": 87.031328,
+  "elapsed_conservative_seconds": 88,
+  "prior_attempt_debit": {
+    "prior_decision_id": "YT-POINT-20261114-001",
+    "prior_proposal_sha256": "06340722ae532c0eeef42ac36f98e746d6a19dff376f6c0665ba9b86e1772ef9",
+    "prior_terminal_receipt_sha256": "1dc9faec222ad9d2f2597329b25958f274575e390b275ac019daf1112a658db2",
+    "metadata_conservative_bytes": 276585640,
+    "metadata_conservative_opens": 622,
+    "seconds": 31,
+    "scientific_payload_bytes": 0,
+    "model_loads": 0,
+    "new_inference": 0,
+    "optimizer_updates": 0
+  },
+  "cumulative_failed_metadata_conservative_bytes": 561325776,
+  "cumulative_failed_metadata_conservative_opens": 842,
+  "cumulative_failed_conservative_seconds": 119,
+  "scientific_payload_bytes": 0,
+  "checkpoint_reads": 0,
+  "model_loads": 0,
+  "evaluation_forwards": 0,
+  "optimizer_updates": 0,
+  "extra_retries": 0,
+  "replay": 0,
+  "candidate_started": false,
+  "approval_consumed": true,
+  "root_cause": "PYTORCH_DETERMINISTIC_SEED_INITIALIZATION_NEEDS_TEMP_AND_INDUCTOR_CACHE_WRITES_DENIED_OUTSIDE_OUTPUT",
+  "test_gap": "PREVIOUS_REAL_PROBE_COVERED_MODULE_IMPORT_AND_RESOURCES_BUT_NOT_GUARDED_SEED_ALL",
+  "correction": "BIND_TEMPFILE_AND_TORCHINDUCTOR_CACHE_TO_CLAIMED_TASK_RUNTIME_DIRECTORY",
+  "harness_review": "NOT_OBTAINED",
+  "recorded_at": "2026-11-13T23:42:06.018154+00:00",
+  "source_identities": {
+    "preflight_01": {
+      "bytes": 8863,
+      "sha256": "528c5e12f15f533d6010c99984b3c27b12bedee7c84ad9583a5be388ab253819"
+    },
+    "preflight_02": {
+      "bytes": 8863,
+      "sha256": "48e21ce7871c7f0ff61f0e7b091ff48e45ce8c4ddf8a4ebe52b7d4c09ed9626c"
+    },
+    "controller_failure": {
+      "bytes": 8880,
+      "sha256": "607334521bdc43f23bf1905dbf7fc6e0a6caabad165ec0c76b3d7f35af4a2d88"
+    },
+    "worker_failure": {
+      "bytes": 9180,
+      "sha256": "35f673369206b8cbd9af9d141e9f45532ca76189a5906e4f7633302522e3c0e6"
+    },
+    "worker_console": {
+      "bytes": 4022,
+      "sha256": "030ab199e06de12e1d3e9874667d33ad48851a6b3b87848a7c37d1cf212273bb"
+    },
+    "target_exit": {
+      "bytes": 148,
+      "sha256": "3e6b18f4864e3d9f7c9fd6a74ef9dd1dee3dae11901ede986e050fe594b88bb9"
+    }
+  }
+}

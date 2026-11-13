@@ -3,7 +3,9 @@
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
+import tempfile
 from types import SimpleNamespace
 
 
@@ -45,6 +47,22 @@ def _validate_runtime(runtime, expected):
 
 def _forbid_optimizer(*args, **kwargs):
     raise PermissionError("Forward-only evaluation forbids optimizer construction")
+
+
+def _initialize_runtime(output, expected):
+    scratch = Path(output).resolve() / "runtime"
+    scratch.mkdir(exist_ok=False)
+    for name in ("TMPDIR", "TEMP", "TMP"):
+        os.environ[name] = str(scratch)
+    tempfile.tempdir = str(scratch)
+    os.environ["TORCHINDUCTOR_CACHE_DIR"] = str(scratch / "torchinductor")
+    runtime = _runtime()
+    identity = _validate_runtime(runtime, expected)
+    runtime.torch.set_grad_enabled(False)
+    runtime.torch.optim.Optimizer.__init__ = _forbid_optimizer
+    runtime.torch.set_num_threads(1)
+    runtime.seed_all(2029)
+    return runtime, identity
 
 
 def _write(path, value):
@@ -117,13 +135,8 @@ def run_task(root, proposal, private, task, output, check):
         if (output / name).exists():
             raise FileExistsError("Task output already exists")
 
-    runtime = _runtime()
+    runtime, runtime_identity = _initialize_runtime(output, proposal["runtime"])
     torch = runtime.torch
-    runtime_identity = _validate_runtime(runtime, proposal["runtime"])
-    torch.set_grad_enabled(False)
-    torch.optim.Optimizer.__init__ = _forbid_optimizer
-    torch.set_num_threads(1)
-    runtime.seed_all(2029)
     reference = runtime.read(paths["dev_report_path"])
     if reference["groups"]["all"]["summary"] != proposal["expected_summaries"][task]:
         raise ValueError("Saved E9 report summary differs from the approved proposal")

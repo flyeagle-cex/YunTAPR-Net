@@ -3,8 +3,10 @@
 import copy
 from contextlib import contextmanager, nullcontext
 import hashlib
+import os
 from pathlib import Path
 import shutil
+import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -180,6 +182,29 @@ def fixture(folder):
 
 
 class WorkerTests(unittest.TestCase):
+    def setUp(self):
+        environment = patch.dict(os.environ)
+        environment.start()
+        self.addCleanup(environment.stop)
+        temporary_directory = patch.object(tempfile, "tempdir", tempfile.tempdir)
+        temporary_directory.start()
+        self.addCleanup(temporary_directory.stop)
+
+    def test_runtime_initialization_rebinds_cached_temp_and_inductor_paths(self):
+        with workspace_directory() as temporary:
+            folder = Path(temporary)
+            runtime, proposal, private, state, report, totals = fixture(folder)
+            tempfile.tempdir = "SYNTHETIC_OUTSIDE_OUTPUT"
+            with patch.object(worker, "_runtime", return_value=runtime):
+                actual, identity = worker._initialize_runtime(folder, proposal["runtime"])
+            self.assertIs(actual, runtime)
+            self.assertEqual(Path(tempfile.gettempdir()), folder / "runtime")
+            for name in ("TMPDIR", "TEMP", "TMP"):
+                self.assertEqual(Path(os.environ[name]), folder / "runtime")
+            self.assertEqual(Path(os.environ["TORCHINDUCTOR_CACHE_DIR"]), folder / "runtime/torchinductor")
+            self.assertEqual(state["seed_calls"], [2029])
+            self.assertEqual(state["grad_modes"], [False])
+
     def test_one_forward_feeds_both_accumulators(self):
         with workspace_directory() as temporary:
             folder = Path(temporary)
