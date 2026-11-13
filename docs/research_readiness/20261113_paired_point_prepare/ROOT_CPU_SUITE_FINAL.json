@@ -1,0 +1,24 @@
+{
+  "tests_run": 60,
+  "failures": 0,
+  "errors": 0,
+  "status": "PASS",
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "legacy_fixture_override": "Existing four host tests use the same isolated workspace UUID directory context as the new worker tests; assertions unchanged",
+  "scientific_payload_reads": 0,
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "failure_history": [
+    {
+      "tests": 49,
+      "errors": 6,
+      "reason": "New worker fixtures used system Temp; fixture implementation corrected"
+    },
+    {
+      "tests": 60,
+      "errors": 3,
+      "reason": "Existing legacy host fixture TemporaryDirectory ACL; final harness substitutes equivalent workspace fixture"
+    }
+  ],
+  "stdout_sha256": "962898aa1992b7591ba1d1bbf9884ee528da812005bbc680cb829d7d512cac3c"
+}

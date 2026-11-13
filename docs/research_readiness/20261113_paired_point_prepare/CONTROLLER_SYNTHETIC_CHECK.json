@@ -1,0 +1,52 @@
+{
+  "scope": "CPU_STANDARD_LIBRARY_SYNTHETIC_CONTROLLER_CHECKS",
+  "verified_at": "2026-11-13T23:43:05.9189516+08:00",
+  "test_file": "tests/research_readiness/test_paired_point_evaluation.py",
+  "controller_file": "tools/research_readiness/start_paired_point_evaluation.py",
+  "controller_sha256": "dbaff0583ca3b9351413ef3fc74a048720140b17bdfceed56946eb887c35edfd",
+  "test_sha256": "3e860aec0f840a09a731e0820d9b659321e9cab16915ac44b8aae4b3591e17a2",
+  "python_version": "3.11.15",
+  "final_test_count": 28,
+  "final_status": "PASS",
+  "final_suite_seconds": 0.862,
+  "final_return_code": 0,
+  "earlier_attempts": [
+    {
+      "status": "SETUP_ERROR",
+      "reason": "System Temp ACL refused synthetic fixture child creation before assertions; changed fixture root to exclusive UUID directory under ignored project synthetic storage.",
+      "test_count": 21
+    },
+    {
+      "status": "PASS",
+      "test_count": 21,
+      "suite_seconds": 0.612
+    },
+    {
+      "status": "PASS",
+      "suite_seconds": 1.491,
+      "test_count": 24
+    },
+    {
+      "status": "FAIL_REGRESSION_FOUND",
+      "reason": "New synthetic no-weather-stat regression exposed that Windows Path.resolve performs stat. Manifest normalization changed to lexical normcase(abspath); actual opened paths still resolve before admission.",
+      "test_count": 25
+    },
+    {
+      "status": "PASS",
+      "suite_seconds": 1.429,
+      "test_count": 25
+    },
+    {
+      "status": "PASS",
+      "suite_seconds": 1.345,
+      "test_count": 27
+    }
+  ],
+  "new_training_updates": 0,
+  "real_inference_passes": 0,
+  "scientific_payload_reads": 0,
+  "real_checkpoint_loads": 0,
+  "final_2025_access": false,
+  "evidence_grade": "DIRECT_VERIFIED",
+  "scope_limit": "Controller and stdlib mock paths only; no real scientific execution or performance validation."
+}

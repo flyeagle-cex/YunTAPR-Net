@@ -1,0 +1,64 @@
+{
+  "status": "PASS_WITH_LIMITATIONS",
+  "created_at": "2026-11-13T15:48:54.977138+00:00",
+  "reviewer": "CODEX_SUBAGENT_SOURCE_METADATA_REVIEW",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "SOURCE_METADATA_ARITHMETIC",
+  "direct_verified_coverage": [
+    "Actual inspected source code and prepared metadata bindings",
+    "SHA256 identities of the 52 metadata whitelist files read by this reviewer",
+    "Budget and source-manifest arithmetic"
+  ],
+  "scope": "Prepared proposal/private bindings, metadata SHA identities and source-manifest arithmetic only",
+  "execution_code_commit": "4fada6856bcd8bef1ee92c7209cb55f6d1d6a0c6",
+  "proposal_sha256": "06340722ae532c0eeef42ac36f98e746d6a19dff376f6c0665ba9b86e1772ef9",
+  "input_identities": {
+    "public_proposal": {
+      "bytes": 103592,
+      "sha256": "86ab1757f5a81c99cfb2b6e7b9099b27ed60947f00d74915b307a461ddf0079a"
+    },
+    "private_preparation": {
+      "bytes": 2739953,
+      "sha256": "b7d6e7211cc037bc56014d8e7f313969d792fa3fb5ab24544c1b3a7d09ab15c4"
+    },
+    "saved_metadata_probe": {
+      "bytes": 3622,
+      "sha256": "3b394f76ca27ad0744e25a176a0e713b9a9bd63ff6ff8e594ed6d9bec4d435b4"
+    }
+  },
+  "checks": {
+    "canonical_proposal": "PASS",
+    "canonical_private_binding": "PASS",
+    "fixed_execution_worktree_clean": "PASS",
+    "metadata_whitelist": "PASS",
+    "metadata_file_count": 52,
+    "metadata_bytes_hashed": 68337999,
+    "source_manifest": "7950_WEATHER_AND_MASK_PLUS_1_STATIC_PLUS_2_CHECKPOINTS",
+    "scientific_sources_opened": 0,
+    "exact_checkpoint_and_report_receipt_bindings": "PASS",
+    "payload_archive_reference_bytes": 53494753532,
+    "payload_open_instances": 15906,
+    "total_metadata_cap_bytes": 1476395008,
+    "total_metadata_open_cap": 5632,
+    "total_source_cap_bytes": 54971148540,
+    "budget_arithmetic": "PASS",
+    "researcher_approval_present": false,
+    "formal_output_present": false
+  },
+  "saved_probe_review": {
+    "status": "PASS",
+    "metadata_archive_reserved_bytes": 110751210,
+    "metadata_open_instances": 15,
+    "payload_opens": 0,
+    "evidence": "SAVED_PROBE_RESULT_ONLY_NO_RUNTIME_REPRODUCTION_BY_REVIEWER"
+  },
+  "limitations": [
+    "Checkpoint identities inherited from bound receipts; checkpoint payloads were not hashed or loaded by this reviewer",
+    "The saved metadata probe was inspected, not independently repeated",
+    "No CUDA execution or complete historical driver/cuDNN reproducibility evidence",
+    "This subagent review is not a Harness review or a researcher execution approval"
+  ],
+  "engineering_status": "PASS",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED"
+}

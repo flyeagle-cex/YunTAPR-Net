@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-11-13T23:29:09.4292003+08:00",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "scope": "CPU_SYNTHETIC_ABC_POINT_ACCUMULATOR_ONLY",
+  "status": "PASS",
+  "scientific_status": "NOT_APPLICABLE",
+  "scientific_input_reads": 0,
+  "limitations": [
+    "CPU_SYNTHETIC_TESTS_DO_NOT_VALIDATE_REAL_INFERENCE_OR_RUNTIME_REPRODUCTION"
+  ],
+  "test_count": 17,
+  "engineering_status": "PASS",
+  "optimizer_steps": 0,
+  "model_loads": 0,
+  "command": "python -B -m unittest discover -s tests/research_readiness -p test_paired_point_metrics.py -v",
+  "runtime": {
+    "python": "3.13.13 | packaged by Anaconda, Inc. | (main, Apr 14 2026, 06:12:50) [MSC v.1942 64 bit (AMD64)]",
+    "numpy": "2.3.5"
+  },
+  "final_2025_access": false,
+  "new_inference_passes": 0,
+  "input_identities": {
+    "docs/research_readiness/20261113_paired_point_prepare/POINT_METRICS_CPU_TEST_STDOUT_FINAL.txt": {
+      "sha256": "322f007afb296e7639e2451cd9bc44f43d5eb6c99ec7d1c31dcf2310d02886e4",
+      "bytes": 2513
+    },
+    "tools/research_readiness/paired_point_metrics.py": {
+      "sha256": "453b9ebe46322e3d2fc1542a92a8cc23ce34c70060b2fe8ae9cff0888929690a",
+      "bytes": 12918
+    },
+    "tools/research_readiness/supplement_occurrence_metrics_20261113.py": {
+      "sha256": "d45225081d08f150ce0c263509cfc25b6b7ac46b06745763c3e3bd5f7292e03c",
+      "bytes": 10016
+    },
+    "tests/research_readiness/test_paired_point_metrics.py": {
+      "sha256": "b2bff8a20b0d4fd76712e5bd9ddd14574c51c37a7631e7e327c2a2da7d41c6dd",
+      "bytes": 12298
+    }
+  },
+  "evidence_grade": "DIRECT_VERIFIED",
+  "exit_code": 0
+}
