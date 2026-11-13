@@ -1,0 +1,87 @@
+{
+  "created_at": "2026-11-13T15:12:34.493353+00:00",
+  "scope": "SAVED_2024_DEVELOPMENT_E9_OCCURRENCE_FIXED_CUTOFF_ARITHMETIC",
+  "truth_event": "float32(rate_mm_h) > float32(0.1)",
+  "prediction_event": "native saved occurrence probability >= 0.5",
+  "cutoff_selection": "FIXED_0_5_NO_DEVELOPMENT_OPTIMIZATION",
+  "population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "unit": "PIXEL_TIMES"
+  },
+  "source_results_identity": {
+    "bytes": 10170,
+    "sha256": "b4420b1388d31f6bc86eeaa088d04ef4ccea2c5ebde18ef2cf7dd271f63eb3ae"
+  },
+  "arms": {
+    "CONTROL_E0": {
+      "input_identity": {
+        "bytes": 1882415,
+        "sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+      },
+      "contingency": {
+        "TP": 174659,
+        "FP": 91783,
+        "FN": 233161,
+        "TN": 2803487
+      },
+      "metrics": {
+        "POD": 0.42827472904712865,
+        "FAR": 0.3444764714271774,
+        "CSI": 0.3495955788896384,
+        "Precision": 0.6555235285728226,
+        "F1": 0.5180745763516259,
+        "ETS": 0.30375073363873767,
+        "HSS": 0.4659644298584232,
+        "frequency_bias": 0.6533323525084597
+      }
+    },
+    "CANDIDATE_COSINE9": {
+      "input_identity": {
+        "bytes": 1885903,
+        "sha256": "e4c030b305904a7a5e0b009460d75ab13f69d31b2f7bd6aa1d824eea660acee1"
+      },
+      "contingency": {
+        "TP": 171951,
+        "FP": 81390,
+        "FN": 235869,
+        "TN": 2813880
+      },
+      "metrics": {
+        "POD": 0.42163454465205236,
+        "FAR": 0.3212665932478359,
+        "CSI": 0.3514870914331269,
+        "Precision": 0.6787334067521641,
+        "F1": 0.5201486476062562,
+        "ETS": 0.30719030464685104,
+        "HSS": 0.4700008920733867,
+        "frequency_bias": 0.6212078858319847
+      }
+    }
+  },
+  "candidate_minus_control": {
+    "POD": -0.006640184395076298,
+    "FAR": -0.023209878179341503,
+    "CSI": 0.001891512543488516,
+    "Precision": 0.023209878179341503,
+    "F1": 0.0020740712546303275,
+    "ETS": 0.0034395710081133735,
+    "HSS": 0.00403646221496351,
+    "frequency_bias": -0.03212446667647495
+  },
+  "implementation": {
+    "script_sha256": "d45225081d08f150ce0c263509cfc25b6b7ac46b06745763c3e3bd5f7292e03c",
+    "bin_semantics_source": "src/yuntapr/experimental/phase_b_v2_formal_integration_candidate/metrics.py:75"
+  },
+  "engineering_status": "PASS",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "SAVED_SUMMARY_ARITHMETIC_AND_INPUT_FILE_IDENTITIES",
+  "limitations": [
+    "ONE_SEED2029_REUSED_2024_DEVELOPMENT",
+    "FIXED_PROBABILITY_CUTOFF_DECLARED_AFTER_ORIGINAL_TRAINING",
+    "R_GT20_CONTINGENCY_AND_PHYSICAL_POINT_ERRORS_UNAVAILABLE_FROM_THESE_SUMMARIES"
+  ]
+}

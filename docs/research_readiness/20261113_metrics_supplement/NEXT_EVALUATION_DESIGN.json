@@ -1,0 +1,171 @@
+{
+  "status": "PROPOSED",
+  "authorized": false,
+  "scope": "TWO_FIXED_E9_B7_SEED2029_2024_DEVELOPMENT_POINT_METRIC_PASSES",
+  "purpose": "Supplement saved occurrence classification with physical-rain point-estimate contingency and error scores for CONTROL_E0 and CANDIDATE_COSINE9",
+  "runner_implemented": false,
+  "new_inference_started": false,
+  "model_loads": 0,
+  "scientific_payload_reads": 0,
+  "models": [
+    {
+      "arm": "CONTROL_E0",
+      "model": "B7",
+      "seed": 2029,
+      "endpoint": "FIXED_EPOCH_9_LAST",
+      "training_commit": "f43b4225fef462a31035d59a06b85f31e5b257dc",
+      "checkpoint_bytes_inherited_from_receipt": 53904005,
+      "checkpoint_sha256_inherited_from_receipt": "a3f9208aa4e25e786c6797e658cc5fda4da9a29a05c87a693aa6a3fdc571565f",
+      "saved_development_report_sha256": "ff46da36310725f185c270061731e0afd31c513c797223f387890ff93a5dc060"
+    },
+    {
+      "arm": "CANDIDATE_COSINE9",
+      "model": "B7",
+      "seed": 2029,
+      "endpoint": "FIXED_EPOCH_9_LAST",
+      "training_commit": "e54ccc16f988628e2dc6c4b91f76051ae94c4629",
+      "checkpoint_bytes_inherited_from_receipt": 53906821,
+      "checkpoint_sha256_inherited_from_receipt": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+      "saved_development_report_sha256": "e4c030b305904a7a5e0b009460d75ab13f69d31b2f7bd6aa1d824eea660acee1"
+    }
+  ],
+  "data": {
+    "year": 2024,
+    "role": "Development",
+    "scenes": 963,
+    "valid_pixel_times": 3303090,
+    "rain_pixel_times": 407820,
+    "R_gt20_pixel_times": 717,
+    "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+    "mode": "FIXED_F006_RETROSPECTIVE",
+    "mask": "INHERITED_VALID_AND_YUNNAN_REGION",
+    "independent_event_count": "NOT_IDENTIFIED",
+    "scope_check": "2024 Development weather and reference only, plus the inherited 2023-derived fixed mask and frozen normalization metadata"
+  },
+  "point_methods": {
+    "A": "p_occ * mean_i(expm1(qlog_i))",
+    "B": "Inherited mixture-median proxy: p_occ < 0.5 gives zero, otherwise u=(p_occ-0.5)/p_occ and inherited piecewise-linear interpolation in log1p space with support-edge handling below tau_1",
+    "C": "p_occ * expm1(mean_i(qlog_i))",
+    "tau_i": "(i+0.5)/32 for zero-based i=0..31",
+    "interpretation": "Finite-node point proxies with physical units mm/h",
+    "reporting_policy": "Report A, B and C together without selecting a winner from Development scores"
+  },
+  "proposed_outputs": {
+    "thresholds_mm_h": [0.1, 1.0, 5.0, 10.0, 20.0, 50.0],
+    "main_threshold_mm_h": 20.0,
+    "truth_rule": "float32(reference_rate_mm_h) > float32(threshold_mm_h)",
+    "prediction_rule": "float32(point_proxy_mm_h) > float32(threshold_mm_h)",
+    "boundary_counts": "Count equality to each FP32 threshold for reference and each A/B/C proxy",
+    "classification": ["TP", "FP", "FN", "TN", "POD", "FAR", "CSI", "Precision", "F1", "ETS", "HSS", "frequency_bias"],
+    "continuous": ["MAE_mm_h", "RMSE_mm_h", "MeanBias_mm_h", "Pearson_CC"],
+    "denominator_policy": "Undefined ratios are null, with their zero denominator recorded",
+    "aggregation": "Full fixed valid population, paired candidate-minus-control summaries",
+    "scope": "POSTHOC_DESCRIPTIVE_DEVELOPMENT_DIAGNOSTIC"
+  },
+  "reuse_design": {
+    "usable_components": [
+      "Historical frozen provider B78Adapter and its original B7 forward graph",
+      "src/yuntapr/experimental/core_innovation/stage4/evaluation.py Evaluation",
+      "Historical provider gate_summary and point_candidates_log",
+      "tools/research_readiness/start_extreme_diagnostic.py ScientificReadGuard, DualDeadline and OutputLimit",
+      "tools/research_readiness/start_independent_process.py independent process supervision"
+    ],
+    "required_new_wiring": [
+      "A two-arm registry binding the exact new E0 and COSINE9 checkpoints and their saved E9 reports",
+      "A new two-task approval validator and once-only controller scope",
+      "An ABC-only accumulator using the declared FP32 boundary convention and recording boundary-equality counts",
+      "A complete bounded metadata reservation mechanism covering validation and worker setup before their source reads",
+      "A new runtime binding that matches the COSINE9 training environment",
+      "Explicit new output namespace and paired result receipts"
+    ],
+    "excluded_legacy_path": "The historical default PointAccumulator also computes candidate_D via conditional-CDF interpolation on a supported subset. It must be replaced before execution to keep this package restricted to A/B/C point scores.",
+    "boundary_compatibility": "The old default PointAccumulator compares FP64 point proxies directly. The later V3 JointCollector uses FP32 predictions and FP32 thresholds. This proposed package inherits the later V3 convention explicitly.",
+    "original_metric_gate": {
+      "exact_integer_counts": true,
+      "absolute_tolerance": 1e-12,
+      "relative_tolerance": 1e-12,
+      "metrics": ["brier", "auroc", "average_precision", "conditional_pinball", "q32_coverage"],
+      "on_failure": "Stop, preserve partial receipts, and require a separate decision before further execution"
+    }
+  },
+  "runtime_reference": {
+    "python_version": "3.11.15",
+    "python_executable_sha256": "0562f573871cb16a2fb8de16e3d486e3dfd74bb83c7e87db265561917d05ad1a",
+    "torch_version": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "numpy_version": "2.4.4",
+    "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "gpu_total_bytes": 8546484224,
+    "forward_precision": "Inherited BF16 autocast and FP64 evaluation accumulation",
+    "environment_status": "REFERENCE_FROM_SAVED_TRAINING_RECEIPTS_NOT_A_NEW_RUNTIME_PROBE",
+    "legacy_runtime_issue": "The old nine-model diagnostic proposal bound Python 3.12.14. Its runtime grant cannot be inherited for this new package.",
+    "historical_driver_cudnn_limitation": "Complete old control driver and cuDNN fingerprints remain unavailable"
+  },
+  "known_source_reference_lower_bound": {
+    "status": "NOT_A_BUDGET_UPPER_LIMIT",
+    "weather_passes": 2,
+    "weather_and_mask_bytes_per_pass": 26639253112,
+    "weather_and_mask_opens_per_pass": 7950,
+    "weather_and_mask_bytes_total": 53278506224,
+    "weather_and_mask_opens_total": 15900,
+    "static_bytes_per_arm": 312828,
+    "static_opens_per_arm": 1,
+    "static_bytes_total": 625656,
+    "checkpoint_archive_bytes_total": 107810826,
+    "proposed_checkpoint_sha256_passes": 2,
+    "proposed_checkpoint_deserializations": 2,
+    "checkpoint_hash_and_load_archive_reference_bytes": 215621652,
+    "payload_archive_reference_bytes_before_metadata": 53494753532,
+    "payload_open_reference_before_metadata": 15906,
+    "byte_semantics": "Full delivered weather/static payload lengths plus archive-length reservations for separate checkpoint SHA256 and deserialization opens. This is not a disk-sector measurement.",
+    "metadata_examples_stat_only": {
+      "inherited_preparation_wrapper_bytes": 4720736,
+      "read_request_bytes": 6048,
+      "populations_json_bytes": 73806,
+      "train_statistics_json_bytes": 2384487,
+      "statistics_sqlite_bytes": 33804288,
+      "manifest_2023_fixed_f006_json_bytes": 7179357,
+      "manifest_2024_fixed_f006_json_bytes": 7225685,
+      "terrain_production_receipt_json_bytes": 31455,
+      "formal_sample_eligibility_2023_2024_csv_bytes": 8313174,
+      "reservation_note": "PopulationPlan separately hashes and opens statistics.sqlite, reserving its full archive length for each access. Metadata files can also be hashed and parsed more than once. Unique sizes do not establish a complete read budget."
+    }
+  },
+  "unresolved_before_execution": [
+    "Implement and inspect the exact two-arm runner and its complete transitive source bindings",
+    "Freeze exact code commit and canonical proposal SHA256",
+    "Freeze all metadata paths, archive reservation caps and open caps for controller and each worker, including validation reads",
+    "Freeze total source reservation upper limit including metadata, checkpoint hashing and loads",
+    "Freeze per-arm and package time limits, output storage cap, initial and per-arm free-space requirements, RAM, commit and GPU admission",
+    "Freeze new private output root and sanitized public result location",
+    "Verify source-volume availability without opening scientific payloads",
+    "Run targeted CPU synthetic/mock checks for approval identity, once-only behavior, source limits, threshold boundaries, zero denominators and original-metric gate handling",
+    "Obtain the required review status and researcher's concrete approval for this exact inference/evaluation package"
+  ],
+  "scope_boundaries": {
+    "training_updates": 0,
+    "new_seeds": 0,
+    "retries": 0,
+    "replay": 0,
+    "extra_train_label_passes": 0,
+    "joint_array_export": "OUTSIDE_THIS_MINIMAL_DESIGN",
+    "final_2025_access": false
+  },
+  "evidence_sources": [
+    "docs/research_readiness/20261110_cosine9/EXECUTION_PROPOSAL.json",
+    "docs/research_readiness/20261110_cosine9/RESULTS.json",
+    "docs/research_readiness/20261110_cosine9/TERMINAL_VERIFICATION.json",
+    "docs/research_readiness/20261031_extreme_diagnostic_execution_v3/proposal.json",
+    "docs/research_readiness/20261106_research_convergence/T15_THEORY_RECORD.md",
+    "tools/research_readiness/extreme_diagnostic_export.py",
+    "tools/research_readiness/start_extreme_diagnostic.py",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py",
+    "src/yuntapr/experimental/core_innovation/stage4/launch.py",
+    "src/yuntapr/experimental/research_readiness/dynamic_training.py"
+  ],
+  "engineering_status": "PENDING",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "SOURCE_CODE_AND_SAVED_RECEIPT_INSPECTION_WITH_SELECTED_METADATA_FILE_SIZE_STATS"
+}

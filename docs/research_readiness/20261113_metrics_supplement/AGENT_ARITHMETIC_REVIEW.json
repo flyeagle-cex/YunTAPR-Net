@@ -1,0 +1,43 @@
+{
+  "reviewed_at": "2026-11-13T15:14:15.418189+00:00",
+  "reviewer": "next_research_step_agent",
+  "scope": "INDEPENDENT_SAVED_OUTPUT_CONTINGENCY_ARITHMETIC_REVIEW",
+  "source": {
+    "path": "docs/research_readiness/20261113_metrics_supplement/OCCURRENCE_METRICS.json",
+    "bytes": 2807,
+    "sha256": "c46fb4193066a7f191a9ddc06b5628884d988ed7fca3c3e37356f7f0162d82dc"
+  },
+  "checks": [
+    {
+      "arm": "CONTROL_E0",
+      "population": "PASS",
+      "metric_values_exact_rational_to_float": "8/8_PASS"
+    },
+    {
+      "arm": "CANDIDATE_COSINE9",
+      "population": "PASS",
+      "metric_values_exact_rational_to_float": "8/8_PASS"
+    }
+  ],
+  "deltas_exact_float_subtraction": "8/8_PASS",
+  "deltas_rational_comparison_tolerance": 1e-15,
+  "maximum_delta_rational_roundoff": 3.903127820947816e-17,
+  "interpretation": {
+    "POD": "DECREASES",
+    "FAR": "IMPROVES_DECREASES",
+    "CSI": "IMPROVES_SLIGHTLY",
+    "true_positive_change": -2708,
+    "false_positive_change": -10393
+  },
+  "engineering_status": "PASS",
+  "scientific_status": "NOT_VERIFIED",
+  "evidence_scope": "SAVED_OUTPUT_ARITHMETIC_AND_POPULATION_ONLY",
+  "limitations": [
+    "SOURCE_REPORT_PAYLOADS_NOT_REOPENED",
+    "OCCURRENCE_EVENT_RATE_GT_0_1_ONLY",
+    "FIXED_PROBABILITY_CUTOFF_0_5",
+    "ONE_SEED2029_REUSED_2024_DEVELOPMENT",
+    "AGENT_ENGINEERING_REVIEW_ONLY"
+  ],
+  "new_model_evaluation": 0
+}
