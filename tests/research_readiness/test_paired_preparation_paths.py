@@ -4,9 +4,20 @@ import tempfile
 import unittest
 
 from tools.research_readiness.prepare_paired_point_evaluation import canonical_task_bindings
+from tools.research_readiness.start_paired_point_evaluation import LIMITS
 
 
 class PreparationPathTests(unittest.TestCase):
+    def test_corrective_allowances_include_consumed_preflight(self):
+        limits = LIMITS
+        roles = 2 * limits["metadata_bytes_per_preflight"] + limits["metadata_bytes_controller"] + 2 * limits["metadata_bytes_per_worker"]
+        self.assertLessEqual(roles, limits["total_metadata_cap_bytes"])
+        self.assertEqual(limits["total_source_cap_bytes"] + limits["previous_attempt_metadata_bytes"],
+                         limits["cumulative_source_cap_bytes"])
+        opens = 2 * limits["metadata_opens_per_preflight"] + limits["metadata_opens_controller"] + 2 * limits["metadata_opens_per_worker"]
+        self.assertLessEqual(opens + limits["previous_attempt_metadata_opens"], limits["cumulative_metadata_opens"])
+        self.assertEqual(limits["maximum_seconds"] + limits["previous_attempt_seconds"], 7200)
+
     def test_alias_references_close_over_canonical_manifests(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

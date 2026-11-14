@@ -51,7 +51,7 @@ def fixture(folder):
                    brier=.1, auroc=.8, average_precision=.6, conditional_pinball=.2,
                    covered=[380000], coverage=[.93])
     reference = dict(scope="2024_DEVELOPMENT_FIXED_F006_RETROSPECTIVE",
-                     source_identity={"population": "synthetic"},
+                     source_identity={"population": "synthetic", "population_sha256": "d" * 64},
                      population_ids_sha256="synthetic-ids", partition_sha256="synthetic-partition",
                      groups={"all": dict(ids_sha="synthetic-ids", complete=True, summary=summary)})
     prepared = dict(private_inputs=dict(stage3_run="metadata-stage3", request="metadata-request"),
@@ -61,7 +61,7 @@ def fixture(folder):
     checkpoint = folder / "synthetic_checkpoint.bin"
     checkpoint.write_bytes(b"synthetic trusted archive")
     state = dict(seed_calls=[], forwards=[], evaluation=[], accumulator=[], load_calls=[],
-                 strict_load=[], closed=[], to_device=[], metadata_reads=[], grad_modes=[])
+                 strict_load=[], closed=[], to_device=[], metadata_reads=[], grad_modes=[], joint=[])
     report = copy.deepcopy(reference)
     totals = dict(opened_files=7950, delivered_bytes=26639253112,
                   reserved_bytes=26639253112, states={"READ_COMPLETE": 7950})
@@ -86,7 +86,8 @@ def fixture(folder):
 
         def batch(self, role, members):
             assert role == "Development"
-            batch = SimpleNamespace(ids=members, rate=TensorStub(), valid=TensorStub(), region=TensorStub())
+            batch = SimpleNamespace(ids=members, analyses=tuple("2024-01-01T00:00:00Z" for _ in members),
+                                    rate=TensorStub(), valid=TensorStub(), region=TensorStub())
             batch.to = lambda device: batch
             return batch
 
@@ -129,6 +130,19 @@ def fixture(folder):
             assert tuple(sid for batch in state["accumulator"] for sid in batch) == ids
             return {"scope": "SYNTHETIC_POINT_METRICS"}
 
+    class JointAccumulator:
+        def __init__(self, members, analyses, **kwargs):
+            assert members == ids and len(analyses) == 963
+            assert kwargs["expected_strong"] == 717
+
+        def add(self, members, analyses, *arrays):
+            assert len(analyses) == len(members) and len(arrays) == 5
+            state["joint"].append(members)
+
+        def finish(self, **kwargs):
+            assert tuple(sid for batch in state["joint"] for sid in batch) == ids
+            return {"scope": "SYNTHETIC_JOINT_METRICS"}
+
     def forward(model, batch):
         state["forwards"].append(batch.ids)
         prediction = SimpleNamespace(rain_prob=TensorStub(), conditional_quantiles_log=TensorStub())
@@ -167,7 +181,7 @@ def fixture(folder):
         DoteDefinition=lambda **kw: kw,
         model_factory=lambda *a, **kw: lambda seed, root: {"B7": model},
         ReaderFactory=ReaderFactory, Evaluation=Evaluation,
-        PointMetricAccumulator=Accumulator, forward=forward,
+        PointMetricAccumulator=Accumulator, StrongJointAccumulator=JointAccumulator, forward=forward,
     )
     private = dict(tasks={"CONTROL_E0": dict(checkpoint_path=str(checkpoint), dev_report_path="report")},
                    preparation_path="preparation", static_source=str(static), static_receipt="static_receipt")
@@ -215,6 +229,7 @@ class WorkerTests(unittest.TestCase):
             self.assertEqual(result["forward_calls"], 121)
             self.assertEqual(len(state["forwards"]), len(state["evaluation"]))
             self.assertEqual(state["forwards"], state["accumulator"])
+            self.assertEqual(state["forwards"], state["joint"])
             self.assertEqual(len(state["load_calls"]), 1)
             self.assertEqual(state["load_calls"][0][1], dict(map_location="cpu", weights_only=False))
             self.assertEqual(state["strict_load"], [({"synthetic_state": 1}, True)])
