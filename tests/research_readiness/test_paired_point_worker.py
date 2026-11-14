@@ -32,6 +32,9 @@ def workspace_directory():
 
 
 class TensorStub:
+    def __init__(self, bfloat16=False):
+        self.bfloat16 = bfloat16
+
     def detach(self):
         return self
 
@@ -39,9 +42,11 @@ class TensorStub:
         return self
 
     def double(self):
-        return self
+        return TensorStub()
 
     def numpy(self):
+        if self.bfloat16:
+            raise TypeError("Got unsupported ScalarType BFloat16")
         return "SYNTHETIC_ARRAY_STUB"
 
 
@@ -145,7 +150,8 @@ def fixture(folder):
 
     def forward(model, batch):
         state["forwards"].append(batch.ids)
-        prediction = SimpleNamespace(rain_prob=TensorStub(), conditional_quantiles_log=TensorStub())
+        prediction = SimpleNamespace(rain_prob=TensorStub(bfloat16=True),
+                                     conditional_quantiles_log=TensorStub(bfloat16=True))
         return prediction, "SYNTHETIC_LOSS"
 
     def load(path, **kwargs):

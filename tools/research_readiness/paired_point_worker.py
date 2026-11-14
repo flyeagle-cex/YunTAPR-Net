@@ -213,7 +213,7 @@ def run_task(root, proposal, private, task, output, check):
                     batch.rate.detach().cpu().numpy(),
                     batch.valid.detach().cpu().numpy(),
                     batch.region.detach().cpu().numpy(),
-                    prediction.rain_prob.detach().cpu().numpy(),
+                    prediction.rain_prob.detach().double().cpu().numpy(),
                     prediction.conditional_quantiles_log.detach().double().cpu().numpy(),
                 )
                 batches += 1

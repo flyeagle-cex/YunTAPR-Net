@@ -1,0 +1,46 @@
+{
+  "status": "STARTED_FIRST_REAL_FORWARD_THEN_STOPPED_NO_RETRY",
+  "scientific_status": "NOT_VERIFIED",
+  "execution_code_commit": "36342da39fb465a64ad190d81dcaf64447c5f411",
+  "proposal_sha256": "060e55ba34bdb368c9ac89d461fd6bf8da5156b1746c1e4941ed031b64c5cf41",
+  "current_researcher_instruction": "立即开始，直接到启动训练才停止",
+  "scope_clarification": "继续当前两臂联合评价（推荐）",
+  "approval_sha256": "b05b674b587826ff8d0c1d84a615ccc99fc0019175a559293df165da1370e132",
+  "authorization_consumed": true,
+  "preflights": [
+    "PASS",
+    "PASS"
+  ],
+  "independent_supervisor_admitted": true,
+  "control_first_forward_reached": true,
+  "control_checkpoint_loads": 1,
+  "optimizer_updates": 0,
+  "candidate_started": false,
+  "automatic_retry": false,
+  "failure_type": "TypeError",
+  "failure_details": "Got unsupported ScalarType BFloat16",
+  "root_cause": "Joint collector occurrence probabilities remained BFloat16; NumPy conversion requires an explicit supported dtype",
+  "current_metadata_bytes": 404677795,
+  "current_payload_bytes": 297157300,
+  "current_total_source_bytes": 701835095,
+  "current_total_opens": 377,
+  "payload_by_category": {
+    "static": 312828,
+    "checkpoint": 107808010,
+    "weather": 189036462
+  },
+  "cumulative_with_v3_source_bytes": 773019923,
+  "cumulative_with_v3_total_opens": 432,
+  "elapsed_current_seconds": 45.19035196304321,
+  "prior_seconds_conservative": 5,
+  "finished": "2026-11-14T15:05:33.049418+00:00",
+  "correction": "Cast joint collector probability tensor to double before cpu().numpy(), matching point collector; frozen executed copy untouched",
+  "post_correction_checks": {
+    "worker_cpu_synthetic_tests_passed": 8,
+    "bfloat16_conversion_regression_stub": true
+  },
+  "harness_delta_review": "No blocking issue in path normalization, lawful host transport and cumulative budget; static code only, no real runtime verification",
+  "original_budget_is_execution_only": true,
+  "preparation_metadata_accounted_separately": true,
+  "next_execution_authorized": false
+}
