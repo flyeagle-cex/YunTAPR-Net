@@ -1,0 +1,33 @@
+{
+  "status": "ENGINEERING_DTYPE_FIX_VERIFIED_ON_CPU",
+  "scientific_status": "NOT_VERIFIED",
+  "production_fix": "paired_point_worker.py converts joint rain_prob with detach().double().cpu().numpy(), matching the point collector",
+  "new_regression": "tests/research_readiness/test_paired_point_worker_tensor.py",
+  "regression_scope": "Real Torch CPU BFloat16 tensors with requires_grad; synthetic worker/evaluator/model/source fixtures; no CUDA tensors or real model forward",
+  "original_failure_reproduced": "Direct detached BFloat16 to NumPy raises TypeError mentioning BFloat16",
+  "fixed_path": {
+    "synthetic_batches_completed": 121,
+    "point_probability_and_quantile_dtype": "float64",
+    "joint_probability_and_quantile_dtype": "float64",
+    "probability_values_preserved_exactly": [0.25, 0.5],
+    "cuda_lazy_initialization_forbidden_by_test": true
+  },
+  "checks": {
+    "paired_flow_tests_passed": 66,
+    "joint_collector_tests_passed": 5,
+    "failures": 0,
+    "git_diff_check": "PASS"
+  },
+  "commands": [
+    "F:/conda_envs/rain-basics/python.exe -B -m unittest discover -s tests/research_readiness -p test_paired*.py -q",
+    "F:/conda_envs/rain-basics/python.exe -B -m unittest tools.research_readiness.test_paired_joint_amplitude -q"
+  ],
+  "verification_activity": {
+    "real_research_payload_reads": 0,
+    "real_checkpoint_loads": 0,
+    "gpu_evaluation_starts": 0,
+    "optimizer_updates": 0,
+    "final_2025_access": false
+  },
+  "execution_state": "V6 remains stopped with all original evidence preserved; this CPU verification is not a resumed formal evaluation"
+}

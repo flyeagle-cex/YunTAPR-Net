@@ -50,7 +50,7 @@ class TensorStub:
         return "SYNTHETIC_ARRAY_STUB"
 
 
-def fixture(folder):
+def fixture(folder, tensor_factory=TensorStub):
     ids = tuple(f"2024-synthetic-{i:04d}" for i in range(963))
     summary = dict(scenes=963, n_valid=3303090, n_rain=407820,
                    brier=.1, auroc=.8, average_precision=.6, conditional_pinball=.2,
@@ -92,7 +92,7 @@ def fixture(folder):
         def batch(self, role, members):
             assert role == "Development"
             batch = SimpleNamespace(ids=members, analyses=tuple("2024-01-01T00:00:00Z" for _ in members),
-                                    rate=TensorStub(), valid=TensorStub(), region=TensorStub())
+                                    rate=tensor_factory(), valid=tensor_factory(), region=tensor_factory())
             batch.to = lambda device: batch
             return batch
 
@@ -150,8 +150,8 @@ def fixture(folder):
 
     def forward(model, batch):
         state["forwards"].append(batch.ids)
-        prediction = SimpleNamespace(rain_prob=TensorStub(bfloat16=True),
-                                     conditional_quantiles_log=TensorStub(bfloat16=True))
+        prediction = SimpleNamespace(rain_prob=tensor_factory(bfloat16=True),
+                                     conditional_quantiles_log=tensor_factory(bfloat16=True))
         return prediction, "SYNTHETIC_LOSS"
 
     def load(path, **kwargs):
