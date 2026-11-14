@@ -57,13 +57,14 @@ def write(path, value):
         stream.write("\n")
 
 
-def prepare(code_root, private_dir, output_root):
+def prepare(code_root, private_dir, output_root, public_root=None):
     from tools.research_readiness.start_paired_point_evaluation import LIMITS, SCOPE, TASKS as ORDER
 
     code_root, private_dir, output_root = map(lambda p: Path(p).resolve(), (code_root, private_dir, output_root))
+    public_root = Path(public_root).resolve() if public_root is not None else PUBLIC
     if output_root.exists() or not output_root.parent.is_dir():
         raise PermissionError("A fresh output namespace under an existing parent is required")
-    PUBLIC.mkdir(parents=True, exist_ok=True)
+    public_root.mkdir(parents=True, exist_ok=True)
     private_dir.mkdir(exist_ok=False)
     cost = MetadataPreparation()
     old, _ = cost.read(ROOT / "docs/research_readiness/20261110_cosine9/EXECUTION_PROPOSAL.json")
@@ -199,19 +200,19 @@ def prepare(code_root, private_dir, output_root):
                     budget=LIMITS, final_2025_access=False)
     proposal["proposal_sha256"] = digest(proposal)
     private["proposal_sha256"] = proposal["proposal_sha256"]
-    write(PUBLIC / "EXECUTION_PROPOSAL.json", proposal)
+    write(public_root / "EXECUTION_PROPOSAL.json", proposal)
     write(private_dir / "PRIVATE_PREPARATION.json", private)
     service = private_dir / "service"
     service.mkdir()
-    write(private_dir / "EXECUTION_SPEC.json", dict(kind="BOUNDED_PAIRED_POINT_EVALUATION",
+    write(private_dir / "EXECUTION_SPEC.json", dict(kind="BOUNDED_PAIRED_JOINT_AMPLITUDE_EVALUATION",
           service_dir=str(service), cwd=str(code_root), command=[str(native), "-B",
-              str(code_root / TOOLS[0]), "execute", "--proposal", str(PUBLIC / "EXECUTION_PROPOSAL.json"),
+              str(code_root / TOOLS[0]), "execute", "--proposal", str(public_root / "EXECUTION_PROPOSAL.json"),
               "--private-preparation", str(private_dir / "PRIVATE_PREPARATION.json"),
               "--researcher-approval", str(private_dir / "RESEARCHER_APPROVAL.json")],
           environment=dict(PYTHONPATH=str(code_root / "src") + os.pathsep + str(code_root),
               PYTHONUTF8="1", PYTHONHASHSEED="2029", CUBLAS_WORKSPACE_CONFIG=":4096:8",
               OMP_NUM_THREADS="1", MKL_NUM_THREADS="1")))
-    write(PUBLIC / "PREPARATION_RECEIPT.json", dict(status="PREPARED_NOT_LAUNCHED", code_commit=current,
+    write(public_root / "PREPARATION_RECEIPT.json", dict(status="PREPARED_NOT_LAUNCHED", code_commit=current,
           proposal_sha256=proposal["proposal_sha256"], metadata_files=len(metadata),
           metadata_preparation_bytes=cost.bytes, metadata_preparation_opens=cost.opens,
           metadata_preparation_limit_bytes=256*1024**2, source_volume_admission="PASS",
@@ -226,8 +227,9 @@ def main():
     parser.add_argument("--code-root", type=Path, required=True)
     parser.add_argument("--private-dir", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--public-root", type=Path)
     args = parser.parse_args()
-    proposal, _ = prepare(args.code_root, args.private_dir, args.output_root)
+    proposal, _ = prepare(args.code_root, args.private_dir, args.output_root, public_root=args.public_root)
     print(json.dumps({k: proposal[k] for k in ("status", "execution_code_commit", "proposal_sha256", "budget")}))
 
 
