@@ -1,0 +1,183 @@
+{
+  "status": "COMPLETE_PAIRED_POINT_EVALUATION",
+  "engineering_status": "PASS",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "NEW_SAVED_TERMINAL_AND_METRIC_METADATA_IDENTITIES",
+  "decision_id": "YT-POINT-V4-20261114-001",
+  "execution_code_commit": "525ee38ae9c1a446202055b8cb0422f6947b5712",
+  "proposal_sha256": "ba2f07954affbf9a4d24dd26cb82eeab5826851f963914e746e0c7d6e6fa0ffb",
+  "target_exit": {
+    "at": "2026-11-14T00:54:30.010250+00:00",
+    "return_code": 0,
+    "return_code_u32_hex": "0x0",
+    "automatic_retry": false
+  },
+  "population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820
+  },
+  "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+  "original_metric_reproduction": {
+    "CONTROL_E0": {
+      "passed": true,
+      "groups": {
+        "all": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_00": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_06": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_12": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_18": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "scene_max_ge20": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        }
+      },
+      "absolute_tolerance": 1e-12,
+      "relative_tolerance": 1e-12
+    },
+    "CANDIDATE_COSINE9": {
+      "passed": true,
+      "groups": {
+        "all": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_00": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_06": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_12": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "analysis_UTC_18": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        },
+        "scene_max_ge20": {
+          "identity": "PASS",
+          "counts": "PASS",
+          "frozen_metrics": "PASS"
+        }
+      },
+      "absolute_tolerance": 1e-12,
+      "relative_tolerance": 1e-12
+    }
+  },
+  "runtime_identity": {
+    "CONTROL_E0": {
+      "torch_version": "2.11.0+cu128",
+      "cuda_build": "12.8",
+      "numpy_version": "2.4.4",
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "gpu_total_bytes": 8546484224
+    },
+    "CANDIDATE_COSINE9": {
+      "torch_version": "2.11.0+cu128",
+      "cuda_build": "12.8",
+      "numpy_version": "2.4.4",
+      "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "gpu_total_bytes": 8546484224
+    }
+  },
+  "completed_evaluation_passes": 2,
+  "forward_calls": {
+    "CONTROL_E0": 121,
+    "CANDIDATE_COSINE9": 121
+  },
+  "optimizer_updates": 0,
+  "replay": 0,
+  "extra_retries": 0,
+  "accounting": {
+    "metadata_archive_reserved_bytes": 595802597,
+    "metadata_open_instances": 447,
+    "payload_archive_reserved_bytes": 53494753532,
+    "payload_open_instances": 15906,
+    "total_source_reserved_bytes": 54090556129
+  },
+  "elapsed_seconds_to_confirmed_exit": 2316.961664,
+  "cumulative_source_conservative_upper_bound_bytes": 82149682553,
+  "cumulative_source_conservative_upper_bound_opens": 27361,
+  "cumulative_seconds_conservative": 2563,
+  "historical_actual_total": "NOT_VERIFIED_PENDING_HARNESS_RECONCILIATION",
+  "harness_review": "NOT_OBTAINED",
+  "independent_event_count": "NOT_IDENTIFIED",
+  "weak_rain_tradeoff_acceptance": "PENDING_RESEARCHER",
+  "historical_training_driver_cudnn_fingerprint": "INCOMPLETE",
+  "AP20_and_exact_P_R_gt_20": "NOT_EVALUATED_BY_THIS_POINT_METRIC_PACKAGE",
+  "recorded_at": "2026-11-14T01:01:46.818525+00:00",
+  "source_identities": {
+    "completion": {
+      "bytes": 4631,
+      "sha256": "bf1b5a29699534f3ce330a9e79354304cfb18ce710da57ff3a2cb9e7abea4fcd"
+    },
+    "paired_metrics": {
+      "bytes": 35613,
+      "sha256": "3848c858f47bb405794e38b2df57eea38dfda87b0e7002277ede3ac6c2d15893"
+    },
+    "target_exit": {
+      "bytes": 148,
+      "sha256": "bb16361606f0e11f4f6106a2a54d7b854e34ba215cc468e4cbcb6f4cef0341e5"
+    },
+    "approval": {
+      "bytes": 2870,
+      "sha256": "e6849d0b508603b96cf47a205c57d3fae295b89b3df8ef8f087313f8c47b485c"
+    },
+    "CONTROL_E0/task_complete.json": {
+      "bytes": 1508705,
+      "sha256": "b44deeeb67270e601b316652f9fb5110c32a744c5d7b583b2382a6a6b9def2a9"
+    },
+    "CONTROL_E0/point_metrics.json": {
+      "bytes": 10886,
+      "sha256": "a55b261d83b5e927b74b9f4d250b80726b771bb154278e512111d63ff39c1645"
+    },
+    "CONTROL_E0/recomputed_report.json": {
+      "bytes": 1812859,
+      "sha256": "1e5566c6181a9117e72e35d48db87458c9e371eeb0fcb7bd34baf268ff1dca23"
+    },
+    "CANDIDATE_COSINE9/task_complete.json": {
+      "bytes": 1508719,
+      "sha256": "7b1d9a324de8033cc2356c11c1b4ae1c7979adfa9a4942dbbad1086d5b189a53"
+    },
+    "CANDIDATE_COSINE9/point_metrics.json": {
+      "bytes": 11106,
+      "sha256": "451ec50185d13b2b048da0d4d44a11b767bf949bc69c369a727c8b7f87db80ac"
+    },
+    "CANDIDATE_COSINE9/recomputed_report.json": {
+      "bytes": 1816347,
+      "sha256": "98c2e9afbc09055a4962d8d4063591df66b8694e8cd01f5fd85372f1ce6d5f13"
+    }
+  }
+}
