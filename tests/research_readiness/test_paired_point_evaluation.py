@@ -8,6 +8,7 @@ import shutil
 import stat
 import unittest
 import uuid
+import numpy as np
 from types import SimpleNamespace
 from unittest import mock
 
@@ -61,7 +62,7 @@ class PairedPointEvaluationTests(unittest.TestCase):
                         data_scope=dict(year=2024, role="Development", scenes=963, n_valid=3303090, n_rain=407820),
                         data_identity=dict(population_sha256=controller.POPULATION_SHA256), code_sha256={},
                         runtime=dict(executable_sha256=controller.sha(self.python), python_version="0.0.0"),
-                        models=[dict(task=task, model="B7", seed=2029) for task in controller.TASKS])
+                        models=[dict(task=task, model="B7", seed=2029, checkpoint_sha256="c" * 64) for task in controller.TASKS])
         proposal["private_preparation_sha256"] = controller.digest({k: v for k, v in self.private.items() if k != "proposal_sha256"})
         proposal["proposal_sha256"] = controller.digest(proposal)
         self.private["proposal_sha256"] = proposal["proposal_sha256"]
@@ -355,6 +356,29 @@ class PairedPointEvaluationTests(unittest.TestCase):
                     methods={method: dict(continuous=dict(MAE=1.0, RMSE=2.0, MeanBias=0.0, Pearson_CC=None),
                                            thresholds=json.loads(json.dumps(rows))) for method in ("A", "B", "C")})
 
+    def write_joint_fixture(self, folder):
+        """Synthetic worker artifacts for exercising the real controller finalizer."""
+        record = folder / "strong_joint_pixels.npz"
+        np.savez_compressed(
+            record, scene_id=np.full(717, "synthetic-scene", dtype="U32"),
+            analysis_time=np.full(717, "2024-01-01T00:30:00Z", dtype="U40"),
+            pixel_index=np.arange(717, dtype=np.int32), truth_mm_h=np.full(717, 25.0),
+            p_occ=np.full(717, 0.2),
+            qlog=np.broadcast_to(np.linspace(np.log1p(0.11), np.log1p(25.0), 32), (717, 32)),
+            point_A_mm_h=np.zeros(717), point_B_mm_h=np.zeros(717), point_C_mm_h=np.zeros(717))
+        bins = [dict(index=i, interval=f"synthetic-bin-{i}", n=717 if i == 2 else 0,
+                     q32_ge_truth=717 if i == 2 else 0, q32_gt20=717 if i == 2 else 0,
+                     A_gt20=0, B_gt20=0, C_gt20=0) for i in range(10)]
+        controller.write(folder / "joint_summary.json", dict(
+            status="COMPLETE_ARM_STRONG_JOINT_RECORDS", checkpoint_sha256="c" * 64,
+            population_sha256=controller.POPULATION_SHA256, n_valid=3303090, n_strong=717,
+            strong_joint_counts=dict(q32_gt20=717), strong_probability_bins=bins,
+            record_file=record.name, record_bytes=record.stat().st_size, record_sha256=controller.sha(record)))
+
+    def paired_proposal(self):
+        return dict(proposal_sha256="x", models=[dict(task=task, checkpoint_sha256="c" * 64)
+                                                for task in controller.TASKS])
+
     def test_execute_serial_success_uses_two_claimed_workers(self):
         paths = self.prepare_mock_execution()
         started = []
@@ -364,6 +388,7 @@ class PairedPointEvaluationTests(unittest.TestCase):
             folder = self.output / task
             folder.mkdir()
             controller.write(folder / "point_metrics.json", self.point_summary())
+            self.write_joint_fixture(folder)
             accounting = dict(metadata_archive_reserved_bytes=0, metadata_open_instances=0,
                               payload_archive_reserved_bytes=controller.LIMITS["payload_archive_reference_bytes"] if task == controller.TASKS[0] else 0,
                               payload_open_instances=controller.LIMITS["payload_open_instances"] if task == controller.TASKS[0] else 0)
@@ -436,7 +461,8 @@ class PairedPointEvaluationTests(unittest.TestCase):
             if task == controller.TASKS[1]:
                 summary["methods"]["A"]["continuous"]["MAE"] = 0.5
             controller.write(folder / "point_metrics.json", summary)
-        result = controller.finalize_pair(self.output, {"proposal_sha256": "x"})
+            self.write_joint_fixture(folder)
+        result = controller.finalize_pair(self.output, self.paired_proposal())
         self.assertEqual(result["differences"]["A"]["continuous"]["MAE"], -0.5)
         self.assertIsNone(result["differences"]["A"]["continuous"]["Pearson_CC"])
         self.assertIsNone(result["differences"]["A"]["thresholds"][0]["FAR"])
@@ -446,6 +472,7 @@ class PairedPointEvaluationTests(unittest.TestCase):
         self.output.mkdir()
         for task in controller.TASKS:
             (self.output / task).mkdir()
+            self.write_joint_fixture(self.output / task)
         for mutation in ("mask", "count", "truth", "thresholds", "methods"):
             summaries = {task: self.point_summary() for task in controller.TASKS}
             candidate = summaries[controller.TASKS[1]]
@@ -463,7 +490,7 @@ class PairedPointEvaluationTests(unittest.TestCase):
             for task, summary in summaries.items():
                 (self.output / task / "point_metrics.json").write_text(json.dumps(summary), encoding="utf-8")
             with self.assertRaises(ValueError, msg=mutation):
-                controller.finalize_pair(self.output, {"proposal_sha256": "x"})
+                controller.finalize_pair(self.output, self.paired_proposal())
 
     def test_source_manifest_validation_does_not_stat_weather(self):
         source = {}

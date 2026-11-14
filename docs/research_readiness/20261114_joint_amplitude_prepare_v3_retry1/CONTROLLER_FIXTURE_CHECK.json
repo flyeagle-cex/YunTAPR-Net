@@ -1,0 +1,14 @@
+{
+  "status": "CPU_SYNTHETIC_CHECKS_PASS_AWAITING_LIMITED_REVIEW",
+  "scientific_status": "NOT_VERIFIED",
+  "authorized": false,
+  "execution_code_commit": "3b99d3e612cf085875931a256e133064cfd311d6",
+  "proposal_sha256": "d1ba07f488b346a131989b6b71e11e3a21bd6c8293084849cbd644cbf987a668",
+  "change_scope": "Only tests/research_readiness/test_paired_point_evaluation.py synthetic fixtures; execution code unchanged",
+  "reproduced_before_fix": {"tests": 34, "errors": 3, "reason": "Old mocked workers omitted newly mandatory joint_summary.json and strong_joint_pixels.npz"},
+  "after_fix": {"controller_tests": 34, "controller_errors": 0, "collector_tests": 5, "collector_errors": 0, "git_diff_check": "PASS"},
+  "commands": ["python -m unittest discover -s tests/research_readiness -p test_paired_point_evaluation.py -v", "python -m unittest tools.research_readiness.test_paired_joint_amplitude -v"],
+  "bound_code_check": {"files": 616, "sha256_mismatches": 0, "changed_fixture_in_execution_binding": false},
+  "interpretation": "Codex CPU synthetic/mock checks only; no real worker, source metering or GPU result verification; not independent Harness test execution",
+  "research_activity": {"real_source_payload_reads": 0, "checkpoint_loads": 0, "inference": 0, "optimizer_updates": 0, "formal_evaluation_starts": 0, "final_2025_access": false}
+}
