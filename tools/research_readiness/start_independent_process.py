@@ -114,6 +114,18 @@ def validate_cosine9_scope(proposal, executable):
         raise PermissionError('Bound cosine9 interpreter differs')
 
 
+def validate_zero_cosine9_scope(proposal, executable):
+    """Bind the existing COSINE9 budget to the explicit zero-numeric control."""
+    tasks = [dict(model='B7',seed=2029,schedule_profile='COSINE9_V1',
+                  dynamic_control='ZERO_NUMERIC_RETAIN_REAL_MASKS')]
+    if (proposal.get('tasks') != tasks
+            or proposal.get('protocol', {}).get('dynamic_control') != 'ZERO_NUMERIC_RETAIN_REAL_MASKS'
+            or proposal.get('scientific_choices', {}).get('dynamic_control') != 'ZERO_NUMERIC_RETAIN_REAL_MASKS'):
+        raise PermissionError('Only the exact ZERO_DOTE/COSINE9 single task is supported')
+    inherited = dict(proposal, tasks=[dict(model='B7',seed=2029,schedule_profile='COSINE9_V1')])
+    validate_cosine9_scope(inherited, executable)
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -174,7 +186,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -191,8 +203,11 @@ def validate_spec(path):
         elif entry.name=='start_upper_quantile_pair.py':
             validate_upper_quantile_scope(proposal,executable)
             expected_commit=approval['code_commit']
-        elif entry.name=='start_cosine9.py':
-            validate_cosine9_scope(proposal,executable)
+        elif entry.name in ('start_cosine9.py','start_zero_cosine9.py'):
+            if entry.name=='start_zero_cosine9.py':
+                validate_zero_cosine9_scope(proposal,executable)
+            else:
+                validate_cosine9_scope(proposal,executable)
             frozen=read(private['inherited'])['prepared']
             volumes={Path(name).anchor for scope in frozen['roles'].values() for name in scope['files']}
             if not volumes or any(not Path(volume).is_dir() for volume in volumes) or not Path(r'H:\葵花202303_202510').is_dir():
