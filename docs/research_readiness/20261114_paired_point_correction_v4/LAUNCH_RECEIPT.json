@@ -1,0 +1,117 @@
+{
+  "status": "RUNNING",
+  "engineering_status": "PASS",
+  "engineering_scope": "APPROVAL_BINDING_AND_SINGLE_LAUNCH_ONLY",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "decision_id": "YT-POINT-V4-20261114-001",
+  "user_approval": "批准V4并立即执行",
+  "execution_code_commit": "525ee38ae9c1a446202055b8cb0422f6947b5712",
+  "proposal_sha256": "ba2f07954affbf9a4d24dd26cb82eeab5826851f963914e746e0c7d6e6fa0ffb",
+  "tasks": [
+    "CONTROL_E0",
+    "CANDIDATE_COSINE9"
+  ],
+  "data_scope": {
+    "year": 2024,
+    "role": "Development",
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820
+  },
+  "budget": {
+    "payload_archive_reference_bytes": 53494753532,
+    "payload_open_instances": 15906,
+    "preflight_validations": 2,
+    "metadata_bytes_per_preflight": 134217728,
+    "metadata_opens_per_preflight": 512,
+    "metadata_bytes_controller": 134217728,
+    "metadata_opens_controller": 512,
+    "metadata_bytes_per_worker": 536870912,
+    "metadata_opens_per_worker": 2048,
+    "total_metadata_cap_bytes": 1476395008,
+    "total_metadata_opens": 5632,
+    "total_source_cap_bytes": 54971148540,
+    "maximum_seconds": 7200,
+    "preflight_seconds": 60,
+    "controller_seconds": 7080,
+    "per_model_seconds": 3000,
+    "output_storage_cap_bytes": 4294967296,
+    "minimum_free_bytes": 8589934592,
+    "minimum_host_available_bytes": 8589934592,
+    "minimum_gpu_free_mib": 5120,
+    "optimizer_updates": 0,
+    "retries": 0,
+    "replay": 0
+  },
+  "cumulative_caps": {
+    "source_cap_bytes": 83030274964,
+    "source_open_cap": 32546,
+    "maximum_seconds": 7446,
+    "future_single_launches": 1,
+    "future_extra_retries": 0,
+    "optimizer_updates": 0,
+    "replay": 0
+  },
+  "target_started": "2026-11-14T00:16:08.716212+00:00",
+  "independence": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "resource_admission": {
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "used_mib": 2403.0,
+      "total_mib": 8151.0,
+      "utilization": 3.0,
+      "temperature": 45.0,
+      "power": 13.83
+    },
+    "memory": {
+      "total": 33752997888,
+      "available": 18420334592,
+      "commit_available": 24605290496
+    },
+    "disk_free": 52841463808
+  },
+  "preflight_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "harness_review": "NOT_OBTAINED",
+  "controller_role": "WEB_SCIENTIFIC_COORDINATION",
+  "codex_role": "TECHNICAL_EXECUTION_AND_RECEIPTS",
+  "target_exit_present_at_capture": false,
+  "recorded_at": "2026-11-14T00:18:31.067197+00:00",
+  "identities": {
+    "approval": {
+      "bytes": 2870,
+      "sha256": "e6849d0b508603b96cf47a205c57d3fae295b89b3df8ef8f087313f8c47b485c"
+    },
+    "private_binding": {
+      "bytes": 2739953,
+      "sha256": "9380e66b35fdb1d5103915f902c1f22dca12c06b5698b2a59d9a18d2bd2d279c"
+    },
+    "proposal": {
+      "bytes": 104677,
+      "sha256": "985d0bcd77383808afb78441c46f104a44f938e296244242cd034d09cdc3d05a"
+    },
+    "preflight_01": {
+      "bytes": 8863,
+      "sha256": "660a7ca7f3e88f3e939b9e3155f04257345bcb03f2e6d0c960b56bfc8bccfc34"
+    },
+    "preflight_02": {
+      "bytes": 8863,
+      "sha256": "ded325c0ef1710ac4ec6a17daff18b1605867821fb7966910a081b94013f4d22"
+    },
+    "target_launch": {
+      "bytes": 254,
+      "sha256": "d2325d84b9417161a2c083d665c6a3cbde37e28a9742c0b087720a34ca7bd0fc"
+    },
+    "binding": {
+      "bytes": 781,
+      "sha256": "09ac7950be85aa4d974554f28ac5cc5722008d9b0a3ebb84b92383f0bffa7273"
+    }
+  }
+}
