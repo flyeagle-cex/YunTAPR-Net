@@ -22,12 +22,14 @@ def _runtime():
     )
     from yuntapr.experimental.research_readiness.static_training import unpack
     from tools.research_readiness.paired_point_metrics import PointMetricAccumulator
+    from tools.research_readiness.paired_joint_amplitude import StrongJointAccumulator
     return SimpleNamespace(
         torch=torch, np=np, digest=digest, PopulationPlan=PopulationPlan, read=read,
         seed_all=seed_all, forward=forward, Evaluation=Evaluation,
         ReaderFactory=ReaderFactory, model_factory=model_factory,
         PhysicalDote=PhysicalDote, DoteDefinition=DoteDefinition, unpack=unpack,
         PointMetricAccumulator=PointMetricAccumulator,
+        StrongJointAccumulator=StrongJointAccumulator,
     )
 
 
@@ -131,7 +133,8 @@ def run_task(root, proposal, private, task, output, check):
     paths = private["tasks"][task]
     output = Path(output)
     output.mkdir(exist_ok=True)
-    for name in ("task_result.json", "recomputed_report.json", "point_metrics.json"):
+    for name in ("task_result.json", "recomputed_report.json", "point_metrics.json",
+                 "joint_summary.json", "strong_joint_pixels.npz"):
         if (output / name).exists():
             raise FileExistsError("Task output already exists")
 
@@ -185,6 +188,11 @@ def run_task(root, proposal, private, task, output, check):
         accumulator = runtime.PointMetricAccumulator(
             ids, expected_n_valid=3303090, expected_n_rain=407820,
         )
+        joint = runtime.StrongJointAccumulator(
+            ids, analyses, expected_valid=3303090, expected_strong=717,
+            output_path=output / "strong_joint_pixels.npz", max_batch_size=8,
+            check_output=check,
+        )
         batches = 0
         with torch.no_grad():
             for position in range(0, len(ids), 8):
@@ -199,10 +207,23 @@ def run_task(root, proposal, private, task, output, check):
                     prediction.rain_prob.detach().double().cpu().numpy(),
                     prediction.conditional_quantiles_log.detach().double().cpu().numpy(),
                 )
+                joint.add(
+                    batch.ids, batch.analyses,
+                    batch.rate.detach().cpu().numpy(),
+                    batch.valid.detach().cpu().numpy(),
+                    batch.region.detach().cpu().numpy(),
+                    prediction.rain_prob.detach().cpu().numpy(),
+                    prediction.conditional_quantiles_log.detach().double().cpu().numpy(),
+                )
                 batches += 1
                 check()
         report = evaluator.finish()
         point_metrics = accumulator.finish()
+        joint_summary = joint.finish(
+            arm_id=task,
+            checkpoint_sha256=model_identity["checkpoint_sha256"],
+            population_sha256=proposal["data_identity"]["population_sha256"],
+        )
         meter_totals = reader.reader.meter.totals()
     finally:
         try:
@@ -224,11 +245,13 @@ def run_task(root, proposal, private, task, output, check):
         "population": {key: summary[key] for key in ("scenes", "n_valid", "n_rain")},
         "meter_totals": meter_totals, "forward_calls": batches,
         "runtime_identity": runtime_identity,
+        "joint_summary": joint_summary,
         "model_inference_passes": 1, "optimizer_updates": 0,
         "scientific_status": "NOT_VERIFIED", "researcher_knowledge": "NOT_ASSESSED",
     }
     _write(output / "recomputed_report.json", report)
     _write(output / "point_metrics.json", point_metrics)
+    _write(output / "joint_summary.json", joint_summary)
     check()
     _write(output / "task_result.json", result)
     return result

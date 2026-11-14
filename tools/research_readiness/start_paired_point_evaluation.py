@@ -18,7 +18,7 @@ import time
 from urllib.parse import parse_qs, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
-SCOPE = "TWO_FIXED_E9_B7_2024_POINT_EVALUATION_V1"
+SCOPE = "TWO_FIXED_E9_B7_2024_JOINT_AMPLITUDE_EVALUATION_V1"
 TASKS = ("CONTROL_E0", "CANDIDATE_COSINE9")
 MIB = 1024 ** 2
 LIMITS = dict(
@@ -555,6 +555,7 @@ def finalize_pair(package, proposal):
     """Pair newly written summaries only, retaining the full reporting contract."""
     package = Path(package)
     summaries = {task: read(package / task / "point_metrics.json") for task in TASKS}
+    joint_summaries = {task: read(package / task / "joint_summary.json") for task in TASKS}
     expected_population = dict(scenes=963, n_valid=3303090, n_rain=407820)
     thresholds = (0.1, 1.0, 5.0, 10.0, 20.0, 50.0)
     expected_continuous = ("MAE", "RMSE", "MeanBias", "Pearson_CC")
@@ -601,7 +602,7 @@ def finalize_pair(package, proposal):
             thresholds=[dict(threshold_mm_h=a["threshold_mm_h"], **{name: metric_difference(b[name], a[name]) for name in expected_metrics})
                         for a, b in zip(left["thresholds"], right["thresholds"])],
         )
-    result = dict(status="COMPLETE_PAIRED_DESCRIPTIVE_DEVELOPMENT_METRICS", proposal_sha256=proposal["proposal_sha256"],
+    result = dict(status="COMPLETE_PAIRED_JOINT_AMPLITUDE_DESCRIPTIVE", proposal_sha256=proposal["proposal_sha256"],
                   population=expected_population, supervision_mask_sha256=control["supervision_mask_sha256"],
                   thresholds_mm_h=list(thresholds), main_threshold_mm_h=20.0, classification_precision=expected_precision,
                   continuous_precision="FP64 original physical point proxies and reference rates",
@@ -609,6 +610,35 @@ def finalize_pair(package, proposal):
                   arms=summaries, differences=differences, scientific_status="NOT_VERIFIED",
                   researcher_knowledge="NOT_ASSESSED", independent_event_count="NOT_IDENTIFIED",
                   source_sha256={task: sha(package / task / "point_metrics.json") for task in TASKS})
+    write(package / "paired_metrics.json", result)
+    for task, summary in joint_summaries.items():
+        model = next(row for row in proposal["models"] if row["task"] == task)
+        if (summary.get("status") != "COMPLETE_ARM_STRONG_JOINT_RECORDS"
+                or summary.get("checkpoint_sha256") != model["checkpoint_sha256"]
+                or summary.get("population_sha256") != POPULATION_SHA256
+                or summary.get("n_valid") != expected_population["n_valid"]
+                or summary.get("n_strong") != 717
+                or summary.get("record_file") != "strong_joint_pixels.npz"):
+            raise ValueError("Strong joint output differs from the frozen model/population binding")
+        record = package / task / summary["record_file"]
+        if record.stat().st_size != summary.get("record_bytes") or sha(record) != summary.get("record_sha256"):
+            raise ValueError("Strong joint output file identity differs")
+    joint_module = module(ROOT / "tools/research_readiness/paired_joint_amplitude.py", "paired_joint_amplitude_finalize")
+    paired_joint = joint_module.pair_strong_records(
+        package / TASKS[0] / joint_summaries[TASKS[0]]["record_file"],
+        package / TASKS[1] / joint_summaries[TASKS[1]]["record_file"],
+        expected_rows=717,
+    )
+    paired_joint.update({
+        "proposal_sha256": proposal["proposal_sha256"],
+        "population_sha256": POPULATION_SHA256,
+        "arm_strong_joint_counts": {task: joint_summaries[task]["strong_joint_counts"] for task in TASKS},
+        "source_sha256": {task: joint_summaries[task]["record_sha256"] for task in TASKS},
+        "scientific_status": "NOT_VERIFIED",
+        "interpretation": "DESCRIPTIVE_JOINT_EVIDENCE_ONLY",
+    })
+    write(package / "paired_joint_evidence.json", paired_joint)
+    result["paired_joint_evidence_sha256"] = sha(package / "paired_joint_evidence.json")
     write(package / "paired_metrics.json", result)
     return result
 

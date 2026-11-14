@@ -12,11 +12,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-PUBLIC = ROOT / "docs/research_readiness/20261113_paired_point_prepare"
+PUBLIC = ROOT / "docs/research_readiness/20261114_joint_amplitude_prepare"
 TOOLS = (
     "tools/research_readiness/start_paired_point_evaluation.py",
     "tools/research_readiness/paired_point_worker.py",
     "tools/research_readiness/paired_point_metrics.py",
+    "tools/research_readiness/paired_joint_amplitude.py",
     "tools/research_readiness/supplement_occurrence_metrics_20261113.py",
     "tools/research_readiness/start_independent_process.py",
 )
@@ -62,6 +63,7 @@ def prepare(code_root, private_dir, output_root):
     code_root, private_dir, output_root = map(lambda p: Path(p).resolve(), (code_root, private_dir, output_root))
     if output_root.exists() or not output_root.parent.is_dir():
         raise PermissionError("A fresh output namespace under an existing parent is required")
+    PUBLIC.mkdir(parents=True, exist_ok=True)
     private_dir.mkdir(exist_ok=False)
     cost = MetadataPreparation()
     old, _ = cost.read(ROOT / "docs/research_readiness/20261110_cosine9/EXECUTION_PROPOSAL.json")
@@ -184,7 +186,16 @@ def prepare(code_root, private_dir, output_root):
                     scientific_choices=dict(DOTE=old["scientific_choices"]["DOTE"], modulation_limit=.1,
                         point_methods=["A", "B", "C"], thresholds_mm_h=[.1, 1., 5., 10., 20., 50.],
                         classification_precision="FP32 strict > threshold, equality counts retained",
-                        continuous_precision="FP64 physical point proxies", cutoff_selection="FIXED_NO_OPTIMIZATION"),
+                        continuous_precision="FP64 physical point proxies", cutoff_selection="FIXED_NO_OPTIMIZATION",
+                        joint_record_policy=dict(
+                            strong_truth_rule="float32(reference_rate_mm_h) > float32(20.0)",
+                            record_population="717 strong pixel-times per arm only",
+                            record_fields=["scene_id", "analysis_time", "pixel_index", "truth_mm_h", "p_occ",
+                                           "qlog[32]", "point_A_mm_h", "point_B_mm_h", "point_C_mm_h"],
+                            identity_key=["scene_id", "analysis_time", "pixel_index"],
+                            all_valid_population="streamed_joint_counts_only",
+                            cross_arm_match="exact ordered key and exact reference value equality",
+                            no_full_population_prediction_export=True)),
                     budget=LIMITS, final_2025_access=False)
     proposal["proposal_sha256"] = digest(proposal)
     private["proposal_sha256"] = proposal["proposal_sha256"]
