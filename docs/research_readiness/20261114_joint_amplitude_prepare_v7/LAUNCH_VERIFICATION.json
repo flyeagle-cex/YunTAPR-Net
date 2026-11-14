@@ -1,0 +1,46 @@
+{
+  "status": "RUNNING_CONTROL_E0_CANDIDATE_PENDING",
+  "observed_at": "2026-11-14T15:21:40.316655+00:00",
+  "execution_code_commit": "55d1532973f93ba607efd3f4c3e241de3f14168f",
+  "proposal_sha256": "00c5174611d23195bc212f7642a4964ee40b753a2c2b4cd104df857d5f623d5c",
+  "researcher_instruction": "重新启动",
+  "approval_sha256": "8338ae6343f9edbef1100bbc3fd5617a39ab9920d1165b0ff8e8e13f8a0afb29",
+  "preflights": [
+    "PASS",
+    "PASS"
+  ],
+  "preflight_accounting": [
+    {
+      "metadata_archive_reserved_bytes": 71185782,
+      "metadata_open_instances": 55,
+      "payload_archive_reserved_bytes": 0,
+      "payload_by_category": {},
+      "payload_open_instances": 0
+    },
+    {
+      "metadata_archive_reserved_bytes": 71185782,
+      "metadata_open_instances": 55,
+      "payload_archive_reserved_bytes": 0,
+      "payload_by_category": {},
+      "payload_open_instances": 0
+    }
+  ],
+  "independent_supervisor_no_job_or_package": true,
+  "real_worker_launched": true,
+  "previous_bfloat16_failure_boundary_passed": true,
+  "startup_weather_completed_files": 1287,
+  "startup_weather_delivered_bytes": 3902900288,
+  "startup_counts_are_not_terminal_totals": true,
+  "no_failure_receipt_at_observation": true,
+  "candidate_started": false,
+  "optimizer_updates": 0,
+  "automatic_retry": false,
+  "final_2025_access": false,
+  "scientific_status": "NOT_VERIFIED",
+  "harness_review": "Limited static dtype and cumulative budget review: no material blocker; 71 CPU tests reported by Codex, not independently executed by Harness",
+  "controller_review": "Cumulative budget consistent; proceed only under strict binding of researcher current restart instruction and bounded preflights",
+  "cumulative_execution_source_cap_bytes": 54971148540,
+  "cumulative_execution_total_opens": 21538,
+  "cumulative_seconds": 7200,
+  "preparation_metadata_accounted_separately": true
+}
