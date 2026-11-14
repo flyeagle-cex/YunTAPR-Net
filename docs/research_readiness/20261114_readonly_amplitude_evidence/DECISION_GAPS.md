@@ -22,3 +22,7 @@
 本包为保存记录直接核对。旧Harness NOT_OBTAINED是历史记录，不静默改写。上一轮独立审核仅覆盖此前指定记录；本包新提取仍须Harness核查，未取得时记录NOT_OBTAINED。不得升级原始证据CROSS_VERIFIED。V1.3仅继承摘要，未直接读取原PDF。无独立暴雨计数、显著性或因果推断。
 
 模型建议：Codex Sol高推理提取；Harness高推理独立核查；网页总控Sol高推理解释与决策。新的评价或训练仍须研究者准确批准。
+
+## 独立审核后显式保留的未完成项
+
+V4 TERMINAL_VERIFICATION.json：historical_actual_total=NOT_VERIFIED_PENDING_HARNESS_RECONCILIATION；weak_rain_tradeoff_acceptance=PENDING_RESEARCHER。本包没有完成历史总量对账或研究者取舍。COSINE9弱雨log Pinball退化7.5945%，不在七项门槛内。最新调度多seed、核心地形机制、Stage4.5独立观测和Stage6业务链未由本包完成。缺少同像元联合记录，仍尚不能判别主因。
