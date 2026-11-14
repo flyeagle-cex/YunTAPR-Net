@@ -1,9 +1,9 @@
 # YT-JOINT-PIXEL-20261114-V3 engineering package
 
-**Status:** `READY_PENDING_HARNESS_REVIEW_AND_RESEARCHER_APPROVAL`  
-**Scientific status:** `NOT_VERIFIED`  
-**Inference/training authorization:** none  
-**Execution commit:** `3b99d3e612cf085875931a256e133064cfd311d6`  
+**Status:** `READY_PENDING_HARNESS_REVIEW_AND_RESEARCHER_APPROVAL`
+**Scientific status:** `NOT_VERIFIED`
+**Inference/training authorization:** none
+**Execution commit:** `3b99d3e612cf085875931a256e133064cfd311d6`
 **Canonical proposal SHA256:** `d1ba07f488b346a131989b6b71e11e3a21bd6c8293084849cbd644cbf987a668`
 
 ## Scope
