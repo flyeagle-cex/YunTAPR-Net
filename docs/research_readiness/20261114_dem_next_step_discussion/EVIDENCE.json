@@ -1,0 +1,428 @@
+{
+  "scope": "READ_ONLY_PLAN_AND_SAVED_RESEARCH_EVIDENCE_DISCUSSION",
+  "engineering_status": "PASS",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "TEAM_SOURCE_DOCUMENT_TEXT_AND_SAVED_JSON_FIELDS_ONLY",
+  "agent_tasks": [
+    "plan_acceptance",
+    "terrain_attribution",
+    "intervention_next_step"
+  ],
+  "cross_discussion_completed": true,
+  "harness_independent_review": false,
+  "harness_status": "NOT_OBTAINED",
+  "original_plan": {
+    "filename": "YunTAPR-Net_V1.3_云南全境近实时降水反演_科研主体掌握与成果转化正式方案.pdf",
+    "pages": 20,
+    "identity": {
+      "bytes": 1561261,
+      "sha256": "bd3af5e3ebe1fe6e28b2b31699babecddc506412310fd96eb80d1c695aabb5fe"
+    },
+    "direct_sections": [
+      "p9 section9.2",
+      "p10 section11",
+      "p11 Stage-Gate"
+    ],
+    "text_reader": "plan_acceptance agent",
+    "requirements": {
+      "formal_main_results_minimum_seeds": 3,
+      "formal_report_mean_and_dispersion": true,
+      "core_innovation_full_ablation_and_terrain_mechanism": true,
+      "independent_observation_minimum_one_source": true,
+      "business_chain_and_efficiency_validation": true,
+      "fixed_POD_FAR_CSI_performance_line": "NOT_FOUND_IN_REVIEWED_ORIGINAL_TEXT"
+    }
+  },
+  "live_plan_version": "LIVE-20261111.30",
+  "schedule9_screen": {
+    "passed": true,
+    "gates_passed": 7,
+    "metrics": [
+      {
+        "metric": "all_log_pinball",
+        "control": 0.12740129422354954,
+        "candidate": 0.12581832845402424,
+        "difference": -0.0015829657695252963,
+        "relative_change_percent": -1.242503680337568,
+        "lower_is_better": true,
+        "gate_passed": true
+      },
+      {
+        "metric": "all_physical_pinball",
+        "control": 0.019610600071569055,
+        "candidate": 0.019365074684425297,
+        "difference": -0.00024552538714375793,
+        "relative_change_percent": -1.2520034381799174,
+        "lower_is_better": true,
+        "gate_passed": true
+      },
+      {
+        "metric": "strong_log_pinball",
+        "control": 0.8982487808534173,
+        "candidate": 0.8084225692926007,
+        "difference": -0.0898262115608166,
+        "relative_change_percent": -10.000148452800971,
+        "lower_is_better": true,
+        "gate_passed": true
+      },
+      {
+        "metric": "strong_physical_pinball",
+        "control": 0.5409483556362883,
+        "candidate": 0.5068646309277545,
+        "difference": -0.034083724708533825,
+        "relative_change_percent": -6.300735431285855,
+        "lower_is_better": true,
+        "gate_passed": true
+      },
+      {
+        "metric": "brier",
+        "control": 0.09673163538839748,
+        "candidate": 0.09233015567445307,
+        "difference": -0.004401479713944403,
+        "relative_change_percent": -4.5501967337485345,
+        "lower_is_better": true,
+        "gate_passed": true
+      },
+      {
+        "metric": "occurrence_ap",
+        "control": 0.5934546324623617,
+        "candidate": 0.6066547555865263,
+        "difference": 0.01320012312416452,
+        "relative_change_percent": 2.2242851267997645,
+        "lower_is_better": false,
+        "gate_passed": true
+      },
+      {
+        "metric": "occurrence_auroc",
+        "control": 0.8959240618810312,
+        "candidate": 0.8990243638708331,
+        "difference": 0.0031003019898018236,
+        "relative_change_percent": 0.3460451752230659,
+        "lower_is_better": false,
+        "gate_passed": true
+      }
+    ],
+    "weak_rain_log_degradation_percent": 7.5945274341407965
+  },
+  "static_terrain_difference": {
+    "B5_minus_B4": {
+      "brier": 0.0002621624354847557,
+      "auroc": 0.00020853919810448485,
+      "average_precision": -0.0018653226146436719,
+      "conditional_pinball": 0.00011665548189260244,
+      "q32_coverage": -0.001628169290373127,
+      "q32_signed_bias": -0.001628169290373127,
+      "q32_absolute_error": 0.001628169290373127
+    },
+    "B6_minus_B4": {
+      "brier": -0.0015459815848104935,
+      "auroc": 0.0008426207465719315,
+      "average_precision": -0.0007624694473549187,
+      "conditional_pinball": 5.766171316340385e-06,
+      "q32_coverage": -0.004754548575351847,
+      "q32_signed_bias": -0.004754548575351847,
+      "q32_absolute_error": 0.004754548575351847
+    },
+    "B6_minus_B5": {
+      "brier": -0.0018081440202952492,
+      "auroc": 0.0006340815484674467,
+      "average_precision": 0.0011028531672887532,
+      "conditional_pinball": -0.00011088931057626206,
+      "q32_coverage": -0.0031263792849787198,
+      "q32_signed_bias": -0.0031263792849787198,
+      "q32_absolute_error": 0.0031263792849787198
+    }
+  },
+  "dote_three_seed_summary": {
+    "brier": {
+      "by_seed": {
+        "2029": -0.0016455233410926084,
+        "2030": -0.00042572297435714,
+        "2031": -0.0006066377395664846
+      },
+      "mean": -0.0008926280183387444,
+      "sample_sd": 0.00065827126880654,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 3,
+      "negative_seeds": 3,
+      "positive_seeds": 0,
+      "zero_seeds": 0,
+      "direction_consistent": true
+    },
+    "auroc": {
+      "by_seed": {
+        "2029": 0.0008349697086184049,
+        "2030": -0.0007819477353661064,
+        "2031": -0.0003381248996572328
+      },
+      "mean": -9.503430880164476e-05,
+      "sample_sd": 0.0008354192251123028,
+      "improvement_direction": "HIGHER",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "average_precision": {
+      "by_seed": {
+        "2029": 0.004693578429989298,
+        "2030": -0.001451980631480665,
+        "2031": -0.0004859218162684975
+      },
+      "mean": 0.0009185586607467119,
+      "sample_sd": 0.0033047538640935945,
+      "improvement_direction": "HIGHER",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "conditional_pinball": {
+      "by_seed": {
+        "2029": -0.0008828710787321115,
+        "2030": -0.00036087624754133074,
+        "2031": 0.000651098343787071
+      },
+      "mean": -0.0001975496608287904,
+      "sample_sd": 0.0007799180904116376,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 2,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_coverage": {
+      "by_seed": {
+        "2029": -0.0042690402628610125,
+        "2030": -0.001010249619930348,
+        "2031": 0.0018611151978814577
+      },
+      "mean": -0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_signed_bias": {
+      "by_seed": {
+        "2029": -0.0042690402628610125,
+        "2030": -0.001010249619930348,
+        "2031": 0.0018611151978814577
+      },
+      "mean": -0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "CLOSER_TO_NOMINAL_0.984375_SEE_ABSOLUTE_ERROR",
+      "improvement_seeds": 1,
+      "negative_seeds": 2,
+      "positive_seeds": 1,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    },
+    "q32_absolute_error": {
+      "by_seed": {
+        "2029": 0.0042690402628610125,
+        "2030": 0.001010249619930348,
+        "2031": -0.0018611151978814577
+      },
+      "mean": 0.0011393915616366341,
+      "sample_sd": 0.0030671174943337977,
+      "improvement_direction": "LOWER",
+      "improvement_seeds": 1,
+      "negative_seeds": 1,
+      "positive_seeds": 2,
+      "zero_seeds": 0,
+      "direction_consistent": false
+    }
+  },
+  "fusion_three_seed_summary": {
+    "brier": {
+      "by_seed": {
+        "2029": 0.001319191800730174,
+        "2030": -1.2611197276315989e-05,
+        "2031": 0.0003330378343825574
+      },
+      "mean": 0.0005465394792788051,
+      "sample_sd": 0.0006910947986020595,
+      "improvement": "LOWER"
+    },
+    "auroc": {
+      "by_seed": {
+        "2029": 0.00023383897029272127,
+        "2030": 0.0006312050095356181,
+        "2031": 1.4383950218133101e-05
+      },
+      "mean": 0.00029314264334882417,
+      "sample_sd": 0.000312657558732945,
+      "improvement": "HIGHER"
+    },
+    "average_precision": {
+      "by_seed": {
+        "2029": 0.0006938316577447257,
+        "2030": 0.00026171971103006175,
+        "2031": -0.0021922919776716787
+      },
+      "mean": -0.0004122468696322971,
+      "sample_sd": 0.0015566311777728803,
+      "improvement": "HIGHER"
+    },
+    "conditional_pinball": {
+      "by_seed": {
+        "2029": -0.0005184234368824647,
+        "2030": 0.0009174744450897443,
+        "2031": 0.0004851033536855398
+      },
+      "mean": 0.0002947181206309398,
+      "sample_sd": 0.0007366380281977096,
+      "improvement": "LOWER"
+    },
+    "q32_coverage": {
+      "by_seed": {
+        "2029": 0.005718209013780617,
+        "2030": -0.0024496101221126443,
+        "2031": -0.006429307047226773
+      },
+      "mean": -0.0010535693851862666,
+      "sample_sd": 0.006192918045435172,
+      "improvement": "CLOSER_TO_NOMINAL"
+    },
+    "q32_signed_bias": {
+      "by_seed": {
+        "2029": 0.005718209013780617,
+        "2030": -0.0024496101221126443,
+        "2031": -0.006429307047226773
+      },
+      "mean": -0.0010535693851862666,
+      "sample_sd": 0.006192918045435172,
+      "improvement": "CLOSER_TO_NOMINAL"
+    },
+    "q32_absolute_error": {
+      "by_seed": {
+        "2029": -0.005718209013780617,
+        "2030": 0.0024496101221126443,
+        "2031": 0.006429307047226773
+      },
+      "mean": 0.0010535693851862666,
+      "sample_sd": 0.006192918045435172,
+      "improvement": "LOWER"
+    }
+  },
+  "latest_point_evaluation": {
+    "status": "COMPLETE_PAIRED_POINT_EVALUATION",
+    "population": {
+      "scenes": 963,
+      "n_valid": 3303090,
+      "n_rain": 407820
+    },
+    "scope": "TWO_B7_2029_E9_ARMS_AND_ABC_FP32_STRICT_THRESHOLD",
+    "R_gt_20_truth_pixel_times": 717,
+    "TP": 0,
+    "FP": 0,
+    "FN": 717,
+    "TN": 3302373,
+    "POD": 0,
+    "CSI": 0,
+    "ETS": 0,
+    "HSS": 0,
+    "FAR": null,
+    "Precision": null,
+    "AP20_and_exact_P20": "NOT_EVALUATED"
+  },
+  "assessment": {
+    "schedule9_development_screen": "PASS",
+    "latest_cosine9_formal_three_seed_requirement": "PENDING_ONE_SEED_ONLY",
+    "core_terrain_innovation_acceptance": "NOT_VERIFIED",
+    "original_plan_scientific_completion": "NOT_ACHIEVED"
+  },
+  "legacy_B4_csv_scope": {
+    "status": "SAVED_COUNTS_PRECISION_DERIVED;NOT_FROZEN",
+    "n_scenes": 207,
+    "n_total": 3303090,
+    "n_positive": 717,
+    "comparison_to_v4": "HISTORICAL_INDICATION_ONLY_NOT_IDENTICAL_PROTOCOL_VALIDATION"
+  },
+  "next_step": {
+    "status": "PROPOSED_PENDING_RESEARCHER",
+    "matrix": "TWO_SCIENTIFIC_QUESTIONS_DOTE_INCREMENT_AND_OVERALL_STRONG_RAIN",
+    "minimum_future_candidate": "ONE_COSINE9_ZERO_DOTE_SEED2029_VS_EXISTING_REAL_COSINE9",
+    "candidate_scope": "EXPLICIT_DOTE_NUMERICAL_INFORMATION_UNDER_TRUE_MASK_AND_EXISTING_SHAPE",
+    "limitations": [
+      "TRUE_MASK_RETAINED",
+      "128_ZERO_INPUT_WEIGHTS_HAVE_NO_LOSS_GRADIENT",
+      "SINGLE_SEED_REUSED_DEV",
+      "PHYSICAL_CAUSALITY_NOT_ESTABLISHED"
+    ],
+    "primary_metric_minimum_effect_and_guardrails": "PENDING_RESEARCHER_SELECTION"
+  },
+  "new_training": 0,
+  "new_inference": 0,
+  "new_model_evaluation": 0,
+  "weight_payload_reads": 0,
+  "raw_science_data_reads": 0,
+  "source_identities": {
+    "output/pdf/YunTAPR-Net_Master_Plan_Live.tex": {
+      "bytes": 97387,
+      "sha256": "60688f1205e3e2248b3b5bee061256ee37cec2d7dcda07185d376d22c01ec022"
+    },
+    "SCIENTIFIC_ANALYSIS.md": {
+      "bytes": 92597,
+      "sha256": "cece3f57ff4fa620075ee3ed815955c2e1566664f2c8736adfac3ee2d73489c0"
+    },
+    "docs/research_readiness/20261025/evidence/b5_b6_completion_and_paired_evidence.json": {
+      "bytes": 353184,
+      "sha256": "a2ca0b49ec59e16ce295f3f8533e10533aa9e2c44d2fe746838c1a381e8f5161"
+    },
+    "docs/research_readiness/20261025/evidence/dote_control_three_seed_completion_20261029.json": {
+      "bytes": 747110,
+      "sha256": "188f0305ec0faa7bd0077cc950dd0d5ec50e104bb54978bcdf8a2878ce2d5adf"
+    },
+    "docs/research_readiness/20261025/evidence/b7_b8_three_seed_completion_20261029.json": {
+      "bytes": 678449,
+      "sha256": "d12a7919da8aac7775300204a2f12d4dfe938e5efbd68f52118ae0bab9edd3f3"
+    },
+    "docs/research_readiness/20261108_lambda2_recovery/RESULTS.json": {
+      "bytes": 9527,
+      "sha256": "1d351fe3f8fc5c5dd6fc7f8d223dd52a4d79c2ffe629d3fe644bb76b5b64bdaf"
+    },
+    "docs/research_readiness/20261108_saved_strata_analysis/RESULTS.json": {
+      "bytes": 21528,
+      "sha256": "0a5b7d751324085ac33084c48f5ebf1085f37ccde73defe46c8a82c713fe6838"
+    },
+    "docs/research_readiness/20261108_upper_quantile_pair/RESULTS.json": {
+      "bytes": 11260,
+      "sha256": "817779ff27e8fa2f91d3b280d4a45aeb606312a6152739bdf703f305df6fdb67"
+    },
+    "docs/research_readiness/20261110_cosine9/RESULTS.json": {
+      "bytes": 10170,
+      "sha256": "b4420b1388d31f6bc86eeaa088d04ef4ccea2c5ebde18ef2cf7dd271f63eb3ae"
+    },
+    "docs/research_readiness/20261110_cosine9/PROTOCOL.md": {
+      "bytes": 4511,
+      "sha256": "413e7dd9614fd5f3baccd625489db6824b5c7d1f1f10204b43074b099236952a"
+    },
+    "docs/research_readiness/20261110_cosine9/EXECUTION_PROPOSAL.json": {
+      "bytes": 102826,
+      "sha256": "8ea11fd3a4d1693c56867847977865ab2cb8fc243d1c99093b3d625215694346"
+    },
+    "docs/research_readiness/20261114_paired_point_correction_v4/RESULTS.json": {
+      "bytes": 35613,
+      "sha256": "3848c858f47bb405794e38b2df57eea38dfda87b0e7002277ede3ac6c2d15893"
+    },
+    "docs/research_readiness/20261114_paired_point_correction_v4/TERMINAL_VERIFICATION.json": {
+      "bytes": 5748,
+      "sha256": "6de4625aa365c070391297106200557beb8d17fda78643c25e0e10fa48ee16ef"
+    },
+    "docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv": {
+      "bytes": 615675,
+      "sha256": "99a2be1aae0aadc725cdc0e9e2c0149e0e6ca7b7b3feb6c885382c7cb255c062"
+    }
+  },
+  "recorded_at": "2026-11-14T01:30:04.741841+00:00"
+}
