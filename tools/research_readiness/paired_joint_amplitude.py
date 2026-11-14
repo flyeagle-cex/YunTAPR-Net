@@ -35,7 +35,7 @@ def _sha256(path):
 class StrongJointAccumulator:
     """Stream full-population summaries and retain exact R>20 joint rows."""
 
-    def __init__(self, scene_ids, analyses, *, expected_valid, expected_strong,
+    def __init__(self, scene_ids, analyses, *, expected_valid, expected_rain, expected_strong,
                  output_path, max_batch_size=8, grid_shape=(100, 100), check_output=None):
         self.scene_ids = tuple(scene_ids)
         self.analyses = tuple(map(str, analyses))
@@ -45,6 +45,7 @@ class StrongJointAccumulator:
                 or any(type(sid) is not str or not sid for sid in self.scene_ids)):
             raise ValueError("Unique ordered scene IDs and aligned analysis times required")
         self.expected_valid = self._positive_int(expected_valid, "expected_valid")
+        self.expected_rain = self._positive_int(expected_rain, "expected_rain")
         self.expected_strong = self._positive_int(expected_strong, "expected_strong")
         self.max_batch_size = self._positive_int(max_batch_size, "max_batch_size")
         if (len(grid_shape) != 2 or any(type(v) is not int or v <= 0 for v in grid_shape)):
@@ -169,6 +170,7 @@ class StrongJointAccumulator:
             if self.poisoned or self.finished:
                 raise RuntimeError("Accumulator is failed or already finished")
             if (self.position != len(self.scene_ids) or self.n_valid != self.expected_valid
+                    or self.n_rain != self.expected_rain
                     or self.n_strong != self.expected_strong):
                 raise ValueError("Complete scene and frozen pixel populations required")
             if (arm_id not in ("CONTROL_E0", "CANDIDATE_COSINE9")

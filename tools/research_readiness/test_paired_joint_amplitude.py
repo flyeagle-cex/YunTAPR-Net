@@ -34,7 +34,7 @@ class JointAmplitudeTests(unittest.TestCase):
         out = Path(folder) / f"{arm}.npz"
         acc = StrongJointAccumulator(
             scene_ids, ("2024-01-01T00:30:00Z", "2024-01-01T01:30:00Z"),
-            expected_valid=8, expected_strong=2, output_path=out,
+            expected_valid=8, expected_rain=3, expected_strong=2, output_path=out,
             max_batch_size=2, grid_shape=(2, 2),
         )
         rate, valid, region, probability, q = self.make_batch(candidate)

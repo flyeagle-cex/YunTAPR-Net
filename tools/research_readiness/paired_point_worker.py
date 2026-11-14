@@ -189,7 +189,8 @@ def run_task(root, proposal, private, task, output, check):
             ids, expected_n_valid=3303090, expected_n_rain=407820,
         )
         joint = runtime.StrongJointAccumulator(
-            ids, analyses, expected_valid=3303090, expected_strong=717,
+            ids, analyses, expected_valid=3303090, expected_rain=407820,
+            expected_strong=717,
             output_path=output / "strong_joint_pixels.npz", max_batch_size=8,
             check_output=check,
         )
