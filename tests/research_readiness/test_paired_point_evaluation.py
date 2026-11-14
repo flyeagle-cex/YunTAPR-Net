@@ -1,4 +1,4 @@
-"""CPU/std-library synthetic checks. Never opens real research inputs."""
+"""CPU synthetic checks using NumPy fixtures. Never opens real research inputs."""
 import importlib.util
 import json
 import os

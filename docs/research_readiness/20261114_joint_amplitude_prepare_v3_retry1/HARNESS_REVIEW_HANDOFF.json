@@ -1,0 +1,22 @@
+{
+  "status": "LIMITED_ENGINEERING_REVIEW_NO_BLOCKER",
+  "reviewer": "Harness DeepSeek-V4.1-Flash High",
+  "provenance": "Codex transcription of the final Harness UI response, not a Harness-authored file or raw-data verification",
+  "execution_code_commit": "3b99d3e612cf085875931a256e133064cfd311d6",
+  "proposal_sha256": "d1ba07f488b346a131989b6b71e11e3a21bd6c8293084849cbd644cbf987a668",
+  "fixture_review": "Reasonable additive fixture repair; original 34 tests and assertions retained; real finalize_pair not mocked away",
+  "engineering": "No blocker in reviewed public code: single metrics write after evidence hash; unified FP32 strict classification; per-arm ten bins sum 717 and retained; early rain-population stop; exact keys and truth pairing",
+  "budget": "Public limits and arithmetic consistent; no budget authorization",
+  "tests": {"codex_reported_passed": 39, "harness_independently_executed": 0},
+  "remaining_limits": [
+    "Synthetic fixtures are success-path focused; new rejection branches and cross-accumulator ABC consistency lack dedicated coverage",
+    "Strong probability bins are validated from summaries, not independently recomputed from records in finalizer",
+    "Private source/runtime/output bindings not independently reviewed; only a later authorized bounded preflight can validate them",
+    "No real GPU evaluation, checkpoint load or source-meter execution verified",
+    "Scientific caveats are in engineering notes rather than embedded in proposal; approval text must explicitly retain q32 coverage is not POD/P20/AP20/calibration and ABC zero detections do not identify a cause"
+  ],
+  "codex_post_review_check": {"frozen_execution_head": "3b99d3e612cf085875931a256e133064cfd311d6", "frozen_execution_git_status_porcelain": ""},
+  "handoff": "May submit to webpage controller and researcher for review; not permission to start",
+  "scientific_status": "NOT_VERIFIED",
+  "authorized": false
+}
