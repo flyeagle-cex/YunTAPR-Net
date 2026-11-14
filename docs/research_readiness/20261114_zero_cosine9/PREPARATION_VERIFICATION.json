@@ -1,0 +1,57 @@
+{
+  "engineering": "PASS",
+  "science": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "execution_code_commit": "b4f15fb8dfeced23c28824f04b35158077678950",
+  "proposal_sha256": "1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41",
+  "proposal_file_identity": {
+    "bytes": 102163,
+    "sha256": "713d16e8157943337ba05924342eaffab4abbc772be0a933022471f138171f17"
+  },
+  "tests": {
+    "new_cpu_synthetic": 12,
+    "affected_regression": 40,
+    "total": 52,
+    "passed": 52,
+    "stdout_bytes": 10301,
+    "stdout_sha256": "e770bcca61e82f020c4d1e7edc7e6bd49bc82d89bd2310341493a70f63c5f081"
+  },
+  "fixed_checkout_clean_and_code_hashes_match": true,
+  "missing_approval_rejected": true,
+  "formal_output_exists": false,
+  "experiment_status": "NOT_STARTED",
+  "preparation_activity": {
+    "raw_payload_opens": 0,
+    "static_payload_opens": 0,
+    "checkpoint_loads": 0,
+    "optimizer_updates": 0
+  },
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "source_bytes_per_model": 477571953840,
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "checkpoint_loads": 0
+  },
+  "inherited_source_differences": [
+    "tools/research_readiness/start_independent_process.py"
+  ],
+  "harness_independent_review": "PENDING_DELIVERY",
+  "limits": [
+    "CPU_SYNTHETIC_NO_REAL_CUDA_TRAINING_PATH_EXECUTION",
+    "SINGLE_SEED_REUSED_DEVELOPMENT",
+    "REAL_MASK_RETAINED_128_ZERO_LOSS_GRADIENT_WEIGHTS",
+    "HISTORICAL_DRIVER_CUDNN_UNAVAILABLE",
+    "NO_NEW_POINT_OR_TERRAIN_MECHANISM_EVALUATION"
+  ]
+}

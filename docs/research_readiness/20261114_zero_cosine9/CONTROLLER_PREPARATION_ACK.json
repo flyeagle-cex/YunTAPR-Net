@@ -1,0 +1,17 @@
+{
+  "destination_thread_id": "6ae89873-7ee8-83e8-858d-ad3bc2cf5f88",
+  "turn_id": "09326a89-bfac-43b7-9f49-6c3424802e99",
+  "reply_id": "bb810029-87be-4f5d-ad00-9741f40a5ce4",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "OBSERVED_CHAT_REPLY_CONTENT",
+  "engineering": "PASS",
+  "experiment": "NOT_STARTED",
+  "science": "NOT_VERIFIED",
+  "harness": "PENDING",
+  "resource_label_correction_sent": {
+    "original_label": "内存准入24GiB",
+    "correct_label": "输出卷可用存储准入24GiB",
+    "proposal_budget_unchanged": true
+  },
+  "reply_text": "收到。总控确认本轮状态，后续以以下记录为准。\n\n**ZERO\\_DOTE / COSINE9 / Seed 2029**\n\n工程准备 (PASS)\n\n实验状态 (NOT\\_STARTED)\n\n科学结论 (NOT\\_VERIFIED)\n\nHarness独立审核 (PENDING)\n\n---\n\n**冻结执行边界**\n\n- 执行代码：`b4f15fb8dfeced23c28824f04b35158077678950`\n- 提案摘要：`1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41`\n- 单模型：ZERO\\_DOTE，B7/E0/COSINE9\n- Seed：2029\n- 更新：4320次\n- 逻辑源读取预算：477571953840 B\n- 时间上限：21600秒\n- 内存准入：24 GiB\n- 重放、额外重试、检查点加载：0\n- 正式输出目录：尚未创建\n- 正式批准：尚未生成\n\n**总控后续原则：**\n\n1. 不把工程准备通过等同于科学验证通过。\n2. 不把旧REAL/COSINE9结果升级为严格因果证据。\n3. 不把128个零输入、零损失梯度权重的问题隐去。\n4. Harness未完成本次独立差异审核，不宣称审核通过。\n5. 不启动模型、不读取科学载荷、不创建正式输出目录，直到准确启动批准成立。\n\n本轮不再增加统计、测试或准备审查。\n\n下一步只处理这一个ZERO\\_DOTE准确执行包的独立审核与研究者启动批准。其他科研方向暂时冻结。"
+}
