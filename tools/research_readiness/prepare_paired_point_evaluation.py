@@ -57,6 +57,18 @@ def write(path, value):
         stream.write("\n")
 
 
+def canonical_task_bindings(tasks, scientific, metadata):
+    """Resolve aliases before freezing references into canonical manifest maps."""
+    result = {}
+    for task, paths in tasks.items():
+        checkpoint = str(Path(paths["checkpoint_path"]).resolve())
+        report = str(Path(paths["dev_report_path"]).resolve())
+        if checkpoint not in scientific or report not in metadata:
+            raise ValueError("Task checkpoint/report reference is absent from its canonical manifest")
+        result[task] = dict(checkpoint_path=checkpoint, dev_report_path=report)
+    return result
+
+
 def prepare(code_root, private_dir, output_root, public_root=None):
     from tools.research_readiness.start_paired_point_evaluation import LIMITS, SCOPE, TASKS as ORDER
 
@@ -154,6 +166,7 @@ def prepare(code_root, private_dir, output_root, public_root=None):
     metadata = {}
     for path in sorted(set(path.resolve() for path in files)):
         _, metadata[str(path)] = cost.raw(path)
+    tasks = canonical_task_bindings(tasks, scientific, metadata)
     native = Path(r"F:\conda_envs\rain-basics\python.exe")
     runtime = dict(old["runtime_binding"])
     runtime["executable_sha256"] = runtime.pop("python_executable_sha256")
@@ -172,7 +185,12 @@ def prepare(code_root, private_dir, output_root, public_root=None):
         path = Path(name).resolve()
         if not any(path.is_relative_to(Path(parent)) for parent in source_roots):
             source_roots.append(str(path))
+    launch_root = (code_root / "docs/research_readiness/.local/paired_joint_launch" / private_dir.name).resolve()
+    launch_root.mkdir(parents=True, exist_ok=False)
+    service = launch_root / "service"
+    service.mkdir()
     private = dict(output_root=str(output_root), preflight_root=str(private_dir / "preflight"),
+                   launch_spec_path=str(launch_root / "EXECUTION_SPEC.json"),
                    code_root=str(code_root), runtime_python=str(native),
                    runtime_roots=[str(native.parent / name) for name in ("Lib", "DLLs", "Library")],
                    preparation_path=str(Path(old_private["inherited"]).resolve()),
@@ -202,16 +220,16 @@ def prepare(code_root, private_dir, output_root, public_root=None):
     private["proposal_sha256"] = proposal["proposal_sha256"]
     write(public_root / "EXECUTION_PROPOSAL.json", proposal)
     write(private_dir / "PRIVATE_PREPARATION.json", private)
-    service = private_dir / "service"
-    service.mkdir()
-    write(private_dir / "EXECUTION_SPEC.json", dict(kind="BOUNDED_PAIRED_JOINT_AMPLITUDE_EVALUATION",
+    execution_spec = dict(kind="BOUNDED_PAIRED_POINT_EVALUATION",
           service_dir=str(service), cwd=str(code_root), command=[str(native), "-B",
               str(code_root / TOOLS[0]), "execute", "--proposal", str(public_root / "EXECUTION_PROPOSAL.json"),
               "--private-preparation", str(private_dir / "PRIVATE_PREPARATION.json"),
               "--researcher-approval", str(private_dir / "RESEARCHER_APPROVAL.json")],
           environment=dict(PYTHONPATH=str(code_root / "src") + os.pathsep + str(code_root),
               PYTHONUTF8="1", PYTHONHASHSEED="2029", CUBLAS_WORKSPACE_CONFIG=":4096:8",
-              OMP_NUM_THREADS="1", MKL_NUM_THREADS="1")))
+              OMP_NUM_THREADS="1", MKL_NUM_THREADS="1"))
+    write(private_dir / "EXECUTION_SPEC.json", execution_spec)
+    write(launch_root / "EXECUTION_SPEC.json", execution_spec)
     write(public_root / "PREPARATION_RECEIPT.json", dict(status="PREPARED_NOT_LAUNCHED", code_commit=current,
           proposal_sha256=proposal["proposal_sha256"], metadata_files=len(metadata),
           metadata_preparation_bytes=cost.bytes, metadata_preparation_opens=cost.opens,
