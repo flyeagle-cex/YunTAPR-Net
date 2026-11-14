@@ -66,6 +66,7 @@ function render(s){
     if(s.b8_recovery){put('page-title','B8 限额恢复 · B7 固定E9对照');put('subtitle',`B8继承E1–E6 · 本次 ${number.format(s.segment_returned)} / 1,440 次更新 · 已重放 ${s.replay_returned} / 62 · 总计数包含原失败段`);put('time-label','本次恢复剩余时间额度');put('campaign-title','B7已完成 · B8恢复E7–E9');}
     if(s.innovation_recovery){put('page-title','B7/B8 多seed限额恢复');put('subtitle',`B7/2030继承E1–E6 · 本包 ${number.format(s.segment_returned)} / 14,400 次更新 · 已重放 ${s.replay_returned} / 441 · 累计计数保留原中断段`);put('time-label','本恢复包剩余时间额度');put('campaign-title','B7/2030 E6 → B8/2030 → B7/2031 → B8/2031');}
     if(s.dote_control){put('page-title','DOTE 零数值主对照');put('subtitle',s.dote_control_multiseed?'B7_ZERO_DOTE · Seed 2030 → 2031 · 真实mask保留 · 各固定九轮 LAST':'B7_ZERO_DOTE · Seed 2029 · 零数值/真实mask保留 · 固定九轮 LAST');put('time-label',s.dote_control_multiseed?'距整包十二小时时限':'距本任务六小时时限');put('campaign-title','仅B7零数值控制 · 原B7结果继承');}
+    if(s.zero_cosine9){put('page-title','ZERO_DOTE · COSINE9');put('subtitle','B7 / E0 / Seed 2029 · 零数值 / 真实mask · 固定九轮 LAST');put('time-label','距本任务六小时时限');put('campaign-title','ZERO_DOTE 新训练 · REAL/COSINE9 已有结果继承');}
     if(s.upper_quantile){put('page-title','B7 上分位权重配对筛查');put('subtitle','Seed2029 · 新E0对照 → UQ_MILD_V1 · 相同原初态 · 固定E9 · 2025封存');put('time-label','整包剩余时间额度');put('campaign-title','E0对照 → 温和上分位候选');}
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
     view=chosen;
@@ -83,6 +84,7 @@ function render(s){
   const percent=Math.min(100,100*s.io.bytes/s.limits.bytes);
   put('state-title',s.state==='COMPLETE'?(s.dote_control_multiseed?'两个DOTE控制及三seed汇总已完成':s.dote_control?'DOTE零数值控制九轮训练与评价已完成':s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'||s.state==='STOPPED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
   if(s.upper_quantile && s.state==='COMPLETE')put('state-title','两臂固定E9已封口，科学结论待审查');
+  if(s.zero_cosine9 && s.state==='COMPLETE')put('state-title','ZERO_DOTE九轮训练与配对评分已完成，科学结论待验证');
   put('state',states[s.state]||s.state);$('state').className='state '+(s.state==='FAILED'||s.state==='STOPPED'||s.state==='BUDGET_ALERT'?'failed':s.state==='UNKNOWN'?'unknown':'');
   const current=view.epochs[view.current_epoch-1];
   put('stage',s.state==='COMPLETE'?'固定第九轮 LAST 已绑定完成收据':`${s.runs?`${view.model} / Seed ${view.seed} · `:''}第 ${view.current_epoch} / 9 轮 · ${phases[view.phase]||view.phase} · 本轮已确认 ${current.updates} / 480 步`);
@@ -103,7 +105,13 @@ function render(s){
   }
   const paired=s.paired_summary;$('paired-section').hidden=!paired;$('paired-metrics').replaceChildren();
   if(paired){
-    const rows=[...Object.entries(paired.values).map(([label,m])=>({label,m,delta:false})),...Object.entries(paired.differences).map(([label,m])=>({label:label.replace('_minus_',' − '),m,delta:true}))];
+    let rows;
+    if(s.zero_cosine9){
+      const displayMetrics=m=>({brier:m.brier,auroc:m.occurrence_auroc,average_precision:m.occurrence_ap,conditional_pinball:m.all_log_pinball});
+      rows=[...Object.entries(paired.values).map(([label,m])=>({label,m:displayMetrics(m),delta:false})),{label:'REAL − ZERO',m:displayMetrics(paired.real_minus_zero),delta:true}];
+    }else{
+      rows=[...Object.entries(paired.values).map(([label,m])=>({label,m,delta:false})),...Object.entries(paired.differences).map(([label,m])=>({label:label.replace('_minus_',' − '),m,delta:true}))];
+    }
     for(const {label,m,delta} of rows){const row=document.createElement('tr');const cells=[label,fmt(m.brier),fmt(m.auroc),fmt(m.average_precision),fmt(m.conditional_pinball),Number.isFinite(m.q32_coverage)?`${(100*m.q32_coverage).toFixed(5)}${delta?' pp':'%'}`:'—'];for(const value of cells){const cell=document.createElement('td');cell.textContent=value;row.append(cell);}$('paired-metrics').append(row);}
   }
   put('bytes',`${(s.io.bytes/1e9).toFixed(3)} / ${(s.limits.bytes/1e9).toFixed(3)} GB`);
@@ -114,7 +122,7 @@ function render(s){
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');
   put('commit',s.source_commit.slice(0,12));
   put('updated',`快照：${new Date(s.snapshot_utc).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})} 北京时间 · 本地只读`);
-  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'||s.state==='STOPPED'?'已停止':`${percent.toFixed(1)}%`} · ${s.upper_quantile?'B7上分位配对筛查':s.dote_control?'DOTE零数值控制':s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
+  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'||s.state==='STOPPED'?'已停止':`${percent.toFixed(1)}%`} · ${s.zero_cosine9?'ZERO_DOTE/COSINE9':s.upper_quantile?'B7上分位配对筛查':s.dote_control?'DOTE零数值控制':s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
 }
 async function refresh(){
   if(loading)return;loading=true;$('refresh').disabled=true;

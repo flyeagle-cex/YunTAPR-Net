@@ -134,6 +134,16 @@ class CampaignReader(base.Reader):
             or (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],
                 self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(4320,477571953840,142813,0,21600)):
             raise ValueError('Not the exact single cosine9 candidate')
+        self.zero_cosine9=self.approval['tasks']==[dict(model='B7',seed=2029,schedule_profile='COSINE9_V1',dynamic_control='ZERO_NUMERIC_RETAIN_REAL_MASKS')]
+        if self.zero_cosine9 and (
+            self.approval['code_commit']!='b4f15fb8dfeced23c28824f04b35158077678950'
+            or self.approval['proposal_sha256']!='1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41'
+            or binding.get('dynamic_control')!='ZERO_NUMERIC_RETAIN_REAL_MASKS'
+            or self.approval.get('approved_by_researcher') is not True
+            or (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],
+                self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(4320,477571953840,142813,0,21600)):
+            raise ValueError('Not the exact ZERO_DOTE cosine9 package')
+        self.cosine9=self.cosine9 or self.zero_cosine9
         self.upper_quantile=self.approval['tasks']==[
             dict(arm='CONTROL_E0',model='B7',seed=2029,quantile_profile='UNIFORM'),
             dict(arm='CANDIDATE_UQ_MILD',model='B7',seed=2029,quantile_profile='UQ_MILD_V1')]
@@ -254,10 +264,11 @@ class CampaignReader(base.Reader):
                 if self.terrain or self.innovation_multiseed or self.control:
                     static_db=self.folder/(f'B7_ZERO_DOTE_s{seed}_static_source.sqlite' if self.control_multi else 'B7_ZERO_DOTE_static_source.sqlite' if self.control else f'{name}_static_source.sqlite' if self.innovation_multiseed else f'{kind}_static_source.sqlite')
                     if self.upper_quantile:static_db=task_root/'B7_static_source.sqlite'
+                    if self.zero_cosine9:static_db=task_root/'ZERO_DOTE_static_source.sqlite'
                     if static_db.exists():
                         counts=self.query(static_db,'SELECT COUNT(*),COALESCE(SUM(actual_bytes),0),COALESCE(SUM(expected_bytes),0) FROM file_io')[0]
                         for key,value in zip(('files','bytes','reserved_bytes'),counts):io[key]+=value
-                runs.append(dict(model=task['arm'] if self.upper_quantile else 'B7_ZERO_DOTE' if self.control else kind,seed=seed,name=task['arm'] if self.upper_quantile else name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
+                runs.append(dict(model=task['arm'] if self.upper_quantile else 'B7_ZERO_DOTE' if self.control or self.zero_cosine9 else kind,seed=seed,name=task['arm'] if self.upper_quantile else name,state=state,returned=returned,reserved=reserved,sealed_epochs=sealed,
                     epochs=epochs,current_epoch=current['epoch'],phase=current['phase']))
             failure=self.document('failure.json');completion=self.document('completion.json')
             if failure:
@@ -303,7 +314,8 @@ class CampaignReader(base.Reader):
             if self.control_multi and state=='COMPLETE':result['three_seed_summary']=self.document('three_seed_dote_control_summary.json')
             result['upper_quantile']=self.upper_quantile
             result['cosine9']=self.cosine9
-            if self.cosine9 and completion:result['paired_summary']=self.document('paired_schedule_summary.json')
+            result['zero_cosine9']=self.zero_cosine9
+            if self.cosine9 and completion:result['paired_summary']=self.document('real_zero_descriptive_comparison.json' if self.zero_cosine9 else 'paired_schedule_summary.json')
             if self.innovation_recovery:result.update(segment_returned=returned-self.budget['prior_updates'],segment_limit=self.budget['total_updates'],prior_attempts=self.budget['prior_updates'])
             self.cache,self.cached_at=result,time.monotonic()
             return result
@@ -494,7 +506,7 @@ def main():
     with ThreadingHTTPServer(('127.0.0.1',a.port),base.handler_for(reader)) as server:
         service=dict(url=f'http://127.0.0.1:{server.server_port}/',pid=base.os.getpid(),read_only=True,training_pid=a.training_pid)
         (a.service_dir/'service.json').write_text(json.dumps(service,indent=2),encoding='utf-8')
-        shortcut='B7九轮余弦训练进度.url' if getattr(reader,'cosine9',False) else 'B7上分位配对训练进度.url' if getattr(reader,'upper_quantile',False) else 'B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
+        shortcut='ZERO_DOTE九轮余弦训练进度.url' if getattr(reader,'zero_cosine9',False) else 'B7九轮余弦训练进度.url' if getattr(reader,'cosine9',False) else 'B7上分位配对训练进度.url' if getattr(reader,'upper_quantile',False) else 'B7_B8多seed训练进度.url' if getattr(reader,'innovation_multiseed',False) else 'B3_B4多seed训练进度.url' if a.campaign else 'B2训练进度.url'
         (a.service_dir/shortcut).write_text('[InternetShortcut]\nURL='+service['url']+'\n',encoding='utf-8')
         print(service['url'],flush=True)
         server.serve_forever(poll_interval=1)

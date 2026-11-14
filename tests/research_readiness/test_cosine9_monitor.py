@@ -27,6 +27,44 @@ def write_json(path, value):
 
 
 class Cosine9MonitorTests(unittest.TestCase):
+    def zero_fixture(self, **kwargs):
+        binding = self.fixture(**kwargs)
+        binding["approval"]["code_commit"] = "b4f15fb8dfeced23c28824f04b35158077678950"
+        binding["approval"]["proposal_sha256"] = "1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41"
+        binding["approval"]["tasks"][0]["dynamic_control"] = "ZERO_NUMERIC_RETAIN_REAL_MASKS"
+        binding["dynamic_control"] = "ZERO_NUMERIC_RETAIN_REAL_MASKS"
+        write_json(self.output / "authorization_binding.json", binding)
+        (self.output / "B7_static_source.sqlite").rename(self.output / "ZERO_DOTE_static_source.sqlite")
+        return binding
+
+    def test_zero_cosine9_accounts_static_and_update_counts(self):
+        self.zero_fixture(returned=17, intents=1)
+        snapshot = monitor.CampaignReader(self.output, 123).snapshot(include_resources=False)
+        self.assertTrue(snapshot["zero_cosine9"])
+        self.assertEqual(snapshot["runs"][0]["model"], "B7_ZERO_DOTE")
+        self.assertEqual((snapshot["returned"], snapshot["reserved"]), (17, 18))
+        self.assertEqual(snapshot["io"]["bytes"], 312828 + 1234)
+        self.assertEqual(snapshot["limits"]["updates"], 4320)
+        self.assertEqual(snapshot["state"], "RUNNING")
+
+    def test_zero_cosine9_completion_uses_descriptive_summary(self):
+        self.zero_fixture(returned=4320, sealed_epochs=9, completed=True)
+        summary = {"scientific_acceptance": "NOT_VERIFIED", "real_minus_zero": {"synthetic": 0.0}}
+        write_json(self.output / "real_zero_descriptive_comparison.json", summary)
+        snapshot = monitor.CampaignReader(self.output, 123).snapshot(include_resources=False)
+        self.assertEqual(snapshot["state"], "COMPLETE")
+        self.assertEqual(snapshot["paired_summary"], summary)
+
+    def test_zero_cosine9_changed_identity_fails_before_queries(self):
+        binding = self.zero_fixture()
+        for key in ("code_commit", "proposal_sha256"):
+            changed = copy.deepcopy(binding)
+            changed["approval"][key] = "DIFFERENT"
+            write_json(self.output / "authorization_binding.json", changed)
+            with self.subTest(key=key), patch.object(monitor.base, "query") as query, self.assertRaises(ValueError):
+                monitor.CampaignReader(self.output, 123)
+            query.assert_not_called()
+
     def setUp(self):
         TEMP_ROOT.mkdir(parents=True, exist_ok=True)
         self.output = (TEMP_ROOT / ("synthetic_" + uuid4().hex)).resolve()

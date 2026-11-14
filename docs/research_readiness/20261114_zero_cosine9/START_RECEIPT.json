@@ -1,0 +1,57 @@
+{
+  "status": "APPROVAL_CONSUMED_SINGLE_DISPATCH_RUNNING",
+  "verified_at": "2026-11-14T11:39:28.115683+08:00",
+  "decision_id": "YT-ZERO-S9-20261114-001",
+  "code_commit": "b4f15fb8dfeced23c28824f04b35158077678950",
+  "proposal_sha256": "1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41",
+  "target_started_at": "2026-11-14T11:34:55.989279+08:00",
+  "target_exit_present_at_snapshot": false,
+  "independent_training_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "independent_monitor_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "observed": {
+    "state": "RUNNING",
+    "returned": 92,
+    "reserved": 92,
+    "uncertain": 0,
+    "sealed_epochs": 0,
+    "completed_models": 0,
+    "io": {
+      "files": 1633,
+      "bytes": 5173846421,
+      "reserved_bytes": 5173846421,
+      "sealed": 0
+    },
+    "limits": {
+      "updates": 4320,
+      "bytes": 477571953840,
+      "files": 142813,
+      "epochs": 9,
+      "seconds": 21600
+    }
+  },
+  "monitor_verification": {
+    "root_get": 200,
+    "snapshot_get": 200,
+    "post": 405,
+    "read_only": true,
+    "correct_training_and_proposal_binding": true,
+    "new_synthetic_checks": 3,
+    "old_monitor_regression_checks": 5,
+    "passed": 8
+  },
+  "engineering": "PASS",
+  "science": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "harness_independent_review": "NOT_OBTAINED_DISCLOSED_AT_APPROVAL",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "EXACT_ADMISSION_AND_LAUNCH_RECEIPTS_LIVE_METADATA_HTTP_SNAPSHOT",
+  "replay_allowance": 0,
+  "additional_retry_allowance": 0,
+  "interpretation": "STARTUP_SNAPSHOT_PENDING_TERMINAL_EXIT_AND_COMPLETION_FAILURE"
+}
