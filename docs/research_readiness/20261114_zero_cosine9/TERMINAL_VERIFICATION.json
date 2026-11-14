@@ -1,0 +1,48 @@
+{
+  "record_type": "terminal_verification",
+  "approval_id": "YT-ZERO-S9-20261114-001",
+  "execution_code_commit": "b4f15fb8dfeced23c28824f04b35158077678950",
+  "proposal_sha256": "1ddd919715c6c86c39c81db58b57ac2f1015b5ff24712ec5d91af243d78a0e41",
+  "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+  "return_code": 0,
+  "exited_at_utc": "2026-11-14T08:05:33.998667+00:00",
+  "automatic_retry": false,
+  "updates": 4320,
+  "schedule": {
+    "profile": "COSINE9_V1",
+    "horizon_epochs": 9,
+    "warmup_epochs": 1,
+    "peak_lr": 0.0001,
+    "minimum_lr": 1e-06,
+    "steps_per_epoch": 480,
+    "total_updates": 4320,
+    "update_index": "ONE_BASED_LR_SET_BEFORE_OPTIMIZER_STEP"
+  },
+  "dynamic_control": "ZERO_NUMERIC_RETAIN_REAL_MASKS",
+  "source_bytes": 477571953840,
+  "source_files": 142813,
+  "evaluation_summary_sha256": "5582346abcb16504b0a69f703e8cad2b93b99c8cff564298bc62a261a135791a",
+  "scientific_status": "NOT_VERIFIED",
+  "engineering_status": "PASS",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "harness_independent_review": "NOT_OBTAINED",
+  "evaluation_population": {
+    "scenes": 963,
+    "valid_pixel_times": 3303090,
+    "rainy_pixel_times": 407820,
+    "r_gt_20_pixel_times": 717,
+    "independent_storm_count": "NOT_IDENTIFIED"
+  },
+  "pointevent_metrics_included": false,
+  "2025_final_test_accessed": false,
+  "weight_payload_read_or_hashed_by_verification": "NO",
+  "limitations": [
+    "single seed 2029",
+    "Development data reused for development decisions",
+    "historical REAL driver/cuDNN fingerprint gap",
+    "ZERO retains REAL masks and zero-input weights receive no loss gradient",
+    "no POD/FAR/CSI point classification in this package",
+    "no independent Harness review"
+  ]
+}
