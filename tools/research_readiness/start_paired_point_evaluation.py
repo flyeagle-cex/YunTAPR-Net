@@ -421,6 +421,7 @@ def package_start(private):
 
 
 def validate_entry(proposal_path, private_path, approval_path):
+    proposal_path, private_path, approval_path = (Path(path).resolve() for path in (proposal_path, private_path, approval_path))
     deadline = Deadline(LIMITS["preflight_seconds"])
     p, v, a, identities, initial = bootstrap(proposal_path, private_path, approval_path)
     folder = Path(v["preflight_root"])
@@ -473,6 +474,7 @@ def require_host():
 
 
 def worker(proposal_path, private_path, approval_path, task):
+    proposal_path, private_path, approval_path = (Path(path).resolve() for path in (proposal_path, private_path, approval_path))
     if task not in TASKS:
         raise PermissionError("Unknown fixed task")
     deadline = Deadline(LIMITS["per_model_seconds"])
@@ -663,6 +665,7 @@ def finalize_pair(package, proposal):
 
 
 def execute(proposal_path, private_path, approval_path):
+    proposal_path, private_path, approval_path = (Path(path).resolve() for path in (proposal_path, private_path, approval_path))
     deadline = Deadline(LIMITS["controller_seconds"])
     p, v, a, identities, initial = bootstrap(proposal_path, private_path, approval_path)
     package = Path(v["output_root"])
