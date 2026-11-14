@@ -1,0 +1,129 @@
+{
+  "status": "STOPPED_PARTIAL_CONTROL_E0_CANDIDATE_NOT_STARTED",
+  "engineering_status": "FAIL",
+  "scientific_status": "NOT_VERIFIED",
+  "researcher_knowledge": "NOT_ASSESSED",
+  "evidence_grade": "DIRECT_VERIFIED",
+  "evidence_scope": "SAVED_EXIT_FAILURE_BINDING_PREFLIGHT_AND_READ_ACCOUNTING_METADATA",
+  "decision_id": "YT-POINT-V3-20261114-001",
+  "execution_code_commit": "7f550c27a03f83f3f717b888e0e6df1e288fa2db",
+  "proposal_sha256": "0a615efc8cdccccc68b72f57b2f17357b3cdc95a861cb1a9b50049c751e83a14",
+  "approval_sha256": "bca2afa4e3072e95d4c9a1b5568b0d9ce9648a986b2e37aca8102c20bed71672",
+  "preflight_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "resource_admission": {
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "used_mib": 2270.0,
+      "total_mib": 8151.0,
+      "utilization": 1.0,
+      "temperature": 44.0,
+      "power": 13.59
+    },
+    "memory": {
+      "total": 33752997888,
+      "available": 17041965056,
+      "commit_available": 24611074048
+    },
+    "disk_free": 54157946880
+  },
+  "target_exit": {
+    "at": "2026-11-13T23:51:36.341892+00:00",
+    "return_code": 1,
+    "return_code_u32_hex": "0x1",
+    "automatic_retry": false
+  },
+  "failure": {
+    "error_type": "PermissionError",
+    "details": "Output links outside the claimed namespace",
+    "termination_error": null
+  },
+  "original_offending_output_entry": "NOT_CAPTURED",
+  "post_stop_output_link_scan": "NO_LINK_OR_OUTSIDE_TARGET_FOUND",
+  "controller_and_preflight_metadata_sealed_bytes": 213555786,
+  "controller_and_preflight_metadata_sealed_opens": 165,
+  "control_read_states": [
+    [
+      "READ_COMPLETE",
+      457,
+      1285614934
+    ]
+  ],
+  "control_job_states": [
+    [
+      "COMPLETE",
+      457
+    ],
+    [
+      "PENDING",
+      1
+    ]
+  ],
+  "control_worker_accounting": "NOT_SEALED_CONTROLLER_TERMINATED_WORKER",
+  "control_payload_reservation_full_allowance_conservative": 26747373950,
+  "control_payload_open_allowance_conservative": 7953,
+  "control_metadata_full_allowance_conservative": 536870912,
+  "control_metadata_opens_full_allowance_conservative": 2048,
+  "attempt_source_upper_bound_bytes": 27497800648,
+  "attempt_source_upper_bound_opens": 10166,
+  "accounting_bound_scope": "CONSERVATIVE_FULL_CONTROL_WORKER_ALLOWANCE_PLUS_ACTUAL_SEALED_PARENT_PROCESSES",
+  "exact_total_actual_source_bytes": "NOT_VERIFIED_PENDING_INDEPENDENT_RECONCILIATION",
+  "elapsed_seconds_to_confirmed_exit": 126.208717,
+  "elapsed_conservative_seconds": 127,
+  "cumulative_including_prior_stop_upper_bound_bytes": 28059126424,
+  "cumulative_including_prior_stop_upper_bound_opens": 11008,
+  "cumulative_including_prior_stop_conservative_seconds": 246,
+  "control_model_load_phase": "PASSED_BEFORE_READ_METER_CREATION_BY_FIXED_CODE_ORDER",
+  "control_forward_count": "NOT_SEALED",
+  "candidate_started": false,
+  "completed_model_evaluations": 0,
+  "completed_new_point_metrics": 0,
+  "optimizer_updates": 0,
+  "replay": 0,
+  "extra_retries": 0,
+  "approval_consumed": true,
+  "automatic_restart": false,
+  "harness_review": "NOT_OBTAINED",
+  "harness_delivery": "PENDING_COMPUTER_USE_BLOCKED_URL_IDENTIFICATION",
+  "controller_start_turn": "874f868d-5637-408a-b751-0d1f61f3d4c4",
+  "controller_start_reply": "b24c620b-0af9-4451-959f-27003d78edc3",
+  "status_reporting_issue": "PERSISTED_DIRECTORIES_AND_READ_LEDGER_MISTAKEN_FOR_RUNNING_AFTER_TARGET_EXIT",
+  "status_reporting_correction": "TARGET_EXIT_RECEIPT_TAKES_PRECEDENCE",
+  "recorded_at": "2026-11-14T00:03:22.896138+00:00",
+  "source_identities": {
+    "approval": {
+      "bytes": 2889,
+      "sha256": "bca2afa4e3072e95d4c9a1b5568b0d9ce9648a986b2e37aca8102c20bed71672"
+    },
+    "preflight_01": {
+      "bytes": 8863,
+      "sha256": "1398182649d2b6aa13b89be8664509b078c6b65eaaf295ca71d834e7cc17ce52"
+    },
+    "preflight_02": {
+      "bytes": 8863,
+      "sha256": "fbb277173a3550aa71dbbcb6a83128ad029f8b06219c8168c4621e3b739f2acb"
+    },
+    "binding": {
+      "bytes": 782,
+      "sha256": "b5af8a8e2fb6ab3994c9bb977fceda00ede43d16c8ec6fe26638957c3d20e8c1"
+    },
+    "controller_failure": {
+      "bytes": 8890,
+      "sha256": "23dcad508a47e0965f7d5cd68517ed66278098f63cac8c795ab467615a86b6ec"
+    },
+    "target_exit": {
+      "bytes": 148,
+      "sha256": "a5130ef6cc514746a31ec92b88b1c383b28c5b4f80b679a2312644cc3929bb7a"
+    },
+    "controller_stderr": {
+      "bytes": 1062,
+      "sha256": "eceecdd40356b56b448e9c699a074db2d3ad1263bd3c8d3be871492f62a5500d"
+    },
+    "read_meter": {
+      "bytes": 233472,
+      "sha256": "236e1aed706a133c3b1470071a02a8a49685876b46de0bf757203ec752fb3c65"
+    }
+  }
+}

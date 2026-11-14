@@ -1,0 +1,41 @@
+{
+  "engineering_self_check": "PASS",
+  "independent_review": "PENDING_HARNESS",
+  "historical_offending_path": "NOT_CAPTURED",
+  "historical_attribution": "INFERRED_FROM_MATCHING_GUARD_FAILURE_AND_LIVE_SQLITE_JOURNALS",
+  "reproduced_defect": "RESOLVING_UNLINKED_WINDOWS_TEMP_FILES_CAN_RETURN_EXTENDED_DOS_OR_NTFS_DELETED_NAMESPACE_AND_FAIL_PATH_CONTAINMENT",
+  "old_probe_successful_checks": 1521,
+  "old_probe_error_counts": {
+    "PermissionError: Output links outside the claimed namespace": 857,
+    "FILE_NOT_FOUND": 133
+  },
+  "old_probe_target_classes": [
+    "EXTENDED_DOS_PATH",
+    "NTFS_DELETED_NAMESPACE"
+  ],
+  "old_probe_identity": {
+    "bytes": 3148,
+    "sha256": "36996bdf1872fa8b051c9ca0795c4dbb7e340ca241d6cb21b749c71a08e45c65"
+  },
+  "corrected_implementation": "NO_FOLLOW_LSTAT_AND_SCANDIR_SNAPSHOT_REJECTS_SYMLINKS_AND_REPARSE_POINTS_SKIPS_DISAPPEARED_ENTRIES",
+  "corrected_probe": {
+    "scope": "SYNTHETIC_CONCURRENT_OUTPUT_FILES_ONLY",
+    "status": "PASS",
+    "successful_checks": 13504,
+    "error_counts": {},
+    "writer_stopped": true,
+    "scientific_inputs": 0,
+    "model_loads": 0,
+    "forwards": 0
+  },
+  "cpu_regression": {
+    "test_count": 63,
+    "failures": 0,
+    "errors": 0,
+    "return_code": 0,
+    "observed_seconds": 2.02
+  },
+  "scientific_payload_reads": 0,
+  "model_loads": 0,
+  "new_evaluation_forwards": 0
+}

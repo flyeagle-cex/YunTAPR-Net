@@ -11,6 +11,7 @@ import json
 import math
 import os
 from pathlib import Path
+import stat
 import subprocess
 import sys
 import time
@@ -117,12 +118,31 @@ class OutputLimit:
     def __call__(self, reserve=0):
         self.deadline.remaining()
         size = 0
-        for root in self.roots:
-            for path in root.rglob("*"):
-                if path.is_symlink() or not path.resolve().is_relative_to(root):
-                    raise PermissionError("Output links outside the claimed namespace")
-                if path.is_file():
-                    size += path.stat().st_size
+        pending = list(self.roots)
+        reparse_attribute = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+        while pending:
+            folder = pending.pop()
+            self.deadline.remaining()
+            try:
+                info = os.lstat(folder)
+                if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & reparse_attribute:
+                    raise PermissionError("Output directory contains a link or reparse point")
+                with os.scandir(folder) as entries:
+                    for entry in entries:
+                        try:
+                            info = entry.stat(follow_symlinks=False)
+                        except FileNotFoundError:
+                            continue
+                        if stat.S_ISLNK(info.st_mode) or getattr(info, "st_file_attributes", 0) & reparse_attribute:
+                            raise PermissionError("Output entry contains a link or reparse point")
+                        if stat.S_ISDIR(info.st_mode):
+                            pending.append(entry.path)
+                        else:
+                            size += info.st_size
+            except FileNotFoundError:
+                # SQLite journals and runtime temporary files can disappear
+                # during the snapshot. Their targets must never be resolved.
+                continue
         if size + reserve > self.maximum:
             raise MemoryError("Output storage cap reached")
         return size

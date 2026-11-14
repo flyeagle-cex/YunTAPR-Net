@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import subprocess
 import shutil
+import stat
 import unittest
 import uuid
 from types import SimpleNamespace
@@ -261,6 +262,36 @@ class PairedPointEvaluationTests(unittest.TestCase):
         check = controller.OutputLimit(self.output, 9, controller.Deadline(30), extra_roots=(self.preflight,))
         with self.assertRaises(MemoryError):
             check()
+
+    def test_output_snapshot_does_not_resolve_transient_files(self):
+        self.output.mkdir()
+        (self.output / "journal").write_bytes(b"123")
+        check = controller.OutputLimit(self.output, 10, controller.Deadline(30))
+        with mock.patch.object(Path, "resolve", side_effect=AssertionError("Unstable file target resolution")):
+            self.assertEqual(check(), 3)
+
+    def test_output_snapshot_skips_disappeared_entries(self):
+        self.output.mkdir()
+        check = controller.OutputLimit(self.output, 10, controller.Deadline(30))
+        entry = mock.Mock()
+        entry.stat.side_effect = FileNotFoundError("Transient journal removed")
+        scan = mock.MagicMock()
+        scan.__enter__.return_value = iter([entry])
+        with mock.patch.object(controller.os, "scandir", return_value=scan):
+            self.assertEqual(check(), 0)
+
+    def test_output_snapshot_rejects_reparse_entries_before_recursion(self):
+        self.output.mkdir()
+        check = controller.OutputLimit(self.output, 10, controller.Deadline(30))
+        entry = mock.Mock()
+        entry.stat.return_value = SimpleNamespace(st_mode=stat.S_IFDIR, st_file_attributes=1024, st_size=0)
+        scan = mock.MagicMock()
+        scan.__enter__.return_value = iter([entry])
+        with mock.patch.object(controller.stat, "FILE_ATTRIBUTE_REPARSE_POINT", 1024, create=True), \
+                mock.patch.object(controller.os, "scandir", return_value=scan) as scans:
+            with self.assertRaisesRegex(PermissionError, "reparse"):
+                check()
+        scans.assert_called_once()
 
     def test_termination_wait_is_bounded(self):
         child = mock.Mock()
