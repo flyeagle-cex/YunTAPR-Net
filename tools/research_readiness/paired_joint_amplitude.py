@@ -116,25 +116,27 @@ class StrongJointAccumulator:
             batch_strong = int(strong_masks.sum())
             if self.n_valid + batch_valid > self.expected_valid:
                 raise ValueError("Valid population exceeds frozen limit")
+            if self.n_rain + batch_rain > self.expected_rain:
+                raise ValueError("Rainy population exceeds frozen limit")
             if self.n_strong + batch_strong > self.expected_strong:
                 raise ValueError("Strong-rain population exceeds frozen limit")
 
             q32_physical = np.expm1(q_flat[..., -1])
+            q32_physical32 = q32_physical.astype(np.float32)
             q32_ge_truth = q_flat[..., -1] >= np.log1p(y_flat)
             probability_bin = np.searchsorted(np.arange(1, 10, dtype=np.float64) / 10, p_flat, side="right")
-            q32_gt20_mask = q32_physical.astype(np.float32) > THRESHOLD_MM_H
+            q32_gt20_mask = q32_physical32 > THRESHOLD_MM_H
             for name, condition in (
                 ("q32_ge_truth", q32_ge_truth),
-                ("q32_gt20", q32_physical.astype(np.float32) > THRESHOLD_MM_H),
+                ("q32_gt20", q32_gt20_mask),
                 ("A_gt20", point32["A"] > THRESHOLD_MM_H),
                 ("B_gt20", point32["B"] > THRESHOLD_MM_H),
                 ("C_gt20", point32["C"] > THRESHOLD_MM_H),
             ):
                 self.joint_counts[name] += int((strong_masks & condition).sum())
-            q32_gt20 = q32_physical.astype(np.float32) > THRESHOLD_MM_H
             for method in ("A", "B", "C"):
                 self.joint_counts[f"q32_gt20_{method}_le20"] += int(
-                    (strong_masks & q32_gt20 & (point32[method] <= THRESHOLD_MM_H)).sum()
+                    (strong_masks & q32_gt20_mask & (point32[method] <= THRESHOLD_MM_H)).sum()
                 )
             for bin_id in range(10):
                 in_bin = strong_masks & (probability_bin == bin_id)
@@ -237,7 +239,9 @@ def pair_strong_records(control_path, candidate_path, *, expected_rows=717):
         for name in ("truth_mm_h",):
             if not np.array_equal(left[name], right[name]):
                 raise ValueError("Paired arms have different reference values")
-        q32_left, q32_right = np.expm1(left["qlog"][:, -1]), np.expm1(right["qlog"][:, -1])
+        # Threshold decisions use the same strict FP32 contract as the point metrics.
+        q32_left = np.expm1(left["qlog"][:, -1]).astype(np.float32)
+        q32_right = np.expm1(right["qlog"][:, -1]).astype(np.float32)
         p_delta = right["p_occ"] - left["p_occ"]
         qlog_delta = right["qlog"] - left["qlog"]
         return {
@@ -246,6 +250,10 @@ def pair_strong_records(control_path, candidate_path, *, expected_rows=717):
             "q32_ge_truth": {
                 "E0": int((left["qlog"][:, -1] >= np.log1p(left["truth_mm_h"])).sum()),
                 "COSINE9": int((right["qlog"][:, -1] >= np.log1p(right["truth_mm_h"])).sum()),
+            },
+            "q32_gt20": {
+                "E0": int((q32_left > THRESHOLD_MM_H).sum()),
+                "COSINE9": int((q32_right > THRESHOLD_MM_H).sum()),
             },
             "q32_gt20_intersection": int(((q32_left > THRESHOLD_MM_H) & (q32_right > THRESHOLD_MM_H)).sum()),
             "q32_gt20_E0_only": int(((q32_left > THRESHOLD_MM_H) & (q32_right <= THRESHOLD_MM_H)).sum()),

@@ -610,7 +610,6 @@ def finalize_pair(package, proposal):
                   arms=summaries, differences=differences, scientific_status="NOT_VERIFIED",
                   researcher_knowledge="NOT_ASSESSED", independent_event_count="NOT_IDENTIFIED",
                   source_sha256={task: sha(package / task / "point_metrics.json") for task in TASKS})
-    write(package / "paired_metrics.json", result)
     for task, summary in joint_summaries.items():
         model = next(row for row in proposal["models"] if row["task"] == task)
         if (summary.get("status") != "COMPLETE_ARM_STRONG_JOINT_RECORDS"
@@ -637,6 +636,21 @@ def finalize_pair(package, proposal):
         "scientific_status": "NOT_VERIFIED",
         "interpretation": "DESCRIPTIVE_JOINT_EVIDENCE_ONLY",
     })
+    for task, arm_name in zip(TASKS, ("E0", "COSINE9")):
+        bins = joint_summaries[task].get("strong_probability_bins")
+        if (not isinstance(bins, list) or len(bins) != 10
+                or [row.get("index") for row in bins] != list(range(10))
+                or any(any(type(row.get(key)) is not int or row[key] < 0
+                           for key in ("n", "q32_ge_truth", "q32_gt20", "A_gt20", "B_gt20", "C_gt20"))
+                       or any(row[key] > row["n"] for key in ("q32_ge_truth", "q32_gt20", "A_gt20", "B_gt20", "C_gt20"))
+                       for row in bins)
+                or sum(row["n"] for row in bins) != 717):
+            raise ValueError("Strong-rain occurrence-probability bins do not close over the fixed population")
+        if paired_joint["q32_gt20"].get(arm_name) != joint_summaries[task]["strong_joint_counts"].get("q32_gt20"):
+            raise ValueError("Paired q32 threshold count differs from the arm summary")
+    paired_joint["arm_strong_probability_bins"] = {
+        task: joint_summaries[task]["strong_probability_bins"] for task in TASKS
+    }
     write(package / "paired_joint_evidence.json", paired_joint)
     result["paired_joint_evidence_sha256"] = sha(package / "paired_joint_evidence.json")
     write(package / "paired_metrics.json", result)
