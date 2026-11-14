@@ -37,7 +37,8 @@
   "correction": "Cast joint collector probability tensor to double before cpu().numpy(), matching point collector; frozen executed copy untouched",
   "post_correction_checks": {
     "worker_cpu_synthetic_tests_passed": 8,
-    "bfloat16_conversion_regression_stub": true
+    "bfloat16_conversion_regression_stub": true,
+    "bound_environment_real_torch_cpu_bfloat16_to_fp64_numpy": "PASS; artificial tensor only, no CUDA tensor/model/data"
   },
   "harness_delta_review": "No blocking issue in path normalization, lawful host transport and cumulative budget; static code only, no real runtime verification",
   "original_budget_is_execution_only": true,
