@@ -12,10 +12,11 @@ class PreparationPathTests(unittest.TestCase):
         limits = LIMITS
         roles = 2 * limits["metadata_bytes_per_preflight"] + limits["metadata_bytes_controller"] + 2 * limits["metadata_bytes_per_worker"]
         self.assertLessEqual(roles, limits["total_metadata_cap_bytes"])
-        self.assertEqual(limits["total_source_cap_bytes"] + limits["previous_attempt_metadata_bytes"],
+        self.assertEqual(limits["total_source_cap_bytes"] + limits["previous_attempt_metadata_bytes"] + limits["previous_attempt_payload_bytes"],
                          limits["cumulative_source_cap_bytes"])
         opens = 2 * limits["metadata_opens_per_preflight"] + limits["metadata_opens_controller"] + 2 * limits["metadata_opens_per_worker"]
         self.assertLessEqual(opens + limits["previous_attempt_metadata_opens"], limits["cumulative_metadata_opens"])
+        self.assertLessEqual(opens + limits["payload_open_instances"] + limits["previous_attempt_metadata_opens"] + limits["previous_attempt_payload_opens"], limits["cumulative_total_opens"])
         self.assertEqual(limits["maximum_seconds"] + limits["previous_attempt_seconds"], 7200)
 
     def test_alias_references_close_over_canonical_manifests(self):

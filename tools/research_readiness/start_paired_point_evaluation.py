@@ -23,15 +23,16 @@ TASKS = ("CONTROL_E0", "CANDIDATE_COSINE9")
 MIB = 1024 ** 2
 LIMITS = dict(
     payload_archive_reference_bytes=53494753532, payload_open_instances=15906,
-    preflight_validations=2, metadata_bytes_per_preflight=128 * MIB,
-    metadata_opens_per_preflight=512, metadata_bytes_controller=128 * MIB,
-    metadata_opens_controller=512, metadata_bytes_per_worker=512 * MIB - 35592414,
-    metadata_opens_per_worker=2020, total_metadata_cap_bytes=1408 * MIB - 71184828,
-    total_metadata_opens=5632 - 55, total_source_cap_bytes=53494753532 + 1408 * MIB - 71184828,
-    previous_attempt_metadata_bytes=71184828, previous_attempt_metadata_opens=55,
-    previous_attempt_seconds=5, cumulative_source_cap_bytes=53494753532 + 1408 * MIB,
-    cumulative_metadata_opens=5632, cumulative_maximum_seconds=7200,
-    maximum_seconds=7195, preflight_seconds=60, controller_seconds=7075,
+    preflight_validations=2, metadata_bytes_per_preflight=80 * MIB,
+    metadata_opens_per_preflight=512, metadata_bytes_controller=80 * MIB,
+    metadata_opens_controller=512, metadata_bytes_per_worker=225858422,
+    metadata_opens_per_worker=1832, total_metadata_cap_bytes=703375085,
+    total_metadata_opens=5200, total_source_cap_bytes=54198128617,
+    previous_attempt_metadata_bytes=475862623, previous_attempt_metadata_opens=361,
+    previous_attempt_payload_bytes=297157300, previous_attempt_payload_opens=71,
+    previous_attempt_seconds=51, cumulative_source_cap_bytes=54971148540,
+    cumulative_metadata_opens=5632, cumulative_total_opens=21538, cumulative_maximum_seconds=7200,
+    maximum_seconds=7149, preflight_seconds=60, controller_seconds=7029,
     per_model_seconds=3000, output_storage_cap_bytes=4 * 1024 ** 3,
     minimum_free_bytes=8 * 1024 ** 3, minimum_host_available_bytes=8 * 1024 ** 3,
     minimum_gpu_free_mib=5120, optimizer_updates=0, retries=0, replay=0,
@@ -544,8 +545,9 @@ def totals(accounting):
     return dict(metadata_archive_reserved_bytes=metadata_bytes, metadata_open_instances=metadata_opens,
                 payload_archive_reserved_bytes=payload_bytes, payload_open_instances=payload_opens,
                 total_source_reserved_bytes=metadata_bytes + payload_bytes,
-                cumulative_source_reserved_bytes=metadata_bytes + payload_bytes + LIMITS["previous_attempt_metadata_bytes"],
-                cumulative_metadata_open_instances=metadata_opens + LIMITS["previous_attempt_metadata_opens"])
+                cumulative_source_reserved_bytes=metadata_bytes + payload_bytes + LIMITS["previous_attempt_metadata_bytes"] + LIMITS["previous_attempt_payload_bytes"],
+                cumulative_metadata_open_instances=metadata_opens + LIMITS["previous_attempt_metadata_opens"],
+                cumulative_total_open_instances=metadata_opens + payload_opens + LIMITS["previous_attempt_metadata_opens"] + LIMITS["previous_attempt_payload_opens"])
 
 
 def metric_difference(candidate, control):
