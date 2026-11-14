@@ -1,0 +1,20 @@
+{
+  "status": "RECOMMENDED_FOR_EXACT_RESEARCHER_DECISION",
+  "authorized": false,
+  "scientific_status": "NOT_VERIFIED",
+  "provenance": "Codex transcription of webpage ChatGPT controller final recommendation; not researcher approval",
+  "execution_code_commit": "3b99d3e612cf085875931a256e133064cfd311d6",
+  "proposal_sha256": "d1ba07f488b346a131989b6b71e11e3a21bd6c8293084849cbd644cbf987a668",
+  "private_binding_sha256": "9d665722d1e13e218f246f983bd7ecc062f669d26775aeda3f8f6903e0032a3c",
+  "reviewed_archive_commit": "a3063a131a57b88961750af9c760f36e94ba1339",
+  "decision": "Worth doing as a bounded descriptive joint-pixel evaluation; no required scientific or execution-code change identified within reviewed public materials",
+  "remaining_conditions": [
+    "Researcher must explicitly approve exact code, proposal, private binding, output namespace, limits and disclosed audit gaps",
+    "After approval, bounded preflight must validate identities, private source/runtime/output bindings and resources before payload access",
+    "Any failure stops and preserves all evidence; no automatic retry or replay"
+  ],
+  "accepted_review_limits": ["39 CPU tests executed by Codex only", "Limited static Harness review transcribed by Codex", "Incomplete dedicated rejection and cross-accumulator ABC coverage", "Bins not independently recomputed from records by finalizer", "Real GPU and source-meter execution not yet verified"],
+  "scientific_caveats": ["Single seed 2029 and reused 2024 Development", "717 pixels-times are not independent storms", "q32 100/717 coverage is not POD, P20, AP20 or calibration", "ABC zero detections do not identify branch, capacity, supervision, optimization or terrain causality"],
+  "local_post_review_check": {"private_binding_matches_proposal": true, "formal_output_exists": false},
+  "formal_execution_started": false
+}
