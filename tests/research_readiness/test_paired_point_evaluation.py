@@ -13,7 +13,7 @@ from types import SimpleNamespace
 from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[2]
-TEST_BASE = ROOT / "docs/research_readiness/.local/paired_point_synthetic_tests"
+TEST_BASE = (ROOT / "docs/research_readiness/.local/paired_point_synthetic_tests").resolve()
 SPEC = importlib.util.spec_from_file_location("paired_point_controller_test", ROOT / "tools/research_readiness/start_paired_point_evaluation.py")
 controller = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(controller)
