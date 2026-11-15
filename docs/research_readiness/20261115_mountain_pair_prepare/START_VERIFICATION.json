@@ -1,0 +1,116 @@
+{
+  "status": "RUNNING",
+  "snapshot_utc": "2026-11-15T07:51:32.602853+00:00",
+  "execution_code_commit": "e8d2a9b0c3ab7f60aa678a0bcee2d60133852e74",
+  "proposal_sha256": "85bc55e0101823b1291c3923c85685a7ad50315797327b9eae410f2fe49bdf61",
+  "researcher_approval": "EXPLICIT_USER_APPROVAL_RECORDED_AND_CONSUMED",
+  "approval_sha256": "ee4bccf33945d741d21d4ac772ad19e4c1a41b0c0ae968531bc1d74e04735062",
+  "preflight_statuses": [
+    "PASS",
+    "PASS"
+  ],
+  "preflight_accounting": [
+    {
+      "metadata_archive_reserved_bytes": 74198202,
+      "metadata_open_instances": 57,
+      "payload_archive_reserved_bytes": 0,
+      "payload_by_category": {},
+      "payload_open_instances": 0
+    },
+    {
+      "metadata_archive_reserved_bytes": 74198202,
+      "metadata_open_instances": 57,
+      "payload_archive_reserved_bytes": 0,
+      "payload_by_category": {},
+      "payload_open_instances": 0
+    }
+  ],
+  "independent_host_admission": true,
+  "exact_code_binding": true,
+  "resource_admission": {
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "used_mib": 2031.0,
+      "total_mib": 8151.0,
+      "utilization": 1.0,
+      "temperature": 50.0,
+      "power": 13.81
+    },
+    "memory": {
+      "total": 33752997888,
+      "available": 20094033920,
+      "commit_available": 25914306560
+    },
+    "disk_free": 36823904256
+  },
+  "arms": {
+    "REAL_COSINE9": {
+      "status": "COMPLETE",
+      "gate": {
+        "passed": true,
+        "groups": {
+          "all": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_00": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_06": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_12": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_18": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "scene_max_ge20": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          }
+        },
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-12
+      },
+      "saved_elevation_gate": "PASS",
+      "population": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820
+      },
+      "forward_calls": 121,
+      "model_inference_passes": 1,
+      "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+      "task_complete_sha256": "c4d0389fb7a3d45d3cc188146d2b7fcb668a402f028fb34152574bd961ff5c04",
+      "accounting": {
+        "metadata_archive_reserved_bytes": 195653265,
+        "metadata_open_instances": 144,
+        "payload_archive_reserved_bytes": 26747379582,
+        "payload_by_category": {
+          "static": 312828,
+          "checkpoint": 107813642,
+          "weather": 26639253112
+        },
+        "payload_open_instances": 7953
+      }
+    },
+    "ZERO_COSINE9": {
+      "status": "RUNNING"
+    }
+  },
+  "automatic_retry": false,
+  "optimizer_updates": 0,
+  "replay": 0,
+  "scientific_status": "NOT_VERIFIED"
+}
