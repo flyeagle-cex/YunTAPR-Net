@@ -1,0 +1,96 @@
+{
+  "status": "SAVED_RESULT_CLAIM_BOUNDARIES_PREPARED",
+  "controller_decision": "Archive PHYS20 fixed failed candidate and prepare one source-traceable claim/evidence table; inherit previous reviews",
+  "controller_mode": "High",
+  "controller_followup_hypothesis": "Optimization schedule may explain current comparative improvements; explicit terrain numeric benefit remains unestablished",
+  "hypothesis_status": "UNVERIFIED_AS_GENERAL_OR_MECHANISTIC_CLAIM",
+  "claims": [
+    {
+      "id": "SCHEDULE9",
+      "claim_to_assess": "COSINE9在固定九轮开发对照中改善七项预设指标",
+      "source": "docs/research_readiness/20261110_cosine9/RESULTS.json",
+      "source_identity": {
+        "bytes": 10170,
+        "sha256": "b4420b1388d31f6bc86eeaa088d04ef4ccea2c5ebde18ef2cf7dd271f63eb3ae"
+      },
+      "status": "DEVELOPMENT_SUPPORT_WITH_WEAK_RAIN_TRADEOFF",
+      "saved_evidence": "七项开发筛选通过，弱雨log损失相对E0增加7.5945%",
+      "limits": "单seed2029，重复使用2024Dev，独立事件未识别",
+      "permitted_development_statement": "在本次固定E9开发比较中，COSINE9改善既定七项指标，同时增加弱雨损失。"
+    },
+    {
+      "id": "TERRAIN_NUMERIC_INPUT",
+      "claim_to_assess": "显式DOTE/地形数值输入带来稳定独立增益",
+      "source": "docs/research_readiness/20261114_zero_cosine9/RESULTS_TERMINAL.md",
+      "source_identity": {
+        "bytes": 3745,
+        "sha256": "14179f7f4983adf8b12beb67a456ed8a069d00df3aeabc5ca50c74eea565f9b3"
+      },
+      "status": "NOT_SUPPORTED_IN_THIS_MATCHED_COMPARISON",
+      "saved_evidence": "REAL相对ZERO总体log+0.0648%、强雨log+0.3434%，Brier略好而AP/AUROC略差",
+      "limits": "单seed，真实mask保留、零输入投影无损失梯度，历史driver/cuDNN指纹缺失",
+      "permitted_development_statement": "在COSINE9背景的该组配对中，显式数值输入的增益尚未得到支持。"
+    },
+    {
+      "id": "E2_WEIGHT",
+      "claim_to_assess": "加大条件项lambda可稳定改善条件强度与发生预测",
+      "source": "docs/research_readiness/20261108_lambda2_recovery/RESULTS.json",
+      "source_identity": {
+        "bytes": 9527,
+        "sha256": "1d351fe3f8fc5c5dd6fc7f8d223dd52a4d79c2ffe629d3fe644bb76b5b64bdaf"
+      },
+      "status": "MIXED_DEVELOPMENT_RESULTS",
+      "saved_evidence": "B7条件log略改善但发生指标退化，B8方向混合",
+      "limits": "架构间方向不一致，单seed重复Dev",
+      "permitted_development_statement": "整体条件项加权呈现指标与架构依赖的取舍。"
+    },
+    {
+      "id": "UQ_MILD",
+      "claim_to_assess": "温和固定分位权重候选通过综合开发筛选",
+      "source": "docs/research_readiness/20261108_upper_quantile_pair/RESULTS.json",
+      "source_identity": {
+        "bytes": 11260,
+        "sha256": "817779ff27e8fa2f91d3b280d4a45aeb606312a6152739bdf703f305df6fdb67"
+      },
+      "status": "FAILED_FIXED_SCREEN",
+      "saved_evidence": "强雨log/物理损失仅约0.1%改善，四项保护失败",
+      "limits": "只检验该固定权重配置，不能外推所有分位加权方法",
+      "permitted_development_statement": "UQ_MILD未通过预设综合开发筛选。"
+    },
+    {
+      "id": "PHYS20",
+      "claim_to_assess": "物理Pinball/20固定替换改善条件强度取舍",
+      "source": "docs/research_readiness/20261115_physical_pinball_prepare/TERMINAL_VERIFICATION.json",
+      "source_identity": {
+        "bytes": 6678,
+        "sha256": "2ddfbfb4d0a095c3f62d54c1ff0a7763b76e5e046cc217dedd28bbfa21b3fea4"
+      },
+      "status": "FAILED_ALL_EIGHT_GATES",
+      "saved_evidence": "强雨log/物理损失退化4.3122%/2.7154%，弱雨8.0549%；八门全FAIL",
+      "limits": "单seed固定配置；尺度与相对任务梯度同时改变，机制未识别",
+      "permitted_development_statement": "PHYS20-COSINE9在此次开发比较中未通过八项预设门槛，固定候选封存。"
+    },
+    {
+      "id": "V7_POINT_AND_NODES",
+      "claim_to_assess": "总体点误差改善代表强雨点预测能力已经改善",
+      "source": "docs/research_readiness/20261115_v7_followup/NEXT_STEP.json",
+      "source_identity": {
+        "bytes": 2636,
+        "sha256": "b17bd26d36f131973a44c85c6f1db041eb1e476bb4530448d7a7b33e22bb68bd"
+      },
+      "status": "STRONG_POINT_CAPABILITY_UNSUPPORTED",
+      "saved_evidence": "V7两臂ABC严格>20均无预测正例；节点q32>20为93/160，但条件物理节点均值最大仅8.6158/14.1633",
+      "limits": "717强像元时次子集，有限节点代理，不能外推全分布校准、独立事件或机制",
+      "permitted_development_statement": "总体点误差和强雨分位诊断需分别报告，强雨点检出仍未建立。"
+    }
+  ],
+  "future_independent_generalization": "UNVERIFIED; final protocol/model freeze and separately authorized final test remain required",
+  "physical_mechanism": "UNVERIFIED",
+  "scientific_status": "NOT_VERIFIED",
+  "new_training": 0,
+  "new_inference": 0,
+  "final_test_2025_access": false,
+  "additional_harness_rounds": 0,
+  "scope": "Engineering evidence inventory from saved records, not a paper draft or scientific acceptance",
+  "next_stage": "Researcher and controller select defensible scientific claims and corresponding minimum reproducibility/independent-validation plan from this inventory"
+}
