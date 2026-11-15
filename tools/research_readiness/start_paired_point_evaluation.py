@@ -20,6 +20,9 @@ from urllib.parse import parse_qs, unquote, urlsplit
 ROOT = Path(__file__).resolve().parents[2]
 SCOPE = "TWO_FIXED_E9_B7_2024_JOINT_AMPLITUDE_EVALUATION_V1"
 TASKS = ("CONTROL_E0", "CANDIDATE_COSINE9")
+ENTRY_PATH = Path(__file__).resolve()
+WORKER_PATH = "tools/research_readiness/paired_point_worker.py"
+COMPLETION_STATUS = "COMPLETE_PAIRED_POINT_EVALUATION"
 MIB = 1024 ** 2
 LIMITS = dict(
     payload_archive_reference_bytes=53494753532, payload_open_instances=15906,
@@ -502,7 +505,7 @@ def worker(proposal_path, private_path, approval_path, task):
         guard.block_subprocess = True
         require_host()
         check = OutputLimit(package, LIMITS["output_storage_cap_bytes"], deadline, extra_roots=(v["preflight_root"],))
-        provider = module(ROOT / "tools/research_readiness/paired_point_worker.py", "paired_point_provider")
+        provider = module(ROOT / WORKER_PATH, "paired_point_provider")
         result = provider.run_task(ROOT, p, v, task, output, check)
         check()
         if result.get("status") != "COMPLETE":
@@ -695,7 +698,7 @@ def execute(proposal_path, private_path, approval_path):
             check()
             resources(package)
             write(package / f"{task}_claim.json", dict(task=task, controller_pid=os.getpid(), proposal_sha256=p["proposal_sha256"]))
-            command = [sys.executable, "-B", str(Path(__file__).resolve()), "worker", "--proposal", str(Path(proposal_path).resolve()),
+            command = [sys.executable, "-B", str(ENTRY_PATH), "worker", "--proposal", str(Path(proposal_path).resolve()),
                        "--private-preparation", str(Path(private_path).resolve()), "--researcher-approval", str(Path(approval_path).resolve()), "--task", task]
             environment = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", PYTHONUTF8="1", PYTHONHASHSEED="2029",
                                CUBLAS_WORKSPACE_CONFIG=":4096:8", OMP_NUM_THREADS="1", MKL_NUM_THREADS="1")
@@ -718,7 +721,7 @@ def execute(proposal_path, private_path, approval_path):
         check()
         controller_accounting = guard.close()
         accounting = totals(preflight + [controller_accounting] + [row["accounting"] for row in worker_records])
-        write(package / "completion.json", dict(status="COMPLETE_PAIRED_POINT_EVALUATION", tasks=list(TASKS),
+        write(package / "completion.json", dict(status=COMPLETION_STATUS, tasks=list(TASKS),
               accounting=accounting, results={row["task"]: row["result"] for row in worker_records},
               paired_metrics_sha256=sha(package / "paired_metrics.json"),
               proposal_sha256=p["proposal_sha256"], automatic_retry=False, optimizer_updates=0,

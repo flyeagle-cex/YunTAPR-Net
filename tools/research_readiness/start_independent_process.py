@@ -156,8 +156,9 @@ def validate_spec(path):
         definition=importlib.util.spec_from_file_location('read_only_diagnostic_identity',entry)
         observer=importlib.util.module_from_spec(definition);definition.loader.exec_module(observer)
         if observer.Reader(config).service!=folder:raise PermissionError('Observer service namespace differs')
-    elif spec['kind']=='BOUNDED_PAIRED_POINT_EVALUATION':
-        if (entry.name!='start_paired_point_evaluation.py' or len(command)<4
+    elif spec['kind'] in ('BOUNDED_PAIRED_POINT_EVALUATION', 'BOUNDED_MOUNTAIN_PAIR_EVALUATION'):
+        expected_entry = 'start_mountain_pair_evaluation.py' if spec['kind']=='BOUNDED_MOUNTAIN_PAIR_EVALUATION' else 'start_paired_point_evaluation.py'
+        if (entry.name!=expected_entry or len(command)<4
                 or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve()):
             raise PermissionError('Only the fixed two-E9 point-evaluation controller')
         def paired_argument(flag):

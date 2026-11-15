@@ -66,11 +66,18 @@ def canonical_task_bindings(tasks, scientific, metadata):
         if checkpoint not in scientific or report not in metadata:
             raise ValueError("Task checkpoint/report reference is absent from its canonical manifest")
         result[task] = dict(checkpoint_path=checkpoint, dev_report_path=report)
+        if 'tail_report_path' in paths:
+            tail = str(Path(paths['tail_report_path']).resolve())
+            if tail not in metadata:
+                raise ValueError('Terrain tail reference is absent from the metadata manifest')
+            result[task]['tail_report_path'] = tail
     return result
 
 
-def prepare(code_root, private_dir, output_root, public_root=None):
+def prepare(code_root, private_dir, output_root, public_root=None, *, campaign=None):
     from tools.research_readiness.start_paired_point_evaluation import LIMITS, SCOPE, TASKS as ORDER
+    if campaign is not None:
+        LIMITS, SCOPE, ORDER = campaign['limits'], campaign['scope'], campaign['tasks']
 
     code_root, private_dir, output_root = map(lambda p: Path(p).resolve(), (code_root, private_dir, output_root))
     public_root = Path(public_root).resolve() if public_root is not None else PUBLIC
@@ -98,10 +105,11 @@ def prepare(code_root, private_dir, output_root, public_root=None):
         raise PermissionError("The fixed execution worktree must be clean")
     code_files = (sorted((code_root / "src").rglob("*.py"))
                   + sorted((code_root / "tools/core_stage4/monitor").rglob("*.py"))
-                  + [code_root / name for name in TOOLS])
+                  + [code_root / name for name in (*TOOLS, *(campaign['additional_tools'] if campaign else ()))])
     code_sha = {path.relative_to(code_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in code_files}
     for name, expected in old["code_sha256"].items():
-        if name.startswith("src/") and code_sha.get(name) != expected:
+        if (name.startswith("src/") and code_sha.get(name) != expected
+                and name not in (campaign['allowed_source_differences'] if campaign else ())):
             raise ValueError("Numerical source differs from the original COSINE9 binding: " + name)
 
     tasks = {}
@@ -116,6 +124,11 @@ def prepare(code_root, private_dir, output_root, public_root=None):
         "a3f9208aa4e25e786c6797e658cc5fda4da9a29a05c87a693aa6a3fdc571565f",
         "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
     )
+    checkpoint_sizes = (53904005, 53906821)
+    if campaign is not None:
+        source_paths = tuple(Path(path) for path in campaign['source_paths'])
+        checkpoint_shas = tuple(row[2] for row in campaign['models'])
+        checkpoint_sizes = tuple(row[1] for row in campaign['models'])
     scientific = {}
 
     def add_scientific(path, spec):
@@ -128,7 +141,8 @@ def prepare(code_root, private_dir, output_root, public_root=None):
         if info["year"] != 2024 and not (info["year"] == 2023 and info["kind"] == "static_mask"):
             raise PermissionError("Forbidden source year or role")
         add_scientific(path, dict(bytes=info["bytes"], sha256=info["sha"], category="weather", tasks=list(ORDER), opens_per_task=1))
-    for task, folder, checkpoint_sha, checkpoint_bytes in zip(ORDER, source_paths, checkpoint_shas, (53904005, 53906821)):
+    tail_paths = []
+    for index, (task, folder, checkpoint_sha, checkpoint_bytes) in enumerate(zip(ORDER, source_paths, checkpoint_shas, checkpoint_sizes)):
         report = folder / "B7_development_09.json"
         saved, report_identity = cost.read(report)
         point = folder / "B7_LAST_epoch_09.pt"
@@ -139,6 +153,11 @@ def prepare(code_root, private_dir, output_root, public_root=None):
         models.append(dict(task=task, model="B7", seed=2029, endpoint="FIXED_EPOCH_9_LAST",
                            checkpoint_bytes=point.stat().st_size, checkpoint_sha256=checkpoint_sha,
                            dev_report_bytes=report_identity["bytes"], dev_report_sha256=report_identity["sha256"]))
+        if campaign is not None:
+            models[-1]['dynamic_control'] = campaign['models'][index][0]
+            tail = folder / 'B7_tail_09.json'
+            tail_paths.append(tail)
+            tasks[task]['tail_report_path'] = str(tail.resolve())
         summaries[task] = saved["groups"]["all"]["summary"]
         report_paths.append(report)
         add_scientific(point, dict(bytes=point.stat().st_size, sha256=checkpoint_sha, category="checkpoint", tasks=[task], opens_per_task=2))
@@ -153,7 +172,7 @@ def prepare(code_root, private_dir, output_root, public_root=None):
     stage3 = Path(inputs["stage3_run"])
     request = Path(inputs["request"])
     request_body, _ = cost.read(request)
-    files = [Path(old_private["inherited"]), *report_paths, terrain / "production_receipt.json", request]
+    files = [Path(old_private["inherited"]), *report_paths, *tail_paths, terrain / "production_receipt.json", request]
     files += [stage3 / name for name in ("populations.json", "train_statistics.json", "statistics.sqlite")]
     files += [request.parent / request_body["roles"][role]["manifest"] for role in ("Train", "Development")]
     files += [path for path in (code_root / "config").rglob("*") if path.is_file() and path.suffix in (".json", ".yaml", ".yml", ".csv")]
@@ -216,13 +235,17 @@ def prepare(code_root, private_dir, output_root, public_root=None):
                             cross_arm_match="exact ordered key and exact reference value equality",
                             no_full_population_prediction_export=True)),
                     budget=LIMITS, final_2025_access=False)
+    if campaign is not None:
+        proposal['scientific_choices'].pop('joint_record_policy')
+        proposal['scientific_choices']['terrain_evaluation'] = campaign['contract']
+        proposal['source_delta_scope'] = campaign['allowed_source_differences']
     proposal["proposal_sha256"] = digest(proposal)
     private["proposal_sha256"] = proposal["proposal_sha256"]
     write(public_root / "EXECUTION_PROPOSAL.json", proposal)
     write(private_dir / "PRIVATE_PREPARATION.json", private)
-    execution_spec = dict(kind="BOUNDED_PAIRED_POINT_EVALUATION",
+    execution_spec = dict(kind=campaign['launcher_kind'] if campaign else "BOUNDED_PAIRED_POINT_EVALUATION",
           service_dir=str(service), cwd=str(code_root), command=[str(native), "-B",
-              str(code_root / TOOLS[0]), "execute", "--proposal", str(public_root / "EXECUTION_PROPOSAL.json"),
+              str(code_root / (campaign['entry'] if campaign else TOOLS[0])), "execute", "--proposal", str(public_root / "EXECUTION_PROPOSAL.json"),
               "--private-preparation", str(private_dir / "PRIVATE_PREPARATION.json"),
               "--researcher-approval", str(private_dir / "RESEARCHER_APPROVAL.json")],
           environment=dict(PYTHONPATH=str(code_root / "src") + os.pathsep + str(code_root),
@@ -234,7 +257,7 @@ def prepare(code_root, private_dir, output_root, public_root=None):
           proposal_sha256=proposal["proposal_sha256"], metadata_files=len(metadata),
           metadata_preparation_bytes=cost.bytes, metadata_preparation_opens=cost.opens,
           metadata_preparation_limit_bytes=256*1024**2, source_volume_admission="PASS",
-          numerical_source_binding="MATCHES_ORIGINAL_COSINE9", scientific_payload_reads=0,
+          numerical_source_binding="BOUND_EXPLICIT_INPUT_CONTRACT_DELTA_REQUIRE_FROZEN_METRIC_REPRODUCTION" if campaign else "MATCHES_ORIGINAL_COSINE9", scientific_payload_reads=0,
           checkpoint_loads=0, new_inference=0, optimizer_updates=0,
           metadata_preparation_reads=cost.records))
     return proposal, private

@@ -1,0 +1,101 @@
+{
+  "status": "SCIENTIFIC_PROTOCOL_PREPARED_NOT_AUTHORIZED",
+  "research_question": "Incremental REAL minus ZERO_DOTE loss within high-elevation strong rain under fixed COSINE9",
+  "contract": {
+    "profile": "MOUNTAIN_TERRAIN_PAIR_V1",
+    "direction": "REAL_MINUS_ZERO",
+    "elevation_edges_m": [
+      1000.0,
+      2000.0
+    ],
+    "rainfall_edges_mm_h": [
+      0.1,
+      1.0,
+      5.0,
+      10.0,
+      20.0,
+      30.0,
+      50.0,
+      null
+    ],
+    "primary_population": "elevation_ge_2000m_AND_float32_R_strictly_gt20",
+    "primary_metrics": [
+      "log_pinball",
+      "physical_pinball_over20"
+    ],
+    "roundoff_tolerance": 1e-10,
+    "purpose": "EXPLORATORY_LOCAL_INCREMENT_AND_GLOBAL_TRADEOFF_DESCRIPTION",
+    "empty_cells": "NOT_ESTIMABLE",
+    "inference": "ONE_FIXED_E9_PASS_PER_ARM_NO_TRAINING",
+    "independent_event_count": "NOT_IDENTIFIED",
+    "scientific_status": "NOT_VERIFIED"
+  },
+  "tasks": [
+    "REAL_COSINE9",
+    "ZERO_COSINE9"
+  ],
+  "fixed_models": [
+    {
+      "task": "REAL_COSINE9",
+      "dynamic_control": "REAL_PHYSICAL_DOTE",
+      "checkpoint_bytes": 53906821,
+      "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e"
+    },
+    {
+      "task": "ZERO_COSINE9",
+      "dynamic_control": "ZERO_NUMERIC_RETAIN_REAL_MASKS",
+      "checkpoint_bytes": 53906757,
+      "checkpoint_sha256": "e5689a573704145fa29b16c8e6ab4c9a1bd2e674a7e8888d2247c82958fb6fa9"
+    }
+  ],
+  "budget": {
+    "payload_archive_reference_bytes": 53494759036,
+    "payload_open_instances": 15906,
+    "preflight_validations": 2,
+    "metadata_bytes_per_preflight": 83886080,
+    "metadata_opens_per_preflight": 512,
+    "metadata_bytes_controller": 83886080,
+    "metadata_opens_controller": 512,
+    "metadata_bytes_per_worker": 268435456,
+    "metadata_opens_per_worker": 2048,
+    "total_metadata_cap_bytes": 788529152,
+    "total_metadata_opens": 5632,
+    "total_source_cap_bytes": 54283288188,
+    "previous_attempt_metadata_bytes": 0,
+    "previous_attempt_metadata_opens": 0,
+    "previous_attempt_payload_bytes": 0,
+    "previous_attempt_payload_opens": 0,
+    "previous_attempt_seconds": 0,
+    "cumulative_source_cap_bytes": 54283288188,
+    "cumulative_metadata_opens": 5632,
+    "cumulative_total_opens": 21538,
+    "cumulative_maximum_seconds": 7200,
+    "maximum_seconds": 7200,
+    "preflight_seconds": 60,
+    "controller_seconds": 7080,
+    "per_model_seconds": 3000,
+    "output_storage_cap_bytes": 4294967296,
+    "minimum_free_bytes": 8589934592,
+    "minimum_host_available_bytes": 8589934592,
+    "minimum_gpu_free_mib": 5120,
+    "optimizer_updates": 0,
+    "retries": 0,
+    "replay": 0
+  },
+  "interpretation_limits": [
+    "963 Development scenes and717 total strong pixel-times are not independent storm events",
+    "The high-elevation strong count is unknown before the approved evaluation",
+    "Repeated2024 Development supports exploratory paired description, not independent confirmation",
+    "ZERO retains physical validity masks and128 zero-input weights with zero loss gradient",
+    "Global REAL/ZERO tradeoffs are already known; this protocol describes all local cells without a new global candidate screen",
+    "New input-contract guards require metric reproduction before any contrast is accepted"
+  ],
+  "engineering_checks": {
+    "new_artificial_checks": 22,
+    "shared_worker_regressions": 9,
+    "raw_payload_reads": 0,
+    "checkpoint_loads": 0,
+    "optimizer_updates": 0
+  },
+  "scientific_status": "NOT_VERIFIED"
+}
