@@ -1,0 +1,44 @@
+{
+  "status": "CONTROLLER_MINIMAL_DIAGNOSTIC_COMPLETED",
+  "controller": "Existing research ChatGPT web conversation, observed reasoning mode High",
+  "controller_requested_analysis": "Compare physical q16/q24/q28/q32 and number of nodes strictly above FP32 20 mm/h in two saved paired strong-pixel records",
+  "hypothesis": "Within observed strong-pixel records, low middle conditional nodes and upper-tail concentration of nodes above 20 accompany the low finite-node A readout; occurrence multiplication alone cannot explain A remaining below 20",
+  "conclusion": "DESCRIPTIVE_SUPPORT_WITHIN_STRONG_SUBSET",
+  "findings": {
+    "strong_pixels_per_arm": 717,
+    "q16_above20_counts": [0, 0],
+    "q24_above20_counts": [0, 0],
+    "q28_above20_counts": [0, 51],
+    "q32_above20_counts": [93, 160],
+    "maximum_nodes_above20_per_record": [3, 7],
+    "maximum_conditional_physical_node_mean_mm_h": [8.615793629007117, 14.163327016372818],
+    "point_A_above20_counts": [0, 0],
+    "arm_order": ["CONTROL_E0", "CANDIDATE_COSINE9"]
+  },
+  "interpretation_limits": [
+    "Conditioning on observed strong rain does not establish conditional-distribution calibration or a learning defect",
+    "The finite-node mean is the inherited point proxy, not an exact expectation over an identified full distribution",
+    "Observations support a representation-level description, not causal attribution to architecture, loss, capacity, terrain or optimization",
+    "Calendar dates are not identified independent storm events",
+    "Full-population FAR and event-bootstrap differences require per-scene all-population statistics missing from the saved point summaries"
+  ],
+  "next_decision": "Use these results to specify one conditional-intensity-learning hypothesis against completed E2/UQ/COSINE interventions before preparing any new training proposal",
+  "scientific_status": "NOT_VERIFIED",
+  "execution_receipts": ["SAVED_RECORD_DIAGNOSTIC.json", "NODE_SHAPE_DIAGNOSTIC.json"],
+  "postprocessing_total": {
+    "passes": 2,
+    "saved_record_open_instances": 4,
+    "saved_record_bytes": 798882,
+    "summary_metadata_open_instances": 8,
+    "summary_metadata_bytes": 317652,
+    "total_bytes": 1116534,
+    "original_weather_or_weight_opens": 0,
+    "model_inference_passes": 0,
+    "optimizer_updates": 0
+  },
+  "review": {
+    "previous_harness_result": "Limited receipt integrity and budget PASS, science NOT_VERIFIED",
+    "previous_harness_scope_deviation": "Opened binding and per-arm task_complete files containing reservations beyond the specified file list; disclosed by reviewer",
+    "additional_harness_review_rounds": 0
+  }
+}
