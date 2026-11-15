@@ -1,6 +1,8 @@
 """Artificial CPU checks for mountain cells, grant boundaries and worker hooks."""
 import argparse
 import copy
+from contextlib import ExitStack
+import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -80,6 +82,121 @@ def bind(proposal, private):
                     budget=proposal['budget'], output_root=private['output_root'],
                     decision_id='ARTIFICIAL_NOT_AN_ACTUAL_APPROVAL', researcher_instruction='ARTIFICIAL_CHECK_ONLY')
     return proposal, private, approval
+
+
+def integration_checks(checks, real, zero):
+    """Exercise real entry/finalizer control flow with artificial IO boundaries."""
+    from tools.research_readiness import paired_point_worker as shared
+    spec = importlib.util.spec_from_file_location('mountain_worker_fixture', ROOT / 'tests/research_readiness/test_paired_point_worker.py')
+    fixtures = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(fixtures)
+    with fixtures.workspace_directory() as temporary, patch.dict(fixtures.os.environ), patch.object(tempfile, 'tempdir', tempfile.tempdir):
+        folder = Path(temporary)
+        runtime, p, v, state, actual, _ = fixtures.fixture(folder)
+        reference = runtime.read('report')
+        groups = ('all', 'analysis_UTC_00', 'analysis_UTC_06', 'analysis_UTC_12', 'analysis_UTC_18', 'scene_max_ge20')
+        for name in groups[1:]:
+            reference['groups'][name] = copy.deepcopy(reference['groups']['all'])
+            actual['groups'][name] = copy.deepcopy(actual['groups']['all'])
+        calls = []
+
+        class Diagnostic:
+            def __init__(self, terrain, ids):
+                assert terrain == 'SYNTHETIC_PACK' and len(ids) == 963
+
+            def add_batch(self, prediction, batch):
+                calls.append(batch.ids)
+
+            def finish(self, report):
+                assert report is actual
+                return real
+
+        treatments = []
+        def transform(terrain, definition):
+            treatments.append(terrain)
+            return 'SYNTHETIC_TRANSFORM'
+        with patch.object(shared, '_runtime', return_value=runtime):
+            result = shared.run_task(folder, p, v, 'CONTROL_E0', folder / 'output', lambda: None,
+                                     diagnostics_factory=Diagnostic, transform_factory=transform, include_joint=False)
+        assert calls == state['forwards'] and len(calls) == 121
+        assert treatments == ['SYNTHETIC_PACK'] and state['joint'] == []
+        assert result['terrain_population_sha256'] == real['paired_population_sha256']
+        assert set(result['gate']['groups']) == set(groups)
+        assert not (folder / 'output/strong_joint_pixels.npz').exists()
+        for name in groups:
+            changed = copy.deepcopy(actual)
+            changed['groups'][name]['summary']['brier'] += .01
+            try:
+                shared._gate_report(changed, reference)
+            except ValueError:
+                continue
+            raise AssertionError('Frozen gate accepted changed group ' + name)
+    checks['shared_worker_diagnostic_hook_121_single_forwards_and_no_joint_export'] = True
+    checks['all_six_frozen_groups_pass_and_each_group_rejects_drift'] = True
+
+    gate = entry.gate
+    accounting = dict(metadata_archive_reserved_bytes=0, metadata_open_instances=0,
+                      payload_archive_reserved_bytes=0, payload_open_instances=0)
+    class Guard:
+        active = False
+        def install(self):
+            self.active = True
+        def close(self):
+            self.active = False
+            return dict(accounting)
+
+    with fixtures.workspace_directory() as temporary:
+        folder = Path(temporary)
+        p, v = grant_fixture()
+        v.update(output_root=str(folder / 'package'), preflight_root=str(folder / 'preflight'), runtime_python=sys.executable)
+        p['private_preparation_sha256'] = gate.digest(v)
+        p, v, a = bind(p, v)
+        paths = [folder / name for name in ('synthetic_proposal.json', 'synthetic_private.json', 'synthetic_approval.json')]
+        for path, value in zip(paths, (p, v, a)):
+            gate.write(path, value)
+        commands = []
+        package = Path(v['output_root'])
+
+        class Child:
+            def __init__(self, command, **kwargs):
+                commands.append(command)
+                assert Path(command[2]) == gate.ENTRY_PATH and command[3] == 'worker'
+                task = command[-1]
+                output = package / task
+                output.mkdir()
+                terrain = real if task == entry.TASKS[0] else zero
+                gate.write(output / 'terrain_metrics.json', terrain)
+                gate.write(output / 'recomputed_report.json', report(fixture()))
+                gate.write(output / 'point_metrics.json', {'artificial_fixture': True})
+                cost = dict(accounting, payload_archive_reserved_bytes=26639253112 + 312828 + 2 * p['models'][entry.TASKS.index(task)]['checkpoint_bytes'], payload_open_instances=7953)
+                gate.write(output / 'task_complete.json', dict(status='COMPLETE', task=task, accounting=cost, result={'task': task, 'status': 'COMPLETE'}))
+                self.returncode = 0
+            def poll(self):
+                return self.returncode
+
+        with ExitStack() as stack:
+            for name, replacement in (
+                ('guard_for', lambda *args: Guard()),
+                ('validate_bound_inputs', lambda *args: None),
+                ('require_host', lambda: None),
+                ('resources', lambda *args: {'artificial_resource_admission': True}),
+            ):
+                stack.enter_context(patch.object(gate, name, replacement))
+            stack.enter_context(patch.object(gate.subprocess, 'Popen', Child))
+            entry.validate_entry(*paths)
+            entry.validate_entry(*paths)
+            gate.execute(*paths)
+        complete = gate.read(package / 'completion.json')
+        paired = gate.read(package / 'paired_metrics.json')
+        assert len(commands) == 2 and [c[-1] for c in commands] == list(entry.TASKS)
+        assert complete['status'] == gate.COMPLETION_STATUS
+        assert complete['paired_metrics_sha256'] == gate.sha(package / 'paired_metrics.json')
+        assert paired['primary_contrast'] == primary_contrast(real, zero)
+        assert len(paired['cells']) == 3 and all(len(rows) == 7 for rows in paired['cells'].values())
+        assert paired['scientific_status'] == 'NOT_VERIFIED'
+        assert not (package / 'failure.json').exists()
+    checks['new_entry_two_preflights_serial_dispatch_and_actual_finalizer'] = True
+    checks['finalizer_all_21_cells_contrast_and_completion_sha'] = True
 
 
 def main():
@@ -211,6 +328,7 @@ def main():
         np.testing.assert_array_equal(real_mask, zero_mask)
     checks['worker_real_zero_treatment_and_unchanged_real_masks'] = True
     checks['worker_terrain_hook_and_saved_elevation_gate'] = True
+    integration_checks(checks, real, zero)
     result = dict(status='PASS_ARTIFICIAL_CPU_MOUNTAIN_PREPARATION', checks=checks, checks_passed=len(checks),
                   real_source_reads=0, checkpoint_reads=0, real_model_forwards=0, optimizer_updates=0,
                   real_approval_created=False, scientific_status='NOT_VERIFIED')

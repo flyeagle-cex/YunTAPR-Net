@@ -1,0 +1,28 @@
+{
+  "status": "LIMITED_PASS_PREPARATION_ONLY",
+  "reviewer": "Harness / DeepSeek-V4.1-Flash High / read-only",
+  "review_count": 1,
+  "reviewed_execution_code_commit": "e8d2a9b0c3ab7f60aa678a0bcee2d60133852e74",
+  "proposal_sha256": "85bc55e0101823b1291c3923c85685a7ad50315797327b9eae410f2fe49bdf61",
+  "definite_code_blockers_found": false,
+  "review_original_artificial_checks": 22,
+  "findings": [
+    "New entry validate/execute/finalize and actual shared diagnostic hook lacked direct synthetic integration coverage",
+    "Six frozen groups were inherited but not individually perturbed in the22 checks",
+    "Actual checkpoint identities, historical physical-input compatibility and metric reproduction remain execution-time checks"
+  ],
+  "codex_followup": {
+    "receipt": "ENTRY_INTEGRATION_CHECK.json",
+    "checks_passed": 26,
+    "added_checks": 4,
+    "execution_code_changed": false,
+    "scope": "Artificial control-flow and worker integration only",
+    "mocked_boundaries": [
+      "scientific read guard and bound-input validation in artificial entry test",
+      "resource/host admission in artificial entry test",
+      "worker subprocess in artificial entry test",
+      "scientific backend in worker test"
+    ]
+  },
+  "scientific_status": "NOT_VERIFIED"
+}

@@ -18,18 +18,29 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--project', type=Path, required=True)
     parser.add_argument('--receipt', type=Path, required=True)
+    parser.add_argument('--bundle', action='append')
+    parser.add_argument('--snapshot-source', type=Path, default=ROOT / 'docs/research_readiness/20261115_core_innovation_repair/OBSIDIAN_SNAPSHOT.md')
+    parser.add_argument('--snapshot-name', default='进度快照_2026-11-15_四项创新主线与首轮修复.md')
+    parser.add_argument('--status', default='core-innovation-repair-in-progress')
+    parser.add_argument('--status-text', default='研究者固定四项创新主线。PHYS20九轮完成且八门失败，当前优先修复物理输入契约和山区强雨证据保存。本轮人工检查通过，科学验收仍为NOT_VERIFIED。')
     args = parser.parse_args()
     project = args.project.resolve()
     index = project / '极端降水预测.md'
     original = index.read_bytes()
-    snapshot_name = '进度快照_2026-11-15_四项创新主线与首轮修复.md'
-    source = ROOT / 'docs/research_readiness/20261115_core_innovation_repair/OBSIDIAN_SNAPSHOT.md'
+    snapshot_name = args.snapshot_name
+    if Path(snapshot_name).name != snapshot_name or not snapshot_name.endswith('.md'):
+        raise ValueError('Snapshot must be a Markdown filename')
+    source = args.snapshot_source.resolve()
     snapshot = source.read_bytes()
     copies = {}
-    for bundle in BUNDLES:
+    bundles = args.bundle or BUNDLES
+    public_root = (ROOT / 'docs/research_readiness').resolve()
+    for bundle in bundles:
+        if Path(bundle).name != bundle or bundle.startswith('.'):
+            raise ValueError('Bundle must name a public research receipt directory')
         destination = project / '资料快照' / bundle
         destination.mkdir(parents=True, exist_ok=True)
-        for path in sorted((ROOT / 'docs/research_readiness' / bundle).glob('*.json')):
+        for path in sorted((public_root / bundle).glob('*.json')):
             if path.resolve() == args.receipt.resolve():
                 continue
             data = path.read_bytes()
@@ -42,12 +53,11 @@ def main():
     assert (project / snapshot_name).read_bytes() == snapshot
     text = original.decode('utf-8-sig')
     text = re.sub(r'^updated:.*$', 'updated: 2026-11-15', text, count=1, flags=re.M)
-    text = re.sub(r'^status:.*$', 'status: core-innovation-repair-in-progress', text, count=1, flags=re.M)
+    text = re.sub(r'^status:.*$', 'status: ' + args.status, text, count=1, flags=re.M)
     marker = '<!-- CODEX_CURRENT_RESEARCH_STATUS -->'
     end = '<!-- /CODEX_CURRENT_RESEARCH_STATUS -->'
     current = (f'{marker}\n## 最新研究状态 · 2026-11-15\n\n'
-               '研究者固定四项创新主线。PHYS20九轮完成且八门失败，当前优先修复物理输入契约和山区强雨证据保存。'
-               '本轮人工检查通过，科学验收仍为NOT_VERIFIED。\n\n'
+               f'{args.status_text}\n\n'
                f'详见 [[{snapshot_name[:-3]}]]。\n{end}\n\n')
     if marker in text:
         text = re.sub(re.escape(marker) + r'.*?' + re.escape(end) + r'\s*', current, text, count=1, flags=re.S)
