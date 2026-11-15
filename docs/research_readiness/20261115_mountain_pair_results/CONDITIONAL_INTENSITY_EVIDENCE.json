@@ -1,0 +1,143 @@
+{
+  "status": "EXISTING_EVIDENCE_TABLE_COMPLETE",
+  "source_identities": {
+    "20261108_lambda2_recovery/RESULTS.json": {
+      "bytes": 9527,
+      "sha256": "1d351fe3f8fc5c5dd6fc7f8d223dd52a4d79c2ffe629d3fe644bb76b5b64bdaf"
+    },
+    "20261108_upper_quantile_pair/RESULTS.json": {
+      "bytes": 11260,
+      "sha256": "817779ff27e8fa2f91d3b280d4a45aeb606312a6152739bdf703f305df6fdb67"
+    },
+    "20261110_cosine9/RESULTS.json": {
+      "bytes": 10170,
+      "sha256": "b4420b1388d31f6bc86eeaa088d04ef4ccea2c5ebde18ef2cf7dd271f63eb3ae"
+    },
+    "20261115_physical_pinball_prepare/TERMINAL_VERIFICATION.json": {
+      "bytes": 6678,
+      "sha256": "2ddfbfb4d0a095c3f62d54c1ff0a7763b76e5e046cc217dedd28bbfa21b3fea4"
+    },
+    "20261115_v7_followup/NEXT_STEP.json": {
+      "bytes": 2636,
+      "sha256": "b17bd26d36f131973a44c85c6f1db041eb1e476bb4530448d7a7b33e22bb68bd"
+    },
+    "20261115_mountain_pair_results/PAIRED_METRICS.json": {
+      "bytes": 47496,
+      "sha256": "5a25a2dcb93ab907d62569d173f8b0a559b921e9905fdd57786a87337e5fe711"
+    }
+  },
+  "axes": {
+    "training_target": [
+      {
+        "intervention": "E2",
+        "factor": "ALL_RAIN_QUANTILE_LOSS_MULTIPLIER_1_TO_2",
+        "control": "B7_E0_ORIGINAL_SCHEDULE",
+        "all_log_relative_percent": -0.46827503236798185,
+        "strong_log_relative_percent": 0.6758574296767517,
+        "identified": "One fixed loss-weight contrast under its original schedule",
+        "unidentified": "Rain-intensity-specific gradient norms and shared-encoder interference"
+      },
+      {
+        "intervention": "UQ_MILD",
+        "control": "B7_E0_ORIGINAL_SCHEDULE",
+        "factor": "UPPER_QUANTILE_NODE_WEIGHTS",
+        "all_log_relative_percent": 0.10742246216608464,
+        "strong_log_relative_percent": -0.10463424023732237,
+        "strong_physical_relative_percent": -0.0934809409034787,
+        "interpretation": "Use each intervention against its own matched control, retain guardrail failures"
+      },
+      {
+        "intervention": "COSINE9",
+        "control": "B7_E0_ORIGINAL_SCHEDULE",
+        "factor": "LEARNING_RATE_SCHEDULE",
+        "all_log_relative_percent": -1.24250368033757,
+        "strong_log_relative_percent": -10.000148452800971,
+        "strong_physical_relative_percent": -6.300735431285853,
+        "interpretation": "Use each intervention against its own matched control, retain guardrail failures"
+      },
+      {
+        "intervention": "PHYS20",
+        "control": "B7_E0_COSINE9",
+        "factor": "PHYSICAL_PINBALL_OVER20_TARGET",
+        "all_log_relative_percent": 2.982093372368233,
+        "strong_log_relative_percent": 4.3122246508306095,
+        "strong_physical_relative_percent": 2.715425277729211,
+        "interpretation": "Use each intervention against its own matched control, retain guardrail failures"
+      }
+    ],
+    "sample_contribution": {
+      "population": "2024_DEVELOPMENT_REAL_COSINE9",
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "n_strong": 717,
+      "strong_share_of_wet_percent": 0.17581285861409446,
+      "strong_share_of_valid_percent": 0.02170694713132249,
+      "strong_share_of_log_pinball_sum_percent": 1.1296532438627942,
+      "weak_share_of_log_pinball_sum_percent": 42.61767649069864,
+      "interpretation": "SAVED_DEV_LOSS_VALUES_ONLY_TRAINING_GRADIENT_CONTRIBUTIONS_UNOBSERVED"
+    },
+    "readout": {
+      "strong_pixels_per_arm": 717,
+      "q16_above20_counts": [
+        0,
+        0
+      ],
+      "q24_above20_counts": [
+        0,
+        0
+      ],
+      "q28_above20_counts": [
+        0,
+        51
+      ],
+      "q32_above20_counts": [
+        93,
+        160
+      ],
+      "maximum_nodes_above20_per_record": [
+        3,
+        7
+      ],
+      "maximum_conditional_physical_node_mean_mm_h": [
+        8.615793629007117,
+        14.163327016372818
+      ],
+      "point_A_above20_counts": [
+        0,
+        0
+      ],
+      "arm_order": [
+        "CONTROL_E0",
+        "CANDIDATE_COSINE9"
+      ]
+    }
+  },
+  "identifiability": {
+    "measured": "Saved model response to four existing interventions and finite-node readout on observed strong pixels",
+    "unresolved": [
+      "Per-intensity training-gradient norms and directions",
+      "Conditional distribution between nodes and beyond q32",
+      "Full-population strong-exceedance ranking/calibration from the current21-cell aggregates",
+      "Independent storm uncertainty and reproducibility of the local terrain effect"
+    ]
+  },
+  "next_preparation": {
+    "task": "TARGETED_CONDITIONAL_INTENSITY_DIAGNOSTIC",
+    "scope": "Use existing loss/readout and tail-identifiability interfaces to specify the missing measurements",
+    "reuse": [
+      "src/yuntapr/experimental/research_readiness/tail_identifiability.py",
+      "tools/research_readiness/extreme_diagnostic_candidates.py::exceedance_bounds"
+    ],
+    "candidate_training": "NOT_SPECIFIED_FROM_CURRENT_CAUSAL_EVIDENCE",
+    "reason": "Current receipts do not distinguish gradient allocation from representation or finite-node readout limitations"
+  },
+  "model_modes": {
+    "engineering": "Sol High",
+    "bounded_scientific_design": "Web ChatGPT High",
+    "routine_receipt_sync": "Luna"
+  },
+  "new_training": 0,
+  "new_inference": 0,
+  "raw_weather_or_weight_reads": 0,
+  "scientific_status": "NOT_VERIFIED"
+}

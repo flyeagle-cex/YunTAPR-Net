@@ -1,0 +1,85 @@
+{
+  "status": "UPDATED_AFTER_COMPLETED_MOUNTAIN_PAIR",
+  "researcher_core": "云南复杂地形山区的极端降水反演",
+  "researcher_innovations": [
+    "面向复杂地形的多元信息协同降水反演框架",
+    "融合风场与地形梯度的动态地形强迫表征方法",
+    "多时相大气环境物理约束",
+    "U-Net底层框架及双输出头"
+  ],
+  "temporal_choice_basis": "研究者答复按你的判断进行；沿用现有六卫星时次及同分析时刻GFS",
+  "controller": "Existing web ChatGPT High fixed the next bounded evidence preparation; no additional Harness review",
+  "stages": [
+    {
+      "stage": "Stage2 多时相与多光谱",
+      "innovation": "多元信息协同框架",
+      "implemented": "七通道六卫星时次，t−60至t−10分钟",
+      "gap": "B0/B1历史人口不同，B2单seed；主消融重复性和同人口贡献证据仍有限",
+      "current_action": "Inherit this fixed2024 Dev verification; preserve the declared six-satellite-time and corresponding f006 GFS scope",
+      "status": "REAL_INPUT_CONTRACT_AND_FROZEN_METRICS_REPRODUCED_FOR_THIS_2024_DEV_PAIR"
+    },
+    {
+      "stage": "Stage3 大气环境",
+      "innovation": "多时相大气环境物理约束",
+      "definition_chosen_under_researcher_delegation": "六时相卫星＋对应分析时刻单组GFS，作为物理环境先验条件输入",
+      "implemented": "13变量MEE、Train-only标准化、f006回顾性身份",
+      "gap": "现有实现不含硬守恒约束，业务到达时刻证据待验收；强雨效果非全面改善",
+      "current_action": "Inherit this fixed2024 Dev verification; preserve the declared six-satellite-time and corresponding f006 GFS scope",
+      "status": "REAL_INPUT_CONTRACT_AND_FROZEN_METRICS_REPRODUCED_FOR_THIS_2024_DEV_PAIR"
+    },
+    {
+      "stage": "Stage4 多元协同与动态地形",
+      "innovation": "风场×地形梯度动态强迫",
+      "implemented": "O/W/L/M、850/700hPa风与米制梯度、PWAT；B7/B8正式单SP04",
+      "gap": "178 high-elevation strong pixel-times over80 scenes show0.2106% log and0.1367% physical loss improvement; lower elevations degrade; >50 high-elevation sample absent; independent-event and multi-seed mechanism evidence unresolved",
+      "current_action": "Preserve complete21-cell table and counterexamples; avoid repeated terrain parameter tuning on this same Dev subset",
+      "status": "HIGH_ELEVATION_STRONG_DESCRIPTIVE_INCREMENT_WITH_COUNTEREXAMPLES"
+    },
+    {
+      "stage": "输出与极端雨评价",
+      "innovation": "U-Net双输出头",
+      "implemented": "发生概率＋32个单调条件分位，双头接口与数值约束存在",
+      "gap": "Both arms ABC >20 TP=0 FN=717; current intervention receipts do not isolate training-gradient allocation versus representation/readout limitations",
+      "current_action": "Targeted conditional-intensity diagnostic preparation using existing evidence and tail-identifiability interfaces",
+      "status": "PRIMARY_BOTTLENECK_CONDITIONAL_INTENSITY_AND_EXTREME_DETECTION"
+    },
+    {
+      "stage": "Stage4.5 独立观测",
+      "innovation": "主要结论真实性验证",
+      "implemented": "已有候选来源调查",
+      "gap": "站点/雷达/DPR实际合法资料、匹配与独立链未完成",
+      "current_action": "维护PARTIAL并准备与固定主张匹配的验证范围",
+      "status": "PARTIAL"
+    },
+    {
+      "stage": "最终测试与Stage6",
+      "innovation": "泛化与近实时应用",
+      "implemented": "离线开发评价和只读进度页",
+      "gap": "最新方案多seed、最终模型冻结、最终测试、业务vintage/时延/连续事件缺验收",
+      "current_action": "开发选型结束后绑定一次性最终协议，2025继续封存",
+      "status": "NOT_ACCEPTED"
+    }
+  ],
+  "source_identities": {
+    "docs/research_readiness/20261115_core_innovation_repair/STAGE_GAPS_AND_ACTIONS.json": {
+      "bytes": 5558,
+      "sha256": "edb8b2c798b5d7fa1e3aad209a58f9082d13eb810c6673c1bdcf22ddc6d1c1f2"
+    },
+    "docs/research_readiness/20261115_mountain_pair_results/TERMINAL_VERIFICATION.json": {
+      "bytes": 4520,
+      "sha256": "b5bdba2bbc028387056940febb4c59c34d10041057cdd2c79db123f968ce58d0"
+    },
+    "docs/research_readiness/20261115_mountain_pair_results/CONDITIONAL_INTENSITY_EVIDENCE.json": {
+      "bytes": 5334,
+      "sha256": "4bc9a60d46bb1cea20def98f72c86518e1274a260492b10cb270604921157251"
+    }
+  },
+  "checks": "TERMINAL_VERIFICATION.json",
+  "new_training": 0,
+  "new_model_inference": 0,
+  "scientific_status": "NOT_VERIFIED",
+  "github_and_obsidian_sync_required": true,
+  "next_unresolved_scientific_problem": "Conditional intensity recovery and strong-rain detection; per-intensity training-gradient contributions remain unmeasured",
+  "compatibility_scope": "Actual2024 Dev inputs reproduced six frozen metric groups per arm and original elevation summaries; broader physical-mechanism acceptance pending",
+  "next_scientific_evaluation_plan": "CONDITIONAL_INTENSITY_EVIDENCE.json::next_preparation"
+}

@@ -1,0 +1,129 @@
+{
+  "status": "VERIFIED_COMPLETE_SAVED_RECEIPTS",
+  "execution_code_commit": "e8d2a9b0c3ab7f60aa678a0bcee2d60133852e74",
+  "proposal_sha256": "85bc55e0101823b1291c3923c85685a7ad50315797327b9eae410f2fe49bdf61",
+  "completion_sha256": "e3163256a286c3e21995d2fc1816b163f346edc81f013705b9495a43afd97fb3",
+  "paired_metrics_sha256": "5a25a2dcb93ab907d62569d173f8b0a559b921e9905fdd57786a87337e5fe711",
+  "accounting": {
+    "metadata_archive_reserved_bytes": 613900867,
+    "metadata_open_instances": 459,
+    "payload_archive_reserved_bytes": 53494759036,
+    "payload_open_instances": 15906,
+    "total_source_reserved_bytes": 54108659903,
+    "cumulative_source_reserved_bytes": 54108659903,
+    "cumulative_metadata_open_instances": 459,
+    "cumulative_total_open_instances": 16365
+  },
+  "elapsed_seconds": 1239.2268002033234,
+  "finished": "2026-11-15T07:57:57.290404+00:00",
+  "output_storage_bytes": 24407833,
+  "budget": {
+    "payload_archive_reference_bytes": 53494759036,
+    "payload_open_instances": 15906,
+    "preflight_validations": 2,
+    "metadata_bytes_per_preflight": 83886080,
+    "metadata_opens_per_preflight": 512,
+    "metadata_bytes_controller": 83886080,
+    "metadata_opens_controller": 512,
+    "metadata_bytes_per_worker": 268435456,
+    "metadata_opens_per_worker": 2048,
+    "total_metadata_cap_bytes": 788529152,
+    "total_metadata_opens": 5632,
+    "total_source_cap_bytes": 54283288188,
+    "previous_attempt_metadata_bytes": 0,
+    "previous_attempt_metadata_opens": 0,
+    "previous_attempt_payload_bytes": 0,
+    "previous_attempt_payload_opens": 0,
+    "previous_attempt_seconds": 0,
+    "cumulative_source_cap_bytes": 54283288188,
+    "cumulative_metadata_opens": 5632,
+    "cumulative_total_opens": 21538,
+    "cumulative_maximum_seconds": 7200,
+    "maximum_seconds": 7200,
+    "preflight_seconds": 60,
+    "controller_seconds": 7080,
+    "per_model_seconds": 3000,
+    "output_storage_cap_bytes": 4294967296,
+    "minimum_free_bytes": 8589934592,
+    "minimum_host_available_bytes": 8589934592,
+    "minimum_gpu_free_mib": 5120,
+    "optimizer_updates": 0,
+    "retries": 0,
+    "replay": 0
+  },
+  "six_groups_per_arm": "PASS",
+  "elevation_reproduction": "PASS",
+  "supervisor_exit_code": 0,
+  "controller_accounting_basis": "DIFFERENCE_FROM_PACKAGE_AND_CHILD_RECEIPTS",
+  "primary_contrast": {
+    "status": "DIRECTIONAL_LOCAL_IMPROVEMENT",
+    "n_strong": 178,
+    "real_minus_zero": {
+      "log_pinball": -0.0018427840817258874,
+      "physical_pinball_over20": -0.0006961972905197065
+    }
+  },
+  "strong_by_elevation": {
+    "elevation_lt_1000m": {
+      "n_strong": 89,
+      "metrics": {
+        "log_pinball": {
+          "real": 0.7941759477185879,
+          "zero": 0.7879793699970069,
+          "real_minus_zero": 0.006196577721580998,
+          "relative_percent": 0.7863883189739518
+        },
+        "physical_pinball_over20": {
+          "real": 0.5239984202196903,
+          "zero": 0.5219426822600706,
+          "real_minus_zero": 0.0020557379596197745,
+          "relative_percent": 0.3938627802421135
+        }
+      }
+    },
+    "elevation_1000_to_2000m": {
+      "n_strong": 450,
+      "metrics": {
+        "log_pinball": {
+          "real": 0.7856880746449428,
+          "zero": 0.7817761819515585,
+          "real_minus_zero": 0.003911892693384322,
+          "relative_percent": 0.500385248834137
+        },
+        "physical_pinball_over20": {
+          "real": 0.5027444612956472,
+          "zero": 0.5014923208598966,
+          "real_minus_zero": 0.001252140435750615,
+          "relative_percent": 0.24968287322996302
+        }
+      }
+    },
+    "elevation_ge_2000m": {
+      "n_strong": 178,
+      "metrics": {
+        "log_pinball": {
+          "real": 0.8730207260989675,
+          "zero": 0.8748635101806934,
+          "real_minus_zero": -0.00184278408172589,
+          "relative_percent": -0.2106367519369145
+        },
+        "physical_pinball_over20": {
+          "real": 0.5087138954640806,
+          "zero": 0.5094100927546004,
+          "real_minus_zero": -0.0006961972905197289,
+          "relative_percent": -0.13666735316434142
+        }
+      }
+    }
+  },
+  "primary_scene_count": 80,
+  "maximum_primary_pixels_in_one_scene": 21,
+  "independent_event_count": "NOT_IDENTIFIED",
+  "checkpoint_rehashes_in_verification": 0,
+  "scientific_payload_reads_in_verification": 0,
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "scientific_status": "NOT_VERIFIED",
+  "metadata_inspection_bytes": 20728591,
+  "metadata_inspection_opens": 20
+}
