@@ -1,0 +1,28 @@
+{
+  "status": "PASS_ARTIFICIAL_CPU_DIAGNOSTICS",
+  "module": "src/yuntapr/experimental/research_readiness/physical_training_diagnostics.py",
+  "module_sha256": "c4783ee4183da55960b0f3ee7205bb94616d75404bc3941c102a11c118a725ca",
+  "checks": {
+    "two_scene_complete_finish": true,
+    "scene_population_masks_strong_weak": true,
+    "seven_bin_physical_log_and_direct_loss": true,
+    "scene_ABC_sums_and_thresholds_match_pooled_accumulator": true,
+    "physical_total_corruption_rejected": true,
+    "scene_count_corruption_rejected": true,
+    "scene_reordering_rejected": true,
+    "finished_reuse_rejected": true
+  },
+  "test_population": {
+    "scenes": 2,
+    "valid_pixel_times": 15,
+    "rainy_pixel_times": 14
+  },
+  "input": "Artificial CPU tensors with BF16 occurrence output; existing frozen score implementations reused",
+  "interpreter": "F:/conda_envs/rain-basics/python.exe -B",
+  "initial_check_environment_failure": "System Python import stopped at missing PyYAML before tensor checks; switched to existing research environment",
+  "raw_data_reads": 0,
+  "model_constructions": 0,
+  "model_forwards": 0,
+  "optimizer_updates": 0,
+  "scientific_status": "NOT_VERIFIED"
+}

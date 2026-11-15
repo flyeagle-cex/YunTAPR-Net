@@ -1,0 +1,16 @@
+{
+  "status": "LIMITED_PREPARATION_PASS_WITH_FP64_CONDITION",
+  "reviewer": "Harness DeepSeek-V4.1-Flash High, read only",
+  "review_rounds": 1,
+  "observed_date_beijing": "2026-11-15",
+  "report_sha256": "00ec2b362488843689d3f9c6dffea3e9bea68aad731df6ae46c8f7675d997ca8",
+  "report_text": "**结论：准备阶段的审核为限定 PASS；存在 1 个条件性阻塞，暂不可启动。**\n\n1. **公式/归一化**：[physical_pinball.py](YunTAPR-Collab-Codex/src/yuntapr/experimental/phase_b_v2_ablations/physical_pinball.py:40) 实现 `Sphys=Σ_rain mean32 ρ((R−expm1(qlog))/20)`，训练目标走 `combine_numerators(s_occ,Sphys,n_valid)`；引擎累计 `(socc+sqr_training)/nvalid`，训练层无 `/Nrain`；Pinball 的 `/Nrain` 只在报告层。PASS（`combine_numerators` 本体不在允许范围，按接口与引擎核验）。\n\n2. **接线/历史兼容**：[engine.py](YunTAPR-Collab-Codex/src/yuntapr/experimental/core_innovation/stage4/engine.py:143) 与 [dynamic_training.py](YunTAPR-Collab-Codex/src/yuntapr/experimental/research_readiness/dynamic_training.py:190) 只对 B7/2029/E0/lambda1/COSINE9 开放 physical，强制 `origin_reference`，拒 recovery/错 model/seed/schedule；`UQ_MILD+COSINE9` 仍拒，UNIFORM/UQ 原路径保留。PASS。\n\n3. **诊断/逐 scene**：[physical_training_diagnostics.py](YunTAPR-Collab-Codex/src/yuntapr/experimental/research_readiness/physical_training_diagnostics.py:78) 继承 log/UQ 诊断，核对 scene ids、n_valid/rain/strong/weak、7 箱物理 n 与 `pinball_sum_mm_h`、Brier、ABC 阈值矩阵；8 项人工 CPU 检查 PASS。\n\n4. **门/control**：approval 文件+`validate_approval`、clean git、package 存在即拒绝、父 PID claim、预算 4320/477571953840B/142813/21600s/24GiB/零 replay/retry/checkpoint，control 的 terminal/results/checkpoint/initial/epoch 绑定齐。PASS。但 `execute` 只记录 `screen_passed`，不因弱雨/guardrail 失败中止；**COMPLETE≠screen PASS**。\n\n5. **代码绑定**：六份代码 SHA 与提案 `code_sha256` 一致，contract SHA `799d…` 一致；未授权、未训练，仅 metadata prepare。\n\n6. **条件性阻塞**：`physical_pinball.py` 用 `torch.expm1(qlog)` 未先 `.double()`；合同要求 `FP64_EXPM1`，又写 return inheritedBF16，diagnostics 也显式把 qlog 转 double。若 qlog 非 FP64，物理节点/训练目标就不是声明的 FP64；应改 `torch.expm1(qlog.double())`，或证明 qlog 已是 FP64。这是唯一代码级公式风险。\n\n7. **未覆盖**：`combine_numerators` 本体、`inherited_pair_summary`/`pair_summary` 真实键与 population 校验、`validate_approval` 细节、control 原件/parent proposal、`start_independent_process.py` 差异（在允许源差异、不在允许 diff 清单）；无真实训练/推理。\n\n**总评**：公式结构、接线、历史兼容、逐 scene 诊断、门/control/预算代码为限定 PASS；FP64 expm1 条件性阻塞需先解决；科学 NOT_VERIFIED，不得启动。未出现权限请求，未写文件。",
+  "conditional_issue_resolution": {
+    "status": "RESOLVED_BY_CODEX_EXISTING_GUARD_AND_4_ARTIFICIAL_CPU_CHECKS",
+    "receipt": "FP64_GUARD_CHECK.json",
+    "independent_harness_recheck": false
+  },
+  "engineering_conclusion": "READY_FOR_EXACT_RESEARCHER_APPROVAL_WITH_RECORDED_LIMITS",
+  "scientific_status": "NOT_VERIFIED",
+  "scope_note": "Formula, profile wiring, inherited branch compatibility, new scene statistics and approval/budget/control binding only. Inherited dependency bodies and real payload execution not independently repeated. Review saw current code and contract hashes, not every one of658 dependencies."
+}

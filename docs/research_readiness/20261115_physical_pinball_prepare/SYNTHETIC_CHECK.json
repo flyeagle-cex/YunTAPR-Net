@@ -1,0 +1,22 @@
+{
+  "status": "PASS_ARTIFICIAL_CPU_ONLY",
+  "profile": "PHYSICAL_PINBALL20_V1",
+  "torch_version": "2.7.1+cu118",
+  "checks": {
+    "all_under_hand_value_gradient_and_inherited_diagnostics": true,
+    "all_over_hand_value_gradient_and_inherited_diagnostics": true,
+    "threshold_equal_dry_invalid_labels_region_and_occurrence_gradient": true,
+    "dry_batch_connected_zero": true,
+    "wet_overflow_rejected": true,
+    "dry_overflow_rejected": true,
+    "e2_config_rejected": true,
+    "zero_valid_rejected": true
+  },
+  "checks_passed": 8,
+  "training_entry_connected": false,
+  "raw_data_reads": 0,
+  "checkpoint_reads": 0,
+  "model_forwards": 0,
+  "optimizer_updates": 0,
+  "scientific_acceptance": "NOT_VERIFIED"
+}

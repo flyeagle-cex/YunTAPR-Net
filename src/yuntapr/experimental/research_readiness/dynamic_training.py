@@ -16,6 +16,7 @@ from .dynamic_terrain import DoteDefinition,PhysicalDote,model_factory
 from .tail_diagnostics import TailDiagnostics
 from ..phase_b_v2_ablations.config import finite_number,get_config
 from ..phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity
+from ..phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE
 
 ENTRY='tools/research_readiness/start_dynamic_pair.py'
 TASKS=(('B7',2029),('B8',2029))
@@ -186,17 +187,22 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
-    if quantile_profile not in ('UNIFORM','UQ_MILD_V1') or (
-        quantile_profile=='UQ_MILD_V1' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
+    if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE) or (
+        quantile_profile!='UNIFORM' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
     ):
-        raise PermissionError('Only B7 seed2029 E0 can use UQ_MILD_V1')
+        raise PermissionError('Only B7 seed2029 E0 can use a modified quantile profile')
     if p.get('protocol',{}).get('quantile_profile','UNIFORM')!=quantile_profile:
         raise PermissionError('Quantile profile must match the explicit task protocol')
+    if quantile_profile==PHYSICAL_PROFILE and (
+        schedule_profile!=COSINE9
+        or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
+    ):
+        raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
     if schedule_profile!=ORIGINAL_50 and (
         schedule_profile!=COSINE9 or kind!='B7' or seed!=2029 or spec.lambda_q!=1.0
-        or quantile_profile!='UNIFORM' or p.get('protocol',{}).get('schedule_profile')!=COSINE9
+        or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
     ):
-        raise PermissionError('Only an explicitly bound B7 seed2029 uniform E0 cosine9 task is supported')
+        raise PermissionError('Only an explicitly bound B7 seed2029 uniform or physical E0 cosine9 task is supported')
     if p.get('protocol',{}).get('schedule_profile',ORIGINAL_50)!=schedule_profile:
         raise PermissionError('Schedule must match the explicit task protocol')
     package=Path(v['output_root'])

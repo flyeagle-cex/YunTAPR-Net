@@ -9,6 +9,7 @@ from yuntapr.experimental.phase_b_v2_runner_candidate.optimizer import new_adamw
 from yuntapr.experimental.phase_b_v2_ablations.config import get_config,finite_number
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MILD_PROFILE,profile_identity,upper_quantile_loss
+from yuntapr.experimental.phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE,physical_pinball_loss,profile_identity as physical_profile_identity
 from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -66,8 +67,10 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
         loss_function=candidate_loss
     elif quantile_profile==MILD_PROFILE and model.kind=='B7' and selected_config==get_config('E0'):
         loss_function=upper_quantile_loss
+    elif quantile_profile==PHYSICAL_PROFILE and model.kind=='B7' and selected_config==get_config('E0'):
+        loss_function=physical_pinball_loss
     else:
-        raise PermissionError('Only explicit B7 E0 UQ_MILD_V1 is supported')
+        raise PermissionError('Only explicit B7 E0 UQ_MILD_V1 or PHYSICAL_PINBALL20_V1 is supported')
     extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
     if model.kind in ('B7','B8'):
         if batch.dynamic is None or batch.dynamic_valid is None:raise ValueError('DOTE physical transform was not connected to the reader')
@@ -138,19 +141,27 @@ class PairedExecutor:
         self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
         self.quantile_profile=quantile_profile
         if quantile_profile!=UNIFORM and (
-            quantile_profile!=MILD_PROFILE or self.kinds!=('B7',)
+            quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE) or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or recovery is not None
         ):
-            raise PermissionError('UQ_MILD_V1 requires one origin-only B7 seed2029 lambda1 task')
+            raise PermissionError('Modified quantile profile requires one origin-only B7 seed2029 lambda1 task')
+        if quantile_profile==PHYSICAL_PROFILE and (
+            schedule_profile!=COSINE9 or not isinstance(origin_reference,dict)
+        ):
+            raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
         self.modified_loss=self.lambda_q!=1.0 or quantile_profile!=UNIFORM
         self.schedule_profile=schedule_profile
         self.modified_schedule=schedule_profile!=ORIGINAL_50
         if self.modified_schedule and (
             schedule_profile!=COSINE9 or self.kinds!=('B7',)
-            or getattr(decision,'seed',None)!=2029 or self.modified_loss or recovery is not None
+            or getattr(decision,'seed',None)!=2029
+            or (self.modified_loss and quantile_profile!=PHYSICAL_PROFILE) or recovery is not None
         ):
-            raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 uniform E0 task')
-        self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
+            raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 E0 uniform or physical task')
+        if quantile_profile==PHYSICAL_PROFILE:
+            self.loss_identity=physical_profile_identity()
+        else:
+            self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
         if self.lambda_q==2.0 and (
             self.kinds not in (('B7',),('B8',))
             or getattr(decision,'seed',None)!=2029
@@ -247,6 +258,8 @@ class PairedExecutor:
                     if self.quantile_profile!=UNIFORM:
                         training.update(loss_arm=self.quantile_profile,loss_config=self.loss_identity,
                                         s_qr_training_weighted=sqr_training,weighted_mean=(socc+sqr_training)/nvalid)
+                    if self.quantile_profile==PHYSICAL_PROFILE:
+                        training['s_qr_training_physical_mm_h_over20']=sqr_training
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()

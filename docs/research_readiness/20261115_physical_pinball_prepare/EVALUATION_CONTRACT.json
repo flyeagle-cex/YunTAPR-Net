@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_NOT_AUTHORIZED",
+  "purpose": "Fixed E9 development screen of one physical-Pinball loss replacement against saved COSINE9",
+  "control": {
+    "arm": "CANDIDATE_COSINE9",
+    "source_path": "docs/research_readiness/20261110_cosine9/RESULTS.json",
+    "source_bytes": 10170,
+    "source_sha256": "b4420b1388d31f6bc86eeaa088d04ef4ccea2c5ebde18ef2cf7dd271f63eb3ae",
+    "metric_values": {
+      "all_log_pinball": 0.12581832845402424,
+      "all_physical_pinball": 0.019365074684425297,
+      "strong_log_pinball": 0.8084225692926007,
+      "strong_physical_pinball": 0.5068646309277545,
+      "brier": 0.09233015567445307,
+      "occurrence_ap": 0.6066547555865263,
+      "occurrence_auroc": 0.8990243638708331,
+      "weak_log_pinball": 0.08872231160181854
+    },
+    "seed": 2029,
+    "endpoint": "FIXED_EPOCH_9_LAST"
+  },
+  "population": {
+    "split": "2024 Development",
+    "scenes": 963,
+    "valid_pixel_times": 3303090,
+    "rainy_pixel_times": 407820,
+    "strong_pixel_times": 717,
+    "weak_pixel_times": 246473,
+    "mask": "INHERIT_ORIGINAL_VALID_MASK",
+    "rainy": "R > float32(0.1)",
+    "strong": "R > float32(20.0)",
+    "weak": "float32(0.1) < R <= float32(1.0)",
+    "threshold_arithmetic": "Cast reference to FP32 before strict greater-than comparisons, inherit frozen evaluator bin membership"
+  },
+  "quantiles": {
+    "count": 32,
+    "tau_formula": "tau[j] = (j + 0.5)/32, j=0..31",
+    "physical_nodes": "expm1(qlog), FP64",
+    "pinball": "rho_tau(e) = max(tau*e,(tau-1)*e)",
+    "log_residual": "log1p(R)-qlog",
+    "physical_residual": "R-expm1(qlog)",
+    "physical_normalization_mm_h": 20.0,
+    "reported_means": "Sum mean-over-32-node losses, divide by applicable rainy/strong/weak population count"
+  },
+  "screen": {
+    "absolute_roundoff_tolerance": 1e-10,
+    "primary_lower_metrics": [
+      "strong_log_pinball",
+      "strong_physical_pinball"
+    ],
+    "primary_rule": "For each primary metric, control - candidate > 1e-10",
+    "guardrail_lower_metrics": [
+      "all_log_pinball",
+      "all_physical_pinball",
+      "brier",
+      "weak_log_pinball"
+    ],
+    "guardrail_lower_rule": "For each lower guardrail, candidate - control <= 1e-10",
+    "guardrail_higher_metrics": [
+      "occurrence_ap",
+      "occurrence_auroc"
+    ],
+    "guardrail_higher_rule": "For each higher guardrail, control - candidate <= 1e-10",
+    "pass_rule": "All primary and guardrail conditions pass, with complete matching population and finite metrics",
+    "weak_guardrail_reference": "COSINE9 value 0.08872231160181854; inherited E0-to-COSINE9 weak-log degradation 7.5945274341407965 percent remains a reported limitation",
+    "interpretation": "Single-seed repeatedly-used development screen",
+    "q32_coverage_role": "DESCRIPTIVE_AUXILIARY",
+    "point_metrics_role": "DESCRIPTIVE_AUXILIARY",
+    "event_confidence_intervals_role": "OUTSIDE_THIS_SCREEN",
+    "AP20_role": "OUTSIDE_THIS_SCREEN"
+  },
+  "future_candidate_saved_statistics": {
+    "granularity": "One record per declared scene, fixed E9 evaluation only",
+    "identity_fields": [
+      "scene_id",
+      "analysis_time",
+      "ordered_scene_manifest_sha256",
+      "reference_population_identity",
+      "model_checkpoint_sha256",
+      "evaluation_code_commit"
+    ],
+    "population_counts": [
+      "n_valid",
+      "n_rain",
+      "n_strong",
+      "n_weak"
+    ],
+    "loss_arithmetic": "FP64 sum of per-pixel mean-over-32-node pinball; physical sums retain mm/h and normalized-by-20 fields",
+    "rain_bins_mm_h": [
+      [
+        0.1,
+        1.0
+      ],
+      [
+        1.0,
+        5.0
+      ],
+      [
+        5.0,
+        10.0
+      ],
+      [
+        10.0,
+        20.0
+      ],
+      [
+        20.0,
+        30.0
+      ],
+      [
+        30.0,
+        50.0
+      ],
+      [
+        50.0,
+        null
+      ]
+    ],
+    "bin_convention": "Lower exclusive, upper inclusive; null upper bound is positive infinity; inherit frozen FP32 reference threshold membership",
+    "per_bin_fields": [
+      "n_rain",
+      "sum_log_pinball",
+      "sum_physical_pinball_mm_h",
+      "sum_physical_pinball_normalized_by_20"
+    ],
+    "aggregate_loss_fields": [
+      "sum_log_pinball_rain",
+      "sum_physical_pinball_normalized_by_20_rain",
+      "sum_log_pinball_strong",
+      "sum_physical_pinball_normalized_by_20_strong",
+      "sum_log_pinball_weak",
+      "sum_brier_occurrence"
+    ],
+    "point_readouts": {
+      "methods": [
+        "A",
+        "B",
+        "C"
+      ],
+      "implementation": "tools/research_readiness/paired_point_metrics.py::point_candidates_log",
+      "population": "All valid pixel-times",
+      "continuous_fields": [
+        "count",
+        "sum_signed_error",
+        "sum_absolute_error",
+        "sum_squared_error"
+      ],
+      "continuous_arithmetic": "FP64, error = prediction - reference",
+      "classification_thresholds_mm_h": [
+        0.1,
+        1.0,
+        5.0,
+        10.0,
+        20.0,
+        50.0
+      ],
+      "classification_arithmetic": "Both reference and prediction cast to FP32, strict greater-than threshold",
+      "classification_fields_per_method_threshold": [
+        "TP",
+        "FP",
+        "FN",
+        "TN"
+      ]
+    },
+    "occurrence_ranking": "Compute global occurrence AP/AUROC over complete pooled population with inherited frozen evaluator and R>0.1 label. Per-scene AP/AUROC must not be averaged to obtain global scores. Additive scene summaries do not suffice for pooled ranking or event-resampled AP. This contract does not add all-population prediction storage."
+  },
+  "validation": {
+    "checks": [
+      "Control source bytes and SHA256 match this contract",
+      "All 963 scene identities and original masks match inherited population",
+      "Population sums and all seven disjoint rainy-bin counts reconcile",
+      "Scene loss/error/confusion sums reconstruct candidate global reports within frozen arithmetic tolerance",
+      "All model outputs and metric values finite, quantile nodes strictly ordered",
+      "Every threshold TP+FP+FN+TN equals applicable valid count"
+    ],
+    "on_failure": "Stop relevant comparison and diagnose; retain outputs and failed receipts"
+  },
+  "execution_scope": {
+    "new_control_inference_required_for_this_screen": false,
+    "authorization": "Requires separate exact scientific plan, code and budget approval before formal execution",
+    "training_started": false,
+    "scientific_status": "NOT_VERIFIED"
+  }
+}

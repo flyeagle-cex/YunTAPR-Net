@@ -1,0 +1,21 @@
+{
+  "status": "PASS_HARNESS_CONDITIONAL_BLOCK_RESOLVED_BY_EXISTING_GUARD",
+  "proof": "physical_pinball_loss -> candidate_loss -> supervision -> quantiles -> validate_log_quantiles requires torch.float64 before expm1; BF16 feature return does not alter this quantile contract",
+  "checks": {
+    "torch.float32_rejected_before_expm1": true,
+    "torch.bfloat16_rejected_before_expm1": true,
+    "torch.float16_rejected_before_expm1": true,
+    "accepted_expm1_input_fp64": true
+  },
+  "source_sha256": {
+    "src/yuntapr/models/quantile_v2/outputs.py": "2efc025e5202e380de0e06203c0701309649c0e4d982aaf49e66daff641b22c7",
+    "src/yuntapr/experimental/phase_b_v2_ablations/validation.py": "05885c309b6cf930a57f30b25438c8664be2ddc5a36eb9f86de82654e886beb0",
+    "src/yuntapr/experimental/phase_b_v2_ablations/total.py": "9ce37393d2af2fbc762d198b2088cb4645d104d35f81b507c236bc3b39cf1ec1",
+    "src/yuntapr/experimental/phase_b_v2_ablations/physical_pinball.py": "0f3a790714f34be45d41044220007f105748b165616023c98d80ed2e86deba36"
+  },
+  "torch_version": "2.11.0+cu128",
+  "raw_data_reads": 0,
+  "checkpoint_reads": 0,
+  "optimizer_updates": 0,
+  "independent_harness_recheck": false
+}
