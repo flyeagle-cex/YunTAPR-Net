@@ -159,7 +159,7 @@ def main():
     if args.receipt.exists():
         raise FileExistsError("Use a fresh receipt destination")
     receipt = summarize(args.output_root, args.proposal)
-    with args.receipt.open("x", encoding="utf-8") as stream:
+    with args.receipt.open("x", encoding="utf-8", newline="\n") as stream:
         json.dump(receipt, stream, ensure_ascii=False, indent=2, allow_nan=False)
         stream.write("\n")
     print(json.dumps({"status": receipt["status"], "arms": receipt["arms"],
