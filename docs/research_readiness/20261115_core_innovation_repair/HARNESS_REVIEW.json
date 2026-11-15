@@ -1,0 +1,9 @@
+{
+  "reviewer": "Harness DeepSeek-V4.1-Flash High",
+  "rounds": 1,
+  "status": "LIMITED_PASS_NEW_CANONICAL_INPUTS_WITH_HISTORICAL_COMPATIBILITY_CONDITION",
+  "report_text": "**结论：新规范输入下限定 PASS；旧输入兼容未证，属条件性阻塞。**\n\n- **字段规则**：`validate_physical_fields` 在 `prepare_mee` 前校验 quantity/Pa 层/unit/shape/valid bool/有效值有限；缺变量、错层、错单位、非有限有效值均拒绝；掩膜 NaN 允许且不填补，无隐式转换。`PhysicalDote` 严格校验 B6 通道顺序、m/m 梯度单位、grid/valid/region 与有限值。PASS。\n- **接线/时间**：`PhysicalDote.physical` 接入同六键校验；`stage4/data.py` 改用实际 `frame.identity` 做 `check_forecast`；模型与损失未改。静态 PASS。\n- **逐 scene**：`TerrainTail` 新增 `rainfall_strata`，保留已算的 elevation×七雨强箱；不改模型/损失/分母。PASS。\n- **检查**：21 项人工 CPU 检查含继承 3 物理测试 PASS；合法 13 字段映射公式等价；回执明确 `historical_run_revalidation:false`。\n- **风险/未覆盖**：① 新校验要求精确 quantity/unit/level，旧 GFS frame 与旧 B6 pack 的元数据兼容未用真实历史输入验证；旧元数据缺省/命名不同会拒绝合法旧输入。② `data.py` 的 `frame.identity` 路径未被 21 项覆盖；检查仅手工构造 `TargetBinding`，实际 `combine_environment` 身份未验。③ `temperature500` 若不在 MEE 键表，该项只测未知键，未真正测错层。④ 输出不变仅合成公式验证，非旧实现/历史回归；旧交叉统计未回填，`rainfall_strata` 只对新推理生效，不能冒充补齐历史。\n- **总评**：新规范输入下限定 PASS；对历史/旧缓存运行前需补元数据兼容与真实身份核验，否则阻塞。未出现权限请求，未运行测试/训练、未改文件。",
+  "codex_followup": "FINAL_COMPATIBILITY_CHECK.json covers11/13 keys, existing decoder on artificial NetCDF, temperature500 membership, actual reader combine_environment and TargetBinding wiring; no independent re-review",
+  "retained_condition": "Real historical payload metadata/identity preflight must be included when a new scientific execution is proposed; historical outputs were not revalidated",
+  "scientific_status": "NOT_VERIFIED"
+}

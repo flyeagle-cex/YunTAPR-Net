@@ -1,0 +1,101 @@
+{
+  "status": "CORE_RESEARCH_DIRECTION_FIXED_AND_FIRST_ENGINEERING_GAPS_REPAIRED",
+  "researcher_core": "云南复杂地形山区的极端降水反演",
+  "researcher_innovations": [
+    "面向复杂地形的多元信息协同降水反演框架",
+    "融合风场与地形梯度的动态地形强迫表征方法",
+    "多时相大气环境物理约束",
+    "U-Net底层框架及双输出头"
+  ],
+  "temporal_choice_basis": "研究者答复按你的判断进行；沿用现有六卫星时次及同分析时刻GFS",
+  "controller": "Existing web controller High adopted four-innovation core and prioritized temporal/physical alignment repair",
+  "stages": [
+    {
+      "stage": "Stage2 多时相与多光谱",
+      "innovation": "多元信息协同框架",
+      "implemented": "七通道六卫星时次，t−60至t−10分钟",
+      "gap": "B0/B1历史人口不同，B2单seed；主消融重复性和同人口贡献证据仍有限",
+      "current_action": "继承已通过时序契约，核对实际解码后GFS identity与卫星目标绑定",
+      "status": "IMPLEMENTED_WITH_SCIENTIFIC_LIMITS"
+    },
+    {
+      "stage": "Stage3 大气环境",
+      "innovation": "多时相大气环境物理约束",
+      "definition_chosen_under_researcher_delegation": "六时相卫星＋对应分析时刻单组GFS，作为物理环境先验条件输入",
+      "implemented": "13变量MEE、Train-only标准化、f006回顾性身份",
+      "gap": "现有实现不含硬守恒约束，业务到达时刻证据待验收；强雨效果非全面改善",
+      "current_action": "新增变量名/quantity/Pa压力层/单位/网格shape/mask验证，接入prepare_mee和PhysicalDote",
+      "status": "INPUT_CONTRACT_REPAIRED_ARTIFICIAL_CHECK_PASS"
+    },
+    {
+      "stage": "Stage4 多元协同与动态地形",
+      "innovation": "风场×地形梯度动态强迫",
+      "implemented": "O/W/L/M、850/700hPa风与米制梯度、PWAT；B7/B8正式单SP04",
+      "gap": "REAL/ZERO同COSINE9尚无明确数值增益，复杂地形强雨增量和机制未通过；多元协同不自动要求多尺度",
+      "current_action": "严格B6通道顺序与梯度单位；保留现已计算的海拔×七雨强箱输出，修复序列化丢失",
+      "status": "CONTRACT_AND_SAVED_DIAGNOSTIC_REPAIRED_EFFECT_UNVERIFIED"
+    },
+    {
+      "stage": "输出与极端雨评价",
+      "innovation": "U-Net双输出头",
+      "implemented": "发生概率＋32个单调条件分位，双头接口与数值约束存在",
+      "gap": "ABC严格>20仍零命中，P20排序/校准和独立事件性能尚未验收",
+      "current_action": "保留双头定义，停止失败损失扫参；下一实验需固定概率与点反演各自验收口径",
+      "status": "HEADS_IMPLEMENTED_PERFORMANCE_GATE_OPEN"
+    },
+    {
+      "stage": "Stage4.5 独立观测",
+      "innovation": "主要结论真实性验证",
+      "implemented": "已有候选来源调查",
+      "gap": "站点/雷达/DPR实际合法资料、匹配与独立链未完成",
+      "current_action": "维护PARTIAL并准备与固定主张匹配的验证范围",
+      "status": "PARTIAL"
+    },
+    {
+      "stage": "最终测试与Stage6",
+      "innovation": "泛化与近实时应用",
+      "implemented": "离线开发评价和只读进度页",
+      "gap": "最新方案多seed、最终模型冻结、最终测试、业务vintage/时延/连续事件缺验收",
+      "current_action": "开发选型结束后绑定一次性最终协议，2025继续封存",
+      "status": "NOT_ACCEPTED"
+    }
+  ],
+  "source_identities": {
+    "src/yuntapr/experimental/core_innovation/stage2/models.py": {
+      "bytes": 7050,
+      "sha256": "9573fd013c797c5e846d0b08d1eeb4049167c6f35944cd4b78dd8b72dd4cdb0c"
+    },
+    "src/yuntapr/models/quantile_v2/heads.py": {
+      "bytes": 1076,
+      "sha256": "731b0e75743c066d4da12e996cfd5dcc9e600b8133a1e86f11e9b1db7038bff3"
+    },
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py": {
+      "bytes": 8298,
+      "sha256": "179061a0782d604a87940ea4c812c068977a121a0b186f7091e95c25d556a462"
+    },
+    "docs/research_readiness/20261114_zero_cosine9/RESULTS_TERMINAL.md": {
+      "bytes": 3745,
+      "sha256": "14179f7f4983adf8b12beb67a456ed8a069d00df3aeabc5ca50c74eea565f9b3"
+    },
+    "docs/research_readiness/20261115_physical_pinball_prepare/TERMINAL_VERIFICATION.json": {
+      "bytes": 6678,
+      "sha256": "2ddfbfb4d0a095c3f62d54c1ff0a7763b76e5e046cc217dedd28bbfa21b3fea4"
+    },
+    "docs/research_readiness/20261115_v7_followup/NEXT_STEP.json": {
+      "bytes": 2636,
+      "sha256": "b17bd26d36f131973a44c85c6f1db041eb1e476bb4530448d7a7b33e22bb68bd"
+    },
+    "docs/research_readiness/20261106_core_completion_prepare/WORK_PACKAGES.json": {
+      "bytes": 8400,
+      "sha256": "59c3a263d7efc4081c0e47809049bb90f26998f7d88eac22edbece0e7f8896ba"
+    }
+  },
+  "checks": "FINAL_CHECK.json",
+  "new_training": 0,
+  "new_model_inference": 0,
+  "scientific_status": "NOT_VERIFIED",
+  "github_and_obsidian_sync_required": true,
+  "next_unresolved_scientific_problem": "Complex-terrain extreme-rain incremental benefit requires a matched, predeclared evaluation/training protocol; historical aggregate outputs cannot recreate absent cross strata.",
+  "compatibility_scope": "Existing11/13 keys and actual decoder on artificial NetCDF plus actual combine_environment/TargetBinding reader wiring passed; real historical payload rerun remains pending separately approved preflight",
+  "next_scientific_evaluation_plan": "NEXT_VALIDATION_PLAN.json"
+}

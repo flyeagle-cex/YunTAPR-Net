@@ -101,7 +101,8 @@ class TerrainTail(BatchTail):
             pin=sum(s['conditional_pinball']*s['n_rain'] for s in r['strata'] if s['n_rain']);nv,bs=self.brier[name]
             bins[name]=dict(n_valid=nv,n_rain=n,brier_sum=bs,brier=bs/nv if nv else None,
                             conditional_pinball=pin/n if n else None,q32_covered=covered,q32_coverage=covered/n if n else None,
-                            auroc='NOT_COMPUTED_ADDITIVE_DIAGNOSTIC',average_precision='NOT_COMPUTED_ADDITIVE_DIAGNOSTIC')
+                            auroc='NOT_COMPUTED_ADDITIVE_DIAGNOSTIC',average_precision='NOT_COMPUTED_ADDITIVE_DIAGNOSTIC',
+                            rainfall_strata=r['strata'])
         s=report['groups']['all']['summary']
         if sum(v['n_valid'] for v in bins.values())!=s['n_valid'] or sum(v['n_rain'] for v in bins.values())!=s['n_rain']:raise RuntimeError('Supplemental terrain bins changed denominator')
         result['elevation_diagnostics']=dict(scope='SUPPLEMENTARY_ONLY_NOT_FROZEN_CORE_PARTITION',bins=bins,

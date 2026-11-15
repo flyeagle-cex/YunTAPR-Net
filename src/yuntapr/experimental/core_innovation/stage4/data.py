@@ -192,7 +192,7 @@ class BatchReader:
             identity=ForecastIdentity(analysis-timedelta(hours=6),timedelta(hours=6),analysis)
             decoded={k:self._read(p,lambda p=p,k=k:read_gfs_file(p,identity,self.requests[k])) for k,p in self.plan.gfs[row['analysis_time']].items()}
             frame=combine_environment(decoded['main'],decoded['thermo'],target_valid_time=analysis,decision_time=analysis,mode='retrospective')
-            TargetBinding(utc(sid),analysis,tuple(utc(r['nominal']) for r in receipts),tuple(utc(r['obs_start']) for r in receipts),tuple(utc(r['obs_end']) for r in receipts)).check_forecast(identity,valid_policy='valid_equals_analysis_retrospective_candidate')
+            TargetBinding(utc(sid),analysis,tuple(utc(r['nominal']) for r in receipts),tuple(utc(r['obs_start']) for r in receipts),tuple(utc(r['obs_end']) for r in receipts)).check_forecast(frame.identity,valid_policy='valid_equals_analysis_retrospective_candidate')
             e,ev,_=prepare_mee(frame,target_grid=self.grid,scalers=self.plan.environment,keys=MEE_V13_KEYS);envs.append(e);env_valids.append(ev)
             if self.dynamic_transform is not None:
                 dx,dm=self.dynamic_transform(frame)

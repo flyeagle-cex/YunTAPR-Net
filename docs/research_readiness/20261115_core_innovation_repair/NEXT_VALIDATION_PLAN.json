@@ -1,0 +1,24 @@
+{
+  "status": "SCIENTIFIC_EVALUATION_PREPARATION_NOT_EXECUTION_READY",
+  "researcher_core_fixed": true,
+  "question": "Does the wind/terrain-gradient representation provide an incremental predictive benefit for extreme rain in complex mountain terrain?",
+  "working_comparison": "Saved REAL and ZERO_DOTE under the same COSINE9/seed2029, fixedE9; source/model identities must be frozen for an execution proposal",
+  "reuse": "Existing elevation bins <1000m,1000–2000m,>=2000m and original seven rain-intensity bins; all bins retained",
+  "engineering_gap_now_fixed": "Future TerrainTail outputs retain elevation×rainfall conditional-log scores/counts/q32 coverage already computed during the original pass",
+  "historical_gap": "Existing REAL/ZERO elevation summaries lack their per-rainfall-bin statistics; the old missing strong-by-elevation cells cannot be reconstructed from those saved means",
+  "possible_next_execution": "One bounded matched REAL/ZERO evaluation to retain identical elevation×intensity cells, if existing other artifacts cannot supply them",
+  "minimum_protocol_before_execution": [
+    "Freeze exact two checkpoint identities, scientific implementation and original population/mask",
+    "Predeclare main mountain/strong-rain contrast and all-population/weak-rain guardrails",
+    "Record dependence, repeated-Dev exploratory interpretation and independent-event limitations",
+    "Include actual source metadata/identity compatibility preflight for the changed input guards",
+    "Bind byte/open/inference/runtime/storage caps and one-shot stopping policy",
+    "Obtain researcher approval of the precise final proposal"
+  ],
+  "effect_claim": "NOT_VERIFIED",
+  "new_training_authorized": false,
+  "new_inference_authorized": false,
+  "budget": "NOT_FROZEN",
+  "failed_loss_candidates": "E2/UQ/PHYS20 results inherited and archived; no automatic parameter sweep",
+  "2025_access": false
+}

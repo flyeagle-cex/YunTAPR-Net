@@ -24,6 +24,30 @@ class EnvironmentScaler:
             raise ValueError('Explicit matching units and finite 2023 Train-only environment scaler required')
 
 
+def validate_physical_fields(frame, keys):
+    """Check keyed physical semantics before interpolation or normalization."""
+    keys = tuple(keys)
+    if not keys or len(set(keys)) != len(keys) or any(key not in MEE_V13_KEYS for key in keys):
+        raise ValueError('Explicit unique canonical environment keys required')
+    for key in keys:
+        if key not in frame.fields:
+            raise ValueError('Missing physical environment field: ' + key)
+        field = frame.fields[key]
+        if key in ('ps', 'pwat', 'cape'):
+            quantity = {'ps': 'surface_pressure', 'pwat': 'precipitable_water', 'cape': 'cape'}[key]
+            level = None
+        else:
+            quantity, level = key[:-3], float(key[-3:]) * 100.0
+        unit = V13_UNITS[MEE_V13_KEYS.index(key)]
+        values, valid = np.asarray(field.values), np.asarray(field.valid)
+        if (field.quantity != quantity or field.unit != unit or field.level_pa != level
+                or values.shape != frame.grid.shape or valid.shape != values.shape
+                or valid.dtype != bool
+                or not (np.issubdtype(values.dtype, np.floating) or np.issubdtype(values.dtype, np.integer))
+                or not np.isfinite(values[valid]).all()):
+            raise ValueError('Physical quantity/pressure/unit/grid/mask mismatch: ' + key)
+
+
 def prepare_mee(frame, *, target_grid, scalers, keys=MEE_KEYS):
     """Caller chooses/fits frozen scalers; outputs neutral values + separate masks.
 
@@ -35,6 +59,7 @@ def prepare_mee(frame, *, target_grid, scalers, keys=MEE_KEYS):
         raise ValueError('Only the explicit eleven/thirteen candidate channels allowed')
     if len({s.population_id for s in scalers.values()}) != 1:
         raise ValueError('Environment scalers must use one declared Train population')
+    validate_physical_fields(frame, keys)
     mapped = frame.on_grid(target_grid, operator='bilinear_point_candidate')
     x, valid = mapped.stack(keys); out = np.zeros_like(x, dtype=np.float32)
     for i, key in enumerate(keys):

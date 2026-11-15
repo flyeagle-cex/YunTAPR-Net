@@ -13,8 +13,10 @@ from ..core_innovation.gfs import EnvironmentFrame,_above_ground
 from ..core_innovation.terrain import TerrainFeatures
 from ..core_innovation.stage2 import CHANNELS, MEE_V13_KEYS
 from ..core_innovation.stage2.dote_v13 import complete_dote
+from ..core_innovation.stage2.environment import validate_physical_fields
 from ..core_innovation.stage2.fusion import paired_fusion_candidates
 from .static_training import model_factory as static_factory
+from .static_terrain import B6_CHANNELS, UNITS as B6_UNITS
 
 ORDER = ('O850','O700','W850','W700','L850','L700','M850','M700')
 
@@ -34,13 +36,19 @@ class DoteDefinition:
 
 class PhysicalDote:
     def __init__(self, pack, definition):
-        if len(pack.channels)!=6 or pack.values.shape!=(6,100,100):raise ValueError('Use the unchanged production B6 pack')
+        if (tuple(pack.channels)!=B6_CHANNELS or tuple(pack.units)!=B6_UNITS
+                or pack.grid.shape!=(100,100) or pack.values.shape!=(6,100,100)
+                or pack.valid.shape!=pack.values.shape or pack.valid.dtype!=bool
+                or pack.region.shape!=pack.grid.shape or pack.region.dtype!=bool
+                or not np.isfinite(pack.values[pack.valid]).all()):
+            raise ValueError('B6 ordered physical terrain channels, units, grid and masks required')
         self.pack=pack;self.definition=definition
         v,m=pack.values,pack.valid
         self.terrain=TerrainFeatures(pack.grid,v[0],m[0],v[1],v[2],m[1]&m[2],v[3],
                                     np.degrees(np.arctan2(v[4],v[5]))%360,m[4]&m[5])
     def physical(self,frame):
         if frame.mode!='retrospective' or frame.identity.lead.total_seconds()!=21600:raise ValueError('Inherited f006 retrospective time required')
+        validate_physical_fields(frame, ('u850','v850','u700','v700','ps','pwat'))
         # Exactly the inherited reader's native-pressure masking, followed by
         # its conservative bilinear support and target-pressure masking. A
         # pre-aligned physical cache must not be interpolated a second time.
