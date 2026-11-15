@@ -86,6 +86,7 @@ function render(s){
   put('state-title',s.state==='COMPLETE'?(s.dote_control_multiseed?'两个DOTE控制及三seed汇总已完成':s.dote_control?'DOTE零数值控制九轮训练与评价已完成':s.innovation?'B7/B8及核心创新配对汇总已完成':s.static?'B5/B6及与B4配对汇总已完成':s.runs?'四模型及三seed汇总已完成':'九轮训练与评估已完成'):s.state==='FAILED'||s.state==='STOPPED'?'本次运行已停止':s.state==='UNKNOWN'?'已有收据，当前进程待确认':'正式训练进行中');
   if(s.upper_quantile && s.state==='COMPLETE')put('state-title','两臂固定E9已封口，科学结论待审查');
   if(s.zero_cosine9 && s.state==='COMPLETE')put('state-title','ZERO_DOTE九轮训练与配对评分已完成，科学结论待验证');
+  if(s.physical_cosine9 && s.state==='COMPLETE')put('state-title',s.paired_summary?.screen_passed?'PHYS20九轮训练已完成，开发筛选通过':'PHYS20九轮训练已完成，开发筛选未通过');
   put('state',states[s.state]||s.state);$('state').className='state '+(s.state==='FAILED'||s.state==='STOPPED'||s.state==='BUDGET_ALERT'?'failed':s.state==='UNKNOWN'?'unknown':'');
   const current=view.epochs[view.current_epoch-1];
   put('stage',s.state==='COMPLETE'?'固定第九轮 LAST 已绑定完成收据':`${s.runs?`${view.model} / Seed ${view.seed} · `:''}第 ${view.current_epoch} / 9 轮 · ${phases[view.phase]||view.phase} · 本轮已确认 ${current.updates} / 480 步`);
