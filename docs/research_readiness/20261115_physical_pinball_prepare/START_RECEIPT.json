@@ -1,0 +1,53 @@
+{
+  "status": "RUNNING_SINGLE_APPROVED_TRAINING",
+  "snapshot_utc": "2026-11-15T00:43:43.459380+00:00",
+  "decision_id": "YT-PHYS20-20261115-001",
+  "researcher_verbatim": "批准本次单模型运行",
+  "code_commit": "0a1dd23510e88554deab87843fc4a3727041dfe5",
+  "proposal_sha256": "c4ac55f41c43036964b31589d37d8553a65bb210fec0bc3c155c24af3144a2a1",
+  "budget": {
+    "models": 1,
+    "updates_per_model": 4320,
+    "total_updates": 4320,
+    "source_bytes_per_model": 477571953840,
+    "source_files_per_model": 142813,
+    "total_source_bytes": 477571953840,
+    "total_source_files": 142813,
+    "max_model_seconds": 21600,
+    "max_package_seconds": 21600,
+    "initial_free_bytes": 25769803776,
+    "minimum_task_free_bytes": 25769803776,
+    "replay_allowance": 0,
+    "additional_retry_allowance": 0,
+    "checkpoint_loads": 0,
+    "logical_source_scope": "WEATHER_AND_STATIC_ONLY; INHERITED_MANIFEST_METADATA_ACCOUNTING",
+    "metadata_io": "INHERIT_EXISTING_RUNTIME_METADATA_POLICY; PREPARATION_METADATA_REPORTED_SEPARATELY",
+    "scene_statistics": "COMPUTED_IN_EXISTING_DEVELOPMENT_PASS; NO_EXTRA_SOURCE_PASS"
+  },
+  "launch_utc": "2026-11-15T00:40:49.640759+00:00",
+  "optimizer_updates_snapshot": {
+    "RETURNED": 114
+  },
+  "independent_supervisor": {
+    "in_any_job": false,
+    "package_status": 15700
+  },
+  "root_failure_exists": false,
+  "target_exit_exists": false,
+  "automatic_retry": false,
+  "checkpoint_loads": 0,
+  "final_2025_access": false,
+  "monitor": {
+    "read_only": true,
+    "url": "http://127.0.0.1:53111/",
+    "physical_profile_observed_in_browser": true
+  },
+  "startup_correction": {
+    "issue": "Independent launcher allowlist omitted the new physical entry; discovered before dispatch",
+    "resolution": "Ancillary launcher admits only the exact approved canonical proposal SHA and interpreter; fixed training checkout remains0a1dd235",
+    "checks": "Exact proposal accepted,3 tamper rejections,full launch spec validation PASS",
+    "scientific_or_training_code_changed": false
+  },
+  "preflight": "Exact approval/runtime/control/data/code binding PASS using saved metadata; no formal payload before dispatch",
+  "scientific_status": "NOT_VERIFIED"
+}

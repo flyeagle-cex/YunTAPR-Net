@@ -143,7 +143,13 @@ class CampaignReader(base.Reader):
             or (self.budget['total_updates'],self.budget['total_source_bytes'],self.budget['total_source_files'],
                 self.budget['replay_allowance'],self.budget['max_package_seconds'])!=(4320,477571953840,142813,0,21600)):
             raise ValueError('Not the exact ZERO_DOTE cosine9 package')
-        self.cosine9=self.cosine9 or self.zero_cosine9
+        self.physical_cosine9=self.approval['tasks']==[dict(model='B7',seed=2029,schedule_profile='COSINE9_V1',quantile_profile='PHYSICAL_PINBALL20_V1')]
+        if self.physical_cosine9 and (
+            self.approval['code_commit']!='0a1dd23510e88554deab87843fc4a3727041dfe5'
+            or self.approval['proposal_sha256']!='c4ac55f41c43036964b31589d37d8553a65bb210fec0bc3c155c24af3144a2a1'
+            or self.approval.get('approved_by_researcher') is not True):
+            raise ValueError('Not the exact approved PHYS20-COSINE9 package')
+        self.cosine9=self.cosine9 or self.zero_cosine9 or self.physical_cosine9
         self.upper_quantile=self.approval['tasks']==[
             dict(arm='CONTROL_E0',model='B7',seed=2029,quantile_profile='UNIFORM'),
             dict(arm='CANDIDATE_UQ_MILD',model='B7',seed=2029,quantile_profile='UQ_MILD_V1')]
@@ -315,7 +321,9 @@ class CampaignReader(base.Reader):
             result['upper_quantile']=self.upper_quantile
             result['cosine9']=self.cosine9
             result['zero_cosine9']=self.zero_cosine9
+            result['physical_cosine9']=self.physical_cosine9
             if self.cosine9 and completion:result['paired_summary']=self.document('real_zero_descriptive_comparison.json' if self.zero_cosine9 else 'paired_schedule_summary.json')
+            if self.physical_cosine9 and completion:result['paired_summary']=self.document('paired_physical_summary.json')
             if self.innovation_recovery:result.update(segment_returned=returned-self.budget['prior_updates'],segment_limit=self.budget['total_updates'],prior_attempts=self.budget['prior_updates'])
             self.cache,self.cached_at=result,time.monotonic()
             return result

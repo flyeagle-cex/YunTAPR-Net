@@ -68,6 +68,7 @@ function render(s){
     if(s.dote_control){put('page-title','DOTE 零数值主对照');put('subtitle',s.dote_control_multiseed?'B7_ZERO_DOTE · Seed 2030 → 2031 · 真实mask保留 · 各固定九轮 LAST':'B7_ZERO_DOTE · Seed 2029 · 零数值/真实mask保留 · 固定九轮 LAST');put('time-label',s.dote_control_multiseed?'距整包十二小时时限':'距本任务六小时时限');put('campaign-title','仅B7零数值控制 · 原B7结果继承');}
     if(s.zero_cosine9){put('page-title','ZERO_DOTE · COSINE9');put('subtitle','B7 / E0 / Seed 2029 · 零数值 / 真实mask · 固定九轮 LAST');put('time-label','距本任务六小时时限');put('campaign-title','ZERO_DOTE 新训练 · REAL/COSINE9 已有结果继承');}
     if(s.upper_quantile){put('page-title','B7 上分位权重配对筛查');put('subtitle','Seed2029 · 新E0对照 → UQ_MILD_V1 · 相同原初态 · 固定E9 · 2025封存');put('time-label','整包剩余时间额度');put('campaign-title','E0对照 → 温和上分位候选');}
+    if(s.physical_cosine9){put('page-title','PHYS20 · COSINE9');put('subtitle','B7 / Seed 2029 · 物理 Pinball / 20 · 固定九轮 LAST');put('time-label','距本任务六小时时限');put('campaign-title','PHYS20 新训练 · COSINE9 对照结果继承');}
     const chosen=s.runs.find(r=>r.name===selectedTask)||s.runs.find(r=>r.state==='RUNNING')||s.runs.find(r=>r.state==='FAILED')||s.runs.find(r=>r.state==='PENDING')||s.runs.at(-1);
     view=chosen;
     $('task').replaceChildren();$('campaign-runs').replaceChildren();
@@ -106,9 +107,9 @@ function render(s){
   const paired=s.paired_summary;$('paired-section').hidden=!paired;$('paired-metrics').replaceChildren();
   if(paired){
     let rows;
-    if(s.zero_cosine9){
+    if(s.zero_cosine9 || s.physical_cosine9){
       const displayMetrics=m=>({brier:m.brier,auroc:m.occurrence_auroc,average_precision:m.occurrence_ap,conditional_pinball:m.all_log_pinball});
-      rows=[...Object.entries(paired.values).map(([label,m])=>({label,m:displayMetrics(m),delta:false})),{label:'REAL − ZERO',m:displayMetrics(paired.real_minus_zero),delta:true}];
+      rows=[...Object.entries(paired.values).map(([label,m])=>({label,m:displayMetrics(m),delta:false})),{label:s.physical_cosine9?'PHYS20 − COSINE9':'REAL − ZERO',m:displayMetrics(s.physical_cosine9?paired.candidate_minus_control:paired.real_minus_zero),delta:true}];
     }else{
       rows=[...Object.entries(paired.values).map(([label,m])=>({label,m,delta:false})),...Object.entries(paired.differences).map(([label,m])=>({label:label.replace('_minus_',' − '),m,delta:true}))];
     }
@@ -122,7 +123,7 @@ function render(s){
   put('memory',r.memory?`${fmt(r.memory.available/2**30,2)} GiB`:'—');put('disk',Number.isFinite(r.disk_free)?`${fmt(r.disk_free/2**30,2)} GiB`:'—');
   put('commit',s.source_commit.slice(0,12));
   put('updated',`快照：${new Date(s.snapshot_utc).toLocaleString('zh-CN',{hour12:false,timeZone:'Asia/Shanghai'})} 北京时间 · 本地只读`);
-  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'||s.state==='STOPPED'?'已停止':`${percent.toFixed(1)}%`} · ${s.zero_cosine9?'ZERO_DOTE/COSINE9':s.upper_quantile?'B7上分位配对筛查':s.dote_control?'DOTE零数值控制':s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
+  document.title=`${s.state==='COMPLETE'?'完成':s.state==='FAILED'||s.state==='STOPPED'?'已停止':`${percent.toFixed(1)}%`} · ${s.physical_cosine9?'PHYS20/COSINE9':s.zero_cosine9?'ZERO_DOTE/COSINE9':s.upper_quantile?'B7上分位配对筛查':s.dote_control?'DOTE零数值控制':s.innovation_multiseed?'B7/B8多seed':s.innovation?'B7/B8核心创新':s.static?'B5/B6地形消融':s.runs?'B3/B4多seed':'B2训练进度'}`;
 }
 async function refresh(){
   if(loading)return;loading=true;$('refresh').disabled=true;

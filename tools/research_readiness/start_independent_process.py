@@ -126,6 +126,17 @@ def validate_zero_cosine9_scope(proposal, executable):
     validate_cosine9_scope(inherited, executable)
 
 
+def validate_physical_pinball_scope(proposal, executable):
+    """Admit the exact researcher-approved PHYS20 preparation through isolation."""
+    expected = 'c4ac55f41c43036964b31589d37d8553a65bb210fec0bc3c155c24af3144a2a1'
+    canonical = {key: value for key, value in proposal.items() if key != 'proposal_sha256'}
+    actual = hashlib.sha256(json.dumps(canonical, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    if proposal.get('proposal_sha256') != expected or actual != expected:
+        raise PermissionError('Only the exact approved PHYS20-COSINE9 proposal is supported')
+    if sha(executable) != proposal.get('runtime_binding', {}).get('python_executable_sha256'):
+        raise PermissionError('Bound PHYS20 interpreter differs')
+
+
 def validate_spec(path):
     path=Path(path).resolve()
     if not path.is_relative_to(PRIVATE.resolve()):raise PermissionError('Private specification required')
@@ -186,7 +197,7 @@ def validate_spec(path):
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_physical_pinball.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -203,9 +214,11 @@ def validate_spec(path):
         elif entry.name=='start_upper_quantile_pair.py':
             validate_upper_quantile_scope(proposal,executable)
             expected_commit=approval['code_commit']
-        elif entry.name in ('start_cosine9.py','start_zero_cosine9.py'):
+        elif entry.name in ('start_cosine9.py','start_zero_cosine9.py','start_physical_pinball.py'):
             if entry.name=='start_zero_cosine9.py':
                 validate_zero_cosine9_scope(proposal,executable)
+            elif entry.name=='start_physical_pinball.py':
+                validate_physical_pinball_scope(proposal,executable)
             else:
                 validate_cosine9_scope(proposal,executable)
             frozen=read(private['inherited'])['prepared']
