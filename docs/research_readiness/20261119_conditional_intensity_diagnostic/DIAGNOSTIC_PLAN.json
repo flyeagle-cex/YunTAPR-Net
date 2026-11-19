@@ -1,0 +1,161 @@
+{
+  "schema": "yuntapr.conditional_intensity_diagnostic_plan.v1",
+  "status": "PREPARED_NO_COMPUTE_AUTHORIZATION",
+  "prepared_date": "2026-11-19",
+  "scientific_status": "NOT_VERIFIED",
+  "current_phase": "B_READOUT_EXPORTER_BLOCKED_NO_COMPUTE_AUTHORIZATION",
+  "current_phase_compute_authorized": false,
+  "controller_decision": {
+    "status": "RECEIVED",
+    "decision": "B_FIRST_A_LATER_IF_STILL_NEEDED",
+    "authorization_split": "A_AND_B_REQUIRE_SEPARATE_BUDGETS_AND_APPROVALS",
+    "current_action": "IMPLEMENT_AND_BIND_SINGLE_ARM_FULL_POPULATION_EXPORTER_BEFORE_ANY_APPROVAL_REQUEST",
+    "b_proposal_file": "B_READOUT_PROPOSAL.json",
+    "a_priority": "DEFER_UNTIL_B_COMPLETES_AND_NEED_IS_REASSESSED",
+    "2026_11_19_re_review": {
+      "science_scope": "ACCEPTABLE_WITH_STATED_LIMITS",
+      "budget_arithmetic": "NO_OBVIOUS_OVER_CAP_CONTRADICTION",
+      "not_approved_for_compute": true,
+      "remaining": [
+        "The e8d2a9b pair worker does not persist the required full-population p/qlog/truth/mask arrays.",
+        "Replace the unsupported Dev source-manifest hash with the frozen population and scene-order identities verified from receipts."
+      ]
+    }
+  },
+  "scope": {
+    "model": "B7",
+    "seed": 2029,
+    "arm": "COSINE9_REAL",
+    "checkpoint": "FIXED_E9",
+    "training_gradient_population": "2023_TRAIN",
+    "readout_population": "2024_DEVELOPMENT",
+    "final_test_2025": "SEALED_NOT_IN_SCOPE"
+  },
+  "gradient_diagnostic": {
+    "kind": "FROZEN_CHECKPOINT_LOCAL_TRAINING_DISTRIBUTION_GRADIENT_PROFILE",
+    "optimizer_updates": 0,
+    "uses_training_samples_and_backward": true,
+    "actual_lambda_q": 1.0,
+    "loss_contract": "(S_occ + 1.0*S_qr)/N_valid; S_qr averages 32 tau losses per rainy pixel, then sums rainy pixels",
+    "objective_contribution": "g_update_bin=(1/N_valid_update)*grad(S_qr_update_bin)",
+    "batch_contract": {
+      "train_scenes": 959,
+      "batch_scenes": 2,
+      "updates_per_epoch": 480,
+      "updates_with_N_valid_6860": 479,
+      "final_update_N_valid": 3430,
+      "epoch_summary": "EQUAL_MEAN_OF_480_PER_UPDATE_GRADIENT_VECTORS"
+    },
+    "bins_mm_h": [
+      "(0.1,1]",
+      "(1,5]",
+      "(5,10]",
+      "(10,20]",
+      "(20,30]",
+      "(30,50]",
+      ">50"
+    ],
+    "parameter_groups": [
+      "model.backbone",
+      "model.projection",
+      "model.heads.quantile",
+      "model.heads.occurrence_separately"
+    ],
+    "required_interpretation_metrics": [
+      "per-bin objective-gradient RMS",
+      "per-rain-pixel sensitivity grad(S_qr_bin)/n_bin",
+      "pairwise bin cosine or leave-one-bin-out cosine",
+      "per-parameter RMS or within-group relative scale"
+    ],
+    "forbidden_inference": [
+      "gradient norm alone proves rare-intensity starvation",
+      "cos(g_bin,g_full) proves alignment",
+      "E9 local gradient describes historical trajectory",
+      "cross-parameter-group raw L2 norms are directly comparable"
+    ],
+    "minimum_bin_count": "MUST_BE_FROZEN_BEFORE_COMPUTATION; OTHERWISE NOT_ESTIMABLE",
+    "expected_source_read_scale_bytes": "APPROX_53GB_FULL_480_UPDATE_PASS; RECOMPUTE_FROM_BOUND_RECEIPT",
+    "late_epoch_signal_limit": "COSINE9_E9_LEARNING_RATE_NEAR_ZERO; LOCAL_GRADIENT_SNR_LIMITATION",
+    "historical_training_attribution": false,
+    "budget": "NOT_ESTIMATED",
+    "priority": "DEFERRED_UNTIL_B_COMPLETES_AND_NEED_IS_REASSESSED",
+    "authorization": "SEPARATE_NEW_EXPLICIT_APPROVAL_REQUIRED"
+  },
+  "readout_diagnostic": {
+    "existing_full_population_prediction_arrays": "NOT_FOUND_IN_PUBLIC_RECEIPTS_OR_SCOPED_LOCAL_MOUNTAIN_PAIR_EVALUATION_ARTIFACTS; SCOPED_MANIFEST_HASHED_LOCALLY",
+    "current_action": "ENGINEERING_EXPORTER_IMPLEMENTATION_AND_IDENTITY_BINDING_ONLY",
+    "readout_executor_code_commit": null,
+    "prior_pair_worker_export_capability": "AGGREGATE_METRICS_AND_STRONG_PIXEL_SUBSET_ONLY; NO_FULL_POPULATION_ARRAY_EXPORT",
+    "target_label_source": "IMERG_ROOT/year/imerg_YYYYMMDD.nc via ReaderFactory; included in the deduplicated Development source plan, additional target-label opens=0",
+    "population_mean_envelope_semantics": "CONSERVATIVE_CLOSED_NOT_ENDPOINT_ATTAINABILITY",
+    "conditional_tail_fraction_envelope_width_for_1_minus_Fplus_20": "1/32",
+    "verified_population_identity": {
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "populations_file_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+      "population_ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+      "partition_sha256": "01b95f12d26a3f6f4ff05620414cdae66c5cec23bd2808b0af2de40e4615291c",
+      "candidate_manifest_sha256": null
+    },
+    "existing_receipts_sufficient_for_full_population_ranking_or_calibration": false,
+    "proposed_threshold_mm_h": [20],
+    "target": "P(R>20 mm/h)",
+    "method": "EXISTING_FINITE_QUANTILE_PARTIAL_IDENTIFICATION_BOUNDS",
+    "reported_metrics": [
+      "per-pixel envelope width distribution",
+      "population mean lower/upper envelope and width",
+      "distribution of number of 32 nodes strictly above 20 mm/h",
+      "full-population node coverage and rain-bin conditional Pinball, with overlap against existing 21-cell aggregates disclosed"
+    ],
+    "removed_metrics": [
+      "identification_rate",
+      "undecided_rate_without_a_frozen_probability_cutoff"
+    ],
+    "output_precision": "FP32_OR_HIGHER_FOR_P_AND_QLOG",
+    "input_preflight": "p_in_[0,1]; qlog_strictly_increasing; qlog[:,0] > log1p(0.1); fail_closed_no_sort_or_repair",
+    "prohibited": [
+      "interpolate_between_quantile_nodes",
+      "extrapolate_beyond_q32",
+      "assume_tail_distribution",
+      "invent_probability_cutoff",
+      "treat_bounds_as_confidence_intervals"
+    ],
+    "population": "ALL_VALID_2024_DEVELOPMENT_PIXEL_TIMES",
+    "budget": {
+      "payload_cap_bytes": 28000000000,
+      "metadata_cap_bytes": 250000000,
+      "total_source_cap_bytes": 28250000000,
+      "payload_open_cap": 8100,
+      "metadata_open_cap": 160,
+      "runtime_cap_seconds": 7200,
+      "output_cap_bytes": 2147483648,
+      "minimum_free_disk_bytes": 8589934592
+    },
+    "authorization": "SEPARATE_NEW_EXPLICIT_APPROVAL_REQUIRED_FOR_ANY_NEW_INFERENCE"
+  },
+  "decision_gates": {
+    "web_controller_review": "RECEIVED_B_FIRST_A_LATER_SEPARATE_APPROVALS",
+    "harness_review": "SECOND_BOUNDED_REVIEW_COMPLETE_NOT_APPROVED; SCIENCE_AND_ARITHMETIC_OK; EXPORTER_CODE_IDENTITY_REMAINS_BLOCKING",
+    "source_and_checkpoint_sha": "CHECKPOINT_AND_FROZEN_POPULATION_IDENTITIES_VERIFIED_FROM_RECEIPTS; EXPORTER_CODE_SHA_PENDING",
+    "source_bytes_open_count_runtime_storage": "PROPOSED_EXACT_LIMITS_IN_B_READOUT_PROPOSAL.json; RECONFIRM_IN_EXECUTOR_BINDING_BEFORE_APPROVAL",
+    "target_label_reads": "IMERG_TARGETS_ARE_INCLUDED_IN_7950_DEDUPLICATED_DEVELOPMENT_SOURCE_FILES; NO_ADDITIONAL_963_LABEL_OPENS",
+    "current_action_reads_weather_or_weights": 0,
+    "new_training": 0,
+    "new_inference": 0,
+    "new_raw_weather_or_weight_reads": 0,
+    "automatic_retry_or_replay": 0
+  },
+  "evidence_basis": [
+    "docs/research_readiness/20261115_mountain_pair_results/CONDITIONAL_INTENSITY_EVIDENCE.json",
+    "src/yuntapr/experimental/phase_b_v2_ablations/total.py",
+    "src/yuntapr/experimental/research_readiness/tail_identifiability.py",
+    "tools/research_readiness/extreme_diagnostic_candidates.py"
+  ],
+  "model_modes": {
+    "science": "Web ChatGPT High",
+    "engineering": "Sol High",
+    "bounded_review": "Harness High",
+    "routine_sync": "Luna"
+  }
+}

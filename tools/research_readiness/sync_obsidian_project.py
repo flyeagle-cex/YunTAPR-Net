@@ -18,12 +18,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--project', type=Path, required=True)
     parser.add_argument('--receipt', type=Path, required=True)
+    parser.add_argument('--date', default='2026-11-15',
+                        help='ISO date written to the project index and publication receipt')
     parser.add_argument('--bundle', action='append')
     parser.add_argument('--snapshot-source', type=Path, default=ROOT / 'docs/research_readiness/20261115_core_innovation_repair/OBSIDIAN_SNAPSHOT.md')
     parser.add_argument('--snapshot-name', default='进度快照_2026-11-15_四项创新主线与首轮修复.md')
     parser.add_argument('--status', default='core-innovation-repair-in-progress')
     parser.add_argument('--status-text', default='研究者固定四项创新主线。PHYS20九轮完成且八门失败，当前优先修复物理输入契约和山区强雨证据保存。本轮人工检查通过，科学验收仍为NOT_VERIFIED。')
     args = parser.parse_args()
+    if not re.fullmatch(r'20\d{2}-\d{2}-\d{2}', args.date):
+        raise ValueError('Publication date must use YYYY-MM-DD')
     project = args.project.resolve()
     index = project / '极端降水预测.md'
     original = index.read_bytes()
@@ -52,11 +56,11 @@ def main():
     (project / snapshot_name).write_bytes(snapshot)
     assert (project / snapshot_name).read_bytes() == snapshot
     text = original.decode('utf-8-sig')
-    text = re.sub(r'^updated:.*$', 'updated: 2026-11-15', text, count=1, flags=re.M)
+    text = re.sub(r'^updated:.*$', 'updated: ' + args.date, text, count=1, flags=re.M)
     text = re.sub(r'^status:.*$', 'status: ' + args.status, text, count=1, flags=re.M)
     marker = '<!-- CODEX_CURRENT_RESEARCH_STATUS -->'
     end = '<!-- /CODEX_CURRENT_RESEARCH_STATUS -->'
-    current = (f'{marker}\n## 最新研究状态 · 2026-11-15\n\n'
+    current = (f'{marker}\n## 最新研究状态 · {args.date}\n\n'
                f'{args.status_text}\n\n'
                f'详见 [[{snapshot_name[:-3]}]]。\n{end}\n\n')
     if marker in text:
@@ -76,7 +80,7 @@ def main():
     temporary = index.with_name(index.name + '.codex-sync.tmp')
     temporary.write_text(text, encoding='utf-8', newline='\n')
     temporary.replace(index)
-    result = dict(status='PUBLISHED_AND_READBACK_HASH_VERIFIED', date='2026-11-15',
+    result = dict(status='PUBLISHED_AND_READBACK_HASH_VERIFIED', date=args.date,
                   snapshot_filename=snapshot_name, snapshot_identity=fingerprint(snapshot),
                   project_index_identity=fingerprint(index.read_bytes()),
                   previous_index_identity=fingerprint(original), previous_index_backup_preserved=True,

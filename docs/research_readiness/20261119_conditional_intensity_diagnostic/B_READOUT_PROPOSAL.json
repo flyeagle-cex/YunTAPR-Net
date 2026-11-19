@@ -1,0 +1,138 @@
+{
+  "schema": "yuntapr.conditional_intensity_B_readout_proposal.v1",
+  "status": "BLOCKED_ENGINEERING_EXPORTER_AND_RESEARCHER_APPROVAL",
+  "prepared_date": "2026-11-19",
+  "authorization": "NONE",
+  "phase": "B_ONLY",
+  "purpose": "Create reusable identity-bound full-population occurrence/conditional-quantile arrays and compute finite-node P(R>20) envelope for 2024 Dev",
+  "identity": {
+    "model": "B7",
+    "seed": 2029,
+    "arm": "COSINE9_REAL",
+    "checkpoint": "FIXED_E9",
+    "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+    "prior_pair_evaluation_code_commit_reference": "e8d2a9b0c3ab7f60aa678a0bcee2d60133852e74",
+    "prior_pair_proposal_sha256": "85bc55e0101823b1291c3923c85685a7ad50315797327b9eae410f2fe49bdf61",
+    "readout_executor_code_commit": null,
+    "readout_executor_status": "NOT_IMPLEMENTED_OR_IDENTITY_BOUND",
+    "verified_dev_population_identity": {
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "populations_file_sha256": "ea6abae6a493f2abdf19f938365407a35f0f0be71ba1346241264635318a32d2",
+      "statistics_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+      "population_ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+      "partition_sha256": "01b95f12d26a3f6f4ff05620414cdae66c5cec23bd2808b0af2de40e4615291c",
+      "candidate_manifest_sha256": null,
+      "identity_source": "local REAL_COSINE9/recomputed_report.json plus frozen population identity in EVIDENCE_INDEX.md; no separate Dev source-manifest hash is evidenced"
+    },
+    "dev_population": {
+      "scenes": 963,
+      "forward_batches": 121,
+      "n_valid": 3303090,
+      "development_source_file_opens": 7950,
+      "development_source_bytes": 26639253112,
+      "label_source": "IMERG target scenes are read through ReaderFactory from IMERG_ROOT/year/imerg_YYYYMMDD.nc; these target files are included in the deduplicated 7950-file Development source plan, not an additional 963 opens",
+      "label_source_additional_open_instances": 0
+    }
+  },
+  "single_arm_scope": {
+    "arm_count": 1,
+    "optimizer_updates": 0,
+    "model_forward_calls_expected": 121,
+    "checkpoint_loads": 1,
+    "weather_reads": 7950,
+    "other_payload_reference_bytes": {
+      "static": 312828,
+      "checkpoint_file_bytes": 53906821,
+      "checkpoint_hash_and_load_reserved_bytes": 107813642
+    },
+    "metadata_reference_bytes": 195653265,
+    "metadata_reference_open_instances": 144,
+    "payload_reference_total_bytes": 26747379582,
+    "total_reference_bytes_including_metadata": 26943032847,
+    "source_caps": {
+      "payload_bytes": 28000000000,
+      "metadata_bytes": 250000000,
+      "payload_open_instances": 8100,
+      "metadata_open_instances": 160
+    },
+    "total_source_cap_bytes": 28250000000,
+    "reference_payload_headroom_bytes": 1252620418,
+    "reference_metadata_headroom_bytes": 54346735,
+    "reference_payload_open_instances": 7953,
+    "reference_payload_open_headroom": 147,
+    "reference_metadata_open_headroom": 16,
+    "runtime_cap_seconds": 7200,
+    "output_storage_cap_bytes": 2147483648,
+    "minimum_free_disk_at_start_bytes": 8589934592,
+    "automatic_retry": 0,
+    "replay": 0
+  },
+  "required_persisted_arrays": {
+    "occurrence_probability_p": "FP32_OR_HIGHER",
+    "conditional_quantiles_log": "FP32_OR_HIGHER; shape [3303090,32]",
+    "truth": "FP32_REFERENCE_DTYPE_AND_UNIT_RECORDED",
+    "validity_or_supervision_mask": "IDENTITY_BOUND_AND_HASHED",
+    "scene_pixel_index": "STABLE_JOIN_KEY_FOR_ALL_ARRAYS"
+  },
+  "estimated_array_payload_bytes": {
+    "p_fp32": 13212360,
+    "qlog_fp32": 422795520,
+    "truth_fp32": 13212360,
+    "scene_index_uint16": 6606180,
+    "pixel_index_uint16": 6606180,
+    "full_supervision_mask_bool_963x100x100": 9630000,
+    "total_before_npy_headers_and_receipts": 472062600
+  },
+  "preflight_fail_closed": [
+    "model/seed/arm/checkpoint hash mismatch",
+    "Dev manifest, scene ordering, population count, or supervision-mask identity mismatch",
+    "p outside [0,1] or non-finite values",
+    "qlog not finite, not strictly increasing, or qlog[:,0] <= log1p(0.1)",
+    "output is not FP32 or higher for p and qlog",
+    "source, runtime, or output cap would be exceeded",
+    "single-arm full-population array-export entry point is not implemented and bound to a clean execution commit"
+  ],
+  "metrics": {
+    "primary": "finite-node partial-identification envelope for P(R>20 mm/h)",
+    "report": [
+      "per-pixel envelope-width distribution",
+      "population mean lower and upper envelope and width",
+      "distribution of count of 32 quantile nodes strictly above 20 mm/h",
+      "full-population node coverage and fixed-bin conditional Pinball, with overlap versus existing aggregates disclosed"
+    ],
+    "explicitly_omitted": [
+      "identification rate",
+      "undecided rate without a frozen probability cutoff",
+      "calibration or ranking claims",
+      "interpolation or extrapolation beyond q32",
+      "confidence interval or risk guarantee"
+    ],
+    "greater_than_50": "If q32 <= 50 mm/h, mark the envelope vacuous/not identifiable and do not use for model selection"
+  },
+  "envelope_interpretation": {
+    "population_mean_bounds": "CONSERVATIVE_CLOSED_ENVELOPE; lower/upper endpoints are not jointly attainable as one distribution",
+    "conditional_tail_fraction_width_for_1_minus_Fplus_20": "1/32 for the 32-node finite quantile contract",
+    "truth_inside_envelope": "NOT_CALIBRATION_EVIDENCE"
+  },
+  "science_limits": [
+    "single model, seed, REAL arm, E9 checkpoint, and 2024 Dev population only",
+    "no evidence of calibration, ranking skill, causal terrain mechanism, or generalization",
+    "scientific_status_remains_NOT_VERIFIED",
+    "2025 Final Test remains sealed"
+  ],
+  "controller_review_2026_11_19": {
+    "science_scope": "ACCEPTABLE_WITH_STATED_LIMITS",
+    "budget_arithmetic": "NO_OBVIOUS_OVER_CAP_CONTRADICTION; EXACT_BYTE_CAPS_RECORDED",
+    "resolved_since_review": [
+      "Replaced the unsupported Dev source-manifest hash with receipt-bound population, population-file, statistics, target-QC, scene-order, and partition identities.",
+      "Named the IMERG target-label source and stated that it is included in the deduplicated 7950-file Development source plan, with no extra 963-label-open term."
+    ],
+    "remaining_blockers": [
+      "Implement and bind a single-arm executor that writes identity-bound full-population p/qlog/truth/mask arrays; the prior pair worker only writes aggregates and the strong-pixel subset."
+    ],
+    "compute_authorized": false,
+    "scientific_status": "NOT_VERIFIED"
+  },
+  "next_gate": "Implement and minimally verify the single-arm full-population exporter/entry, bind its clean commit to the already listed frozen Dev identities, then request separate explicit approval. A remains deferred and excluded."
+}
