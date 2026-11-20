@@ -1,4 +1,4 @@
-"""Paired executor with E0 and explicitly bounded origin-only loss variants."""
+"""Paired executor with E0 and explicitly bounded loss variants."""
 from dataclasses import dataclass,asdict
 from pathlib import Path
 import ctypes,gc,json,os,random,sqlite3
@@ -19,6 +19,8 @@ from ..stage2.models import paired_spectral_candidates
 from ..stage3.planning import digest
 from . import *
 from .evaluation import Evaluation,paired_difference
+from .data import sha
+from .recovery import Tail20E8Resume,write as write_durable
 
 
 def cpu_tree(value):
@@ -33,6 +35,23 @@ def cpu_tree(value):
 
 def write(path,value):
     with Path(path).open('x',encoding='utf-8') as f:json.dump(value,f,indent=2,allow_nan=False)
+
+
+def save_checkpoint(path, payload):
+    with Path(path).open('xb') as f:
+        torch.save(payload, f)
+        f.flush()
+        os.fsync(f.fileno())
+    return sha(path)
+
+
+def publish_pre_dev_checkpoint(path, payload):
+    staged = path.with_suffix('.pt.pending')
+    checkpoint_sha256 = save_checkpoint(staged, payload)
+    # Publish the complete file atomically. Link creation also rejects an existing endpoint.
+    os.link(staged, path)
+    staged.unlink()
+    return checkpoint_sha256
 
 
 def resources(*,backward=True):
@@ -146,11 +165,15 @@ class PairedExecutor:
         self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
         self.quantile_profile=quantile_profile
         self.final_dev_observer=final_dev_observer
+        self.tail20_resume = type(recovery) is Tail20E8Resume
+        if self.tail20_resume and (quantile_profile != TAIL20_PROFILE or schedule_profile != COSINE9):
+            raise PermissionError('TAIL20 E8 restore requires the original loss and schedule')
+        incompatible_resume = recovery is not None and not self.tail20_resume
         if quantile_profile!=UNIFORM and (
             quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE,TAIL20_PROFILE) or self.kinds!=('B7',)
-            or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or recovery is not None
+            or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or incompatible_resume
         ):
-            raise PermissionError('Modified quantile profile requires one origin-only B7 seed2029 lambda1 task')
+            raise PermissionError('Modified quantile profile requires a supported B7 seed2029 lambda1 task')
         if quantile_profile==PHYSICAL_PROFILE and (
             schedule_profile!=COSINE9 or not isinstance(origin_reference,dict)
         ):
@@ -165,7 +188,7 @@ class PairedExecutor:
         if self.modified_schedule and (
             schedule_profile!=COSINE9 or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029
-            or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,TAIL20_PROFILE)) or recovery is not None
+            or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,TAIL20_PROFILE)) or incompatible_resume
         ):
             raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 E0 uniform or physical task')
         if quantile_profile==PHYSICAL_PROFILE:
@@ -192,6 +215,23 @@ class PairedExecutor:
         if (initial_identity[kind]['full_state_sha256']!=reference['original_model_state_sha256']
                 or [digest(orders[e]) for e in range(1,EPOCHS+1)]!=reference['epoch_order_sha256']):
             raise RuntimeError('Candidate original initialization or epoch order differs from bound E0')
+
+    def checkpoint_payload(self, kind, model, optimizer, groups, initial, epoch, updates, order, training, report):
+        payload=dict(identity=dict(decision=asdict(self.decision),data=self.plan.identity,model=kind),
+                     initial_sha256=initial,epoch=epoch,updates=updates,
+                     model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),
+                     scheduler=dict(completed=updates,steps_per_epoch=STEPS,original_horizon=50*STEPS),
+                     rng=dict(python=random.getstate(),numpy=np.random.get_state(),torch_cpu=torch.get_rng_state(),
+                              torch_cuda=torch.cuda.get_rng_state_all()),
+                     train_order_sha256=digest(order),training=training,validation=report,optimizer_groups=groups)
+        if self.modified_loss:
+            payload['identity']['loss_config']=self.loss_identity
+            payload['identity']['origin_reference']=self.origin_reference
+        if self.modified_schedule:
+            payload['identity'].update(schedule=schedule_identity(),origin_reference=self.origin_reference)
+            payload['scheduler']=dict(completed=updates,steps_per_epoch=STEPS,horizon=EPOCHS*STEPS,
+                                      profile=self.schedule_profile)
+        return payload
 
     def run(self,reader_factory):
         # No optimizer or output experiment exists before all explicit decisions.
@@ -279,6 +319,19 @@ class PairedExecutor:
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()
+                    if self.tail20_resume:
+                        self.recovery.verify_replayed_train(training)
+                        path=self.folder/f'{kind}_PREDEV_epoch_{epoch:02d}.pt'
+                        payload=self.checkpoint_payload(kind,model,optimizer,groups,initial,epoch,u,order,training,None)
+                        checkpoint_sha256=publish_pre_dev_checkpoint(path,payload)
+                        del payload
+                        write_durable(path.with_suffix('.receipt.json'),dict(
+                            status='SEALED_TRAIN_BEFORE_DEV',model=kind,epoch=epoch,updates=u,
+                            checkpoint_sha256=checkpoint_sha256,checkpoint_bytes=path.stat().st_size,
+                            inherited_checkpoint_sha256=self.recovery.checkpoint_sha256,
+                            train_receipt_sha256=digest(training),population_sha256=POPULATION_SHA,
+                            loss_config=self.loss_identity,schedule=schedule_identity(),code_commit=self.code_commit))
+                        self.deadline()
                     ids=self.plan.ids('Development');reader=reader_factory('Development',epoch,ids,self.folder/f'{kind}_dev_reads_{epoch:02d}')
                     ev=Evaluation(ids,[self.plan.rows['Development'][s]['analysis_time'] for s in ids],self.plan.identity,self.folder/f'{kind}_evaluation_{epoch:02d}',strong_scene_ids=self.strong,altitude=self.altitude)
                     model.eval()
@@ -304,20 +357,9 @@ class PairedExecutor:
                     if final_observer is not None:
                         write(self.folder/f'{kind}_tail20_gate_{epoch:02d}.json',final_observer.finish(report))
                     self.deadline()
-                    payload=dict(identity=dict(decision=asdict(self.decision),data=self.plan.identity,model=kind),initial_sha256=initial,epoch=epoch,updates=u,
-                        model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),scheduler=dict(completed=u,steps_per_epoch=STEPS,original_horizon=50*STEPS),
-                        rng=dict(python=random.getstate(),numpy=np.random.get_state(),torch_cpu=torch.get_rng_state(),torch_cuda=torch.cuda.get_rng_state_all()),
-                        train_order_sha256=digest(order),training=training,validation=report,optimizer_groups=groups)
-                    if self.modified_loss:
-                        payload['identity']['loss_config']=self.loss_identity
-                        payload['identity']['origin_reference']=self.origin_reference
-                    if self.modified_schedule:
-                        payload['identity'].update(schedule=schedule_identity(),origin_reference=self.origin_reference)
-                        payload['scheduler']=dict(completed=u,steps_per_epoch=STEPS,horizon=9*STEPS,profile=self.schedule_profile)
+                    payload=self.checkpoint_payload(kind,model,optimizer,groups,initial,epoch,u,order,training,report)
                     path=self.folder/f'{kind}_LAST_epoch_{epoch:02d}.pt'
-                    with path.open('xb') as f:torch.save(payload,f);f.flush();os.fsync(f.fileno())
-                    from .data import sha
-                    receipt=dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=sha(path),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report))
+                    receipt=dict(model=kind,epoch=epoch,updates=u,checkpoint_sha256=save_checkpoint(path,payload),population_sha256=POPULATION_SHA,validation_receipt_sha256=digest(report))
                     if self.modified_loss:receipt['loss_config']=self.loss_identity
                     if self.modified_schedule:receipt['schedule']=schedule_identity()
                     if self.code_commit is not None:receipt['code_commit']=self.code_commit

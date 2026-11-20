@@ -3,7 +3,9 @@ from pathlib import Path
 import hashlib,json,os,sqlite3
 from contextlib import closing
 from ..stage3.planning import digest
-from . import POPULATION_SHA,STEPS,PAIR_CAP
+from . import EPOCHS,POPULATION_SHA,STEPS,PAIR_CAP
+from ...phase_b_v2_ablations.schedule import COSINE9, ORIGINAL_50, schedule_identity
+from ...phase_b_v2_ablations.tail20_aux import profile_identity as tail20_identity
 
 BASE='5b5298f41025db5b7b718fd736fc3fe6de516875'
 LAST_SHA='9d4c8a4d3035c0b8327812466dc111afa72c074afb8612bf30f32a25bed7fc8e'
@@ -112,23 +114,129 @@ def verify_source(request,folder,decision_id):
         finally:meter.uninstall();cache.close()
 
 
-def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=None,seed=None,loss_config=None):
+def restore_last(path,model,optimizer,groups,*,data_identity,epoch,updates,kind=None,seed=None,loss_config=None,
+                 schedule_profile=ORIGINAL_50,expected_sha256=None,validate_payload=None):
     """Shared LAST restoration; no optimizer step and no source-data access."""
     import random,numpy as np,torch
     from yuntapr.training.phase_a_protocol import state_digest
-    payload=torch.load(path,map_location='cpu',weights_only=False)
+    if expected_sha256 is None:
+        payload=torch.load(path,map_location='cpu',weights_only=False)
+    else:
+        with Path(path).open('rb') as f:
+            actual=hashlib.file_digest(f,'sha256').hexdigest()
+            if actual!=expected_sha256:raise ValueError('Checkpoint bytes differ from the approved digest')
+            f.seek(0)
+            payload=torch.load(f,map_location='cpu',weights_only=False)
     if (payload['identity']['data']!=data_identity or payload['optimizer_groups']!=groups
             or payload['epoch']!=epoch or payload['updates']!=updates
             or (kind is not None and payload['identity']['model']!=kind)
             or (seed is not None and payload['identity']['decision']['seed']!=seed)
             or (loss_config is not None and payload['identity'].get('loss_config')!=loss_config)):
         raise ValueError('Checkpoint state/grouping identity differs')
-    if payload['scheduler']!=dict(completed=updates,steps_per_epoch=480,original_horizon=24000):raise ValueError('Original schedule differs')
+    if schedule_profile==ORIGINAL_50:
+        expected_schedule=dict(completed=updates,steps_per_epoch=STEPS,original_horizon=50*STEPS)
+    elif schedule_profile==COSINE9:
+        expected_schedule=dict(completed=updates,steps_per_epoch=STEPS,horizon=EPOCHS*STEPS,profile=COSINE9)
+    else:
+        raise ValueError('Unsupported restored schedule')
+    if payload['scheduler']!=expected_schedule:raise ValueError('Restored schedule differs')
+    if validate_payload is not None:validate_payload(payload)
     model.load_state_dict(payload['model'],strict=True);optimizer.load_state_dict(payload['optimizer'])
     if state_digest(model.state_dict())!=state_digest(payload['model']):raise ValueError('Restored model tensors differ')
     if state_digest(optimizer.state_dict())!=state_digest(payload['optimizer']):raise ValueError('Restored optimizer tensors differ')
     rng=payload['rng'];random.setstate(rng['python']);np.random.set_state(rng['numpy']);torch.set_rng_state(rng['torch_cpu'])
     torch.cuda.set_rng_state_all(rng['torch_cuda'])
+
+
+class Tail20E8Resume:
+    """Restore the approved stopped B7 endpoint and replay only its ninth epoch."""
+
+    kinds = ('B7',)
+    inherited_epochs = EPOCHS - 1
+    inherited_updates = inherited_epochs * STEPS
+    effective_updates = EPOCHS * STEPS
+
+    @classmethod
+    def required_parent_files(cls):
+        return ('paired_initial_identity.json', 'paired_orders.json', 'B7_train_09.json',
+                *(f'B7_development_{e:02d}.json' for e in range(1, cls.inherited_epochs + 1)),
+                *(f'B7_LAST_epoch_{e:02d}.receipt.json' for e in range(1, cls.inherited_epochs + 1)))
+
+    def __init__(self, *, parent, decision_id, data_identity, checkpoint_sha256, train_sha256,
+                 parent_pins, parent_code_commit):
+        self.parent = Path(parent).resolve()
+        self.decision_id = decision_id
+        self.data_identity = data_identity
+        self.checkpoint_sha256 = checkpoint_sha256
+        self.train_sha256 = train_sha256
+        self.parent_pins = {name: parent_pins[name] for name in self.required_parent_files()}
+        self.parent_code_commit = parent_code_commit
+        self.request = dict(prior_updates=self.effective_updates, replayed_updates=STEPS)
+
+    def completed_epochs(self, kind):
+        if kind != 'B7':
+            raise PermissionError('Only B7 may use the TAIL20 E8 restore')
+        return self.inherited_epochs
+
+    def validate(self, plan, decision):
+        if (plan.identity != self.data_identity or decision.seed != 2029
+                or decision.decision_id != self.decision_id or not self.decision_id):
+            raise PermissionError('TAIL20 recovery population or decision differs')
+        if (any(sha(self.parent / name) != identity for name, identity in self.parent_pins.items())
+                or digest(read(self.parent / 'B7_train_09.json')) != self.train_sha256):
+            raise ValueError('Frozen TAIL20 parent metadata differs')
+        if (self.parent / 'B7_LAST_epoch_09.pt').exists() or (self.parent / 'B7_development_09.json').exists():
+            raise PermissionError('TAIL20 recovery requires an unsaved E9 endpoint')
+
+    def ledger(self, path, identity):
+        recovery = dict(parent=str(self.parent), checkpoint_sha256=self.checkpoint_sha256,
+                        train_sha256=self.train_sha256, inherited_updates=self.inherited_updates,
+                        **self.request)
+        return RecoveryLedger(path, dict(identity, recovery=recovery), offsets={'B7': self.inherited_updates},
+                              segment_cap=STEPS, prior_updates=self.effective_updates,
+                              cumulative_cap=self.effective_updates + STEPS, allowed_models=self.kinds)
+
+    def check_initial(self, value):
+        if value != read(self.parent / 'paired_initial_identity.json'):
+            raise ValueError('TAIL20 parent initialization differs')
+
+    def check_orders(self, orders):
+        if {str(e): dict(ids=list(o), sha256=digest(o)) for e, o in orders.items()} != read(self.parent / 'paired_orders.json'):
+            raise ValueError('TAIL20 parent Train orders differ')
+
+    def restore(self, kind, model, optimizer, groups):
+        last = self.completed_epochs(kind)
+        reports = []
+        for epoch in range(1, last + 1):
+            report = read(self.parent / f'B7_development_{epoch:02d}.json')
+            seal = read(self.parent / f'B7_LAST_epoch_{epoch:02d}.receipt.json')
+            if (seal['model'] != kind or seal['epoch'] != epoch or seal['updates'] != epoch * STEPS
+                    or seal['code_commit'] != self.parent_code_commit
+                    or seal['population_sha256'] != POPULATION_SHA or seal['validation_receipt_sha256'] != digest(report)
+                    or seal['loss_config'] != tail20_identity() or seal['schedule'] != schedule_identity()):
+                raise ValueError('Inherited TAIL20 Dev or checkpoint seal differs')
+            reports.append(report)
+        if seal['checkpoint_sha256'] != self.checkpoint_sha256:
+            raise ValueError('Inherited TAIL20 E8 digest differs')
+        initial = read(self.parent / 'paired_initial_identity.json')[kind]['full_state_sha256']
+        order = read(self.parent / 'paired_orders.json')[str(last)]['sha256']
+
+        def validate_payload(payload):
+            if (payload['identity']['schedule'] != schedule_identity()
+                    or payload['initial_sha256'] != initial or payload['train_order_sha256'] != order
+                    or digest(payload['validation']) != seal['validation_receipt_sha256']):
+                raise ValueError('Inherited TAIL20 E8 checkpoint state differs from sealed evidence')
+
+        restore_last(self.parent / 'B7_LAST_epoch_08.pt', model, optimizer, groups,
+                     data_identity=self.data_identity, epoch=last, updates=self.inherited_updates,
+                     kind=kind, seed=2029, loss_config=tail20_identity(), schedule_profile=COSINE9,
+                     expected_sha256=self.checkpoint_sha256, validate_payload=validate_payload)
+        return self.inherited_updates, reports
+
+    def verify_replayed_train(self, training):
+        actual = digest(training)
+        if actual != self.train_sha256:
+            raise RuntimeError(f'TAIL20 E9 Train replay differs before Development; actual receipt digest {actual}')
 
 
 class ResumeState:

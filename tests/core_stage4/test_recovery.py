@@ -1,6 +1,8 @@
 """Recovery-only regressions; CPU fixtures, no weather sources or optimizer step."""
 import hashlib,io,json,sqlite3,unittest,uuid
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 from unittest.mock import patch
 from yuntapr.contracts.loader import REPO_ROOT
 from yuntapr.experimental.core_innovation.stage3.metered_io import SourceMeter,MeasuredReader,IdentityConflict,path_key
@@ -92,4 +94,95 @@ class RecoveryTests(unittest.TestCase):
             u,reports=state.restore('B3',restored,restored_opt,{'fixture':True})
         self.assertEqual((u,len(reports)),(1440,3));self.assertEqual(state_digest(model.state_dict()),state_digest(restored.state_dict()))
         self.assertEqual(state_digest(opt.state_dict()),state_digest(restored_opt.state_dict()));self.assertTrue(torch.equal(torch.get_rng_state(),rng['torch_cpu']));cuda.assert_called_once_with([])
+
+
+class Tail20RecoveryTests(unittest.TestCase):
+    def test_pre_dev_checkpoint_is_published_atomically_without_overwrite(self):
+        import torch
+        from yuntapr.experimental.core_innovation.stage4.engine import publish_pre_dev_checkpoint
+        from yuntapr.experimental.core_innovation.stage4.recovery import sha
+
+        with TemporaryDirectory(dir=REPO_ROOT) as temporary:
+            target = Path(temporary) / 'B7_PREDEV_epoch_09.pt'
+            digest = publish_pre_dev_checkpoint(target, {'fixture': True})
+            self.assertEqual(sha(target), digest)
+            self.assertEqual(torch.load(target, map_location='cpu', weights_only=True), {'fixture': True})
+            self.assertFalse(target.with_suffix('.pt.pending').exists())
+            with self.assertRaises(FileExistsError):
+                publish_pre_dev_checkpoint(target, {'fixture': False})
+            self.assertEqual(sha(target), digest)
+
+    def test_cosine9_restore_and_exact_replay_receipt(self):
+        import random
+        import numpy as np
+        import torch
+        from yuntapr.experimental.core_innovation.stage3.planning import digest
+        from yuntapr.experimental.core_innovation.stage4 import POPULATION_SHA
+        from yuntapr.experimental.core_innovation.stage4.recovery import Tail20E8Resume,sha,write
+        from yuntapr.experimental.phase_b_v2_ablations.schedule import COSINE9,schedule_identity
+        from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import profile_identity
+        from yuntapr.training.phase_a_protocol import state_digest
+
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            parent = root / 'stopped'
+            parent.mkdir()
+            data = {'population_sha256': POPULATION_SHA}
+            approval = SimpleNamespace(seed=2029, decision_id='SYNTHETIC_RECOVERY')
+            model = torch.nn.Linear(2, 1)
+            optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4, foreach=False)
+            for parameter in model.parameters():
+                optimizer.state[parameter] = dict(step=torch.tensor(3840.), exp_avg=torch.full_like(parameter, .2),
+                                                  exp_avg_sq=torch.full_like(parameter, .3))
+            rng = dict(python=random.getstate(), numpy=np.random.get_state(), torch_cpu=torch.get_rng_state(), torch_cuda=[])
+            train = dict(updates=4320, n_strong=9, s_tail_training=5.0)
+            write(parent / 'B7_train_09.json',train)
+            write(parent / 'paired_initial_identity.json', {'B7': {'full_state_sha256': 'synthetic-initial'}})
+            write(parent / 'paired_orders.json', {'8': {'sha256': 'synthetic-order'}})
+            checkpoint = parent / 'B7_LAST_epoch_08.pt'
+            torch.save(dict(identity=dict(data=data, model='B7', decision={'seed': 2029},
+                                         loss_config=profile_identity(), schedule=schedule_identity()),
+                            initial_sha256='synthetic-initial',train_order_sha256='synthetic-order',
+                            epoch=8, updates=3840, model=model.state_dict(), optimizer=optimizer.state_dict(),
+                            scheduler=dict(completed=3840, steps_per_epoch=480, horizon=4320, profile=COSINE9),
+                            rng=rng, validation={'epoch': 8},optimizer_groups={'fixture': True}), checkpoint)
+            checkpoint_sha = sha(checkpoint)
+            for epoch in range(1, 9):
+                write(parent / f'B7_development_{epoch:02d}.json', {'epoch': epoch})
+                write(parent / f'B7_LAST_epoch_{epoch:02d}.receipt.json',
+                      dict(model='B7', epoch=epoch, updates=480*epoch, code_commit='old', population_sha256=POPULATION_SHA,
+                           validation_receipt_sha256=digest({'epoch': epoch}),loss_config=profile_identity(),
+                           schedule=schedule_identity(),checkpoint_sha256=checkpoint_sha))
+            resume = Tail20E8Resume(parent=parent, decision_id=approval.decision_id, data_identity=data,
+                                    checkpoint_sha256=checkpoint_sha, train_sha256=digest(train), parent_code_commit='old',
+                                    parent_pins={name:sha(parent / name) for name in Tail20E8Resume.required_parent_files()})
+            resume.validate(SimpleNamespace(identity=data), approval)
+            restored = torch.nn.Linear(2, 1)
+            restored_optimizer = torch.optim.AdamW(restored.parameters(), lr=1e-4, foreach=False)
+            with patch('torch.cuda.set_rng_state_all') as cuda, patch.object(restored_optimizer, 'step', side_effect=AssertionError('No optimizer update')):
+                updates, reports = resume.restore('B7', restored, restored_optimizer, {'fixture': True})
+            self.assertEqual((updates, reports), (3840, [{'epoch': e} for e in range(1, 9)]))
+            self.assertEqual(state_digest(restored.state_dict()), state_digest(model.state_dict()))
+            self.assertEqual(state_digest(restored_optimizer.state_dict()), state_digest(optimizer.state_dict()))
+            self.assertTrue(torch.equal(torch.get_rng_state(), rng['torch_cpu']))
+            cuda.assert_called_once_with([])
+            resume.verify_replayed_train(train)
+            with self.assertRaisesRegex(RuntimeError, 'replay differs before Development'):
+                resume.verify_replayed_train(dict(train, s_tail_training=5.00000001))
+
+            ledger = resume.ledger(root / 'updates.sqlite', {'fixture': True})
+            try:
+                self.assertEqual(ledger.expected_returned, 480)
+                with self.assertRaises(PermissionError):
+                    ledger.reserve('B7', 3840)
+                ledger.reserve('B7', 3841)
+                ledger.returned('B7', 3841)
+            finally:
+                ledger.close()
+
+            with checkpoint.open('ab') as weight:
+                weight.write(b'changed')
+            with patch('torch.load', side_effect=AssertionError('Do not load altered checkpoint bytes')):
+                with self.assertRaisesRegex(ValueError, 'approved digest'):
+                    resume.restore('B7', restored, restored_optimizer, {'fixture': True})
 

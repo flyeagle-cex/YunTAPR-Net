@@ -10,6 +10,7 @@ from ..core_innovation.stage4.data import PopulationPlan,read,sha
 from ..core_innovation.stage4.engine import FormalDecision,PairedExecutor,resources,write
 from ..core_innovation.stage4.launch import ReaderFactory
 from ..core_innovation.stage4.evaluation import paired_difference
+from ..core_innovation.stage4.recovery import Tail20E8Resume,query
 from .multiseed import load_inherited,code_hashes,endpoint,BatchTail,metric_values,worker_creation_flags
 from .static_training import unpack,validate_approval
 from .dynamic_terrain import DoteDefinition,PhysicalDote,model_factory
@@ -17,7 +18,7 @@ from .tail_diagnostics import TailDiagnostics
 from ..phase_b_v2_ablations.config import finite_number,get_config
 from ..phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity
 from ..phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE
-from ..phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE
+from ..phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE,profile_identity as tail20_identity
 
 ENTRY='tools/research_readiness/start_dynamic_pair.py'
 TASKS=(('B7',2029),('B8',2029))
@@ -184,8 +185,51 @@ def worker(root,proposal,private,approval,commit,index,*,lambda_q=1.0):
     return run_task(root,p,v,a,prepared,commit,kind,seed,started=started,pair_reference=pair_reference,static_name=f'{kind}_static_source.sqlite',lambda_q=lambda_q)
 
 
+def tail20_recovery_endpoint(folder, state, prepared, commit):
+    rows = query(folder / 'updates.sqlite', 'SELECT model,state,count(*),min(u),max(u) FROM updates GROUP BY model,state')
+    if rows != [('B7','RETURNED',480,3841,4320)]:
+        raise RuntimeError('Incomplete TAIL20 replay ledger')
+    training = read(folder / 'B7_train_09.json')
+    state.verify_replayed_train(training)
+    dev = read(folder / 'B7_development_09.json')
+    read(folder / 'B7_tail_09.json')
+    read(folder / 'B7_tail20_gate_09.json')
+    pre_dev_path = folder / 'B7_PREDEV_epoch_09.pt'
+    final_path = folder / 'B7_LAST_epoch_09.pt'
+    pre_dev = read(pre_dev_path.with_suffix('.receipt.json'))
+    final = read(final_path.with_suffix('.receipt.json'))
+    for seal in (pre_dev, final):
+        if (seal['model'] != 'B7' or seal['epoch'] != 9 or seal['updates'] != 4320
+                or seal['code_commit'] != commit or seal['population_sha256'] != state.data_identity['population_sha256']
+                or seal['loss_config'] != tail20_identity() or seal['schedule'] != schedule_identity()):
+            raise RuntimeError('TAIL20 recovery checkpoint seal differs')
+    if (pre_dev['status'] != 'SEALED_TRAIN_BEFORE_DEV' or pre_dev['train_receipt_sha256'] != state.train_sha256
+            or pre_dev['inherited_checkpoint_sha256'] != state.checkpoint_sha256
+            or pre_dev_path.stat().st_size != pre_dev['checkpoint_bytes']
+            or final['validation_receipt_sha256'] != digest(dev) or final_path.stat().st_size <= 0):
+        raise RuntimeError('TAIL20 recovery Train or Dev seal differs')
+    weather_bytes = weather_files = 0
+    for role, name in (('Train','train'), ('Development','dev')):
+        receipt = read(folder / f'B7_{name}_reads_09' / 'pass_receipt.json')
+        expected = prepared['roles'][role]
+        actual = receipt['actual_reads']
+        if (receipt['during_failure'] or receipt['expected_files'] != expected['file_count']
+                or receipt['expected_bytes'] != expected['bytes_per_pass']
+                or receipt['source_manifest_sha256'] != expected['source_manifest_sha256']
+                or actual['opened_files'] != expected['file_count'] or actual['delivered_bytes'] != expected['bytes_per_pass']
+                or actual['reserved_bytes'] != expected['bytes_per_pass']
+                or actual['states'] != {'READ_COMPLETE': expected['file_count']}):
+            raise RuntimeError('Unsealed TAIL20 replay source pass')
+        weather_bytes += actual['delivered_bytes']
+        weather_files += actual['opened_files']
+    return dict(status='COMPLETE_TRAIN_AND_DEV_EVALUATION',model='B7',seed=2029,epochs=9,
+                inherited_epochs=8,optimizer_updates=4320,segment_updates=480,replay=480,cumulative_attempts=4800,
+                logical_source_bytes=weather_bytes,logical_source_files=weather_files,code_commit=commit,
+                endpoint='FIXED_EPOCH_9_LAST',checkpoint=final,pre_dev_checkpoint=pre_dev)
+
+
 def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0,
-             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50,final_dev_observer_factory=None):
+             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50,final_dev_observer_factory=None,recovery=None):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
@@ -205,6 +249,11 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
         or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
     ):
         raise PermissionError('TAIL20-AUX-V1 requires the bound origin and E9 observer')
+    if recovery is not None and (type(recovery) is not Tail20E8Resume or quantile_profile != TAIL20_PROFILE
+            or a['decision_id'] != recovery.decision_id or p['data'] != recovery.data_identity
+            or a.get('approved_replay_updates') != 480 or p['budget'].get('replay_allowance') != 480
+            or p['budget'].get('checkpoint_loads') != 1):
+        raise PermissionError('Dynamic recovery requires the exact approved TAIL20 E8 replay')
     if schedule_profile!=ORIGINAL_50 and (
         schedule_profile!=COSINE9 or kind!='B7' or seed!=2029 or spec.lambda_q!=1.0
         or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE,TAIL20_PROFILE) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
@@ -231,11 +280,12 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:(TerrainTail if tail_factory is None else tail_factory)(pack),code_commit=commit,
                    pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q,
                    origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind),quantile_profile=quantile_profile,
-                   schedule_profile=schedule_profile,
+                    schedule_profile=schedule_profile,recovery=recovery,
                    final_dev_observer=(lambda ids:final_dev_observer_factory(pack,ids))
                    if final_dev_observer_factory is not None else None).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
-    result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
+    result=endpoint(folder,kind,seed,commit) if recovery is None else tail20_recovery_endpoint(folder,recovery,prepared,commit)
+    result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
     if spec.lambda_q!=1.0:result.update(loss_arm=spec.loss_config.experiment_id,lambda_q=spec.lambda_q)
     if quantile_profile!='UNIFORM':result.update(loss_arm=quantile_profile,lambda_q=1.0)
     if schedule_profile!=ORIGINAL_50:result.update(schedule=schedule_identity())

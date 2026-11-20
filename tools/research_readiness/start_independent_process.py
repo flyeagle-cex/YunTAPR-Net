@@ -179,15 +179,18 @@ def validate_spec(path):
                 or not all(Path(value).is_absolute() for value in command[5::2])
                 or not Path(command[9]).is_file()):
             raise PermissionError('Only the exact single-arm readout command with a separate approval file')
-    elif spec['kind']=='BOUNDED_TAIL20_TRAINING':
-        if (entry!=(Path(spec['cwd'])/'tools/research_readiness/start_tail20_aux.py').resolve()
+    elif spec['kind'] in ('BOUNDED_TAIL20_TRAINING', 'BOUNDED_TAIL20_E9_REPLAY'):
+        replay = spec['kind'] == 'BOUNDED_TAIL20_E9_REPLAY'
+        entry_name = 'start_tail20_recovery.py' if replay else 'start_tail20_aux.py'
+        scope = 'TAIL20_AUX_V1_E8_TO_E9_REPLAY' if replay else 'TAIL20_AUX_V1_REAL_COSINE9_MATCHED'
+        if (entry!=(Path(spec['cwd'])/'tools/research_readiness'/entry_name).resolve()
                 or len(command)!=10 or command[3]!='execute'
                 or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
                 or not all(Path(value).is_absolute() for value in command[5::2])
                 or not Path(command[9]).is_file()):
             raise PermissionError('Exact TAIL20 arguments and separate approval required')
         proposal, private, approval = map(read, command[5::2])
-        if (proposal.get('authorization_scope')!='TAIL20_AUX_V1_REAL_COSINE9_MATCHED'
+        if (proposal.get('authorization_scope')!=scope
                 or approval.get('approved_by_researcher') is not True
                 or not approval.get('decision_id')
                 or any(approval.get(name)!=proposal.get(name) for name in
@@ -200,6 +203,10 @@ def validate_spec(path):
                 or spec.get('environment',{}).get('PYTHONHASHSEED')!='2029'
                 or Path(private['output_root']).exists()):
             raise PermissionError('TAIL20 approval, service, or numerical runtime differs')
+        if replay and (approval.get('approved_replay_updates') != 480
+                       or proposal['budget'].get('replay_allowance') != 480
+                       or proposal['budget'].get('max_package_seconds') != 4500):
+            raise PermissionError('Only the separately authorized fixed E9 replay is allowed')
     elif spec['kind']=='BOUNDED_EXTREME_DIAGNOSTIC':
         if entry.name!='start_extreme_diagnostic.py' or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve():
             raise PermissionError('Only the fixed nontraining extreme diagnostic controller')
@@ -293,7 +300,8 @@ def supervise(path):
         write(folder/'target_launch.json',dict(at=now(),pid=process.pid,supervisor_pid=os.getpid(),spec_sha256=sha(path),kind=spec['kind'],automatic_retry=False))
         try:
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
-                       'BOUNDED_TAIL20_TRAINING': 21600}.get(spec['kind'])
+                       'BOUNDED_TAIL20_TRAINING': 21600,
+                       'BOUNDED_TAIL20_E9_REPLAY': 4500}.get(spec['kind'])
             code=process.wait(timeout=timeout)
         except subprocess.TimeoutExpired:
             process.kill()

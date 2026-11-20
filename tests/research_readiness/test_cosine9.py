@@ -276,9 +276,10 @@ class Cosine9EngineCodeChainTests(unittest.TestCase):
         self.assertLess(origin_check.lineno, optimizer_creation.lineno)
 
     def test_actual_metadata_branches_bind_training_checkpoint_and_receipt(self):
-        tree = ast.parse(textwrap.dedent(inspect.getsource(engine.PairedExecutor.run)))
-        blocks = sorted([node for node in ast.walk(tree) if isinstance(node, ast.If)
-                         and ast.unparse(node.test) == "self.modified_schedule"], key=lambda node: node.lineno)
+        functions = (engine.PairedExecutor.run, engine.PairedExecutor.checkpoint_payload)
+        trees = [ast.parse(textwrap.dedent(inspect.getsource(function))) for function in functions]
+        blocks = [node for tree in trees for node in ast.walk(tree) if isinstance(node, ast.If)
+                  and ast.unparse(node.test) == "self.modified_schedule"]
         self.assertEqual(len(blocks), 4)
         # Execute only the four metadata branches, never the training loop.
         fragment = compile(ast.Module(body=copy.deepcopy(blocks), type_ignores=[]), "<synthetic_schedule_metadata>", "exec")
@@ -291,7 +292,7 @@ class Cosine9EngineCodeChainTests(unittest.TestCase):
                     "self": SimpleNamespace(modified_schedule=modified, origin_reference=origin,
                                             schedule_profile=COSINE9 if modified else ORIGINAL_50),
                     "identity": {}, "training": {}, "payload": {"identity": {}, "scheduler": dict(legacy_scheduler)},
-                    "receipt": {}, "u": 4320, "STEPS": 480, "epoch": 9, "lr": 1e-6,
+                    "receipt": {}, "u": 4320, "updates": 4320, "STEPS": 480, "EPOCHS": 9, "epoch": 9, "lr": 1e-6,
                 }
                 exec(fragment, namespace)
                 if modified:
