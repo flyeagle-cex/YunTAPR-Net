@@ -1,0 +1,27 @@
+{
+  "status": "REVIEW_COMPLETE_READY_FOR_SEPARATE_APPROVAL",
+  "execution_code_commit": "4ab5a6ff13bdbf4ef170d759690ce07e60f322bc",
+  "proposal_sha256": "20f2f8e0cce6b4f95002af5dc668da34dbce1b9a50c01fc95c2f670d44eafbc0",
+  "reviewer": "Harness High",
+  "review_scope": "Exact researcher grant, single dispatch, limits, frozen identity and return contract",
+  "blocking_findings": [],
+  "followup": {
+    "tail_loss_sha256_matches_proposal": "e22a551d593cd3c0f02cda9b36a2642b5036815eb4706814006ea24102d20480",
+    "e9_observer_sha256_matches_proposal": "9ae7742516914b2667652fa50a124b912a19380d28ee167d89ae3672fdf53dd3",
+    "endpoint_return_contract": "multiseed.endpoint provides status, code_commit, optimizer_updates and replay; dynamic_training.run_task adds exact static-inclusive source totals and schedule_identity for COSINE9",
+    "minimum_task_disk_space": "Inherited run_task checks the bound minimum before opening the static archive",
+    "checkpoint_load_limit": "Origin-only fresh model factory; the recovery restore branch is not enabled; existing-output checkpoint SHA verification is not deserialization. No separate runtime load counter."
+  },
+  "engineering_checks": {
+    "e9_observer_and_truth_join_synthetic": "PASS",
+    "fail_closed_without_e9_observer": "PASS",
+    "missing_approval_and_old_phys20_approval": "REJECTED",
+    "fixed_checkout_prepare_and_budget": "PASS"
+  },
+  "new_raw_payload_opens": 0,
+  "new_checkpoint_loads": 0,
+  "optimizer_updates": 0,
+  "new_inference": 0,
+  "authorization": "NONE",
+  "scientific_status": "NOT_VERIFIED"
+}
