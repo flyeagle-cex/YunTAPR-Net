@@ -172,6 +172,13 @@ def validate_spec(path):
                                              paired_argument('--researcher-approval'))
         if executable.resolve()!=Path(private['runtime_python']).resolve():
             raise PermissionError('Paired evaluation requires the bound native interpreter')
+    elif spec['kind']=='BOUNDED_CONDITIONAL_INTENSITY_READOUT':
+        if (entry!=(Path(spec['cwd'])/'tools/research_readiness/start_conditional_intensity_readout.py').resolve()
+                or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Only the exact single-arm readout command with a separate approval file')
     elif spec['kind']=='BOUNDED_EXTREME_DIAGNOSTIC':
         if entry.name!='start_extreme_diagnostic.py' or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve():
             raise PermissionError('Only the fixed nontraining extreme diagnostic controller')
@@ -263,7 +270,12 @@ def supervise(path):
     with (folder/'target_stdout.log').open('xb') as stdout,(folder/'target_stderr.log').open('xb') as stderr:
         process=subprocess.Popen(spec['command'],cwd=spec['cwd'],env=environment,stdout=stdout,stderr=stderr,creationflags=subprocess.CREATE_NO_WINDOW)
         write(folder/'target_launch.json',dict(at=now(),pid=process.pid,supervisor_pid=os.getpid(),spec_sha256=sha(path),kind=spec['kind'],automatic_retry=False))
-        code=process.wait()
+        try:
+            code=process.wait(timeout=7200 if spec['kind']=='BOUNDED_CONDITIONAL_INTENSITY_READOUT' else None)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=10)
+            raise
     write(folder/'target_exit.json',dict(at=now(),pid=process.pid,return_code=code,return_code_u32_hex=hex(code&0xffffffff),automatic_retry=False))
     return code
 

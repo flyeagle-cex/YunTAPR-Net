@@ -279,7 +279,7 @@ class ReadGuard:
                     reservations=self.entries)
 
 
-def bootstrap(proposal_path, private_path, approval_path):
+def bootstrap(proposal_path, private_path, approval_path, *, validate=None):
     paths = tuple(Path(path).resolve() for path in (proposal_path, private_path, approval_path))
     if len({key(path) for path in paths}) != 3 or not paths[2].is_file():
         raise PermissionError("A separate exact researcher approval is required")
@@ -297,7 +297,7 @@ def bootstrap(proposal_path, private_path, approval_path):
         identities[key(path)] = dict(bytes=size, sha256=hashlib.sha256(raw).hexdigest())
         total += size
     p, v, a = objects
-    validate_grant(p, v, a)
+    (validate or validate_grant)(p, v, a)
     return p, v, a, identities, total
 
 
@@ -333,7 +333,7 @@ def validate_grant(p, v, a):
         raise PermissionError("New output/preflight namespaces must be separate from inputs")
 
 
-def validate_bound_inputs(p, v, *, worker=False):
+def validate_bound_inputs(p, v, *, worker=False, tasks=None, limits=None):
     for relative, expected in p["code_sha256"].items():
         path = (ROOT / relative).resolve()
         if not path.is_relative_to(ROOT) or sha(path) != expected:
@@ -352,10 +352,12 @@ def validate_bound_inputs(p, v, *, worker=False):
     for path, info in v["metadata_files"].items():
         if sha(path) != info["sha256"]:
             raise PermissionError("Frozen metadata SHA256 changed")
-    validate_scientific_manifest(p, v)
+    validate_scientific_manifest(p, v, tasks=tasks, limits=limits)
 
 
-def validate_scientific_manifest(p, v):
+def validate_scientific_manifest(p, v, *, tasks=None, limits=None):
+    tasks = TASKS if tasks is None else tasks
+    limits = LIMITS if limits is None else limits
     seen = set()
     total_bytes = total_opens = 0
     for path, info in v["scientific_files"].items():
@@ -363,16 +365,16 @@ def validate_scientific_manifest(p, v):
         if identity in seen:
             raise PermissionError("Duplicate resolved scientific source")
         seen.add(identity)
-        if info["category"] not in ("weather", "static", "checkpoint") or not info["tasks"] or len(set(info["tasks"])) != len(info["tasks"]) or not set(info["tasks"]).issubset(TASKS):
+        if info["category"] not in ("weather", "static", "checkpoint") or not info["tasks"] or len(set(info["tasks"])) != len(info["tasks"]) or not set(info["tasks"]).issubset(tasks):
             raise PermissionError("Scientific source has an invalid category/task grant")
         opens = 2 if info["category"] == "checkpoint" else 1
         if info["opens_per_task"] != opens or (info["category"] != "weather" and Path(path).stat().st_size != info["bytes"]):
             raise PermissionError("Scientific input archive/open binding changed")
         total_bytes += info["bytes"] * opens * len(info["tasks"])
         total_opens += opens * len(info["tasks"])
-    if (total_bytes, total_opens) != (LIMITS["payload_archive_reference_bytes"], LIMITS["payload_open_instances"]):
+    if (total_bytes, total_opens) != (limits["payload_archive_reference_bytes"], limits["payload_open_instances"]):
         raise PermissionError("Full source manifest exceeds or differs from the exact payload grant")
-    for task in TASKS:
+    for task in tasks:
         categories = {}
         for info in v["scientific_files"].values():
             if task in info["tasks"]:
@@ -461,13 +463,14 @@ def require_preflights(v, p, approval_sha256):
     return receipts
 
 
-def resources(folder):
+def resources(folder, *, limits=None):
+    limits = LIMITS if limits is None else limits
     monitor = module(ROOT / "tools/core_stage4/monitor/server.py", "paired_point_resources")
     status = monitor.resources(folder)
     gpu, memory = status.get("gpu") or {}, status.get("memory") or {}
-    if (status.get("disk_free", 0) < LIMITS["minimum_free_bytes"]
-            or memory.get("available", 0) < LIMITS["minimum_host_available_bytes"]
-            or gpu.get("total_mib", 0) - gpu.get("used_mib", 0) < LIMITS["minimum_gpu_free_mib"]):
+    if (status.get("disk_free", 0) < limits["minimum_free_bytes"]
+            or memory.get("available", 0) < limits["minimum_host_available_bytes"]
+            or gpu.get("total_mib", 0) - gpu.get("used_mib", 0) < limits["minimum_gpu_free_mib"]):
         raise RuntimeError("Fixed disk/RAM/GPU admission failed " + json.dumps(status, sort_keys=True))
     return status
 

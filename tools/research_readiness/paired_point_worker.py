@@ -120,7 +120,7 @@ def _gate_report(actual, reference):
 
 
 def run_task(root, proposal, private, task, output, check, *, diagnostics_factory=None,
-             transform_factory=None, include_joint=True):
+             transform_factory=None, include_joint=True, readout_factory=None):
     """Run one approved task with one forward per batch and no optimizer restore.
 
     The caller binds the proposal, code/runtime, input SHA identities, live claim,
@@ -164,6 +164,7 @@ def run_task(root, proposal, private, task, output, check, *, diagnostics_factor
         raise ValueError("Frozen Development read scope differs")
     transform = (transform_factory or runtime.PhysicalDote)(pack, runtime.DoteDefinition(**proposal["scientific_choices"]["DOTE"]))
     diagnostics = diagnostics_factory(pack, ids) if diagnostics_factory is not None else None
+    readout = readout_factory(ids, reference) if readout_factory is not None else None
     models = runtime.model_factory(
         pack, receipt["scalers"], modulation_limit=proposal["scientific_choices"]["modulation_limit"],
     )(2029, Path(root))
@@ -204,12 +205,13 @@ def run_task(root, proposal, private, task, output, check, *, diagnostics_factor
                 with torch.autocast("cuda", dtype=torch.bfloat16):
                     prediction, _ = runtime.forward(model, batch)
                 evaluator.add(prediction, batch)
-                accumulator.add(
-                    batch.ids, batch.rate.detach().cpu().numpy(),
-                    batch.valid.detach().cpu().numpy(), batch.region.detach().cpu().numpy(),
-                    prediction.rain_prob.detach().double().cpu().numpy(),
-                    prediction.conditional_quantiles_log.detach().double().cpu().numpy(),
-                )
+                arrays = (batch.ids, batch.rate.detach().cpu().numpy(),
+                          batch.valid.detach().cpu().numpy(), batch.region.detach().cpu().numpy(),
+                          prediction.rain_prob.detach().double().cpu().numpy(),
+                          prediction.conditional_quantiles_log.detach().double().cpu().numpy())
+                accumulator.add(*arrays)
+                if readout is not None:
+                    readout.add(*arrays)
                 if joint is not None:
                     joint.add(
                         batch.ids, batch.analyses,
@@ -261,6 +263,8 @@ def run_task(root, proposal, private, task, output, check, *, diagnostics_factor
     if terrain_metrics is not None:
         _write(output / "terrain_metrics.json", terrain_metrics)
         result["terrain_population_sha256"] = terrain_metrics["paired_population_sha256"]
+    if readout is not None:
+        result["full_dev_readout"] = readout.finish(point_metrics["supervision_mask_sha256"])
     check()
     _write(output / "task_result.json", result)
     return result
