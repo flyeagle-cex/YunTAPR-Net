@@ -10,7 +10,7 @@ from yuntapr.experimental.phase_b_v2_ablations.config import get_config,finite_n
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MILD_PROFILE,profile_identity,upper_quantile_loss
 from yuntapr.experimental.phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE,physical_pinball_loss,profile_identity as physical_profile_identity
-from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, tail20_aux_loss
+from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, tail20_aux_loss, profile_identity as tail20_identity
 from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -132,7 +132,8 @@ class UpdateLedger:
 class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
                  kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None,
-                 lambda_q=1.0,origin_reference=None,quantile_profile=UNIFORM,schedule_profile=ORIGINAL_50):
+                 lambda_q=1.0,origin_reference=None,quantile_profile=UNIFORM,schedule_profile=ORIGINAL_50,
+                 final_dev_observer=None):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
@@ -144,8 +145,9 @@ class PairedExecutor:
             raise ValueError('Only closed E0/E2 quantile weights are supported')
         self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
         self.quantile_profile=quantile_profile
+        self.final_dev_observer=final_dev_observer
         if quantile_profile!=UNIFORM and (
-            quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE) or self.kinds!=('B7',)
+            quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE,TAIL20_PROFILE) or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or recovery is not None
         ):
             raise PermissionError('Modified quantile profile requires one origin-only B7 seed2029 lambda1 task')
@@ -153,17 +155,23 @@ class PairedExecutor:
             schedule_profile!=COSINE9 or not isinstance(origin_reference,dict)
         ):
             raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
+        if quantile_profile==TAIL20_PROFILE and (
+            schedule_profile!=COSINE9 or not isinstance(origin_reference,dict) or not callable(final_dev_observer)
+        ):
+            raise PermissionError('TAIL20-AUX-V1 requires COSINE9, a matched origin and the fixed E9 gate')
         self.modified_loss=self.lambda_q!=1.0 or quantile_profile!=UNIFORM
         self.schedule_profile=schedule_profile
         self.modified_schedule=schedule_profile!=ORIGINAL_50
         if self.modified_schedule and (
             schedule_profile!=COSINE9 or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029
-            or (self.modified_loss and quantile_profile!=PHYSICAL_PROFILE) or recovery is not None
+            or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,TAIL20_PROFILE)) or recovery is not None
         ):
             raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 E0 uniform or physical task')
         if quantile_profile==PHYSICAL_PROFILE:
             self.loss_identity=physical_profile_identity()
+        elif quantile_profile==TAIL20_PROFILE:
+            self.loss_identity=tail20_identity()
         else:
             self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
         if self.lambda_q==2.0 and (
@@ -235,7 +243,7 @@ class PairedExecutor:
                     if self.recovery is not None and epoch<=self.recovery.completed_epochs(kind):continue
                     resources(backward=False)
                     reader=reader_factory('Train',epoch,order,self.folder/f'{kind}_train_reads_{epoch:02d}')
-                    visited=[];model.train();nvalid=nrain=0;socc=sqr=sqr_training=0.
+                    visited=[];model.train();nvalid=nrain=nstrong=0;socc=sqr=sqr_training=stail=0.
                     try:
                         for pos in range(0,TRAIN_N,BATCH):
                             self.deadline()
@@ -249,6 +257,8 @@ class PairedExecutor:
                             check_finite(model.state_dict());check_finite(optimizer.state_dict());visited.extend(b.ids)
                             nvalid+=loss.n_valid;nrain+=loss.n_rain;socc+=float(loss.s_occ.detach());sqr+=float(loss.s_qr.detach())
                             if self.quantile_profile!=UNIFORM:sqr_training+=float(loss.weighted_quantile_per_valid.detach())*loss.n_valid
+                            if self.quantile_profile==TAIL20_PROFILE:
+                                nstrong+=loss.n_strong;stail+=float(loss.s_tail.detach())
                             if u%50==0:resources(backward=False)
                             del b,out,loss
                     finally:reader.close()
@@ -264,6 +274,8 @@ class PairedExecutor:
                                         s_qr_training_weighted=sqr_training,weighted_mean=(socc+sqr_training)/nvalid)
                     if self.quantile_profile==PHYSICAL_PROFILE:
                         training['s_qr_training_physical_mm_h_over20']=sqr_training
+                    if self.quantile_profile==TAIL20_PROFILE:
+                        training.update(n_strong=nstrong,s_tail_training=stail)
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()
@@ -271,20 +283,26 @@ class PairedExecutor:
                     ev=Evaluation(ids,[self.plan.rows['Development'][s]['analysis_time'] for s in ids],self.plan.identity,self.folder/f'{kind}_evaluation_{epoch:02d}',strong_scene_ids=self.strong,altitude=self.altitude)
                     model.eval()
                     tail=self.tail_factory() if self.tail_factory is not None else None
+                    final_observer=(self.final_dev_observer(ids)
+                                    if self.final_dev_observer is not None and epoch==EPOCHS else None)
+                    eval_profile=UNIFORM if self.quantile_profile==TAIL20_PROFILE else self.quantile_profile
                     try:
                         with torch.no_grad():
                             for pos in range(0,DEV_N,VAL_BATCH):
                                 self.deadline()
                                 b=reader.batch('Development',ids[pos:pos+VAL_BATCH]).to('cuda')
                                 if b.identity!=self.plan.identity or b.role!='Development' or b.ids!=ids[pos:pos+VAL_BATCH]:raise ValueError('Development batch identity/order differs')
-                                with torch.autocast('cuda',dtype=torch.bfloat16):out,_=forward(model,b,loss_config=self.loss_config,quantile_profile=self.quantile_profile)
+                                with torch.autocast('cuda',dtype=torch.bfloat16):out,_=forward(model,b,loss_config=self.loss_config,quantile_profile=eval_profile)
                                 ev.add(out,b)
                                 if tail is not None:tail.add_batch(out,b)
+                                if final_observer is not None:final_observer.add_batch(out,b)
                                 del b,out
                         report=ev.finish()
                     finally:ev.close();reader.close()
                     write(self.folder/f'{kind}_development_{epoch:02d}.json',report)
                     if tail is not None:write(self.folder/f'{kind}_tail_{epoch:02d}.json',tail.finish_checked(report,ids))
+                    if final_observer is not None:
+                        write(self.folder/f'{kind}_tail20_gate_{epoch:02d}.json',final_observer.finish(report))
                     self.deadline()
                     payload=dict(identity=dict(decision=asdict(self.decision),data=self.plan.identity,model=kind),initial_sha256=initial,epoch=epoch,updates=u,
                         model=cpu_tree(model.state_dict()),optimizer=cpu_tree(optimizer.state_dict()),scheduler=dict(completed=u,steps_per_epoch=STEPS,original_horizon=50*STEPS),

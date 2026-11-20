@@ -16,6 +16,14 @@ PHYSICAL_SCALE_MM_H = 20.0
 LAMBDA_TAIL = 1.0
 
 
+def profile_identity():
+    return dict(experiment_id=TAIL20_PROFILE, base_experiment_id="E0", lambda_tail=LAMBDA_TAIL,
+                strong_threshold_mm_h=THRESHOLD_MM_H, physical_scale_mm_h=PHYSICAL_SCALE_MM_H,
+                nodes=32, denominator="N_VALID", truth_comparison="STRICT_FP32_GT",
+                objective="E0 + SUM_STRONG_VALID(MEAN32(PHYSICAL_PINBALL_OVER20))/N_VALID",
+                empty="EXACT_E0", physical_precision="FP64")
+
+
 @dataclass(frozen=True, kw_only=True)
 class Tail20AuxResult(CandidateLossResult):
     s_tail: torch.Tensor

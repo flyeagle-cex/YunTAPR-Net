@@ -179,6 +179,27 @@ def validate_spec(path):
                 or not all(Path(value).is_absolute() for value in command[5::2])
                 or not Path(command[9]).is_file()):
             raise PermissionError('Only the exact single-arm readout command with a separate approval file')
+    elif spec['kind']=='BOUNDED_TAIL20_TRAINING':
+        if (entry!=(Path(spec['cwd'])/'tools/research_readiness/start_tail20_aux.py').resolve()
+                or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Exact TAIL20 arguments and separate approval required')
+        proposal, private, approval = map(read, command[5::2])
+        if (proposal.get('authorization_scope')!='TAIL20_AUX_V1_REAL_COSINE9_MATCHED'
+                or approval.get('approved_by_researcher') is not True
+                or not approval.get('decision_id')
+                or any(approval.get(name)!=proposal.get(name) for name in
+                       ('proposal_sha256','tasks','budget','scientific_choices'))
+                or approval.get('code_commit')!=proposal.get('execution_code_commit')
+                or approval.get('output_root')!=private.get('output_root')
+                or private.get('proposal_sha256')!=proposal.get('proposal_sha256')
+                or Path(private['service_dir']).resolve()!=folder
+                or sha(executable)!=proposal['runtime_binding']['python_executable_sha256']
+                or spec.get('environment',{}).get('PYTHONHASHSEED')!='2029'
+                or Path(private['output_root']).exists()):
+            raise PermissionError('TAIL20 approval, service, or numerical runtime differs')
     elif spec['kind']=='BOUNDED_EXTREME_DIAGNOSTIC':
         if entry.name!='start_extreme_diagnostic.py' or command[3]!='execute' or entry.parent.parent.parent!=Path(spec['cwd']).resolve():
             raise PermissionError('Only the fixed nontraining extreme diagnostic controller')
@@ -271,7 +292,9 @@ def supervise(path):
         process=subprocess.Popen(spec['command'],cwd=spec['cwd'],env=environment,stdout=stdout,stderr=stderr,creationflags=subprocess.CREATE_NO_WINDOW)
         write(folder/'target_launch.json',dict(at=now(),pid=process.pid,supervisor_pid=os.getpid(),spec_sha256=sha(path),kind=spec['kind'],automatic_retry=False))
         try:
-            code=process.wait(timeout=7200 if spec['kind']=='BOUNDED_CONDITIONAL_INTENSITY_READOUT' else None)
+            timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
+                       'BOUNDED_TAIL20_TRAINING': 21600}.get(spec['kind'])
+            code=process.wait(timeout=timeout)
         except subprocess.TimeoutExpired:
             process.kill()
             process.wait(timeout=10)

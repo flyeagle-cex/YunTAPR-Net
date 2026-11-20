@@ -17,6 +17,7 @@ from .tail_diagnostics import TailDiagnostics
 from ..phase_b_v2_ablations.config import finite_number,get_config
 from ..phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity
 from ..phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE
+from ..phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE
 
 ENTRY='tools/research_readiness/start_dynamic_pair.py'
 TASKS=(('B7',2029),('B8',2029))
@@ -184,11 +185,11 @@ def worker(root,proposal,private,approval,commit,index,*,lambda_q=1.0):
 
 
 def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0,
-             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50):
+             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50,final_dev_observer_factory=None):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
-    if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE) or (
+    if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE,TAIL20_PROFILE) or (
         quantile_profile!='UNIFORM' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
     ):
         raise PermissionError('Only B7 seed2029 E0 can use a modified quantile profile')
@@ -199,9 +200,14 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
         or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
     ):
         raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
+    if quantile_profile==TAIL20_PROFILE and (
+        schedule_profile!=COSINE9 or not callable(final_dev_observer_factory)
+        or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
+    ):
+        raise PermissionError('TAIL20-AUX-V1 requires the bound origin and E9 observer')
     if schedule_profile!=ORIGINAL_50 and (
         schedule_profile!=COSINE9 or kind!='B7' or seed!=2029 or spec.lambda_q!=1.0
-        or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
+        or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE,TAIL20_PROFILE) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
     ):
         raise PermissionError('Only an explicitly bound B7 seed2029 uniform or physical E0 cosine9 task is supported')
     if p.get('protocol',{}).get('schedule_profile',ORIGINAL_50)!=schedule_profile:
@@ -225,7 +231,9 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:(TerrainTail if tail_factory is None else tail_factory)(pack),code_commit=commit,
                    pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q,
                    origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind),quantile_profile=quantile_profile,
-                   schedule_profile=schedule_profile).run(
+                   schedule_profile=schedule_profile,
+                   final_dev_observer=(lambda ids:final_dev_observer_factory(pack,ids))
+                   if final_dev_observer_factory is not None else None).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
     result=endpoint(folder,kind,seed,commit);result.update(static_source_reads=totals,total_logical_source_bytes=result['logical_source_bytes']+312828,total_logical_source_files=result['logical_source_files']+1)
     if spec.lambda_q!=1.0:result.update(loss_arm=spec.loss_config.experiment_id,lambda_q=spec.lambda_q)
