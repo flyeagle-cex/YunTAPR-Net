@@ -1,0 +1,140 @@
+{
+  "status": "COMPLETE_SAVED_READOUT_DESCRIPTIVE",
+  "proposal_sha256": "ed417346f82218fe981078872fb91c80211ad46e9b836f29e628daef842308a9",
+  "completion_receipt_sha256": "1a3396a7fd0d9564590967881d576060ffd7801c7f24b37102c68b7911b76614",
+  "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+  "saved_prediction_bytes": 881894762,
+  "saved_prediction_opens": 121,
+  "raw_source_opens": 0,
+  "checkpoint_loads": 0,
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "thresholds": {
+    "wet_truth_mm_h": 0.1,
+    "strong_truth_mm_h": 20,
+    "truth_and_point_classification": "strict FP32 >",
+    "native_q32_comparison": "FP64 qlog32 > log1p(20)"
+  },
+  "readout": "A = p × mean(expm1(qlog_1..32))",
+  "replicated_A_contingency": {
+    "TP": 0,
+    "FP": 0,
+    "FN": 717,
+    "TN": 3302373
+  },
+  "cohorts": {
+    "dry": {
+      "n": 2895270,
+      "funnel": {
+        "no_node_over_20": 2894735,
+        "node_over_20_but_conditional_mean_at_most_20": 534,
+        "conditional_mean_over_20_but_A_at_most_20": 1,
+        "A_over_20": 0
+      },
+      "p": {
+        "min": 0.03173828125,
+        "p10": 0.0888671875,
+        "median": 0.1923828125,
+        "p90": 0.390625,
+        "max": 0.83984375
+      },
+      "q32": {
+        "min": 0.22365380784988345,
+        "p10": 0.4874985215534993,
+        "median": 0.9120695346515432,
+        "p90": 2.4379779910449964,
+        "max": 82.30684373979041
+      },
+      "conditional_mean": {
+        "min": 0.1396206666105877,
+        "p10": 0.22634705972305377,
+        "median": 0.37881449076578605,
+        "p90": 0.8439542063567795,
+        "max": 21.635215051722696
+      },
+      "A": {
+        "min": 0.004934996064735608,
+        "p10": 0.020705931036076257,
+        "median": 0.07267778405616858,
+        "p90": 0.318795187110796,
+        "max": 18.170200141095233
+      }
+    },
+    "wet_up_to_20": {
+      "n": 407103,
+      "funnel": {
+        "no_node_over_20": 401869,
+        "node_over_20_but_conditional_mean_at_most_20": 5231,
+        "conditional_mean_over_20_but_A_at_most_20": 3,
+        "A_over_20": 0
+      },
+      "p": {
+        "min": 0.046630859375,
+        "p10": 0.265625,
+        "median": 0.470703125,
+        "p90": 0.640625,
+        "max": 0.84765625
+      },
+      "q32": {
+        "min": 0.3018934935308433,
+        "p10": 1.1525587900248773,
+        "median": 3.2481039990537752,
+        "p90": 9.22120804012538,
+        "max": 88.23792737796683
+      },
+      "conditional_mean": {
+        "min": 0.16405520663213397,
+        "p10": 0.46302935920371624,
+        "median": 1.0885630713491685,
+        "p90": 2.8380269700933454,
+        "max": 23.025473890824692
+      },
+      "A": {
+        "min": 0.009172942742516139,
+        "p10": 0.12745896236434856,
+        "median": 0.5085129071061684,
+        "p90": 1.7738055730900035,
+        "max": 18.618254278909028
+      }
+    },
+    "observed_over_20": {
+      "n": 717,
+      "funnel": {
+        "no_node_over_20": 557,
+        "node_over_20_but_conditional_mean_at_most_20": 160,
+        "conditional_mean_over_20_but_A_at_most_20": 0,
+        "A_over_20": 0
+      },
+      "p": {
+        "min": 0.1298828125,
+        "p10": 0.4765625,
+        "median": 0.640625,
+        "p90": 0.74609375,
+        "max": 0.81640625
+      },
+      "q32": {
+        "min": 0.6421618619586056,
+        "p10": 4.29960887290858,
+        "median": 11.084562572029958,
+        "p90": 28.742317530325234,
+        "max": 49.5867017980669
+      },
+      "conditional_mean": {
+        "min": 0.27987836924942894,
+        "p10": 1.4184949124110127,
+        "median": 3.3340825589087575,
+        "p90": 8.364260561406368,
+        "max": 14.163327016372818
+      },
+      "A": {
+        "min": 0.03635138975602934,
+        "p10": 0.6826552837607194,
+        "median": 2.0768580009429707,
+        "p90": 6.183414738267842,
+        "max": 11.507703200802915
+      }
+    }
+  },
+  "interpretation_scope": "Single fixed E9 and 2024 Dev; descriptive decomposition of the finite-node A point readout",
+  "scientific_status": "NOT_VERIFIED"
+}
