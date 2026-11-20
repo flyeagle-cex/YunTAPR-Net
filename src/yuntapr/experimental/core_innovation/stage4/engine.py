@@ -10,6 +10,7 @@ from yuntapr.experimental.phase_b_v2_ablations.config import get_config,finite_n
 from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MILD_PROFILE,profile_identity,upper_quantile_loss
 from yuntapr.experimental.phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE,physical_pinball_loss,profile_identity as physical_profile_identity
+from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, tail20_aux_loss
 from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -69,8 +70,11 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
         loss_function=upper_quantile_loss
     elif quantile_profile==PHYSICAL_PROFILE and model.kind=='B7' and selected_config==get_config('E0'):
         loss_function=physical_pinball_loss
+    elif (quantile_profile==TAIL20_PROFILE and model.kind=='B7'
+          and batch.role=='Train' and selected_config==get_config('E0')):
+        loss_function=tail20_aux_loss
     else:
-        raise PermissionError('Only explicit B7 E0 UQ_MILD_V1 or PHYSICAL_PINBALL20_V1 is supported')
+        raise PermissionError('The selected quantile profile is not supported for this arm and split')
     extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
     if model.kind in ('B7','B8'):
         if batch.dynamic is None or batch.dynamic_valid is None:raise ValueError('DOTE physical transform was not connected to the reader')

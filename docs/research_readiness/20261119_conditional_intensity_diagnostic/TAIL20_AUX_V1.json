@@ -1,0 +1,45 @@
+{
+  "status": "IMPLEMENTED_SYNTHETIC_VERIFIED_NO_EXECUTION_GRANT",
+  "profile": "TAIL20-AUX-V1",
+  "decision_source": "Web ChatGPT High, 2026-11-20",
+  "matched_control": {
+    "arm": "B7_REAL_COSINE9",
+    "seed": 2029,
+    "checkpoint": "FIXED_E9",
+    "base_loss": "E0",
+    "comparison_gate": "CONDITIONAL_TAIL_2024_DEV_V1"
+  },
+  "candidate_change": {
+    "type": "ADDITIVE_STRONG_TRUTH_PHYSICAL_PINBALL",
+    "strong_mask": "imerg_valid & yunnan_mask & float32(R) > float32(20)",
+    "lambda_tail": 1.0,
+    "scale_mm_h": 20.0,
+    "tau_rule": "(k-0.5)/32 for k=1..32",
+    "numerator": "SUM_STRONG_VALID(MEAN32(rho_tau((R-expm1(qlog))/20)))",
+    "objective": "E0 + S_tail/N_valid",
+    "no_strong": "S_tail is a connected zero; return the exact E0 objective",
+    "qlog_arithmetic": "FP64_EXPM1_ONLY_ON_SELECTED_PIXELS_FAIL_ON_NONFINITE"
+  },
+  "implementation": {
+    "loss": "src/yuntapr/experimental/phase_b_v2_ablations/tail20_aux.py",
+    "forward_routing": "Explicit TAIL20-AUX-V1 only for B7/E0/Train",
+    "development_evaluation": "Original frozen loss and existing Conditional Tail V1 gate",
+    "formal_training_driver_status": "NOT_BOUND_OR_AUTHORIZED"
+  },
+  "synthetic_checks": {
+    "strict_fp32_threshold_and_mask": "PASS",
+    "fp64_loss_and_n_valid": "PASS",
+    "unchanged_e0_components_and_empty_batch": "PASS",
+    "selected_only_direct_gradient_and_no_logit_gradient": "PASS",
+    "wrong_configuration_and_selected_overflow_rejected": "PASS",
+    "actual_stage4_forward_train_only_and_default_dev_unchanged": "PASS"
+  },
+  "scientific_scope": "One matched objective intervention at the frozen Development endpoint, subject to the existing tail and non-regression gates",
+  "new_raw_source_opens": 0,
+  "new_checkpoint_loads": 0,
+  "new_inference": 0,
+  "optimizer_updates": 0,
+  "formal_training_authorization": "NONE",
+  "final_2025_access": false,
+  "scientific_status": "NOT_VERIFIED"
+}
