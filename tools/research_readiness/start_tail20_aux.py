@@ -33,9 +33,16 @@ BASE = "docs/research_readiness/"
 PARENT = BASE + "20261110_cosine9/EXECUTION_PROPOSAL.json"
 BASELINE = BASE + "20261119_conditional_intensity_diagnostic/CONDITIONAL_TAIL_BASELINE.json"
 CONTRACT = BASE + "20261119_conditional_intensity_diagnostic/CONDITIONAL_TAIL_V1.md"
+GUARD_REFERENCE = BASE + "20261115_mountain_pair_prepare/EXECUTION_PROPOSAL.json"
+GUARD_REFERENCE_SHA = "85bc55e0101823b1291c3923c85685a7ad50315797327b9eae410f2fe49bdf61"
+GUARD_FILES = (
+    "src/yuntapr/experimental/core_innovation/stage2/environment.py",
+    "src/yuntapr/experimental/core_innovation/stage4/data.py",
+    "src/yuntapr/experimental/research_readiness/dynamic_terrain.py",
+)
 SCOPE = "TAIL20_AUX_V1_REAL_COSINE9_MATCHED"
 TASKS = [{"model": "B7", "seed": 2029, "quantile_profile": TAIL20_PROFILE, "schedule_profile": COSINE9}]
-FILES = (ENTRY, BASELINE, CONTRACT, "tools/research_readiness/mountain_pair_metrics.py",
+FILES = (ENTRY, BASELINE, CONTRACT, GUARD_REFERENCE, "tools/research_readiness/mountain_pair_metrics.py",
          "tools/research_readiness/conditional_tail_gate.py")
 CHOICE_KEYS = ("DOTE", "channels", "normalization", "spatial_operator", "scales", "condition_channels",
                "projection_width", "modulation_limit", "condition_mask", "precision", "architecture")
@@ -56,6 +63,14 @@ def code_hashes():
 def budget(prepared):
     return dict(cosine_budget(prepared), extra_development_passes=0,
                 logical_source_scope="FROZEN_WEATHER_AND_STATIC; INHERITED_METADATA_POLICY")
+
+
+def matched_guard_hashes():
+    reference = read(ROOT / GUARD_REFERENCE)
+    saved = reference.pop("proposal_sha256")
+    if saved != GUARD_REFERENCE_SHA or digest(reference) != saved:
+        raise ValueError("The successful mountain evaluation guard reference changed")
+    return {name: reference["code_sha256"][name] for name in GUARD_FILES}
 
 
 def reserve_disk(output, caps):
@@ -80,7 +95,8 @@ def prepare(parent_private, output, service):
             or sha(old["inherited"]) != old["inherited_file_sha256"]):
         raise ValueError("Frozen COSINE9 parent binding differs")
     control = Path(old["output_root"]) / "B7_s2029"
-    binding = control_binding(ROOT, parent_file, control)
+    guards = matched_guard_hashes()
+    binding = control_binding(ROOT, parent_file, control, guard_hashes=guards)
     _, prepared = load_inherited(old["inherited"])
     if prepared["data"] != parent["data"]:
         raise ValueError("The inherited Development/Train identity differs")
@@ -94,6 +110,7 @@ def prepare(parent_private, output, service):
                    candidate_loss=profile_identity(), candidate_schedule=schedule_identity(),
                    origin_reference={"B7": binding["origin"]}, control_reuse=binding,
                    conditional_tail_baseline_sha256=sha(ROOT / BASELINE),
+                   post_control_input_guard_sha256=guards,
                    final_dev_observer="EXISTING_E9_FORWARD_NO_EXTRA_PASS")
     private = dict(output_root=str(output), service_dir=str(service),
                    inherited=old["inherited"], inherited_file_sha256=old["inherited_file_sha256"],
@@ -121,6 +138,7 @@ def checked(p, v, approval, commit):
             or p["protocol"] != dict(read(ROOT / PARENT)["protocol"], quantile_profile=TAIL20_PROFILE)
             or p["scientific_choices"]["candidate_loss"] != profile_identity()
             or p["scientific_choices"]["candidate_schedule"] != schedule_identity()
+            or p["scientific_choices"]["post_control_input_guard_sha256"] != matched_guard_hashes()
             or p["scientific_choices"]["final_dev_observer"] != "EXISTING_E9_FORWARD_NO_EXTRA_PASS"):
         raise PermissionError("Only the exact new B7 origin-only TAIL20 candidate is admitted")
     key = "proposal_sha256"

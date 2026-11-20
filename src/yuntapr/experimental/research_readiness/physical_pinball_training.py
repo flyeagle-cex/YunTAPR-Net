@@ -94,7 +94,7 @@ def pair_summary(root, control, candidate):
     return result
 
 
-def control_binding(root, parent_proposal, control):
+def control_binding(root, parent_proposal, control, *, guard_hashes=None):
     """Read saved JSON, hash relevant metadata, and stat the already-hashed checkpoint."""
     root, control = Path(root), Path(control)
     parent = read(parent_proposal)
@@ -103,7 +103,10 @@ def control_binding(root, parent_proposal, control):
     if runtime_binding() != parent["runtime_binding"]:
         raise ValueError("The reviewed control numerical runtime differs")
     differences = sorted(name for name, expected in parent["code_sha256"].items() if sha(root / name) != expected)
-    if set(differences) - ALLOWED_SOURCE_DIFFERENCES:
+    guard_hashes = guard_hashes or {}
+    if any(sha(root / name) != expected for name, expected in guard_hashes.items()):
+        raise ValueError("Bound input guards differ from their reviewed versions")
+    if set(differences) - ALLOWED_SOURCE_DIFFERENCES - set(guard_hashes):
         raise ValueError("A non-treatment numerical dependency changed: " + str(differences))
     terminal_path = root / "docs/research_readiness/20261110_cosine9/TERMINAL_VERIFICATION.json"
     results_path = root / "docs/research_readiness/20261110_cosine9/RESULTS.json"
