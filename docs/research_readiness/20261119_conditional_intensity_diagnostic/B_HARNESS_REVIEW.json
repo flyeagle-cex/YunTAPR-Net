@@ -1,0 +1,16 @@
+{
+  "status": "REVIEW_COMPLETE_NO_BLOCKERS",
+  "execution_code_commit": "df2155ab3c5bc6bc8cb7a507c14e8bedab856544",
+  "proposal_sha256": "1d6f1680cefc7ed461e8aa98eeaf39860781a5ce178a661801cdfacfafcf9478",
+  "review_scope": "Approval binding, source accounting and once-only execution",
+  "reviewer": "Harness High",
+  "findings": {
+    "old_grant": "Rejected at the target entry before any scientific input is opened; the launcher can create a service claim if given a wrong approval file.",
+    "accounting": "Logical archive reservations rather than measured device I/O. The bound manifest fixes bytes and opens, and ReadGuard checks the current archive size and open allowance before each scientific open.",
+    "dispatch": "The bound service launch claim and exclusive output directory prevent reuse of the frozen launch and output namespaces. Use only the bound service directory for this proposal."
+  },
+  "disposition": "Retain the reviewed code and proposal. Submit the exact scope for separate researcher approval before dispatch.",
+  "authorization": "NONE",
+  "new_inference": 0,
+  "scientific_status": "NOT_VERIFIED"
+}
