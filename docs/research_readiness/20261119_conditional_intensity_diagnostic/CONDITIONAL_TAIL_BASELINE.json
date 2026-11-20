@@ -1,0 +1,51 @@
+{
+  "status": "FROZEN_BASELINE_NO_CANDIDATE",
+  "protocol": "CONDITIONAL_TAIL_2024_DEV_V1",
+  "population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "n_strong": 717,
+    "n_weak": 246473
+  },
+  "identity": {
+    "population_ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+    "partition_sha256": "01b95f12d26a3f6f4ff05620414cdae66c5cec23bd2808b0af2de40e4615291c",
+    "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+    "paired_truth_mask_terrain_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba"
+  },
+  "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+  "metrics": {
+    "strong_physical_pinball_over20": 0.5068646309277546,
+    "q32_support_tp": 160,
+    "q32_support_fp": 5769,
+    "point_a_tp": 0,
+    "point_a_fp": 0,
+    "weak_log_pinball": 0.08872231160181858,
+    "occurrence_brier": 0.09233015567445307,
+    "occurrence_ap": 0.6066547555865263,
+    "occurrence_auroc": 0.8990243638708331
+  },
+  "comparison_directions": {
+    "strong_physical_pinball_over20": "lt",
+    "q32_support_tp": "ge",
+    "q32_support_fp": "le",
+    "point_a_tp": "ge",
+    "point_a_fp": "le",
+    "weak_log_pinball": "le",
+    "occurrence_brier": "le",
+    "occurrence_ap": "ge",
+    "occurrence_auroc": "ge"
+  },
+  "source_receipt_sha256": {
+    "20261115_mountain_pair_results/PAIRED_METRICS.json": "5a25a2dcb93ab907d62569d173f8b0a559b921e9905fdd57786a87337e5fe711",
+    "20261119_conditional_intensity_diagnostic/B_READOUT_RESULTS.json": "7a668ae044ecb934b2f3db5110018e742d1003a4f5df27380e011a2dec0bee2e",
+    "20261119_conditional_intensity_diagnostic/B_HEAD_DIAGNOSTIC.json": "88a401ebbebbce31bf65d30f38f979a7ddf427786e4f1892efbaba58d0296ccf",
+    "20261119_conditional_intensity_diagnostic/B_RECOVERY_PROPOSAL.json": "ddd8e23c86d335a8b3e4dcb09ab727a8e386705ef2e820b4c28c5a55f599187a"
+  },
+  "new_inference": 0,
+  "prediction_shard_opens": 0,
+  "optimizer_updates": 0,
+  "final_2025_access": false,
+  "scientific_status": "NOT_VERIFIED"
+}
