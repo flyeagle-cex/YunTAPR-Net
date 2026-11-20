@@ -1,0 +1,42 @@
+{
+  "status": "STOP_NO_RETRY",
+  "proposal_sha256": "1d6f1680cefc7ed461e8aa98eeaf39860781a5ce178a661801cdfacfafcf9478",
+  "execution_code_commit": "df2155ab3c5bc6bc8cb7a507c14e8bedab856544",
+  "first_attempt_approval_consumed": true,
+  "finished": "2026-11-20T23:20:04.709068+08:00",
+  "wall_seconds_rounded_up": 31,
+  "exit_code": 1,
+  "failure": "FIRST_FROZEN_SATELLITE_PATH_NOT_FOUND_IN_INDEPENDENT_PROCESS",
+  "completed_forward_batches": 0,
+  "prediction_shards": 0,
+  "optimizer_updates": 0,
+  "checkpoint_hashes": 1,
+  "checkpoint_loads": 1,
+  "actual_logical_reservations": {
+    "metadata_bytes": 189018499,
+    "metadata_opens": 140,
+    "payload_bytes": 108147386,
+    "payload_opens": 4,
+    "total_bytes": 297165885,
+    "total_opens": 144
+  },
+  "post_stop_probe": {
+    "status": "PASS",
+    "method": "Independent-process strict path resolution and file size only",
+    "expected_bytes": 4950844,
+    "observed_bytes": 4950844,
+    "payload_opens": 0
+  },
+  "next_proposal": {
+    "file": "B_RECOVERY_PROPOSAL.json",
+    "proposal_sha256": "ed417346f82218fe981078872fb91c80211ad46e9b836f29e628daef842308a9",
+    "authorization": "NONE",
+    "additional_source_cap_bytes": 28250000000,
+    "additional_source_open_cap": 8260,
+    "additional_wall_cap_seconds": 7200,
+    "cumulative_source_cap_bytes_including_failed_attempt": 28547165885,
+    "cumulative_source_open_cap_including_failed_attempt": 8404,
+    "cumulative_wall_cap_seconds_including_failed_attempt": 7231
+  },
+  "scientific_status": "NOT_VERIFIED"
+}
