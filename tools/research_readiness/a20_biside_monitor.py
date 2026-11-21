@@ -105,7 +105,7 @@ def snapshot(output, service, proposal):
     )
 
 
-def serve(run, ready):
+def serve(run, ready, *, proposal_file=PUBLIC, port=0):
     run, ready = run.resolve(), ready.resolve()
     if run.parent != (READINESS / ".local").resolve() or ready.parent != run:
         raise ValueError("Use the bound private A20 directory")
@@ -113,7 +113,7 @@ def serve(run, ready):
     private = receipt(run / "PRIVATE_PREPARATION.json")
     output, service = run / "output", run / "service"
     if (proposal.get("authorization_scope") != "A20_BISIDE_V1_REAL_COSINE9_MATCHED"
-            or proposal != receipt(PUBLIC) or private["proposal_sha256"] != proposal["proposal_sha256"]
+            or proposal != receipt(proposal_file) or private["proposal_sha256"] != proposal["proposal_sha256"]
             or Path(private["output_root"]).resolve() != output.resolve()
             or Path(private["service_dir"]).resolve() != service.resolve()):
         raise ValueError("A fixed, published A20 proposal is required")
@@ -143,7 +143,7 @@ def serve(run, ready):
         def log_message(self, *_args):
             pass
 
-    with ThreadingHTTPServer(("127.0.0.1", 0), Handler) as server:
+    with ThreadingHTTPServer(("127.0.0.1", port), Handler) as server:
         with ready.open("x", encoding="utf-8") as stream:
             json.dump({"url": f"http://127.0.0.1:{server.server_port}/"}, stream)
         server.serve_forever()
@@ -153,5 +153,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--ready", type=Path, required=True)
+    parser.add_argument("--proposal", type=Path, default=PUBLIC)
+    parser.add_argument("--port", type=int, default=0)
     args = parser.parse_args()
-    serve(args.run, args.ready)
+    serve(args.run, args.ready, proposal_file=args.proposal, port=args.port)
