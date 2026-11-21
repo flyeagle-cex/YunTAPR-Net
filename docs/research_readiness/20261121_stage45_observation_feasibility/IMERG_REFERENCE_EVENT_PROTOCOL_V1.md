@@ -33,3 +33,5 @@
 顺利情景仍按内部约 **5–13 个有效工作日，日历约 2–3 周** 排程。条件为候选首轮达标、参考覆盖及最终适配顺利。P20 与新训练继续暂缓，2025 继续封存。本轮使用现有脱敏收据和协议材料。[现有强雨门槛](../20261119_conditional_intensity_diagnostic/A20_BISIDE_V1.md) · [最终测试准备记录](../20261025/evidence/final_test_preregistration_increment_20261030.json)
 
 网页 GPT-6 High 裁定科研口径，Codex 建议 Sol High 准备工程协议，Harness 建议 Flash High 在新执行包就绪时进行一次限定审核。
+
+[第 2 步现行评价协议](STAGE2_EVALUATION_FREEZE_V1.md)
