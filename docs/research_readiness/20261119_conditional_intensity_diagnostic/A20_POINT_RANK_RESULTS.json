@@ -1,0 +1,132 @@
+{
+  "status": "COMPLETE_MATCHED_POINT_A_RANKING",
+  "scientific_status": "NOT_VERIFIED",
+  "decision": "STOP_A20_POINT_SCORE_ROUTE_PRIMARY_AP20_DECLINED",
+  "proposal_sha256": "5dcc00f2108226d89a8edb45350f4547b8c9d8d4078eb24e2aaa9f678ad549ad",
+  "execution_code_commit": "096a04bfd62538ba36edf50eaca96fd7f30538bf",
+  "started_at_beijing": "2026-11-21T17:34:25.924454+08:00",
+  "finished_at_beijing": "2026-11-21T17:56:36.390205+08:00",
+  "supervisor_exit_code": 0,
+  "elapsed_seconds": 1330.465751,
+  "forward_batches": 121,
+  "optimizer_updates": 0,
+  "accounting": {
+    "metadata_archive_reserved_bytes": 189220590,
+    "metadata_open_instances": 142,
+    "payload_archive_reserved_bytes": 27629271528,
+    "payload_by_category": {
+      "static": 312828,
+      "checkpoint": 107810826,
+      "weather": 26639253112,
+      "saved_control": 881894762
+    },
+    "payload_open_instances": 8074
+  },
+  "score_shards": 121,
+  "score_storage_bytes": 13227848,
+  "completion_receipt_sha256": "f5a577c8e80d96f2f9dc72dc3e6a774b176f87190307ed9b7655ec61575cf3c7",
+  "paired_population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820
+  },
+  "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+  "metrics": {
+    "COSINE9": {
+      "fixed_a_counts": {
+        "tp": 0,
+        "fp": 0
+      },
+      "all": {
+        "n_strong": 717,
+        "n_non_strong": 3302373,
+        "ap20": 0.018690918630881997,
+        "auroc20": 0.9676006939722105,
+        "score_overlap": {
+          "strong_range_mm_h": [
+            0.036351390182971954,
+            11.507702827453613
+          ],
+          "non_strong_range_mm_h": [
+            0.004934995900839567,
+            18.618253707885742
+          ],
+          "strong_strictly_above_non_strong_max": 0,
+          "strong_tied_with_non_strong_max": 0
+        }
+      },
+      "elevation_ge_2000m": {
+        "n_strong": 178,
+        "n_non_strong": 1212239,
+        "ap20": 0.008314078350999054,
+        "auroc20": 0.9782219772344184,
+        "score_overlap": {
+          "strong_range_mm_h": [
+            0.1727689504623413,
+            6.780589580535889
+          ],
+          "non_strong_range_mm_h": [
+            0.0057687219232320786,
+            14.922318458557129
+          ],
+          "strong_strictly_above_non_strong_max": 0,
+          "strong_tied_with_non_strong_max": 0
+        }
+      }
+    },
+    "A20": {
+      "fixed_a_counts": {
+        "tp": 627,
+        "fp": 177098
+      },
+      "all": {
+        "n_strong": 717,
+        "n_non_strong": 3302373,
+        "ap20": 0.007785992328504142,
+        "auroc20": 0.9685012637848124,
+        "score_overlap": {
+          "strong_range_mm_h": [
+            0.04452743008732796,
+            226.74359130859375
+          ],
+          "non_strong_range_mm_h": [
+            0.010116090066730976,
+            443.1760559082031
+          ],
+          "strong_strictly_above_non_strong_max": 0,
+          "strong_tied_with_non_strong_max": 0
+        }
+      },
+      "elevation_ge_2000m": {
+        "n_strong": 178,
+        "n_non_strong": 1212239,
+        "ap20": 0.00492918220373834,
+        "auroc20": 0.9717376948445596,
+        "score_overlap": {
+          "strong_range_mm_h": [
+            0.3402765095233917,
+            110.10514831542969
+          ],
+          "non_strong_range_mm_h": [
+            0.010467952117323875,
+            237.4599609375
+          ],
+          "strong_strictly_above_non_strong_max": 0,
+          "strong_tied_with_non_strong_max": 0
+        }
+      }
+    }
+  },
+  "candidate_minus_control": {
+    "all": {
+      "ap20": -0.010904926302377854,
+      "auroc20": 0.0009005698126018924
+    },
+    "elevation_ge_2000m": {
+      "ap20": -0.0033848961472607133,
+      "auroc20": -0.006484282389858764
+    }
+  },
+  "automatic_retry": false,
+  "final_2025_access": false
+}
