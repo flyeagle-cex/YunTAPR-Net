@@ -23,8 +23,10 @@ A20 的负类均值项位于强雨像元数大于零的分支中。逐场景 QC 
 
 与 A20 历史终态比较误报与强雨物理损失。误报未下降会推翻预期抑制方向。所有正式科学筛查仍按 COSINE9 固定联合门判定，要求固定 A 命中大于零、误报等于零、强雨物理 Pinball/20 改善且其他护栏通过。同一 E9 Dev 前向报告全部样本和海拔 ≥2,000 m 的 AP20、雨强与检出。任一失败即封存，无参数扫描或自动重试。[冻结评价协议](../20261121_stage45_observation_feasibility/STAGE2_EVALUATION_FREEZE_V1.md) · [候选身份与合成收据](A20_NEG_COVERAGE_V1.json)
 
-本轮限代码、合成验证及执行准备。正式单次训练和评价需研究者批准精准提案。科学状态 NOT_VERIFIED，P20 暂缓，2025 封存。网页 GPT-6 High 已裁定科学准备，Codex Sol High 实现，Harness Flash High 做必要的新增差异审核。
+网页 GPT-6 High 裁定科学方案，Codex Sol High 实现，Harness Flash High 审核新增差异。科学状态 NOT_VERIFIED，P20 暂缓，2025 封存。
 
 ## 执行包与审核
 
-固定代码 4dc4f4d1cfc75d8607a19db0eba6fae9c6af9856，提案 787217dfedacf75dc6bdc21996446d2779d6ea30c96222a7bd331d74f670c10c。Harness Flash High 完成新增差异的限定只读审核，未发现实质阻塞。已核对 674 项固定身份，启动器与入口在缺少新批准时拒绝，历史 A20 批准也被拒绝。正式候选尚未启动。[精确提案](A20_NEG_COVERAGE_EXECUTION_PROPOSAL.json) · [审核收据](A20_NEG_COVERAGE_REVIEW.json)
+固定代码 4dc4f4d1cfc75d8607a19db0eba6fae9c6af9856，提案 787217dfedacf75dc6bdc21996446d2779d6ea30c96222a7bd331d74f670c10c。Harness Flash High 完成新增差异的限定只读审核，未发现实质阻塞。准备时核对了 674 项固定身份，拒绝了无批准与历史批准两种入口调用。[精确提案](A20_NEG_COVERAGE_EXECUTION_PROPOSAL.json) · [审核收据](A20_NEG_COVERAGE_REVIEW.json)
+
+研究者批准后，独立监督器于北京时间 20:22:54 单次派发。20:24:04 的账本快照确认 17/4,320 次已返回的优化器更新。Chrome 只读页面显示轮次、更新和 Dev 状态。实验仍在第 3 步，科学验收待固定 E9 Dev 封口。[启动收据](A20_NEG_COVERAGE_LAUNCH_RECEIPT.json)

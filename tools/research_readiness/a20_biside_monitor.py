@@ -1,4 +1,4 @@
-"""Read-only browser view of the one-shot A20-BISIDE-V1 run."""
+"""Read-only browser view of the one-shot A20 experiments."""
 
 import argparse
 from datetime import datetime, timezone
@@ -12,6 +12,8 @@ from tail20_replay_monitor import count_rows, receipt
 ROOT = Path(__file__).resolve().parents[2]
 READINESS = ROOT / "docs/research_readiness"
 PUBLIC = READINESS / "20261119_conditional_intensity_diagnostic" / "A20_EXECUTION_PROPOSAL.json"
+COVERAGE_PUBLIC = (READINESS / "20261121_a20_negative_coverage"
+                   / "A20_NEG_COVERAGE_EXECUTION_PROPOSAL.json")
 EPOCHS = 9
 
 
@@ -105,20 +107,26 @@ def snapshot(output, service, proposal):
     )
 
 
-def serve(run, ready, *, proposal_file=PUBLIC, port=0):
+def serve(run, ready, *, proposal_file=None, port=0, coverage=False):
     run, ready = run.resolve(), ready.resolve()
     if run.parent != (READINESS / ".local").resolve() or ready.parent != run:
         raise ValueError("Use the bound private A20 directory")
-    proposal = receipt(run / "A20_EXECUTION_PROPOSAL.json")
+    candidate = "A20-NEG-COVERAGE-V1" if coverage else "A20-BISIDE-V1"
+    scope = candidate.replace("-", "_") + "_REAL_COSINE9_MATCHED"
+    default_proposal = COVERAGE_PUBLIC if coverage else PUBLIC
+    proposal = receipt(run / default_proposal.name)
     private = receipt(run / "PRIVATE_PREPARATION.json")
     output, service = run / "output", run / "service"
-    if (proposal.get("authorization_scope") != "A20_BISIDE_V1_REAL_COSINE9_MATCHED"
-            or proposal != receipt(proposal_file) or private["proposal_sha256"] != proposal["proposal_sha256"]
+    if (proposal.get("authorization_scope") != scope
+            or proposal != receipt(proposal_file or default_proposal)
+            or private["proposal_sha256"] != proposal["proposal_sha256"]
             or Path(private["output_root"]).resolve() != output.resolve()
             or Path(private["service_dir"]).resolve() != service.resolve()):
         raise ValueError("A fixed, published A20 proposal is required")
+    page = Path(__file__).with_name("a20_biside_progress.html").read_text(encoding="utf-8")
+    html = page.replace("A20-BISIDE-V1", candidate).encode("utf-8")
     assets = {
-        "/": (Path(__file__).with_name("a20_biside_progress.html").read_bytes(), "text/html; charset=utf-8"),
+        "/": (html, "text/html; charset=utf-8"),
         "/style.css": ((ROOT / "tools/b2_monitor/style.css").read_bytes(), "text/css; charset=utf-8"),
     }
 
@@ -153,7 +161,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--ready", type=Path, required=True)
-    parser.add_argument("--proposal", type=Path, default=PUBLIC)
+    parser.add_argument("--proposal", type=Path)
     parser.add_argument("--port", type=int, default=0)
+    parser.add_argument("--coverage", action="store_true")
     args = parser.parse_args()
-    serve(args.run, args.ready, proposal_file=args.proposal, port=args.port)
+    serve(args.run, args.ready, proposal_file=args.proposal, port=args.port, coverage=args.coverage)
