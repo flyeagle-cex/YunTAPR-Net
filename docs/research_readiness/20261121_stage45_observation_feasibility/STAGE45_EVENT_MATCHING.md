@@ -1,5 +1,7 @@
 # Stage 4.5 独立观测与暴雨事件匹配
 
+> 历史外部观测路线。当前采用 IMERG V07 Final 降水参考，站点和雷达转为可选补充。见 [现行参考评价、事件协议与排程](IMERG_REFERENCE_EVENT_PROTOCOL_V1.md)。
+
 2026 年 11 月 21 日，网页总控 High 综合两位 agent 的意见，选定独立观测与事件匹配可行性为唯一下一步。A20 排序路线已封存，COSINE9 保留作匹配参考。P20_c 继续暂缓，其插值比较只能回答排序问题。阶段 4.5 为 PARTIAL，科学状态为 NOT_VERIFIED，2025 最终测试集继续封存。[A20 配对终态](../20261119_conditional_intensity_diagnostic/A20_POINT_RANK_RESULTS.md)
 
 ## 可行性清单
