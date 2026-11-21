@@ -1,0 +1,164 @@
+\documentclass[UTF8,fontset=windows,zihao=-4,a4paper]{ctexart}
+\usepackage[margin=22mm,top=25mm,bottom=23mm,headheight=16pt]{geometry}
+\usepackage{graphicx,xcolor,amsmath,booktabs,tabularx,array,enumitem,fancyhdr}
+\usepackage[unicode,colorlinks,linkcolor=teal!70!black,urlcolor=blue!45!black,pdfstartview=FitH]{hyperref}
+\graphicspath{{figures/}}
+\definecolor{ink}{HTML}{182C40}
+\definecolor{accent}{HTML}{086C65}
+\definecolor{muted}{HTML}{4B6171}
+\definecolor{wash}{HTML}{EEF5F5}
+\definecolor{warm}{HTML}{A04A23}
+\hypersetup{pdftitle={从极端降水反演学科研},pdfsubject={YunTAPR-Net 案例讲义与科研方法}}
+\ctexset{section={format=\Large\bfseries\color{ink},beforeskip=0pt,afterskip=12pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}从极端降水反演学科研}
+\fancyhead[R]{\small\color{muted}YunTAPR-Net}
+\fancyfoot[L]{\small\hyperlink{nav}{目录}\quad\hyperlink{gl-data}{术语注释}\quad\hyperlink{sources}{证据与延伸阅读}}
+\fancyfoot[R]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.28}
+\linespread{1.13}
+\setlist{nosep,leftmargin=1.8em,topsep=4pt,itemsep=3pt}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcommand{\term}[2]{\hyperlink{g-#1}{#2}}
+\newcommand{\src}[1]{\hyperlink{s-#1}{\textsuperscript{[#1]}}}
+\newcommand{\back}[2]{\hyperlink{#1}{\textcolor{muted}{回到#2}}}
+\newcommand{\source}[3]{\hypertarget{s-#1}{}\textbf{[#1]}\enspace\href{#2}{#3}\par}
+\newcommand{\chapterpage}[3]{\clearpage\hypertarget{#1}{}\section{#2}\textcolor{accent}{\bfseries #3}\par}
+\newcommand{\sub}[1]{\par\medskip{\large\bfseries\color{ink}#1}\par}
+\newcommand{\boxnote}[2]{\par\smallskip\noindent\colorbox{wash}{\begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}\vspace{3pt}\textbf{\textcolor{accent}{#1}}\par #2\vspace{3pt}\end{minipage}}\par\smallskip}
+\newcommand{\diagram}[4][1]{\par\smallskip\noindent\makebox[\linewidth][c]{\includegraphics[width=#1\linewidth]{#2}}\par{\small\color{muted}\textbf{图 #3}\enspace #4\par}\smallskip}
+\newcommand{\gloss}[4]{\par\hypertarget{g-#1}{}\textbf{\textcolor{ink}{#2}}\enspace #3\hfill{\small #4}\par}
+\newcommand{\navline}[3]{\hyperlink{#1}{\textbf{#2}}\hfill\pageref{p-#1}\par{\small\color{muted}#3}\par\smallskip}
+\newcommand{\mmh}{\mathrm{mm\,h^{-1}}}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{12mm}
+{\large\bfseries\color{accent} 科研方法讲义\par}
+\vspace{9mm}
+{\fontsize{35}{45}\selectfont\bfseries\color{ink}从极端降水反演\\学科研\par}
+\vspace{5mm}
+{\Large\color{muted}以云南复杂地形 YunTAPR-Net 项目为例\par}
+\vspace{8mm}
+读完并完成练习后，检验自己能否独立写出一个可被数据驳倒的问题，设计公平比较，复算关键指标，并在组会上讲清楚证据能支持的结论。
+\diagram{01-workflow.pdf}{1}{从问题、协议和数据到对照、诊断和表达。诊断发现的反例可以促使研究者重写问题。流程为教学示意。}
+\boxnote{怎么使用这份讲义}{先读正文，点击青绿色术语可跳到定义和例子，注释有返回正文的链接。上标编号通往证据索引，便于核对原始公开记录。读完合上讲义，先做练习，再对照参考答案和组会评分表。}
+\vfill
+{\small\color{muted} 案例证据截至 2026 年 11 月 21 日 \hfill \hyperlink{nav}{进入目录 $\rightarrow$}\par}
+
+\clearpage
+\hypertarget{nav}{}
+\section*{学习路径}
+\navline{question}{1\quad 把研究兴趣写成可检验的问题}{交付问题卡，说明对象、比较和什么结果会改变判断。}
+\navline{data}{2\quad 定义数据，再谈模型}{交付一张数据契约，区分观测时标、资料到达和参考窗口。}
+\navline{model}{3\quad 把假说翻译为模型与对照}{用四条候选主张解释特征、网络和输出各在检验什么。}
+\navline{experiment}{4\quad 设计比较并留下可复核的证据}{冻结配对样本、主要指标、保护线和停止规则。}
+\navline{diagnosis}{5\quad 读懂强雨失效的三层证据}{复算检出和排序，理解条件分位数与固定点值。\enspace\hyperlink{freeze}{查看冻结协议实例}}
+\navline{verification}{6\quad 从像元到暴雨过程}{写清同源参考、时间留出和独立观测各自的结论范围。}
+\navline{communication}{7\quad 写结果、讲组会、回答追问}{输出一段结果、一页比较说明和三分钟口头讲解。}
+\navline{exercises}{8\quad 练习与自评}{设计一项研究、复算数字、给结论降到证据允许的强度。}
+\medskip
+\hyperlink{gl-data}{数据与模型术语}\quad
+\hyperlink{gl-eval}{统计与指标术语}\quad
+\hyperlink{gl-method}{研究设计与输出术语}\par
+\hyperlink{sources}{项目证据与原始阅读}
+\vfill
+\boxnote{案例范围}{讲义采用 Obsidian 项目记录与相应公开证据。项目当前科学状态为 \texttt{NOT\_VERIFIED}。文中明确区分实际结果、教学算例和拟议的评价步骤。\src{P1}}
+
+\chapterpage{question}{把研究兴趣写成可检验的问题}{从“想做极端降水”到一张能够被反例推翻的问题卡}
+\label{p-question}
+云南山地的云顶辐射、低层水汽、近地风与地形相互作用，地面降水与卫星看到的云并非一一对应。YunTAPR-Net 研究的是复杂地形下的\term{retrieval}{卫星降水反演}，目标是用多源输入估计给定时间窗的降水；\term{latency}{近实时}适用性还依赖输入抵达时间与处理延迟。\src{P1}\src{P2}\src{R3}
+
+\sub{一张可检验的问题卡}
+\begin{tabularx}{\linewidth}{@{}p{3.2cm}L@{}}
+\toprule
+要素 & 用云南案例填写 \\
+\midrule
+研究对象 & 已配对的云南参考格点、半小时目标窗、高海拔强雨子集。\\
+可操纵因素 & 固定网络及其余条件，比较真实动态地形输入与相同位置数值归零。\\
+事前预期 & 真实地形输入会降低既定高海拔强雨子集的物理\term{pinball}{Pinball 损失}。\\
+反驳条件 & 收益方向不稳定，或误报、弱雨等保护线失守。结论强度还取决于事件覆盖与重复性。\\
+证据范围 & 先做\term{split}{开发集}比较，再检验不同\term{seed}{随机种子}、天气过程和时间留出。\\
+\bottomrule
+\end{tabularx}
+
+\sub{读文献时，把结果追问到底}
+以 Hydronn 原文为练习。先找研究区、卫星输入、训练参考与测试对象，再定位哪张表支持哪个结论。最后记录要迁移的设计，以及云南的地形、时间支撑或参考来源可能改变什么。Obsidian 文献索引可沿“静止卫星反演→多源融合→概率与强雨→实时订正”这条路线继续读。\src{R3}
+
+\sub{先写下最容易混淆的解释}
+如果高海拔只在两场相似天气中出现较多，局部收益可能反映过程构成。如果归零改变了网络参数或训练样本，差异也可能来自容量或数据。读完一篇文献后，写一条“可迁移的做法”和一条“需要重新验证的主张”，并标出区分这两种解释的比较。\src{P4}\src{P6}
+
+\boxnote{把方法迁移到自己的课题}{用一句话填空。「在［人群或区域、时间和单位］上，把［变量］改为［候选］，相对［对照］，预计［主指标］改变，且［保护指标］达标。若［观测结果］出现，我会收窄或放弃主张。」}
+
+\chapterpage{data}{定义数据，再谈模型}{一条样本要说得清哪里、何时、用的是什么版本}
+\label{p-data}
+\begin{tabularx}{\linewidth}{@{}p{2.65cm}L@{}}
+\toprule
+数据身份 & 本项目案例中的定义 \\
+\midrule
+目标与单位 & \term{imerg}{IMERG V07 Final} 半小时平均雨强。设起点 \(T\)，目标窗 \([T,T+30\,\mathrm{min})\)，分析时刻 \(A=T+30\,\mathrm{min}\)，时间记为 \term{time}{UTC}。 \\
+卫星输入 & 一个记录配置为七个\term{satellite}{光谱通道}、六个名义卫星时槽 \(A-60,A-50,A-40,A-30,A-20,A-10\) 分钟，解码时观察结束时刻须满足协议上的因果限制。\\
+环境与地形 & \term{gfs}{GFS f006} 提供回顾性环境输入。地形来自 \term{dem}{DEM}。环境字段的变量身份、单位、气压层和\term{mask}{有效掩膜}写进输入契约。 \\
+空间与划分 & \term{grid}{SP04} 约 \(0.1^\circ\) 网格及云南监督掩膜。案例以 2023 训练、2024 开发，2025 最终测试期封存。\\
+\bottomrule
+\end{tabularx}
+\src{P1}\src{P2}\src{P3}
+
+\diagram{02-timeline.pdf}{2}{通用时间示意。图中时间关系仅用于解释资料何时可用。项目的目标窗在分析时刻 \(A\) 结束，部分输入名义时槽可位于目标窗内。}
+
+\textbf{三项开跑前检查。} 第一，逐条核对输入观测起止、模式起报、预报有效和档案实际可用时间；回顾性资料对齐为核查前几项绑定提供依据。第二，检查经纬度轴方向、格点中心、范围、单位、掩膜与陆地以下气压层。第三，先划分再拟合\term{scaler}{标准化}统计，构造同窗同格点的两臂共同有效样本。\src{P1}\src{P2}\src{P3}
+
+\textbf{核查实例。} 若卫星文件标记 \(A-10\) 分钟，实际扫描结束晚于 \(A\)，就不能只看文件名入选。若某气压层在山区地表以下，按项目契约标记无效；若混入 Pa 和 hPa，错误应在标准化前被发现。\src{P2}\src{P3}
+
+\boxnote{半小时换算}{若完整半小时累计雨量是 \(H\) mm，则对应平均雨强为 \(2H\) mm/h。\(H=10\) mm 恰好等于 20 mm/h。项目把强雨定义为严格 \(>20\) mm/h，因此恰好等于阈值的值归入非强雨。}
+
+\chapterpage{model}{把假说翻译为模型与对照}{四个方向分别提出四个可以被检验的问题}
+\label{p-model}
+\begin{tabularx}{\linewidth}{@{}p{3.15cm}LL@{}}
+\toprule
+项目方向 & 为什么值得试 & 怎样识别贡献 \\
+\midrule
+多元信息协同 & \term{satellite}{多时相、多光谱}补充云演变及通道差异，环境和地形给出位置与状态背景。 & 用\term{ablation}{消融}分别固定通道或时间槽，其余比较协议与样本身份一致。 \\
+动态地形强迫 & \term{dote}{风场与地形梯度}可提供上坡运动的近似表征。 & REAL/ZERO 把对应特征在同架构中归零，配对核对真值、掩膜、海拔和雨强分层。独立暴雨事件数仍未知。 \\
+环境物理约束 & 当前\term{mee}{MEE 环境先验}有 13 个变量，并绑定物理量、单位与地下层掩码。 & 在同人口配对中检验环境增量。当前为条件输入，硬守恒及业务可用性分别需要证据。 \\
+U-Net 双头 & \term{unet}{U-Net}融合空间上下文。\term{heads}{双头}分别输出有雨概率与 32 个单调条件分位数。 & 分开评估发生、条件强度与强雨越线。固定\term{readout}{读出}后再比较阈值检出。 \\
+\bottomrule
+\end{tabularx}
+\src{P2}\src{P3}\src{P4}\src{P6}
+
+\sub{从数学式读出不同的预测}
+令 \(R\) 是雨强，\(W=\{R>0.1\,\mmh\}\)，\(x\) 是输入。发生头估计 \(p(x)=P(W\mid x)\)，条件头估计 \(Q_\tau(R\mid W,x)\)。两者可以共同描述强雨风险。对 \(u=20\,\mmh\)，有
+\[
+P(R>u\mid x)=p(x)\,P(R>u\mid W,x).
+\]
+这个等式依赖 \(\{R>u\}\subset W\)。项目用有限节点表达\term{quantile}{条件分位数}，节点之间与两端的分布还需额外假设才能给出单一越线概率。q32 的 \(\tau=0.984375\) 表示条件分位水平。\src{P2}\src{P7}
+
+\sub{让机制主张承担可被推翻的预期}
+若上坡气流表征是有效信息，合理预期是同样雨强下，收益随地形坡向与风向的相互关系改变。对应检验需要事前定义风向、坡向和海拔分组，并把 REAL/ZERO 差值在多个天气过程中重复比较。当前已有海拔分层差异，风向机制仍需专门的证据。\src{P3}\src{P6}
+
+\boxnote{最小算例}{教学例。若两个模型的有雨概率同为 0.8，而条件下超过 20 的概率分别为 0.05 与 0.25，则强雨概率分别为 0.04 与 0.20。仅看发生头会错过这个差异。}
+
+\chapterpage{experiment}{设计比较并留下可复核的证据}{先写比较规则，再看结果}
+\label{p-experiment}
+\begin{enumerate}
+\item \textbf{冻结因变量。} 写明指标、单位、分母、样本身份、比较方向与\term{guardrail}{保护线}。例如事前同时要求强雨损失下降、弱雨和误报保持在容许范围。
+\item \textbf{冻结对照。} 绑定训练和评价的\term{population}{样本集合}、数据版本、顺序、初始化、学习率调度、网络结构、输出规则与\term{checkpoint}{固定检查点}。记录唯一有意改变的因素。
+\item \textbf{先用小检查排错。} 用人工张量试验临界值、缺帧、无雨、错误单位和网格错位。先查输入契约、算分器和账本，再用获准的小真实样本检查整条路径。
+\item \textbf{保存可复核材料。} 记录代码提交、配置、随机种子、检查点指纹、样本/掩膜身份、有效计数、停止原因和失败运行。一次恢复的重放和一个独立 seed 各自记账。
+\item \textbf{报告差值与不确定性。} 同一场景两臂相减。复现时分开报告种子差异和暴雨过程差异。若采用\term{block}{事件级重采样}，先说明区块构造和有效独立性。
+\end{enumerate}
+
+\diagram{03-evidence.pdf}{3}{工程核验、开发比较、时间留出与独立观测对应不同的证据问题。箭头示意证据范围扩展，图不代表项目已通过这些阶段。}
+
+\textbf{历史案例。} B3/B4 三个 seed 在同一 2024 Dev 上的 Brier、AUROC、AP 和条件 Pinball 总体同向改善，q32 方向存在不一致，强雨仍有退化。B0/B1 的历史训练和评价人口与 B3/B4 不同，跨人口拼排无法识别多光谱增益。\src{P4}
+
+\textbf{为何要保留代价？} COSINE9 把学习率时程从原方案缩至九轮。与固定对照相比，强雨 log Pinball 约降 10.00\%，弱雨 log Pinball 却升约 7.59\%。二者在不同分层、不同分母上统计。先写清样本构成与保护线，再判断变更是否值得保留。\src{P5}\src{P12}
+
+\boxnote{复现前先自问}{别人拿到这份记录，能否找到同一代码和检查点、重建同一像元的配对、复算同一个分母、识别什么时候这个候选已经失败？}
+
+\input{casework}
+\input{annotations}
+\end{document}
