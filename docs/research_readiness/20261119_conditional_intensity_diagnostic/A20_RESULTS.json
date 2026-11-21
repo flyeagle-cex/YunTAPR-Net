@@ -1,0 +1,107 @@
+{
+  "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+  "scientific_status": "NOT_VERIFIED",
+  "screen_status": "FAIL_DEV_POINT_A20_GATE",
+  "execution_code_commit": "2303f389d7d524541c84b87da15b2d84b45ce9f5",
+  "proposal_sha256": "0d287679ee0fc849047f3eb1a4f9fe465e951c9077bd227ca6daf7cd1e933c54",
+  "started_at_beijing": "2026-11-21T10:11:20.010161+08:00",
+  "finished_at_beijing": "2026-11-21T16:08:51.988509+08:00",
+  "supervisor_exit_code": 0,
+  "elapsed_seconds": 21451.978348,
+  "train_epochs": 9,
+  "development_epochs": 9,
+  "effective_optimizer_updates": 4320,
+  "prior_attempted_updates": 47,
+  "cumulative_attempted_updates": 4367,
+  "logical_source_bytes": 477571953840,
+  "logical_source_opens": 142813,
+  "cumulative_logical_source_bytes": 480249413398,
+  "cumulative_logical_source_opens": 143657,
+  "checkpoint_saved_before_e9_development": true,
+  "e9_predev_sha256": "3532ae02525c6c4635a69588415d5f30c6cc22e70eadc3f09165355894bf48ab",
+  "e9_checkpoint_sha256": "3a081d737779bc861cede8d5109529ae7eaee05081a828cf74d1f5da3524e361",
+  "completion_receipt_sha256": "6817eaf05a880c23e5edf69f10c1b7fb6212920d353da7ba34b049feb917de53",
+  "automatic_retry": false,
+  "final_2025_access": false,
+  "population": {
+    "scenes": 963,
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "n_strong": 717,
+    "n_weak": 246473
+  },
+  "frozen_comparison": {
+    "status": "FAIL_DEV_TAIL_GATE",
+    "protocol": "CONDITIONAL_TAIL_2024_DEV_V1",
+    "checks": {
+      "strong_physical_pinball_over20": {
+        "baseline": 0.5068646309277546,
+        "candidate": 0.6282741337411532,
+        "delta": 0.12140950281339857,
+        "pass_gate": false
+      },
+      "q32_support_tp": {
+        "baseline": 160,
+        "candidate": 665,
+        "delta": 505,
+        "pass_gate": true
+      },
+      "q32_support_fp": {
+        "baseline": 5769,
+        "candidate": 352680,
+        "delta": 346911,
+        "pass_gate": false
+      },
+      "point_a_tp": {
+        "baseline": 0,
+        "candidate": 627,
+        "delta": 627,
+        "pass_gate": true
+      },
+      "point_a_fp": {
+        "baseline": 0,
+        "candidate": 177098,
+        "delta": 177098,
+        "pass_gate": false
+      },
+      "weak_log_pinball": {
+        "baseline": 0.08872231160181858,
+        "candidate": 0.1062018279881104,
+        "delta": 0.01747951638629182,
+        "pass_gate": false
+      },
+      "occurrence_brier": {
+        "baseline": 0.09233015567445307,
+        "candidate": 0.09733828254858409,
+        "delta": 0.005008126874131019,
+        "pass_gate": false
+      },
+      "occurrence_ap": {
+        "baseline": 0.6066547555865263,
+        "candidate": 0.5629312481666144,
+        "delta": -0.04372350741991182,
+        "pass_gate": false
+      },
+      "occurrence_auroc": {
+        "baseline": 0.8990243638708331,
+        "candidate": 0.8874382321053875,
+        "delta": -0.01158613176544554,
+        "pass_gate": false
+      }
+    },
+    "point_a_detection_restored": false,
+    "scientific_status": "NOT_VERIFIED"
+  },
+  "checks_passed": 2,
+  "total_checks": 9,
+  "fixed_point_a": {
+    "tp": 627,
+    "fp": 177098,
+    "fn": 90,
+    "tn": 3125275,
+    "pod": 0.8744769874476988,
+    "false_alarm_ratio": 0.9964720776480518,
+    "false_positive_rate": 0.053627497560087854,
+    "csi": 0.0035261367151252707
+  }
+}
