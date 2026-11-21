@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TAIL20 · E9 恢复进度</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #19323d;
+      --muted: #48616e;
+      --paper: #edf4f6;
+      --surface: #fbfdfe;
+      --line: #bdcfd7;
+      --rain: #136785;
+      --good: #246044;
+      --warn: #933b26;
+      --radius: 8px;
+      font: 16px/1.55 "Microsoft YaHei UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(100% - 32px, 850px); margin: clamp(24px, 7vh, 82px) auto 36px; }
+    header, footer, .split, .stage { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    header, footer, .split { flex-wrap: wrap; }
+    h1 { margin: 0; font-size: clamp(25px, 4vw, 36px); line-height: 1.25; }
+    header p, footer, dt, .descriptor, .stage-detail { color: var(--muted); }
+    header p { margin: 6px 0 0; }
+    button { min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 5px; color: var(--rain); background: var(--surface); font: inherit; font-weight: 650; cursor: pointer; }
+    button:hover { background: var(--paper); }
+    button:focus-visible { outline: 3px solid var(--rain); outline-offset: 3px; }
+    section { margin-top: 24px; padding: clamp(18px, 4vw, 32px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+    h2 { margin: 0; font-size: 19px; color: var(--rain); }
+    h2[data-state="stopped"], h2[data-state="verify"], h2[data-state="offline"] { color: var(--warn); }
+    h2[data-state="complete"] { color: var(--good); }
+    .count { margin: 10px 0 12px; font: 700 clamp(52px, 10vw, 88px)/1.1 Consolas, monospace; letter-spacing: -.06em; }
+    .count small { font: 600 .39em Consolas, monospace; color: var(--muted); letter-spacing: -.02em; }
+    progress { display: block; width: 100%; height: 12px; accent-color: var(--rain); }
+    .descriptor { margin: 7px 0 0; }
+    #percent { color: var(--rain); }
+    .stages { padding: 0; margin: 24px 0 0; list-style: none; border-top: 1px solid var(--line); }
+    .stage { align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--line); }
+    .stage span:first-child { font-weight: 650; }
+    .stage-detail { text-align: right; }
+    .stage-detail[data-confirmed="true"] { color: var(--good); }
+    dl { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 22px 0 0; }
+    dt, footer, .stage-detail { font-size: .92rem; }
+    dd { margin: 3px 0 0; font-variant-numeric: tabular-nums; font-weight: 650; }
+    footer { margin-top: 16px; }
+    #result { margin: 20px 0 0; color: var(--ink); }
+    @media (max-width: 510px) { dl { grid-template-columns: 1fr; } .stage { gap: 8px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>TAIL20 · E9 恢复进度</h1>
+      <p>云南极端降水反演 · B7 / seed2029</p>
+    </div>
+    <button type="button" id="refresh">刷新进度</button>
+  </header>
+  <section aria-label="E9 恢复状态">
+    <h2 id="status" role="status">正在连接本机进度…</h2>
+    <p class="count"><span id="count">—</span><small> / <span id="total">480</span> 步</small></p>
+    <progress id="bar" max="480" value="0" aria-label="已返回的 E9 优化器更新"></progress>
+    <div class="split descriptor"><span id="range">重放步号 3,841–4,320</span><strong id="percent">—</strong></div>
+    <ul class="stages">
+      <li class="stage"><span>E9 训练汇总与权重</span><span class="stage-detail" id="checkpoint">—</span></li>
+      <li class="stage"><span>2024 Dev 评价</span><span class="stage-detail" id="development">—</span></li>
+    </ul>
+    <dl>
+      <div><dt>启动时间（北京）</dt><dd id="start">—</dd></div>
+      <div><dt>本次耗时</dt><dd id="elapsed">—</dd></div>
+      <div><dt>运行上限</dt><dd id="limit">75 分钟</dd></div>
+    </dl>
+    <p id="result" hidden></p>
+  </section>
+  <footer><span id="updated">等待读取账本</span><span id="refresh_mode">本机只读 · 打开时每 10 秒刷新</span></footer>
+</main>
+<script>
+  const get = id => document.getElementById(id);
+  const number = new Intl.NumberFormat("zh-CN");
+  const clock = new Intl.DateTimeFormat("zh-CN", {
+    timeStyle: "medium", timeZone: "Asia/Shanghai", hourCycle: "h23"
+  });
+  const labels = {
+    pending: "等待启动",
+    training: "正在重放第 9 轮",
+    saving: "正在核对训练汇总并保存权重",
+    development: "正在评价 2024 Dev",
+    closing: "正在封存开发集结果",
+    complete: "E9 恢复与开发集评价已完成",
+    stopped: "本次恢复已停止",
+    verify: "已退出或到达时限，等待核实终态"
+  };
+  let reading = false;
+  let terminal = false;
+
+  function text(id, value) {
+    const node = get(id);
+    if (node.textContent !== value) node.textContent = value;
+  }
+
+  function render(data) {
+    const known = Number.isInteger(data.replayed);
+    const completed = known ? data.replayed : 0;
+    get("status").dataset.state = data.state;
+    text("status", labels[data.state]);
+    text("count", known ? number.format(completed) : "—");
+    text("total", number.format(data.replay_total));
+    text("range", "重放步号 " + number.format(data.start_step) + "–" + number.format(data.end_step));
+    get("bar").max = data.replay_total;
+    if (known) get("bar").value = completed;
+    else get("bar").removeAttribute("value");
+    text("percent", known ? (100 * completed / data.replay_total).toFixed(1) + "%" : "短暂等待读取");
+    text("checkpoint", data.predev_checkpoint ? "核对通过，已封存权重" : "待封存");
+    get("checkpoint").dataset.confirmed = data.predev_checkpoint;
+    const files = data.dev_read == null ? "—" : number.format(data.dev_read);
+    const reads = files + " / " + number.format(data.dev_total) + " 份源档案已读";
+    const dev = data.state === "complete" ? "评价已封口" : data.dev_pass_sealed
+      ? "读取已封口，核对结果中" : data.predev_checkpoint ? reads : "等待 E9 权重";
+    text("development", dev);
+    get("development").dataset.confirmed = data.state === "complete";
+    text("start", data.started_at ? clock.format(new Date(data.started_at)) : "—");
+    text("elapsed", data.started_at ? Math.floor(data.elapsed_seconds / 60) + " 分 " + data.elapsed_seconds % 60 + " 秒" : "—");
+    text("limit", data.time_limit_seconds / 60 + " 分钟");
+    text("updated", "北京 " + clock.format(new Date(data.as_of)) + " · 提案 " + data.proposal);
+    if (data.result) {
+      const gate = data.result.gate_passed ? "通过" : "未通过";
+      const restored = data.result.point_a_restored ? "已恢复" : "未恢复";
+      text("result", "冻结门槛" + gate + "（" + data.result.passed + "/" + data.result.total + "） · A 点值强雨检出" + restored);
+      get("result").hidden = false;
+    }
+    terminal = data.state === "complete" || data.state === "stopped";
+    text("refresh_mode", terminal ? "本机只读 · 已显示终态" : "本机只读 · 打开时每 10 秒刷新");
+  }
+
+  async function refresh() {
+    if (reading) return;
+    reading = true;
+    get("refresh").setAttribute("aria-busy", "true");
+    try {
+      const response = await fetch("/api/progress", { cache: "no-store" });
+      if (!response.ok) throw new Error("无法读取账本");
+      render(await response.json());
+    } catch {
+      get("status").dataset.state = "offline";
+      text("status", "本机进度暂不可读，可点击刷新重试");
+    } finally {
+      reading = false;
+      get("refresh").removeAttribute("aria-busy");
+    }
+  }
+
+  get("refresh").addEventListener("click", refresh);
+  document.addEventListener("visibilitychange", () => {
+    if (!terminal && !document.hidden) refresh();
+  });
+  setInterval(() => { if (!terminal && !document.hidden) refresh(); }, 10000);
+  refresh();
+</script>
+</body>
+</html>
