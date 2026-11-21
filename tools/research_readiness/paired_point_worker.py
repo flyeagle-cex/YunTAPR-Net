@@ -164,7 +164,7 @@ def run_task(root, proposal, private, task, output, check, *, diagnostics_factor
         raise ValueError("Frozen Development read scope differs")
     transform = (transform_factory or runtime.PhysicalDote)(pack, runtime.DoteDefinition(**proposal["scientific_choices"]["DOTE"]))
     diagnostics = diagnostics_factory(pack, ids) if diagnostics_factory is not None else None
-    readout = readout_factory(ids, reference) if readout_factory is not None else None
+    readout = readout_factory(pack, ids, reference) if readout_factory is not None else None
     models = runtime.model_factory(
         pack, receipt["scalers"], modulation_limit=proposal["scientific_choices"]["modulation_limit"],
     )(2029, Path(root))

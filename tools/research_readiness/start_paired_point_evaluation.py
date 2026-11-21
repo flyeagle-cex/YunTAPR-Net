@@ -359,13 +359,17 @@ def validate_scientific_manifest(p, v, *, tasks=None, limits=None):
     tasks = TASKS if tasks is None else tasks
     limits = LIMITS if limits is None else limits
     seen = set()
+    saved = limits.get("saved_control_files", 0)
+    categories_allowed = {"weather", "static", "checkpoint"}
+    if saved:
+        categories_allowed.add("saved_control")
     total_bytes = total_opens = 0
     for path, info in v["scientific_files"].items():
         identity = key(path)
         if identity in seen:
             raise PermissionError("Duplicate resolved scientific source")
         seen.add(identity)
-        if info["category"] not in ("weather", "static", "checkpoint") or not info["tasks"] or len(set(info["tasks"])) != len(info["tasks"]) or not set(info["tasks"]).issubset(tasks):
+        if info["category"] not in categories_allowed or not info["tasks"] or len(set(info["tasks"])) != len(info["tasks"]) or not set(info["tasks"]).issubset(tasks):
             raise PermissionError("Scientific source has an invalid category/task grant")
         opens = 2 if info["category"] == "checkpoint" else 1
         if info["opens_per_task"] != opens or (info["category"] != "weather" and Path(path).stat().st_size != info["bytes"]):
@@ -382,6 +386,8 @@ def validate_scientific_manifest(p, v, *, tasks=None, limits=None):
                 categories[info["category"]] = (count + 1, size + info["bytes"])
         model = next(model for model in p["models"] if model["task"] == task)
         expected = dict(weather=(7950, 26639253112), static=(1, 312828), checkpoint=(1, model["checkpoint_bytes"]))
+        if saved:
+            expected["saved_control"] = (saved, limits["saved_control_bytes"])
         if categories != expected:
             raise PermissionError("Each arm must retain its exact one-pass weather/static/checkpoint population")
     for model in p["models"]:

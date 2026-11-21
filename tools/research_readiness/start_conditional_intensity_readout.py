@@ -99,7 +99,7 @@ def execute(proposal_path, private_path, approval_path):
         from tools.research_readiness.conditional_intensity_readout import DevelopmentReadout
         from tools.research_readiness.paired_point_worker import run_task
 
-        def factory(ids, reference):
+        def factory(_pack, ids, reference):
             for name in ("population_ids_sha256", "partition_sha256"):
                 if reference[name] != READOUT_IDENTITY[name]:
                     raise ValueError(f"Frozen Development report has a different {name}")

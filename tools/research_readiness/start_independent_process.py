@@ -172,6 +172,26 @@ def validate_spec(path):
                                              paired_argument('--researcher-approval'))
         if executable.resolve()!=Path(private['runtime_python']).resolve():
             raise PermissionError('Paired evaluation requires the bound native interpreter')
+    elif spec['kind']=='BOUNDED_A20_POINT_RANK':
+        if (entry!=(Path(spec['cwd'])/'tools/research_readiness/start_a20_point_rank.py').resolve()
+                or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Separate exact A20 rank approval and entry required')
+        proposal, private, approval = map(read, command[5::2])
+        if (proposal.get('authorization_scope')!='A20_E9_POINT_RANK_MATCHED_SAVED_COSINE9_V1'
+                or approval.get('authorization_scope')!=proposal['authorization_scope']
+                or approval.get('approved_by_researcher') is not True
+                or not approval.get('decision_id') or not approval.get('researcher_instruction')
+                or any(approval.get(name)!=proposal.get(name) for name in ('proposal_sha256','tasks','budget'))
+                or approval.get('code_commit')!=proposal.get('execution_code_commit')
+                or approval.get('output_root')!=private.get('output_root')
+                or private.get('proposal_sha256')!=proposal.get('proposal_sha256')
+                or Path(private['output_root']).exists() or Path(private['service_dir']).resolve()!=folder
+                or Path(private['runtime_python']).resolve()!=executable.resolve()
+                or proposal['budget'].get('maximum_seconds')!=7200):
+            raise PermissionError('A20 rank approval or runtime differs')
     elif spec['kind']=='BOUNDED_CONDITIONAL_INTENSITY_READOUT':
         if (entry!=(Path(spec['cwd'])/'tools/research_readiness/start_conditional_intensity_readout.py').resolve()
                 or len(command)!=10 or command[3]!='execute'
@@ -312,6 +332,7 @@ def supervise(path):
         write(folder/'target_launch.json',dict(at=now(),pid=process.pid,supervisor_pid=os.getpid(),spec_sha256=sha(path),kind=spec['kind'],automatic_retry=False))
         try:
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
+                       'BOUNDED_A20_POINT_RANK': 7200,
                        'BOUNDED_TAIL20_TRAINING': 21600,
                        'BOUNDED_TAIL20_E9_REPLAY': 4500,
                        'BOUNDED_A20_BISIDE_TRAINING': 28800}.get(spec['kind'])
