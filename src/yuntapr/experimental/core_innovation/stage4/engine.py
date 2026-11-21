@@ -11,6 +11,7 @@ from yuntapr.experimental.phase_b_v2_ablations.total import candidate_loss
 from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MILD_PROFILE,profile_identity,upper_quantile_loss
 from yuntapr.experimental.phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE,physical_pinball_loss,profile_identity as physical_profile_identity
 from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, tail20_aux_loss, profile_identity as tail20_identity
+from yuntapr.experimental.phase_b_v2_ablations.point_a20_aux import POINT_A20_PROFILE, point_a20_aux_loss, profile_identity as point_a20_identity
 from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -21,6 +22,9 @@ from . import *
 from .evaluation import Evaluation,paired_difference
 from .data import sha
 from .recovery import Tail20E8Resume,write as write_durable
+
+
+POINT_DEV_GATE_PROFILES = (TAIL20_PROFILE, POINT_A20_PROFILE)
 
 
 def cpu_tree(value):
@@ -92,6 +96,9 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
     elif (quantile_profile==TAIL20_PROFILE and model.kind=='B7'
           and batch.role=='Train' and selected_config==get_config('E0')):
         loss_function=tail20_aux_loss
+    elif (quantile_profile==POINT_A20_PROFILE and model.kind=='B7'
+          and batch.role=='Train' and selected_config==get_config('E0')):
+        loss_function=point_a20_aux_loss
     else:
         raise PermissionError('The selected quantile profile is not supported for this arm and split')
     extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
@@ -99,8 +106,11 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
         if batch.dynamic is None or batch.dynamic_valid is None:raise ValueError('DOTE physical transform was not connected to the reader')
         extra.update(dynamic=batch.dynamic,dynamic_valid=batch.dynamic_valid,dynamic_grid=model.grid)
     output=model(batch.x,batch.native_valid,channel_order=CHANNELS,**extra)
-    loss=loss_function(output.rain_logit,output.conditional_quantiles_log,batch.rate,batch.valid,batch.region,
-                       config=selected_config)
+    targets=(batch.rate,batch.valid,batch.region)
+    if loss_function is point_a20_aux_loss:
+        loss=loss_function(output,*targets,config=selected_config)
+    else:
+        loss=loss_function(output.rain_logit,output.conditional_quantiles_log,*targets,config=selected_config)
     if loss.n_valid!=len(batch.ids)*3430:raise ValueError('Frozen supervision denominator')
     return output,loss
 
@@ -170,7 +180,7 @@ class PairedExecutor:
             raise PermissionError('TAIL20 E8 restore requires the original loss and schedule')
         incompatible_resume = recovery is not None and not self.tail20_resume
         if quantile_profile!=UNIFORM and (
-            quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE,TAIL20_PROFILE) or self.kinds!=('B7',)
+            quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or incompatible_resume
         ):
             raise PermissionError('Modified quantile profile requires a supported B7 seed2029 lambda1 task')
@@ -178,23 +188,25 @@ class PairedExecutor:
             schedule_profile!=COSINE9 or not isinstance(origin_reference,dict)
         ):
             raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
-        if quantile_profile==TAIL20_PROFILE and (
+        if quantile_profile in POINT_DEV_GATE_PROFILES and (
             schedule_profile!=COSINE9 or not isinstance(origin_reference,dict) or not callable(final_dev_observer)
         ):
-            raise PermissionError('TAIL20-AUX-V1 requires COSINE9, a matched origin and the fixed E9 gate')
+            raise PermissionError('The train-only point/tail objectives require COSINE9, a matched origin and the fixed E9 gate')
         self.modified_loss=self.lambda_q!=1.0 or quantile_profile!=UNIFORM
         self.schedule_profile=schedule_profile
         self.modified_schedule=schedule_profile!=ORIGINAL_50
         if self.modified_schedule and (
             schedule_profile!=COSINE9 or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029
-            or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,TAIL20_PROFILE)) or incompatible_resume
+            or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES)) or incompatible_resume
         ):
             raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 E0 uniform or physical task')
         if quantile_profile==PHYSICAL_PROFILE:
             self.loss_identity=physical_profile_identity()
         elif quantile_profile==TAIL20_PROFILE:
             self.loss_identity=tail20_identity()
+        elif quantile_profile==POINT_A20_PROFILE:
+            self.loss_identity=point_a20_identity()
         else:
             self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
         if self.lambda_q==2.0 and (
@@ -283,7 +295,7 @@ class PairedExecutor:
                     if self.recovery is not None and epoch<=self.recovery.completed_epochs(kind):continue
                     resources(backward=False)
                     reader=reader_factory('Train',epoch,order,self.folder/f'{kind}_train_reads_{epoch:02d}')
-                    visited=[];model.train();nvalid=nrain=nstrong=0;socc=sqr=sqr_training=stail=0.
+                    visited=[];model.train();nvalid=nrain=nstrong=0;socc=sqr=sqr_training=stail=s_point=0.
                     try:
                         for pos in range(0,TRAIN_N,BATCH):
                             self.deadline()
@@ -299,6 +311,9 @@ class PairedExecutor:
                             if self.quantile_profile!=UNIFORM:sqr_training+=float(loss.weighted_quantile_per_valid.detach())*loss.n_valid
                             if self.quantile_profile==TAIL20_PROFILE:
                                 nstrong+=loss.n_strong;stail+=float(loss.s_tail.detach())
+                            if self.quantile_profile==POINT_A20_PROFILE:
+                                nstrong+=loss.n_strong
+                                s_point+=float(loss.weighted_point_auxiliary.detach())*loss.n_valid
                             if u%50==0:resources(backward=False)
                             del b,out,loss
                     finally:reader.close()
@@ -316,21 +331,27 @@ class PairedExecutor:
                         training['s_qr_training_physical_mm_h_over20']=sqr_training
                     if self.quantile_profile==TAIL20_PROFILE:
                         training.update(n_strong=nstrong,s_tail_training=stail)
+                    if self.quantile_profile==POINT_A20_PROFILE:
+                        training.update(n_strong=nstrong,s_point_a20_training_weighted=s_point,
+                                        weighted_mean=(socc+sqr_training+s_point)/nvalid)
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()
                     if self.tail20_resume:
                         self.recovery.verify_replayed_train(training)
+                    if self.tail20_resume or (self.quantile_profile==POINT_A20_PROFILE and epoch==EPOCHS):
                         path=self.folder/f'{kind}_PREDEV_epoch_{epoch:02d}.pt'
                         payload=self.checkpoint_payload(kind,model,optimizer,groups,initial,epoch,u,order,training,None)
                         checkpoint_sha256=publish_pre_dev_checkpoint(path,payload)
                         del payload
-                        write_durable(path.with_suffix('.receipt.json'),dict(
+                        predev_receipt=dict(
                             status='SEALED_TRAIN_BEFORE_DEV',model=kind,epoch=epoch,updates=u,
                             checkpoint_sha256=checkpoint_sha256,checkpoint_bytes=path.stat().st_size,
-                            inherited_checkpoint_sha256=self.recovery.checkpoint_sha256,
                             train_receipt_sha256=digest(training),population_sha256=POPULATION_SHA,
-                            loss_config=self.loss_identity,schedule=schedule_identity(),code_commit=self.code_commit))
+                            loss_config=self.loss_identity,schedule=schedule_identity(),code_commit=self.code_commit)
+                        if self.tail20_resume:
+                            predev_receipt['inherited_checkpoint_sha256']=self.recovery.checkpoint_sha256
+                        write_durable(path.with_suffix('.receipt.json'),predev_receipt)
                         self.deadline()
                     ids=self.plan.ids('Development');reader=reader_factory('Development',epoch,ids,self.folder/f'{kind}_dev_reads_{epoch:02d}')
                     ev=Evaluation(ids,[self.plan.rows['Development'][s]['analysis_time'] for s in ids],self.plan.identity,self.folder/f'{kind}_evaluation_{epoch:02d}',strong_scene_ids=self.strong,altitude=self.altitude)
@@ -338,7 +359,7 @@ class PairedExecutor:
                     tail=self.tail_factory() if self.tail_factory is not None else None
                     final_observer=(self.final_dev_observer(ids)
                                     if self.final_dev_observer is not None and epoch==EPOCHS else None)
-                    eval_profile=UNIFORM if self.quantile_profile==TAIL20_PROFILE else self.quantile_profile
+                    eval_profile=UNIFORM if self.quantile_profile in POINT_DEV_GATE_PROFILES else self.quantile_profile
                     try:
                         with torch.no_grad():
                             for pos in range(0,DEV_N,VAL_BATCH):

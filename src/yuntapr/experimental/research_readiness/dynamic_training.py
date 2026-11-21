@@ -7,7 +7,7 @@ import torch
 from ..core_innovation.stage3.planning import digest
 from ..core_innovation.stage3.metered_io import SourceMeter,path_key
 from ..core_innovation.stage4.data import PopulationPlan,read,sha
-from ..core_innovation.stage4.engine import FormalDecision,PairedExecutor,resources,write
+from ..core_innovation.stage4.engine import FormalDecision,PairedExecutor,POINT_DEV_GATE_PROFILES,resources,write
 from ..core_innovation.stage4.launch import ReaderFactory
 from ..core_innovation.stage4.evaluation import paired_difference
 from ..core_innovation.stage4.recovery import Tail20E8Resume,query
@@ -233,7 +233,7 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
-    if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE,TAIL20_PROFILE) or (
+    if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or (
         quantile_profile!='UNIFORM' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
     ):
         raise PermissionError('Only B7 seed2029 E0 can use a modified quantile profile')
@@ -244,11 +244,11 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
         or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
     ):
         raise PermissionError('PHYSICAL_PINBALL20_V1 requires COSINE9 and an explicit origin reference')
-    if quantile_profile==TAIL20_PROFILE and (
+    if quantile_profile in POINT_DEV_GATE_PROFILES and (
         schedule_profile!=COSINE9 or not callable(final_dev_observer_factory)
         or not isinstance(p.get('scientific_choices',{}).get('origin_reference',{}).get(kind),dict)
     ):
-        raise PermissionError('TAIL20-AUX-V1 requires the bound origin and E9 observer')
+        raise PermissionError('The train-only point/tail objectives require the bound origin and E9 observer')
     if recovery is not None and (type(recovery) is not Tail20E8Resume or quantile_profile != TAIL20_PROFILE
             or a['decision_id'] != recovery.decision_id or p['data'] != recovery.data_identity
             or a.get('approved_replay_updates') != 480 or p['budget'].get('replay_allowance') != 480
@@ -256,7 +256,7 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
         raise PermissionError('Dynamic recovery requires the exact approved TAIL20 E8 replay')
     if schedule_profile!=ORIGINAL_50 and (
         schedule_profile!=COSINE9 or kind!='B7' or seed!=2029 or spec.lambda_q!=1.0
-        or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE,TAIL20_PROFILE) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
+        or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
     ):
         raise PermissionError('Only an explicitly bound B7 seed2029 uniform or physical E0 cosine9 task is supported')
     if p.get('protocol',{}).get('schedule_profile',ORIGINAL_50)!=schedule_profile:
@@ -274,7 +274,7 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     if plan.identity!=p['data']:raise ValueError('Population changed')
     transform=dynamic_transform_factory(pack,DoteDefinition(**p['scientific_choices']['DOTE']))
     def deadline():
-        if time.monotonic()-started>p['budget']['max_model_seconds']:raise RuntimeError('Task6h cap; no retry')
+        if time.monotonic()-started>p['budget']['max_model_seconds']:raise RuntimeError('Task time cap reached; no retry')
     folder=package/f'{kind}_s{seed}'
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:(TerrainTail if tail_factory is None else tail_factory)(pack),code_commit=commit,
