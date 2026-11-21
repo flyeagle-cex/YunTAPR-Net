@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>A20-BISIDE-V1 · 训练进度</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    main { max-width: 1080px; }
+    header { align-items: center; margin-bottom: 22px; }
+    #refresh { min-height: 44px; flex-shrink: 0; }
+    .overall { flex-wrap: wrap; column-gap: 12px; row-gap: 0; }
+    .overall strong { font-size: clamp(33px, 6vw, 56px); }
+    #percent { margin-left: auto; font-family: var(--mono); color: var(--accent); }
+    #e9 { margin-top: 14px; }
+    .timeline li { min-height: 78px; }
+    .timeline .VALIDATION span, .timeline .TRAINING span { color: var(--accent); font-weight: 600; }
+    @media (max-width: 520px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .timeline li { min-height: 48px; }
+      .state-heading { flex-wrap: wrap; }
+    }
+    @media (max-width: 355px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>A20-BISIDE-V1 训练进度</h1>
+      <p class="subtitle">云南极端降水反演 · B7 / seed2029 · 固定 COSINE9 E9</p>
+    </div>
+    <button type="button" id="refresh">刷新进度</button>
+  </header>
+  <section class="live" aria-labelledby="status">
+    <div class="state-heading">
+      <h2 id="status" role="status">正在连接本机账本…</h2>
+      <span id="tag" class="state">等待数据</span>
+    </div>
+    <p id="stage"></p>
+    <div class="overall">
+      <strong id="updates">—</strong>
+      <span id="target">/ 4,320 步</span>
+      <span id="percent">—</span>
+    </div>
+    <progress id="progress" max="4320" value="0" aria-label="已返回的优化器更新"></progress>
+    <div class="facts">
+      <div><span>Train / Dev 已封口轮次</span><strong id="closed">—</strong></div>
+      <div><span>启动时间（北京）</span><strong id="start">—</strong></div>
+      <div><span>已用时间</span><strong id="elapsed">—</strong></div>
+      <div><span>运行上限</span><strong id="limit">8 小时</strong></div>
+    </div>
+    <p class="note" id="e9">E9 权重等待封存</p>
+    <p id="result" class="warning" hidden></p>
+  </section>
+  <section aria-labelledby="timeline-title">
+    <div class="section-head">
+      <h2 id="timeline-title">九轮训练与评价</h2>
+      <span>每轮 480 步，随后评价 2024 Dev</span>
+    </div>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+  <footer>
+    <p id="updated">等待读取账本</p>
+    <p class="note" id="refresh_mode">本机只读 · 页面可见时每 15 秒刷新</p>
+  </footer>
+</main>
+<script>
+  const get = id => document.getElementById(id);
+  const number = new Intl.NumberFormat("zh-CN");
+  const clock = new Intl.DateTimeFormat("zh-CN", {
+    timeStyle: "medium", timeZone: "Asia/Shanghai", hourCycle: "h23"
+  });
+  const labels = {
+    pending: ["等待训练启动", "等待"],
+    training: ["正在训练", "Train"],
+    saving: ["训练完成，正在封存 E9 权重", "保存 E9"],
+    development: ["正在评价 2024 Dev", "Dev"],
+    closing: ["正在核对最终结果", "封口"],
+    complete: ["九轮训练与 2024 Dev 已完成", "工程完成"],
+    stopped: ["运行已停止", "已停止"],
+    verify: ["终态待核实", "待核实"]
+  };
+  let loading = false;
+  let terminal = false;
+
+  function text(id, value) {
+    const node = get(id);
+    if (node.textContent !== value) node.textContent = value;
+  }
+
+  function duration(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds % 3600 / 60);
+    const rest = seconds % 60;
+    return (hours ? hours + " 小时 " : "") + minutes + " 分 " + rest + " 秒";
+  }
+
+  function render(data) {
+    const [label, tag] = labels[data.state];
+    text("status", data.state === "training" ? "正在训练第 " + data.current_epoch + " 轮" : label);
+    text("tag", tag);
+    get("tag").className = "state" + (data.state === "stopped" ? " failed" : data.state === "verify" ? " unknown" : "");
+    const known = Number.isInteger(data.updates);
+    text("updates", known ? number.format(data.updates) : "—");
+    text("target", "/ " + number.format(data.total_updates) + " 步");
+    text("percent", known ? (100 * data.updates / data.total_updates).toFixed(1) + "%" : "账本暂忙");
+    const bar = get("progress");
+    bar.max = data.total_updates;
+    if (known) bar.value = data.updates;
+    else bar.removeAttribute("value");
+    let stage = "进度条显示已返回的优化器更新。";
+    if (data.state === "training" && known) {
+      const current = Math.max(0, data.updates - (data.current_epoch - 1) * data.updates_per_epoch);
+      stage = "本轮已完成 " + Math.min(current, data.updates_per_epoch) + " / " + data.updates_per_epoch + " 步。";
+    } else if (data.state === "development") {
+      const files = data.dev_files_read == null ? "—" : number.format(data.dev_files_read);
+      stage = "第 " + data.current_epoch + " 轮已读源档案 " + files + " / " + number.format(data.dev_files_total) + " 份。";
+    } else if (data.state === "complete") {
+      stage = "九轮完成收据和监督器正常退出已核对。";
+    }
+    text("stage", stage);
+    text("closed", data.closed_epochs + " / " + data.epochs.length);
+    text("start", data.started_at ? clock.format(new Date(data.started_at)) : "—");
+    text("elapsed", data.started_at ? duration(data.elapsed_seconds) : "—");
+    text("limit", data.time_limit_seconds / 3600 + " 小时");
+    text("e9", data.e9_saved_before_dev ? "E9 权重已在 Dev 前完成封存" : "E9 权重等待封存");
+
+    const items = data.epochs.map(epoch => {
+      const row = document.createElement("li");
+      const title = document.createElement("strong");
+      const state = document.createElement("span");
+      title.textContent = "E" + epoch.epoch;
+      if (epoch.sealed) {
+        row.className = "SEALED";
+        state.textContent = "已封口";
+      } else if (epoch.epoch === data.current_epoch && data.state === "development") {
+        row.className = "VALIDATION";
+        state.textContent = "Dev 中";
+      } else if (epoch.epoch === data.current_epoch && data.state === "training") {
+        row.className = "TRAINING";
+        state.textContent = "训练中";
+      } else {
+        state.textContent = epoch.train_sealed ? "Train 完成" : "等待";
+      }
+      row.append(title, state);
+      return row;
+    });
+    get("timeline").replaceChildren(...items);
+    if (data.result) {
+      text("result", "冻结筛查" + (data.result.passed ? "通过" : "未通过")
+        + " · 原护栏 " + data.result.passed_guards + "/" + data.result.guard_count
+        + " · 固定 A 强雨命中 " + data.result.point_a_tp + "，误报 " + data.result.point_a_fp);
+      get("result").hidden = false;
+    }
+    terminal = data.state === "complete" || data.state === "stopped";
+    text("updated", "北京 " + clock.format(new Date(data.as_of)) + " · 提案 " + data.proposal);
+    text("refresh_mode", terminal ? "本机只读 · 已显示终态" : "本机只读 · 页面可见时每 15 秒刷新");
+  }
+
+  async function refresh() {
+    if (loading) return;
+    loading = true;
+    get("refresh").setAttribute("aria-busy", "true");
+    try {
+      const response = await fetch("/api/progress", { cache: "no-store" });
+      if (!response.ok) throw new Error("progress");
+      render(await response.json());
+    } catch {
+      text("status", "本机进度暂不可读，可点击刷新重试");
+      text("tag", "连接中断");
+      get("tag").className = "state unknown";
+    } finally {
+      loading = false;
+      get("refresh").removeAttribute("aria-busy");
+    }
+  }
+
+  get("refresh").addEventListener("click", refresh);
+  document.addEventListener("visibilitychange", () => {
+    if (!terminal && !document.hidden) refresh();
+  });
+  setInterval(() => { if (!terminal && !document.hidden) refresh(); }, 15000);
+  refresh();
+</script>
+</body>
+</html>
