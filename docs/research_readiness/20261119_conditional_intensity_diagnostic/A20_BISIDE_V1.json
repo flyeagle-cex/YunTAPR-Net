@@ -1,0 +1,73 @@
+{
+  "status": "SYNTHETIC_VALIDATED",
+  "controller": "ChatGPT High",
+  "engineering_mode": "Codex Sol High",
+  "candidate": {
+    "experiment_id": "A20-BISIDE-V1",
+    "base_experiment_id": "E0",
+    "readout": "DETACHED_EMITTED_P_TIMES_MEAN32_EXPM1_QLOG",
+    "strong_truth": "STRICT_FP32_GT_20",
+    "threshold_mm_h": 20.0,
+    "scale_mm_h": 20.0,
+    "auxiliary_weight": 0.1,
+    "denominator": "SEPARATE_PER_CLASS_MEANS_NO_N_VALID_DIVISION",
+    "positive_loss": "SOFTPLUS_NEGATIVE_SIGNED_MARGIN",
+    "negative_loss": "SOFTPLUS_SIGNED_MARGIN",
+    "no_positive": "EXACT_E0",
+    "positive_only": "POSITIVE_MEAN_ONLY",
+    "physical_precision": "FP64"
+  },
+  "scope": {
+    "model": "B7",
+    "seed": 2029,
+    "reference": "REAL_COSINE9_E9",
+    "split": "2024 Development",
+    "source_population": {
+      "scenes": 963,
+      "n_valid": 3303090,
+      "n_rain": 407820,
+      "n_strong": 717,
+      "n_weak": 246473
+    }
+  },
+  "baseline_evidence": {
+    "maximum_true_strong_point_a_mm_h": 11.507703200802915,
+    "maximum_non_strong_point_a_mm_h": 18.618254278909028,
+    "can_get_tp_with_zero_fp_under_monotone_global_recalibration": false
+  },
+  "predeclared_acceptance": {
+    "frozen_baseline_sha256": "6c100deae46db77d683757429a37354d390bd31daf67196589a385a85fafd3b7",
+    "all_existing_conditional_tail_gates": "PASS_DEV_TAIL_GATE",
+    "additional_primary": "POINT_A_DETECTION_RESTORED",
+    "point_a_tp_minimum": 1,
+    "point_a_fp_maximum": 0,
+    "baseline_metrics": {
+      "strong_physical_pinball_over20": 0.5068646309277546,
+      "q32_support_tp": 160,
+      "q32_support_fp": 5769,
+      "point_a_tp": 0,
+      "point_a_fp": 0,
+      "weak_log_pinball": 0.08872231160181858,
+      "occurrence_brier": 0.09233015567445307,
+      "occurrence_ap": 0.6066547555865263,
+      "occurrence_auroc": 0.8990243638708331
+    }
+  },
+  "inputs": {
+    "B_HEAD_DIAGNOSTIC.json": "88a401ebbebbce31bf65d30f38f979a7ddf427786e4f1892efbaba58d0296ccf",
+    "TAIL20_RECOVERY_RESULTS.json": "cb0c1e431b705f4dc042379649cd8c6fca362d09048e2d35311b88a88d4f5c64"
+  },
+  "implementation": {
+    "src/yuntapr/experimental/phase_b_v2_ablations/point_a20_aux.py": "ecd2be4996e4d52ca9fa48726171d0da1a7515aad9efde20335bc4e1badd7129",
+    "tests/phase_b_v2_ablation_implementation/test_point_a20_aux.py": "505e0757cc9277e05f20234a56288f09ee08e5ca6e30bd33378357751f44967f"
+  },
+  "synthetic_cpu_tests_passed": 8,
+  "formal_runner_connected": false,
+  "formal_run_authorized": false,
+  "raw_source_reads": 0,
+  "weight_loads": 0,
+  "real_training_updates": 0,
+  "new_inference": 0,
+  "final_2025_access": false,
+  "scientific_status": "NOT_VERIFIED"
+}
