@@ -12,6 +12,7 @@ from yuntapr.experimental.phase_b_v2_ablations.upper_quantile import UNIFORM,MIL
 from yuntapr.experimental.phase_b_v2_ablations.physical_pinball import PHYSICAL_PROFILE,physical_pinball_loss,profile_identity as physical_profile_identity
 from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, tail20_aux_loss, profile_identity as tail20_identity
 from yuntapr.experimental.phase_b_v2_ablations.point_a20_aux import POINT_A20_PROFILE, point_a20_aux_loss, profile_identity as point_a20_identity
+from yuntapr.experimental.phase_b_v2_ablations.point_a20_coverage import COVERAGE_PROFILE, point_a20_coverage_loss, profile_identity as coverage_identity
 from yuntapr.experimental.phase_b_v2_ablations.schedule import ORIGINAL_50,COSINE9,schedule_identity,scheduled_lr
 from yuntapr.experimental.phase_b_v2_integration.resources import resource_snapshot,require_resources
 from yuntapr.models.quantile_v2.parameterization import CandidateNumerics
@@ -24,7 +25,8 @@ from .data import sha
 from .recovery import Tail20E8Resume,write as write_durable
 
 
-POINT_DEV_GATE_PROFILES = (TAIL20_PROFILE, POINT_A20_PROFILE)
+POINT_A20_PROFILES = (POINT_A20_PROFILE, COVERAGE_PROFILE)
+POINT_DEV_GATE_PROFILES = (TAIL20_PROFILE, *POINT_A20_PROFILES)
 
 
 def cpu_tree(value):
@@ -96,9 +98,9 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
     elif (quantile_profile==TAIL20_PROFILE and model.kind=='B7'
           and batch.role=='Train' and selected_config==get_config('E0')):
         loss_function=tail20_aux_loss
-    elif (quantile_profile==POINT_A20_PROFILE and model.kind=='B7'
+    elif (quantile_profile in POINT_A20_PROFILES and model.kind=='B7'
           and batch.role=='Train' and selected_config==get_config('E0')):
-        loss_function=point_a20_aux_loss
+        loss_function=point_a20_coverage_loss if quantile_profile==COVERAGE_PROFILE else point_a20_aux_loss
     else:
         raise PermissionError('The selected quantile profile is not supported for this arm and split')
     extra=dict(environment=batch.environment,environment_valid=batch.environment_valid,environment_grid=model.grid,environment_keys=MEE_V13_KEYS) if model.kind in ('B4','B5','B6','B7','B8') else {}
@@ -107,7 +109,7 @@ def forward(model,batch,*,loss_config=None,quantile_profile=UNIFORM):
         extra.update(dynamic=batch.dynamic,dynamic_valid=batch.dynamic_valid,dynamic_grid=model.grid)
     output=model(batch.x,batch.native_valid,channel_order=CHANNELS,**extra)
     targets=(batch.rate,batch.valid,batch.region)
-    if loss_function is point_a20_aux_loss:
+    if loss_function in (point_a20_aux_loss, point_a20_coverage_loss):
         loss=loss_function(output,*targets,config=selected_config)
     else:
         loss=loss_function(output.rain_logit,output.conditional_quantiles_log,*targets,config=selected_config)
@@ -207,6 +209,8 @@ class PairedExecutor:
             self.loss_identity=tail20_identity()
         elif quantile_profile==POINT_A20_PROFILE:
             self.loss_identity=point_a20_identity()
+        elif quantile_profile==COVERAGE_PROFILE:
+            self.loss_identity=coverage_identity()
         else:
             self.loss_identity=profile_identity() if quantile_profile==MILD_PROFILE else asdict(self.loss_config)
         if self.lambda_q==2.0 and (
@@ -296,6 +300,7 @@ class PairedExecutor:
                     resources(backward=False)
                     reader=reader_factory('Train',epoch,order,self.folder/f'{kind}_train_reads_{epoch:02d}')
                     visited=[];model.train();nvalid=nrain=nstrong=0;socc=sqr=sqr_training=stail=s_point=0.
+                    negative_only_batches=negative_only_pixels=0
                     try:
                         for pos in range(0,TRAIN_N,BATCH):
                             self.deadline()
@@ -311,9 +316,12 @@ class PairedExecutor:
                             if self.quantile_profile!=UNIFORM:sqr_training+=float(loss.weighted_quantile_per_valid.detach())*loss.n_valid
                             if self.quantile_profile==TAIL20_PROFILE:
                                 nstrong+=loss.n_strong;stail+=float(loss.s_tail.detach())
-                            if self.quantile_profile==POINT_A20_PROFILE:
+                            if self.quantile_profile in POINT_A20_PROFILES:
                                 nstrong+=loss.n_strong
                                 s_point+=float(loss.weighted_point_auxiliary.detach())*loss.n_valid
+                                if self.quantile_profile==COVERAGE_PROFILE and not loss.n_strong:
+                                    negative_only_batches+=1
+                                    negative_only_pixels+=loss.n_non_strong
                             if u%50==0:resources(backward=False)
                             del b,out,loss
                     finally:reader.close()
@@ -331,15 +339,18 @@ class PairedExecutor:
                         training['s_qr_training_physical_mm_h_over20']=sqr_training
                     if self.quantile_profile==TAIL20_PROFILE:
                         training.update(n_strong=nstrong,s_tail_training=stail)
-                    if self.quantile_profile==POINT_A20_PROFILE:
+                    if self.quantile_profile in POINT_A20_PROFILES:
                         training.update(n_strong=nstrong,s_point_a20_training_weighted=s_point,
                                         weighted_mean=(socc+sqr_training+s_point)/nvalid)
+                    if self.quantile_profile==COVERAGE_PROFILE:
+                        training.update(negative_only_batches=negative_only_batches,
+                                        negative_only_pixels=negative_only_pixels)
                     write(self.folder/f'{kind}_train_{epoch:02d}.json',training)
                     optimizer.zero_grad(set_to_none=True);gc.collect();torch.cuda.empty_cache()
                     self.deadline()
                     if self.tail20_resume:
                         self.recovery.verify_replayed_train(training)
-                    if self.tail20_resume or (self.quantile_profile==POINT_A20_PROFILE and epoch==EPOCHS):
+                    if self.tail20_resume or (self.quantile_profile in POINT_A20_PROFILES and epoch==EPOCHS):
                         path=self.folder/f'{kind}_PREDEV_epoch_{epoch:02d}.pt'
                         payload=self.checkpoint_payload(kind,model,optimizer,groups,initial,epoch,u,order,training,None)
                         checkpoint_sha256=publish_pre_dev_checkpoint(path,payload)

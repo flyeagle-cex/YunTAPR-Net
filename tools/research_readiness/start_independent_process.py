@@ -199,11 +199,13 @@ def validate_spec(path):
                 or not all(Path(value).is_absolute() for value in command[5::2])
                 or not Path(command[9]).is_file()):
             raise PermissionError('Only the exact single-arm readout command with a separate approval file')
-    elif spec['kind'] in ('BOUNDED_TAIL20_TRAINING', 'BOUNDED_TAIL20_E9_REPLAY', 'BOUNDED_A20_BISIDE_TRAINING'):
+    elif spec['kind'] in ('BOUNDED_TAIL20_TRAINING', 'BOUNDED_TAIL20_E9_REPLAY',
+                         'BOUNDED_A20_BISIDE_TRAINING', 'BOUNDED_A20_NEG_COVERAGE_TRAINING'):
         entry_name, scope = {
             'BOUNDED_TAIL20_TRAINING': ('start_tail20_aux.py', 'TAIL20_AUX_V1_REAL_COSINE9_MATCHED'),
             'BOUNDED_TAIL20_E9_REPLAY': ('start_tail20_recovery.py', 'TAIL20_AUX_V1_E8_TO_E9_REPLAY'),
             'BOUNDED_A20_BISIDE_TRAINING': ('start_a20_biside.py', 'A20_BISIDE_V1_REAL_COSINE9_MATCHED'),
+            'BOUNDED_A20_NEG_COVERAGE_TRAINING': ('start_a20_neg_coverage.py', 'A20_NEG_COVERAGE_V1_REAL_COSINE9_MATCHED'),
         }[spec['kind']]
         if (entry!=(Path(spec['cwd'])/'tools/research_readiness'/entry_name).resolve()
                 or len(command)!=10 or command[3]!='execute'
@@ -229,7 +231,7 @@ def validate_spec(path):
                        or proposal['budget'].get('replay_allowance') != 480
                        or proposal['budget'].get('max_package_seconds') != 4500):
             raise PermissionError('Only the separately authorized fixed E9 replay is allowed')
-        if spec['kind'] == 'BOUNDED_A20_BISIDE_TRAINING':
+        if spec['kind'] in ('BOUNDED_A20_BISIDE_TRAINING', 'BOUNDED_A20_NEG_COVERAGE_TRAINING'):
             caps = {'total_updates': 4320, 'total_source_bytes': 477571953840, 'total_source_files': 142813,
                     'max_package_seconds': 28800, 'max_model_seconds': 28800, 'checkpoint_loads': 0,
                     'replay_allowance': 0, 'additional_retry_allowance': 0, 'extra_development_passes': 0}
@@ -335,7 +337,8 @@ def supervise(path):
                        'BOUNDED_A20_POINT_RANK': 7200,
                        'BOUNDED_TAIL20_TRAINING': 21600,
                        'BOUNDED_TAIL20_E9_REPLAY': 4500,
-                       'BOUNDED_A20_BISIDE_TRAINING': 28800}.get(spec['kind'])
+                       'BOUNDED_A20_BISIDE_TRAINING': 28800,
+                       'BOUNDED_A20_NEG_COVERAGE_TRAINING': 28800}.get(spec['kind'])
             code=process.wait(timeout=timeout)
         except subprocess.TimeoutExpired:
             process.kill()

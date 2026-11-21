@@ -6,11 +6,29 @@ import math
 import numpy as np
 
 from tools.research_readiness.conditional_tail_gate import POPULATION, PROTOCOL, evaluate
-from tools.research_readiness.mountain_pair_metrics import MountainAccumulator
+from tools.research_readiness.mountain_pair_metrics import ELEVATIONS, MountainAccumulator
+from tools.research_readiness.point_rank_readout import rank_scores
+
+
+def _point_rank_group(scores, strong, strong_cells):
+    ranking = rank_scores(scores, strong)
+    n_strong = ranking["n_strong"]
+    if n_strong != sum(row["n_rain"] for row in strong_cells):
+        raise ValueError("Point ranking and physical rain intensity populations differ")
+    above = scores > np.float32(20)
+    tp = int((above & strong).sum())
+    fp = int((above & ~strong).sum())
+    return dict(
+        n_strong=n_strong, n_non_strong=ranking["n_non_strong"], ap20=ranking["ap20"],
+        point_a=dict(tp=tp, fp=fp, fn=n_strong - tp, pod=tp / n_strong if n_strong else None),
+        strong_physical_pinball_over20=math.fsum(
+            row["physical_pinball_over20"] * row["n_rain"] for row in strong_cells
+        ) / n_strong if n_strong else None,
+    )
 
 
 class Tail20Observer:
-    def __init__(self, pack, ids, baseline):
+    def __init__(self, pack, ids, baseline, *, report_point_rank=False):
         self.terrain = MountainAccumulator(pack, ids)
         self.baseline = baseline
         self.mask_sha = hashlib.sha256()
@@ -18,6 +36,7 @@ class Tail20Observer:
         self.weak_log_sum = 0.
         self.q32_tp = self.q32_fp = self.point_tp = self.point_fp = 0
         self.taus = (np.arange(32, dtype=np.float64) + .5) / 32
+        self.point_rank_batches = [] if report_point_rank else None
 
     def add_batch(self, output, batch):
         rate = batch.rate.detach().cpu().numpy()
@@ -37,7 +56,11 @@ class Tail20Observer:
         strong = truth > np.float32(20)
         supported = q[:, -1] > math.log1p(20)
         with np.errstate(over="raise", invalid="raise"):
-            point = (p[:, 0][mask] * np.expm1(q).mean(axis=1)).astype(np.float32) > np.float32(20)
+            scores = (p[:, 0][mask] * np.expm1(q).mean(axis=1)).astype(np.float32)
+        point = scores > np.float32(20)
+        if self.point_rank_batches is not None:
+            high = np.broadcast_to(self.terrain.masks[2], mask.shape)[mask]
+            self.point_rank_batches.append((scores, strong, high))
         self.q32_tp += int((supported & strong).sum())
         self.q32_fp += int((supported & ~strong).sum())
         self.point_tp += int((point & strong).sum())
@@ -74,4 +97,16 @@ class Tail20Observer:
                 occurrence_auroc=values["auroc"],
             ),
         )
-        return dict(candidate=candidate, comparison=evaluate(self.baseline, candidate))
+        result = dict(candidate=candidate, comparison=evaluate(self.baseline, candidate))
+        if self.point_rank_batches is not None:
+            scores, strong, high = (np.concatenate(field) for field in zip(*self.point_rank_batches))
+            self.point_rank_batches.clear()
+            high_group = terrain["elevation_groups"][ELEVATIONS[2]]
+            if len(scores) != population["n_valid"] or int(high.sum()) != high_group["n_valid"]:
+                raise ValueError("Point ranking valid population differs from the terrain partition")
+            high_strong_cells = [row for row in high_group["cells"][4:] if row["n_rain"]]
+            result["point_rank_report"] = {
+                "all": _point_rank_group(scores, strong, strong_cells),
+                ELEVATIONS[2]: _point_rank_group(scores[high], strong[high], high_strong_cells),
+            }
+        return result

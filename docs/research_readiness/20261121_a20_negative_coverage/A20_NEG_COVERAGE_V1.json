@@ -1,0 +1,45 @@
+{
+  "status": "SYNTHETIC_VALIDATED",
+  "controller": "WEB_CHATGPT_HIGH",
+  "candidate": {
+    "experiment_id": "A20-NEG-COVERAGE-V1",
+    "base_experiment_id": "E0",
+    "readout": "DETACHED_EMITTED_P_TIMES_MEAN32_EXPM1_QLOG",
+    "strong_truth": "STRICT_FP32_GT_20",
+    "threshold_mm_h": 20.0,
+    "scale_mm_h": 20.0,
+    "auxiliary_weight": 0.1,
+    "denominator": "SEPARATE_PER_CLASS_MEANS_NO_N_VALID_DIVISION",
+    "positive_loss": "SOFTPLUS_NEGATIVE_SIGNED_MARGIN",
+    "negative_loss": "SOFTPLUS_SIGNED_MARGIN",
+    "no_positive": "NEGATIVE_MEAN_IF_VALID",
+    "positive_only": "POSITIVE_MEAN_ONLY",
+    "physical_precision": "FP64"
+  },
+  "coverage_receipt_sha256": "5a19c9fd3e18839f1a6466b19e74e16ef5fa962c0f49d03013f0763bea4c1ad0",
+  "rank_reference_sha256": "65851e4b22e120c7f621ff1684b6dd6c6bb3775852c66b892ab926b58e6471d0",
+  "reporting_protocol_sha256": "9d1d31ed32342a0f6ff58eeabedd2f3aa034e9d78da4c3a089c067dd932521b5",
+  "implementation": {
+    "src/yuntapr/experimental/phase_b_v2_ablations/point_a20_coverage.py": "ee77ca4b9083480bd7de4280dca85aff6a83526f89668393f5a5595737b2c4d1"
+  },
+  "predeclared_acceptance": {
+    "frozen_baseline_sha256": "6c100deae46db77d683757429a37354d390bd31daf67196589a385a85fafd3b7",
+    "point_a_tp_minimum": 1,
+    "point_a_fp_maximum": 0,
+    "additional_report": "AP20_ALL_AND_GE_2000M_EXISTING_E9_FORWARD"
+  },
+  "synthetic_verification": {
+    "focused_regression_tests": 17,
+    "new_branch": [
+      "exact_mixed_and_positive_only_objectives_and_gradients",
+      "unchanged_empty_batch_rejection",
+      "negative_only_fp64_mean_and_mask",
+      "detached_probability_and_negative_quantile_direction",
+      "nonfinite_physical_rejection",
+      "train_only_forward",
+      "odd_final_batch_count"
+    ]
+  },
+  "formal_training_authorized": false,
+  "final_2025_access": false
+}

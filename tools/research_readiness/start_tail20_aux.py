@@ -22,6 +22,7 @@ from yuntapr.experimental.core_innovation.stage4.engine import resources, write
 from yuntapr.experimental.phase_b_v2_ablations.schedule import COSINE9, schedule_identity
 from yuntapr.experimental.phase_b_v2_ablations.tail20_aux import TAIL20_PROFILE, profile_identity
 from yuntapr.experimental.phase_b_v2_ablations.point_a20_aux import POINT_A20_PROFILE, profile_identity as point_a20_identity
+from yuntapr.experimental.phase_b_v2_ablations.point_a20_coverage import COVERAGE_PROFILE, profile_identity as coverage_identity
 from yuntapr.experimental.research_readiness.dynamic_training import run_task, runtime_binding
 from yuntapr.experimental.research_readiness.multiseed import load_inherited
 from yuntapr.experimental.research_readiness.physical_pinball_training import control_binding
@@ -51,6 +52,12 @@ CHOICE_KEYS = ("DOTE", "channels", "normalization", "spatial_operator", "scales"
                "projection_width", "modulation_limit", "condition_mask", "precision", "architecture")
 POINT_DESIGN = BASE + "20261119_conditional_intensity_diagnostic/A20_BISIDE_V1.json"
 POINT_LOSS = "src/yuntapr/experimental/phase_b_v2_ablations/point_a20_aux.py"
+COVERAGE_DIR = BASE + "20261121_a20_negative_coverage/"
+COVERAGE_DESIGN = COVERAGE_DIR + "A20_NEG_COVERAGE_V1.json"
+COVERAGE_RESULT = COVERAGE_DIR + "A20_LABEL_COVERAGE_V1.json"
+COVERAGE_LOSS = "src/yuntapr/experimental/phase_b_v2_ablations/point_a20_coverage.py"
+RANK_REFERENCE = BASE + "20261119_conditional_intensity_diagnostic/A20_POINT_RANK_RESULTS.json"
+REPORTING_PROTOCOL = BASE + "20261121_stage45_observation_feasibility/STAGE2_EVALUATION_FREEZE_V1.md"
 RECOVERY_DEPENDENCY = "src/yuntapr/experimental/core_innovation/stage4/recovery.py"
 REVIEWED_RECOVERY_SHA = "33fb7e473a3e0f39459512924bb1a28dbdfb049742e6bd4b541150ef4acb148b"
 
@@ -63,6 +70,10 @@ class MatchedArm:
     loss_identity: Callable[[], dict]
     intervention: str
     wall_seconds: int
+    point_design: str | None = None
+    point_loss: str | None = None
+    supervisor_kind: str | None = None
+    report_point_rank: bool = False
 
     @property
     def tasks(self):
@@ -73,7 +84,12 @@ TAIL20_ARM = MatchedArm(ENTRY, SCOPE, TAIL20_PROFILE, profile_identity,
                         "ADD_STRONG_TRUTH_PHYSICAL_PINBALL_OVER20", 21600)
 POINT_A20_ARM = MatchedArm("tools/research_readiness/start_a20_biside.py",
                            "A20_BISIDE_V1_REAL_COSINE9_MATCHED", POINT_A20_PROFILE, point_a20_identity,
-                           "ADD_TWO_SIDED_SUPERVISION_ON_FIXED_POINT_A", 28800)
+                           "ADD_TWO_SIDED_SUPERVISION_ON_FIXED_POINT_A", 28800,
+                           POINT_DESIGN, POINT_LOSS, "BOUNDED_A20_BISIDE_TRAINING")
+COVERAGE_ARM = MatchedArm("tools/research_readiness/start_a20_neg_coverage.py",
+                         "A20_NEG_COVERAGE_V1_REAL_COSINE9_MATCHED", COVERAGE_PROFILE, coverage_identity,
+                         "ENABLE_EXISTING_A20_NEGATIVE_MEAN_IN_VALID_NEGATIVE_ONLY_BATCHES", 28800,
+                         COVERAGE_DESIGN, COVERAGE_LOSS, "BOUNDED_A20_NEG_COVERAGE_TRAINING", True)
 
 
 def clean_commit():
@@ -86,9 +102,14 @@ def clean_commit():
 
 def code_hashes(arm=TAIL20_ARM):
     names = FILES
-    if arm == POINT_A20_ARM:
-        names += (arm.entry, POINT_DESIGN, POINT_LOSS, RECOVERY_DEPENDENCY,
+    if arm.point_design is not None:
+        names += (arm.entry, arm.point_design, arm.point_loss, POINT_LOSS, RECOVERY_DEPENDENCY,
                   "tools/research_readiness/start_independent_process.py")
+    if arm.report_point_rank:
+        names += (COVERAGE_RESULT, RANK_REFERENCE, REPORTING_PROTOCOL,
+                  "tools/research_readiness/start_tail20_aux.py",
+                  "tools/research_readiness/point_rank_readout.py",
+                  "src/yuntapr/experimental/research_readiness/tail20_evaluation.py")
     return inherited_hashes(ROOT) | {name: sha(ROOT / name) for name in names}
 
 
@@ -108,24 +129,50 @@ def matched_guard_hashes():
 
 def arm_guard_hashes(arm):
     guards = matched_guard_hashes()
-    if arm == POINT_A20_ARM:
+    if arm.point_design is not None:
         # The completed, separately reviewed replay changed the shared recovery module.
         # The new A20 arm is origin-only and pins that previously reviewed version.
         guards[RECOVERY_DEPENDENCY] = REVIEWED_RECOVERY_SHA
     return guards
 
 
-def point_design_choices():
-    design = read(ROOT / POINT_DESIGN)
+def point_design_choices(arm=POINT_A20_ARM):
+    design = read(ROOT / arm.point_design)
     acceptance = design["predeclared_acceptance"]
-    if (design["status"] != "SYNTHETIC_VALIDATED" or design["candidate"] != point_a20_identity()
-            or design["implementation"][POINT_LOSS] != sha(ROOT / POINT_LOSS)
+    if (design["status"] != "SYNTHETIC_VALIDATED" or design["candidate"] != arm.loss_identity()
+            or design["implementation"][arm.point_loss] != sha(ROOT / arm.point_loss)
             or acceptance["frozen_baseline_sha256"] != sha(ROOT / BASELINE)
             or acceptance["point_a_tp_minimum"] != 1 or acceptance["point_a_fp_maximum"] != 0):
         raise ValueError("The validated A20 point design differs from the fixed implementation")
-    return dict(point_design_sha256=sha(ROOT / POINT_DESIGN),
-                acceptance="PASS_DEV_TAIL_GATE_AND_POINT_A_DETECTION_RESTORED",
-                checkpoint_publication="ATOMIC_E9_BEFORE_DEVELOPMENT")
+    choices = dict(point_design_sha256=sha(ROOT / arm.point_design),
+                   acceptance="PASS_DEV_TAIL_GATE_AND_POINT_A_DETECTION_RESTORED",
+                   checkpoint_publication="ATOMIC_E9_BEFORE_DEVELOPMENT")
+    if arm.report_point_rank:
+        coverage_sha = sha(ROOT / COVERAGE_RESULT)
+        rank_sha = sha(ROOT / RANK_REFERENCE)
+        if (design["coverage_receipt_sha256"] != coverage_sha or design["rank_reference_sha256"] != rank_sha
+                or design["reporting_protocol_sha256"] != sha(ROOT / REPORTING_PROTOCOL)):
+            raise ValueError("Frozen coverage or reporting evidence differs")
+        coverage = read(ROOT / COVERAGE_RESULT)
+        rank = read(ROOT / RANK_REFERENCE)
+        baseline = read(ROOT / BASELINE)
+        if (coverage["status"] != "COMPLETE_FROM_EXISTING_METADATA" or coverage["final_2025_access"] is not False
+                or rank["supervision_mask_sha256"] != baseline["identity"]["supervision_mask_sha256"]
+                or any(rank["paired_population"][k] != baseline["population"][k] for k in ("scenes", "n_valid", "n_rain"))):
+            raise ValueError("Point ranking reference population differs")
+        choices.update(coverage_receipt_sha256=coverage_sha, rank_reference_sha256=rank_sha,
+                       coverage_order_file_sha256=coverage["order_file_sha256"],
+                       coverage_target_qc_sha256=coverage["target_qc_sha256"],
+                       report_point_rank="AP20_ALL_AND_GE_2000M_EXISTING_E9_FORWARD",
+                       cosine9_ap20={region: row["ap20"] for region, row in rank["metrics"]["COSINE9"].items()
+                                     if region in ("all", "elevation_ge_2000m")})
+    return choices
+
+
+def verify_coverage_binding(choices, data):
+    if (choices["coverage_order_file_sha256"] != choices["control_reuse"]["metadata_files"]["paired_orders.json"]["sha256"]
+            or choices["coverage_target_qc_sha256"] != data["target_QC_sha256"]):
+        raise ValueError("Coverage evidence is not bound to the matched training order and target QC")
 
 
 def reserve_disk(output, caps):
@@ -167,8 +214,10 @@ def prepare(parent_private, output, service, *, arm=TAIL20_ARM):
                    conditional_tail_baseline_sha256=sha(ROOT / BASELINE),
                    post_control_input_guard_sha256=guards,
                    final_dev_observer="EXISTING_E9_FORWARD_NO_EXTRA_PASS")
-    if arm == POINT_A20_ARM:
-        choices.update(point_design_choices())
+    if arm.point_design is not None:
+        choices.update(point_design_choices(arm))
+    if arm.report_point_rank:
+        verify_coverage_binding(choices, prepared["data"])
     private = dict(output_root=str(output), service_dir=str(service),
                    inherited=old["inherited"], inherited_file_sha256=old["inherited_file_sha256"],
                    terrain=old["terrain"], control=str(control))
@@ -199,9 +248,11 @@ def checked(p, v, approval, commit, *, arm=TAIL20_ARM):
             or p["scientific_choices"]["post_control_input_guard_sha256"] != arm_guard_hashes(arm)
             or p["scientific_choices"]["final_dev_observer"] != "EXISTING_E9_FORWARD_NO_EXTRA_PASS"):
         raise PermissionError("Only the exact approved B7 origin-only candidate is admitted")
-    if arm == POINT_A20_ARM and any(p["scientific_choices"].get(key) != value
-                                   for key, value in point_design_choices().items()):
+    if arm.point_design is not None and any(p["scientific_choices"].get(key) != value
+                                           for key, value in point_design_choices(arm).items()):
         raise PermissionError("The fixed A20 gate and checkpoint order must match the proposal")
+    if arm.report_point_rank:
+        verify_coverage_binding(p["scientific_choices"], p["data"])
     key = "proposal_sha256"
     if (digest({k: x for k, x in p.items() if k != key}) != p[key] or v[key] != p[key]
             or digest({k: x for k, x in v.items() if k != key}) != p["private_preparation_sha256"]):
@@ -221,18 +272,30 @@ def checked(p, v, approval, commit, *, arm=TAIL20_ARM):
     return prepared
 
 
-def point_completion(folder, gate, p):
+def point_completion(folder, gate, p, *, arm=POINT_A20_ARM):
     checkpoint = folder / "B7_PREDEV_epoch_09.pt"
     seal = read(checkpoint.with_suffix(".receipt.json"))
     training = read(folder / "B7_train_09.json")
     if (seal["status"] != "SEALED_TRAIN_BEFORE_DEV" or (seal["model"], seal["epoch"]) != ("B7", 9)
             or seal["updates"] != p["budget"]["total_updates"]
             or seal["population_sha256"] != p["data"]["population_sha256"]
-            or seal["code_commit"] != p["execution_code_commit"] or seal["loss_config"] != point_a20_identity()
+            or seal["code_commit"] != p["execution_code_commit"] or seal["loss_config"] != arm.loss_identity()
             or seal["schedule"] != schedule_identity() or seal["checkpoint_bytes"] != checkpoint.stat().st_size
             or seal["train_receipt_sha256"] != digest(training)):
         raise RuntimeError("A20 E9 pre-Development checkpoint seal differs")
     comparison = gate["comparison"]
+    if arm.report_point_rank:
+        coverage = read(ROOT / COVERAGE_RESULT)
+        for row in coverage["epochs"]:
+            record = read(folder / f'B7_train_{row["epoch"]:02d}.json')
+            if (record["negative_only_batches"], record["negative_only_pixels"]) != (
+                row["skipped_batches"], row["skipped_negative_exposures"]
+            ):
+                raise RuntimeError("Real negative-only batch coverage differs from the sealed metadata")
+        point = gate["point_rank_report"]["all"]["point_a"]
+        if (point["tp"] != comparison["checks"]["point_a_tp"]["candidate"]
+                or point["fp"] != comparison["checks"]["point_a_fp"]["candidate"]):
+            raise RuntimeError("Point report and frozen contingency counts differ")
     passed = comparison["status"] == "PASS_DEV_TAIL_GATE" and comparison["point_a_detection_restored"] is True
     return dict(point_a20_status="PASS_DEV_POINT_A20_GATE" if passed else "FAIL_DEV_POINT_A20_GATE",
                 predev_checkpoint_sha256=seal["checkpoint_sha256"], final_2025_access=False)
@@ -249,12 +312,12 @@ def execute(p, v, approval, commit, *, arm=TAIL20_ARM):
         raise RuntimeError("A frozen source volume is unavailable")
     if os.environ.get("PYTHONHASHSEED") != "2029":
         raise PermissionError("Frozen process seed required")
-    if arm == POINT_A20_ARM:
+    if arm.supervisor_kind is not None:
         service = Path(v["service_dir"])
         launch = read(service / "target_launch.json")
         claim = read(service / "independent_launch_claim.json")
         if ((launch["pid"], launch["supervisor_pid"]) != (os.getpid(), os.getppid())
-                or launch["kind"] != "BOUNDED_A20_BISIDE_TRAINING"
+                or launch["kind"] != arm.supervisor_kind
                 or launch["spec_sha256"] != claim["spec_sha256"]
                 or launch["automatic_retry"] is not False or claim["automatic_retry"] is not False):
             raise PermissionError("A live one-shot A20 supervisor is required")
@@ -268,7 +331,9 @@ def execute(p, v, approval, commit, *, arm=TAIL20_ARM):
             ROOT, p, v, approval, prepared, commit, "B7", 2029, started=started,
             pair_reference=Path(v["control"]), static_name="B7_static_source.sqlite",
             quantile_profile=arm.profile, schedule_profile=COSINE9,
-            final_dev_observer_factory=lambda pack, ids: Tail20Observer(pack, ids, baseline),
+            final_dev_observer_factory=lambda pack, ids: Tail20Observer(
+                pack, ids, baseline, report_point_rank=arm.report_point_rank
+            ),
         )
         caps = p["budget"]
         if (result["status"] != "COMPLETE_TRAIN_AND_DEV_EVALUATION" or result["code_commit"] != commit
@@ -285,8 +350,8 @@ def execute(p, v, approval, commit, *, arm=TAIL20_ARM):
             proposal_sha256=p["proposal_sha256"], checkpoint_sha256=checkpoint["checkpoint_sha256"],
             optimizer_updates=result["optimizer_updates"], source_bytes=result["total_logical_source_bytes"],
             source_files=result["total_logical_source_files"], gate=gate, automatic_retry=False)
-        if arm == POINT_A20_ARM:
-            completion.update(point_completion(folder, gate, p))
+        if arm.point_design is not None:
+            completion.update(point_completion(folder, gate, p, arm=arm))
         write(package / "completion.json", completion)
     except BaseException as error:
         write(package / "failure.json", dict(status="STOP_NO_AUTOMATIC_RETRY",
