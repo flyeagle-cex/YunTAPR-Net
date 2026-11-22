@@ -35,3 +35,5 @@
 网页 GPT-6 High 裁定科研口径，Codex 建议 Sol High 准备工程协议，Harness 建议 Flash High 在新执行包就绪时进行一次限定审核。
 
 [第 2 步现行评价协议](STAGE2_EVALUATION_FREEZE_V1.md)
+
+2026-11-22 补充调查。NASA CMR 中，2023 全年与云南宽边界框（东经 97–107°、北纬 21–30°）相交的 GPM 2A-DPR V07 轨道文件有 494 份。仅在本机将整轨起止时间与 159 个 Train 强雨半小时窗相交，18 个窗口各对应一份候选文件。18 是目录层面的覆盖上限，实际同像元扫描覆盖尚待核实。未下载科学载荷。DPR 是 CORRA 的输入，IMERG 的被动微波降水估计使用 CORRA 交叉校准，二者共享来源链。DPR 可作补充观测，项目沿用 IMERG V07 Final 参考。[公开目录查询](https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=C2179081499-GES_DISC&temporal=2023-01-01T00%3A00%3A00Z%2C2023-12-31T23%3A59%3A59Z&bounding_box=97%2C21%2C107%2C30&page_size=1000) · [CORRA 算法文档](https://gpm.nasa.gov/sites/default/files/2023-01/Combined_algorithm_ATBD.V07_0.pdf) · [IMERG 技术文档](https://gpm.nasa.gov/resources/documents/imerg-v07-technical-documentation)
