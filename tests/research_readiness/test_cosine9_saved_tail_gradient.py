@@ -76,6 +76,7 @@ class TailGradientDiagnosticTests(unittest.TestCase):
             grant = root / "RESEARCHER_APPROVAL.json"
             grant.write_text(json.dumps(dict(
                 approved_by_researcher=True, decision_id="synthetic-wrong-scope",
+                run_folder=str(root.resolve()),
                 authorization_scope="OLD_ALREADY_CONSUMED", budget=plan["budget"],
                 proposal_sha256=plan["proposal_sha256"],
             )), encoding="utf-8")
@@ -83,6 +84,28 @@ class TailGradientDiagnosticTests(unittest.TestCase):
                 with self.assertRaises(PermissionError):
                     diagnostic.execute_once(None, root)
             self.assertFalse((root / "output").exists())
+
+    def test_grant_cannot_be_copied_or_reused_after_failed_attempt(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            plan = diagnostic.build_proposal()
+            proposal = root / "proposal.json"
+            proposal.write_text(json.dumps(plan), encoding="utf-8")
+            grant = dict(approved_by_researcher=True, decision_id="synthetic",
+                         run_folder=str(root.resolve()), budget=plan["budget"],
+                         authorization_scope=plan["authorization_scope"], proposal_sha256=plan["proposal_sha256"])
+            approval_name = "RESEARCHER_APPROVAL.json"
+            (root / approval_name).write_text(json.dumps(grant), encoding="utf-8")
+            other = root / "other"
+            other.mkdir()
+            (other / approval_name).write_text(json.dumps(grant), encoding="utf-8")
+            with patch.object(diagnostic, "PROPOSAL_PATH", proposal):
+                with self.assertRaises(PermissionError):
+                    diagnostic.execute_once(None, other)
+                with self.assertRaisesRegex(ValueError, "archive name or size"):
+                    diagnostic.execute_once(root / "unrecognized.npz", root)
+                with self.assertRaises(FileExistsError):
+                    diagnostic.execute_once(None, root)
 
 
 if __name__ == "__main__":

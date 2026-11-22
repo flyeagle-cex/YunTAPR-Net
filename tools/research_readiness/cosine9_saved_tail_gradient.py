@@ -120,14 +120,16 @@ def execute_once(archive, run_folder):
     proposal = json.loads(PROPOSAL_PATH.read_text(encoding="utf-8"))
     if proposal != build_proposal():
         raise PermissionError("Frozen proposal and current code differ")
+    run_folder = run_folder.resolve()
     grant = json.loads((run_folder / "RESEARCHER_APPROVAL.json").read_text(encoding="utf-8"))
     if (grant.get("approved_by_researcher") is not True or not grant.get("decision_id")
+            or grant.get("run_folder") != str(run_folder)
             or any(grant.get(k) != proposal[k] for k in ("authorization_scope", "budget", "proposal_sha256"))):
         raise PermissionError("Separate approval of this exact saved-record scope is required")
+    output = run_folder / "output"
+    output.mkdir(exist_ok=False)  # Consume the attempt before checking the archive or reading its bytes.
     if archive.name != "strong_joint_pixels.npz" or archive.stat().st_size != ARCHIVE_BYTES:
         raise ValueError("Saved strong-rain archive name or size differs")
-    output = run_folder / "output"
-    output.mkdir(exist_ok=False)
     with archive.open("rb") as stream:
         raw = stream.read(ARCHIVE_BYTES)
     result = _verified_result(raw)
