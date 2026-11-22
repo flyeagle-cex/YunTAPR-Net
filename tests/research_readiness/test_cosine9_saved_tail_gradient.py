@@ -13,6 +13,24 @@ import numpy as np
 from tools.research_readiness import cosine9_saved_tail_gradient as diagnostic
 
 
+def synthetic_archive(*, point_drift=0.):
+    n = 717
+    physical = np.broadcast_to(np.linspace(8, 19, 32), (n, 32)).copy()
+    physical[:100, -1] = 26
+    physical[100:160, -1] = 23
+    qlog = np.log1p(physical)
+    p = np.full(n, .25)
+    stream = BytesIO()
+    np.savez_compressed(
+        stream, p_occ=p, qlog=qlog, truth_mm_h=np.full(n, 25.),
+        point_A_mm_h=p * np.expm1(qlog).mean(axis=1) + point_drift,
+        scene_id=np.full(n, "synthetic"),
+        analysis_time=np.full(n, "2024-SYNTHETIC"),
+        pixel_index=np.arange(n),
+    )
+    return stream.getvalue()
+
+
 class TailGradientDiagnosticTests(unittest.TestCase):
     def test_two_direction_definitions_and_boundary_cases(self):
         low = np.linspace(8, 20, 32)
@@ -37,25 +55,9 @@ class TailGradientDiagnosticTests(unittest.TestCase):
         self.assertEqual(band["fixed_allocation_span"]["aligned"], 1)
 
     def test_identity_and_frozen_baseline_against_generated_archive(self):
-        n = 717
-        physical = np.broadcast_to(np.linspace(8, 19, 32), (n, 32)).copy()
-        physical[:100, -1] = 26
-        physical[100:160, -1] = 23
-        qlog = np.log1p(physical)
-        p = np.full(n, .25)
-        fields = dict(
-            p_occ=p, qlog=qlog, truth_mm_h=np.full(n, 25.),
-            point_A_mm_h=p * np.expm1(qlog).mean(axis=1),
-            scene_id=np.full(n, "synthetic"),
-            analysis_time=np.full(n, "2024-SYNTHETIC"),
-            pixel_index=np.arange(n),
-        )
         for drift in (False, True):
             with self.subTest(baseline_changed=drift):
-                stream = BytesIO()
-                arrays = fields | {"point_A_mm_h": fields["point_A_mm_h"] + float(drift)}
-                np.savez_compressed(stream, **arrays)
-                raw = stream.getvalue()
+                raw = synthetic_archive(point_drift=float(drift))
                 with patch.multiple(diagnostic, ARCHIVE_BYTES=len(raw), ARCHIVE_SHA256=sha256(raw).hexdigest()):
                     if drift:
                         with self.assertRaisesRegex(ValueError, "frozen FP32 point A"):
@@ -106,6 +108,38 @@ class TailGradientDiagnosticTests(unittest.TestCase):
                     diagnostic.execute_once(root / "unrecognized.npz", root)
                 with self.assertRaises(FileExistsError):
                     diagnostic.execute_once(None, root)
+
+    def test_approved_synthetic_run_emits_only_aggregate_and_cannot_reopen(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder).resolve()
+            archive = root / "strong_joint_pixels.npz"
+            payload = synthetic_archive()
+            archive.write_bytes(payload)
+            budget = diagnostic.BUDGET | {"saved_record_bytes": len(payload)}
+            proposal_path = root / "proposal.json"
+            with patch.multiple(diagnostic, ARCHIVE_BYTES=len(payload), ARCHIVE_SHA256=sha256(payload).hexdigest(),
+                                BUDGET=budget, PROPOSAL_PATH=proposal_path):
+                plan = diagnostic.build_proposal()
+                proposal_path.write_text(json.dumps(plan), encoding="utf-8")
+                grant = {key: plan[key] for key in ("authorization_scope", "budget", "proposal_sha256")}
+                grant.update(approved_by_researcher=True, decision_id="synthetic", run_folder=str(root))
+                (root / "RESEARCHER_APPROVAL.json").write_text(json.dumps(grant), encoding="utf-8")
+                result = diagnostic.execute_once(archive, root)
+                archive.unlink()
+                with self.assertRaises(FileExistsError):
+                    diagnostic.execute_once(archive, root)
+
+            outputs = list((root / "output").iterdir())
+            self.assertEqual([file.name for file in outputs], ["completion.json"])
+            self.assertEqual(json.loads(outputs[0].read_text(encoding="utf-8")), result)
+            self.assertEqual(result["all_strong"]["n"], 717)
+            self.assertEqual(result["all_strong"]["all_nodes_below_truth"], 617)
+            self.assertEqual(result["status"], "COMPLETE_SAVED_STRONG_LOCAL_GRADIENT")
+            self.assertEqual(result["scientific_status"], "NOT_VERIFIED")
+            self.assertEqual(result["actual_usage"]["saved_record_opens"], 1)
+            self.assertEqual(result["actual_usage"]["saved_record_bytes"], len(payload))
+            self.assertEqual(result["actual_usage"]["forwards"], 0)
+            self.assertFalse(result["actual_usage"]["final_2025_access"])
 
 
 if __name__ == "__main__":
