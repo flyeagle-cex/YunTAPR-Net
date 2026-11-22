@@ -13,6 +13,51 @@ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 
 class IndependentHostTests(unittest.TestCase):
+    def test_mfc_accepts_only_its_own_fixed_train_scope_and_budget(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            service = root / "service"
+            service.mkdir()
+            entry_name = "tools/research_readiness/start_train_mfc700.py"
+            entry = root / entry_name
+            entry.parent.mkdir(parents=True)
+            entry.touch()
+            source = root / "test_python.exe"
+            source.touch()
+            spec_path, proposal_path, private_path, grant_path = (
+                root / name for name in ("spec.json", "proposal.json", "private.json", "grant.json")
+            )
+            environment = dict(PYTHONHASHSEED="2029", PYTHONUTF8="1", OMP_NUM_THREADS="1",
+                               MKL_NUM_THREADS="1", CUBLAS_WORKSPACE_CONFIG=":4096:8")
+            scope = "COSINE9_E9_2023_TRAIN_MFC700_MATCHED"
+            budget = dict(total_scientific_source_bytes=16066485320, total_scientific_source_opens=4637,
+                          forward_batches=70, checkpoint_loads=1, max_seconds=2400,
+                          optimizer_updates=0, refits=0, retries=0, replay=0)
+            proposal = dict(authorization_scope=scope, authorized=False, final_2025_access=False,
+                            proposal_sha256="synthetic", execution_code_commit="synthetic",
+                            budget=budget, scientific_choices={},
+                            tasks=[dict(model="B7", seed=2029, checkpoint="COSINE9_FIXED_E9", role="Train", year=2023)],
+                            code_sha256={entry_name: module.sha(entry)}, python_sha256=module.sha(source))
+            private = dict(proposal_sha256="synthetic", output_root=str(root / "output"),
+                           service_dir=str(service), runtime_python=str(source))
+            spec = dict(kind="BOUNDED_TRAIN_MFC700_MATCHED", cwd=str(root), service_dir=str(service),
+                        environment=environment,
+                        command=[str(source), "-B", str(entry), "execute", "--proposal", str(proposal_path),
+                                 "--private-preparation", str(private_path), "--researcher-approval", str(grant_path)])
+            module.write(spec_path, spec)
+            module.write(proposal_path, proposal)
+            module.write(private_path, private)
+            grant = dict(proposal, approved_by_researcher=True, decision_id="fixture",
+                         code_commit="synthetic", output_root=private["output_root"])
+            module.write(grant_path, grant)
+            with patch.object(module, "PRIVATE", root), patch.object(
+                    module.subprocess, "check_output", side_effect=["synthetic", ""]):
+                self.assertEqual(module.validate_spec(spec_path), (spec, service))
+                grant["authorization_scope"] = "COSINE9_E9_2023_TRAIN_RH700_AMPLITUDE"
+                grant_path.write_text(json.dumps(grant), encoding="utf-8")
+                with self.assertRaisesRegex(PermissionError, "scope, approval, or runtime differs"):
+                    module.validate_spec(spec_path)
+
     def test_cross_checkout_configuration_must_be_absolute_before_dispatch(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp);entry=p/'start_dote_physical_control.py';entry.write_text('')
