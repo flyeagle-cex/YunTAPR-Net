@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 from tools.research_readiness import start_train_rh700_separability as runner
+from tools.research_readiness import start_train_rh700_amplitude as amplitude
 from yuntapr.experimental.core_innovation.gfs import EnvironmentFrame, Field, ForecastIdentity, _above_ground
 from yuntapr.experimental.core_innovation.grid import GridSpec
 
@@ -61,6 +62,24 @@ class TrainRH700ExecutionTests(unittest.TestCase):
                      2: dict(valid_pairs=10, wins=5)}
         self.assertEqual(runner.decision(clustered)["decision"], "STOP_RH700_DIRECTION")
         self.assertEqual(runner.decision({0: dict(valid_pairs=40, wins=30)})["decision"], "INSUFFICIENT_COVERAGE")
+
+    def test_amplitude_bounds_include_unmatched_same_scene_negative(self):
+        sid = "2023-03-01T05:30:00+00:00"
+        summary = amplitude.Summary([sid])
+        mask = np.zeros((1, 1, 100, 100), dtype=bool)
+        mask.ravel()[:3430] = True
+        truth = np.zeros_like(mask, dtype=np.float32)
+        truth[0, 0, 0, 0] = 35.
+        probability = np.full(mask.shape, .75)
+        nodes = np.broadcast_to(np.log1p(np.linspace(14., 19., 32)[None, :, None, None]), (1, 32, 100, 100))
+        humidity = np.zeros((100, 100))
+        humidity[0, :2] = [90., 95.]
+        summary.pending[sid] = (None, humidity, np.ones_like(humidity, dtype=bool))
+        summary.add((sid,), truth, mask, mask, probability, nodes)
+        self.assertEqual(summary.target_negative, 3429)
+        self.assertEqual(amplitude.conclude(summary.bounds)["decision"], "STOP_LOCAL_NEGATIVE_CEILING")
+        self.assertEqual(amplitude.conclude(dict(first_hit=1., point_stop=2., tail_stop=1.))["decision"],
+                         "NUMERICAL_BOUNDARY_UNRESOLVED")
 
 
 if __name__ == "__main__":
