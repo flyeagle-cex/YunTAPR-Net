@@ -1,0 +1,138 @@
+{
+  "status": "PASS_SYNTHETIC_DIRECTION_ONLY",
+  "scientific_status": "NOT_VERIFIED",
+  "seed": 2029,
+  "reference_sha256": "635fa0da94d17d46a201282ce5059f9ef1403024d62953ca4443b690ba825fa1",
+  "intervention": {
+    "frozen_e0_anchor": true,
+    "threshold_conditional_median_mm_h": 1.0,
+    "probability_boundary": 0.5,
+    "separate_conditional_corrections": true,
+    "training_objective": "E0 + unchanged twCRPS + unchanged q32 penalty"
+  },
+  "anchor_run": {
+    "updates": 144,
+    "clipped_updates": 0,
+    "max_gradient_norm": 0.06472888588905334
+  },
+  "correction_run": {
+    "updates": 144,
+    "clipped_updates": 0,
+    "max_gradient_norm": 0.15003512799739838
+  },
+  "protection": {
+    "occurrence_prediction_bitwise_equal": true,
+    "weak_log_node_max_abs_delta": 0.0
+  },
+  "e0": {
+    "strong_low_mean_a": 12.73509422938029,
+    "low_p_negative_mean_q32": 39.47820085258812,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.21726430461066507,
+    "weak_log_pinball": 0.014474714961124503,
+    "occurrence_brier": 0.01863390538427565,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04393715196700707
+  },
+  "candidate": {
+    "strong_low_mean_a": 12.85849110285441,
+    "low_p_negative_mean_q32": 39.088519441847026,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.2126428853797252,
+    "weak_log_pinball": 0.014474714961124503,
+    "occurrence_brier": 0.01863390538427565,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04301143426337341
+  },
+  "candidate_minus_e0": {
+    "strong_low_mean_a": 0.1233968734741211,
+    "low_p_negative_mean_q32": -0.3896814107410904,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": -0.004621419230939866,
+    "weak_log_pinball": 0.0,
+    "occurrence_brier": 0.0,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 0,
+    "q32_fp": 0,
+    "mean_twcrps": -0.0009257177036336647
+  },
+  "candidate_minus_twcrps": {
+    "strong_low_mean_a": -0.34325273831685443,
+    "low_p_negative_mean_q32": -1.8195489186612406,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": 0.013753648704990518,
+    "weak_log_pinball": -0.00038649830806393275,
+    "occurrence_brier": -9.5367431640625e-05,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": -12,
+    "q32_fp": 0,
+    "mean_twcrps": -0.0005658559382762315
+  },
+  "synthetic_direction_gates": {
+    "strong_low_a_gain": true,
+    "low_p_negative_q32_drop": true,
+    "strong_physical_pinball_gain": true,
+    "weak_log_pinball_not_worse": true,
+    "occurrence_brier_not_worse": true,
+    "occurrence_ap_not_worse": true,
+    "occurrence_auroc_not_worse": true,
+    "q32_drop_relative_to_twcrps": true,
+    "fixed_a_hits_without_false_alarms": true,
+    "q32_false_alarms_not_higher": true
+  },
+  "feature_overlap_stress": {
+    "labels_changed": 4,
+    "optimization_updates": 0,
+    "e0": {
+      "strong_low_mean_a": 12.73509422938029,
+      "low_p_negative_mean_q32": 39.47820085258812,
+      "low_p_negative_mean_p": 0.010009765625,
+      "strong_physical_pinball_over20": 0.24108654229803106,
+      "weak_log_pinball": 0.09212740386097679,
+      "occurrence_brier": 0.01863390538427565,
+      "occurrence_ap": 1.0,
+      "occurrence_auroc": 1.0,
+      "a_tp": 0,
+      "a_fp": 0,
+      "q32_tp": 8,
+      "q32_fp": 76,
+      "mean_twcrps": 0.04645345061968699
+    },
+    "candidate": {
+      "strong_low_mean_a": 12.85849110285441,
+      "low_p_negative_mean_q32": 39.088519441847026,
+      "low_p_negative_mean_p": 0.010009765625,
+      "strong_physical_pinball_over20": 0.23660048003647854,
+      "weak_log_pinball": 0.09239488596743527,
+      "occurrence_brier": 0.01863390538427565,
+      "occurrence_ap": 1.0,
+      "occurrence_auroc": 1.0,
+      "a_tp": 8,
+      "a_fp": 4,
+      "q32_tp": 8,
+      "q32_fp": 76,
+      "mean_twcrps": 0.04575127925462254
+    }
+  },
+  "script_sha256": "52d8f1cbc0b8a247444a14b9c6f02207ff09a9f24562ded4be5b792e9b7f9517",
+  "real_source_payload_reads": 0,
+  "real_checkpoints_loaded": 0,
+  "formal_updates": 0,
+  "final_2025_access": false
+}

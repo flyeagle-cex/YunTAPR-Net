@@ -1,0 +1,135 @@
+{
+  "status": "STOP_BEFORE_REAL_TRAINING",
+  "scientific_status": "NOT_VERIFIED",
+  "seed": 2029,
+  "design": "Fixed E0 anchor with a zero-initialized quantile correction projected off Train weak features",
+  "projection_relative_svd_tolerance": 1e-06,
+  "projection": {
+    "training_weak_rows": 256,
+    "protected_rank": 8,
+    "residual_degrees_of_freedom": 40,
+    "max_training_projected_feature": 1.713582630109527e-15
+  },
+  "archived_control_reproduced": true,
+  "zero_initial_correction_matches_anchor": true,
+  "previous_settings": {
+    "intervention": "Add non-strong q32 physical squared hinge to E0 + fixed twCRPS",
+    "threshold_mm_h": 20.0,
+    "weight": 0.1,
+    "denominator": "ALL_VALID_PIXELS",
+    "synthetic_admission_thresholds": {
+      "min_a_gain": 0.02,
+      "min_q32_drop": 0.02,
+      "min_physical_pinball_gain": 1e-05,
+      "guard_tolerance": 1e-08
+    }
+  },
+  "anchor_run": {
+    "updates": 144,
+    "clipped_updates": 0,
+    "max_gradient_norm": 0.06472888588905334
+  },
+  "correction_run": {
+    "updates": 144,
+    "clipped_updates": 0,
+    "max_gradient_norm": 0.06458262354135513
+  },
+  "evaluation_protection": {
+    "occurrence_prediction_bitwise_equal": true,
+    "weak_log_node_max_abs_delta": 0.0
+  },
+  "e0": {
+    "strong_low_mean_a": 12.73509422938029,
+    "low_p_negative_mean_q32": 39.47820085258812,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.21726430461066507,
+    "weak_log_pinball": 0.014474714961124503,
+    "occurrence_brier": 0.01863390538427565,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04393715196700707
+  },
+  "previous_gradient_route": {
+    "strong_low_mean_a": 12.968415896097818,
+    "low_p_negative_mean_q32": 39.45272303884893,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.20846217525507094,
+    "weak_log_pinball": 0.014595065667850054,
+    "occurrence_brier": 0.018729272815916274,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04376292513245704
+  },
+  "candidate": {
+    "strong_low_mean_a": 12.73509422938029,
+    "low_p_negative_mean_q32": 39.47820085258812,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.21726430461066507,
+    "weak_log_pinball": 0.014474714961124503,
+    "occurrence_brier": 0.01863390538427565,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04393715196700707
+  },
+  "candidate_minus_e0": {
+    "strong_low_mean_a": 0.0,
+    "low_p_negative_mean_q32": 0.0,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": 0.0,
+    "weak_log_pinball": 0.0,
+    "occurrence_brier": 0.0,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 0,
+    "q32_fp": 0,
+    "mean_twcrps": 0.0
+  },
+  "candidate_minus_twcrps": {
+    "strong_low_mean_a": -0.4666496117909755,
+    "low_p_negative_mean_q32": -1.4298675079201502,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": 0.018375067935930384,
+    "weak_log_pinball": -0.00038649830806393275,
+    "occurrence_brier": -9.5367431640625e-05,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": -12,
+    "a_fp": 0,
+    "q32_tp": -12,
+    "q32_fp": 0,
+    "mean_twcrps": 0.0003598617653574332
+  },
+  "synthetic_direction_gates": {
+    "strong_low_a_gain": false,
+    "low_p_negative_q32_drop": false,
+    "strong_physical_pinball_gain": false,
+    "weak_log_pinball_not_worse": true,
+    "occurrence_brier_not_worse": true,
+    "occurrence_ap_not_worse": true,
+    "occurrence_auroc_not_worse": true,
+    "q32_drop_relative_to_twcrps": true,
+    "fixed_a_hits_without_false_alarms": false,
+    "q32_false_alarms_not_higher": true
+  },
+  "script_sha256": "ecb3548850f881f1776e82cd2d5d011fdd2b16c906ba58c1bdf12011500da033",
+  "reference_sha256": "635fa0da94d17d46a201282ce5059f9ef1403024d62953ca4443b690ba825fa1",
+  "previous_sha256": "ad576545fad9e655c6630ce112d439f0dd53853693ec53dfc99bf1e481b9ce11",
+  "real_source_payload_reads": 0,
+  "real_checkpoints_loaded": 0,
+  "formal_updates": 0,
+  "final_2025_access": false
+}

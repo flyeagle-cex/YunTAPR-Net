@@ -1,0 +1,29 @@
+{
+  "status": "READY_WAITING_EXACT_READOUT_APPROVAL",
+  "authorization_scope": "COSINE9_SAVED_DEV_ROUTE_OVERLAP",
+  "script_sha256": "80de6f819d09af8afec750cf7f23c80f8d55989a69531ef2b0bc081d6fb6a26b",
+  "input_completion_sha256": "1a3396a7fd0d9564590967881d576060ffd7801c7f24b37102c68b7911b76614",
+  "input_checkpoint_identity": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+  "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+  "saved_shards": 121,
+  "budget": {
+    "saved_array_bytes": 881894762,
+    "saved_array_opens": 121,
+    "max_seconds": 300,
+    "raw_source_opens": 0,
+    "checkpoint_loads": 0,
+    "inference_passes": 0,
+    "optimizer_updates": 0,
+    "additional_retries": 0
+  },
+  "definition": {
+    "weak_truth": "0.1 < FP32 R <= 1",
+    "strong_truth": "FP32 R > 20",
+    "active": "mean(expm1(qlog_16), expm1(qlog_17)) > 1",
+    "low_p": "p < 0.5",
+    "q32_risk": "qlog_32 > log1p(20)",
+    "aggregate_only": true,
+    "final_2025_access": false
+  },
+  "purpose": "Quantify overlap of the fixed synthetic routing rule with weak and strong real labels."
+}
