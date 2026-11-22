@@ -47,7 +47,7 @@ def _moment_box(original, active, padding):
     return lower, upper
 
 
-def _outer_problem(p, original, truth, active, baseline, *, tighten=True):
+def _outer_problem(p, original, truth, active, baseline, *, tighten=True, physical_box=None):
     physical = np.expm1(original)
     upper = float(physical[-1])
     padding = 1e-12 * max(1., truth, upper)
@@ -58,6 +58,8 @@ def _outer_problem(p, original, truth, active, baseline, *, tighten=True):
         lower, higher = _moment_box(original, active, padding)
         lower_physical = np.maximum(1., np.expm1(lower) - padding)
         upper_physical = np.minimum(upper, np.expm1(higher) + padding)
+    if physical_box is not None:
+        lower_physical, upper_physical = (limit[active] for limit in physical_box)
     for i, left, right in zip(active, lower_physical, upper_physical):
         bounds[i] = (float(left), float(right))
     bounds.extend([(0., max(truth, upper) / 20)] * NODES)
