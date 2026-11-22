@@ -14,11 +14,23 @@ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 class IndependentHostTests(unittest.TestCase):
     def test_mfc_accepts_only_its_own_fixed_train_scope_and_budget(self):
+        self._check_train_scope_and_budget(
+            "BOUNDED_TRAIN_MFC700_MATCHED", "start_train_mfc700.py",
+            "COSINE9_E9_2023_TRAIN_MFC700_MATCHED", "COSINE9_E9_2023_TRAIN_RH700_AMPLITUDE",
+        )
+
+    def test_mfc_amplitude_rejects_prior_matching_approval(self):
+        self._check_train_scope_and_budget(
+            "BOUNDED_TRAIN_MFC700_AMPLITUDE", "start_train_mfc700_amplitude.py",
+            "COSINE9_E9_2023_TRAIN_MFC700_AMPLITUDE", "COSINE9_E9_2023_TRAIN_MFC700_MATCHED",
+        )
+
+    def _check_train_scope_and_budget(self, kind, filename, scope, rejected_scope):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
             service = root / "service"
             service.mkdir()
-            entry_name = "tools/research_readiness/start_train_mfc700.py"
+            entry_name = "tools/research_readiness/" + filename
             entry = root / entry_name
             entry.parent.mkdir(parents=True)
             entry.touch()
@@ -29,7 +41,6 @@ class IndependentHostTests(unittest.TestCase):
             )
             environment = dict(PYTHONHASHSEED="2029", PYTHONUTF8="1", OMP_NUM_THREADS="1",
                                MKL_NUM_THREADS="1", CUBLAS_WORKSPACE_CONFIG=":4096:8")
-            scope = "COSINE9_E9_2023_TRAIN_MFC700_MATCHED"
             budget = dict(total_scientific_source_bytes=16066485320, total_scientific_source_opens=4637,
                           forward_batches=70, checkpoint_loads=1, max_seconds=2400,
                           optimizer_updates=0, refits=0, retries=0, replay=0)
@@ -40,7 +51,7 @@ class IndependentHostTests(unittest.TestCase):
                             code_sha256={entry_name: module.sha(entry)}, python_sha256=module.sha(source))
             private = dict(proposal_sha256="synthetic", output_root=str(root / "output"),
                            service_dir=str(service), runtime_python=str(source))
-            spec = dict(kind="BOUNDED_TRAIN_MFC700_MATCHED", cwd=str(root), service_dir=str(service),
+            spec = dict(kind=kind, cwd=str(root), service_dir=str(service),
                         environment=environment,
                         command=[str(source), "-B", str(entry), "execute", "--proposal", str(proposal_path),
                                  "--private-preparation", str(private_path), "--researcher-approval", str(grant_path)])
@@ -53,10 +64,26 @@ class IndependentHostTests(unittest.TestCase):
             with patch.object(module, "PRIVATE", root), patch.object(
                     module.subprocess, "check_output", side_effect=["synthetic", ""]):
                 self.assertEqual(module.validate_spec(spec_path), (spec, service))
-                grant["authorization_scope"] = "COSINE9_E9_2023_TRAIN_RH700_AMPLITUDE"
+                grant["authorization_scope"] = rejected_scope
                 grant_path.write_text(json.dumps(grant), encoding="utf-8")
                 with self.assertRaisesRegex(PermissionError, "scope, approval, or runtime differs"):
                     module.validate_spec(spec_path)
+
+    def test_mfc_amplitude_supervisor_uses_the_bound_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Path(tmp)
+            configuration = service / "spec.json"
+            fixture = dict(kind="BOUNDED_TRAIN_MFC700_AMPLITUDE", command=["synthetic"], cwd=tmp)
+            module.write(configuration, fixture)
+            module.write(service / "independent_launch_claim.json", dict(spec_sha256=module.sha(configuration)))
+            with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
+                    module, "host_identity", return_value=dict(in_any_job=False, package_status=15700)
+            ), patch.object(module.subprocess, "Popen") as popen:
+                process = popen.return_value
+                process.pid = 123
+                process.wait.return_value = 0
+                self.assertEqual(module.supervise(configuration), 0)
+                process.wait.assert_called_once_with(timeout=2400)
 
     def test_cross_checkout_configuration_must_be_absolute_before_dispatch(self):
         with tempfile.TemporaryDirectory() as tmp:

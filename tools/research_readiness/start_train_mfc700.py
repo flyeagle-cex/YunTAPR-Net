@@ -109,8 +109,11 @@ def outcome(blocks):
 
 
 class Summary:
-    def __init__(self, positive_scenes):
+    def __init__(self, positive_scenes, *, capture_scenes=None):
         self.positive_scenes = set(positive_scenes)
+        self.capture_scenes = self.positive_scenes if capture_scenes is None else set(capture_scenes)
+        if not self.positive_scenes <= self.capture_scenes:
+            raise ValueError("Declared strong scenes must be included in the MFC capture scope")
         self.seen = set()
         self.pending = {}
         self.aligned = {}
@@ -126,7 +129,7 @@ class Summary:
     def capture(self, frame):
         analysis = frame.identity.valid
         target = (analysis - timedelta(minutes=30)).isoformat()
-        if target not in self.positive_scenes:
+        if target not in self.capture_scenes:
             return
         if target in self.pending or target in self.seen:
             raise ValueError("Duplicate MFC forecast capture")
@@ -151,7 +154,7 @@ class Summary:
         self.pending[target] = (analysis, mapped.fields["mfc"], mapped.fields[rh.FEATURE])
 
     def verify_batch(self, batch):
-        expected = set(batch.ids) & self.positive_scenes
+        expected = set(batch.ids) & self.capture_scenes
         if self.aligned or set(self.pending) != expected:
             raise ValueError("MFC forecast capture disagrees with the current batch")
         for index, sid in enumerate(batch.ids):
