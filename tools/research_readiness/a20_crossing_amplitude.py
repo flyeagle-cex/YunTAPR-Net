@@ -9,51 +9,55 @@ from tools.research_readiness.a20_fixed_endpoint_bounds import (
 )
 
 
-def crossing_amplitude(probability, original, truth, *, tolerance=1e-10, max_intervals=4095):
+def crossing_amplitude(probability, original, truth, *, tolerance=1e-10, max_intervals=4095, vertex=None):
     """Find a strict crossing with improvement, certify the tolerance, or remain unresolved."""
     original = np.asarray(original, dtype=np.float64)
     if (original.shape != (32,) or not np.isfinite(original).all()
             or (original < 0).any() or (np.diff(original) <= 0).any()
-            or not 0 <= probability <= 1 or not math.isfinite(truth) or truth <= THRESHOLD
+            or not 0 <= probability <= 1 or not math.isfinite(truth) or np.float32(truth) <= THRESHOLD
             or not math.isfinite(tolerance) or tolerance <= 0
             or type(max_intervals) is not int or max_intervals < 1):
         raise ValueError("Expected ordered log nodes and a finite strong-rain truth")
     if point(probability, original) > THRESHOLD:
         raise ValueError("The baseline must be below or equal to the point threshold")
-    vertex = weak_preserving_vertex(original)
+    if vertex is None:
+        vertex = weak_preserving_vertex(original)
     if point(probability, vertex) <= THRESHOLD:
         return {"status": "NO_CROSSING"}
     direction = vertex - original
-    baseline = pinball((truth - np.expm1(original)) / 20)
-
-    # Convex A and a non-crossing baseline imply one boundary on this segment.
-    # Use its lower bracket so a bound includes every strictly crossing alpha.
-    low, high = 0.0, 1.0
-    for _ in range(44):
-        middle = (low + high) / 2
-        if point(probability, original + middle * direction) > THRESHOLD:
-            high = middle
-        else:
-            low = middle
-
-    work = [(low, 1.0)]
+    with np.errstate(over="raise", invalid="raise"):
+        baseline = pinball((truth - np.expm1(original)) / 20)
+    if not math.isfinite(baseline):
+        raise ArithmeticError("Non-finite physical Pinball")
+    # Use the full line. Convexity bounds A from above by its endpoint maximum
+    # on each interval. Leave a small numerical margin at the rounding boundary.
+    first_rounding_boundary = float(THRESHOLD) + float(np.spacing(THRESHOLD)) / 2
+    score_slack = 1e-12
+    work = [(0.0, 1.0)]
     for checked in range(1, max_intervals + 1):
         left, right = work.pop()
-        qa, qb = np.expm1(original + left * direction), np.expm1(original + right * direction)
+        with np.errstate(over="raise", invalid="raise"):
+            qa = np.expm1(original + left * direction)
+            qb = np.expm1(original + right * direction)
         closest = np.clip(truth, np.minimum(qa, qb), np.maximum(qa, qb))
         # Each physical node is monotone in alpha. Minimizing each Pinball
         # term independently gives a lower bound for a shared alpha.
         lower_delta = float(pinball((truth - closest) / 20) - baseline)
-        if lower_delta < -tolerance:
+        upper_score = probability * max(qa.mean(), qb.mean())
+        if not math.isfinite(lower_delta) or not math.isfinite(upper_score):
+            raise ArithmeticError("Non-finite amplitude interval bound")
+        loss_slack = 32 * np.finfo(np.float64).eps * max(1., abs(baseline), abs(lower_delta))
+        if upper_score >= first_rounding_boundary - score_slack and lower_delta - loss_slack < -tolerance:
             alpha = (left + right) / 2
+            if not left < alpha < right:
+                break
             log_nodes = original + alpha * direction
             delta = float(pinball((truth - np.expm1(log_nodes)) / 20) - baseline)
             score = point(probability, log_nodes)
-            if delta < -tolerance and score > THRESHOLD and (np.diff(log_nodes) > 0).all():
+            if (delta < -tolerance and score > THRESHOLD and (np.diff(log_nodes) > 0).all()
+                    and log_nodes[-1] == original[-1]):
                 return {"status": "AMPLITUDE_WITNESS", "alpha": alpha, "point_a": score,
                         "physical_pinball_delta": delta, "intervals": checked}
-            if alpha == left or alpha == right:
-                break
             work.extend(((alpha, right), (left, alpha)))
         if not work:
             return {"status": "NO_GAIN_BEYOND_TOLERANCE", "tolerance": tolerance, "intervals": checked}

@@ -200,11 +200,11 @@ class Coverage:
                     mixed_label_feature_groups=mixed, feature_columns=FEATURES, gate_fits=0)
 
 
-def recheck(plan, private, approval, expected_commit):
-    if approval.get("authorization_scope") != SCOPE:
+def recheck(plan, private, approval, expected_commit, *, scope=SCOPE, budget=CAP):
+    if approval.get("authorization_scope") != scope:
         raise PermissionError("Separate Train-only approval required")
     validate_approval(approval, plan, private, expected_commit)
-    if (plan["authorization_scope"] != SCOPE or plan["budget"] != CAP or plan["final_2025_access"]
+    if (plan["authorization_scope"] != scope or plan["budget"] != budget or plan["final_2025_access"]
             or plan["proposal_sha256"] != digest(unsigned(plan))
             or private["proposal_sha256"] != plan["proposal_sha256"]
             or digest(unsigned(private)) != plan["private_preparation_sha256"]
@@ -212,29 +212,30 @@ def recheck(plan, private, approval, expected_commit):
         raise PermissionError("Pinned Train-only approval or code differs")
 
 
-def execute(plan, private, approval):
+def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, binder=seal,
+            summary_factory=Coverage, complete_status="COMPLETE_TRAIN_ENDPOINT_SCREEN"):
     start = time.monotonic()
     require_independent(host_identity())
-    recheck(plan, private, approval, plan["execution_code_commit"])
+    recheck(plan, private, approval, plan["execution_code_commit"], scope=scope, budget=budget)
     service = Path(private["service_dir"])
     launch, claim = (read(service / f) for f in ("target_launch.json", "independent_launch_claim.json"))
     if ((launch["pid"], launch["supervisor_pid"]) != (os.getpid(), os.getppid())
-            or launch["kind"] != KIND or launch["automatic_retry"] is not False
+            or launch["kind"] != kind or launch["automatic_retry"] is not False
             or claim["automatic_retry"] is not False or launch["spec_sha256"] != claim["spec_sha256"]
             or sha(sys.executable) != plan["python_sha256"]
             or any(os.environ.get(key) != value for key, value in ENV.items())):
         raise PermissionError("A live once-only Train supervisor and pinned runtime are required")
     output = Path(private["output_root"])
-    if shutil.disk_usage(output.parent).free < CAP["minimum_free_bytes"]:
+    if shutil.disk_usage(output.parent).free < budget["minimum_free_bytes"]:
         raise RuntimeError("Insufficient workspace space for Train diagnostic")
     run = output.parent
-    parent_proposal, binding, prepared = seal(Path(private["source_root"]), run, plan["execution_code_commit"])
+    parent_proposal, binding, prepared = binder(Path(private["source_root"]), run, plan["execution_code_commit"])
     if parent_proposal != plan or binding != private:
         raise PermissionError("Train source binding changed after preparation")
     output.mkdir(exist_ok=False)
 
     def deadline():
-        if time.monotonic() - start >= CAP["max_seconds"]:
+        if time.monotonic() - start >= budget["max_seconds"]:
             raise TimeoutError("Train screen deadline reached")
 
     try:
@@ -244,8 +245,10 @@ def execute(plan, private, approval):
         deadline()
         inputs = prepared["private_inputs"]
         population = runtime.PopulationPlan(inputs["stage3_run"], inputs["request"], root=ROOT)
-        ids = tuple(population.ids("Train"))
-        if population.identity != plan["data"] or ids != tuple(prepared["roles"]["Train"]["ids"]):
+        ids = tuple(prepared["roles"]["Train"]["ids"])
+        selected = set(ids)
+        if (population.identity != plan["data"]
+                or ids != tuple(sid for sid in population.ids("Train") if sid in selected)):
             raise ValueError("Train population or ordering differs")
         static = Path(private["static"])
         checkpoint = Path(private["checkpoint"])
@@ -281,15 +284,16 @@ def execute(plan, private, approval):
         transform = runtime.PhysicalDote(pack, runtime.DoteDefinition(**plan["scientific_choices"]["DOTE"]))
         factory = runtime.ReaderFactory(population, prepared, approval["decision_id"],
                                         allowed_models=("B7",), dynamic_transform=transform)
-        summary = Coverage()
+        summary = summary_factory()
         reader = factory("Train", 9, ids, output / "B7_train_09_reads")
         batches = 0
         try:
             with torch.no_grad():
-                for position in range(0, len(ids), CAP["batch_size"]):
+                for position in range(0, len(ids), budget["batch_size"]):
                     deadline()
-                    batch = reader.batch("Train", ids[position:position + CAP["batch_size"]]).to("cuda")
-                    if batch.role != "Train" or batch.identity != plan["data"]:
+                    expected_ids = ids[position:position + budget["batch_size"]]
+                    batch = reader.batch("Train", expected_ids).to("cuda")
+                    if batch.role != "Train" or batch.identity != plan["data"] or batch.ids != expected_ids:
                         raise ValueError("Unexpected role or train batch identity")
                     with torch.autocast("cuda", dtype=torch.bfloat16):
                         result, _ = runtime.forward(model, batch)
@@ -300,11 +304,11 @@ def execute(plan, private, approval):
         finally:
             reader.close()
         deadline()
-        if batches != CAP["forward_batches"]:
+        if batches != budget["forward_batches"]:
             raise RuntimeError("Train-pass forward count differs")
         stats = summary.finish(output)
         weather = read(output / "B7_train_09_reads/pass_receipt.json")["actual_reads"]
-        _write(output / "completion.json", dict(status="COMPLETE_TRAIN_ENDPOINT_SCREEN", **stats,
+        _write(output / "completion.json", dict(status=complete_status, **stats,
                                                proposal_sha256=plan["proposal_sha256"], runtime=runtime_identity,
                                                forward_batches=batches, fixed_source_reads=fixed, train_reads=weather,
                                                optimizer_updates=0, final_2025_access=False))

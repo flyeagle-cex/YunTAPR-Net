@@ -192,9 +192,18 @@ def validate_spec(path):
                 or Path(private['runtime_python']).resolve()!=executable.resolve()
                 or proposal['budget'].get('maximum_seconds')!=7200):
             raise PermissionError('A20 rank approval or runtime differs')
-    elif spec['kind']=='BOUNDED_TRAIN_ENDPOINT_SCREEN':
+    elif spec['kind'] in ('BOUNDED_TRAIN_ENDPOINT_SCREEN', 'BOUNDED_TRAIN_CROSSING_AMPLITUDE'):
         cwd = Path(spec['cwd']).resolve()
-        if (entry != cwd / 'tools/research_readiness/start_train_endpoint_screen.py'
+        entry_name, authorization_scope, total_bytes, total_files, batches, seconds = {
+            'BOUNDED_TRAIN_ENDPOINT_SCREEN': (
+                'start_train_endpoint_screen.py', 'COSINE9_E9_2023_TRAIN_ENDPOINT_SCREEN',
+                26478482205, 7920, 120, 3600),
+            'BOUNDED_TRAIN_CROSSING_AMPLITUDE': (
+                'start_train_crossing_amplitude.py', 'COSINE9_E9_2023_TRAIN_CROSSING_AMPLITUDE',
+                7529790140, 2119, 32, 1200),
+        }[spec['kind']]
+        entry_relative = 'tools/research_readiness/' + entry_name
+        if (entry != cwd / entry_relative
                 or len(command) != 10 or command[3] != 'execute'
                 or command[4::2] != ['--proposal', '--private-preparation', '--researcher-approval']
                 or not all(Path(value).is_absolute() for value in command[5::2])
@@ -205,7 +214,7 @@ def validate_spec(path):
                                 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1',
                                 'CUBLAS_WORKSPACE_CONFIG': ':4096:8'}
         budget = proposal['budget']
-        if (proposal.get('authorization_scope') != 'COSINE9_E9_2023_TRAIN_ENDPOINT_SCREEN'
+        if (proposal.get('authorization_scope') != authorization_scope
                 or approval.get('authorization_scope') != proposal['authorization_scope']
                 or proposal.get('authorized') is not False or proposal.get('final_2025_access') is not False
                 or approval.get('approved_by_researcher') is not True or not approval.get('decision_id')
@@ -214,8 +223,8 @@ def validate_spec(path):
                 or proposal['tasks'] != [dict(model='B7', seed=2029, checkpoint='COSINE9_FIXED_E9',
                                               role='Train', year=2023)]
                 or any(budget.get(key) != value for key, value in
-                       dict(total_scientific_source_bytes=26478482205, total_scientific_source_opens=7920,
-                            forward_batches=120, checkpoint_loads=1, max_seconds=3600,
+                       dict(total_scientific_source_bytes=total_bytes, total_scientific_source_opens=total_files,
+                            forward_batches=batches, checkpoint_loads=1, max_seconds=seconds,
                             optimizer_updates=0, refits=0, retries=0, replay=0).items())
                 or approval['code_commit'] != proposal['execution_code_commit']
                 or approval['output_root'] != private['output_root']
@@ -227,7 +236,7 @@ def validate_spec(path):
             raise PermissionError('Train-only scope, approval, or runtime differs')
         commit = subprocess.check_output(['git', '-C', str(cwd), 'rev-parse', 'HEAD'], text=True).strip()
         dirty = subprocess.check_output(['git', '-C', str(cwd), 'status', '--porcelain'], text=True).strip()
-        entry_hash = proposal['code_sha256']['tools/research_readiness/start_train_endpoint_screen.py']
+        entry_hash = proposal['code_sha256'][entry_relative]
         if commit != approval['code_commit'] or dirty or sha(entry) != entry_hash:
             raise PermissionError('Clean approved Train checkout required')
     elif spec['kind']=='BOUNDED_CONDITIONAL_INTENSITY_READOUT':
@@ -384,6 +393,7 @@ def supervise(path):
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
                        'BOUNDED_A20_POINT_RANK': 7200,
                        'BOUNDED_TRAIN_ENDPOINT_SCREEN': 3600,
+                       'BOUNDED_TRAIN_CROSSING_AMPLITUDE': 1200,
                        'BOUNDED_TAIL20_TRAINING': 21600,
                        'BOUNDED_TAIL20_E9_REPLAY': 4500,
                        'BOUNDED_A20_BISIDE_TRAINING': 28800,
