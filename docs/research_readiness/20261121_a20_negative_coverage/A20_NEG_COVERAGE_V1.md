@@ -30,3 +30,5 @@ A20 的负类均值项位于强雨像元数大于零的分支中。逐场景 QC 
 固定代码 4dc4f4d1cfc75d8607a19db0eba6fae9c6af9856，提案 787217dfedacf75dc6bdc21996446d2779d6ea30c96222a7bd331d74f670c10c。Harness Flash High 完成新增差异的限定只读审核，未发现实质阻塞。准备时核对了 674 项固定身份，拒绝了无批准与历史批准两种入口调用。[精确提案](A20_NEG_COVERAGE_EXECUTION_PROPOSAL.json) · [审核收据](A20_NEG_COVERAGE_REVIEW.json)
 
 研究者批准后，独立监督器于北京时间 20:22:54 单次派发。20:24:04 的账本快照确认 17/4,320 次已返回的优化器更新。Chrome 只读页面显示轮次、更新和 Dev 状态。实验仍在第 3 步，科学验收待固定 E9 Dev 封口。[启动收据](A20_NEG_COVERAGE_LAUNCH_RECEIPT.json)
+
+2026-11-22 暂停后，原运行已停止。账本累计 2,566 步，最后检查点保存到第 5 轮第 2,400 步。第 6 至 9 轮的限额恢复包已准备，等待批准。[恢复方案](A20_COVERAGE_E5_RECOVERY.md)
