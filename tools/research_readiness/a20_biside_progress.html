@@ -49,9 +49,10 @@
       <div><span>Train / Dev 已封口轮次</span><strong id="closed">—</strong></div>
       <div><span>启动时间（北京）</span><strong id="start">—</strong></div>
       <div><span>已用时间</span><strong id="elapsed">—</strong></div>
-      <div><span>运行上限</span><strong id="limit">8 小时</strong></div>
+      <div><span>运行上限</span><strong id="limit">—</strong></div>
     </div>
     <p class="note" id="e9">E9 权重等待封存</p>
+    <p class="note" id="recovery" hidden></p>
     <p id="result" class="warning" hidden></p>
   </section>
   <section aria-labelledby="timeline-title">
@@ -126,6 +127,12 @@
     text("elapsed", data.started_at ? duration(data.elapsed_seconds) : "—");
     text("limit", data.time_limit_seconds / 3600 + " 小时");
     text("e9", data.e9_saved_before_dev ? "E9 权重已在 Dev 前完成封存" : "E9 权重等待封存");
+    if (data.inherited_updates) {
+      const steps = data.segment_updates == null ? "—" : number.format(data.segment_updates);
+      text("recovery", "第 5 轮已封存 · 本次接续 " + steps + " / " + number.format(data.segment_total)
+        + " 步 · 含 " + number.format(data.replay_limit) + " 步重放");
+      get("recovery").hidden = false;
+    }
 
     const items = data.epochs.map(epoch => {
       const row = document.createElement("li");

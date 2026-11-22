@@ -14,12 +14,16 @@ READINESS = ROOT / "docs/research_readiness"
 PUBLIC = READINESS / "20261119_conditional_intensity_diagnostic" / "A20_EXECUTION_PROPOSAL.json"
 COVERAGE_PUBLIC = (READINESS / "20261121_a20_negative_coverage"
                    / "A20_NEG_COVERAGE_EXECUTION_PROPOSAL.json")
+RECOVERY_PUBLIC = COVERAGE_PUBLIC.with_name("A20_COVERAGE_RECOVERY_PROPOSAL.json")
 EPOCHS = 9
 
 
-def snapshot(output, service, proposal):
+def snapshot(output, service, proposal, *, inherited_task=None):
     now = datetime.now(timezone.utc)
-    total = proposal["budget"]["total_updates"]
+    budget = proposal["budget"]
+    segment_total = budget["total_updates"]
+    total = budget.get("effective_updates", segment_total)
+    offset = total - segment_total
     time_limit = proposal["budget"]["max_model_seconds"]
     expected_dev_files = proposal["source_scope_summary"]["Development"]["file_count"]
     identity = proposal["execution_code_commit"]
@@ -35,19 +39,24 @@ def snapshot(output, service, proposal):
         (datetime.fromisoformat(ended) if ended else now) - datetime.fromisoformat(started)
     ).total_seconds())) if started else 0
 
-    updates = count_rows(
+    segment_updates = count_rows(
         task / "updates.sqlite",
-        f"SELECT count(*) FROM updates WHERE model='B7' AND state='RETURNED' AND u BETWEEN 1 AND {total}",
+        f"SELECT count(*) FROM updates WHERE model='B7' AND state='RETURNED' AND u BETWEEN {offset + 1} AND {total}",
     )
+    updates = offset + segment_updates if segment_updates is not None else None
     per_epoch = total // EPOCHS
     epochs = []
     for epoch in range(1, EPOCHS + 1):
         target = per_epoch * epoch
-        train = receipt(task / f"B7_train_{epoch:02d}.json")
-        seal = receipt(task / f"B7_LAST_epoch_{epoch:02d}.receipt.json")
+        inherited = target <= offset
+        source = inherited_task if inherited else task
+        expected_commit = (proposal["scientific_choices"]["recovery"]["parent_execution_commit"]
+                           if inherited else identity)
+        train = receipt(source / f"B7_train_{epoch:02d}.json")
+        seal = receipt(source / f"B7_LAST_epoch_{epoch:02d}.receipt.json")
         train_sealed = train.get("updates") == target
         sealed = (train_sealed and seal.get("epoch") == epoch and seal.get("updates") == target
-                  and seal.get("code_commit") == identity and bool(seal.get("checkpoint_sha256")))
+                  and seal.get("code_commit") == expected_commit and bool(seal.get("checkpoint_sha256")))
         epochs.append(dict(epoch=epoch, train_sealed=train_sealed, sealed=sealed))
     closed_epochs = sum(epoch["sealed"] for epoch in epochs)
     current = min(closed_epochs + 1, EPOCHS)
@@ -67,6 +76,8 @@ def snapshot(output, service, proposal):
         and done.get("execution_code_commit") == identity
         and e9_saved and closed_epochs == EPOCHS
         and done.get("optimizer_updates") == total
+        and (not offset or (done.get("segment_updates") == segment_total
+                            and done.get("replay") == budget["replay_allowance"]))
         and done.get("source_bytes") == proposal["budget"]["total_source_bytes"]
         and done.get("source_files") == proposal["budget"]["total_source_files"]
         and science in ("PASS_DEV_POINT_A20_GATE", "FAIL_DEV_POINT_A20_GATE")
@@ -100,6 +111,8 @@ def snapshot(output, service, proposal):
 
     return dict(
         state=state, updates=updates, total_updates=total, updates_per_epoch=per_epoch, epochs=epochs,
+        inherited_updates=offset, segment_updates=segment_updates, segment_total=segment_total,
+        replay_limit=budget["replay_allowance"] if offset else 0,
         closed_epochs=closed_epochs, current_epoch=current, e9_saved_before_dev=e9_saved,
         dev_files_read=dev_read, dev_files_total=expected_dev_files, result=result,
         started_at=started, elapsed_seconds=elapsed, time_limit_seconds=time_limit, as_of=now.isoformat(),
@@ -107,13 +120,15 @@ def snapshot(output, service, proposal):
     )
 
 
-def serve(run, ready, *, proposal_file=None, port=0, coverage=False):
+def serve(run, ready, *, proposal_file=None, port=0, coverage=False, coverage_recovery=False):
     run, ready = run.resolve(), ready.resolve()
     if run.parent != (READINESS / ".local").resolve() or ready.parent != run:
         raise ValueError("Use the bound private A20 directory")
-    candidate = "A20-NEG-COVERAGE-V1" if coverage else "A20-BISIDE-V1"
-    scope = candidate.replace("-", "_") + "_REAL_COSINE9_MATCHED"
-    default_proposal = COVERAGE_PUBLIC if coverage else PUBLIC
+    candidate = "A20-NEG-COVERAGE-V1" if coverage or coverage_recovery else "A20-BISIDE-V1"
+    scope = candidate.replace("-", "_") + (
+        "_E5_TO_E9_RECOVERY" if coverage_recovery else "_REAL_COSINE9_MATCHED"
+    )
+    default_proposal = RECOVERY_PUBLIC if coverage_recovery else (COVERAGE_PUBLIC if coverage else PUBLIC)
     proposal = receipt(run / default_proposal.name)
     private = receipt(run / "PRIVATE_PREPARATION.json")
     output, service = run / "output", run / "service"
@@ -123,6 +138,13 @@ def serve(run, ready, *, proposal_file=None, port=0, coverage=False):
             or Path(private["output_root"]).resolve() != output.resolve()
             or Path(private["service_dir"]).resolve() != service.resolve()):
         raise ValueError("A fixed, published A20 proposal is required")
+    inherited_task = None
+    if coverage_recovery:
+        original = run.parent / "a20_negative_coverage_20261121_v1"
+        inherited_task = (original / "output" / "B7_s2029").resolve()
+        if Path(private["stopped_task"]).resolve() != inherited_task or not inherited_task.is_dir():
+            raise ValueError("Use the bound original A20 run for the inherited rounds")
+        candidate += " · E5 接续"
     page = Path(__file__).with_name("a20_biside_progress.html").read_text(encoding="utf-8")
     html = page.replace("A20-BISIDE-V1", candidate).encode("utf-8")
     assets = {
@@ -133,7 +155,7 @@ def serve(run, ready, *, proposal_file=None, port=0, coverage=False):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             if self.path == "/api/progress":
-                body = json.dumps(snapshot(output, service, proposal)).encode("utf-8")
+                body = json.dumps(snapshot(output, service, proposal, inherited_task=inherited_task)).encode("utf-8")
                 content_type = "application/json; charset=utf-8"
             elif self.path in assets:
                 body, content_type = assets[self.path]
@@ -163,6 +185,9 @@ if __name__ == "__main__":
     parser.add_argument("--ready", type=Path, required=True)
     parser.add_argument("--proposal", type=Path)
     parser.add_argument("--port", type=int, default=0)
-    parser.add_argument("--coverage", action="store_true")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--coverage", action="store_true")
+    modes.add_argument("--coverage-recovery", action="store_true")
     args = parser.parse_args()
-    serve(args.run, args.ready, proposal_file=args.proposal, port=args.port, coverage=args.coverage)
+    serve(args.run, args.ready, proposal_file=args.proposal, port=args.port,
+          coverage=args.coverage, coverage_recovery=args.coverage_recovery)
