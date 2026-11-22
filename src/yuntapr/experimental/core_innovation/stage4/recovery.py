@@ -6,6 +6,7 @@ from ..stage3.planning import digest
 from . import EPOCHS,POPULATION_SHA,STEPS,PAIR_CAP
 from ...phase_b_v2_ablations.schedule import COSINE9, ORIGINAL_50, schedule_identity
 from ...phase_b_v2_ablations.tail20_aux import profile_identity as tail20_identity
+from ...phase_b_v2_ablations.point_a20_coverage import profile_identity as coverage_identity
 
 BASE='5b5298f41025db5b7b718fd736fc3fe6de516875'
 LAST_SHA='9d4c8a4d3035c0b8327812466dc111afa72c074afb8612bf30f32a25bed7fc8e'
@@ -155,6 +156,7 @@ class Tail20E8Resume:
     inherited_epochs = EPOCHS - 1
     inherited_updates = inherited_epochs * STEPS
     effective_updates = EPOCHS * STEPS
+    loss_identity = staticmethod(tail20_identity)
 
     @classmethod
     def required_parent_files(cls):
@@ -192,9 +194,11 @@ class Tail20E8Resume:
         recovery = dict(parent=str(self.parent), checkpoint_sha256=self.checkpoint_sha256,
                         train_sha256=self.train_sha256, inherited_updates=self.inherited_updates,
                         **self.request)
+        segment = self.effective_updates - self.inherited_updates
+        prior = self.request['prior_updates']
         return RecoveryLedger(path, dict(identity, recovery=recovery), offsets={'B7': self.inherited_updates},
-                              segment_cap=STEPS, prior_updates=self.effective_updates,
-                              cumulative_cap=self.effective_updates + STEPS, allowed_models=self.kinds)
+                              segment_cap=segment, prior_updates=prior,
+                              cumulative_cap=prior + segment, allowed_models=self.kinds)
 
     def check_initial(self, value):
         if value != read(self.parent / 'paired_initial_identity.json'):
@@ -213,11 +217,11 @@ class Tail20E8Resume:
             if (seal['model'] != kind or seal['epoch'] != epoch or seal['updates'] != epoch * STEPS
                     or seal['code_commit'] != self.parent_code_commit
                     or seal['population_sha256'] != POPULATION_SHA or seal['validation_receipt_sha256'] != digest(report)
-                    or seal['loss_config'] != tail20_identity() or seal['schedule'] != schedule_identity()):
-                raise ValueError('Inherited TAIL20 Dev or checkpoint seal differs')
+                    or seal['loss_config'] != self.loss_identity() or seal['schedule'] != schedule_identity()):
+                raise ValueError('Inherited Dev or checkpoint seal differs')
             reports.append(report)
         if seal['checkpoint_sha256'] != self.checkpoint_sha256:
-            raise ValueError('Inherited TAIL20 E8 digest differs')
+            raise ValueError('Inherited LAST digest differs')
         initial = read(self.parent / 'paired_initial_identity.json')[kind]['full_state_sha256']
         order = read(self.parent / 'paired_orders.json')[str(last)]['sha256']
 
@@ -225,11 +229,11 @@ class Tail20E8Resume:
             if (payload['identity']['schedule'] != schedule_identity()
                     or payload['initial_sha256'] != initial or payload['train_order_sha256'] != order
                     or digest(payload['validation']) != seal['validation_receipt_sha256']):
-                raise ValueError('Inherited TAIL20 E8 checkpoint state differs from sealed evidence')
+                raise ValueError('Inherited LAST checkpoint state differs from sealed evidence')
 
-        restore_last(self.parent / 'B7_LAST_epoch_08.pt', model, optimizer, groups,
+        restore_last(self.parent / f'B7_LAST_epoch_{last:02d}.pt', model, optimizer, groups,
                      data_identity=self.data_identity, epoch=last, updates=self.inherited_updates,
-                     kind=kind, seed=2029, loss_config=tail20_identity(), schedule_profile=COSINE9,
+                     kind=kind, seed=2029, loss_config=self.loss_identity(), schedule_profile=COSINE9,
                      expected_sha256=self.checkpoint_sha256, validate_payload=validate_payload)
         return self.inherited_updates, reports
 
@@ -237,6 +241,37 @@ class Tail20E8Resume:
         actual = digest(training)
         if actual != self.train_sha256:
             raise RuntimeError(f'TAIL20 E9 Train replay differs before Development; actual receipt digest {actual}')
+
+
+class CoverageE5Resume(Tail20E8Resume):
+    """Restore B7 E5 and continue its four unfinished rounds."""
+
+    inherited_epochs = 5
+    inherited_updates = inherited_epochs * STEPS
+    prior_updates = 2566
+    replay_updates = prior_updates - inherited_updates
+    loss_identity = staticmethod(coverage_identity)
+
+    @classmethod
+    def required_parent_files(cls):
+        return ('paired_initial_identity.json', 'paired_orders.json',
+                *(f'B7_train_{e:02d}.json' for e in range(1, cls.inherited_epochs + 1)),
+                *(f'B7_development_{e:02d}.json' for e in range(1, cls.inherited_epochs + 1)),
+                *(f'B7_LAST_epoch_{e:02d}.receipt.json' for e in range(1, cls.inherited_epochs + 1)))
+
+    def __init__(self, *, parent, decision_id, data_identity, checkpoint_sha256,
+                 parent_pins, parent_code_commit):
+        super().__init__(parent=parent, decision_id=decision_id, data_identity=data_identity,
+                         checkpoint_sha256=checkpoint_sha256, train_sha256=None,
+                         parent_pins=parent_pins, parent_code_commit=parent_code_commit)
+        self.request = dict(prior_updates=self.prior_updates, replayed_updates=self.replay_updates)
+
+    def validate(self, plan, decision):
+        if (plan.identity != self.data_identity or decision.seed != 2029
+                or decision.decision_id != self.decision_id or not self.decision_id):
+            raise PermissionError('A20 coverage recovery population or decision differs')
+        if any(sha(self.parent / name) != identity for name, identity in self.parent_pins.items()):
+            raise ValueError('Frozen A20 coverage parent evidence differs')
 
 
 class ResumeState:

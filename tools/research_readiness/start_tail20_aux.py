@@ -272,12 +272,12 @@ def checked(p, v, approval, commit, *, arm=TAIL20_ARM):
     return prepared
 
 
-def point_completion(folder, gate, p, *, arm=POINT_A20_ARM):
+def point_completion(folder, gate, p, *, arm=POINT_A20_ARM, inherited=None):
     checkpoint = folder / "B7_PREDEV_epoch_09.pt"
     seal = read(checkpoint.with_suffix(".receipt.json"))
     training = read(folder / "B7_train_09.json")
     if (seal["status"] != "SEALED_TRAIN_BEFORE_DEV" or (seal["model"], seal["epoch"]) != ("B7", 9)
-            or seal["updates"] != p["budget"]["total_updates"]
+            or seal["updates"] != p["budget"].get("effective_updates", p["budget"]["total_updates"])
             or seal["population_sha256"] != p["data"]["population_sha256"]
             or seal["code_commit"] != p["execution_code_commit"] or seal["loss_config"] != arm.loss_identity()
             or seal["schedule"] != schedule_identity() or seal["checkpoint_bytes"] != checkpoint.stat().st_size
@@ -287,7 +287,8 @@ def point_completion(folder, gate, p, *, arm=POINT_A20_ARM):
     if arm.report_point_rank:
         coverage = read(ROOT / COVERAGE_RESULT)
         for row in coverage["epochs"]:
-            record = read(folder / f'B7_train_{row["epoch"]:02d}.json')
+            source = inherited if inherited is not None and row["epoch"] <= inherited.inherited_epochs else None
+            record = read((source.parent if source is not None else folder) / f'B7_train_{row["epoch"]:02d}.json')
             if (record["negative_only_batches"], record["negative_only_pixels"]) != (
                 row["skipped_batches"], row["skipped_negative_exposures"]
             ):

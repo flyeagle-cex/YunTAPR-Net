@@ -22,7 +22,7 @@ from ..stage3.planning import digest
 from . import *
 from .evaluation import Evaluation,paired_difference
 from .data import sha
-from .recovery import Tail20E8Resume,write as write_durable
+from .recovery import CoverageE5Resume,Tail20E8Resume,write as write_durable
 
 
 POINT_A20_PROFILES = (POINT_A20_PROFILE, COVERAGE_PROFILE)
@@ -178,9 +178,12 @@ class PairedExecutor:
         self.quantile_profile=quantile_profile
         self.final_dev_observer=final_dev_observer
         self.tail20_resume = type(recovery) is Tail20E8Resume
+        self.coverage_resume = type(recovery) is CoverageE5Resume
         if self.tail20_resume and (quantile_profile != TAIL20_PROFILE or schedule_profile != COSINE9):
             raise PermissionError('TAIL20 E8 restore requires the original loss and schedule')
-        incompatible_resume = recovery is not None and not self.tail20_resume
+        if self.coverage_resume and (quantile_profile != COVERAGE_PROFILE or schedule_profile != COSINE9):
+            raise PermissionError('A20 coverage E5 restore requires the original loss and schedule')
+        incompatible_resume = recovery is not None and not (self.tail20_resume or self.coverage_resume)
         if quantile_profile!=UNIFORM and (
             quantile_profile not in (MILD_PROFILE,PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or self.kinds!=('B7',)
             or getattr(decision,'seed',None)!=2029 or self.lambda_q!=1.0 or incompatible_resume
@@ -360,7 +363,7 @@ class PairedExecutor:
                             checkpoint_sha256=checkpoint_sha256,checkpoint_bytes=path.stat().st_size,
                             train_receipt_sha256=digest(training),population_sha256=POPULATION_SHA,
                             loss_config=self.loss_identity,schedule=schedule_identity(),code_commit=self.code_commit)
-                        if self.tail20_resume:
+                        if self.tail20_resume or self.coverage_resume:
                             predev_receipt['inherited_checkpoint_sha256']=self.recovery.checkpoint_sha256
                         write_durable(path.with_suffix('.receipt.json'),predev_receipt)
                         self.deadline()
