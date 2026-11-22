@@ -201,8 +201,8 @@ class Summary:
 
 def main(*, kind=KIND, scope=SCOPE, budget=CAP, binder=seal, entry=__file__,
          make_summary=lambda paths: Summary(paths["selected_strong_scenes"]), status=STATUS,
-         diagnostic_hooks=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+         diagnostic_hooks=None, native_diagnostic_factory=None, description=__doc__):
+    parser = argparse.ArgumentParser(description=description)
     sub = parser.add_subparsers(dest="mode", required=True)
     prep = sub.add_parser("prepare")
     run = sub.add_parser("execute")
@@ -219,7 +219,7 @@ def main(*, kind=KIND, scope=SCOPE, budget=CAP, binder=seal, entry=__file__,
         plan, paths, grant = map(endpoint.read, (args.proposal, args.private_preparation, args.researcher_approval))
         endpoint.execute(plan, paths, grant, scope=scope, budget=budget, kind=kind, binder=binder,
                          summary_factory=lambda: make_summary(paths), complete_status=status,
-                         diagnostic_hooks=diagnostic_hooks)
+                         diagnostic_hooks=diagnostic_hooks, native_diagnostic_factory=native_diagnostic_factory)
         return
     source = args.source_root.resolve()
     namespace = args.private_preparation.resolve().parent

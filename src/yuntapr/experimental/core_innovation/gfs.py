@@ -15,13 +15,15 @@ UTC=timezone.utc
 VARIABLES={
  'temperature':('Temperature_isobaric',),
  'relative_humidity':('Relative_humidity_isobaric',),
+ 'specific_humidity':('Specific_humidity_isobaric',),
  'u':('u-component_of_wind_isobaric',),
  'v':('v-component_of_wind_isobaric',),
  'surface_pressure':('Pressure_surface',),
  'precipitable_water':('Precipitable_water_entire_atmosphere_single_layer',),
  'cape':('Convective_available_potential_energy_surface',),
 }
-PRESSURE_QUANTITIES={'temperature','relative_humidity','u','v'}
+PRESSURE_QUANTITIES={'temperature','relative_humidity','specific_humidity','u','v'}
+SPECIFIC_HUMIDITY_LEVEL_PA=70000.
 
 
 def utc(value):
@@ -83,6 +85,12 @@ class VariableRequest:
         if self.quantity in PRESSURE_QUANTITIES:
             if self.level_pa is None or not np.isfinite(self.level_pa) or self.level_pa<=0:raise ValueError('Explicit pressure level in Pa required')
         elif self.level_pa is not None:raise ValueError('Surface/column fields do not have isobaric levels')
+        if self.quantity=='specific_humidity' and self.level_pa!=SPECIFIC_HUMIDITY_LEVEL_PA:
+            raise ValueError('Only 700 hPa specific humidity is audited for diagnostics')
+
+
+SPECIFIC_HUMIDITY_700=VariableRequest('specific_humidity700','specific_humidity',
+                                      'Specific_humidity_isobaric',SPECIFIC_HUMIDITY_LEVEL_PA)
 
 
 @dataclass(frozen=True)
@@ -127,6 +135,7 @@ class EnvironmentFrame:
 
 def _convert(values,unit,quantity):
     aliases={'temperature':{'K':'K'},'relative_humidity':{'%':'%'},
+      'specific_humidity':{'kg kg-1':'kg kg-1'},
       'u':{'m/s':'m/s','m s-1':'m/s','m.s-1':'m/s'},'v':{'m/s':'m/s','m s-1':'m/s','m.s-1':'m/s'},
       'surface_pressure':{'Pa':'Pa','hPa':'Pa'},
       'precipitable_water':{'kg m-2':'kg m-2','kg.m-2':'kg m-2','kg/m^2':'kg m-2'},
@@ -240,6 +249,8 @@ def decode_gfs_bytes(raw, identity, requests, *, max_cells=65536):
         for request in requests:
             if request.variable not in ds.variables:raise ValueError('Requested field missing: '+request.key)
             var=ds.variables[request.variable];index=[];remaining=[]
+            if request.quantity=='specific_humidity' and var.dimensions.count(pressure.dimensions[0])!=1:
+                raise ValueError('Specific humidity requires one explicit pressure axis')
             for dim in var.dimensions:
                 if dim==lat.dimensions[0] or dim==lon.dimensions[0]:index.append(slice(None));remaining.append(dim)
                 elif pressure is not None and dim==pressure.dimensions[0] and request.level_pa is not None:
@@ -253,6 +264,8 @@ def decode_gfs_bytes(raw, identity, requests, *, max_cells=65536):
             values,valid=decode_packed(var[tuple(index)],attrs)
             if values.shape!=grid.shape:raise ValueError('Variable grid differs from coordinates')
             values,unit=_convert(values,str(attrs.get('units','')),request.quantity)
+            if request.quantity=='specific_humidity' and np.any((values[valid]<0)|(values[valid]>=1)):
+                raise ValueError('Valid specific humidity must lie in [0, 1) kg kg-1')
             fields[request.key]=Field(values,valid,request.quantity,unit,request.level_pa)
         # Preserve stale auxiliary/history evidence; these never establish release.
         for name in ('conservative_available_time_utc','availability_note','history','legacy_history_before_20260925'):

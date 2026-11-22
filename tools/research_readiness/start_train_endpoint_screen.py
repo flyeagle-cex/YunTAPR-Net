@@ -4,6 +4,7 @@ import argparse
 from collections import Counter
 from datetime import date
 from io import BytesIO
+import json
 import os
 from pathlib import Path
 import shutil
@@ -214,7 +215,7 @@ def recheck(plan, private, approval, expected_commit, *, scope=SCOPE, budget=CAP
 
 def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, binder=seal,
             summary_factory=Coverage, complete_status="COMPLETE_TRAIN_ENDPOINT_SCREEN",
-            diagnostic_hooks=None):
+            diagnostic_hooks=None, native_diagnostic_factory=None):
     start = time.monotonic()
     require_independent(host_identity())
     recheck(plan, private, approval, plan["execution_code_commit"], scope=scope, budget=budget)
@@ -286,8 +287,11 @@ def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, bind
         summary = summary_factory()
         if diagnostic_hooks is not None:
             transform, verify_batch = diagnostic_hooks(summary, transform, population)
+        reader_options = {}
+        if native_diagnostic_factory is not None:
+            reader_options["native_diagnostic"] = native_diagnostic_factory(summary)
         factory = runtime.ReaderFactory(population, prepared, approval["decision_id"],
-                                        allowed_models=("B7",), dynamic_transform=transform)
+                                        allowed_models=("B7",), dynamic_transform=transform, **reader_options)
         reader = factory("Train", 9, ids, output / "B7_train_09_reads")
         batches = 0
         try:
@@ -314,10 +318,15 @@ def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, bind
             raise RuntimeError("Train-pass forward count differs")
         stats = summary.finish(output)
         weather = read(output / "B7_train_09_reads/pass_receipt.json")["actual_reads"]
-        _write(output / "completion.json", dict(status=complete_status, **stats,
-                                               proposal_sha256=plan["proposal_sha256"], runtime=runtime_identity,
-                                               forward_batches=batches, fixed_source_reads=fixed, train_reads=weather,
-                                               optimizer_updates=0, final_2025_access=False))
+        terminal = dict(status=complete_status, **stats,
+                        proposal_sha256=plan["proposal_sha256"], runtime=runtime_identity,
+                        forward_batches=batches, fixed_source_reads=fixed, train_reads=weather,
+                        optimizer_updates=0, final_2025_access=False)
+        if "aggregate_receipt_max_bytes" in budget:
+            payload = json.dumps(terminal, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+            if len(payload.encode("utf-8")) > budget["aggregate_receipt_max_bytes"]:
+                raise RuntimeError("Aggregate diagnostic exceeds the receipt allowance")
+        _write(output / "completion.json", terminal)
     except BaseException as exc:
         _write(output / "failure.json", dict(status="STOP_NO_RETRY", error_type=type(exc).__name__, details=str(exc)))
         raise

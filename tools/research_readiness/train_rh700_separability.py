@@ -7,6 +7,22 @@ import math
 import numpy as np
 
 
+def scene_pairs(members, strong, pixels, probability, q32):
+    """Match one scene and one elevation bin without examining diagnostic fields."""
+    positives = sorted((i for i in members if strong[i]), key=lambda i: pixels[i])
+    negatives = np.array([i for i in members if not strong[i]], dtype=int)
+    unused = np.ones(len(negatives), dtype=bool)
+    for i in positives:
+        dp = np.abs(probability[negatives].astype(np.float64) - float(probability[i]))
+        dq = np.abs(q32[negatives] - q32[i])
+        eligible = np.flatnonzero(unused & (dp <= .10) & (dq <= 5.))
+        if eligible.size:
+            order = np.lexsort((pixels[negatives[eligible]], dq[eligible], dp[eligible]))
+            chosen = eligible[order[0]]
+            unused[chosen] = False
+            yield i, negatives[chosen]
+
+
 def summarize(scene_ids, pixel_ids, elevation, truth, probability, q32_log, rh700, rh_valid):
     """One-to-one same-scene matching before inspecting RH values or validity."""
     arrays = (scene_ids, pixel_ids, elevation, truth, probability, q32_log, rh700, rh_valid)
@@ -37,21 +53,8 @@ def summarize(scene_ids, pixel_ids, elevation, truth, probability, q32_log, rh70
     results = defaultdict(lambda: dict(positive=0, matched=0, valid_pairs=0, wins=0, ties=0))
     for (scene, _), group in groups.items():
         tally = results[blocks[scene]]
-        positive = sorted((i for i in group if strong[i]), key=lambda i: pixel_ids[i])
-        negative = np.array([i for i in group if not strong[i]], dtype=int)
-        unused = np.ones(len(negative), dtype=bool)
-        tally["positive"] += len(positive)
-        for i in positive:
-            dp = np.abs(probability[negative].astype(np.float64) - float(probability[i]))
-            dq = np.abs(q32[negative] - q32[i])
-            eligible = np.flatnonzero(unused & (dp <= .10) & (dq <= 5.))
-            if not len(eligible):
-                continue
-            # Closest in p, then q32, then the immutable row-major pixel index.
-            order = np.lexsort((pixel_ids[negative[eligible]], dq[eligible], dp[eligible]))
-            chosen = eligible[order[0]]
-            j = negative[chosen]
-            unused[chosen] = False
+        tally["positive"] += int(strong[group].sum())
+        for i, j in scene_pairs(group, strong, pixel_ids, probability, q32):
             tally["matched"] += 1
             if rh_valid[i] and rh_valid[j]:
                 values = rh700[[i, j]]

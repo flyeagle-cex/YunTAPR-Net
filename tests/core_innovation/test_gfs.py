@@ -8,7 +8,8 @@ import numpy as np
 import netCDF4
 from yuntapr.experimental.core_innovation.grid import GridSpec
 from yuntapr.experimental.core_innovation.gfs import (
-    ForecastIdentity,Availability,VariableRequest,read_gfs_file,combine_environment,decode_packed)
+    ForecastIdentity,Availability,SPECIFIC_HUMIDITY_700,VariableRequest,
+    read_gfs_file,combine_environment,decode_packed)
 
 NOW=datetime(2023,5,1,tzinfo=timezone.utc)
 IDENTITY=ForecastIdentity(NOW,timedelta(hours=3),NOW+timedelta(hours=3))
@@ -29,7 +30,8 @@ def dataset_bytes(path):
     else:path.write_bytes(ds.close())
 
 
-def fixture(path,thermo=False,*,reference_shift=0,pressure_unit='hPa',lat=(32,31,30),surface_unit='Pa'):
+def fixture(path,thermo=False,*,reference_shift=0,pressure_unit='hPa',lat=(32,31,30),surface_unit='Pa',
+            specific_humidity=None,humidity_unit='kg kg-1',humidity_pressure_axis=True):
     path.parent.mkdir(parents=True,exist_ok=True)
     with dataset_bytes(path) as ds:
         for d,n in (('valid_time',1),('pressure_level',2),('latitude',3),('longitude',4)):ds.createDimension(d,n)
@@ -47,6 +49,15 @@ def fixture(path,thermo=False,*,reference_shift=0,pressure_unit='hPa',lat=(32,31
             values=np.full(var.shape,{'u':4,'v':-2,'surface_pressure':100000,'temperature':280,'relative_humidity':75}[request.quantity],dtype=np.float32)
             if request.quantity=='surface_pressure':values[0,1,1]=70000
             if request.quantity=='temperature':values[0,1,2,2]=-9999
+            var[:]=values
+        if specific_humidity is not None:
+            dims=('valid_time','pressure_level','latitude','longitude') if humidity_pressure_axis else ('valid_time','latitude','longitude')
+            var=ds.createVariable(SPECIFIC_HUMIDITY_700.variable,'f4',dims,fill_value=-9999.)
+            var.units=humidity_unit
+            values=np.full(var.shape,.03,dtype=np.float32)
+            if humidity_pressure_axis:
+                values[0,0]=specific_humidity
+                values[0,0,0,0]=-9999.
             var[:]=values
 
 
@@ -71,6 +82,38 @@ class GFSTests(unittest.TestCase):
         a,b=self.files();out=combine_environment(a,b,target_valid_time=IDENTITY.valid,decision_time=IDENTITY.valid,mode='retrospective')
         self.assertFalse(out.fields['u850'].valid[1,1]);self.assertFalse(out.fields['rh850'].valid[1,1])
         x,m=out.stack(('t850','u850'));self.assertEqual(x.shape,(2,3,4));self.assertEqual(m.dtype,bool)
+
+    def test_specific_humidity_700_is_opt_in_and_uses_the_same_thermo_read(self):
+        path=self.folder/'humidity/gfs_thermo_0p25_2023050100_f003.nc'
+        fixture(path,True,specific_humidity=.012)
+        default=read_gfs_file(path,IDENTITY,THERMO)
+        self.assertNotIn(SPECIFIC_HUMIDITY_700.key,default.fields)
+        with patch.object(Path,'open',autospec=True,side_effect=Path.open) as open_file:
+            thermo=read_gfs_file(path,IDENTITY,(*THERMO,SPECIFIC_HUMIDITY_700))
+        open_file.assert_called_once_with(path.resolve(),'rb')
+        self.assertEqual(thermo.provenance,default.provenance)
+        field=thermo.fields[SPECIFIC_HUMIDITY_700.key]
+        self.assertEqual((field.quantity,field.unit,field.level_pa),('specific_humidity','kg kg-1',70000.))
+        self.assertAlmostEqual(field.values[0,1],.012)
+        self.assertFalse(field.valid[0,0])
+        self.assertTrue(np.isnan(field.values[0,0]))
+        main=read_gfs_file(self.main,IDENTITY,MAIN)
+        frame=combine_environment(main,thermo,target_valid_time=IDENTITY.valid,decision_time=IDENTITY.valid,mode='retrospective')
+        self.assertFalse(frame.fields[SPECIFIC_HUMIDITY_700.key].valid[1,1])
+
+    def test_specific_humidity_700_rejects_unaudited_quantity_metadata(self):
+        with self.assertRaisesRegex(ValueError,'Only 700 hPa'):
+            VariableRequest('q850','specific_humidity','Specific_humidity_isobaric',85000.)
+        cases=(('Missing pressure axis',dict(humidity_pressure_axis=False), 'pressure axis'),
+               ('Wrong units',dict(humidity_unit='g kg-1'), 'units'),
+               ('Negative fraction',dict(specific_humidity=-.01), 'must lie'),
+               ('Fraction at upper bound',dict(specific_humidity=1.), 'must lie'))
+        for i,(name,options,message) in enumerate(cases):
+            with self.subTest(name=name):
+                path=self.folder/f'humidity_bad_{i}/gfs_thermo_0p25_2023050100_f003.nc'
+                fixture(path,True,**({'specific_humidity':.012}|options))
+                with self.assertRaisesRegex(ValueError,message):
+                    read_gfs_file(path,IDENTITY,(SPECIFIC_HUMIDITY_700,))
 
     def test_operational_requires_exact_historical_release_evidence(self):
         a,b=self.files();kwargs=dict(target_valid_time=IDENTITY.valid,decision_time=IDENTITY.valid,mode='operational')

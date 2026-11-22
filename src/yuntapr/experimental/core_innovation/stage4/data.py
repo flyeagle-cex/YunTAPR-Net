@@ -11,7 +11,7 @@ from yuntapr.data.dataset_b1 import H_ROOT,IMERG_ROOT,SCALER_SHA
 from yuntapr.data.imerg_v07 import decode_imerg
 from yuntapr.spatial.sp04_mapping import load_sp04
 from ..grid import GridSpec,frozen_sp04_grid
-from ..gfs import ForecastIdentity,VariableRequest,read_gfs_file,combine_environment
+from ..gfs import EnvironmentFrame,ForecastIdentity,SPECIFIC_HUMIDITY_700,VariableRequest,read_gfs_file,combine_environment
 from ..multispectral import TrainNormalization,prepare_multispectral
 from ..stage2 import CHANNELS,OFFSETS,MEE_V13_KEYS
 from ..stage2.environment import EnvironmentScaler,V13_UNITS,prepare_mee
@@ -118,8 +118,16 @@ class BatchReader:
     One reader owns one pass. Further epochs require independently authorized
     fresh scopes; Stage4 CLI only supplies the ten declared dry-run scenes.
     """
-    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2,source_bytes=None,dynamic_transform=None):
+    def __init__(self,plan,ids_by_role,folder,*,decision_id,max_files=84,max_bytes=512*1024**2,source_bytes=None,dynamic_transform=None,native_diagnostic=None):
         self.dynamic_transform=dynamic_transform
+        self.requests=variable_requests()
+        self.native_diagnostic=None
+        if native_diagnostic is not None:
+            if (not isinstance(native_diagnostic,tuple) or len(native_diagnostic)!=2
+                    or native_diagnostic[0]!=SPECIFIC_HUMIDITY_700 or not callable(native_diagnostic[1])):
+                raise ValueError('Native diagnostic requires the audited q700 request and a callback')
+            thermo_request,self.native_diagnostic=native_diagnostic
+            self.requests['thermo']+=(thermo_request,)
         self.plan=plan;self.ids_by_role=ids_by_role;self.folder=Path(folder);self.folder.mkdir(exist_ok=False)
         self.mapping=load_sp04(plan.root);self.grid=frozen_sp04_grid(plan.root);self.native=GridSpec(self.mapping.axes['native_lat'],self.mapping.axes['native_lon'])
         chosen={};self.target_paths={};self.target_buffers={};self.scene_seen=set()
@@ -147,7 +155,7 @@ class BatchReader:
         grant=dict(authorized=True,decision_id=decision_id,manifest_sha=digest(jobs),max_files=max_files,max_bytes=max_bytes)
         self.cache=SourceCache(self.folder/'reads.sqlite',manifest=jobs,manifest_sha=digest(jobs),grant=grant,processor_id='STAGE4_BATCH_ONLY_V1')
         self.meter=SourceMeter(self.cache.db,files,max_files=max_files,max_bytes=max_bytes);self.meter.install()
-        self.yunnan=None;self.requests=variable_requests()
+        self.yunnan=None
     def _read(self,path,decoder):
         key=self.path_jobs[path_key(path)];box=[]
         def load():
@@ -193,6 +201,9 @@ class BatchReader:
             decoded={k:self._read(p,lambda p=p,k=k:read_gfs_file(p,identity,self.requests[k])) for k,p in self.plan.gfs[row['analysis_time']].items()}
             frame=combine_environment(decoded['main'],decoded['thermo'],target_valid_time=analysis,decision_time=analysis,mode='retrospective')
             TargetBinding(utc(sid),analysis,tuple(utc(r['nominal']) for r in receipts),tuple(utc(r['obs_start']) for r in receipts),tuple(utc(r['obs_end']) for r in receipts)).check_forecast(frame.identity,valid_policy='valid_equals_analysis_retrospective_candidate')
+            if self.native_diagnostic is not None:
+                self.native_diagnostic(frame)
+                frame=EnvironmentFrame(frame.identity,frame.grid,{key:frame.fields[key] for key in MEE_V13_KEYS},frame.mode,frame.provenance)
             e,ev,_=prepare_mee(frame,target_grid=self.grid,scalers=self.plan.environment,keys=MEE_V13_KEYS);envs.append(e);env_valids.append(ev)
             if self.dynamic_transform is not None:
                 dx,dm=self.dynamic_transform(frame)
