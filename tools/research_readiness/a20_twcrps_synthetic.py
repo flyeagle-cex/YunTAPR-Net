@@ -97,8 +97,11 @@ class FixtureModel(nn.Module):
                 self.heads.quantile.weight[:32, index, 0, 0] = torch.expm1(allocation - 1e-4).log()
                 self.heads.quantile.weight[32, index, 0, 0] = torch.expm1(log_nodes[-1] - 1e-4).log()
 
+    def features(self, x):
+        return x + .125 * self.shared(x).tanh().float()
+
     def forward(self, x):
-        return self.heads(x + .125 * self.shared(x).tanh().float())
+        return self.heads(self.features(x))
 
 
 def fixture(seed, device):
@@ -127,7 +130,7 @@ def fixture(seed, device):
             categories[order].to(device))
 
 
-def run_arm(model, batches, device, *, candidate, extra_loss=None):
+def run_arm(model, batches, device, *, candidate, extra_loss=None, extra_forward=None):
     opt, _ = new_adamw(model)
     num_clipped = 0
     max_norm = 0.
@@ -145,7 +148,8 @@ def run_arm(model, batches, device, *, candidate, extra_loss=None):
             if candidate:
                 loss = loss + WEIGHT * auxiliary(output, rate, valid, region)
             if extra_loss is not None:
-                loss = loss + extra_loss(output, rate, valid, region, base.n_valid)
+                extra_output = output if extra_forward is None else extra_forward(model, features)
+                loss = loss + extra_loss(extra_output, rate, valid, region, base.n_valid)
         loss.backward()
         evidence = clip_and_check(model)
         max_norm = max(max_norm, evidence["pre_clip_norm"])
