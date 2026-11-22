@@ -11,6 +11,12 @@ PROBABILITY_EDGES = np.arange(1, 10, dtype=np.float64) / 10
 ELEVATION_EDGES_M = (1000, 2000)
 
 
+def rainfall_counts(strong_truth):
+    return {"(20,30]": int((strong_truth <= 30).sum()),
+            "(30,50]": int(((strong_truth > 30) & (strong_truth <= 50)).sum()),
+            "(50,inf)": int((strong_truth > 50).sum())}
+
+
 def summarize(scene_ids, truth_mm_h, probability, q32_log, elevation_m, slope, pwat,
               upslope700_m_s, physical_valid):
     """Compare one fixed physical feature and three controls on identical pairs.
@@ -47,6 +53,7 @@ def summarize(scene_ids, truth_mm_h, probability, q32_log, elevation_m, slope, p
         groups[key].append(index)
 
     selected_strong = strong[selected]
+    matched_positive = np.zeros(len(selected), dtype=bool)
     concordance = []
     left_out_negative = matched_negative = comparisons = 0
     matched_scenes = set()
@@ -59,6 +66,7 @@ def summarize(scene_ids, truth_mm_h, probability, q32_log, elevation_m, slope, p
             left_out_negative += len(negative)
             continue
         matched_scenes.add(key[0])
+        matched_positive[np.asarray(members)[is_positive]] = True
         matched_negative += len(negative)
         comparisons += len(positive) * len(negative)
         for row in positive:
@@ -78,6 +86,11 @@ def summarize(scene_ids, truth_mm_h, probability, q32_log, elevation_m, slope, p
                              non_strong=left_out_negative),
         matched=dict(strong=len(concordance), non_strong=matched_negative,
                      scenes=len(matched_scenes), comparisons=comparisons),
+        strong_coverage_by_rainfall=dict(
+            invalid_physics=rainfall_counts(truth_mm_h[support & strong & ~physical_valid]),
+            unmatched_valid=rainfall_counts(truth_mm_h[selected[selected_strong & ~matched_positive]]),
+            matched=rainfall_counts(truth_mm_h[selected[matched_positive]]),
+        ),
         positive_weighted_concordance={key: None if value is None else float(value)
                                       for key, value in zip(FEATURES, mean)},
         strong_strictly_above_own_group_negative_max=dict(zip(FEATURES, map(int, above_all))),

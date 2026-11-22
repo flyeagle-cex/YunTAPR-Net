@@ -192,7 +192,6 @@ def read_gfs_file(path,identity,requests,*,max_file_bytes=2*1024**2,max_cells=65
     File byte reading is counted by provenance. This is NOT a zero-byte metadata
     check. The budget prevents materializing a large library/forecast archive.
     """
-    from netCDF4 import Dataset
     if not isinstance(identity,ForecastIdentity):raise TypeError('Validated ForecastIdentity required before source access')
     if type(max_file_bytes) is not int or not 0<max_file_bytes<=8*1024**2 or type(max_cells) is not int or not 0<max_cells<=65536:raise ValueError('Small bounded interface read only')
     if not requests or len({r.key for r in requests})!=len(requests):raise ValueError('Unique explicit variable requests required')
@@ -211,6 +210,18 @@ def read_gfs_file(path,identity,requests,*,max_file_bytes=2*1024**2,max_cells=65
     if len(raw)!=before.st_size or len(raw)>max_file_bytes:raise ValueError('Bounded input changed or exceeded size')
     after=resolved.stat()
     if (before.st_size,before.st_mtime_ns,before.st_ino)!=(after.st_size,after.st_mtime_ns,after.st_ino):raise ValueError('Source changed during bounded read')
+    return decode_gfs_bytes(raw,identity,requests,max_cells=max_cells)
+
+
+def decode_gfs_bytes(raw, identity, requests, *, max_cells=65536):
+    """Decode a bounded in-memory archive supplied by a metered caller."""
+    from netCDF4 import Dataset
+    if not isinstance(identity, ForecastIdentity):
+        raise TypeError("Validated ForecastIdentity required")
+    if not isinstance(raw, bytes) or not 0 < len(raw) <= 8 * 1024**2 or not 0 < max_cells <= 65536:
+        raise ValueError("Bounded in-memory forecast required")
+    if not requests or len({request.key for request in requests}) != len(requests):
+        raise ValueError("Unique explicit variable requests required")
     fields={};caveats={}
     with Dataset('bounded_forecast.nc',mode='r',memory=raw) as ds:
         ds.set_auto_maskandscale(False)

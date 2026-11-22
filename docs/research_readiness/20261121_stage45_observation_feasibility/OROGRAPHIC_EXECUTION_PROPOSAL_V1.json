@@ -1,0 +1,48 @@
+{
+  "authorization_scope": "OROGRAPHIC_SEPARABILITY_V1_DEV_READOUT",
+  "status": "PROPOSAL_ONLY_REQUIRES_RESEARCHER_APPROVAL",
+  "source_binding_sha256": "2ba648aec706bb853773da74336fefe276699be2d31cf3a6aff177018deace73",
+  "code_sha256": {
+    "tools/research_readiness/run_orographic_separability.py": "1aa340a34e6baf3d764169b22ea74842753a8a462f7e70ffde86a5844b53f922",
+    "tools/research_readiness/orographic_separability.py": "658c98b527aacecc9e7e3ed26c5f750eeb019c115c223215667066c97b074af3",
+    "tools/research_readiness/orographic_source_binding.py": "fca5f9790b1af7d0f319b2053db168de1000988699d96df781c351b2b1a59182",
+    "src/yuntapr/experimental/core_innovation/gfs.py": "047df5708c0b2b24142942db502e1f8cbfd92c6ec29b590ec7abcbe447166299",
+    "src/yuntapr/experimental/core_innovation/grid.py": "cabd377f1f471a9429ff70b22af50a07f30e50a208acad2a8de5290bd98f1177",
+    "src/yuntapr/experimental/core_innovation/dote.py": "bc655da7f6815ff050b9d6589e613c29ec4e169335d1008c3d335e3692120d76",
+    "src/yuntapr/experimental/core_innovation/terrain.py": "ddfd020d6043d638283421b8f0061f49d12f7317f55cf0524e15f2c802834276",
+    "src/yuntapr/spatial/sp04_mapping.py": "a4a4d0c8744acd6754588f01c7d1976ccd109b7c9224ba362a4bc474cdc35202"
+  },
+  "budget": {
+    "saved_array_opens": 121,
+    "saved_array_bytes": 881894762,
+    "gfs_main_opens_max": 160,
+    "gfs_main_bytes_max": 48383614,
+    "static_pack_opens_max": 1,
+    "static_pack_bytes_max": 312828,
+    "satellite_opens": 0,
+    "imerg_opens": 0,
+    "gfs_thermo_opens": 0,
+    "checkpoint_loads": 0,
+    "forwards": 0,
+    "optimizer_updates": 0,
+    "retries": 0,
+    "final_2025_access": false,
+    "total_payload_bytes_max": 930591204,
+    "max_seconds": 600,
+    "total_payload_opens_max": 282
+  },
+  "population": {
+    "scenes": 963,
+    "supervised": 3303090,
+    "strong": 717,
+    "supported_strong": 160,
+    "supported_non_strong": 5769
+  },
+  "matched_minimum": {
+    "strong": 80,
+    "scenes": 10
+  },
+  "decision": "Windward concordance must exceed 0.5 and each of PWAT, slope and reversed wind.",
+  "aggregate_only": true,
+  "proposal_sha256": "920475188360022577f25dfdc06ac3fe3bb1871146ef2965b82f53b4d9b4b078"
+}
