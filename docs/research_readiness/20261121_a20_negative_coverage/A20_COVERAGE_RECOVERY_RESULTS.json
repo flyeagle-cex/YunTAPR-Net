@@ -1,0 +1,142 @@
+{
+  "status": "COMPLETE_TRAIN_AND_DEV_EVALUATION",
+  "screen_status": "FAIL_DEV_POINT_A20_GATE",
+  "decision": "ARCHIVE_CANDIDATE_AT_STAGE_3",
+  "scientific_status": "NOT_VERIFIED",
+  "proposal_sha256": "6d0ec68a313bdbd9c041af2e471d2975fd688c67af45f2194bad96f127f597aa",
+  "execution_code_commit": "b518d04b8eca98e290c028eaeacecca7ba89b98b",
+  "started_at_beijing": "2026-11-22T08:46:11.509699+08:00",
+  "finished_at_beijing": "2026-11-22T11:28:42.280753+08:00",
+  "elapsed_seconds": 9750.771054,
+  "exit_code": 0,
+  "inherited_epochs": 5,
+  "train_epochs": 9,
+  "development_epochs": 9,
+  "effective_updates": 4320,
+  "segment_updates": 1920,
+  "replayed_updates": 166,
+  "cumulative_attempted_updates": 4486,
+  "logical_source_bytes": 212254375500,
+  "logical_source_files": 63473,
+  "cumulative_logical_source_bytes": 486670668812,
+  "cumulative_logical_source_files": 145672,
+  "automatic_retry": false,
+  "final_2025_access": false,
+  "verified_negative_only_batches": 2992,
+  "verified_negative_only_exposures": 20497680,
+  "population": {
+    "n_valid": 3303090,
+    "n_rain": 407820,
+    "n_strong": 717,
+    "scenes": 963,
+    "n_weak": 246473
+  },
+  "e9_predev_checkpoint_sha256": "ffe3c5f3715295174aa938fd1509ed71a25ba290e2aeb274b42936158f7d6336",
+  "e9_checkpoint_sha256": "57d8d5a4a338bb4166f635fbba6d64a00f6ffe85c6db5a6527b8099c91b1c9c6",
+  "completion_receipt_sha256": "e6379751b06df6530030011ca9c3525d882610c71671a0203930d8e32c984ae6",
+  "checks_passed": 2,
+  "total_checks": 9,
+  "frozen_comparison": {
+    "status": "FAIL_DEV_TAIL_GATE",
+    "protocol": "CONDITIONAL_TAIL_2024_DEV_V1",
+    "checks": {
+      "strong_physical_pinball_over20": {
+        "baseline": 0.5068646309277546,
+        "candidate": 0.6174573159113314,
+        "delta": 0.11059268498357677,
+        "pass_gate": false
+      },
+      "q32_support_tp": {
+        "baseline": 160,
+        "candidate": 661,
+        "delta": 501,
+        "pass_gate": true
+      },
+      "q32_support_fp": {
+        "baseline": 5769,
+        "candidate": 301423,
+        "delta": 295654,
+        "pass_gate": false
+      },
+      "point_a_tp": {
+        "baseline": 0,
+        "candidate": 586,
+        "delta": 586,
+        "pass_gate": true
+      },
+      "point_a_fp": {
+        "baseline": 0,
+        "candidate": 128804,
+        "delta": 128804,
+        "pass_gate": false
+      },
+      "weak_log_pinball": {
+        "baseline": 0.08872231160181858,
+        "candidate": 0.10458840835215784,
+        "delta": 0.01586609675033926,
+        "pass_gate": false
+      },
+      "occurrence_brier": {
+        "baseline": 0.09233015567445307,
+        "candidate": 0.0967715200374986,
+        "delta": 0.004441364363045527,
+        "pass_gate": false
+      },
+      "occurrence_ap": {
+        "baseline": 0.6066547555865263,
+        "candidate": 0.5687151094968468,
+        "delta": -0.03793964608967948,
+        "pass_gate": false
+      },
+      "occurrence_auroc": {
+        "baseline": 0.8990243638708331,
+        "candidate": 0.8884091028251019,
+        "delta": -0.010615261045731184,
+        "pass_gate": false
+      }
+    },
+    "point_a_detection_restored": false,
+    "scientific_status": "NOT_VERIFIED"
+  },
+  "old_a20_values": {
+    "strong_physical_pinball_over20": 0.6282741337411532,
+    "q32_support_tp": 665,
+    "q32_support_fp": 352680,
+    "point_a_tp": 627,
+    "point_a_fp": 177098,
+    "weak_log_pinball": 0.1062018279881104,
+    "occurrence_brier": 0.09733828254858409,
+    "occurrence_ap": 0.5629312481666144,
+    "occurrence_auroc": 0.8874382321053875
+  },
+  "point_rank_report": {
+    "all": {
+      "n_strong": 717,
+      "n_non_strong": 3302373,
+      "ap20": 0.011782153515060697,
+      "point_a": {
+        "tp": 586,
+        "fp": 128804,
+        "fn": 131,
+        "pod": 0.8172942817294282
+      },
+      "strong_physical_pinball_over20": 0.6174573159113314,
+      "prior_a20_ap20": 0.007785992328504142,
+      "cosine9_ap20": 0.018690918630881997
+    },
+    "elevation_ge_2000m": {
+      "n_strong": 178,
+      "n_non_strong": 1212239,
+      "ap20": 0.0073079183395853365,
+      "point_a": {
+        "tp": 139,
+        "fp": 35341,
+        "fn": 39,
+        "pod": 0.7808988764044944
+      },
+      "strong_physical_pinball_over20": 0.5500051915189469,
+      "prior_a20_ap20": 0.00492918220373834,
+      "cosine9_ap20": 0.008314078350999054
+    }
+  }
+}
