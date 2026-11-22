@@ -127,7 +127,7 @@ def fixture(seed, device):
             categories[order].to(device))
 
 
-def run_arm(model, batches, device, *, candidate):
+def run_arm(model, batches, device, *, candidate, extra_loss=None):
     opt, _ = new_adamw(model)
     num_clipped = 0
     max_norm = 0.
@@ -140,8 +140,12 @@ def run_arm(model, batches, device, *, candidate):
         with torch.autocast(device.type, dtype=torch.bfloat16):
             output = model(features)
             base = candidate_loss(output.rain_logit, output.conditional_quantiles_log,
-                                  rate, valid, region, config=config).training_objective
-            loss = base + WEIGHT * auxiliary(output, rate, valid, region) if candidate else base
+                                  rate, valid, region, config=config)
+            loss = base.training_objective
+            if candidate:
+                loss = loss + WEIGHT * auxiliary(output, rate, valid, region)
+            if extra_loss is not None:
+                loss = loss + extra_loss(output, rate, valid, region, base.n_valid)
         loss.backward()
         evidence = clip_and_check(model)
         max_norm = max(max_norm, evidence["pre_clip_norm"])
