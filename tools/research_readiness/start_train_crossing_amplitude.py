@@ -200,7 +200,8 @@ class Summary:
 
 
 def main(*, kind=KIND, scope=SCOPE, budget=CAP, binder=seal, entry=__file__,
-         make_summary=lambda paths: Summary(paths["selected_strong_scenes"]), status=STATUS):
+         make_summary=lambda paths: Summary(paths["selected_strong_scenes"]), status=STATUS,
+         diagnostic_hooks=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="mode", required=True)
     prep = sub.add_parser("prepare")
@@ -217,7 +218,8 @@ def main(*, kind=KIND, scope=SCOPE, budget=CAP, binder=seal, entry=__file__,
             raise PermissionError("Separate exact Train amplitude approval required")
         plan, paths, grant = map(endpoint.read, (args.proposal, args.private_preparation, args.researcher_approval))
         endpoint.execute(plan, paths, grant, scope=scope, budget=budget, kind=kind, binder=binder,
-                         summary_factory=lambda: make_summary(paths), complete_status=status)
+                         summary_factory=lambda: make_summary(paths), complete_status=status,
+                         diagnostic_hooks=diagnostic_hooks)
         return
     source = args.source_root.resolve()
     namespace = args.private_preparation.resolve().parent

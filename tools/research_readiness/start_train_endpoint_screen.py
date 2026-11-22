@@ -213,7 +213,8 @@ def recheck(plan, private, approval, expected_commit, *, scope=SCOPE, budget=CAP
 
 
 def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, binder=seal,
-            summary_factory=Coverage, complete_status="COMPLETE_TRAIN_ENDPOINT_SCREEN"):
+            summary_factory=Coverage, complete_status="COMPLETE_TRAIN_ENDPOINT_SCREEN",
+            diagnostic_hooks=None):
     start = time.monotonic()
     require_independent(host_identity())
     recheck(plan, private, approval, plan["execution_code_commit"], scope=scope, budget=budget)
@@ -282,9 +283,11 @@ def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, bind
         del state
         model = model.to("cuda").eval()
         transform = runtime.PhysicalDote(pack, runtime.DoteDefinition(**plan["scientific_choices"]["DOTE"]))
+        summary = summary_factory()
+        if diagnostic_hooks is not None:
+            transform, verify_batch = diagnostic_hooks(summary, transform, population)
         factory = runtime.ReaderFactory(population, prepared, approval["decision_id"],
                                         allowed_models=("B7",), dynamic_transform=transform)
-        summary = summary_factory()
         reader = factory("Train", 9, ids, output / "B7_train_09_reads")
         batches = 0
         try:
@@ -292,9 +295,12 @@ def execute(plan, private, approval, *, scope=SCOPE, budget=CAP, kind=KIND, bind
                 for position in range(0, len(ids), budget["batch_size"]):
                     deadline()
                     expected_ids = ids[position:position + budget["batch_size"]]
-                    batch = reader.batch("Train", expected_ids).to("cuda")
+                    batch = reader.batch("Train", expected_ids)
                     if batch.role != "Train" or batch.identity != plan["data"] or batch.ids != expected_ids:
                         raise ValueError("Unexpected role or train batch identity")
+                    if diagnostic_hooks is not None:
+                        verify_batch(batch)
+                    batch = batch.to("cuda")
                     with torch.autocast("cuda", dtype=torch.bfloat16):
                         result, _ = runtime.forward(model, batch)
                     summary.add(batch.ids, batch.rate.cpu().numpy(), batch.valid.cpu().numpy(),
