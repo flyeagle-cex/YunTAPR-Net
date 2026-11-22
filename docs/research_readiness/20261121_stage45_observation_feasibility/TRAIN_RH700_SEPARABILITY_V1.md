@@ -16,6 +16,10 @@
 
 ## 只用元数据绑定的输入范围
 
-使用原标签 QC 的全部 159 个真强雨场景，不按后续预测或湿度筛选。它们横跨 17 个 14 日块。为保留原数值路径，取含这些场景的完整八景批次，得到 70 批、560 个前向场景，其中 401 个仅作原批次伴随场景。实际匹配只使用 159 个目标场景。含一次地形包和一次 E9 检查点加载的估算上限为 **16,066,485,320 字节、4,637 次打开**，相对重复完整 Train 旧前向约少 39%。训练、阈值拟合、重试、Dev 和 2025 访问均为零。时限、执行入口和准确批准尚待绑定。[范围回执](TRAIN_RH700_SCOPE_V1.json) · [元数据工具](../../../tools/research_readiness/prepare_train_separability_scope.py)
+使用原标签 QC 的全部 159 个真强雨场景，不按后续预测或湿度筛选。它们横跨 17 个 14 日块。为保留原数值路径，取含这些场景的完整八景批次，得到 70 批、560 个前向场景，其中 401 个仅作原批次伴随场景。实际匹配只使用 159 个目标场景。含一次地形包和一次 E9 检查点加载的上限为 **16,066,485,320 字节、4,637 次打开**，相对重复完整 Train 旧前向约少 39%。训练、阈值拟合、重试、Dev 和 2025 访问均为零。[范围回执](TRAIN_RH700_SCOPE_V1.json) · [元数据工具](../../../tools/research_readiness/prepare_train_separability_scope.py)
 
-三项合成检查通过，覆盖输入顺序、邻近规则、负例不复用、无效湿度无替补、逐块剔除、身份与年份拒绝。当前无真实科学载荷读取。网页总控 GPT-6 High 裁定科学范围，Codex Sol High 完成准备，Harness 暂缓到实际执行包形成。[匹配实现](../../../tools/research_readiness/train_rh700_separability.py) · [测试](../../../tests/research_readiness/test_train_rh700_separability.py)
+## 单遍执行包
+
+固定副本 b2196d9，提案 8d2e30c2，独立监督器限时 2,400 秒，启动至少保留 8 GiB 空间。仅使用固定 B7/COSINE9 E9 一次 2023 Train 前向，最多 70 批。已有前向旁路从同一次解码的环境场保留物理 RH700。按靶窗和场景核对，并要求 RH700 掩膜及使用原 scaler 归一化后的 FP32 位模式，与实际 MEE 通道一致。DOTE 八通道原样转发。覆盖门固定为 30 对和 3 块。任何超限、身份或前向错误即停，授权一次性消费。汇总后保留分块计数，临时配对不落盘。[执行提案](TRAIN_RH700_EXECUTION_PROPOSAL_V1.json) · [前向入口](../../../tools/research_readiness/start_train_rh700_separability.py)
+
+五项合成检查通过，覆盖输入顺序、邻近规则、负例不复用、无效湿度无替补、逐块剔除、原生及目标地上掩膜、DOTE 转发和 MEE 一致性。实际元数据重新绑定与无授权入口拒绝通过。真实科学载荷读取仍为零，精确执行授权未绑定。[匹配测试](../../../tests/research_readiness/test_train_rh700_separability.py) · [前向接线测试](../../../tests/research_readiness/test_run_train_rh700_separability.py)
