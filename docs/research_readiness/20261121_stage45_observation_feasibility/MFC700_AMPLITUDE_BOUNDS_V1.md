@@ -11,3 +11,12 @@
 3. 数值边界无法可靠判定时记为未决。局部约束相斥即可否决该动作。局部可行时仍有 399 个未在本次范围内的 Train 场景及其非强雨约束，也仍须按原协议检验弱雨和全部九项指标。
 
 原匹配诊断已消费其一次读取。新包单独计量，拟用 **16,066,485,320 字节 / 4,637 次打开 / 最长 2,400 秒**，一次 E9 加载，零更新、零重试、零重放。新包只保留汇总结果。
+
+## 固定执行包
+
+- 执行代码：`b9d064f12f9a3363027133ab7d25b05ff63b018d`（[代码提交](https://github.com/flyeagle-cex/YunTAPR-Net/commit/b9d064f12f9a3363027133ab7d25b05ff63b018d)），固定副本 `D:\研究\极端降水预测\YunTAPR-Train-MFC700-Amplitude-Exec-b9d064f`（git worktree，无未提交改动）。
+- 冻结提案：[MFC700_AMPLITUDE_BOUNDS_EXECUTION_PROPOSAL_V1.json](MFC700_AMPLITUDE_BOUNDS_EXECUTION_PROPOSAL_V1.json)；规范提案 SHA-256 `4238aa34a27df4cf0678ac8e372904100a8df0fc4d97e5674a37671e1dd15197`，提案文件 SHA-256 `b8de194ddd02b35342121ff60723c8b5b1df1d5d817d5a0c588a75e354e63053`。
+- 身份绑定：前序匹配提案 `7ad7c6096fd44d9d290e44a0aca9c6b8d8458ec8c4667e9c5fbe4b670cd00529`、匹配终态 `a73a6e00a0e1678542c3eabb9eb6f306d44873c45a0e8122da993863703cf6eb`、训练清单 `3de8b53c73186edc2ab6f4c5cb2ae4b54f66d3a4331e3c55edb9810d2f618466`、静态总量 `788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd`、检查点 `1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e`；DOTE、调制上限、投影和额外 GFS 打开数沿用冻结协议。
+- 预算与状态：16,066,485,320 字节 / 4,637 次打开 / 70 批 / 最多 2,400 秒；一次 E9 加载；零更新、零重试、零重放；只保留汇总（聚合上报上限 65,536 字节）；2025 继续封存。执行器状态 `READY_WAITING_EXACT_TRAIN_READOUT_APPROVAL`，`authorized=False`，`final_2025_access=False`。
+- 定向测试：`25 passed / 3 subtests passed`，含幅值边界模块的解析式一致性与四类 STOP、可行 witness、输入校验，以及独立监督器新臂的固定作用域、精确预算和 2,400 秒超时门；受限权限下的验证用临时 shim 不进入仓库。
+- 尚未执行：未创建 `RESEARCHER_APPROVAL.json`，未加载权重、未跑前向。正式执行须研究者针对本提案的一次明确批准，不自动重试或重放。
