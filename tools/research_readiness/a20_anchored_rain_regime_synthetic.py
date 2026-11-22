@@ -21,11 +21,13 @@ RAIN_DECISION = .5
 
 
 class RainRegimeCorrection(nn.Module):
-    def __init__(self, anchor, device):
+    def __init__(self, anchor, device, *, preserve_span=False):
         super().__init__()
         self.anchor = anchor.requires_grad_(False).eval()
-        self.low_probability = nn.Conv2d(48, 33, 1, bias=False, device=device)
-        self.high_probability = nn.Conv2d(48, 33, 1, bias=False, device=device)
+        self.preserve_span = preserve_span
+        channels = 32 if preserve_span else 33
+        self.low_probability = nn.Conv2d(48, channels, 1, bias=False, device=device)
+        self.high_probability = nn.Conv2d(48, channels, 1, bias=False, device=device)
         with torch.no_grad():
             self.low_probability.weight.zero_()
             self.high_probability.weight.zero_()
@@ -45,7 +47,8 @@ class RainRegimeCorrection(nn.Module):
             low = active & (p < RAIN_DECISION)
             high = active & (p >= RAIN_DECISION)
             correction = self.low_probability(features) * low + self.high_probability(features) * high
-            adjusted = raw + correction
+            adjusted = (torch.cat((raw[:, :32] + correction, raw[:, 32:]), dim=1)
+                        if self.preserve_span else raw + correction)
             qlog = normalized_monotonic_quantiles(adjusted[:, :32], adjusted[:, 32:], numerics=numerics)
         return LogDomainOutput(logit, p, qlog)
 
