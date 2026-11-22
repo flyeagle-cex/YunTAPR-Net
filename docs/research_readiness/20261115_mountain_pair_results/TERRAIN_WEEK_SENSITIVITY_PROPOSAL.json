@@ -1,0 +1,30 @@
+{
+  "authorization_scope": "COSINE9_B7_E9_HIGH_ELEVATION_LEAVE_ONE_UTC_WEEK",
+  "code_sha256": "17965163d0859453ea96d74b5cf927eb9d06027225aeda9e635cbedacc495e58",
+  "budget": {
+    "saved_aggregate_bytes": 7385179,
+    "saved_aggregate_opens": 2,
+    "seconds": 60,
+    "scientific_source_reads": 0,
+    "forwards": 0,
+    "optimizer_updates": 0,
+    "retries": 0,
+    "final_2025_access": false
+  },
+  "inputs": {
+    "REAL_COSINE9": {
+      "bytes": 3692556,
+      "sha256": "95d2a238f43bcdb32a7c33b0f9bd2aabbc7aac640335ffbab3b10c5b277900fb"
+    },
+    "ZERO_COSINE9": {
+      "bytes": 3692623,
+      "sha256": "5a7c0f00a8c88622745a6a3536fe8f96096ae69285065ad83a534124c71a9c77"
+    }
+  },
+  "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+  "baseline_real_minus_zero": -0.0006961972905197065,
+  "time_definition": "UTC target plus 30 minutes; Monday calendar weeks",
+  "comparison": "B7 seed2029 COSINE9 REAL minus ZERO, altitude >=2000m, float32 R >20mm/h",
+  "threshold_tolerance": 1e-10,
+  "proposal_sha256": "8770669f11507fe060656c6fe6207f8bb668904ba66a810c044ac860d2e960fa"
+}
