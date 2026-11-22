@@ -1,0 +1,31 @@
+{
+  "status": "READY_WAITING_EXACT_READOUT_APPROVAL",
+  "scope": "SAVED_COSINE9_COMMON_REDISTRIBUTION_SCREEN",
+  "code_sha256": {
+    "a20_fixed_endpoint_scalar_screen.py": "7340158ad2b1cc6be9774dca350506606d85825a73e1281a2ab1b3392c51f371",
+    "a20_fixed_endpoint_bounds.py": "a42628cb8a521bf93ad8f953d6b73ddb1c1daf6ad1d54040a4e6897ba0d3878d",
+    "a20_anchored_regime_readout.py": "80de6f819d09af8afec750cf7f23c80f8d55989a69531ef2b0bc081d6fb6a26b"
+  },
+  "input_checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+  "input_completion_sha256": "1a3396a7fd0d9564590967881d576060ffd7801c7f24b37102c68b7911b76614",
+  "input_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+  "budget": {
+    "saved_array_bytes": 881894762,
+    "saved_array_opens": 121,
+    "max_seconds": 300,
+    "raw_source_opens": 0,
+    "checkpoint_loads": 0,
+    "inference_passes": 0,
+    "optimizer_updates": 0,
+    "additional_retries": 0
+  },
+  "definition": {
+    "alpha": "Common input-independent interpolation from saved nodes to their weak-preserving maximum",
+    "ordering": "The interior is strictly ordered for alpha < 1",
+    "strong": "strict FP32 truth > 20",
+    "point_threshold": "strict FP32 A > 20",
+    "decision": "Existence of a shared alpha with TP > 0 and FP = 0; descriptive feasibility only",
+    "no_parameter_selection": true,
+    "final_2025_access": false
+  }
+}
