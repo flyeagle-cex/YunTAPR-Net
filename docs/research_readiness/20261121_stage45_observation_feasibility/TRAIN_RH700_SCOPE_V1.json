@@ -1,0 +1,73 @@
+{
+  "status": "METADATA_SCOPE_ONLY_NOT_AN_EXECUTION_PROPOSAL",
+  "train_scenes": 959,
+  "selected_positive_scenes": 159,
+  "forward_scenes": 560,
+  "companion_scenes": 401,
+  "positive_scene_counts_by_14day_block": {
+    "5": 5,
+    "6": 1,
+    "7": 3,
+    "8": 5,
+    "9": 5,
+    "10": 7,
+    "11": 13,
+    "12": 16,
+    "13": 12,
+    "14": 12,
+    "15": 29,
+    "16": 20,
+    "17": 10,
+    "18": 12,
+    "19": 2,
+    "20": 4,
+    "21": 3
+  },
+  "original_train_manifest_sha256": "f0c0a9188e771bfbba7c1e8a8ffdbfabd2d4e927bd1428d353b290be236a13dc",
+  "proposed_subset_source_sha256": "3de8b53c73186edc2ab6f4c5cb2ae4b54f66d3a4331e3c55edb9810d2f618466",
+  "fixed_batch_order_sha256": "4f8e98112be2488087dc23a5ddee1fea01a92714cf49e78b18ae0706da54200f",
+  "private_scope_sha256": "53a30454da945689811053adf566016f958608434ab94a7990c3df3da73be5b7",
+  "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+  "static_pack_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+  "target_qc_sha256": "b4bad8ea45a78eddae3832df89cfade00cac3b184fc550eea4f0cf479c29de90",
+  "budget": {
+    "static_bytes": 312828,
+    "checkpoint_bytes": 53906821,
+    "static_opens": 1,
+    "checkpoint_source_opens": 1,
+    "checkpoint_loads": 1,
+    "weather_and_supervision_bytes": 16012265671,
+    "weather_and_supervision_opens": 4635,
+    "total_scientific_source_bytes": 16066485320,
+    "total_scientific_source_opens": 4637,
+    "forward_batches": 70,
+    "optimizer_updates": 0,
+    "threshold_fits": 0,
+    "retries": 0,
+    "development_access": false,
+    "final_2025_access": false
+  },
+  "source_breakdown": {
+    "satellite": {
+      "files": 3360,
+      "bytes": 15666302037
+    },
+    "GFS_main": {
+      "files": 560,
+      "bytes": 162945686
+    },
+    "GFS_thermo": {
+      "files": 560,
+      "bytes": 51872949
+    },
+    "IMERG": {
+      "files": 154,
+      "bytes": 131124083
+    },
+    "static_mask": {
+      "files": 1,
+      "bytes": 20916
+    }
+  },
+  "opened_scientific_payloads": 0
+}
