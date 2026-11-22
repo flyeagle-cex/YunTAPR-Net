@@ -1,4 +1,4 @@
-"""Synthetic-only preparation for full-node amplitude feasibility."""
+"""Bound full-node amplitude feasibility and verify the original constraints."""
 
 from fractions import Fraction
 import json
@@ -17,6 +17,7 @@ SLACK = 2 * NODES
 TARGET = float(THRESHOLD) + float(np.spacing(THRESHOLD)) / 2
 GAIN_TOLERANCE = 1e-10
 MOMENT_TOLERANCE = 1e-12
+SOLVER_SECONDS = 2
 
 
 def certified_lower_bound(objective, matrix, rhs, bounds, multipliers):
@@ -32,11 +33,33 @@ def certified_lower_bound(objective, matrix, rhs, bounds, multipliers):
     return result
 
 
-def _outer_problem(p, original, truth, active, baseline):
+def _moment_box(original, active, padding):
+    # For fixed z_i, precedence bounds its earlier nodes above by z_i and
+    # its later nodes below by z_i. The frozen moment then bounds z_i.
+    weights = 1 - TAU[active]
+    moment = float(weights @ original[active])
+    through = np.cumsum(weights)
+    following = np.cumsum(weights[::-1])[::-1]
+    before = np.r_[0., through[:-1]]
+    after = np.r_[following[1:], 0.]
+    lower = np.maximum(WEAK_LIMIT, (moment - after * original[-1] - padding) / through)
+    upper = np.minimum(original[-1], (moment - before * WEAK_LIMIT + padding) / following)
+    return lower, upper
+
+
+def _outer_problem(p, original, truth, active, baseline, *, tighten=True):
     physical = np.expm1(original)
     upper = float(physical[-1])
     padding = 1e-12 * max(1., truth, upper)
-    bounds = [(1., upper) if i in active else (float(x), float(x)) for i, x in enumerate(physical)]
+    bounds = [(float(x), float(x)) for x in physical]
+    lower_physical = np.ones(active.size)
+    upper_physical = np.full(active.size, upper)
+    if active.size and tighten:
+        lower, higher = _moment_box(original, active, padding)
+        lower_physical = np.maximum(1., np.expm1(lower) - padding)
+        upper_physical = np.minimum(upper, np.expm1(higher) + padding)
+    for i, left, right in zip(active, lower_physical, upper_physical):
+        bounds[i] = (float(left), float(right))
     bounds.extend([(0., max(truth, upper) / 20)] * NODES)
     bounds.append((0., TARGET + baseline + 1.))
     matrix, rhs = [], []
@@ -60,9 +83,11 @@ def _outer_problem(p, original, truth, active, baseline):
     if active.size:
         weights = 1 - TAU[active]
         moment = float(weights @ original[active])
-        slope = (original[-1] - WEAK_LIMIT) / (upper - 1.)
-        intercept = WEAK_LIMIT - slope
-        add(zip(active, weights * slope), moment - float(weights.sum()) * intercept + padding)
+        width = upper_physical - lower_physical
+        slopes = np.divide(np.log1p(width / (1 + lower_physical)), width,
+                           out=1 / (1 + lower_physical), where=width > 0)
+        intercepts = np.log1p(lower_physical) - slopes * lower_physical
+        add(zip(active, weights * slopes), moment - float(weights @ intercepts) + padding)
         tangent_slopes = 1 / (1 + physical[active])
         tangent_intercepts = original[active] - tangent_slopes * physical[active]
         add(zip(active, -weights * tangent_slopes), float(weights @ tangent_intercepts) - moment + padding)
@@ -111,7 +136,7 @@ def verify_witness(p, original, truth, candidate):
     return None
 
 
-def solve(p, original, truth):
+def solve(p, original, truth, *, tighten=True):
     original = np.asarray(original, dtype=np.float64)
     if (original.shape != (NODES,) or not np.isfinite(original).all() or np.any(original < 0)
             or np.any(np.diff(original) <= 0) or not 0 <= p <= 1
@@ -122,8 +147,9 @@ def solve(p, original, truth):
             raise ValueError("Expected bounded synthetic nodes and no baseline crossing")
         baseline = pinball((truth - np.expm1(original)) / 20)
     active = np.flatnonzero(original[:-1] > WEAK_LIMIT)
-    objective, matrix, rhs, bounds = _outer_problem(p, original, truth, active, baseline)
-    result = linprog(objective, A_ub=matrix, b_ub=rhs, bounds=bounds, method="highs")
+    objective, matrix, rhs, bounds = _outer_problem(p, original, truth, active, baseline, tighten=tighten)
+    result = linprog(objective, A_ub=matrix, b_ub=rhs, bounds=bounds, method="highs",
+                     options={"time_limit": SOLVER_SECONDS})
     if not result.success:
         return dict(status="UNRESOLVED", reason="NO_CHECKABLE_DUAL_OR_PRIMAL")
     dual = result.ineqlin.marginals
@@ -149,10 +175,12 @@ def synthetic_preflight():
     exclusion = solve(1., no_gain, no_gain_truth)
     exclusion["crossing_only_ceiling"] = crossing_ceiling
     one_free = np.log1p(np.r_[np.linspace(0.01, 0.99, 30), 115., 500.])
-    false_positive = solve(1., one_free, 600.)
+    false_positive = solve(1., one_free, 600., tighten=False)
+    tightened = solve(1., one_free, 600.)
     assert witness["status"] == "VERIFIED_WITNESS", witness
     assert crossing_ceiling > THRESHOLD and exclusion["status"] == "EXCLUDED_BY_OUTER_BOUND", exclusion
     assert false_positive["status"] == "UNRESOLVED" and false_positive["relaxed_slack"] < 1e-8, false_positive
+    assert tightened["status"] == "EXCLUDED_BY_OUTER_BOUND", tightened
     assert np.float32(TARGET) == THRESHOLD and np.float32(np.nextafter(TARGET, np.inf)) > THRESHOLD
     objective, matrix, rhs, bounds = _outer_problem(
         1., no_gain, no_gain_truth, np.flatnonzero(no_gain[:-1] > WEAK_LIMIT),
@@ -162,7 +190,8 @@ def synthetic_preflight():
     for index, value in exclusion["dual"].items():
         dual[int(index)] = value
     assert certified_lower_bound(objective, matrix, rhs, bounds, dual) > 0
-    return dict(synthetic_cases=dict(witness=witness, exclusion=exclusion, relaxation_false_positive=false_positive),
+    return dict(synthetic_cases=dict(witness=witness, exclusion=exclusion, relaxation_false_positive=false_positive,
+                                     tightened_exclusion=tightened),
                 float32_midpoint=TARGET, gain_tolerance=GAIN_TOLERANCE, moment_tolerance=MOMENT_TOLERANCE,
                 scientific_source_reads=0, gate_fits=0, optimizer_updates=0, final_2025_access=False)
 

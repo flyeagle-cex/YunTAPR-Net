@@ -192,7 +192,8 @@ def validate_spec(path):
                 or Path(private['runtime_python']).resolve()!=executable.resolve()
                 or proposal['budget'].get('maximum_seconds')!=7200):
             raise PermissionError('A20 rank approval or runtime differs')
-    elif spec['kind'] in ('BOUNDED_TRAIN_ENDPOINT_SCREEN', 'BOUNDED_TRAIN_CROSSING_AMPLITUDE'):
+    elif spec['kind'] in ('BOUNDED_TRAIN_ENDPOINT_SCREEN', 'BOUNDED_TRAIN_CROSSING_AMPLITUDE',
+                           'BOUNDED_TRAIN_FULL_NODE_LP'):
         cwd = Path(spec['cwd']).resolve()
         entry_name, authorization_scope, total_bytes, total_files, batches, seconds = {
             'BOUNDED_TRAIN_ENDPOINT_SCREEN': (
@@ -201,6 +202,9 @@ def validate_spec(path):
             'BOUNDED_TRAIN_CROSSING_AMPLITUDE': (
                 'start_train_crossing_amplitude.py', 'COSINE9_E9_2023_TRAIN_CROSSING_AMPLITUDE',
                 7529790140, 2119, 32, 1200),
+            'BOUNDED_TRAIN_FULL_NODE_LP': (
+                'start_train_full_node_lp.py', 'COSINE9_E9_2023_TRAIN_FULL_NODE_LP',
+                1469586775, 402, 6, 600),
         }[spec['kind']]
         entry_relative = 'tools/research_readiness/' + entry_name
         if (entry != cwd / entry_relative
@@ -394,6 +398,7 @@ def supervise(path):
                        'BOUNDED_A20_POINT_RANK': 7200,
                        'BOUNDED_TRAIN_ENDPOINT_SCREEN': 3600,
                        'BOUNDED_TRAIN_CROSSING_AMPLITUDE': 1200,
+                       'BOUNDED_TRAIN_FULL_NODE_LP': 600,
                        'BOUNDED_TAIL20_TRAINING': 21600,
                        'BOUNDED_TAIL20_E9_REPLAY': 4500,
                        'BOUNDED_A20_BISIDE_TRAINING': 28800,

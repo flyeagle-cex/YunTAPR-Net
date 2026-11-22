@@ -50,6 +50,20 @@ def choose_batches(ids, strong):
     return tuple(batch for batch in batches if strong.intersection(batch))
 
 
+def restrict_scope(population, original, subset):
+    mask, = ((path, item) for path, item in original.items() if item["kind"] == "static_mask")
+    dates = {date.fromisoformat(Path(path).stem[-8:]).isoformat(): item["bytes"]
+             for path, item in original.items() if item["kind"] == "IMERG"}
+    restricted = SimpleNamespace(
+        rows={"Train": {sid: population.rows["Train"][sid] for sid in subset}},
+        ids=lambda role: subset, sat=population.sat, gfs=population.gfs, sources=population.sources,
+    )
+    bounds = source_scope(restricted, "Train", dates, mask)
+    if any(original.get(path) != item for path, item in bounds["files"].items()):
+        raise ValueError("One or more sources fall outside the frozen Train scope")
+    return bounds
+
+
 def seal(source_root, run, commit):
     plan, paths, prepared = endpoint.seal(source_root, run, commit)
     previous = endpoint.read(ROOT / DOCS / "A20_TRAIN_ENDPOINT_SCREEN_PROPOSAL.json")
@@ -89,21 +103,9 @@ def seal(source_root, run, commit):
             or len(batches) != CAP["forward_batches"] or any(len(batch) != CAP["batch_size"] for batch in batches)
             or len(subset) != CAP["train_scenes"]):
         raise ValueError("The exact 32 original batches are required")
-    original = full["files"]
-    mask, = ((path, item) for path, item in original.items() if item["kind"] == "static_mask")
-    dates = {}
-    for path, item in original.items():
-        if item["kind"] == "IMERG":
-            day = Path(path).stem[-8:]
-            dates[date(int(day[:4]), int(day[4:6]), int(day[6:])).isoformat()] = item["bytes"]
-    restricted = SimpleNamespace(
-        rows={"Train": {sid: population.rows["Train"][sid] for sid in subset}},
-        ids=lambda role: subset, sat=population.sat, gfs=population.gfs, sources=population.sources,
-    )
-    bounds = source_scope(restricted, "Train", dates, mask)
-    if ((bounds["bytes_per_pass"], bounds["file_count"]) !=
-            (CAP["weather_and_supervision_bytes"], CAP["weather_and_supervision_opens"])
-            or any(original.get(path) != item for path, item in bounds["files"].items())):
+    bounds = restrict_scope(population, full["files"], subset)
+    if (bounds["bytes_per_pass"], bounds["file_count"]) != (
+            CAP["weather_and_supervision_bytes"], CAP["weather_and_supervision_opens"]):
         raise ValueError("The Train subset source identity or allowance differs")
 
     plan = endpoint.unsigned(plan)
@@ -197,7 +199,8 @@ class Summary:
                     best_witness_delta=self.best_delta, study_acceptance="NOT_VERIFIED")
 
 
-def main():
+def main(*, kind=KIND, scope=SCOPE, budget=CAP, binder=seal, entry=__file__,
+         make_summary=lambda paths: Summary(paths["selected_strong_scenes"]), status=STATUS):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="mode", required=True)
     prep = sub.add_parser("prepare")
@@ -213,21 +216,21 @@ def main():
         if not args.researcher_approval.is_file():
             raise PermissionError("Separate exact Train amplitude approval required")
         plan, paths, grant = map(endpoint.read, (args.proposal, args.private_preparation, args.researcher_approval))
-        endpoint.execute(plan, paths, grant, scope=SCOPE, budget=CAP, kind=KIND, binder=seal,
-                         summary_factory=lambda: Summary(paths["selected_strong_scenes"]), complete_status=STATUS)
+        endpoint.execute(plan, paths, grant, scope=scope, budget=budget, kind=kind, binder=binder,
+                         summary_factory=lambda: make_summary(paths), complete_status=status)
         return
     source = args.source_root.resolve()
     namespace = args.private_preparation.resolve().parent
     if namespace.parent != (source / endpoint.LOCAL).resolve() or namespace.exists() or args.proposal.exists():
         raise ValueError("A fresh private namespace and proposal are required")
-    plan, paths, _ = seal(source, namespace, args.code_commit)
+    plan, paths, _ = binder(source, namespace, args.code_commit)
     service = namespace / "service"
     service.mkdir(parents=True, exist_ok=False)
     endpoint._write(args.proposal, plan)
     endpoint._write(args.private_preparation, paths)
     endpoint._write(namespace / "EXECUTION_SPEC.json", dict(
-        kind=KIND, cwd=str(ROOT), service_dir=str(service), environment=endpoint.ENV,
-        command=[paths["runtime_python"], "-B", str(Path(__file__).resolve()), "execute",
+        kind=kind, cwd=str(ROOT), service_dir=str(service), environment=endpoint.ENV,
+        command=[paths["runtime_python"], "-B", str(Path(entry).resolve()), "execute",
                  "--proposal", str(args.proposal.resolve()), "--private-preparation", str(args.private_preparation.resolve()),
                  "--researcher-approval", str(namespace / "RESEARCHER_APPROVAL.json")]))
     print(plan["proposal_sha256"])
