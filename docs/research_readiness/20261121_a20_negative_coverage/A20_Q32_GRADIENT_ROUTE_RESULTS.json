@@ -1,0 +1,179 @@
+{
+  "status": "STOP_BEFORE_REAL_TRAINING",
+  "scientific_status": "NOT_VERIFIED",
+  "seed": 2029,
+  "settings": {
+    "intervention": "Add non-strong q32 physical squared hinge to E0 + fixed twCRPS",
+    "threshold_mm_h": 20.0,
+    "weight": 0.1,
+    "denominator": "ALL_VALID_PIXELS",
+    "synthetic_admission_thresholds": {
+      "min_a_gain": 0.02,
+      "min_q32_drop": 0.02,
+      "min_physical_pinball_gain": 1e-05,
+      "guard_tolerance": 1e-08
+    }
+  },
+  "only_change": "Stop the q32 guard gradient before the shared feature layer",
+  "trace": {
+    "loss_and_forward_values_equal": true,
+    "head_gradients_equal": true,
+    "guard_does_not_reach_shared_layer": true,
+    "unit_gradient_step_directions": {
+      "strong_low_mean_a": {
+        "shared_feature_direction": -0.7414106912910938,
+        "head_direction": -0.9143037500159306
+      },
+      "low_p_negative_mean_q32": {
+        "shared_feature_direction": -3.6598941199481487,
+        "head_direction": -5.728994145412669
+      }
+    },
+    "interpretation": "One local derivative of the guard alone; not an AdamW update"
+  },
+  "run": {
+    "updates": 144,
+    "clipped_updates": 0,
+    "max_gradient_norm": 0.1922248899936676
+  },
+  "initial": {
+    "strong_low_mean_a": 12.612305641174316,
+    "low_p_negative_mean_q32": 39.99999906593755,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.21826177072576503,
+    "weak_log_pinball": 0.014932721349722126,
+    "occurrence_brier": 0.01913596192995707,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.046313960535255834
+  },
+  "archived_e0": {
+    "strong_low_mean_a": 12.73509422938029,
+    "low_p_negative_mean_q32": 39.47820085258812,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.21726430461066507,
+    "weak_log_pinball": 0.014474714961124503,
+    "occurrence_brier": 0.01863390538427565,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04393715196700707
+  },
+  "archived_twcrps": {
+    "strong_low_mean_a": 13.201743841171265,
+    "low_p_negative_mean_q32": 40.90806836050827,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.19888923667473468,
+    "weak_log_pinball": 0.014861213269188435,
+    "occurrence_brier": 0.018729272815916274,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 24,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04357729020164964
+  },
+  "archived_full_gradient": {
+    "strong_low_mean_a": 12.629742304484049,
+    "low_p_negative_mean_q32": 38.245787858906574,
+    "low_p_negative_mean_p": 0.01031494140625,
+    "strong_physical_pinball_over20": 0.2207268575840085,
+    "weak_log_pinball": 0.014561203780845062,
+    "occurrence_brier": 0.018730306583974097,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.043943317434190506
+  },
+  "candidate": {
+    "strong_low_mean_a": 12.968415896097818,
+    "low_p_negative_mean_q32": 39.45272303884893,
+    "low_p_negative_mean_p": 0.010009765625,
+    "strong_physical_pinball_over20": 0.20846217525507094,
+    "weak_log_pinball": 0.014595065667850054,
+    "occurrence_brier": 0.018729272815916274,
+    "occurrence_ap": 1.0,
+    "occurrence_auroc": 1.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 12,
+    "q32_fp": 72,
+    "mean_twcrps": 0.04376292513245704
+  },
+  "candidate_minus_e0": {
+    "strong_low_mean_a": 0.2333216667175293,
+    "low_p_negative_mean_q32": -0.025477813739186672,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": -0.00880212935559413,
+    "weak_log_pinball": 0.00012035070672555132,
+    "occurrence_brier": 9.5367431640625e-05,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 0,
+    "q32_fp": 0,
+    "mean_twcrps": -0.0001742268345500328
+  },
+  "candidate_minus_twcrps": {
+    "strong_low_mean_a": -0.23332794507344623,
+    "low_p_negative_mean_q32": -1.4553453216593368,
+    "low_p_negative_mean_p": 0.0,
+    "strong_physical_pinball_over20": 0.009572938580336254,
+    "weak_log_pinball": -0.00026614760133838143,
+    "occurrence_brier": 0.0,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 0,
+    "a_fp": 0,
+    "q32_tp": -12,
+    "q32_fp": 0,
+    "mean_twcrps": 0.0001856349308074004
+  },
+  "candidate_minus_full_gradient": {
+    "strong_low_mean_a": 0.33867359161376953,
+    "low_p_negative_mean_q32": 1.2069351799423558,
+    "low_p_negative_mean_p": -0.00030517578125,
+    "strong_physical_pinball_over20": -0.01226468232893757,
+    "weak_log_pinball": 3.386188700499164e-05,
+    "occurrence_brier": -1.0337680578231812e-06,
+    "occurrence_ap": 0.0,
+    "occurrence_auroc": 0.0,
+    "a_tp": 12,
+    "a_fp": 0,
+    "q32_tp": 0,
+    "q32_fp": 0,
+    "mean_twcrps": -0.00018039230173346604
+  },
+  "synthetic_direction_gates": {
+    "strong_low_a_gain": true,
+    "low_p_negative_q32_drop": true,
+    "strong_physical_pinball_gain": true,
+    "weak_log_pinball_not_worse": false,
+    "occurrence_brier_not_worse": false,
+    "occurrence_ap_not_worse": true,
+    "occurrence_auroc_not_worse": true,
+    "q32_drop_relative_to_twcrps": true,
+    "fixed_a_hits_without_false_alarms": true,
+    "q32_false_alarms_not_higher": true
+  },
+  "script_sha256": "dbf68b683343b1efab30987cfa47d044b28cf9959cea3733db4977dda9480586",
+  "harness_sha256": "e33475e5c004980196fd6a21b0951173b2ebe6101ce21db388d8b13370a53ef1",
+  "reference_sha256": "635fa0da94d17d46a201282ce5059f9ef1403024d62953ca4443b690ba825fa1",
+  "previous_sha256": "d1840ad72139f9ec7d7ae9f0ca61779fe1decef247cb58586cb402f101db9577",
+  "real_source_payload_reads": 0,
+  "real_checkpoints_loaded": 0,
+  "formal_updates": 0,
+  "final_2025_access": false
+}
