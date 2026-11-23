@@ -200,5 +200,19 @@ class CandidateManifestTests(unittest.TestCase):
         self.assertEqual(len(collector.rows), manifest.MAX_CANDIDATE_ROWS)
 
 
+    def test_finish_returns_json_serializable_counts(self):
+        import json
+
+        p, qlog, truth, valid, region = scene()
+        set_pixel(p, qlog, truth, 0, 1, 1.0, 50.0, 25.0)
+        set_pixel(p, qlog, truth, 0, 2, 1.0, 50.0, 5.0)
+        collector = manifest.CandidateManifest()
+        collector.update(p, qlog, truth, valid, region, SID)
+        with tempfile.TemporaryDirectory() as folder:
+            counts = collector.finish(folder)
+            json.dumps(counts, ensure_ascii=False, allow_nan=False)
+            self.assertTrue((Path(folder) / manifest.OUTPUT_NAME).is_file())
+
+
 if __name__ == "__main__":
     unittest.main()

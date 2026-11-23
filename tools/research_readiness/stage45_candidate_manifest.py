@@ -221,7 +221,7 @@ class CandidateManifest:
             [row.delta for row in rows if row.reachable and np.isfinite(row.delta)],
             dtype=np.float64,
         )
-        return dict(
+        counts = dict(
             evaluated_scenes=len(self.scenes),
             evaluated_supervised_pixels=self.pixels,
             evaluated_strong_pixels=self.strong,
@@ -247,3 +247,7 @@ class CandidateManifest:
             retained_rows_bounded=len(rows) <= self.max_rows,
             row_table_name=OUTPUT_NAME,
         )
+        return {
+            key: int(value) if isinstance(value, np.integer) else value
+            for key, value in counts.items()
+        }
