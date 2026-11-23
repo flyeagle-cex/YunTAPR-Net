@@ -128,3 +128,14 @@
 - 冻结阈值与预算不变：candidate `p·q32>20`、a0≥9.5373、split_min≥2.3612、目标质量 20.01；901 次打开 / 4,474,903,222 B / 最长 900 秒 / 无模型前向、无检查点加载、无 GPU、无优化器更新；输出仅汇总 JSON（选中行 ≤50、不可行行 ≤50）。提案状态改为 `READY_WAITING_EXACT_DEV_ACCEPTANCE_APPROVAL`，authorized=False、final_2025_access=False。
 - 代码与测试：`tools/research_readiness/stage45_dev_acceptance.py` 增加 `blend_to_top`、真实 data 上修正选中行 global-row→candidate-index 映射、门 6 对已激活弱雨行重算；`start_stage45_dev_acceptance.py` 更新状态与 action_rule。定向测试（`test_stage45_dev_acceptance.py` + `test_independent_process.py`）18 passed / 3 subtests；另用真实 121 分片 + 合成 501×501 卫星 payload 做端到端演练：选中 1 个强雨行（u=0.456、new_A=20.01、变化 −0.1703），门 1 候选 0.5066271（基线 0.5068646，pass）、门 6 恒等、门 2/3 pass、0 非强雨选中 → 演练决策 PASS。
 - 证据边界：Dev 正式验收仍是一次性真实读取；若选中集含非强雨、为空、或门 1 不降，则候选封存、第 3 步保持 NOT_VERIFIED，不重试、不改阈值、不重放。
+
+## 14. 固定执行包 · Dev 九门验收 V1 · 2026-11-23
+
+- KIND：`BOUNDED_STAGE45_DEV_ACCEPTANCE`；SCOPE：`COSINE9_E9_2024_DEV_STAGE45_NINE_GATE_ACCEPTANCE`；执行代码 `2392f51843e7c9199b28dd43796fc1666748fe01`（[GitHub commit](https://github.com/flyeagle-cex/YunTAPR-Net/commit/2392f51843e7c9199b28dd43796fc1666748fe01)），已冻结、尚未推送（网络中断，本地提交）；本文档与提案副本随后同批提交。
+- 固定副本：`D:\研究\极端降水预测\YunTAPR-Train-Stage45-DevAccept-Exec-2392f51`（detached HEAD = 2392f51，7,695 文件）。为保证自包含，已把保存的 Dev 读取数组（121 分片）复制进该副本私有 `.local\b_readout_prepare_20261120_v2\readout`；`.local` 不进入版本控制。
+- 冻结提案：规范 SHA-256 `f568e8401d27b9e1e552cdb9dc539c4e1f052126cccda7dd26d079453b273bec`；私有命名空间内 `PROPOSAL.json` 原样文件 SHA-256 `aaf23983ad0a351dcb8da002cd6e71eea6abe8ad3f40d568da4a7812a2bf32e1`（5,806 B，CRLF）；本目录公开副本以 LF 规范化后文件 SHA-256 `c4bc27ae77d66f2b77f28d890c57860a83c9827fef040911f589d8d0100317a5`（5,664 B，JSON 内容相同、规范 SHA 不变）；`PRIVATE_PREPARATION.json` 279,566 B；`EXECUTION_SPEC.json` 1,488 B。私有命名空间：`<fixed>\docs\research_readiness\.local\train_stage45_dev_acceptance_v1`。
+- 身份继承：Dev readout 提案 `ed417346f82218fe981078872fb91c80211ad46e9b836f29e628daef842308a9`、检查点 `1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e`（本包 0 次加载）、population_ids `916302412bf0…`、partition `01b95f12…`、监督掩膜 `70368bec…`、population `2f2cc75c…`、2024 开发清单 `6bd5a810…`；保存数组 121 文件 / 881,894,762 B；卫星文件 780 个 / 3,593,008,460 B（逐文件字节与 sha256 在 prepare 时核对通过）。
+- 预算：901 次科学文件打开 / 4,474,903,222 字节 / 最长 900 秒 / 1 次科学遍 / 模型前向 0 / 检查点加载 0 / 优化器更新 0 / retry 0 / replay 0；2025 不访问。
+- 状态：`READY_WAITING_EXACT_DEV_ACCEPTANCE_APPROVAL`，authorized=False、final_2025_access=False；未创建 `RESEARCHER_APPROVAL.json`、未创建 output、未执行真实 Dev 读取。
+- 已完成的非科学验证：定向测试 18 passed / 3 subtests；真实 121 分片 + 合成卫星 payload 的端到端演练 PASS（用于验证代码路径，不作为科学证据）。
+- 执行一次后按第 12/13 节门规则判定；任一失败即候选封存、第 3 步保持 NOT_VERIFIED，不重试、不改阈值、不重放。

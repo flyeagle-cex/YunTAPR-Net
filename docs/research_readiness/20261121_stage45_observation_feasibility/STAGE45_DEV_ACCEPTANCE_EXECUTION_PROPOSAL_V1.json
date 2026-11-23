@@ -1,0 +1,142 @@
+{
+  "authorization_scope": "COSINE9_E9_2024_DEV_STAGE45_NINE_GATE_ACCEPTANCE",
+  "authorized": false,
+  "budget": {
+    "array_reference_bytes": 881894762,
+    "checkpoint_loads": 0,
+    "maximum_reference_bytes": 4474903222,
+    "maximum_scientific_file_opens": 901,
+    "maximum_seconds": 900,
+    "model_inference_passes": 0,
+    "optimizer_updates": 0,
+    "replay": 0,
+    "retries": 0,
+    "satellite_reference_bytes": 3593008460,
+    "scientific_passes": 1
+  },
+  "code_sha256": {
+    "config/spatial/sp04_coordinate_axes_v1.csv": "994705240ef12b2fbd6438a678f18c6e8f7687fe238ee45e7af16299eeeef0c5",
+    "config/spatial/sp04_coordinate_manifest_v1.json": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473",
+    "config/spatial/sp04_target_cell_membership_v1.csv": "3f4dea000efa0146cec292578bca07c370f897328c933e804346097f8ab9d3fd",
+    "src/yuntapr/data/himawari_b13.py": "4ce00bd7dc44839cbb5feb6e36e404931fc547ba5cc726a577be5120926a4857",
+    "src/yuntapr/spatial/sp04_mapping.py": "a4a4d0c8744acd6754588f01c7d1976ccd109b7c9224ba362a4bc474cdc35202",
+    "tools/research_readiness/stage45_dev_acceptance.py": "c59dbef9b4f5b45192494096150b7c61cea2def9ba2d0f97244092dc1bf4af5d",
+    "tools/research_readiness/start_stage45_dev_acceptance.py": "bded925c8e603c0b9dd6dd9175693a1cf851061cb6fc3533bbef8e406758edb7"
+  },
+  "data_identity": {
+    "arrays_bytes": 881894762,
+    "arrays_files": 121,
+    "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+    "identity": {
+      "checkpoint_sha256": "1c9b5f8c595935674f6952da6b239a50e26ca4eb4d90a217ab5593866d5b319e",
+      "code_commit": "df2155ab3c5bc6bc8cb7a507c14e8bedab856544",
+      "n_rain": 407820,
+      "n_strong": 717,
+      "partition_sha256": "01b95f12d26a3f6f4ff05620414cdae66c5cec23bd2808b0af2de40e4615291c",
+      "population_ids_sha256": "916302412bf024942aadeefe969d12c74452481ef24dedc30b1262b24609cf76",
+      "population_sha256": "2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8",
+      "proposal_sha256": "ed417346f82218fe981078872fb91c80211ad46e9b836f29e628daef842308a9",
+      "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b"
+    },
+    "readout_proposal_sha256": "ed417346f82218fe981078872fb91c80211ad46e9b836f29e628daef842308a9",
+    "readout_status": "COMPLETE_SINGLE_ARM_READOUT",
+    "satellite_bytes": 3593008460,
+    "satellite_files": 780
+  },
+  "execution_code_commit": "2392f51843e7c9199b28dd43796fc1666748fe01",
+  "final_2025_access": false,
+  "kind": "BOUNDED_STAGE45_DEV_ACCEPTANCE",
+  "models": [],
+  "private_preparation_sha256": "79b242749359081293830837a345d5f95237c370b1016b0c441538d4c0cbb74f",
+  "proposal_sha256": "f568e8401d27b9e1e552cdb9dc539c4e1f052126cccda7dd26d079453b273bec",
+  "python_sha256": "0562f573871cb16a2fb8de16e3d486e3dfd74bb83c7e87db265561917d05ad1a",
+  "scientific_choices": {
+    "a0_rule": "a0 = float32(p * mean(expm1(qlog)))",
+    "a0_threshold": 9.5373,
+    "action_rule": "keep q32 and p fixed; blend the 31 sub-top physical quantiles a fraction u toward the fixed top quantile q32, with u chosen so the FP32 point mass p*mean reaches 20.01; feasible iff 0 < u < 1, nodes remain strictly increasing, and new A = float32(p * mean(blended)) > 20.0",
+    "baseline_counts": {
+      "n_candidate_scenes": 130,
+      "n_candidate_strong": 84,
+      "n_candidates": 1912,
+      "n_rain": 407820,
+      "n_strong": 717,
+      "n_valid": 3303090,
+      "n_weak": 246473,
+      "scenes": 963
+    },
+    "baseline_metrics": {
+      "occurrence_ap": 0.6066547555865263,
+      "occurrence_auroc": 0.8990243638708331,
+      "occurrence_brier": 0.09233015567445307,
+      "point_a_fp": 0,
+      "point_a_tp": 0,
+      "q32_support_fp": 5769,
+      "q32_support_tp": 160,
+      "strong_physical_pinball_over20": 0.5068646309277546,
+      "weak_log_pinball": 0.08872231160181858
+    },
+    "candidate_rule": "supervised rows with FP64 p * q32 > 20.0, q32 = expm1(qlog[-1])",
+    "candidate_threshold": 20.0,
+    "decision": "PASS iff gate1 improves, gate2 tp >= 1, gate3 fp == 0, gate6 unchanged, and no weak/nonstrong row is selected",
+    "gates": [
+      {
+        "comparator": "lt",
+        "gate": 1,
+        "name": "strong_physical_pinball_over20"
+      },
+      {
+        "comparator": "ge",
+        "gate": 2,
+        "name": "point_a_detection_restored",
+        "threshold": 1
+      },
+      {
+        "comparator": "le",
+        "gate": 3,
+        "name": "point_a_false_positive_removed",
+        "threshold": 0
+      },
+      {
+        "comparator": "eq",
+        "gate": 4,
+        "name": "q32_support_true_positive_unchanged"
+      },
+      {
+        "comparator": "eq",
+        "gate": 5,
+        "name": "q32_support_false_positive_unchanged"
+      },
+      {
+        "comparator": "eq",
+        "gate": 6,
+        "name": "weak_log_pinball_unchanged"
+      },
+      {
+        "comparator": "by_construction_equal",
+        "gate": 7,
+        "name": "occurrence_brier_unchanged"
+      },
+      {
+        "comparator": "by_construction_equal",
+        "gate": 8,
+        "name": "occurrence_ap_unchanged"
+      },
+      {
+        "comparator": "by_construction_equal",
+        "gate": 9,
+        "name": "occurrence_auroc_unchanged"
+      }
+    ],
+    "split_rule": "split = tbb_08 - tbb_13 at the candidate pixel after SP04 25-cell area mean; split_min over slot_0..slot_5",
+    "split_threshold": 2.3612,
+    "target_mass": 20.01
+  },
+  "status": "READY_WAITING_EXACT_DEV_ACCEPTANCE_APPROVAL",
+  "tasks": [
+    {
+      "evaluation": "STAGE45_DEV_NINE_GATE_ACCEPTANCE",
+      "role": "Development",
+      "year": 2024
+    }
+  ]
+}
