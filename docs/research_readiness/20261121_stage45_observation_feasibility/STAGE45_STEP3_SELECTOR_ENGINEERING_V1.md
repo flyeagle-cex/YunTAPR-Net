@@ -59,3 +59,20 @@
 - 预算：16,066,485,320 B / 4,637 次打开 / 70 批 / 最长 2,400 秒；零更新、零 refit、零 retry、零 replay；2025 封存。
 - 状态：`READY_WAITING_EXACT_TRAIN_READOUT_APPROVAL`、`authorized=False`、`final_2025_access=False`；测试收据：25 passed / 5 subtests（含本臂 6 项 collector 测试与 supervisor 预算/超时测试）。
 - 尚未执行：无 RESEARCHER_APPROVAL.json，未加载检查点、未阅读任何气象源、未跑前向。
+
+## 7. V1 执行尝试终态 · 2026-11-23
+
+- V1 提案（规范 SHA `d054082c…`，代码 `7646b37`）经研究者单次批准（decision_id `STAGE45-CANDIDATE-MANIFEST-20261123-ONE`）于北京时间 19:58 单次派发；20:06 目标进程退出码 1，落盘 `failure.json`：`STOP_NO_RETRY`、`TypeError: Object of type int64 is not JSON serializable`。
+- 实际完成：前向全部 70 批、560 场景、1,920,800 监督像元、484 真强雨全部评估；候选行表已完整写出（`stage45_candidate_manifest.npz`，1,475 行 / 108 场景；可达 105 行 = 10 强雨 + 95 非强雨；已跨界 0；不可达 1,370 行 = 52 强雨 + 1,318 非强雨）。
+- 失败点：终态 `completion.json` 写聚合计数时遇到 numpy `int64` 而崩溃（文件截断）。该失败属终态收据写出缺陷，不改变行表字节；但按冻结协议本次不构成有效终态。
+- 处置：不自动重试、不重放；V1 行表仅保留为私有描述性残件，不用于任何正式冻结；批准已消费。修复提交 `e00edf09` 后重新冻结 V2。
+
+## 8. 固定执行包 V2 · 2026-11-23
+
+- 修复提交：`e00edf09e6707ad889359ef66fe20ebd45bb0f57`「Serialize the candidate-manifest aggregate receipt as plain Python」（[GitHub commit](https://github.com/flyeagle-cex/YunTAPR-Net/commit/e00edf09e6707ad889359ef66fe20ebd45bb0f57)）：聚合计数全部显式转 `int`，并新增 JSON 序列化回归测试；定向测试 26 passed / 5 subtests。
+- 执行代码：`e00edf09…`；固定副本 `D:\研究\极端降水预测\YunTAPR-Train-Stage45-Candidates-Exec-e00edf09`（detached HEAD）。
+- 冻结提案：规范 SHA-256 `283033ee8a951b8fd104fcb6f6b94fdd7d8b218f902faec5cda7447e9e601c61`；本目录副本 [STAGE45_CANDIDATE_MANIFEST_EXECUTION_PROPOSAL_V2.json](STAGE45_CANDIDATE_MANIFEST_EXECUTION_PROPOSAL_V2.json)，文件 SHA-256 `3cffbc1e4ea2cc28112a417b5a04e6d487abb1c8293f8a9676debb43a6b68ce8`。
+- 私有命名空间：`docs/research_readiness/.local/train_stage45_candidates_v2`（无 `RESEARCHER_APPROVAL.json`）。
+- 身份继承、预算与 V1 逐字段一致：训练清单 `3de8b53c…`、检查点 `1c9b5f8c…`（53,906,821 B / 1 次）、静态地形 `788572b1…`（312,828 B / 1 次）、源收据 `14fb38b5…`、DOTE/调制上限/投影/额外 GFS 打开数不变；16,066,485,320 B / 4,637 次 / 70 批 / 最长 2,400 秒；零更新、零 refit、零 retry、零 replay；2025 封存。
+- 状态：`READY_WAITING_EXACT_TRAIN_READOUT_APPROVAL`、`authorized=False`、`final_2025_access=False`；尚未执行（未创建批准文件、未加载检查点、未跑前向）。
+- 预期输出：与 V1 相同的 1,475 行候选行表 + 合法终态收据；结果仅作描述性工程原料，不构成 Dev 验收。
