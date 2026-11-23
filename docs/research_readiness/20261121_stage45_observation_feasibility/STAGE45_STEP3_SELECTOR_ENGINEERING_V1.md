@@ -49,6 +49,13 @@
 2. 用第 4 步候选行 + 第 1 项特征在 Train 上冻结 S1/S2 与最终规则。
 3. Dev 一次性九门验收（保存的 121 分片 881,894,762 B / 121 次打开 / 300 秒量级数组 + 仅候选场景云顶读取）；通过即完成第 3 步，失败则按门规则封存。
 
-## 6. 固定执行包
+## 6. 固定执行包 · 2026-11-23
 
-（prepare 后补记：KIND/SCOPE、代码提交、固定副本路径、规范提案 SHA-256 与文件 SHA-256、命名空间、状态、测试收据、未执行声明。）
+- KIND：`BOUNDED_TRAIN_STAGE45_CANDIDATE_MANIFEST`；SCOPE：`COSINE9_E9_2023_TRAIN_STAGE45_CANDIDATE_MANIFEST`。
+- 执行代码：`7646b371ea81af7813c2547a3c80fb5e689d2d3b`（[GitHub commit](https://github.com/flyeagle-cex/YunTAPR-Net/commit/7646b371ea81af7813c2547a3c80fb5e689d2d3b)），固定副本 `D:\研究\极端降水预测\YunTAPR-Train-Stage45-Candidates-Exec-7646b37`（detached HEAD）。
+- 冻结提案：规范 SHA-256 `d054082c3681ecb243cf078c75cb09f7d44eb5b0d1e4c972ec67349d87fe2b0f`；本目录副本 [STAGE45_CANDIDATE_MANIFEST_EXECUTION_PROPOSAL_V1.json](STAGE45_CANDIDATE_MANIFEST_EXECUTION_PROPOSAL_V1.json)，文件 SHA-256 `c060b010bceaeeb8cb401e3fb4f0a88471144c6a00b51a35a8e74bb28773819a`。
+- 私有命名空间：`docs/research_readiness/.local/train_stage45_candidates_v1`（EXECUTION_SPEC / PRIVATE_PREPARATION / PROPOSAL / service；`RESEARCHER_APPROVAL.json` 尚不存在）。
+- 身份继承：训练清单 `3de8b53c…`、检查点 `1c9b5f8c…`（53,906,821 B / 1 次加载）、静态地形 `788572b1…`（312,828 B / 1 次打开）、源收据 `14fb38b5…`、DOTE/调制上限/投影/额外 GFS 打开数与冻结参考一致。
+- 预算：16,066,485,320 B / 4,637 次打开 / 70 批 / 最长 2,400 秒；零更新、零 refit、零 retry、零 replay；2025 封存。
+- 状态：`READY_WAITING_EXACT_TRAIN_READOUT_APPROVAL`、`authorized=False`、`final_2025_access=False`；测试收据：25 passed / 5 subtests（含本臂 6 项 collector 测试与 supervisor 预算/超时测试）。
+- 尚未执行：无 RESEARCHER_APPROVAL.json，未加载检查点、未阅读任何气象源、未跑前向。
