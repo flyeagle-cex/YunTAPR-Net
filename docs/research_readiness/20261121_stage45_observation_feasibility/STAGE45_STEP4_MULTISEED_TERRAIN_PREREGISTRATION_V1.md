@@ -93,4 +93,19 @@ E0 初始化的额外预注册要求（2026-11-23 事实清单补充）：
 
 ## 9. 状态
 
-`DRAFT_PREPARATION`：未冻结、未获批、未启动训练、未访问 2025。
+`PROPOSAL_FROZEN_PENDING_RESEARCHER_APPROVAL`：代码与提案已冻结，等待研究者对本次 4 模型包的一次明确批准；未启动训练、未读原始气象载荷、未访问 2025。
+
+## 10. 固定执行包 · 多 seed 训练 V1（2026-11-23）
+
+- 执行器：`BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN`；SCOPE=`FOUR_TASK_COSINE9_REAL_ZERO_SEED2030_2031`；单次批准、串行四任务（REAL2030 → ZERO2030 → REAL2031 → ZERO2031）、失败即停、零重试零重放。
+- 执行代码：`061a4d94ed6f1387eebeed04ece75d94779cc534`（[GitHub](https://github.com/flyeagle-cex/YunTAPR-Net/commit/061a4d94ed6f1387eebeed04ece75d94779cc534)）；固定副本：`D:\研究\极端降水预测\YunTAPR-Train-Cosine9-Multiseed-Exec-061a4d9`（detached HEAD）。
+- 规范提案 SHA-256：`65624e55361b9c39912fd89de4c917f1dd0dda993cbe434c1ea1cccbc877fb21`；公开副本：[STAGE45_STEP4_MULTISEED_TERRAIN_EXECUTION_PROPOSAL_V1.json](STAGE45_STEP4_MULTISEED_TERRAIN_EXECUTION_PROPOSAL_V1.json)（文件 SHA-256 `EF6AA724E32F0C1BFDFC51B005381DD58A269DF5C94607B005BAFBAF3A0C9B93`，111,357 B）。
+- 私有命名空间：`docs/research_readiness/.local/train_cosine9_multiseed_v1`（PROPOSAL.json / PRIVATE_PREPARATION.json / EXECUTION_SPEC.json / service/），无 `RESEARCHER_APPROVAL.json`、无 output。
+- 提案状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`、authorized=False、final_2025_access=False。
+- 身份链：UQ E0 对照 → COSINE9 REAL seed2029（`e54ccc16…`）→ ZERO seed2029（`b4f15fb8…`）→ 本包；seed2029 REAL 原始初始化 `ab749c88…`（与冻结提案一致）；B7@2030 初始化 `50dcc3295f13b4cd1dfe79ee9b549d767dd6e708195bfb8c6afdc782d2d0c56e`、B7@2031 初始化 `65c4889632e0dd1770473016ced5cb5deeff2eade8b64db3ce2d6a347315fa91`（各 9 个 epoch order 已封存）；ZERO 数值控制复用 seed2029 收据（真实 mask 保留、128 个无损失梯度权重）。
+- 预算（提案 budget 逐字冻结）：4 模型 × 4,320 更新 = 17,280；4 × 477,571,953,840 B = 1,910,287,815,360 B；4 × 142,813 = 571,252 次打开；每模型 21,600 s / 整包 86,400 s；初始可用 ≥48 GiB、每任务 ≥24 GiB；checkpoint 加载 0、replay/额外重试 0；2025 不访问。
+- 输出根：`F:\pytorch\research\YunTAPR_cosine9_multiseed_s2030_s2031_20261123_v1`（不存在；父目录已存在；F: 可用约 86.6 GiB ≥ 48 GiB）。
+- 验证：定向测试 29 passed / 38 subtests（`test_cosine9_multiseed.py` + `test_independent_process.py`，base python 3.13 + shim）；相关既有回归 58 passed / 178 subtests；py_compile 与 `git diff --check` 通过；只读冒烟（继承漂移允许集、ZERO 绑定、seed 初始化摘要）通过。
+- 未执行：未创建批准文件、未加载模型/检查点、未创建输出根、未读原始气象载荷、未访问 2025。获批后由独立监督器按 `EXECUTION_SPEC.json` 单次派发。
+
+> 执行前须由研究者对该提案身份（`65624e55…`）与预算给出一次明确批准；旧批准不可复用，2025 继续封存。
