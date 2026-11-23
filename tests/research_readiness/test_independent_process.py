@@ -25,6 +25,12 @@ class IndependentHostTests(unittest.TestCase):
             "COSINE9_E9_2023_TRAIN_MFC700_AMPLITUDE", "COSINE9_E9_2023_TRAIN_MFC700_MATCHED",
         )
 
+    def test_stage45_candidates_reject_prior_amplitude_approval(self):
+        self._check_train_scope_and_budget(
+            "BOUNDED_TRAIN_STAGE45_CANDIDATE_MANIFEST", "start_train_stage45_candidates.py",
+            "COSINE9_E9_2023_TRAIN_STAGE45_CANDIDATE_MANIFEST", "COSINE9_E9_2023_TRAIN_MFC700_AMPLITUDE",
+        )
+
     def _check_train_scope_and_budget(self, kind, filename, scope, rejected_scope):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp).resolve()
@@ -74,6 +80,22 @@ class IndependentHostTests(unittest.TestCase):
             service = Path(tmp)
             configuration = service / "spec.json"
             fixture = dict(kind="BOUNDED_TRAIN_MFC700_AMPLITUDE", command=["synthetic"], cwd=tmp)
+            module.write(configuration, fixture)
+            module.write(service / "independent_launch_claim.json", dict(spec_sha256=module.sha(configuration)))
+            with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
+                    module, "host_identity", return_value=dict(in_any_job=False, package_status=15700)
+            ), patch.object(module.subprocess, "Popen") as popen:
+                process = popen.return_value
+                process.pid = 123
+                process.wait.return_value = 0
+                self.assertEqual(module.supervise(configuration), 0)
+                process.wait.assert_called_once_with(timeout=2400)
+
+    def test_stage45_candidates_supervisor_uses_the_bound_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Path(tmp)
+            configuration = service / "spec.json"
+            fixture = dict(kind="BOUNDED_TRAIN_STAGE45_CANDIDATE_MANIFEST", command=["synthetic"], cwd=tmp)
             module.write(configuration, fixture)
             module.write(service / "independent_launch_claim.json", dict(spec_sha256=module.sha(configuration)))
             with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
