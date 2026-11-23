@@ -63,3 +63,10 @@
 - `MFC700_E9_MATCHED_V1.md`、`MFC700_E9_MATCHED_RESULTS_V1.json`（sha256 a73a6e00a0e1678542c3eabb9eb6f306d44873c45a0e8122da993863703cf6eb）
 - `MFC700_AMPLITUDE_BOUNDS_V1.md`、`MFC700_AMPLITUDE_BOUNDS_EXECUTION_PROPOSAL_V2.json`（文件 sha256 d0d629191da8b5c0f6af9d44b2ee08eb3769d9aa37d6d8d5b67189d268b6e3ba；执行终态 completion.json sha256 05b37236668334fd753c85e3f1a8ebd7c32778d2423776c489219d09a9e84c01）
 - `A20_FIXED_ENDPOINT_SCALAR_RESULTS.json`（提案 75e93a25…）、`A20_FIXED_ENDPOINT_SAVED_BOUND.md`、`TAIL_GRAD_ALIGNMENT_SYNTH_V1.md`、`RH700_AMPLITUDE_FEASIBILITY_V1.md`、`OROGRAPHIC_SEPARABILITY_V1.md`、`B13_SCALE_ROBUST_COOLING_V1.md`、`COSINE9_SAVED_TAIL_GRADIENT_PREPARATION.md`
+
+## 6. 重开与一次性 Dev 九门验收终态（2026-11-23）
+
+- 依研究者 2026-11-23 的明确指示重开第 3 步。按第 4 节复审条件，一次预注册候选被冻结并完成一次性 Dev 九门验收：候选 = Train 冻结的云顶持续冷却+正 WV-IR split 选择器（`p·q32>20 ∧ a0≥9.5373 ∧ split_min≥2.3612`）+ blend-to-top 弱雨保恒幅值校正（固定 p 与 q32），云顶与选择器阈值先于任何 Dev 云顶读取冻结。
+- 终态：`decision = PASS`、`failing_gates = []`。门 1 强雨物理 Pinball/20 `0.5068646309277545 → 0.5067400512587865`（−1.246e−4，严格下降）；门 2 固定 A 真强雨命中 0→1；门 3 非强雨误报 0；门 4 q32 真阳 160 不变；门 5 q32 假阳 5,769 不变；门 6 弱雨 log Pinball 0.08872231160181855 不变；门 7/8/9 因 p 与 q32 固定按构造恒等。选择 1 个真强雨像元（2024-09-30T17:30 y17x44，truth 20.12 mm/h）、0 非强雨、0 弱雨、0 不可行；账本 901 次科学文件打开 / 4,474,903,222 B / 63.83 秒，零模型前向、零检查点、零优化器更新、零 retry/replay；2025 未访问。
+- 因此本文件第 3 节的 `STEP3_GATE_CLOSED_NO_ADMISSIBLE_CANDIDATE` 负终裁对本次冻结候选不再适用（保留为历史记录）；第 3 步按冻结协议判定为该候选通过。更广的数据集级科学结论仍受证据边界约束（仅 1 个激活像元、门 1 余量约 1.2e-4），不自动授权任何新训练、扩域或 2025 访问。
+- 引用：`STAGE45_STEP3_SELECTOR_ENGINEERING_V1.md` 第 14/15 节；公开收据 `STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json`（文件 SHA-256 `5e184d575f0e4aa052048b1747270f62d6a8bc21b1431aac202c44bdc91af6ad`）；规范提案 `f568e8401d27b9e1e552cdb9dc539c4e1f052126cccda7dd26d079453b273bec`；执行代码 `2392f51843e7c9199b28dd43796fc1666748fe01`。

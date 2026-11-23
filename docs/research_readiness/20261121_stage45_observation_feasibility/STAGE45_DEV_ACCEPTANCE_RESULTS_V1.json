@@ -1,0 +1,228 @@
+{
+  "accounting": {
+    "array_bytes_read": 881894762,
+    "array_files_read": 121,
+    "maximum_reference_bytes": 4474903222,
+    "maximum_scientific_file_opens": 901,
+    "metadata_config_opens": 3,
+    "satellite_bytes_read": 3593008460,
+    "satellite_files_read": 780,
+    "scientific_file_opens": 901,
+    "scientific_reference_bytes": 4474903222
+  },
+  "automatic_retry": false,
+  "decision": "PASS",
+  "execution_code_commit": "2392f51843e7c9199b28dd43796fc1666748fe01",
+  "final_2025_access": false,
+  "finished": "2026-11-23T14:18:55.249228+00:00",
+  "model_inference_passes": 0,
+  "optimizer_updates": 0,
+  "private_preparation_sha256": "79b242749359081293830837a345d5f95237c370b1016b0c441538d4c0cbb74f",
+  "proposal_sha256": "f568e8401d27b9e1e552cdb9dc539c4e1f052126cccda7dd26d079453b273bec",
+  "result": {
+    "accounting": {
+      "array_bytes_read": 881894762,
+      "array_files_read": 121,
+      "maximum_reference_bytes": 4474903222,
+      "maximum_scientific_file_opens": 901,
+      "metadata_config_opens": 3,
+      "satellite_bytes_read": 3593008460,
+      "satellite_files_read": 780,
+      "scientific_file_opens": 901,
+      "scientific_reference_bytes": 4474903222
+    },
+    "authorization_scope": "COSINE9_E9_2024_DEV_STAGE45_NINE_GATE_ACCEPTANCE",
+    "automatic_retry": false,
+    "baseline_metrics": {
+      "occurrence_ap": 0.6066547555865267,
+      "occurrence_auroc": 0.8990243638708331,
+      "occurrence_brier": 0.09233015567445307,
+      "point_a_fp": 0,
+      "point_a_tp": 0,
+      "q32_support_fp": 5769,
+      "q32_support_tp": 160,
+      "strong_physical_pinball_over20": 0.5068646309277545,
+      "weak_log_pinball": 0.08872231160181855
+    },
+    "candidate_metrics": {
+      "occurrence_ap": 0.6066547555865267,
+      "occurrence_auroc": 0.8990243638708331,
+      "occurrence_brier": 0.09233015567445307,
+      "point_a_fp": 0,
+      "point_a_tp": 1,
+      "q32_support_fp": 5769,
+      "q32_support_tp": 160,
+      "strong_physical_pinball_over20": 0.5067400512587865,
+      "weak_log_pinball": 0.08872231160181855
+    },
+    "counts": {
+      "n_candidate_scenes": 130,
+      "n_candidate_strong": 84,
+      "n_candidates": 1912,
+      "n_rain": 407820,
+      "n_strong": 717,
+      "n_valid": 3303090,
+      "n_weak": 246473,
+      "scenes": 963
+    },
+    "decision": "PASS",
+    "elapsed_seconds": 63.82800000000134,
+    "execution_code_commit": "2392f51843e7c9199b28dd43796fc1666748fe01",
+    "failing_gates": [],
+    "final_2025_access": false,
+    "gates": [
+      {
+        "baseline": 0.5068646309277545,
+        "candidate": 0.5067400512587865,
+        "comparator": "lt",
+        "delta": -0.00012457966896795014,
+        "gate": 1,
+        "name": "strong_physical_pinball_over20",
+        "passed": true,
+        "status": "RECOMPUTED"
+      },
+      {
+        "baseline": {
+          "fp": 0,
+          "tp": 0
+        },
+        "candidate": {
+          "fp": 0,
+          "tp": 1
+        },
+        "comparator": "ge",
+        "delta": {
+          "fp": 0,
+          "tp": 1
+        },
+        "gate": 2,
+        "name": "point_a_detection_restored",
+        "passed": true,
+        "requirement": "candidate_tp>=1"
+      },
+      {
+        "baseline": {
+          "fp": 0,
+          "tp": 0
+        },
+        "candidate": {
+          "fp": 0,
+          "tp": 1
+        },
+        "comparator": "le",
+        "delta": {
+          "fp": 0,
+          "tp": 1
+        },
+        "gate": 3,
+        "name": "point_a_false_positive_removed",
+        "passed": true,
+        "requirement": "candidate_fp==0"
+      },
+      {
+        "baseline": 160,
+        "candidate": 160,
+        "comparator": "eq",
+        "gate": 4,
+        "name": "q32_support_true_positive_unchanged",
+        "passed": true
+      },
+      {
+        "baseline": 5769,
+        "candidate": 5769,
+        "comparator": "eq",
+        "gate": 5,
+        "name": "q32_support_false_positive_unchanged",
+        "passed": true
+      },
+      {
+        "baseline": 0.08872231160181855,
+        "candidate": 0.08872231160181855,
+        "comparator": "eq",
+        "gate": 6,
+        "name": "weak_log_pinball_unchanged",
+        "passed": true
+      },
+      {
+        "baseline": 0.09233015567445307,
+        "candidate": 0.09233015567445307,
+        "equal": true,
+        "gate": 7,
+        "name": "occurrence_brier_unchanged",
+        "passed": true,
+        "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+        "status": "BY_CONSTRUCTION_EQUAL"
+      },
+      {
+        "baseline": 0.6066547555865267,
+        "candidate": 0.6066547555865267,
+        "equal": true,
+        "gate": 8,
+        "name": "occurrence_ap_unchanged",
+        "passed": true,
+        "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+        "status": "BY_CONSTRUCTION_EQUAL"
+      },
+      {
+        "baseline": 0.8990243638708331,
+        "candidate": 0.8990243638708331,
+        "equal": true,
+        "gate": 9,
+        "name": "occurrence_auroc_unchanged",
+        "passed": true,
+        "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+        "status": "BY_CONSTRUCTION_EQUAL"
+      }
+    ],
+    "infeasible_rows": [],
+    "kind": "BOUNDED_STAGE45_DEV_ACCEPTANCE",
+    "model_inference_passes": 0,
+    "notes": [
+      "Gates 7/8/9 are BY_CONSTRUCTION_EQUAL because the action fixes p and q32.",
+      "Baselines were recomputed from the loaded arrays and matched the frozen preparation within 1e-12.",
+      "The real acceptance execution remains subject to a separate researcher approval file."
+    ],
+    "optimizer_updates": 0,
+    "private_preparation_sha256": "79b242749359081293830837a345d5f95237c370b1016b0c441538d4c0cbb74f",
+    "proposal_sha256": "f568e8401d27b9e1e552cdb9dc539c4e1f052126cccda7dd26d079453b273bec",
+    "scientific_status": "NOT_VERIFIED",
+    "selected_rows": [
+      {
+        "a0": 10.493988037109375,
+        "activated": true,
+        "blend_fraction": 0.3774170427122716,
+        "infeasible_reason": null,
+        "new_A": 20.010000228881836,
+        "normalized_pinball_change": -0.08932362264998903,
+        "p": 0.8046875,
+        "q32": 44.374379123223896,
+        "row": 57,
+        "scene": "2024-09-30T17:30:00+00:00",
+        "split_min": 2.5723876953125,
+        "strong": true,
+        "truth": 20.119998931884766,
+        "weak": false,
+        "x": 44,
+        "y": 17
+      }
+    ],
+    "selected_rows_omitted": 0,
+    "selected_rows_total": 1,
+    "selection": {
+      "candidate_rows": 1912,
+      "feasible_rows": 1,
+      "infeasible_rows": 0,
+      "nonstrong_rows_selected": 0,
+      "rule": "candidate AND a0 >= 9.5373 AND split_min >= 2.3612",
+      "selected_rows": 1,
+      "weak_rows_selected": 0
+    },
+    "status": "COMPLETE_STAGE45_DEV_ACCEPTANCE",
+    "task": {
+      "evaluation": "STAGE45_DEV_NINE_GATE_ACCEPTANCE",
+      "role": "Development",
+      "year": 2024
+    }
+  },
+  "status": "COMPLETE_STAGE45_DEV_ACCEPTANCE"
+}

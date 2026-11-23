@@ -139,3 +139,12 @@
 - 状态：`READY_WAITING_EXACT_DEV_ACCEPTANCE_APPROVAL`，authorized=False、final_2025_access=False；未创建 `RESEARCHER_APPROVAL.json`、未创建 output、未执行真实 Dev 读取。
 - 已完成的非科学验证：定向测试 18 passed / 3 subtests；真实 121 分片 + 合成卫星 payload 的端到端演练 PASS（用于验证代码路径，不作为科学证据）。
 - 执行一次后按第 12/13 节门规则判定；任一失败即候选封存、第 3 步保持 NOT_VERIFIED，不重试、不改阈值、不重放。
+
+## 15. Dev 九门验收 V1 执行终态 · 2026-11-23
+
+- 单次执行完成：`decision = PASS`、`failing_gates = []`、`status = COMPLETE_STAGE45_DEV_ACCEPTANCE`；target_exit return_code 0（2026-11-23T14:18:55Z），耗时 63.83 秒（上限 900 秒）；`completion.json` 7,310 B（私有 SHA-256 `0c85c1c5af0057c2c644033c14ea206972ba9ea3b4fb113c8226f28ad9fc70f3`，公开副本 [STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json](STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json) 以 LF 规范化，文件 SHA-256 `5e184d575f0e4aa052048b1747270f62d6a8bc21b1431aac202c44bdc91af6ad`）。
+- 账本：121 个数组分片 / 881,894,762 B + 780 个卫星文件 / 3,593,008,460 B = 901 次科学文件打开 / 4,474,903,222 B；元数据配置打开 3 次；模型前向 0、检查点加载 0、优化器更新 0、retry/replay 0；final_2025_access = false。
+- 选择器：从 1,912 个候选行中按冻结规则 `p·q32>20 ∧ a0≥9.5373 ∧ split_min≥2.3612` 选中 1 行，为真强雨（2024-09-30T17:30，scene row 57，y=17、x=44，truth 20.12 mm/h，p=0.8046875，q32=44.3744，a0=10.4940，split_min=2.5724）；非强雨选中 0、弱雨选中 0、不可行 0。blend 比例 u=0.377417，new_A=20.0100002，归一化物理 Pinball 变化 −0.08932362。
+- 九门：门 1 强雨物理 Pinball/20 `0.5068646309277545 → 0.5067400512587865`（delta −0.00012458，严格下降）；门 2 固定 A 真强雨命中 0→1；门 3 非强雨误报 0→0；门 4 q32 真阳 160 不变；门 5 q32 假阳 5,769 不变；门 6 弱雨 log Pinball 0.08872231160181855 不变；门 7/8/9 因 p 与 q32 固定按构造恒等（Brier/AP/AUROC）。九门全部通过。
+- 结论：冻结的单一候选（云顶持续冷却 + 正 WV-IR split 门控、blend-to-top 弱雨保恒幅值校正）在一次性 Dev 九门验收中 `PASS`，无门失败；按第 3 步冻结协议，第 3 步联合门由负终态改为「该候选通过」。证据边界：仅 1 个激活像元（门 2 只要求 ≥1）、门 1 余量约 1.2e-4；结论严格限于本冻结协议与本次单次执行。completion 的 `scientific_status = NOT_VERIFIED` 指更广的数据集级科学验证状态，不否定本次九门判定；2025 封存、不重试、不重放，且本结果不自动授权任何新训练、扩域或 2025 访问。
+- 复现：执行代码 `2392f51`、规范提案 `f568e840…`、私有准备 `79b24274…`、固定副本 `YunTAPR-Train-Stage45-DevAccept-Exec-2392f51`；由独立监督器 spawn 一次（supervisor_pid 29968、target pid 35080），无自动重试。
