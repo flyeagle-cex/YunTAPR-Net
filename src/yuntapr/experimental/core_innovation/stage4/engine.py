@@ -164,7 +164,7 @@ class PairedExecutor:
     def __init__(self,plan,folder,*,decision=None,strong_scene_ids=(),altitude=None,recovery=None,
                  kinds=('B3','B4'),deadline=None,tail_factory=None,code_commit=None,pair_reference=None,model_factory=None,
                  lambda_q=1.0,origin_reference=None,quantile_profile=UNIFORM,schedule_profile=ORIGINAL_50,
-                 final_dev_observer=None):
+                 final_dev_observer=None,cosine9_seeds=(2029,)):
         self.plan=plan;self.folder=Path(folder);self.decision=decision;self.strong=strong_scene_ids or (plan.strong_scene_ids if plan is not None else ());self.altitude=altitude
         self.recovery=recovery
         self.kinds=tuple(kinds);self.deadline=deadline or (lambda:None)
@@ -176,6 +176,9 @@ class PairedExecutor:
             raise ValueError('Only closed E0/E2 quantile weights are supported')
         self.loss_config=get_config('E0' if self.lambda_q==1.0 else 'E2')
         self.quantile_profile=quantile_profile
+        self.cosine9_seeds=tuple(cosine9_seeds)
+        if not self.cosine9_seeds or any(type(seed) is not int for seed in self.cosine9_seeds):
+            raise ValueError('COSINE9_V1 requires an explicit integer seed set')
         self.final_dev_observer=final_dev_observer
         self.tail20_resume = type(recovery) is Tail20E8Resume
         self.coverage_resume = type(recovery) is CoverageE5Resume
@@ -202,10 +205,11 @@ class PairedExecutor:
         self.modified_schedule=schedule_profile!=ORIGINAL_50
         if self.modified_schedule and (
             schedule_profile!=COSINE9 or self.kinds!=('B7',)
-            or getattr(decision,'seed',None)!=2029
+            or getattr(decision,'seed',None) not in self.cosine9_seeds
             or (self.modified_loss and quantile_profile not in (PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES)) or incompatible_resume
         ):
-            raise PermissionError('COSINE9_V1 requires one origin-only B7 seed2029 E0 uniform or physical task')
+            raise PermissionError(
+                'COSINE9_V1 requires one origin-only B7 E0 uniform or physical task in the bound seed set '+str(self.cosine9_seeds))
         if quantile_profile==PHYSICAL_PROFILE:
             self.loss_identity=physical_profile_identity()
         elif quantile_profile==TAIL20_PROFILE:

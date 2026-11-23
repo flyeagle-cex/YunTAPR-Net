@@ -126,6 +126,38 @@ def validate_zero_cosine9_scope(proposal, executable):
     validate_cosine9_scope(inherited, executable)
 
 
+def validate_cosine9_multiseed_scope(proposal, executable):
+    """Admit only the four serial REAL/ZERO cosine9 tasks on the two new seeds."""
+    protocol, caps = proposal.get('protocol', {}), proposal.get('budget', {})
+    expected_caps = dict(models=4,updates_per_model=4320,total_updates=17280,
+        source_bytes_per_model=477571953840,source_files_per_model=142813,
+        total_source_bytes=1910287815360,total_source_files=571252,
+        max_model_seconds=21600,max_package_seconds=86400,
+        initial_free_bytes=48*1024**3,minimum_task_free_bytes=24*1024**3,
+        replay_allowance=0,additional_retry_allowance=0,checkpoint_loads=0)
+    tasks = [dict(arm=arm,model='B7',seed=seed,schedule_profile='COSINE9_V1')
+             for seed in (2030,2031) for arm in ('REAL','ZERO')]
+    choices = proposal.get('scientific_choices', {})
+    if (proposal.get('kind') != 'BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN'
+            or proposal.get('authorization_scope') != 'FOUR_TASK_COSINE9_REAL_ZERO_SEED2030_2031'
+            or proposal.get('tasks') != tasks
+            or protocol.get('loss') != 'E0' or protocol.get('lambda_q') != 1.0
+            or protocol.get('quantile_profile') != 'UNIFORM'
+            or protocol.get('schedule_profile') != 'COSINE9_V1' or protocol.get('epochs') != 9
+            or protocol.get('endpoint') != 'FIXED_EPOCH_9_LAST'
+            or protocol.get('seed_scope') != 'PER_TASK_2030_2031'
+            or caps != expected_caps
+            or choices.get('dynamic_control') != 'ZERO_NUMERIC_RETAIN_REAL_MASKS'
+            or choices.get('real_masks_retained') is not True
+            or choices.get('structurally_zero_loss_gradient_weights') != 128):
+        raise PermissionError('Only the exact four-task B7 REAL/ZERO cosine9 package is supported')
+    origin = choices.get('origin_reference', {})
+    if any(not isinstance(origin.get(f'B7@{seed}'), dict) for seed in (2030,2031)):
+        raise PermissionError('Both per-seed original initialization digests are required')
+    if sha(executable) != proposal.get('runtime_binding', {}).get('python_executable_sha256'):
+        raise PermissionError('Bound four-task cosine9 interpreter differs')
+
+
 def validate_physical_pinball_scope(proposal, executable):
     """Admit the exact researcher-approved PHYS20 preparation through isolation."""
     expected = 'c4ac55f41c43036964b31589d37d8553a65bb210fec0bc3c155c24af3144a2a1'
@@ -385,8 +417,8 @@ def validate_spec(path):
             import importlib.util
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
-    elif spec['kind']=='APPROVAL_BOUND_EXECUTION':
-        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_physical_pinball.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
+    elif spec['kind']=='APPROVAL_BOUND_EXECUTION' or (spec['kind']=='BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN' and entry.name=='start_cosine9_multiseed.py'):
+        if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_cosine9_multiseed.py','start_physical_pinball.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
             path=Path(command[command.index(flag)+1])
             if not path.is_absolute():raise ValueError('Cross-checkout execution requires absolute '+flag)
@@ -410,6 +442,23 @@ def validate_spec(path):
                 validate_physical_pinball_scope(proposal,executable)
             else:
                 validate_cosine9_scope(proposal,executable)
+            frozen=read(private['inherited'])['prepared']
+            volumes={Path(name).anchor for scope in frozen['roles'].values() for name in scope['files']}
+            if not volumes or any(not Path(volume).is_dir() for volume in volumes) or not Path(r'H:\葵花202303_202510').is_dir():
+                raise RuntimeError('Frozen source volume/root unavailable; no launch claim or target created')
+            expected_commit=approval['code_commit']
+        elif entry.name=='start_cosine9_multiseed.py':
+            validate_cosine9_multiseed_scope(proposal,executable)
+            environment=spec.get('environment',{})
+            if (proposal.get('authorized') is not False or proposal.get('final_2025_access') is not False
+                    or approval.get('authorization_scope')!=proposal.get('authorization_scope')
+                    or proposal.get('execution_code_commit') not in (None,approval.get('code_commit'))
+                    or environment.get('PYTHONHASHSEED') not in ('2030','2031')
+                    or environment.get('CUBLAS_WORKSPACE_CONFIG')!=':4096:8'
+                    or environment.get('PYTHONUTF8')!='1'
+                    or environment.get('OMP_NUM_THREADS')!='1'
+                    or environment.get('MKL_NUM_THREADS')!='1'):
+                raise PermissionError('Four-task cosine9 scope, approval, or runtime differs')
             frozen=read(private['inherited'])['prepared']
             volumes={Path(name).anchor for scope in frozen['roles'].values() for name in scope['files']}
             if not volumes or any(not Path(volume).is_dir() for volume in volumes) or not Path(r'H:\葵花202303_202510').is_dir():
@@ -463,6 +512,7 @@ def supervise(path):
                        'BOUNDED_TRAIN_MFC700_MATCHED': 2400,
                        'BOUNDED_TRAIN_MFC700_AMPLITUDE': 2400,
                        'BOUNDED_TRAIN_STAGE45_CANDIDATE_MANIFEST': 2400,
+                       'BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN': 87000,
                        'BOUNDED_TAIL20_TRAINING': 21600,
                        'BOUNDED_TAIL20_E9_REPLAY': 4500,
                        'BOUNDED_A20_BISIDE_TRAINING': 28800,

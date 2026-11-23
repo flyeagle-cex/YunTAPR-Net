@@ -238,10 +238,13 @@ def tail20_recovery_endpoint(folder, state, prepared, commit):
 
 
 def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,static_name,dynamic_transform_factory=PhysicalDote,lambda_q=1.0,
-             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50,final_dev_observer_factory=None,recovery=None):
+             quantile_profile='UNIFORM',tail_factory=None,schedule_profile=ORIGINAL_50,final_dev_observer_factory=None,recovery=None,
+             cosine9_seeds=(2029,),origin_reference=None):
     """Internal task wiring shared by approval-checked single/multi-seed dispatchers."""
     spec=RunSpec(kind,seed,lambda_q)
     spec.validate_protocol(p.get('protocol',{}))
+    if not isinstance(cosine9_seeds,tuple) or not cosine9_seeds or any(type(value) is not int for value in cosine9_seeds):
+        raise ValueError('COSINE9_V1 requires an explicit integer seed set')
     if quantile_profile not in ('UNIFORM','UQ_MILD_V1',PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or (
         quantile_profile!='UNIFORM' and (kind!='B7' or seed!=2029 or spec.lambda_q!=1.0)
     ):
@@ -266,10 +269,10 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
             or p['budget'].get('checkpoint_loads') != 1):
         raise PermissionError('Dynamic recovery requires the exact approved TAIL20 E8 replay')
     if schedule_profile!=ORIGINAL_50 and (
-        schedule_profile!=COSINE9 or kind!='B7' or seed!=2029 or spec.lambda_q!=1.0
+        schedule_profile!=COSINE9 or kind!='B7' or seed not in cosine9_seeds or spec.lambda_q!=1.0
         or quantile_profile not in ('UNIFORM',PHYSICAL_PROFILE,*POINT_DEV_GATE_PROFILES) or p.get('protocol',{}).get('schedule_profile')!=COSINE9
     ):
-        raise PermissionError('Only an explicitly bound B7 seed2029 uniform or physical E0 cosine9 task is supported')
+        raise PermissionError('Only an explicitly bound B7 uniform or physical E0 cosine9 task in the declared seed set is supported')
     if p.get('protocol',{}).get('schedule_profile',ORIGINAL_50)!=schedule_profile:
         raise PermissionError('Schedule must match the explicit task protocol')
     package=Path(v['output_root'])
@@ -290,8 +293,9 @@ def run_task(root,p,v,a,prepared,commit,kind,seed,*,started,pair_reference,stati
     PairedExecutor(plan,folder,decision=FormalDecision(a['decision_id'],seed,p['data']['population_sha256'],True,True,True),
                    kinds=(kind,),deadline=deadline,tail_factory=lambda:(TerrainTail if tail_factory is None else tail_factory)(pack),code_commit=commit,
                    pair_reference=pair_reference,model_factory=model_factory(pack,read(Path(v['terrain'])/'production_receipt.json')['scalers'],modulation_limit=p['scientific_choices']['modulation_limit']),lambda_q=spec.lambda_q,
-                   origin_reference=p['scientific_choices'].get('origin_reference',{}).get(kind),quantile_profile=quantile_profile,
-                    schedule_profile=schedule_profile,recovery=recovery,
+                   origin_reference=origin_reference if origin_reference is not None else p['scientific_choices'].get('origin_reference',{}).get(kind),
+                   quantile_profile=quantile_profile,schedule_profile=schedule_profile,recovery=recovery,
+                   cosine9_seeds=cosine9_seeds,
                    final_dev_observer=(lambda ids:final_dev_observer_factory(pack,ids))
                    if final_dev_observer_factory is not None else None).run(
                        ReaderFactory(plan,prepared,a['decision_id'],allowed_models=(kind,),dynamic_transform=transform))
