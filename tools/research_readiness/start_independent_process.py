@@ -192,6 +192,47 @@ def validate_spec(path):
                 or Path(private['runtime_python']).resolve()!=executable.resolve()
                 or proposal['budget'].get('maximum_seconds')!=7200):
             raise PermissionError('A20 rank approval or runtime differs')
+    elif spec['kind']=='BOUNDED_STAGE45_DEV_ACCEPTANCE':
+        cwd=Path(spec['cwd']).resolve()
+        entry_relative='tools/research_readiness/start_stage45_dev_acceptance.py'
+        if (entry!=cwd/entry_relative or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Separate exact Stage-45 Dev approval and fixed entry required')
+        proposal,private,approval=map(read,command[5::2])
+        expected_environment={'PYTHONHASHSEED':'2029','PYTHONUTF8':'1',
+                              'OMP_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
+                              'CUBLAS_WORKSPACE_CONFIG':':4096:8'}
+        scope='COSINE9_E9_2024_DEV_STAGE45_NINE_GATE_ACCEPTANCE'
+        task=[dict(role='Development',year=2024,evaluation='STAGE45_DEV_NINE_GATE_ACCEPTANCE')]
+        budget=proposal.get('budget',{})
+        if (proposal.get('authorization_scope')!=scope
+                or approval.get('authorization_scope')!=proposal.get('authorization_scope')
+                or proposal.get('authorized') is not False or proposal.get('final_2025_access') is not False
+                or approval.get('approved_by_researcher') is not True or not approval.get('decision_id')
+                or any(approval.get(key)!=proposal.get(key) for key in
+                       ('proposal_sha256','tasks','budget','scientific_choices'))
+                or proposal.get('tasks')!=task
+                or any(budget.get(key)!=value for key,value in
+                       dict(maximum_scientific_file_opens=901,maximum_reference_bytes=4474903222,
+                            maximum_seconds=900,optimizer_updates=0,model_inference_passes=0,
+                            checkpoint_loads=0,retries=0,replay=0).items())
+                or approval.get('code_commit')!=proposal.get('execution_code_commit')
+                or approval.get('output_root')!=private.get('output_root')
+                or private.get('proposal_sha256')!=proposal.get('proposal_sha256')
+                or Path(private.get('output_root','')).resolve()!=folder.parent/'output'
+                or Path(private.get('output_root','')).exists()
+                or Path(private.get('service_dir','')).resolve()!=folder
+                or Path(private.get('runtime_python','')).resolve()!=executable.resolve()
+                or sha(executable)!=proposal.get('python_sha256')
+                or spec.get('environment')!=expected_environment):
+            raise PermissionError('Stage-45 nine-gate scope, approval, or runtime differs')
+        commit=subprocess.check_output(['git','-C',str(cwd),'rev-parse','HEAD'],text=True).strip()
+        dirty=subprocess.check_output(['git','-C',str(cwd),'status','--porcelain'],text=True).strip()
+        entry_hash=proposal.get('code_sha256',{}).get(entry_relative)
+        if not isinstance(entry_hash,str) or commit!=approval.get('code_commit') or dirty or sha(entry)!=entry_hash:
+            raise PermissionError('Clean approved Stage-45 checkout required')
     elif spec['kind'] in ('BOUNDED_TRAIN_ENDPOINT_SCREEN', 'BOUNDED_TRAIN_CROSSING_AMPLITUDE',
                            'BOUNDED_TRAIN_FULL_NODE_LP', 'BOUNDED_TRAIN_RH700_SEPARABILITY',
                            'BOUNDED_TRAIN_RH700_AMPLITUDE', 'BOUNDED_TRAIN_MFC700_MATCHED',
@@ -413,6 +454,7 @@ def supervise(path):
         try:
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
                        'BOUNDED_A20_POINT_RANK': 7200,
+                       'BOUNDED_STAGE45_DEV_ACCEPTANCE': 900,
                        'BOUNDED_TRAIN_ENDPOINT_SCREEN': 3600,
                        'BOUNDED_TRAIN_CROSSING_AMPLITUDE': 1200,
                        'BOUNDED_TRAIN_FULL_NODE_LP': 600,

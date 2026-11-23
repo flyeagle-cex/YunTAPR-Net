@@ -143,4 +143,72 @@ class IndependentHostTests(unittest.TestCase):
                 popen.assert_not_called()
 
 
+    def test_stage45_dev_acceptance_rejects_a_different_scope(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            service = root / "service"
+            service.mkdir()
+            entry_relative = "tools/research_readiness/start_stage45_dev_acceptance.py"
+            entry = root / entry_relative
+            entry.parent.mkdir(parents=True)
+            entry.touch()
+            runtime = root / "test_python.exe"
+            runtime.touch()
+            proposal_path, private_path, grant_path = (root / name for name in
+                                                      ("proposal.json", "private.json", "grant.json"))
+            spec_path = root / "spec.json"
+            budget = dict(maximum_scientific_file_opens=901, maximum_reference_bytes=4474903222,
+                          maximum_seconds=900, optimizer_updates=0, model_inference_passes=0,
+                          checkpoint_loads=0, retries=0, replay=0)
+            proposal = dict(
+                kind="BOUNDED_STAGE45_DEV_ACCEPTANCE",
+                authorization_scope="COSINE9_E9_2024_DEV_STAGE45_NINE_GATE_ACCEPTANCE",
+                authorized=False, final_2025_access=False,
+                proposal_sha256="synthetic", execution_code_commit="synthetic",
+                budget=budget, scientific_choices={},
+                tasks=[dict(role="Development", year=2024,
+                            evaluation="STAGE45_DEV_NINE_GATE_ACCEPTANCE")],
+                code_sha256={entry_relative: module.sha(entry)},
+                python_sha256=module.sha(runtime),
+            )
+            private = dict(proposal_sha256="synthetic", output_root=str(root / "output"),
+                           service_dir=str(service), runtime_python=str(runtime))
+            spec = dict(kind="BOUNDED_STAGE45_DEV_ACCEPTANCE", cwd=str(root), service_dir=str(service),
+                        environment=dict(PYTHONHASHSEED="2029", PYTHONUTF8="1", OMP_NUM_THREADS="1",
+                                         MKL_NUM_THREADS="1", CUBLAS_WORKSPACE_CONFIG=":4096:8"),
+                        command=[str(runtime), "-B", str(entry), "execute",
+                                 "--proposal", str(proposal_path),
+                                 "--private-preparation", str(private_path),
+                                 "--researcher-approval", str(grant_path)])
+            module.write(spec_path, spec)
+            module.write(proposal_path, proposal)
+            module.write(private_path, private)
+            grant = dict(proposal, approved_by_researcher=True, decision_id="fixture",
+                         code_commit="synthetic", output_root=private["output_root"])
+            module.write(grant_path, grant)
+            with patch.object(module, "PRIVATE", root), patch.object(
+                    module.subprocess, "check_output", side_effect=["synthetic", ""]):
+                self.assertEqual(module.validate_spec(spec_path), (spec, service))
+                grant["authorization_scope"] = "SOME_OTHER_SCOPE"
+                grant_path.write_text(json.dumps(grant), encoding="utf-8")
+                with self.assertRaisesRegex(PermissionError, "scope, approval, or runtime differs"):
+                    module.validate_spec(spec_path)
+
+    def test_stage45_dev_acceptance_supervisor_uses_the_bound_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Path(tmp)
+            configuration = service / "spec.json"
+            fixture = dict(kind="BOUNDED_STAGE45_DEV_ACCEPTANCE", command=["synthetic"], cwd=tmp)
+            module.write(configuration, fixture)
+            module.write(service / "independent_launch_claim.json", dict(spec_sha256=module.sha(configuration)))
+            with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
+                    module, "host_identity", return_value=dict(in_any_job=False, package_status=15700)
+            ), patch.object(module.subprocess, "Popen") as popen:
+                process = popen.return_value
+                process.pid = 123
+                process.wait.return_value = 0
+                self.assertEqual(module.supervise(configuration), 0)
+                process.wait.assert_called_once_with(timeout=900)
+
+
 if __name__=='__main__':unittest.main()
