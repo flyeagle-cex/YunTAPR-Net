@@ -505,6 +505,18 @@ class Cosine9MultiseedTests(unittest.TestCase):
             with self.assertRaises(TypeError):
                 controller.inherited_delta(root, str(parent))
 
+    def test_task_private_scopes_run_task_to_the_arm_package(self):
+        private = {"output_root": str(Path("PKG")), "terrain": "TERRAIN", "static_payload": "STATIC"}
+        scoped = controller.task_private(private, "REAL", 2030)
+        self.assertEqual(Path(scoped["output_root"]), Path("PKG") / "REAL_s2030")
+        self.assertEqual(Path(scoped["output_root"]) / "B7_s2030",
+                         controller.task_folder(private, "REAL", 2030))
+        self.assertEqual(scoped["terrain"], "TERRAIN")
+        self.assertEqual(scoped["static_payload"], "STATIC")
+        self.assertEqual(private["output_root"], str(Path("PKG")))
+        zero = controller.task_private(private, "ZERO", 2031)
+        self.assertEqual(Path(zero["output_root"]), Path("PKG") / "ZERO_s2031")
+
 
 if __name__ == "__main__":
     unittest.main()

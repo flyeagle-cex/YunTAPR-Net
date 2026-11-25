@@ -149,6 +149,13 @@ def task_folder(private, arm, seed):
     return task_package(private, arm, seed) / f"{MODEL}_s{seed}"
 
 
+def task_private(private, arm, seed):
+    """Scope run_task to one arm package so it writes the sealed arm folder layout."""
+    scoped = dict(private)
+    scoped["output_root"] = str(task_package(private, arm, seed))
+    return scoped
+
+
 def origin_entry(choices, seed):
     return choices["origin_reference"][f"{MODEL}@{seed}"]
 
@@ -647,7 +654,7 @@ def worker(root, proposal_path, private_path, approval_path, commit, index):
     arm, seed = task["arm"], task["seed"]
     reference = task_folder(private, "REAL", seed) if arm == "ZERO" else None
     result = run_task(
-        root, proposal, private, approval, prepared, commit, MODEL, seed,
+        root, proposal, task_private(private, arm, seed), approval, prepared, commit, MODEL, seed,
         started=claim["started_monotonic"], pair_reference=reference,
         static_name=f"{arm}_static_source.sqlite",
         dynamic_transform_factory=ZeroNumericDote if arm == "ZERO" else PhysicalDote,
