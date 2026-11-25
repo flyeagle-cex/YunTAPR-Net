@@ -226,6 +226,11 @@ def inherited_delta(root, proposal):
     return differences
 
 
+def parent_delta(root, parent_proposal_path):
+    """Read the frozen parent proposal and return its reviewed dependency delta."""
+    return inherited_delta(root, read(parent_proposal_path))
+
+
 def zero_inheritance(root, zero_path, real):
     """Approved ZERO protocol plus its hash binding to the completed seed2029 REAL arm."""
     root, real = Path(root), Path(real)
@@ -461,7 +466,7 @@ def checked(root, proposal_path, private_path, approval_path, commit):
     if reuse != proposal["scientific_choices"]["zero_protocol_reuse"]:
         raise ValueError("The reviewed ZERO protocol evidence changed")
     delta = dict(allowance=sorted(INHERITED_DELTA_ALLOWANCE),
-                 parent=inherited_delta(root, private["parent_proposal"]),
+                 parent=parent_delta(root, private["parent_proposal"]),
                  zero=reuse["changed_inherited_dependencies"])
     if delta != proposal["reviewed_inherited_delta"]:
         raise ValueError("The reviewed inherited delta changed")

@@ -490,6 +490,21 @@ class Cosine9MultiseedTests(unittest.TestCase):
         self.assertEqual(spec["environment"]["CUBLAS_WORKSPACE_CONFIG"], ":4096:8")
         self.assertEqual(spec["proposal_sha256"], "SYNTHETIC_SHA")
 
+    def test_parent_delta_reads_the_parent_proposal_from_its_path(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            name = "tools/research_readiness/start_independent_process.py"
+            dependency = root / name
+            dependency.parent.mkdir(parents=True)
+            dependency.write_text("VALUE = 1\n", encoding="utf-8")
+            parent = root / "PARENT_PROPOSAL.json"
+            parent.write_text(json.dumps({"code_sha256": {name: "0" * 64}}), encoding="utf-8")
+            self.assertEqual(controller.parent_delta(root, parent), [name])
+            self.assertEqual(controller.parent_delta(root, str(parent)), [name])
+            with self.assertRaises(TypeError):
+                controller.inherited_delta(root, str(parent))
+
 
 if __name__ == "__main__":
     unittest.main()
