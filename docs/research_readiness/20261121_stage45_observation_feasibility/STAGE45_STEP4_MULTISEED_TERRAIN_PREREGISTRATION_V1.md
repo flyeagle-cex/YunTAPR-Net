@@ -118,4 +118,3 @@ E0 初始化的额外预注册要求（2026-11-23 事实清单补充）：
 - 修复验证：定向测试 30 passed / 38 subtests；py_compile 通过；在 V1 同一真实数据上以临时批准（不落入命名空间、用后删除）干跑 `checked()` 通过：父/ZERO 继承漂移 9 文件均在允许集内，data 与预算与提案相等。
 - V2 冻结：执行代码 `d694542c9e0a40380f0e6984ba386d23dbb6e5f4`；固定副本 `D:\研究\极端降水预测\YunTAPR-Train-Cosine9-Multiseed-Exec-d694542`；规范提案 SHA-256 `b445b1f6ef103e7deb4bb4474197a8b702c46f69172c261cd9622d17aed6c4bc`；公开副本 `STAGE45_STEP4_MULTISEED_TERRAIN_EXECUTION_PROPOSAL_V2.json`；私有命名空间 `docs/research_readiness/.local/train_cosine9_multiseed_v2`（无批准文件、无 output）；输出根 `F:\pytorch\research\YunTAPR_cosine9_multiseed_s2030_s2031_20261125_v1`（不存在）。预算、协议、任务顺序与身份链与 V1 逐字段一致，仅代码身份与输出根日期更新。
 - 状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`。等待研究者对 V2 提案身份的一次明确批准；旧批准不可复用；2025 继续封存。
-
