@@ -658,3 +658,52 @@ def test_task_worker_rejects_a_foreign_hash_seed(monkeypatch):
             "2" * 40,
             0,
         )
+
+
+def test_task_check_accepts_a_reservation_and_enforces_the_output_cap(tmp_path):
+    deadline = arm.Deadline(60)
+    assert arm._task_check(tmp_path, deadline) is None
+    assert arm._task_check(tmp_path, deadline, 0) is None
+    with pytest.raises(MemoryError, match="output reserve"):
+        arm._task_check(
+            tmp_path, deadline, arm.BUDGET["maximum_output_bytes"] + 1
+        )
+    (tmp_path / "payload.bin").write_bytes(b"x" * 8)
+    with pytest.raises(MemoryError, match="output reserve"):
+        arm._task_check(tmp_path, deadline, arm.BUDGET["maximum_output_bytes"] - 1)
+    assert arm._task_check(tmp_path, deadline, 1) is None
+    expired = arm.Deadline(0)
+    with pytest.raises(ValueError, match="time cap"):
+        arm._task_check(tmp_path, expired)
+
+
+def test_development_readout_uses_the_task_check_with_a_reservation(tmp_path):
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from tools.research_readiness.conditional_intensity_readout import DevelopmentReadout
+
+    identity = {
+        "supervision_mask_sha256": "a" * 64,
+        "n_rain": 0,
+        "n_strong": 0,
+    }
+    ids = ("2024-01-01T00:00:00+00:00",)
+    valid = np.ones((1, 1, 100, 100), dtype=np.bool_)
+    region = np.ones((1, 1, 100, 100), dtype=np.bool_)
+    rate = np.zeros((1, 1, 100, 100), dtype=np.float32)
+    probability = np.full((1, 1, 100, 100), 0.5, dtype=np.float32)
+    nodes = np.log1p(np.arange(1, 33, dtype=np.float64)).reshape(1, 32, 1, 1)
+    quantiles_log = np.broadcast_to(nodes, (1, 32, 100, 100)).copy()
+    deadline = arm.Deadline(60)
+    folder = tmp_path / "task"
+    readout = DevelopmentReadout(
+        folder,
+        ids,
+        identity,
+        lambda reserve_bytes=None: arm._task_check(tmp_path, deadline, reserve_bytes),
+        valid_per_scene=10000,
+    )
+    readout.add(ids, rate, valid, region, probability, quantiles_log)
+    summary = readout.finish("a" * 64)
+    assert summary["storage"]["files"][0]["bytes"] > 0
+    assert summary["n_valid"] == 10000

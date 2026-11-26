@@ -1418,6 +1418,18 @@ def _write_task_outputs(folder, report, point_metrics, terrain, readout):
         _require((folder / name).is_file(), f"Missing recomputed output {name}")
 
 
+def _task_check(output, deadline, reserve_bytes=None):
+    """Enforce the time and bounded-output caps during one frozen task pass."""
+
+    _require(deadline.remaining() > 0, "The package time cap was reached")
+    if reserve_bytes is not None:
+        _require(
+            _output_bytes(output) + int(reserve_bytes) <= BUDGET["maximum_output_bytes"],
+            "The bounded output reserve was exceeded during the task",
+            MemoryError,
+        )
+
+
 def run_task(root, proposal, private, task, output, runtime, deadline, metadata_meter):
     """One fixed epoch-9 Development pass for one frozen model."""
 
@@ -1432,8 +1444,8 @@ def run_task(root, proposal, private, task, output, runtime, deadline, metadata_
     _require(not folder.exists(), f"The task output already exists: {folder}")
     folder.mkdir(parents=False)
 
-    def check():
-        _require(deadline.remaining() > 0, "The package time cap was reached")
+    def check(reserve_bytes=None):
+        _task_check(output, deadline, reserve_bytes)
 
     check()
     dev_report = _read_json(task_private["dev_report_path"], metadata_meter)
