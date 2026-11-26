@@ -211,4 +211,91 @@ class IndependentHostTests(unittest.TestCase):
                 process.wait.assert_called_once_with(timeout=900)
 
 
+    def test_four_model_dev_evaluation_rejects_a_cosine9_multiseed_scope(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            service = root / "service"
+            service.mkdir()
+            entry_relative = "tools/research_readiness/start_multiseed_dev_evaluation.py"
+            entry = root / entry_relative
+            entry.parent.mkdir(parents=True)
+            entry.touch()
+            runtime = root / "test_python.exe"
+            runtime.touch()
+            parent_proposal = root / "parent_proposal.json"
+            parent_proposal.write_text("{}", encoding="utf-8")
+            preparation = root / "preparation.json"
+            preparation.write_text("{}", encoding="utf-8")
+            static_source = root / "b6_static.npz"
+            static_source.write_text("0", encoding="utf-8")
+            proposal_path, private_path, grant_path = (root / name for name in
+                                                      ("proposal.json", "private.json", "grant.json"))
+            spec_path = root / "spec.json"
+            scope = "FOUR_MODEL_COSINE9_REAL_ZERO_DEV_MOUNTAIN_EVALUATION_V1"
+            tasks = ["REAL_s2030", "ZERO_s2030", "REAL_s2031", "ZERO_s2031"]
+            budget = dict(total_scientific_file_opens=32730,
+                          total_scientific_source_bytes=108217319806,
+                          checkpoint_loads=4, model_inference_passes=4,
+                          optimizer_updates=0, retries=0, replays=0,
+                          maximum_seconds=7200)
+            proposal = dict(
+                kind="BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION",
+                authorization_scope=scope, authorized=False, final_2025_access=False,
+                decision="DESCRIPTIVE_MULTISEED_REAL_ZERO_DEV_EVALUATION",
+                proposal_sha256="synthetic", execution_code_commit="synthetic",
+                budget=budget, scientific_choices={}, tasks=tasks,
+                runtime_binding=dict(python_executable_sha256=module.sha(runtime)),
+                parent_proposal_identity=dict(
+                    proposal_sha256="cd5948b67e07ce7231d4502e73613bbe8bdb6cc3c90b63f97299ae7da0f7c6b2"),
+                static_source_sha256="788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+                code_sha256={entry_relative: module.sha(entry)},
+            )
+            private = dict(proposal_sha256="synthetic", output_root=str(root / "output"),
+                           service_dir=str(service), runtime_python=str(runtime),
+                           parent_proposal=str(parent_proposal),
+                           preparation_path=str(preparation),
+                           static_source=str(static_source))
+            spec = dict(kind="BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION", cwd=str(root),
+                        service_dir=str(service),
+                        environment=dict(PYTHONHASHSEED="2029", PYTHONUTF8="1",
+                                         OMP_NUM_THREADS="1", MKL_NUM_THREADS="1",
+                                         CUBLAS_WORKSPACE_CONFIG=":4096:8"),
+                        command=[str(runtime), "-B", str(entry), "execute",
+                                 "--proposal", str(proposal_path),
+                                 "--private-preparation", str(private_path),
+                                 "--researcher-approval", str(grant_path)])
+            module.write(spec_path, spec)
+            module.write(proposal_path, proposal)
+            module.write(private_path, private)
+            grant = dict(proposal, approved_by_researcher=True,
+                         decision_id=proposal["decision"],
+                         code_commit="synthetic", output_root=private["output_root"])
+            module.write(grant_path, grant)
+            with patch.object(module, "PRIVATE", root), patch.object(
+                    module.subprocess, "check_output", side_effect=["synthetic", ""]):
+                self.assertEqual(module.validate_spec(spec_path), (spec, service))
+                grant["authorization_scope"] = "FOUR_TASK_COSINE9_REAL_ZERO_SEED2030_2031"
+                grant_path.write_text(json.dumps(grant), encoding="utf-8")
+                with self.assertRaisesRegex(PermissionError, "Four-model Development"):
+                    module.validate_spec(spec_path)
+
+    def test_four_model_dev_evaluation_supervisor_uses_the_bound_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Path(tmp)
+            configuration = service / "spec.json"
+            fixture = dict(kind="BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION",
+                           command=["synthetic"], cwd=tmp)
+            module.write(configuration, fixture)
+            module.write(service / "independent_launch_claim.json",
+                         dict(spec_sha256=module.sha(configuration)))
+            with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
+                    module, "host_identity", return_value=dict(in_any_job=False, package_status=15700)
+            ), patch.object(module.subprocess, "Popen") as popen:
+                process = popen.return_value
+                process.pid = 123
+                process.wait.return_value = 0
+                self.assertEqual(module.supervise(configuration), 0)
+                process.wait.assert_called_once_with(timeout=7200)
+
+
 if __name__=='__main__':unittest.main()

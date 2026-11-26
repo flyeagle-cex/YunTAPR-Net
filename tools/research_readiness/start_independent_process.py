@@ -417,6 +417,62 @@ def validate_spec(path):
             import importlib.util
             definition=importlib.util.spec_from_file_location('corrective_metric_gate',entry);gate=importlib.util.module_from_spec(definition);definition.loader.exec_module(gate)
             gate.validate(private)  # Reject missing grant before WMI target creation.
+    elif spec['kind']=='BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION':
+        cwd=Path(spec['cwd']).resolve()
+        entry_relative='tools/research_readiness/start_multiseed_dev_evaluation.py'
+        if (entry!=cwd/entry_relative or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Separate exact four-model Development evaluation approval required')
+        proposal,private,approval=map(read,command[5::2])
+        expected_environment={'PYTHONHASHSEED':'2029','PYTHONUTF8':'1',
+                              'OMP_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
+                              'CUBLAS_WORKSPACE_CONFIG':':4096:8'}
+        scope='FOUR_MODEL_COSINE9_REAL_ZERO_DEV_MOUNTAIN_EVALUATION_V1'
+        tasks=['REAL_s2030','ZERO_s2030','REAL_s2031','ZERO_s2031']
+        budget=proposal.get('budget',{})
+        if (proposal.get('kind')!='BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION'
+                or proposal.get('authorization_scope')!=scope
+                or approval.get('authorization_scope')!=scope
+                or proposal.get('authorized') is not False
+                or proposal.get('final_2025_access') is not False
+                or approval.get('approved_by_researcher') is not True
+                or not approval.get('decision_id')
+                or approval.get('decision_id')!=proposal.get('decision')
+                or any(approval.get(key)!=proposal.get(key) for key in
+                       ('proposal_sha256','tasks','budget','scientific_choices'))
+                or proposal.get('tasks')!=tasks
+                or any(budget.get(key)!=value for key,value in
+                       dict(total_scientific_file_opens=32730,
+                            total_scientific_source_bytes=108217319806,
+                            checkpoint_loads=4,model_inference_passes=4,
+                            optimizer_updates=0,retries=0,replays=0,
+                            maximum_seconds=7200).items())
+                or approval.get('code_commit')!=proposal.get('execution_code_commit')
+                or approval.get('output_root')!=private.get('output_root')
+                or private.get('proposal_sha256')!=proposal.get('proposal_sha256')
+                or Path(private.get('output_root','')).exists()
+                or Path(private.get('service_dir','')).resolve()!=folder
+                or Path(private.get('runtime_python','')).resolve()!=executable.resolve()
+                or sha(executable)!=proposal.get('runtime_binding',{}).get('python_executable_sha256')
+                or proposal.get('parent_proposal_identity',{}).get('proposal_sha256')
+                   !='cd5948b67e07ce7231d4502e73613bbe8bdb6cc3c90b63f97299ae7da0f7c6b2'
+                or proposal.get('static_source_sha256')
+                   !='788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd'
+                or spec.get('environment')!=expected_environment):
+            raise PermissionError('Four-model Development scope, approval, or runtime differs')
+        for key in ('parent_proposal','preparation_path','static_source','output_root'):
+            if not Path(private.get(key,'')).is_absolute():
+                raise PermissionError('Absolute private binding required for '+key)
+        if not Path(private['parent_proposal']).is_file():
+            raise PermissionError('The bound V4 public proposal is missing')
+        commit=subprocess.check_output(['git','-C',str(cwd),'rev-parse','HEAD'],text=True).strip()
+        dirty=subprocess.check_output(['git','-C',str(cwd),'status','--porcelain'],text=True).strip()
+        entry_hash=proposal.get('code_sha256',{}).get(entry_relative)
+        if (commit!=approval.get('code_commit') or dirty
+                or not isinstance(entry_hash,str) or sha(entry)!=entry_hash):
+            raise PermissionError('Clean approved four-model Development checkout required')
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION' or (spec['kind']=='BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN' and entry.name=='start_cosine9_multiseed.py'):
         if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_cosine9_multiseed.py','start_physical_pinball.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
@@ -503,6 +559,7 @@ def supervise(path):
         try:
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
                        'BOUNDED_A20_POINT_RANK': 7200,
+                       'BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION': 7200,
                        'BOUNDED_STAGE45_DEV_ACCEPTANCE': 900,
                        'BOUNDED_TRAIN_ENDPOINT_SCREEN': 3600,
                        'BOUNDED_TRAIN_CROSSING_AMPLITUDE': 1200,
