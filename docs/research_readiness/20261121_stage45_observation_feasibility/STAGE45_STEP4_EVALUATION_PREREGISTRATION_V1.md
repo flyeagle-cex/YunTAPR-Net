@@ -63,3 +63,16 @@
 2. 确认后实现工作包 A 执行器与测试 → 冻结 A 提案（含代码提交、检查点 SHA、epoch-9 Dev 报告 SHA、数组留档清单、账本上限）→ 申请 A 的一次精确启动批准；
 3. A 完成并留档后，枚举 B 的精确场景列表与字节数 → 冻结 B 提案 → 申请 B 的一次精确启动批准；
 4. 两个包均不改变 2025 封存状态，不自动重试/重放。
+
+## 15 固定执行包 · 多 seed Dev 评价 V1（2026-11-27）
+
+- KIND `BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION`；SCOPE `FOUR_MODEL_COSINE9_REAL_ZERO_DEV_MOUNTAIN_EVALUATION_V1`；预计终态 `COMPLETE_STAGE4_MULTISEED_DEV_EVALUATION`；decision `DESCRIPTIVE_MULTISEED_REAL_ZERO_DEV_EVALUATION`。
+- 执行代码 `c612b122feaa0204a74f4adda884a7241fe8b759`；固定副本 `D:\研究\极端降水预测\YunTAPR-Stage4-Eval-Exec-c612b12`（detached c612b12）。
+- 规范提案 SHA-256 `b4c722b278715d614859aa85ad6495962ce3ced314d7a009932136f60b9708b3`；提案文件 SHA-256 `c45d94ad34fd04ff1455a7e319c57c698a50bb3a77134515e83df29cb35ac10d`（公开副本同字节，100,738 B）；private seal `b4ed41cb029d7a8bcc41936407cd7076f8db6a34452a065c6f2d18166f0c3fe3`。
+- 私有命名空间 `docs/research_readiness/.local/train_stage4_multiseed_dev_eval_v1`；输出根 `F:\pytorch\Research\YunTAPR_stage4_multiseed_dev_eval_20261127_v1`（尚未创建）。
+- 身份链：V4 提案文件 `0648beb6…`/内部 `cd5948b6…`、V4 终态 `COMPLETE_FOUR_TASK_COSINE9_REAL_ZERO_MULTISEED`；静态地形 `788572b1…`（312,828 B）；运行解释器 `0562f573…`；四模型固定 E9 检查点：REAL_s2030 `ee7f81da…`/53,906,437 B、ZERO_s2030 `c8e0f574…`/53,906,757 B、REAL_s2031 `ce2aad58…`/53,906,885 B、ZERO_s2031 `47022bd5…`/53,906,885 B。
+- 任务顺序 REAL_s2030 → ZERO_s2030 → REAL_s2031 → ZERO_s2031；每任务一次固定 E9 Dev 前向（963 场景/121 批），四路累积（冻结指标、点指标、山地海拔、tail 读数）并留档逐像元数组（121 个分片/任务，约 3.55 GB）；两对同 seed 初始全态配对（s2030 `50dcc329…`、s2031 `65c48896…`）。
+- 预算：科学打开 31,812 + 元数据 918 = 32,730；源字节 106,989,518,072 + 1,227,801,734 = 108,217,319,806；检查点加载 4；模型前向 4；优化器更新 0；重试/重放 0；最长 7,200 秒；启动可用磁盘 8 GiB；数组存储上限 4 GiB。
+- 准入门槛：固定副本 HEAD=c612b12、工作树干净、proposal 在 `READY_WAITING_EXACT_RESEARCHER_APPROVAL`（authorized=False、final_2025_access=False）；准入干跑（含身份、artifact、父包、预算与 artifact 哈希校验）返回 `VERTICAL_CHECKED_OK`，干跑临时批准未落命名空间。
+- 测试：定向测试 29 passed / 3 subtests（base python + shim）；5 文件 py_compile 通过；`git diff --check` 通过。
+- 状态：**READY_WAITING_EXACT_RESEARCHER_APPROVAL**、authorized=False、final_2025_access=False；未创建批准文件、未创建输出目录、未执行任何前向；公开副本仅供冻结。
