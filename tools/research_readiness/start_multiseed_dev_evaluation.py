@@ -159,7 +159,16 @@ def execute(args):
             indent=2,
         )
     )
-    completion = arm.execute(ROOT, proposal, private, approval, commit)
+    completion = arm.execute(
+        ROOT,
+        proposal,
+        private,
+        approval,
+        commit,
+        proposal_path=str(proposal_path),
+        private_path=str(private_path),
+        approval_path=str(approval_path),
+    )
     print(
         json.dumps(
             {
@@ -171,6 +180,31 @@ def execute(args):
             indent=2,
             ensure_ascii=False,
         )
+    )
+    return 0
+
+
+def worker(args):
+    approval_path = Path(args.researcher_approval).resolve()
+    if not approval_path.is_file():
+        raise PermissionError("A researcher approval file is required")
+    proposal_path = Path(args.proposal).resolve()
+    private_path = Path(args.private_preparation).resolve()
+    proposal = _read(proposal_path)
+    private = _read(private_path)
+    approval = _read(approval_path)
+    commit = _git("rev-parse", "HEAD")
+    arm.task_worker(
+        ROOT,
+        proposal,
+        private,
+        approval,
+        commit,
+        int(args.task_index),
+        seconds_cap=args.seconds_cap,
+        proposal_path=str(proposal_path),
+        private_path=str(private_path),
+        approval_path=str(approval_path),
     )
     return 0
 
@@ -193,6 +227,14 @@ def main(argv=None):
     execute_parser.add_argument("--private-preparation", required=True)
     execute_parser.add_argument("--researcher-approval", required=True)
     execute_parser.set_defaults(handler=execute)
+
+    worker_parser = subparsers.add_parser("worker")
+    worker_parser.add_argument("--task-index", required=True, type=int)
+    worker_parser.add_argument("--seconds-cap", default=None, type=float)
+    worker_parser.add_argument("--proposal", required=True)
+    worker_parser.add_argument("--private-preparation", required=True)
+    worker_parser.add_argument("--researcher-approval", required=True)
+    worker_parser.set_defaults(handler=worker)
 
     args = parser.parse_args(argv)
     return args.handler(args)

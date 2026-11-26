@@ -624,3 +624,37 @@ def test_saved_elevation_gate_pass_and_failure():
     assert gate["passed"] is True
     with pytest.raises(ValueError, match="conditional pinball differs"):
         arm.saved_elevation_gate(terrain_for(0.4), tail)
+
+
+def test_task_worker_rejects_an_unknown_index():
+    with pytest.raises(ValueError, match="task index"):
+        arm.task_worker(ROOT, {"models": []}, {}, {}, "0" * 40, 4)
+
+
+def test_task_worker_rejects_a_foreign_hash_seed(monkeypatch):
+    proposal = {
+        "scope": arm.SCOPE,
+        "models": [
+            {
+                "task": "REAL_s2030",
+                "seed": 2030,
+                "arm": "REAL",
+                "dynamic_control": "REAL_PHYSICAL_DOTE",
+            }
+        ],
+        "proposal_sha256": "0" * 64,
+        "private_preparation_sha256": "1" * 64,
+        "decision": arm.DECISION,
+        "execution_code_commit": "2" * 40,
+        "tasks": list(arm.TASKS),
+    }
+    monkeypatch.setenv("PYTHONHASHSEED", "2029")
+    with pytest.raises(PermissionError, match="hash seed"):
+        arm.task_worker(
+            ROOT,
+            proposal,
+            {"proposal_sha256": "0" * 64},
+            {"approved_by_researcher": True},
+            "2" * 40,
+            0,
+        )

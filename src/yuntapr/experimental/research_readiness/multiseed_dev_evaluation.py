@@ -20,6 +20,7 @@ import json
 import math
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -1319,9 +1320,10 @@ def _checkpoint_identity(path, expected_bytes, expected_sha256, check):
     return delivered, observed
 
 
-def _initialize_runtime(output, expected):
+def _initialize_runtime(output, expected, *, create=True, hash_seed=2029):
     output = Path(output)
-    output.mkdir(parents=True, exist_ok=False)
+    if create:
+        output.mkdir(parents=True, exist_ok=False)
     for name in ("TMPDIR", "TEMP", "TMP"):
         os.environ[name] = str(output)
     tempfile.tempdir = str(output)
@@ -1349,7 +1351,7 @@ def _initialize_runtime(output, expected):
 
     runtime.torch.optim.Optimizer.__init__ = _forbid
     runtime.torch.set_num_threads(1)
-    runtime.seed_all(2029)
+    runtime.seed_all(int(hash_seed))
     return runtime, observed
 
 
@@ -2006,9 +2008,24 @@ def _completion(proposal, private, commit, results, paired, q1, elapsed, metadat
     }
 
 
-def execute(root, proposal, private, approval, commit):
+def execute(
+    root,
+    proposal,
+    private,
+    approval,
+    commit,
+    *,
+    proposal_path=None,
+    private_path=None,
+    approval_path=None,
+):
     """The approval-bound, single-attempt four-model evaluation."""
 
+    _require(
+        proposal_path is not None and private_path is not None and approval_path is not None,
+        "The live proposal, preparation and approval paths are required",
+        PermissionError,
+    )
     root = Path(root).resolve()
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
@@ -2066,10 +2083,6 @@ def execute(root, proposal, private, approval, commit):
         output_root / "runtime", proposal["runtime_binding"]
     )
     results = {}
-    metadata_meter = ReadMeter(
-        BUDGET["metadata_archive_reference_bytes"],
-        BUDGET["metadata_open_instances"],
-    )
     try:
         for index, row in enumerate(proposal["models"]):
             _require(
@@ -2112,15 +2125,35 @@ def execute(root, proposal, private, approval, commit):
                 "The live task claim differs from the proposal",
                 PermissionError,
             )
-            result = run_task(
-                root,
-                proposal,
-                private,
-                row["task"],
-                output_root,
-                runtime,
-                deadline,
-                metadata_meter,
+            command = [
+                sys.executable,
+                "-B",
+                str((root / ENTRY).resolve()),
+                "worker",
+                "--task-index",
+                str(index),
+                "--proposal",
+                str(Path(proposal_path).resolve()),
+                "--private-preparation",
+                str(Path(private_path).resolve()),
+                "--researcher-approval",
+                str(Path(approval_path).resolve()),
+                "--seconds-cap",
+                str(max(1, int(math.floor(deadline.remaining())))),
+            ]
+            environment = dict(os.environ)
+            environment["PYTHONHASHSEED"] = str(row["seed"])
+            completed = subprocess.run(command, cwd=str(root), env=environment)
+            _require(
+                completed.returncode == 0,
+                f"The frozen per-seed worker failed for {row['task']}",
+                RuntimeError,
+            )
+            result = read(output_root / row["task"] / "task_result.json")
+            _require(
+                result.get("task") == row["task"] and result.get("status") == "COMPLETE",
+                "The frozen per-seed worker did not publish a complete task result",
+                RuntimeError,
             )
             results[row["task"]] = result
             _require(
@@ -2166,3 +2199,177 @@ def execute(root, proposal, private, approval, commit):
                 },
             )
         raise
+
+
+# ---------------------------------------------------------------------------
+# Per-seed worker process
+# ---------------------------------------------------------------------------
+
+
+def _task_row(proposal, index):
+    index = int(index)
+    _require(0 <= index < len(TASKS), f"Invalid frozen task index: {index}")
+    task = TASKS[index]
+    row = next((item for item in proposal["models"] if item["task"] == task), None)
+    _require(row is not None, "The frozen proposal does not contain the task")
+    return task, row
+
+
+def task_worker(
+    root,
+    proposal,
+    private,
+    approval,
+    commit,
+    index,
+    *,
+    seconds_cap=None,
+    proposal_path=None,
+    private_path=None,
+    approval_path=None,
+):
+    """Run exactly one frozen task inside its own per-seed process.
+
+    The parent controller starts each task with ``PYTHONHASHSEED`` fixed at the
+    task seed, because the frozen Dev pass that this arm recomputes was produced
+    under that interpreter hash seed.  The worker therefore re-validates the
+    live claim instead of the "fresh output root" precondition used by the
+    parent controller.
+    """
+
+    root = Path(root).resolve()
+    task, row = _task_row(proposal, index)
+    _require(
+        os.environ.get("PYTHONHASHSEED") == str(row["seed"]),
+        "The worker hash seed differs from the frozen task seed",
+        PermissionError,
+    )
+    validate_scope(proposal)
+    _require(
+        proposal_seal(proposal) == proposal["proposal_sha256"],
+        "The frozen proposal seal differs",
+        PermissionError,
+    )
+    _require(
+        private.get("proposal_sha256") == proposal["proposal_sha256"],
+        "The private preparation is not bound to the frozen proposal",
+        PermissionError,
+    )
+    _require(
+        private_seal(private) == proposal["private_preparation_sha256"],
+        "The private preparation seal differs",
+        PermissionError,
+    )
+    head = _git_head(root)
+    _require(
+        str(head).lower() == str(commit).lower(),
+        "The worker commit differs from the approved commit",
+        PermissionError,
+    )
+    _require(
+        str(head).lower() == str(proposal["execution_code_commit"]).lower(),
+        "The worker commit differs from the frozen proposal",
+        PermissionError,
+    )
+    _require(
+        _clean_tree(root),
+        "The fixed execution worktree must be clean",
+        PermissionError,
+    )
+    validate_approval(approval, proposal, private, commit=commit)
+    for label, path in (
+        ("proposal", proposal_path),
+        ("private preparation", private_path),
+        ("researcher approval", approval_path),
+    ):
+        _require(
+            path is not None and Path(path).is_file(),
+            f"The live worker {label} path is missing",
+            PermissionError,
+        )
+    namespace = Path(private["service_dir"]).resolve().parent
+    _require(
+        Path(approval_path).resolve().parent == namespace,
+        "The worker approval is outside the frozen namespace",
+        PermissionError,
+    )
+    output_root = Path(private["output_root"])
+    _require(
+        output_root.is_dir(),
+        "The parent evaluation output is missing",
+        PermissionError,
+    )
+    binding = read(output_root / "authorization_binding.json")
+    _require(
+        binding.get("kind") == KIND,
+        "The authorization binding kind differs",
+        PermissionError,
+    )
+    _require(
+        binding.get("proposal_sha256") == proposal["proposal_sha256"],
+        "The authorization binding proposal differs",
+        PermissionError,
+    )
+    _require(
+        binding.get("code_commit") == commit,
+        "The authorization binding commit differs",
+        PermissionError,
+    )
+    _require(
+        int(binding.get("controller_pid")) == os.getppid(),
+        "The authorization binding controller is not the live parent",
+        PermissionError,
+    )
+    claim = read(output_root / f"task_{int(index) + 1}_claim.json")
+    _require(
+        int(claim.get("index")) == int(index),
+        "The live task claim index differs",
+        PermissionError,
+    )
+    _require(
+        claim.get("task") == task and int(claim.get("seed")) == int(row["seed"]),
+        "The live task claim differs from the frozen task",
+        PermissionError,
+    )
+    _require(
+        int(claim.get("controller_pid")) == os.getppid(),
+        "The live task claim controller is not the live parent",
+        PermissionError,
+    )
+    runtime, _ = _initialize_runtime(
+        output_root / "runtime",
+        proposal["runtime_binding"],
+        create=False,
+        hash_seed=row["seed"],
+    )
+    deadline = Deadline(
+        float(seconds_cap)
+        if seconds_cap is not None
+        else float(BUDGET["maximum_seconds"])
+    )
+    metadata_meter = ReadMeter(
+        BUDGET["metadata_archive_reference_bytes"],
+        BUDGET["metadata_open_instances"],
+    )
+    result = run_task(
+        root,
+        proposal,
+        private,
+        task,
+        output_root,
+        runtime,
+        deadline,
+        metadata_meter,
+    )
+    print(
+        json.dumps(
+            {
+                "task": task,
+                "status": result["status"],
+                "forward_calls": result["forward_calls"],
+                "seed": result["seed"],
+            },
+            indent=2,
+        )
+    )
+    return result
