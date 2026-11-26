@@ -140,3 +140,5 @@ E0 初始化的额外预注册要求（2026-11-23 事实清单补充）：
 - 准入干跑：以临时批准（不落命名空间、用后删除）在真实数据上运行 `checked()` → `DRYRUN_CHECKED_OK`；父/ZERO 继承漂移 9 文件均在允许集内，data 与预算与提案相等，proposal_sha256=`cd5948b6…`。
 - 状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`。等待研究者对 V4 提案身份的一次明确批准；V3 批准已消费不可复用；V3 已消耗的 356,600,930,790 B 属审计历史，不计入 V4 预算（V4 为独立完整包）；2025 继续封存。
 - 后续：获批后由固定副本独立监督器单次派发并串行四任务（失败即停、零重试零重放）；训练期间继续提供只读进度页。
+
+- 启动记录（2026-11-26）：V4 提案 `cd5948b6…` 于 08:35 获研究者一次明确批准（decision_id `STAGE45-MULTISEED-TERRAIN-20261126-ONE`；批准文件 `RESEARCHER_APPROVAL.json` 11,785 B，SHA-256 `02554e32531de21c934cf2f8844c48ecdcb3182f755abb75ff87090793e74edc`），固定副本独立监督器于 2026-11-26T00:39:12.510378Z 单次派发（supervisor 14536 / target 21956；claim/target spec_sha256 `fb738dbf7c95d710c67fd0a529b87f7a7ccbcdadbd9e3d753dd01809312499cd`；automatic_retry false），任务 1 REAL_2030 启动并训练。V4 批准已消费，后续零重试零重放；2025 继续封存。
