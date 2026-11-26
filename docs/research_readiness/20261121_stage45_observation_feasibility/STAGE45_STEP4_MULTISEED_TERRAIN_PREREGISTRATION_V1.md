@@ -142,3 +142,12 @@ E0 初始化的额外预注册要求（2026-11-23 事实清单补充）：
 - 后续：获批后由固定副本独立监督器单次派发并串行四任务（失败即停、零重试零重放）；训练期间继续提供只读进度页。
 
 - 启动记录（2026-11-26）：V4 提案 `cd5948b6…` 于 08:35 获研究者一次明确批准（decision_id `STAGE45-MULTISEED-TERRAIN-20261126-ONE`；批准文件 `RESEARCHER_APPROVAL.json` 11,785 B，SHA-256 `02554e32531de21c934cf2f8844c48ecdcb3182f755abb75ff87090793e74edc`），固定副本独立监督器于 2026-11-26T00:39:12.510378Z 单次派发（supervisor 14536 / target 21956；claim/target spec_sha256 `fb738dbf7c95d710c67fd0a529b87f7a7ccbcdadbd9e3d753dd01809312499cd`；automatic_retry false），任务 1 REAL_2030 启动并训练。V4 批准已消费，后续零重试零重放；2025 继续封存。
+
+## 14. V4 执行终态（2026-11-26）
+
+- 终态：独立监督器 `target_exit.json` 为 `return_code 0`（2026-11-26T15:25:07.943734+00:00、`automatic_retry false`）；包 receipt `completion.json`（8,085 B，SHA-256 `b890423b2beb8a527651f1b8a17ccad9f754647f3cbff19f505ca50b3ac0bc3c`）状态 `COMPLETE_FOUR_TASK_COSINE9_REAL_ZERO_MULTISEED`；elapsed 53,151.203 s（14h45m51s，低于整包 86,400 s 上限）；无 `failure.json`。
+- 四任务全部 `COMPLETE_TRAIN_AND_DEV_EVALUATION`：每模型 4,320 更新 / 9 epoch / 142,813 次打开 / 477,571,953,840 B（每模型 = static 1 次 312,828 B + train 71,262 次 237,818,363,004 B + dev 71,550 次 239,753,278,008 B）；整包 totals = tasks_completed 4 / updates 17,280 / source_bytes 1,910,287,815,360 / source_files 571,252，与冻结预算逐位相等；`checkpoint_loads` 0、`replay false`、`automatic_retry false`、零重试。
+- 配对与身份：seed2030 两臂初始全态同为 `50dcc3295f13b4cd1dfe79ee9b549d767dd6e708195bfb8c6afdc782d2d0c56e`，seed2031 同为 `65c4889632e0dd1770473016ced5cb5deeff2eade8b64db3ce2d6a347315fa91`；同 seed 两臂 9 个 epoch order 列表逐字节相同，pairing = `IDENTICAL_SEED_DRIVEN_ORIGINAL_STATE_AND_EPOCH_ORDER`；两臂 source bytes 相等（477,571,953,840 B）。执行代码 `a5503df`、规范提案 `cd5948b6…` 与公开副本 `0648BEB6…` 不变。
+- 产物身份（私有运行路径从公开收据略去）：四模型各 9 个 `B7_LAST_epoch_*.pt` 检查点（epoch09：REAL2030 53,906,437 B `ee7f81da…`、ZERO2030 53,906,757 B `c8e0f574…`、REAL2031 53,906,885 B `ce2aad58…`、ZERO2031 53,906,885 B `47022bd5…`）、9 个 `B7_development_*.json`（每轮约 1.88 MB）、模型级 `completion.json` 与 `task_receipt.json`（SHA-256 见公开收据）。
+- 公开收据：[STAGE45_STEP4_MULTISEED_TERRAIN_RESULTS_V1.json](STAGE45_STEP4_MULTISEED_TERRAIN_RESULTS_V1.json)（含四任务、配对、totals、budget、schedule 与各文件 SHA-256；不含私有运行路径）。
+- 证据边界：本终态只证明四任务训练与 Dev 评价按冻结身份完成、账本与预算一致；`scientific_acceptance = NOT_VERIFIED`。地形机制跨 seed 与冻结候选跨 seed 复现的科学问题尚未评估，必须另立 E1 多 seed 山区配对评价与 E2 候选跨 seed 复现提案并单独申请预算批准；2025 继续封存；V4 批准已消费，不重试、不重放。
