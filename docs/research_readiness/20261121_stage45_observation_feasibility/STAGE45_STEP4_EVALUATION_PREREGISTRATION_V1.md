@@ -76,3 +76,12 @@
 - 准入门槛：固定副本 HEAD=c612b12、工作树干净、proposal 在 `READY_WAITING_EXACT_RESEARCHER_APPROVAL`（authorized=False、final_2025_access=False）；准入干跑（含身份、artifact、父包、预算与 artifact 哈希校验）返回 `VERTICAL_CHECKED_OK`，干跑临时批准未落命名空间。
 - 测试：定向测试 29 passed / 3 subtests（base python + shim）；5 文件 py_compile 通过；`git diff --check` 通过。
 - 状态：**READY_WAITING_EXACT_RESEARCHER_APPROVAL**、authorized=False、final_2025_access=False；未创建批准文件、未创建输出目录、未执行任何前向；公开副本仅供冻结。
+
+## V1 执行尝试终态与 V2 执行包（2026-11-27）
+
+- V1 执行：提案 `b4c722b2…`、代码 `c612b12`，2026-11-26T23:33:26Z 以 `RuntimeError: Set the selected hash seed before Python startup` 终止（`return_code` 1、`automatic_retry` false）；在包目录与授权绑定创建后、任何科学读取前失败：0 场景读取、0 前向、0 优化器更新；批准已消费，按冻结规则不重试、不自动重放；V1 输出根残件仅作审计保留。
+- 根因：Dev 重算须在与训练时各 seed 相同的 `PYTHONHASHSEED` 下对账，而父进程固定 `PYTHONHASHSEED=2029`；修复 = 每任务在独立子进程中运行，环境 `PYTHONHASHSEED=<task seed>`，父进程仅做准入、任务 claim、逐任务收尾与两对汇总。
+- 修复代码：提交 `c4e12bb`（`multiseed_dev_evaluation.py` 增加 `task_worker` 与 `_initialize_runtime(create=False, hash_seed=...)`；`execute` 以 `subprocess.run` 逐任务启动 worker；CLI 增加 `worker --task-index/--seconds-cap`）；定向测试 31 passed / 3 subtests；`py_compile` 通过；未改动预算与科学口径。
+- V2 冻结：固定副本 `D:\研究\极端降水预测\YunTAPR-Stage4-Eval-Exec-c4e12bb`（HEAD `c4e12bb`、干净）；私有命名空间 `docs/research_readiness/.local/train_stage4_multiseed_dev_eval_v2`；输出根 `F:\pytorch\Research\YunTAPR_stage4_multiseed_dev_eval_20261127_v2`（尚不存在）；规范提案 SHA-256 `48637a348dc2a5a1f54ad5b71cc34234e11bd0db8caf1a3f7c88121ab2fc14be`、私有准备 SHA-256 `2688efbb72c9421930e6e68f10e536df1029be390722b168995a2e8f4ac004c1`；公开副本 `STAGE45_STEP4_EVALUATION_EXECUTION_PROPOSAL_V2.json`（LF 规范化，100,738 B，文件 SHA-256 `457a6713145c8a2ada9c52517019ace0a4a05e73308fbbf1f5a000c935b39a04`；私有原样文件 100,738 B，SHA-256 `457a6713145c8a2ada9c52517019ace0a4a05e73308fbbf1f5a000c935b39a04`）。
+- 准入干跑：`VERTICAL_CHECKED_OK`（HEAD `c4e12bb`；四任务 REAL_s2030/ZERO_s2030/REAL_s2031/ZERO_s2031；checkpoint 身份 `ee7f81da…`/`c8e0f574…`/`ce2aad58…`/`47022bd5…`；q1 参考 sha `5a25a2dc…`；预算 31,812 payload opens / 106,989,518,072 B / 4 checkpoint loads / 4 forwards / 7,200 s 不变）。
+- 状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`、`authorized=False`、`final_2025_access=False`；尚未执行；获批后单次派发并记录四任务终态与两对 REAL−ZERO 描述指标；证据边界保持 `NOT_VERIFIED`。
