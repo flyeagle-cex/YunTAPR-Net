@@ -134,4 +134,3 @@
 - 启动（本地 2026-11-27 23:16:20）：控制器 = 固定副本 `YunTAPR-SeedCompletion-Exec-f4d44a7` 下 `F:\pytorch\Research\.venv-cuda\Scripts\python.exe -B tools/research_readiness/start_seed_completion.py execute …`，`--worker-python C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`；控制器/worker 继承 `PYTHONPATH=F:\pytorch\Research\.venv-cuda\Lib\site-packages`、`PYTHONUTF8=1`。绑定文件记录 controller_pid 40600；进程链 18356（shim）→ 40600（真实控制器）→ 13064（worker，ppid 40600），父进程校验通过。
 - 启动证据：输出根已创建，`authorization_binding.json` 7,501 B、`task_1_claim.json` 108 B；`B2_s2030/initialization.json` 952 B、`train_orders.json` 311,790 B；截至 23:21，`updates.sqlite` 表 `updates` 已 174 行（RETURNED），`B2_Train_reads_01/reads.sqlite` 3,004 jobs / 3,004 file_io，凭据与既有 B2 训练循环一致；无 `failure.json`。
 - 运行上限：每任务 21,600 s、整包 129,600 s（36 h）；零重放、零额外重试；任何任务失败即 STOP_NO_AUTOMATIC_REPLAY 并保留已写入账本。完成后按预注册执行独立核验（ledger 4,320/任务、三 seed 表与比较摘要、检查点身份）。
-
