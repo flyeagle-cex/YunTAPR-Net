@@ -208,4 +208,3 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 测试：`test_final_test_2025_catalogue.py`（12）+ `test_final_test_2025_catalogue_execution.py`（18，含 1 fixture skip）→ 30 passed / 1 skipped（48 s）；py_compile exit 0；`git diff --check`（cr-at-eol）exit 0；CLI `plan` 输出 856 场景/7,063 unique/7,048 present/15 missing/23,976,706,717 B/215 IMERG 天，guards 全零。
 - 授权请求对象：`AUTHORIZATION_REQUEST_CATALOGUE_QC_V1.md`（scope、14 键模板、7 项绑定、23.98 GB 预算、失败即停、下一阶段另需一次性最终推理授权）。
 - 边界：本阶段未读取任何 2025 载荷内容；checkpoint/模型/前向/指标零访问；2025 保持封存。
-
