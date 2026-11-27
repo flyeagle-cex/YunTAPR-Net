@@ -134,3 +134,13 @@
 - 启动（本地 2026-11-27 23:16:20）：控制器 = 固定副本 `YunTAPR-SeedCompletion-Exec-f4d44a7` 下 `F:\pytorch\Research\.venv-cuda\Scripts\python.exe -B tools/research_readiness/start_seed_completion.py execute …`，`--worker-python C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`；控制器/worker 继承 `PYTHONPATH=F:\pytorch\Research\.venv-cuda\Lib\site-packages`、`PYTHONUTF8=1`。绑定文件记录 controller_pid 40600；进程链 18356（shim）→ 40600（真实控制器）→ 13064（worker，ppid 40600），父进程校验通过。
 - 启动证据：输出根已创建，`authorization_binding.json` 7,501 B、`task_1_claim.json` 108 B；`B2_s2030/initialization.json` 952 B、`train_orders.json` 311,790 B；截至 23:21，`updates.sqlite` 表 `updates` 已 174 行（RETURNED），`B2_Train_reads_01/reads.sqlite` 3,004 jobs / 3,004 file_io，凭据与既有 B2 训练循环一致；无 `failure.json`。
 - 运行上限：每任务 21,600 s、整包 129,600 s（36 h）；零重放、零额外重试；任何任务失败即 STOP_NO_AUTOMATIC_REPLAY 并保留已写入账本。完成后按预注册执行独立核验（ledger 4,320/任务、三 seed 表与比较摘要、检查点身份）。
+
+
+## 16 研究者暂停（2026-11-28，未恢复）
+
+- 指令：研究者（m07171）指示“暂停进度”。暂停时间 2026-11-28 00:02:48（本地）/ 2026-11-27T16:02:48Z（UTC）。
+- 终止顺序与进程：先终止控制器真实解释器 pid 40600，再终止 worker pid 13064（父 pid 40600）；控制器先终止可避免其把中断写成 `failure.json`。终止后确认三者均已退出。
+- 暂停点进度：`B2_s2030` 已完成 2/9 个 epoch（960/4320 更新），暂停于 epoch 2 Development evaluation (Dev_reads_02)；该任务 reads 28883/142812 jobs、字节 96959556099/477571641012；整包累计 960/25920 更新、28883/856876 reads、96959556099/2865430597384 B。其余 5 个任务均未启动。
+- 证据状态：输出根无 `failure.json`、无 `completion.json`、无 `package_completion.json`；包状态记为 `INCOMPLETE_PAUSED_MID_EXECUTION`。本暂停不是工程失败，也不是科学结果，不得据此写任何结论。
+- 暂停记录：私有位置 `D:\研究\极端降水预测\.dsh_seed_completion_pause.json`（不写入已批准的证据目录）；看板 `http://127.0.0.1:8766/` 显示 PAUSED。
+- 恢复治理：不自动恢复。已批准的一次性执行已被中断并消费；继续或重跑属于新的执行，必须由研究者给出新的明确批准（新提案或修订提案、预算按已消费部分重算、失败即停、零静默重试），且不得覆盖现有输出根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`。可选路径：A 从零重跑 `B2_s2030`（旧目录留证、新输出目录）；B 仅执行剩余 5 任务并按已消费 960 更新重算预算；C 保持暂停。
