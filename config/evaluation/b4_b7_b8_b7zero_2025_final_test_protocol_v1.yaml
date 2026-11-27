@@ -196,8 +196,15 @@ prohibitions:
 # Three-stage authorization; each stage is a separate researcher act.
 # ---------------------------------------------------------------------------
 execution_gates:
+  - stage: INVENTORY_MEASUREMENT_RESEARCHER_AUTHORITY
+    gate: inventory_measurement_authorization_json
+    allowed: >-
+      stat/list-only visibility of the expected 2025 payload paths (six satellite
+      slots, GFS main/thermo, IMERG day files) to determine presence, exact unique
+      file set and exact byte totals; no file content may be opened, hashed or
+      decoded and no checkpoint may be loaded
   - stage: CATALOGUE_ONLY_RESEARCHER_AUTHORITY
-    gate: catalogue_authorization_json
+    gate: catalogue_authorization_json_plus_inventory
     allowed: 'caller-supplied inventory inspection only; no payload open'
   - stage: OUTCOME_FREE_CATALOGUE_QC_AND_FREEZE
     gate: catalogue_freeze_record
@@ -207,7 +214,7 @@ execution_gates:
     allowed: 'checkpoint and frozen-input identity verification; dry-run plan'
   - stage: FINAL_READ_ONLY_INFERENCE
     gate: payload_authorization_json_plus_final_test_authorization_json
-    allowed: 'one bounded final pass'
+    allowed: 'one bounded final pass after the payload-phase QC hashing budget is frozen'
 must_bind:
   - protocol
   - implementation
@@ -242,6 +249,36 @@ budget:
   read_formula: '12 * sum(exact per-model unique satellite/GFS/IMERG/mask payload bytes over the frozen common population) + required static reads; no training-epoch multiplier'
   inventory_dependency: 'exact unique bytes are only knowable from the authorized 2025 inventory/QC phase; no 2025 file was listed, stat-ed or opened to prepare this draft'
   note: 'source-byte, checkpoint-storage, score-storage and wall-clock caps must be frozen by the researcher before execution'
+
+# ---------------------------------------------------------------------------
+# Stat-only inventory measurement (gate 0).  Implemented in
+# src/yuntapr/experimental/research_readiness/final_test_2025_inventory.py and
+# tools/research_readiness/measure_b4_b7_b8_2025_inventory.py.
+# ---------------------------------------------------------------------------
+inventory_measurement:
+  status: TOOL_READY_PENDING_RESEARCHER_AUTHORIZATION
+  authorization_scope: B4_B7_B8_2025_INVENTORY_MEASUREMENT_ONLY
+  authorization_file: config/evaluation/b4_b7_b8_2025_inventory_measurement_authorization_v1.json
+  implementation_sha256_files:
+    - config/evaluation/b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml
+    - src/yuntapr/experimental/research_readiness/final_test_2025_inventory.py
+    - src/yuntapr/experimental/research_readiness/final_test_2025_planning.py
+    - tools/research_readiness/measure_b4_b7_b8_2025_inventory.py
+  expected_scenes: 856
+  expected_unique_files: {himawari: 5136, gfs_main: 856, gfs_thermo: 856, imerg: 215}
+  expected_total_unique_files: 7063
+  expected_operations: '7063 os.stat calls (list/stat-only); zero payload content reads; zero payload SHA-256; zero checkpoint stats/loads; zero model builds'
+  expected_duration: 'under 300 s wall clock (stat-only; bounded by 900 s cap)'
+  carry_in_exception: '2025-02-28 frames/imerg day are allowed only for the 2025-03-01T00:00Z analysis window'
+  october: HARD_REJECT
+  outputs:
+    - inventory_measurement_v1.json
+    - inventory_measurement_summary.json
+    - final_status.json
+  output_rule: 'append-only new directory; a failure writes failure.json and STOP_REQUIRED'
+  output_location_hint: docs/research_readiness/20261128_b4_b7_b8_2025_final_test/inventory_runs/run_<UTC>
+  measured_bytes_feed: 'the separate catalogue-QC / payload-phase budget request; measurement alone authorizes no content read'
+  tests: 'tests/research_readiness/test_final_test_2025_inventory.py (8 tests; synthetic temp roots only)'
 
 # ---------------------------------------------------------------------------
 # Open questions carried by this draft.

@@ -183,3 +183,13 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 ## 10. 修订记录
 
 - 2026-11-27：闭合开放问题 1–4（卫星产品 HIMAWARI_9；GFS `YYYY/YYYYMMDD` 布局；ZERO_DOTE 2030/2031 bytes 由归档 epoch-09 文件 stat+SHA 复核为 53,905,157 / 53,906,117；SP04 绑定 pinned manifest SHA `e1c5d8ab…`）；`final_test_2025_catalogue.CHECKPOINTS` 与协议草案同步更新，`catalog_sha256` 重算为 `7b5bafdf9920b17c78d4949bf8a5d19a0071c06cdae3da3fa95ee57dc14aab46`；测试 35 passed；未读取任何 2025 载荷。
+
+## 11. 2026-11-28 补记：stat-only 清单测量工具与 gate-0 授权请求
+
+- 新增实现：`src/yuntapr/experimental/research_readiness/final_test_2025_inventory.py`（stat-only 测量与 strict 8 键授权校验）与 `tools/research_readiness/measure_b4_b7_b8_2025_inventory.py`（`plan` / `run`；run 需授权且输出根不得已存在）。
+- 测量规模（理论日历，无 2025 I/O）：856 个分析时隙；唯一预期文件 7,063 = Himawari 6 槽 5,136 + GFS main 856 + GFS thermo 856 + IMERG 日文件 215（含 2025-02-28 carry-in 一天）。
+- 硬守卫：仅 `os.stat`；零内容读取/零载荷 SHA/零解码/零检查点/零模型/零指标；十月 HARD_REJECT；carry-in 仅 2025-02-28；唯一文件超 20,000 或超 900 秒即失败；失败写 `failure.json` + `STOP_REQUIRED`、不自动重试。
+- 测试：`tests/research_readiness/test_final_test_2025_inventory.py` 8 tests（合成临时根目录；验证测量期间禁止 `open` 的 stat-only 性质、授权键/绑定、缺失文件计数、单次输出根）；新增后全量 2025 适配器测试 43 passed。
+- 协议：`execution_gates` 已在最前新增 gate 0 `INVENTORY_MEASUREMENT_RESEARCHER_AUTHORITY`；新增 `inventory_measurement` 段记录实现文件、预期计数、输出契约与"测量本身不构成内容读取授权"的边界。
+- 授权请求：`AUTHORIZATION_REQUEST_INVENTORY_MEASUREMENT_V1.md`（scope `B4_B7_B8_2025_INVENTORY_MEASUREMENT_ONLY`、AUTHORIZED_BY=RESEARCHER、预计 <300 秒、零载荷字节读取）。
+- 边界：未读取任何 2025 载荷；获批后只执行一次 stat-only 测量，然后以精确字节预算另行请求编目/QC 与冻结授权。
