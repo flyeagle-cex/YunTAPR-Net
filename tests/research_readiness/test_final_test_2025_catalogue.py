@@ -10,6 +10,10 @@ from yuntapr.experimental.research_readiness import final_test_2025_catalogue as
 from yuntapr.experimental.research_readiness import final_test_2025_manifest as m
 from yuntapr.experimental.research_readiness import final_test_2025_planning as p
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+MEASUREMENT_RELPATH = ('docs/research_readiness/20261128_b4_b7_b8_2025_final_test/'
+                       'inventory_runs/run_20261127T074800Z/inventory_measurement_v1.json')
+
 
 def sha(text):
     return hashlib.sha256(text.encode()).hexdigest()
@@ -53,16 +57,26 @@ def inventory_for(scene_rows, *, imerg_override=None, drop_imerg_index=None):
     return list(entries.values())
 
 
-def real_authorization(created_utc):
+def measurement_binding(created_utc=None):
+    return {'path': str(REPO_ROOT / MEASUREMENT_RELPATH), 'sha256': sha('measurement'),
+            'created_utc': created_utc or '2026-01-01T00:00:00+00:00'}
+
+
+def real_authorization(created_utc, *, measurement_created_utc=None, measurement=None,
+                       frozen_identity=None):
     return c.CatalogueAuthorization2025({
-        'version': 'v1', 'AUTHORIZED_BY': 'RESEARCHER', 'scope': c.CATALOGUE_SCOPE,
+        'version': 'v1', 'decision_id': 'CATALOGUE_QC_2025_STAT_ONLY',
+        'AUTHORIZED_BY': 'RESEARCHER', 'scope': c.CATALOGUE_SCOPE,
         'FINAL_TEST_CATALOGUE_AUTHORIZED': True, 'FINAL_TEST_2025_AUTHORIZED': False,
+        'CATALOGUE_QC_PAYLOAD_AUTHORIZED': True,
         'protocol': {'path': c.PROTOCOL_FILENAME, 'sha256': sha('protocol')},
         'implementation': {'sha256': sha('implementation'),
                            'files': {'src/yuntapr/experimental/research_readiness/final_test_2025_catalogue.py': sha('impl')}},
         'checkpoint_catalog_sha256': c.CHECKPOINT_CATALOG_SHA256,
         'source_roots': {'himawari': p.HIMAWARI_ROOT, 'imerg': p.IMERG_ROOT,
                          'gfs': p.GFS_ROOT, 'gfs_thermo': p.GFS_THERMO_ROOT},
+        'inventory_measurement': measurement or measurement_binding(measurement_created_utc),
+        'identity': dict(frozen_identity or c.FROZEN_IDENTITY_2025),
         'created_utc': created_utc,
     })
 
@@ -126,6 +140,8 @@ class Catalogue2025Tests(unittest.TestCase):
             with self.assertRaises(PermissionError):
                 auth.require_catalogue(allow_fixture=False)
             with self.assertRaises(PermissionError):
+                auth.require_qc_payload()
+            with self.assertRaises(PermissionError):
                 c.build_catalogue_artefacts(auth, pop, inventory_for(scenes), Path(root) / 'out')
             with self.assertRaises(PermissionError):
                 c.authorize_payload()
@@ -156,7 +172,7 @@ class Catalogue2025Tests(unittest.TestCase):
     def test_final_authority_ordering_and_bundle_verification(self):
         with tempfile.TemporaryDirectory() as root:
             scenes = fixture_rows(root)
-            pop = m.build_population(scenes, identity(), fixture=False)
+            pop = m.build_population(scenes, dict(c.FROZEN_IDENTITY_2025), fixture=False)
             auth = real_authorization('2026-01-01T00:00:00+00:00')
             bundle = c.build_catalogue_artefacts(auth, pop, inventory_for(scenes),
                                                  Path(root) / 'real-out')
@@ -196,13 +212,17 @@ class Catalogue2025Tests(unittest.TestCase):
                 })
 
     def test_authorization_requires_exact_keys_and_checkpoint_digest(self):
-        good = {'version': 'v1', 'AUTHORIZED_BY': 'RESEARCHER', 'scope': c.CATALOGUE_SCOPE,
+        good = {'version': 'v1', 'decision_id': 'CATALOGUE_QC_2025_STAT_ONLY',
+                'AUTHORIZED_BY': 'RESEARCHER', 'scope': c.CATALOGUE_SCOPE,
                 'FINAL_TEST_CATALOGUE_AUTHORIZED': True, 'FINAL_TEST_2025_AUTHORIZED': False,
+                'CATALOGUE_QC_PAYLOAD_AUTHORIZED': True,
                 'protocol': {'path': c.PROTOCOL_FILENAME, 'sha256': sha('p')},
                 'implementation': {'sha256': sha('i'), 'files': {'f': sha('f')}},
                 'checkpoint_catalog_sha256': c.CHECKPOINT_CATALOG_SHA256,
                 'source_roots': {'himawari': p.HIMAWARI_ROOT, 'imerg': p.IMERG_ROOT,
                                  'gfs': p.GFS_ROOT, 'gfs_thermo': p.GFS_THERMO_ROOT},
+                'inventory_measurement': measurement_binding(),
+                'identity': dict(c.FROZEN_IDENTITY_2025),
                 'created_utc': '2026-01-01T00:00:00+00:00'}
         self.assertTrue(c.CatalogueAuthorization2025(good).require_catalogue())
         with self.assertRaises(ValueError):
@@ -211,6 +231,55 @@ class Catalogue2025Tests(unittest.TestCase):
             c.CatalogueAuthorization2025(dict(good, checkpoint_catalog_sha256='0' * 64))
         with self.assertRaises(PermissionError):
             c.CatalogueAuthorization2025(dict(good, FINAL_TEST_2025_AUTHORIZED=True))
+
+    def test_authorization_qc_grant_and_measurement_ordering(self):
+        granted = real_authorization('2026-01-02T00:00:00+00:00',
+                                     measurement_created_utc='2026-01-01T00:00:00+00:00')
+        self.assertTrue(granted.require_qc_payload())
+        self.assertEqual(granted.identity, c.FROZEN_IDENTITY_2025)
+        self.assertEqual(granted.inventory_measurement['created_utc'],
+                         '2026-01-01T00:00:00+00:00')
+        with self.assertRaises(PermissionError):
+            real_authorization('2026-01-02T00:00:00+00:00',
+                               measurement_created_utc='2026-01-03T00:00:00+00:00')
+        denied = real_authorization('2026-01-02T00:00:00+00:00')
+        with self.assertRaises(ValueError):
+            c.CatalogueAuthorization2025(dict(denied.as_dict(),
+                                              CATALOGUE_QC_PAYLOAD_AUTHORIZED=False,
+                                              identity=identity()))
+        false_grant = real_authorization('2026-01-02T00:00:00+00:00')
+        raw = false_grant.as_dict()
+        raw['CATALOGUE_QC_PAYLOAD_AUTHORIZED'] = False
+        with self.assertRaises(PermissionError):
+            c.CatalogueAuthorization2025(raw).require_qc_payload()
+        tampered = dict(false_grant.as_dict())
+        tampered['identity'] = dict(c.FROZEN_IDENTITY_2025, static_sha256='0' * 64)
+        with self.assertRaises(ValueError):
+            c.CatalogueAuthorization2025(tampered)
+        with self.assertRaises(PermissionError):
+            c.CatalogueAuthorization2025(dict(false_grant.as_dict(),
+                                              inventory_measurement={'path': r'F:\pytorch\Research\x.json',
+                                                                     'sha256': '0' * 64,
+                                                                     'created_utc': '2026-01-01T00:00:00+00:00'}))
+
+    def test_population_identity_must_match_authorization(self):
+        with tempfile.TemporaryDirectory() as root:
+            scenes = fixture_rows(root)
+            pop = m.build_population(scenes, identity(), fixture=False)
+            auth = real_authorization('2026-01-01T00:00:00+00:00')
+            with self.assertRaises(ValueError):
+                c.build_catalogue_artefacts(auth, pop, inventory_for(scenes), Path(root) / 'out')
+
+    def test_authorization_load_pins_file_digest(self):
+        with tempfile.TemporaryDirectory() as root:
+            auth = real_authorization('2026-01-02T00:00:00+00:00')
+            path = Path(root) / 'authorization.json'
+            path.write_text(json.dumps(auth.as_dict(), indent=2), encoding='utf-8')
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            loaded = c.CatalogueAuthorization2025.load(path, expected_sha256=digest)
+            self.assertEqual(loaded.identity, auth.identity)
+            with self.assertRaises(ValueError):
+                c.CatalogueAuthorization2025.load(path, expected_sha256='0' * 64)
 
     def test_safe_artifact_path_blocks_payload_roots(self):
         for forbidden in (r'H:\葵花202303_202510\202503', r'F:\pytorch\Research\out',

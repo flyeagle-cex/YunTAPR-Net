@@ -10,8 +10,12 @@ Design mirrors the frozen B0 ``catalogue_gate_b0.FinalAuthority`` pattern:
 * the final-test authorization is a *separate* object and additionally binds the
   catalogue CSV, the frozen population CSV and the catalogue freeze record; its
   ``created_utc`` may not precede the freeze completion time.
-* ``authorize_payload`` always raises.  Opening 2025 payloads is a distinct
-  private payload-phase grant that this module cannot issue.
+* the catalogue authorization also carries a separate
+  ``CATALOGUE_QC_PAYLOAD_AUTHORIZED`` flag.  When set it permits *read-only
+  hash/metadata QC* of exactly the files named by the frozen inventory
+  measurement (see ``final_test_2025_catalogue_execution``), and nothing else.
+* ``authorize_payload`` always raises.  Opening 2025 payloads for inference is a
+  distinct private payload-phase grant that this module cannot issue.
 """
 
 from dataclasses import dataclass
@@ -87,6 +91,25 @@ CHECKPOINT_CATALOG_SHA256 = manifest.canonical_sha(
                          'execution_commit': item['execution_commit']}
      for (model, seed), item in sorted(CHECKPOINTS.items())})
 
+# Frozen 2025 identity, mapped one-to-one from the draft protocol's
+# ``frozen_inputs`` block (config/evaluation/
+# b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml:105-110):
+#   sp04_grid_sha256        <- frozen_inputs.sp04_grid_sha256
+#                              (config/spatial/sp04_coordinate_manifest_v1.json)
+#   supervision_mask_sha256 <- frozen_inputs.yunnan_mask_region_sha256
+#                              (Yunnan supervision-region digest, 3430 of 100x100)
+#   static_sha256           <- frozen_inputs.static_pack_sha256
+#   train_scalers_sha256    <- frozen_inputs.train_statistics_sha256
+# The mask *file* digest (9d921def...) is the sibling ``yunnan_mask_file_sha256``
+# and is deliberately not an identity field: it belongs to the private B13/IMERG
+# decode route, not to the catalogue identity.
+FROZEN_IDENTITY_2025 = {
+    'sp04_grid_sha256': 'e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473',
+    'supervision_mask_sha256': '70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b',
+    'static_sha256': '788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd',
+    'train_scalers_sha256': '53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980',
+}
+
 SHA = re.compile(r'[0-9a-f]{64}')
 
 # Flat catalogue columns, ordered whitelist.  No outcome, metric, model-output,
@@ -127,10 +150,11 @@ REJECTIONS = (
     'IMERG_NO_YUNNAN_OVERLAP',
 )
 
-_CATALOGUE_AUTH_KEYS = ('version', 'AUTHORIZED_BY', 'scope',
+_CATALOGUE_AUTH_KEYS = ('version', 'decision_id', 'AUTHORIZED_BY', 'scope',
                         'FINAL_TEST_CATALOGUE_AUTHORIZED', 'FINAL_TEST_2025_AUTHORIZED',
-                        'protocol', 'implementation', 'checkpoint_catalog_sha256',
-                        'source_roots', 'created_utc')
+                        'CATALOGUE_QC_PAYLOAD_AUTHORIZED', 'protocol', 'implementation',
+                        'checkpoint_catalog_sha256', 'source_roots',
+                        'inventory_measurement', 'identity', 'created_utc')
 _FINAL_AUTH_KEYS = ('version', 'AUTHORIZED_BY', 'scope',
                     'FINAL_TEST_CATALOGUE_AUTHORIZED', 'FINAL_TEST_2025_AUTHORIZED',
                     'protocol', 'implementation', 'checkpoint_catalog_sha256',
@@ -229,6 +253,30 @@ def safe_artifact_path(path):
     return path
 
 
+def _identity_entry(value):
+    """Exact four-field frozen identity; must equal the protocol frozen_inputs."""
+    _exact_keys(value, manifest.IDENTITY_FIELDS, 'frozen identity')
+    identity = {key: _lower_hex(value[key], 'identity ' + key)
+                for key in manifest.IDENTITY_FIELDS}
+    if identity != FROZEN_IDENTITY_2025:
+        raise ValueError('Frozen 2025 identity differs from the protocol frozen_inputs')
+    return identity
+
+
+def _inventory_measurement_entry(value):
+    """Pin the stat-only inventory measurement JSON by path + SHA-256."""
+    _exact_keys(value, ('path', 'sha256', 'created_utc'), 'inventory measurement binding')
+    path = value['path']
+    if not isinstance(path, str) or not path:
+        raise ValueError('Inventory measurement path required')
+    declared = Path(path)
+    if declared.is_absolute():
+        safe_artifact_path(declared)
+    _lower_hex(value['sha256'], 'inventory measurement sha256')
+    created = parse_utc(value['created_utc'])
+    return {'path': path, 'sha256': value['sha256'], 'created_utc': created.isoformat()}
+
+
 @dataclass(frozen=True)
 class InventoryEntry:
     modality: str
@@ -241,6 +289,7 @@ class InventoryEntry:
     run_type: str = ''
     time_grid_provenance_pass: bool = False
     valid_yunnan_count: int = 0
+    valid_yunnan_counts: tuple = ()
 
     def __post_init__(self):
         if self.modality not in INVENTORY_MODALITIES:
@@ -256,6 +305,13 @@ class InventoryEntry:
             raise ValueError('Boolean readable flag required')
         if type(self.valid_yunnan_count) is not int or self.valid_yunnan_count < 0:
             raise ValueError('Non-negative Yunnan overlap count required')
+        if self.valid_yunnan_counts:
+            counts = tuple(self.valid_yunnan_counts)
+            if len(counts) != 48:
+                raise ValueError('48 half-hour Yunnan overlap counts required')
+            if any(type(value) is not int or value < 0 for value in counts):
+                raise ValueError('Non-negative half-hour Yunnan overlap counts required')
+            object.__setattr__(self, 'valid_yunnan_counts', counts)
 
     def as_dict(self):
         return {key: getattr(self, key) for key in INVENTORY_KEYS if hasattr(self, key)}
@@ -347,6 +403,10 @@ def catalogue_row(scene, index):
 
     imerg_path = scene['imerg_day_relative_path']
     imerg_entry = index.get('imerg', imerg_path)
+    # A day-cached entry may carry all 48 half-hour counts; the catalogue row
+    # carries the count of the scene's own half-hour index.
+    counts = getattr(imerg_entry, 'valid_yunnan_counts', ()) if imerg_entry is not None else ()
+    imerg_count = counts[scene['imerg_index']] if counts else _inventory_value(imerg_entry, 'valid_yunnan_count', 0)
     row['imerg_day_relative_path'] = imerg_path
     row['imerg_bytes'] = _inventory_value(imerg_entry, 'bytes', 0)
     row['imerg_sha256'] = _inventory_value(imerg_entry, 'sha256', '')
@@ -354,7 +414,7 @@ def catalogue_row(scene, index):
     row['imerg_version'] = _inventory_value(imerg_entry, 'version', '')
     row['imerg_run_type'] = _inventory_value(imerg_entry, 'run_type', '')
     row['imerg_time_grid_provenance_pass'] = bool(_inventory_value(imerg_entry, 'time_grid_provenance_pass', False))
-    row['imerg_valid_yunnan_count'] = _inventory_value(imerg_entry, 'valid_yunnan_count', 0)
+    row['imerg_valid_yunnan_count'] = imerg_count
     row['imerg_index'] = scene['imerg_index']
     if imerg_entry is None:
         reason = reason or 'MISSING_IMERG_DAY'
@@ -549,17 +609,22 @@ class CatalogueAuthorization2025:
             base = planning.synthetic_layout(Path(value['fixture_root'])) if 'fixture_root' in value else None
             if base is None:
                 raise ValueError('Fixture authorization needs an absolute fixture root')
+            created_iso = iso_utc(value.get('created_utc'))
             self._value = {
-                'version': VERSION, 'AUTHORIZED_BY': 'ENGINEERING_FIXTURE',
-                'scope': FIXTURE_SCOPE,
+                'version': VERSION, 'decision_id': 'ENGINEERING_FIXTURE',
+                'AUTHORIZED_BY': 'ENGINEERING_FIXTURE', 'scope': FIXTURE_SCOPE,
                 'FINAL_TEST_CATALOGUE_AUTHORIZED': False,
                 'FINAL_TEST_2025_AUTHORIZED': False,
+                'CATALOGUE_QC_PAYLOAD_AUTHORIZED': False,
                 'protocol': {'path': 'FIXTURE', 'sha256': '0' * 64},
                 'implementation': {'sha256': '0' * 64, 'files': {'fixture': '0' * 64}},
                 'checkpoint_catalog_sha256': CHECKPOINT_CATALOG_SHA256,
                 'source_roots': {'himawari': base.himawari_root, 'imerg': base.imerg_root,
                                  'gfs': base.gfs_root, 'gfs_thermo': base.gfs_thermo_root},
-                'created_utc': iso_utc(value.get('created_utc')),
+                'inventory_measurement': {'path': 'FIXTURE', 'sha256': '0' * 64,
+                                          'created_utc': created_iso},
+                'identity': dict(value.get('identity') or {}),
+                'created_utc': created_iso,
             }
             self.fixture = True
             self.created_utc = parse_utc(self._value['created_utc'])
@@ -569,21 +634,32 @@ class CatalogueAuthorization2025:
             raise ValueError('Researcher-authored v1 catalogue authorization required')
         if value['scope'] != CATALOGUE_SCOPE:
             raise ValueError('Catalogue authorization scope mismatch')
+        if not isinstance(value['decision_id'], str) or not value['decision_id']:
+            raise ValueError('Catalogue authorization decision_id required')
         if value['FINAL_TEST_CATALOGUE_AUTHORIZED'] is not True:
             raise PermissionError('Catalogue authorization not granted')
         if value['FINAL_TEST_2025_AUTHORIZED'] is not False:
             raise PermissionError('Catalogue authorization must not grant final-test payload access')
+        if not isinstance(value['CATALOGUE_QC_PAYLOAD_AUTHORIZED'], bool):
+            raise ValueError('Boolean CATALOGUE_QC_PAYLOAD_AUTHORIZED required')
         protocol = _protocol_entry(value['protocol'])
         implementation = _implementation_entry(value['implementation'])
         catalog_sha = _lower_hex(value['checkpoint_catalog_sha256'], 'checkpoint catalog sha256')
         if catalog_sha != CHECKPOINT_CATALOG_SHA256:
             raise ValueError('Checkpoint catalogue digest mismatch')
         roots = _source_roots(value['source_roots'], fixture=False)
+        measurement = _inventory_measurement_entry(value['inventory_measurement'])
+        identity = _identity_entry(value['identity'])
         created = parse_utc(value['created_utc'])
-        self._value = {'version': VERSION, 'AUTHORIZED_BY': 'RESEARCHER', 'scope': CATALOGUE_SCOPE,
+        if created < parse_utc(measurement['created_utc']):
+            raise PermissionError('Catalogue QC authorization must not precede the inventory measurement')
+        self._value = {'version': VERSION, 'decision_id': value['decision_id'],
+                       'AUTHORIZED_BY': 'RESEARCHER', 'scope': CATALOGUE_SCOPE,
                        'FINAL_TEST_CATALOGUE_AUTHORIZED': True, 'FINAL_TEST_2025_AUTHORIZED': False,
+                       'CATALOGUE_QC_PAYLOAD_AUTHORIZED': bool(value['CATALOGUE_QC_PAYLOAD_AUTHORIZED']),
                        'protocol': protocol, 'implementation': implementation,
                        'checkpoint_catalog_sha256': catalog_sha, 'source_roots': roots,
+                       'inventory_measurement': measurement, 'identity': identity,
                        'created_utc': created.isoformat()}
         self.fixture = False
         self.created_utc = created
@@ -610,6 +686,14 @@ class CatalogueAuthorization2025:
             raise PermissionError('Catalogue authorization missing')
         return True
 
+    def require_qc_payload(self):
+        """Permit read-only hash/metadata QC of the frozen inventory files only."""
+        if self.fixture:
+            raise PermissionError('Engineering fixture authorization cannot open 2025 payloads')
+        if self._value['CATALOGUE_QC_PAYLOAD_AUTHORIZED'] is not True:
+            raise PermissionError('Catalogue QC payload authorization missing')
+        return True
+
     def require_final(self):
         raise PermissionError('Catalogue-only authorization cannot run final inference')
 
@@ -620,6 +704,14 @@ class CatalogueAuthorization2025:
     @property
     def implementation(self):
         return dict(self._value['implementation'])
+
+    @property
+    def inventory_measurement(self):
+        return dict(self._value['inventory_measurement'])
+
+    @property
+    def identity(self):
+        return dict(self._value['identity'])
 
     def as_dict(self):
         return json.loads(json.dumps(self._value))
@@ -734,6 +826,8 @@ def build_catalogue_artefacts(authorization, population, inventory, output_dir, 
         raise PermissionError('Fixture mode must match the authorization')
     authorization.require_catalogue(allow_fixture=fixture)
     manifest.validate_population(population, require_fixture=fixture)
+    if not fixture and dict(population.document['identity']) != authorization.identity:
+        raise ValueError('Population identity differs from the catalogue authorization identity')
     rows = build_catalogue(population, inventory, fixture=fixture)
     summary = eligibility_summary(rows)
     output = safe_artifact_path(output_dir)

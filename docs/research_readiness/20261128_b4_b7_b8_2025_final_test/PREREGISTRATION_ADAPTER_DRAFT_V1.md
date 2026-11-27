@@ -200,3 +200,12 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 推论与边界：理论 856 场景需剔除至少 9 个（carry-in + 8 个单槽缺口），至多 847 场景可在 QC 后入人口；真实 eligible 数量待 catalogue/QC 冻结。守卫全零（内容读取/哈希/解码/检查点/模型/指标/十月路径均 0），`FINAL_TEST_2025_EXECUTED=false`。
 - 核验：独立只读核验 56 项全 PASS；结果文档 `INVENTORY_MEASUREMENT_RESULTS_V1.md`、核验 JSON `inventory_measurement_verification_v1.json`（SHA-256 `5546ae2e…`）。
 - 下一步：需研究者对 catalogue/QC 阶段（读取并 SHA-256 哈希 2025 原始文件约 24 GB、逐场景 eligibility 判定、冻结 candidate/population/freeze 三件套；零模型/零指标/零调参）另行明确授权。2025 保持封存。
+
+## 13. 2026-11-27 补记：catalogue/QC 执行门（gate 2）已实现，待研究者授权
+
+- 实现：新增 `src/yuntapr/experimental/research_readiness/final_test_2025_catalogue_execution.py`（streaming SHA-256、measurement 重推校验、仅读冻结清单文件、IMERG 每日一次元数据 QC、构造 population/catalogue/freeze、entries/summary/ledger/final_status、failure STOP）与 `tools/research_readiness/run_b4_b7_b8_2025_catalogue_qc.py`（plan/run）；扩展 `final_test_2025_catalogue.py` 的 `CatalogueAuthorization2025`（14 键：decision_id、`CATALOGUE_QC_PAYLOAD_AUTHORIZED`、inventory_measurement 绑定、4 字段冻结 identity；`FINAL_TEST_2025_AUTHORIZED` 硬 false；`require_qc_payload()`）；`final_test_2025_catalogue_execution.IMPLEMENTATION_FILES` 7 文件 canonical digest = `1f3f4b9e58ded7758ba9af6a6b700a95d6458bb0cd086f26fc272f5129826714`，`run_catalogue_qc` 在打开 payload 前校验工作树实现与协议 SHA。
+- 协议：`catalogue_only` 阶段 allowed 文本已加入“仅当授权携带 CATALOGUE_QC_PAYLOAD_AUTHORIZED 时只读尺寸/SHA-256 + IMERG 元数据 QC”，并新增 `catalogue_qc:` 段（status TOOL_READY_PENDING_RESEARCHER_AUTHORIZATION、expected 7,048 文件/15 缺失/23,976,706,717 B、2–8 分钟、十月 HARD_REJECT、输出目录 `catalogue_qc_runs/run_<UTC>`）；协议 SHA-256 现为 `eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431`。
+- 测试：`test_final_test_2025_catalogue.py`（12）+ `test_final_test_2025_catalogue_execution.py`（18，含 1 fixture skip）→ 30 passed / 1 skipped（48 s）；py_compile exit 0；`git diff --check`（cr-at-eol）exit 0；CLI `plan` 输出 856 场景/7,063 unique/7,048 present/15 missing/23,976,706,717 B/215 IMERG 天，guards 全零。
+- 授权请求对象：`AUTHORIZATION_REQUEST_CATALOGUE_QC_V1.md`（scope、14 键模板、7 项绑定、23.98 GB 预算、失败即停、下一阶段另需一次性最终推理授权）。
+- 边界：本阶段未读取任何 2025 载荷内容；checkpoint/模型/前向/指标零访问；2025 保持封存。
+
