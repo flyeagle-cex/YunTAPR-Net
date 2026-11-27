@@ -100,14 +100,21 @@
 
 批准文件必须包含：`approved_by_researcher: true`、`decision_id`、`code_commit`、`proposal_sha256`、`tasks`、`budget`、`scientific_choices`、`output_root`，与冻结 proposal 全等。批准前不写任何授权文件、不启动任何训练。
 
-## 12 冻结提案与无载荷 dry-run（2026-11-27）
+## 12 冻结提案与无载荷 dry-run（重封于 2026-11-27，提交 f4d44a7）
 
-- 固定执行副本：`D:\研究\极端降水预测\YunTAPR-SeedCompletion-Exec-ee69b65`，HEAD `ee69b65102b60e284c621c952589cac0c0eef04d`；工作树干净。
+- 固定执行副本：`D:\研究\极端降水预测\YunTAPR-SeedCompletion-Exec-f4d44a7`，HEAD `f4d44a76880f844531139beef5d3a8941a83e038`；工作树干净。
 - 执行器：`F:\pytorch\Research\.venv-cuda\Scripts\python.exe`（Python 3.12.14、torch 2.11.0+cu128）。
-- 规范提案摘要：`proposal_sha256 = efd9905775f28267206903cd82a7b292c2898a1ba6fdb7ca7c2a654ff3420231`（由 JSON 内容规范化计算，与文件换行无关）。
-- 公开提案副本：`docs/research_readiness/20261128_seed_completion/SEED_COMPLETION_EXECUTION_PROPOSAL_V1.json`，LF 规范化后 108,893 B、文件 SHA-256 `954deff5696e7e66c5b01e43bd0d5d07b19261b019d33b2039408c8332f7ee09`。
-- 私有准备（不提交，位于固定副本 gitignored `.local/seed_completion_20261128_v1/PRIVATE_PREPARATION.json`）：6,805 B、文件 SHA-256 `9eb6d66198313415cb62f1b55017d42d51d9dd88e28fc7e6432389b69540897e`；绑定 output_root `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`（当前不存在）。
-- 提案内容：6 任务、25,920 更新、856,876 次源读取、2,865,430,597,384 B；672 个代码文件 SHA 绑定；21 个 input pins；每 seed 配对基线（B2→B3、B5/B6→B4 的 Dev E9）与 `paired_initial_identity` / `paired_orders` 引用；startup 存储准入 86,537,695,232 B（≥48 GiB）。
-- 无载荷 dry-run：使用本地内存中的工程 stub 批准对象（`approved_by_researcher: true`、`decision_id: ENGINEERING_DRY_RUN_STUB_NOT_RESEARCHER_AUTHORIZATION`，**不是研究者授权**）调用 `dry_run` → `DRY_RUN_OK`；校验提案摘要、8 键批准结构、预算算术、代码 SHA、21 个 pins、输出根与 48 GiB 准入；未读 Train/Dev、未建模型、未 `torch.load`、未创建输出根。
-- 批准对象（待研究者给出）：恰 8 键，必须逐字段绑定 `code_commit = ee69b65102b60e284c621c952589cac0c0eef04d`、`proposal_sha256 = efd9905775f28267206903cd82a7b292c2898a1ba6fdb7ca7c2a654ff3420231`、tasks、budget、scientific_choices、output_root。
-- 边界：本包只补训练 seed 用于后续描述性三 seed 对比；不建立机制因果、不改变 2025 终测结论、不产生确认性显著性判决；获批后单次串行执行、失败即停、不重试不重放。
+- 规范提案摘要：`proposal_sha256 = eb9ac98fa1ce12d12384fca3e29220aca78b625672ca5d4aad852ee93041ffa9`。
+- 公开提案副本：`docs/research_readiness/20261128_seed_completion/SEED_COMPLETION_EXECUTION_PROPOSAL_V1.json`，LF 规范化后 108,893 B、文件 SHA-256 `e5ec42b14b7b5538d9b69842743b298566c78e623fa1b1b1cbbd13042724bd48`。
+- 私有准备（不提交，位于固定副本 gitignored `.local/seed_completion_20261128_v1/PRIVATE_PREPARATION.json`）：6,805 B、文件 SHA-256 `57ba26165ea2630557c0eec16edc7f18e9d5b70edd6238b7b6e6d130145e318c`；绑定 output_root `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`（当前不存在）。
+- 提案内容：6 任务、25,920 更新、856,876 次源读取、2,865,430,597,384 B；672 个代码文件 SHA 绑定；21 个 input pins；每 seed 配对基线（B2→B3、B5/B6→B4 的 Dev E9）与 `paired_initial_identity` / `paired_orders` 引用；startup 存储准入 86,537,695,232 B（≥48 GiB）；created_utc `2026-11-27T15:06:00Z`。
+- 无载荷 dry-run：使用本地内存中的工程 stub 批准对象（`decision_id: ENGINEERING_DRY_RUN_STUB_NOT_RESEARCHER_AUTHORIZATION`，**不是研究者授权**）调用 `dry_run` → `DRY_RUN_OK`；校验提案摘要、8 键批准结构、预算算术、代码 SHA、21 个 pins、输出根与 48 GiB 准入；未读 Train/Dev、未建模型、未 `torch.load`、未创建输出根。
+- 批准对象（待研究者给出）：恰 8 键，必须逐字段绑定 `code_commit = f4d44a76880f844531139beef5d3a8941a83e038`、`proposal_sha256 = eb9ac98fa1ce12d12384fca3e29220aca78b625672ca5d4aad852ee93041ffa9`、tasks、budget、scientific_choices、output_root。
+
+## 13 首次启动失败（WinError 206）、修复与重封（2026-11-27）
+
+- 上一版冻结（固定副本 `Exec-ee69b65`、HEAD `ee69b65`、规范提案 `efd99057…`）获研究者批准后首次执行，控制器在启动第 1 个 worker 时于 `seed_completion.py` 的 `subprocess.Popen` 抛 `FileNotFoundError: [WinError 206] 文件名或扩展名太长`。
+- 根因：控制器在 `checked()` 之后用已校验的**文档字典**（proposal/private/approval）而不是文件路径调用 `worker_command(...)`；`str(dict)` 生成约 115 KB 的单参数，超过 Windows 命令行上限。
+- 证据与消费：输出根仅创建 `authorization_binding.json`、`task_1_claim.json`、0 B 控制台日志与 `failure.json`（STOP_NO_AUTOMATIC_REPLAY）；0 训练、0 源读取、0 指标；失败 run 与已消费批准归档于 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261127T230031Z/`。
+- 修复：`execute()` 保留 `proposal_path`/`private_path`/`approval_path` 并使用路径构造 worker 命令；新增回归测试 `test_execute_spawns_worker_with_path_strings_not_documents`（断言参数为短字符串路径）；测试 **15 passed**；提交 `f4d44a76880f844531139beef5d3a8941a83e038` 并推送。
+- 治理：首次批准已因工程缺陷作废（一次尝试消费）；本重新冻结需研究者给出**一次新的明确批准**后才能启动；失败即停、零重放零重试、零 2025 读取。
