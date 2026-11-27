@@ -1,0 +1,143 @@
+{
+  "eligible_count": 847,
+  "expected_scenes": 856,
+  "expected_unique": {
+    "gfs_main": 856,
+    "gfs_thermo": 856,
+    "himawari": 5136,
+    "imerg": 215
+  },
+  "guards": {
+    "checkpoint_hashes": 0,
+    "checkpoint_loads": 0,
+    "checkpoint_stats": 0,
+    "final_test_2025_executed": false,
+    "inference_scenes": 0,
+    "metrics_computed": 0,
+    "model_builds": 0,
+    "normalization_refits": 0,
+    "parameter_updates": 0,
+    "threshold_tunings": 0,
+    "training_updates": 0
+  },
+  "hashed_bytes": 23976706717,
+  "imerg_days": 215,
+  "imerg_half_hours_checked": 10320,
+  "missing_paths": [
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2300_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2310_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2320_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2330_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2340_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202502/28/NC_H09_20250228_2350_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202503/27/NC_H09_20250327_1130_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202503/27/NC_H09_20250327_2330_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202504/21/NC_H09_20250421_1740_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202504/28/NC_H09_20250428_1740_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202505/05/NC_H09_20250505_1740_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202508/11/NC_H09_20250811_1110_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202508/17/NC_H09_20250817_1140_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "himawari",
+      "relative_path": "202508/31/NC_H09_20250831_1710_R21_FLDK.06001_06001.nc"
+    },
+    {
+      "modality": "gfs_thermo",
+      "relative_path": "2025/20250228/gfs_thermo_0p25_2025022818_f006.nc"
+    }
+  ],
+  "missing_unique": 15,
+  "per_modality": {
+    "gfs_main": {
+      "expected_unique": 856,
+      "max_bytes": 303789,
+      "min_bytes": 278828,
+      "missing_unique": 0,
+      "observed_unique": 856,
+      "present_unique": 856,
+      "total_bytes": 255602095
+    },
+    "gfs_thermo": {
+      "expected_unique": 856,
+      "max_bytes": 96923,
+      "min_bytes": 88442,
+      "missing_unique": 1,
+      "observed_unique": 856,
+      "present_unique": 855,
+      "total_bytes": 79537689
+    },
+    "himawari": {
+      "expected_unique": 5136,
+      "max_bytes": 6112392,
+      "min_bytes": 2672346,
+      "missing_unique": 14,
+      "observed_unique": 5136,
+      "present_unique": 5122,
+      "total_bytes": 23461923781
+    },
+    "imerg": {
+      "expected_unique": 215,
+      "max_bytes": 1543497,
+      "min_bytes": 304355,
+      "missing_unique": 0,
+      "observed_unique": 215,
+      "present_unique": 215,
+      "total_bytes": 179643152
+    }
+  },
+  "present_bytes": 23976706717,
+  "present_unique": 7048,
+  "rejected_count": 9,
+  "rejection_counts": {
+    "MISSING_HIMAWARI_SLOT": 9
+  },
+  "runtime": {
+    "completed_utc": "2026-11-27T08:38:11.733066+00:00",
+    "elapsed_seconds": 86.779956,
+    "hash_bytes_per_second": 276293141.492,
+    "started_utc": "2026-11-27T08:36:44.953002+00:00"
+  },
+  "scene_count": 856,
+  "status": "CATALOGUE_QC_COMPLETED",
+  "task": "B4_B7_B8_2025_CATALOGUE_QC",
+  "version": "v1"
+}

@@ -1,7 +1,7 @@
 # B4/B7/B8 × 2029/2030/2031 · 2025 编目与 QC 阶段授权请求 V1
 
 - 日期：2026-11-27（UTC+08:00）
-- 状态：`EXECUTED_ONCE_INVALID_IMERG_DECODER_DEFECT_FIXED_PENDING_REAUTHORIZATION`
+- 状态：`EXECUTED_AND_FROZEN_PENDING_FINAL_TEST_AUTHORIZATION`
 - 本文件是阶段 gate 2（`CATALOGUE_ONLY_RESEARCHER_AUTHORITY`）的授权请求对象说明，不是授权本身，也不构成执行许可。
 - 协议：`config/evaluation/b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml`（SHA-256 `eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431`）
 - gate 0 测量：`docs/research_readiness/20261128_b4_b7_b8_2025_final_test/inventory_runs/run_20261127T074800Z/`（inventory `c45b30d1e86d1094c23975592cba6c9cb22a0eeb0b12418ee69cd5dc836055c1`，measurement JSON SHA-256 `4b9113697080f7aed66f22d6981279e02128c420a7e3ac6b43d04c9654186533`，created_utc `2026-11-27T07:48:45+00:00`）
@@ -97,3 +97,10 @@ F:\devtools\miniconda3\python.exe tools\research_readiness\run_b4_b7_b8_2025_cat
 - 判断：本次 0 eligible 是实现/环境缺陷导致的无效执行，不是 2025 人口或模型结果；不得据此冻结人口、计算预算或调整任何东西。
 - 请求：批准**修复后单次重跑**（相同 scope `B4_B7_B8_2025_FINAL_TEST_CATALOGUE_ONLY`，再次读取同样的 7,048 个文件/约 23.98 GB，零 checkpoint/零模型/零指标；decision_id 建议 `CATALOGUE_QC_2025_HASH_ONLY_RERUN`）。重跑成功后冻结人口与唯一源字节预算，再另行请求一次性最终推理授权。
 - 授权模板：与 §5 相同 14 键，但 `implementation.sha256` 使用上述新 digest、`created_utc` 取整分钟且晚于本次补记时间；输出目录必须为新 `catalogue_qc_runs/run_<UTC>`。
+
+## 8. 2026-11-27 重跑执行结果（成功，已冻结）
+
+- 研究者已批准修复后单次重跑；运行 `run_20261127T083600Z` 完成（86.78 s）：读取/哈希 7,048 文件（23,976,706,717 B）、215 个 IMERG 日文件元数据 QC 全部通过；**eligible 847 / rejected 9**（全部 `MISSING_HIMAWARI_SLOT`）。
+- 冻结工件：catalogue `51c167f1…`、population manifest `14ab430f…`（856 条候选记录）、freeze record `dbe0a716…`；独立核验 99 项 PASS（`catalogue_qc_verification_v1.json`，`0e683608…`）。
+- 冻结推理预算：847 场景单次读取唯一 6,990 文件 / 23,820,342,517 B（Himawari 5,082；GFS main 847；GFS thermo 847；IMERG 214）。
+- 边界：零 checkpoint、零模型、零前向、零指标；`FINAL_TEST_2025_EXECUTED=false`。下一步需另行请求一次性 12 模型最终推理授权（`SEPARATE_POST_FREEZE_FINAL_TEST_AUTHORITY` + payload 授权）。

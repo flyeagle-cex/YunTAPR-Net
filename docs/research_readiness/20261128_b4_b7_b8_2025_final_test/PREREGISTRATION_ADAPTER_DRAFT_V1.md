@@ -216,3 +216,11 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 修复：解码前把 IMERG 日文件复制到 ASCII staging（`_staged`，即时清理），并新增“全部不可解码即 STOP”守卫；用 2024 IMERG 文件验证解码（48×3,430=164,640）；测试 32 passed/1 skipped；implementation digest 更新为 `a10711d2…`（§13 的 `1f3f4b9e…` 已被取代）。
 - 证据处置：三份无效运行（`run_20261127T082300Z`、`run_20261127T082500Z`、`run_20261127T082700Z`）与旧授权 `stale_authorization_916b013f.json` 已移入 gitignored `docs/research_readiness/.local/catalogue_qc_invalid_runs/`；公开 `catalogue_qc_runs/` 为空。
 - 状态：gate 2 授权已消费；需研究者批准修复后单次重跑（同 scope，约 23.98 GB 再读，零 checkpoint/模型/指标；建议 decision_id `CATALOGUE_QC_2025_HASH_ONLY_RERUN`）。协议 SHA 保持 `eb209ff2…` 不变。
+
+## 15. 2026-11-27 补记：gate 2 重跑成功，2025 人口已冻结
+
+- 研究者批准修复后单次重跑后，运行 `run_20261127T083600Z`（授权 `8c98bed3…`，86.78 s）完成：读取并哈希 7,048 个文件/23,976,706,717 B，215 个 IMERG 日文件各解码一次（10,320 半时次全部 provenance 通过、计数各 3,430）；守卫全零、`FINAL_TEST_2025_EXECUTED=false`。
+- 冻结结果：856 候选 → **847 eligible / 9 rejected**（`MISSING_HIMAWARI_SLOT`）。catalogue `51c167f1…`、population manifest `14ab430f…`（856 条候选记录）、freeze record `dbe0a716…`；独立核验 99 项 PASS（`catalogue_qc_verification_v1.json`，SHA `0e683608…`）。
+- 冻结推理预算：847 场景单次读取唯一 **6,990 文件 / 23,820,342,517 B**（Himawari 5,082/23,309,298,535；GFS main 847/252,937,333；GFS thermo 847/78,787,769；IMERG 214/179,318,880）。
+- 首次无效执行（IMERG 非 ASCII 路径解码失败）已停止并披露；修复后本运行是唯一公开有效运行，无效证据在 gitignored `.local/catalogue_qc_invalid_runs/`。
+- 结果文档：`CATALOGUE_QC_RESULTS_V1.md`。下一步：另行请求 12 模型一次性最终推理授权（`SEPARATE_POST_FREEZE_FINAL_TEST_AUTHORITY` + payload 授权）；2025 仍不得回流调参。

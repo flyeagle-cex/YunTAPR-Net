@@ -1,0 +1,44 @@
+{
+  "version": "v1",
+  "decision_id": "CATALOGUE_QC_2025_HASH_ONLY_RERUN",
+  "AUTHORIZED_BY": "RESEARCHER",
+  "scope": "B4_B7_B8_2025_FINAL_TEST_CATALOGUE_ONLY",
+  "FINAL_TEST_CATALOGUE_AUTHORIZED": true,
+  "FINAL_TEST_2025_AUTHORIZED": false,
+  "CATALOGUE_QC_PAYLOAD_AUTHORIZED": true,
+  "protocol": {
+    "path": "config/evaluation/b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml",
+    "sha256": "eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431"
+  },
+  "implementation": {
+    "sha256": "a10711d283af1b17d809b67a0252b5c127e28e2b2e9727cd1f0f74875e550547",
+    "files": {
+      "config/evaluation/b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml": "eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431",
+      "src/yuntapr/experimental/research_readiness/final_test_2025_catalogue.py": "854ab6268060525f54dc2a72040a973b964f9d9b2513c43d4e9b8a1eeb13fe92",
+      "src/yuntapr/experimental/research_readiness/final_test_2025_catalogue_execution.py": "901b93b008445a8adee0ac2e42a46aacc749c609bb0a54317a44cd06ca4407fd",
+      "src/yuntapr/experimental/research_readiness/final_test_2025_inventory.py": "6ba30b66fce2457694fc1448ceaab14db78c913a593d4937c501ed931e4ddd8b",
+      "src/yuntapr/experimental/research_readiness/final_test_2025_manifest.py": "efdf1e3bfc43343e3258ec4dfcba9da21dd997a69b2ee0c1c5ceec1c9a4a391b",
+      "src/yuntapr/experimental/research_readiness/final_test_2025_planning.py": "f0d631fb67b3689f3074b96ea9ed34b9df3031f11ec8113097b8c50570013088",
+      "tools/research_readiness/run_b4_b7_b8_2025_catalogue_qc.py": "4b31785a6634204f88693a40dd46af5a580369126aeb79aea0881414ec06c72d"
+    }
+  },
+  "checkpoint_catalog_sha256": "7b5bafdf9920b17c78d4949bf8a5d19a0071c06cdae3da3fa95ee57dc14aab46",
+  "source_roots": {
+    "himawari": "H:\\葵花202303_202510",
+    "imerg": "F:\\云南极端降水数据\\raw\\IMERG",
+    "gfs": "F:\\云南极端降水数据\\raw\\GFS",
+    "gfs_thermo": "F:\\云南极端降水数据\\raw\\GFS_THERMO"
+  },
+  "inventory_measurement": {
+    "path": "docs/research_readiness/20261128_b4_b7_b8_2025_final_test/inventory_runs/run_20261127T074800Z/inventory_measurement_v1.json",
+    "sha256": "4b9113697080f7aed66f22d6981279e02128c420a7e3ac6b43d04c9654186533",
+    "created_utc": "2026-11-27T07:48:45+00:00"
+  },
+  "identity": {
+    "sp04_grid_sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473",
+    "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+    "static_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+    "train_scalers_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980"
+  },
+  "created_utc": "2026-11-27T08:36:00+00:00"
+}
