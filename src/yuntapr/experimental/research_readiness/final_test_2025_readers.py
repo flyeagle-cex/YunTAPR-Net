@@ -373,6 +373,17 @@ def _cf_time(var):
                     converted.minute, converted.second, converted.microsecond, tzinfo=UTC)
 
 
+def _frame_in_nominal_bin(nominal, obs_start, obs_end):
+    """The frozen plan names each ten-minute bin by its start; real scans begin a
+    few tens of seconds after that label and end inside the same bin."""
+    if not (isinstance(nominal, datetime) and isinstance(obs_start, datetime)
+            and isinstance(obs_end, datetime)):
+        raise ValueError('Datetime frame times required')
+    if not obs_start < obs_end:
+        return False
+    return nominal <= obs_start and obs_end <= nominal + timedelta(minutes=10)
+
+
 def _axes_ok(lat, lon):
     lat, lon = np.asarray(lat), np.asarray(lon)
     return (lat.shape == (NATIVE_SHAPE[0],) and lon.shape == (NATIVE_SHAPE[1],)
@@ -435,8 +446,8 @@ def read_satellite_scene(access, scene, *, expected=None, channels=CHANNELS,
                 band_masks.append(mask)
             obs_start, obs_end = _cf_time(ds['start_time']), _cf_time(ds['end_time'])
             created = str(getattr(ds, 'date_created', '')) or None
-        if not (obs_start <= nominal <= obs_end):
-            raise ValueError('Cached nominal time lies outside the observed frame')
+        if not _frame_in_nominal_bin(nominal, obs_start, obs_end):
+            raise ValueError('Observed frame must lie inside its frozen ten-minute nominal bin')
         for observed in (obs_start, obs_end):
             if observed.year != planning.YEAR:
                 raise PermissionError('Observed 2025 frame required')

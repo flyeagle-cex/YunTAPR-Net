@@ -233,3 +233,35 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 测试：`tests/research_readiness/test_final_test_2025_*.py` → 74 passed / 1 skipped；dry-run 通过（`DRY_RUN_AUTHORIZED_NO_PAYLOAD_IO`）。
 - 预算：按场景 7,623 opens / 24,351,305,156 B；唯一文件 6,990 / 23,820,342,517 B；权重 643,891,462 B；10,164 次 no-grad forward；预计 1.5–4 h，输出 <1 GiB。
 - 请求对象：见 `AUTHORIZATION_REQUEST_FINAL_TEST_V1.md`；**本文件不构成授权**，2025 载荷仍未打开。
+
+## 17. 最终测试启动尝试与实现缺陷 STOP（2026-11-27）
+
+研究者于 2026-11-27 21:04（+08:00）批准一次性 12 模型 2025 最终测试后，按批准流程写入了
+authority（SHA-256 `bb596dd5…`）与 payload 授权（SHA-256 `8f9a65a3…`）。紧接的启动尝试暴露了
+三个实现缺陷，均在产生任何指标之前 STOP：
+
+1. 尝试 A（无输出目录）：CLI `command_run` 以 `authorization_path=` 等关键字调用
+   `adapter.execute`，与函数签名（`authority_path`）不匹配 → `TypeError`；payload 打开 0、
+   2025 读取 0。修复：CLI 改为按签名传位置参数，并新增 CLI 参数绑定测试。
+2. 尝试 B（无输出目录）：`execute()` 以 `authority.document['frozen_inputs']['statistics'][1]`
+   读取已解析绑定，实际 document 保留 JSON dict 形态 → `KeyError: 1`；payload 打开 0。
+   修复：新增 `frozen_statistics_sha(authority)` 使用解析后的 tuple 绑定，并补回归测试。
+3. 尝试 C（`run_20261127T130951Z`）：通过读取器打开第一个 2025 卫星文件（1 次打开、
+   5,282,917 B）后，`read_satellite_scene` 抛 `ValueError: Cached nominal time lies outside
+   the observed frame`，写 `failure.json`（STOP_REQUIRED、payload_opens 1、ledger 空），
+   未计算任何指标。根因：读取器原要求 `obs_start <= nominal <= obs_end`，而真实 Himawari
+   帧从名义 bin 起点后约 40 秒开始、在同 10 分钟 bin 内结束（在 2023 文件上实测
+   `05:00:40.792040–05:09:38.646280` for nominal `05:00`）。修复：新增
+   `_frame_in_nominal_bin()`（`nominal <= obs_start < obs_end <= nominal+10min`），并把
+   合成 fixture 的时间窗改为真实约定，新增两个回归测试。
+
+验证：全套 2025 测试 **70 passed / 1 skipped**；authority 重新封签——模板 SHA-256
+`0af1fab770e0e8cf167fbbfbca12eb419b13a1383d86872a242628a631853216`、implementation digest
+`521aa9ebef6fb5df00851cd599760614dfbb7d3eb77bc66c3f0af2cb5bd5c2c2`（9 文件）。
+
+治理与证据：尝试 A/B 无输出目录；尝试 C 的 `failure.json` 与空 ledger、以及两份已消费授权
+归档于 `docs/research_readiness/.local/final_test_invalid_runs/`（不公开提交）。2025 数据在
+尝试 C 中被打开一次（单个卫星文件），未产生任何指标或科学结果；检查点未加载、模型前向 0 次、
+零更新、零反向、零重试。按“失败即停、不自动重试”约定，**重新执行需要研究者一次新的明确授权**
+（同 scope、单次、重新签发 created_utc 晚于批准时刻的 authority 与 payload 授权）。本记录不
+代表任何科学结局。

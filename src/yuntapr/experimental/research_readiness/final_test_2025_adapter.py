@@ -339,6 +339,11 @@ def spectral_population_id(channel: str, population_sha256: str) -> str:
     return FROZEN_B13_NORMALIZATION_SHA if channel == 'B13' else population_sha256
 
 
+def frozen_statistics_sha(authority: FinalTest2025Authority) -> str:
+    """SHA-256 of the frozen Train statistics bound by a parsed authority."""
+    return authority.frozen_inputs['statistics'][1]
+
+
 def load_frozen_inputs(authority: FinalTest2025Authority, *,
                        require_canonical: bool = True) -> FrozenInputs:
     """Load the frozen 2023-Train scalers, static B6 pack and Yunnan mask."""
@@ -915,7 +920,7 @@ def execute(authority_path: str | os.PathLike[str], authority_sha256: str | None
     scenes = select_eligible_scenes(population, rows, freeze.get('eligible_count'))
     pins = _expected_from_catalogue(rows)
     frozen = load_frozen_inputs(authority)
-    if authority.document['frozen_inputs']['statistics'][1] != FROZEN_TRAIN_STATISTICS_SHA:
+    if frozen_statistics_sha(authority) != FROZEN_TRAIN_STATISTICS_SHA:
         raise PermissionError('Frozen train statistics binding mismatch')
 
     output = Path(output_dir)

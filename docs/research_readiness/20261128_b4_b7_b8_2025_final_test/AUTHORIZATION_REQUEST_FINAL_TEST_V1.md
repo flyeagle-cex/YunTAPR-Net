@@ -70,3 +70,21 @@
 ## 8. 请求的明确回复
 
 请研究者明确批准：**“批准执行 12 模型 2025 一次性最终测试（B4_B7_B8_2025_FINAL_TEST_ONLY + 载荷授权）”**。批准后按上述流程单次执行并将证据（运行目录、metrics、comparison、manifest、final status、独立核验）落档、提交推送与 Obsidian 同步；不重复申请、不重跑。
+
+## 9. 重新授权请求（实现缺陷修复后，2026-11-27）
+
+上一份授权被三次启动尝试消耗：前两次在打开任何 payload 之前即因参数/绑定缺陷 STOP；第三次
+打开 1 个 2025 卫星文件后因帧时间窗校验缺陷 STOP（无指标）。缺陷已修复、全套 2025 测试
+70 passed / 1 skipped、authority 已重新封签（模板 `0af1fab7…`、implementation digest
+`521aa9eb…`）。失败证据归档于 `docs/research_readiness/.local/final_test_invalid_runs/`。
+
+现请求研究者对**修复后的单次执行**再给一次明确授权：
+
+- scope：`B4_B7_B8_2025_FINAL_TEST_ONLY`（payload scope 同前）
+- 模型/人口/预算不变：12 个 E9 检查点、847 eligible 场景、按场景读取 7,623 次 /
+  24,351,305,156 B、唯一文件集 6,990 文件
+- 零训练、零调参、零选择、零重试；失败即停并保留 `failure.json`
+- 获批后：签发 `created_utc` 晚于批准时刻的 authority/payload 授权 → 单次运行 → 独立核验 →
+  提交推送并汇报主比较（B7_REAL−B7_ZERO_DOTE；Brier + conditional Pinball）
+
+回复“批准重跑（推荐）”即视为一次明确授权；回复停止则不再执行。

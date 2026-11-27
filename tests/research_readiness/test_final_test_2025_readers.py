@@ -78,8 +78,8 @@ def _write_satellite(path, nominal, seed):
             raw = rng.integers(2000, 4000, size=(501, 501)).astype(np.int16)
             raw[0, 0] = -9999
             var[:] = raw
-        for name, when in (('start_time', nominal - timedelta(minutes=10)),
-                           ('end_time', nominal + timedelta(minutes=9))):
+        for name, when in (('start_time', nominal + timedelta(seconds=40)),
+                           ('end_time', nominal + timedelta(minutes=9, seconds=38))):
             var = ds.createVariable(name, 'f8')
             var.units = 'seconds since 2025-02-28 00:00:00'
             var.assignValue(_cf_seconds(when, epoch))
@@ -344,3 +344,23 @@ def test_inventory_mismatch_is_rejected(synthetic_bundle):
     with pytest.raises(ValueError):
         readers.read_satellite_scene(readers.PayloadAccess2025(authorization),
                                      scene, expected=bad)
+
+
+def test_frame_in_nominal_bin_accepts_real_scan_offset():
+    # Real Himawari frames start ~40 s after the nominal bin label and close
+    # inside the same ten-minute bin (probed on a 2023 file).
+    nominal = _utc('2023-03-01T05:00:00')
+    start = _utc('2023-03-01T05:00:40.792040')
+    end = _utc('2023-03-01T05:09:38.646280')
+    assert readers._frame_in_nominal_bin(nominal, start, end) is True
+    assert readers._frame_in_nominal_bin(
+        nominal, _utc('2023-03-01T05:00:00'), _utc('2023-03-01T05:10:00')) is True
+
+
+def test_frame_in_nominal_bin_rejects_out_of_bin_frames():
+    nominal = _utc('2023-03-01T05:00:00')
+    start = _utc('2023-03-01T05:00:40')
+    end = _utc('2023-03-01T05:09:38')
+    assert readers._frame_in_nominal_bin(nominal, _utc('2023-03-01T04:59:59'), end) is False
+    assert readers._frame_in_nominal_bin(nominal, start, _utc('2023-03-01T05:10:01')) is False
+    assert readers._frame_in_nominal_bin(nominal, end, start) is False

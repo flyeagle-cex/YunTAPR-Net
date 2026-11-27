@@ -130,10 +130,10 @@ def command_run(args):
     if not args.output_dir:
         return _deny('run requires an explicit --output-dir')
     status = adapter.execute(
-        authorization_path=Path(args.authorization),
-        authorization_sha256=args.authorization_sha256,
-        payload_authorization_path=Path(args.payload_authorization),
-        payload_authorization_sha256=args.payload_authorization_sha256,
+        Path(args.authorization),
+        args.authorization_sha256,
+        Path(args.payload_authorization),
+        args.payload_authorization_sha256,
         output_dir=Path(args.output_dir))
     print(_json(status))
     return 0

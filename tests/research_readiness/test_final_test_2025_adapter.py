@@ -401,3 +401,13 @@ def test_forward_scene_uses_bf16_cuda_autocast(monkeypatch):
     captured.clear()
     assert adapter.forward_scene(None, 'B7', None, None, torch.device('cuda')) == 'RESULT'
     assert captured == {'device_type': 'cuda', 'dtype': torch.bfloat16, 'enabled': True}
+
+
+def test_frozen_statistics_sha_reads_parsed_authority_entries(tmp_path):
+    path, _ = _authority(tmp_path)
+    sha = _sha(path.read_text(encoding='utf-8'))
+    loaded = adapter.FinalTest2025Authority.load(path, sha)
+    assert adapter.frozen_statistics_sha(loaded) == _sha('stats')
+    # The raw document keeps the JSON dict form; the parsed binding is a tuple.
+    assert isinstance(loaded.document['frozen_inputs']['statistics'], dict)
+    assert loaded.frozen_inputs['statistics'][1] == _sha('stats')
