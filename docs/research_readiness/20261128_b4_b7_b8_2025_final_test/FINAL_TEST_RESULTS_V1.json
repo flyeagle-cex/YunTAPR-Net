@@ -1,0 +1,654 @@
+{
+  "version": "v1",
+  "task": "B4_B7_B8_B7ZERO_2025_FINAL_TEST",
+  "status": "EXECUTED_ONCE_UNDER_FROZEN_PROTOCOL",
+  "scope": "B4_B7_B8_2025_FINAL_TEST_ONLY",
+  "run_id": "run_20261127T134218Z",
+  "executed_on": "2026-11-27",
+  "authorization": {
+    "authorized_by": "RESEARCHER",
+    "explicit_approval": "researcher selected the re-run approval option in session",
+    "authority_sha256": "f004778f0edd1feb853da103b69bdc2106248766e583c7d61bcaa5e584865ff3",
+    "payload_authorization_sha256": "d5c93e094d2f87536265194588945bde96bc0480acce4d95dba1652750552eb8",
+    "authority_created_utc": "2026-11-27T13:44:00+00:00"
+  },
+  "frozen_bindings": {
+    "protocol_sha256": "eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431",
+    "implementation_sha256": "c6d614b921e05f3d116c1793381607f90b253d026d116b344fdbedbe995c017e",
+    "catalogue_sha256": "51c167f19aa8bec887f0d6c1711492a70da86abe96ba05153fea0efd14102b25",
+    "population_file_sha256": "14ab430f1057d1bfc1eb01637a5c9cc99f0bb373f8627bd74fd3b48964385ece",
+    "population_sha256": "d4c1b81c06fd5ca716f40d7ca29c69464f869ac71f30a68d1b14df641182255a",
+    "freeze_sha256": "dbe0a716d7afc4bfac4b3c45e039229cb3e3896642e01457dc03679aa4c4ebf0",
+    "b13_normalization_sha256": "656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31",
+    "checkpoint_catalog_sha256": "7b5bafdf9920b17c78d4949bf8a5d19a0071c06cdae3da3fa95ee57dc14aab46",
+    "model_identity_sha256": {
+      "sp04_grid_sha256": "e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473",
+      "supervision_mask_sha256": "70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b",
+      "static_sha256": "788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd",
+      "train_scalers_sha256": "53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980"
+    },
+    "dote": {
+      "moisture_basis": "windward_W",
+      "pwat_reference_kg_m2": 31.85768219039871,
+      "reference_provenance": "FROZEN_2023_TRAIN_POSITIVE_PWAT_MEAN_statistics_sha256=53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980",
+      "velocity_reference_m_s": 1.0
+    }
+  },
+  "population": {
+    "eligible_scenes": 847,
+    "n_valid": 2905210,
+    "n_rain": 417607,
+    "prevalence": 0.1437441699567329
+  },
+  "execution": {
+    "models": 12,
+    "elapsed_seconds": 858.0,
+    "payload_opens": 7623,
+    "payload_bytes": 24351305156,
+    "unique_files": 6990,
+    "unique_bytes": 23820342517,
+    "checkpoint_bytes_total": 643891462,
+    "forward_passes": 10164,
+    "model_parameters_updated": false,
+    "optimizer_steps": 0,
+    "backward_calls": 0,
+    "selection": "FINAL_ONLY_NO_SELECTION",
+    "device": "cuda",
+    "seed": 2026,
+    "scenes_per_batch": 1
+  },
+  "model_families": {
+    "B4": {
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "mean": {
+        "Brier": 0.10419586019279188,
+        "AUROC": 0.8972243707769335,
+        "Average_Precision": 0.6273398100127198,
+        "conditional_mean_pinball": 0.12878716080216487,
+        "global_core_loss": 0.05296665732783847,
+        "occurrence_loss": 0.03445425379724699,
+        "quantile_loss": 0.018512403530591474,
+        "mean_absolute_coverage_error": 0.017865482741049994
+      },
+      "coverage_min": 0.014075434559286603,
+      "coverage_max": 0.9461599063234093,
+      "per_seed": {
+        "2029": {
+          "Brier": 0.10627625729069058,
+          "AUROC": 0.8955562609484868,
+          "Average_Precision": 0.6207380516379324,
+          "conditional_mean_pinball": 0.12881607644742238
+        },
+        "2030": {
+          "Brier": 0.1024498129162342,
+          "AUROC": 0.8976654818395072,
+          "Average_Precision": 0.6300255936254437,
+          "conditional_mean_pinball": 0.12866557884076157
+        },
+        "2031": {
+          "Brier": 0.10386151037145085,
+          "AUROC": 0.8984513695428065,
+          "Average_Precision": 0.6312557847747831,
+          "conditional_mean_pinball": 0.12887982711831064
+        }
+      }
+    },
+    "B7": {
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "mean": {
+        "Brier": 0.10327850469951755,
+        "AUROC": 0.8982815368034233,
+        "Average_Precision": 0.6281273600527911,
+        "conditional_mean_pinball": 0.12878554133443468,
+        "global_core_loss": 0.0527882412119152,
+        "occurrence_loss": 0.034276070470368375,
+        "quantile_loss": 0.01851217074154683,
+        "mean_absolute_coverage_error": 0.021285657060396104
+      },
+      "coverage_min": 0.014516040200475568,
+      "coverage_max": 0.9517728390568165,
+      "per_seed": {
+        "2029": {
+          "Brier": 0.10507986897736105,
+          "AUROC": 0.8965987418193442,
+          "Average_Precision": 0.6220943062197695,
+          "conditional_mean_pinball": 0.12953564224792302
+        },
+        "2030": {
+          "Brier": 0.10186978538517309,
+          "AUROC": 0.8984685140301155,
+          "Average_Precision": 0.6293262035166395,
+          "conditional_mean_pinball": 0.12800675329277678
+        },
+        "2031": {
+          "Brier": 0.10288585973601849,
+          "AUROC": 0.8997773545608098,
+          "Average_Precision": 0.6329615704219644,
+          "conditional_mean_pinball": 0.12881422846260426
+        }
+      }
+    },
+    "B8": {
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "mean": {
+        "Brier": 0.10381149086956977,
+        "AUROC": 0.8986619162954049,
+        "Average_Precision": 0.6286656739164164,
+        "conditional_mean_pinball": 0.12860614111602778,
+        "global_core_loss": 0.052771795683781896,
+        "occurrence_loss": 0.03428541267772001,
+        "quantile_loss": 0.018486383006061872,
+        "mean_absolute_coverage_error": 0.022193637617375108
+      },
+      "coverage_min": 0.014405888790178326,
+      "coverage_max": 0.949854767760119,
+      "per_seed": {
+        "2029": {
+          "Brier": 0.10623709759572593,
+          "AUROC": 0.8974192178286045,
+          "Average_Precision": 0.6260130224768918,
+          "conditional_mean_pinball": 0.12854968148454074
+        },
+        "2030": {
+          "Brier": 0.10171400739358386,
+          "AUROC": 0.8991585043833457,
+          "Average_Precision": 0.6303952239616417,
+          "conditional_mean_pinball": 0.1283653878488869
+        },
+        "2031": {
+          "Brier": 0.10348336761939954,
+          "AUROC": 0.8994080266742647,
+          "Average_Precision": 0.6295887753107157,
+          "conditional_mean_pinball": 0.12890335401465575
+        }
+      }
+    },
+    "B7_ZERO_DOTE": {
+      "seeds": [
+        2029,
+        2030,
+        2031
+      ],
+      "mean": {
+        "Brier": 0.10426796461472713,
+        "AUROC": 0.8981927101981153,
+        "Average_Precision": 0.6267646671349603,
+        "conditional_mean_pinball": 0.1288566327166872,
+        "global_core_loss": 0.05282288722017089,
+        "occurrence_loss": 0.03430049750689109,
+        "quantile_loss": 0.018522389713279797,
+        "mean_absolute_coverage_error": 0.023418577080245303
+      },
+      "coverage_min": 0.013924575019096903,
+      "coverage_max": 0.9532742506710855,
+      "per_seed": {
+        "2029": {
+          "Brier": 0.10669693903298333,
+          "AUROC": 0.8959489015608304,
+          "Average_Precision": 0.6163717393434829,
+          "conditional_mean_pinball": 0.13052348754197107
+        },
+        "2030": {
+          "Brier": 0.102489413954459,
+          "AUROC": 0.8987790032688098,
+          "Average_Precision": 0.6301138745382089,
+          "conditional_mean_pinball": 0.1281715189750218
+        },
+        "2031": {
+          "Brier": 0.10361754085673909,
+          "AUROC": 0.8998502257647057,
+          "Average_Precision": 0.6338083875231889,
+          "conditional_mean_pinball": 0.12787489163306873
+        }
+      }
+    }
+  },
+  "checkpoints": [
+    {
+      "model": "B4",
+      "seed": 2029,
+      "sha256": "7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d",
+      "bytes": 52913659
+    },
+    {
+      "model": "B4",
+      "seed": 2030,
+      "sha256": "7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c",
+      "bytes": 52914619
+    },
+    {
+      "model": "B4",
+      "seed": 2031,
+      "sha256": "17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea",
+      "bytes": 52914939
+    },
+    {
+      "model": "B7",
+      "seed": 2029,
+      "sha256": "019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35",
+      "bytes": 53904005
+    },
+    {
+      "model": "B7",
+      "seed": 2030,
+      "sha256": "820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d",
+      "bytes": 53905285
+    },
+    {
+      "model": "B7",
+      "seed": 2031,
+      "sha256": "4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7",
+      "bytes": 53906245
+    },
+    {
+      "model": "B8",
+      "seed": 2029,
+      "sha256": "8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0",
+      "bytes": 53905021
+    },
+    {
+      "model": "B8",
+      "seed": 2030,
+      "sha256": "f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e",
+      "bytes": 53906237
+    },
+    {
+      "model": "B8",
+      "seed": 2031,
+      "sha256": "bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07",
+      "bytes": 53906877
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2029,
+      "sha256": "445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21",
+      "bytes": 53903301
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2030,
+      "sha256": "b03ee41cd190dc7579a1fb993afb1f5598997fca91af3b1c2addc6eed430f0ba",
+      "bytes": 53905157
+    },
+    {
+      "model": "B7_ZERO_DOTE",
+      "seed": 2031,
+      "sha256": "f99952905157d8e649e567af671d0ee3ff02f11530a9996b80306ef758acdac0",
+      "bytes": 53906117
+    }
+  ],
+  "comparisons": {
+    "inference_status": "NOT_FROZEN; DESCRIPTIVE ONLY; NO SIGNIFICANCE VERDICT",
+    "co_primary_metrics": [
+      "Brier",
+      "conditional_mean_pinball"
+    ],
+    "primary_comparison": "B7_REAL_MINUS_B7_ZERO_DOTE",
+    "weighting": "equal weight across the three frozen seeds; paired within seed",
+    "primary_metrics": {
+      "AUROC": {
+        "mean": 8.88266053078457e-05,
+        "per_seed": [
+          0.0006498402585137786,
+          -0.00031048923869425593,
+          -7.287120389598556e-05
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "Average_Precision": {
+        "mean": 0.0013626929178309026,
+        "per_seed": [
+          0.005722566876286583,
+          -0.0007876710215694027,
+          -0.000846817101224473
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "Brier": {
+        "mean": -0.000989459915209596,
+        "per_seed": [
+          -0.0016170700556222828,
+          -0.0006196285692859071,
+          -0.0007316811207205981
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "conditional_mean_pinball": {
+        "mean": -7.109138225251203e-05,
+        "per_seed": [
+          -0.0009878452940480509,
+          -0.00016476568224502164,
+          0.0009393368295355364
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "mean_absolute_coverage_error": {
+        "mean": -0.0021329200198492,
+        "per_seed": [
+          -0.002213380623858077,
+          -0.0069188854592954555,
+          0.0027335060236059333
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "q32_absolute_error": {
+        "mean": 0.0016498765585826192,
+        "per_seed": [
+          0.004796375539682041,
+          0.001501411614268977,
+          -0.0013481574782031602
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      },
+      "q32_signed_bias": {
+        "mean": -0.0016498765585826192,
+        "per_seed": [
+          -0.004796375539682041,
+          -0.001501411614268977,
+          0.0013481574782031602
+        ],
+        "n_seeds": 3,
+        "null_seeds": 0
+      }
+    },
+    "secondary_comparisons": {
+      "SECONDARY_B7_REAL_MINUS_B4": {
+        "left": "B7_REAL",
+        "right": "B4",
+        "metrics": {
+          "AUROC": {
+            "mean": 0.001057166026489642,
+            "per_seed": [
+              0.001042480870857343,
+              0.0008030321906082882,
+              0.001325985018003295
+            ]
+          },
+          "Average_Precision": {
+            "mean": 0.0007875500400713978,
+            "per_seed": [
+              0.0013562545818370797,
+              -0.0006993901088042653,
+              0.0017057856471813793
+            ]
+          },
+          "Brier": {
+            "mean": -0.0009173554932743327,
+            "per_seed": [
+              -0.0011963883133295355,
+              -0.0005800275310611086,
+              -0.0009756506354323541
+            ]
+          },
+          "conditional_mean_pinball": {
+            "mean": -1.6194677301776632e-06,
+            "per_seed": [
+              0.0007195658005006433,
+              -0.0006588255479847982,
+              -6.559865570637813e-05
+            ]
+          },
+          "mean_absolute_coverage_error": {
+            "mean": 0.0034201743193461084,
+            "per_seed": [
+              -0.0004202819763856839,
+              0.009695054575833261,
+              0.0009857503585907479
+            ]
+          },
+          "q32_absolute_error": {
+            "mean": -0.0017328892156181681,
+            "per_seed": [
+              0.0023969904719030044,
+              -0.006175662764273504,
+              -0.001419995354484005
+            ]
+          },
+          "q32_signed_bias": {
+            "mean": 0.0017328892156181681,
+            "per_seed": [
+              -0.0023969904719030044,
+              0.006175662764273504,
+              0.001419995354484005
+            ]
+          }
+        }
+      },
+      "SECONDARY_B8_MINUS_B4": {
+        "left": "B8",
+        "right": "B4",
+        "metrics": {
+          "AUROC": {
+            "mean": 0.001437545518471417,
+            "per_seed": [
+              0.0018629568801176166,
+              0.0014930225438384293,
+              0.0009566571314582051
+            ]
+          },
+          "Average_Precision": {
+            "mean": 0.0013258639036966742,
+            "per_seed": [
+              0.005274970838959447,
+              0.00036963033619796803,
+              -0.0016670094640673927
+            ]
+          },
+          "Brier": {
+            "mean": -0.000384369323222102,
+            "per_seed": [
+              -3.9159694964652214e-05,
+              -0.0007358055226503457,
+              -0.0003781427520513081
+            ]
+          },
+          "conditional_mean_pinball": {
+            "mean": -0.00018101968613706831,
+            "per_seed": [
+              -0.00026639496288163866,
+              -0.00030019099187467146,
+              2.3526896345105186e-05
+            ]
+          },
+          "mean_absolute_coverage_error": {
+            "mean": 0.004328154876325111,
+            "per_seed": [
+              -0.00167637612935128,
+              0.014954634755284277,
+              -0.0002937939969576628
+            ]
+          },
+          "q32_absolute_error": {
+            "mean": -0.0009985464803032862,
+            "per_seed": [
+              -0.0033644072058179875,
+              -0.004257591467575983,
+              0.004626359232484112
+            ]
+          },
+          "q32_signed_bias": {
+            "mean": 0.0009985464803032862,
+            "per_seed": [
+              0.0033644072058179875,
+              0.004257591467575983,
+              -0.004626359232484112
+            ]
+          }
+        }
+      },
+      "SECONDARY_B8_MINUS_B7_REAL": {
+        "left": "B8",
+        "right": "B7_REAL",
+        "metrics": {
+          "AUROC": {
+            "mean": 0.0003803794919817749,
+            "per_seed": [
+              0.0008204760092602736,
+              0.000689990353230141,
+              -0.00036932788654508997
+            ]
+          },
+          "Average_Precision": {
+            "mean": 0.0005383138636252763,
+            "per_seed": [
+              0.003918716257122368,
+              0.0010690204450022334,
+              -0.003372795111248772
+            ]
+          },
+          "Brier": {
+            "mean": 0.0005329861700522307,
+            "per_seed": [
+              0.0011572286183648833,
+              -0.0001557779915892371,
+              0.000597507883381046
+            ]
+          },
+          "conditional_mean_pinball": {
+            "mean": -0.00017940021840689066,
+            "per_seed": [
+              -0.000985960763382282,
+              0.00035863455611012673,
+              8.912555205148331e-05
+            ]
+          },
+          "mean_absolute_coverage_error": {
+            "mean": 0.0009079805569790032,
+            "per_seed": [
+              -0.001256094152965596,
+              0.005259580179451016,
+              -0.0012795443555484107
+            ]
+          },
+          "q32_absolute_error": {
+            "mean": 0.000734342735314882,
+            "per_seed": [
+              -0.005761397677720992,
+              0.001918071296697521,
+              0.006046354586968117
+            ]
+          },
+          "q32_signed_bias": {
+            "mean": -0.000734342735314882,
+            "per_seed": [
+              0.005761397677720992,
+              -0.001918071296697521,
+              -0.006046354586968117
+            ]
+          }
+        }
+      }
+    }
+  },
+  "verification": {
+    "status": "PASS",
+    "checks": 275,
+    "failures": 0,
+    "raw_ledger_sha256": "167b73b4c9eb4b72751c64ed4f43c7bc4c033d56e9f970dc71a35c138b36882b",
+    "raw_ledger_rows": 847,
+    "public_ledger_note": "The raw per-scene ledger contains the cumulative SHA-256 list of every opened payload file (126 MB) and is kept with the local run. The public compact ledger carries per-scene accounting plus a canonical digest of each scene's hash list; the raw ledger SHA-256 is recorded here."
+  },
+  "evidence_files": [
+    {
+      "path": "metrics/B4_2029.json",
+      "bytes": 5977,
+      "sha256": "245dabf3223af7b6a9f9488f0e2adff766931e0599c409737061f27e16607ffd"
+    },
+    {
+      "path": "metrics/B4_2030.json",
+      "bytes": 5965,
+      "sha256": "a99e7ee8a579761c72466934b891c82625054c23b2de7d7492b8bab6769c8cf3"
+    },
+    {
+      "path": "metrics/B4_2031.json",
+      "bytes": 5909,
+      "sha256": "2d744668ef4bd9f41b2fd250f2459bf3a8532fb34d5e9510d1e1715da1739e24"
+    },
+    {
+      "path": "metrics/B7_2029.json",
+      "bytes": 5976,
+      "sha256": "11906ee2e2dfc4dc5cf7b62a2c587b12e76aed203eeca9d6dd894e3ef6ca571d"
+    },
+    {
+      "path": "metrics/B7_2030.json",
+      "bytes": 5936,
+      "sha256": "e60de9378982b1fbe2246e31dd6d34c7ea0d0e61076b5ed808aeca4c4efb8996"
+    },
+    {
+      "path": "metrics/B7_2031.json",
+      "bytes": 5919,
+      "sha256": "3c916762d63165f2cd01a451d3457ef2fd52f2313e4de75f6ca134dd53ba1fe9"
+    },
+    {
+      "path": "metrics/B7_ZERO_DOTE_2029.json",
+      "bytes": 6010,
+      "sha256": "4805c479af185620e496ccf564bae669b733edd267e798f972243bf95063fe3d"
+    },
+    {
+      "path": "metrics/B7_ZERO_DOTE_2030.json",
+      "bytes": 5920,
+      "sha256": "b23971b3d487e8067ad2cddde3b66982fdea7d317a10cb0c8dd64da61ebf27d5"
+    },
+    {
+      "path": "metrics/B7_ZERO_DOTE_2031.json",
+      "bytes": 5935,
+      "sha256": "e25d302e24aa87f7055c7f1a49f64d6d809f54ad4418344c82a37194597bd430"
+    },
+    {
+      "path": "metrics/B8_2029.json",
+      "bytes": 5987,
+      "sha256": "3c6c0d6558a466349c2a085bd205ee36fad6cdb3d81c64c84320c9cc8a8442a8"
+    },
+    {
+      "path": "metrics/B8_2030.json",
+      "bytes": 5926,
+      "sha256": "5f14b2fa6c63f69defb5679b8f866a5afb9f490f50d02aca7c03f68f8388e652"
+    },
+    {
+      "path": "metrics/B8_2031.json",
+      "bytes": 5902,
+      "sha256": "0764232bf354f6500616cfddc6eccf593151693a7b5fde3f868805746f1b0388"
+    },
+    {
+      "path": "comparisons.json",
+      "bytes": 12032,
+      "sha256": "c257d2ed6e2d0fe0642ca4e90f690fba5b0aa622c1f864b44813ba1312cbebc8"
+    },
+    {
+      "path": "final_status.json",
+      "bytes": 556883,
+      "sha256": "4f00657cec1ab558b55953001e20f0259743d6ca65629701a61576dc0307f72a"
+    },
+    {
+      "path": "runtime_ledger_compact.jsonl",
+      "bytes": 229730,
+      "sha256": "cfb7ca65f48d4019f9ef12de1dce39e6a650ffec87c4b71f03a66a683b9bab94"
+    }
+  ],
+  "limitations": [
+    "Descriptive paired differences only; the protocol declares no significance verdict and no frozen inference procedure.",
+    "Single held-out 2025 population; no independent weather-event catalogue is bound, so no event-level attribution.",
+    "One deterministic implementation run on one GPU; no seed-level uncertainty beyond the three trained seeds per family.",
+    "IMERG V07 Final is a reference observation product, not ground truth.",
+    "The 12-model comparison uses the frozen 2023 Train scalers and the frozen Yunnan supervision mask; B4 uses the static-only path, B7/B8 the dynamic path and B7_ZERO_DOTE a numerically zeroed DOTE input.",
+    "This receipt does not establish the physical DOTE mechanism; it measures the frozen models on a frozen population under a frozen protocol."
+  ]
+}

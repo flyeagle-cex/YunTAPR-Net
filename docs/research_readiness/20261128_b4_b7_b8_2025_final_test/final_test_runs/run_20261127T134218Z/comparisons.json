@@ -1,0 +1,380 @@
+{
+  "co_primary_metrics": [
+    "Brier",
+    "conditional_mean_pinball"
+  ],
+  "inference_status": "NOT_FROZEN; DESCRIPTIVE ONLY; NO SIGNIFICANCE VERDICT",
+  "pairs": {
+    "PRIMARY_B7_REAL_MINUS_B7_ZERO_DOTE": {
+      "left": "B7_REAL",
+      "metrics": {
+        "AUROC": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 8.88266053078457e-05,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0006498402585137786,
+            -0.00031048923869425593,
+            -7.287120389598556e-05
+          ]
+        },
+        "Average_Precision": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0013626929178309026,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.005722566876286583,
+            -0.0007876710215694027,
+            -0.000846817101224473
+          ]
+        },
+        "Brier": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.000989459915209596,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0016170700556222828,
+            -0.0006196285692859071,
+            -0.0007316811207205981
+          ]
+        },
+        "conditional_mean_pinball": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -7.109138225251203e-05,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0009878452940480509,
+            -0.00016476568224502164,
+            0.0009393368295355364
+          ]
+        },
+        "mean_absolute_coverage_error": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.0021329200198492,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.002213380623858077,
+            -0.0069188854592954555,
+            0.0027335060236059333
+          ]
+        },
+        "q32_absolute_error": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0016498765585826192,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.004796375539682041,
+            0.001501411614268977,
+            -0.0013481574782031602
+          ]
+        },
+        "q32_signed_bias": {
+          "direction": "B7_REAL_MINUS_B7_ZERO_DOTE",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.0016498765585826192,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.004796375539682041,
+            -0.001501411614268977,
+            0.0013481574782031602
+          ]
+        }
+      },
+      "right": "B7_ZERO_DOTE",
+      "tier": "PRIMARY"
+    },
+    "SECONDARY_B7_REAL_MINUS_B4": {
+      "left": "B7_REAL",
+      "metrics": {
+        "AUROC": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.001057166026489642,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.001042480870857343,
+            0.0008030321906082882,
+            0.001325985018003295
+          ]
+        },
+        "Average_Precision": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0007875500400713978,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0013562545818370797,
+            -0.0006993901088042653,
+            0.0017057856471813793
+          ]
+        },
+        "Brier": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.0009173554932743327,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0011963883133295355,
+            -0.0005800275310611086,
+            -0.0009756506354323541
+          ]
+        },
+        "conditional_mean_pinball": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -1.6194677301776632e-06,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0007195658005006433,
+            -0.0006588255479847982,
+            -6.559865570637813e-05
+          ]
+        },
+        "mean_absolute_coverage_error": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0034201743193461084,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0004202819763856839,
+            0.009695054575833261,
+            0.0009857503585907479
+          ]
+        },
+        "q32_absolute_error": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.0017328892156181681,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0023969904719030044,
+            -0.006175662764273504,
+            -0.001419995354484005
+          ]
+        },
+        "q32_signed_bias": {
+          "direction": "B7_REAL_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0017328892156181681,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0023969904719030044,
+            0.006175662764273504,
+            0.001419995354484005
+          ]
+        }
+      },
+      "right": "B4",
+      "tier": "SECONDARY"
+    },
+    "SECONDARY_B8_MINUS_B4": {
+      "left": "B8",
+      "metrics": {
+        "AUROC": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.001437545518471417,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0018629568801176166,
+            0.0014930225438384293,
+            0.0009566571314582051
+          ]
+        },
+        "Average_Precision": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0013258639036966742,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.005274970838959447,
+            0.00036963033619796803,
+            -0.0016670094640673927
+          ]
+        },
+        "Brier": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.000384369323222102,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -3.9159694964652214e-05,
+            -0.0007358055226503457,
+            -0.0003781427520513081
+          ]
+        },
+        "conditional_mean_pinball": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.00018101968613706831,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.00026639496288163866,
+            -0.00030019099187467146,
+            2.3526896345105186e-05
+          ]
+        },
+        "mean_absolute_coverage_error": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.004328154876325111,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.00167637612935128,
+            0.014954634755284277,
+            -0.0002937939969576628
+          ]
+        },
+        "q32_absolute_error": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.0009985464803032862,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.0033644072058179875,
+            -0.004257591467575983,
+            0.004626359232484112
+          ]
+        },
+        "q32_signed_bias": {
+          "direction": "B8_MINUS_B4",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0009985464803032862,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0033644072058179875,
+            0.004257591467575983,
+            -0.004626359232484112
+          ]
+        }
+      },
+      "right": "B4",
+      "tier": "SECONDARY"
+    },
+    "SECONDARY_B8_MINUS_B7_REAL": {
+      "left": "B8",
+      "metrics": {
+        "AUROC": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0003803794919817749,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0008204760092602736,
+            0.000689990353230141,
+            -0.00036932788654508997
+          ]
+        },
+        "Average_Precision": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0005383138636252763,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.003918716257122368,
+            0.0010690204450022334,
+            -0.003372795111248772
+          ]
+        },
+        "Brier": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0005329861700522307,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.0011572286183648833,
+            -0.0001557779915892371,
+            0.000597507883381046
+          ]
+        },
+        "conditional_mean_pinball": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.00017940021840689066,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.000985960763382282,
+            0.00035863455611012673,
+            8.912555205148331e-05
+          ]
+        },
+        "mean_absolute_coverage_error": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.0009079805569790032,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.001256094152965596,
+            0.005259580179451016,
+            -0.0012795443555484107
+          ]
+        },
+        "q32_absolute_error": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": 0.000734342735314882,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            -0.005761397677720992,
+            0.001918071296697521,
+            0.006046354586968117
+          ]
+        },
+        "q32_signed_bias": {
+          "direction": "B8_MINUS_B7_REAL",
+          "inference": "PAIRED_DESCRIPTIVE_ONLY_NO_INFERENCE",
+          "mean": -0.000734342735314882,
+          "n_seeds": 3,
+          "null_seeds": 0,
+          "per_seed": [
+            0.005761397677720992,
+            -0.001918071296697521,
+            -0.006046354586968117
+          ]
+        }
+      },
+      "right": "B7_REAL",
+      "tier": "SECONDARY"
+    }
+  },
+  "primary_comparison": "B7_REAL_MINUS_B7_ZERO_DOTE",
+  "secondary_comparisons": [
+    "B8_MINUS_B7_REAL",
+    "B7_REAL_MINUS_B4",
+    "B8_MINUS_B4"
+  ],
+  "weighting": "equal weight across the three frozen seeds; paired within seed"
+}

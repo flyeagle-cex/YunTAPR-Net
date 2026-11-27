@@ -304,3 +304,29 @@ SHA-256）；公开输出根 `E:\YunTAPR_2025_12model_final_test` 已清空。au
 约定，**修复版执行仍需研究者一次新的明确授权**（同 scope、单次、重签 `created_utc` 晚于批准
 时刻的 authority 与 payload 授权）。本节不构成任何科学结果，2025 数据不得回流调参。
 
+
+## 19 12 模型 2025 一次性最终测试执行终态（2026-11-27）
+
+- 授权与对象：研究者在协议/适配器/预算评审后明确批准一次性执行，并再次批准修复版重跑；实际
+  执行的 authority SHA-256 `f004778f0edd1feb853da103b69bdc2106248766e583c7d61bcaa5e584865ff3`、
+  payload 授权 SHA-256 `d5c93e094d2f87536265194588945bde96bc0480acce4d95dba1652750552eb8`
+  （created_utc 2026-11-27T13:44:00+00:00；执行后已消费并归档，不随公开版本发布）。
+- 执行：run `run_20261127T134218Z`，2026-11-27T13:42:21Z 开始，elapsed 858.0 s，exit 0；
+  847 个 eligible 场景 × 12 个冻结 E9 模型、按场景读取 7,623 次 / 24,351,305,156 B
+  （唯一文件集 6,990 文件 / 23,820,342,517 B）、12 个检查点 643,891,462 B；
+  `MODEL_PARAMETERS_UPDATED=false`、`OPTIMIZER_STEPS=0`、`BACKWARD_CALLS=0`、无重试。
+- 结果（描述性）：主比较 B7_REAL−B7_ZERO_DOTE 的 Brier 三 seed 均值 −0.000989460
+  （per-seed −0.001617070 / −0.000619629 / −0.000731681），条件 pinball 均值 −7.1091×10⁻⁵
+  （per-seed −0.000987845 / −0.000164766 / +0.000939337，第三个 seed 方向相反）；
+  次比较 B7_REAL−B4、B8−B4、B8−B7_REAL 的成对差值见结果收据。
+  `inference_status = NOT_FROZEN; DESCRIPTIVE ONLY; NO SIGNIFICANCE VERDICT`。
+- 解释边界：不建立 DOTE 物理机制因果结论；无事件级归因；IMERG 为参考观测而非地面真值；
+  不延伸到其他模型、时期或 2025 年十月之后数据；2025 结果不得回流调参/选择/校准。
+- 证据与核验：`FINAL_TEST_RESULTS_V1.json`（SHA-256 `2f645523…`）、
+  `FINAL_TEST_VERIFICATION_V1.json`（`4d7b2cd3…`）、`FINAL_TEST_EXECUTION_REPORT_v1.pdf`
+  （`7a3a148e…`，4 页）；公开证据目录 `final_test_runs/run_20261127T134218Z/`
+  （metrics 12 个、comparisons.json、final_status.json、runtime_ledger_compact.jsonl）；
+  原始 126,036,094 B ledger 与含私有绝对路径的 run_manifest 留在本地运行目录，原始 ledger
+  SHA-256 `167b73b4…36882b` 记录在核验收据；独立核验 275 项全 PASS。
+- 治理：研究者授权已全部消费；本轮为一次性最终测试，不重跑；如需其他模型或时期最终测试，
+  须新协议、人口冻结、预算与新的明确授权。
