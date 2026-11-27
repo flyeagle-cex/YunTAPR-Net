@@ -198,6 +198,57 @@ class SeedCompletionTests(unittest.TestCase):
         module.write_package_failure(out, RuntimeError('second'), 7, 8, 9)
         self.assertEqual(json.loads(path.read_text(encoding='utf-8')), failure)
 
+    def test_execute_spawns_worker_with_path_strings_not_documents(self):
+        """Regression: the controller must pass file paths to the worker command.
+
+        Passing the verified proposal/private/approval documents instead of their
+        paths produced one ~115 KB argument and failed with WinError 206 before
+        the first worker could start (2026-11-27 attempt).
+        """
+        parent = Path(tempfile.mkdtemp())
+        out = parent / 'run'
+        proposal = _proposal()
+        private = _private(proposal, out)
+        approval = _approval(proposal, private)
+        proposal_path = parent / 'proposal.json'
+        private_path = parent / 'private.json'
+        approval_path = parent / 'approval.json'
+        for path in (proposal_path, private_path, approval_path):
+            path.write_text('{}', encoding='utf-8')
+        captured = {}
+
+        def fake_checked(root, proposal_arg, private_arg, approval_arg, commit):
+            self.assertEqual(Path(proposal_arg), proposal_path)
+            self.assertEqual(Path(private_arg), private_path)
+            self.assertEqual(Path(approval_arg), approval_path)
+            return proposal, private, approval
+
+        def fake_validate_output_root(path):
+            return Path(path), 10 ** 12
+
+        def fake_popen(command, **kwargs):
+            captured['command'] = list(command)
+            captured['kwargs'] = dict(kwargs)
+            raise RuntimeError('synthetic stop before a worker starts')
+
+        with patch.object(module, 'checked', fake_checked), \
+                patch.object(module, 'validate_output_root', fake_validate_output_root), \
+                patch.object(module.subprocess, 'Popen', fake_popen), \
+                patch.object(module, 'write', lambda *args, **kwargs: None), \
+                patch.object(module, 'read', lambda *args, **kwargs: {}), \
+                patch.object(module, 'write_package_failure', lambda *args, **kwargs: None):
+            with self.assertRaises(RuntimeError):
+                module.execute(REPO_ROOT, proposal_path, private_path, approval_path, 'c' * 40)
+
+        command = captured['command']
+        self.assertTrue(all(isinstance(item, str) for item in command))
+        self.assertLess(sum(len(item) for item in command), 5000)
+        self.assertEqual(command[command.index('--proposal') + 1], str(proposal_path))
+        self.assertEqual(command[command.index('--private-preparation') + 1], str(private_path))
+        self.assertEqual(command[command.index('--researcher-approval') + 1], str(approval_path))
+        self.assertEqual(command[command.index('--task-index') + 1], '0')
+        self.assertEqual(captured['kwargs']['env']['PYTHONHASHSEED'], '2030')
+
     def test_prepare_requires_explicit_paths_before_any_read(self):
         parent = Path(tempfile.mkdtemp())
         with self.assertRaises(PermissionError):

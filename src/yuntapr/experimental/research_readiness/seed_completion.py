@@ -619,7 +619,8 @@ def _comparison_summary(out,proposal):
 def execute(root,proposal,private,approval,commit,*,worker_python=None):
     """Serial six-task controller. Fresh output only; failure stops the package."""
     root=Path(root);started=time.monotonic()
-    proposal,private,approval=checked(root,proposal,private,approval,commit)
+    proposal_path,private_path,approval_path=Path(proposal),Path(private),Path(approval)
+    proposal,private,approval=checked(root,proposal_path,private_path,approval_path,commit)
     out,free=validate_output_root(private['output_root'])
     admission=dict(resources(),initial_output_free_bytes=free)
     out.mkdir(parents=True,exist_ok=False)
@@ -631,7 +632,7 @@ def execute(root,proposal,private,approval,commit,*,worker_python=None):
             remaining=proposal['budget']['max_package_seconds']-(time.monotonic()-started)
             if remaining<=0:raise RuntimeError('Seed-completion package 36h limit reached; no replay')
             write(out/f'task_{index+1}_claim.json',dict(index=index,controller_pid=os.getpid(),code_commit=commit))
-            command=worker_command(root,proposal,private,approval,index,worker_python=worker_python)
+            command=worker_command(root,proposal_path,private_path,approval_path,index,worker_python=worker_python)
             with (out/f'{kind}_s{seed}_console.log').open('xb') as log:
                 active=subprocess.Popen(command,cwd=str(root),env=worker_environment(seed),stdout=log,
                                         stderr=subprocess.STDOUT,creationflags=worker_creation_flags())
