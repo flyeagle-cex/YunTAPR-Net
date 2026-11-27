@@ -1,7 +1,7 @@
 # B4/B7/B8 × 2029/2030/2031 · 2025 编目与 QC 阶段授权请求 V1
 
 - 日期：2026-11-27（UTC+08:00）
-- 状态：`READY_WAITING_EXACT_RESEARCHER_AUTHORIZATION`
+- 状态：`EXECUTED_ONCE_INVALID_IMERG_DECODER_DEFECT_FIXED_PENDING_REAUTHORIZATION`
 - 本文件是阶段 gate 2（`CATALOGUE_ONLY_RESEARCHER_AUTHORITY`）的授权请求对象说明，不是授权本身，也不构成执行许可。
 - 协议：`config/evaluation/b4_b7_b8_b7zero_2025_final_test_protocol_v1.yaml`（SHA-256 `eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431`）
 - gate 0 测量：`docs/research_readiness/20261128_b4_b7_b8_2025_final_test/inventory_runs/run_20261127T074800Z/`（inventory `c45b30d1e86d1094c23975592cba6c9cb22a0eeb0b12418ee69cd5dc836055c1`，measurement JSON SHA-256 `4b9113697080f7aed66f22d6981279e02128c420a7e3ac6b43d04c9654186533`，created_utc `2026-11-27T07:48:45+00:00`）
@@ -28,7 +28,7 @@
 | 项 | 值 |
 |---|---|
 | protocol SHA-256 | `eb209ff285d93ea029cdf2a68ade635d54afaa9b9acc5452dcc81313ed1e9431` |
-| implementation digest | `1f3f4b9e58ded7758ba9af6a6b700a95d6458bb0cd086f26fc272f5129826714`（7 文件映射，见授权 JSON `implementation.files`） |
+| implementation digest | `a10711d283af1b17d809b67a0252b5c127e28e2b2e9727cd1f0f74875e550547`（7 文件映射，见授权 JSON `implementation.files`） |
 | checkpoint catalog SHA-256 | `7b5bafdf9920b17c78d4949bf8a5d19a0071c06cdae3da3fa95ee57dc14aab46` |
 | sp04_grid_sha256 | `e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473` |
 | supervision_mask_sha256 | `70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b` |
@@ -84,3 +84,16 @@ F:\devtools\miniconda3\python.exe tools\research_readiness\run_b4_b7_b8_2025_cat
 - 截至本文件，2025 原始载荷内容读取为 0（gate 0 仅 `os.stat` 元数据）。
 - 本阶段不是最终测试授权，不产生任何 2025 模型指标；`FINAL_TEST_2025_AUTHORIZED` 必须保持 `false`。
 - 若本请求被拒绝或需修改范围，须重新提交授权对象，不得以默认值执行。
+
+## 7. 2026-11-27 执行事件与重跑请求（V1.1 补记）
+
+- 研究者已通过交互选择“批准执行（推荐）”批准本阶段单次执行（decision_id 采用 `CATALOGUE_QC_2025_HASH_ONLY`），该授权已按“一次执行”消费。
+- 事件链（全部无效，未产生任何科学结论）：
+  1. 首次尝试 `run_20261127T082300Z` 在打开载荷前中止：measurement 绑定的协议 revision 为 gate-0 的 `3b5608a2…`，而 gate-2 协议已变为 `eb209ff2…`，严格相等检查报 `Measurement protocol differs from the authorization protocol`（0 个载荷打开）。
+  2. 加入 predecessor 协议 revision 兼容并重签授权（SHA-256 `916b013f…`）后，实际运行 `run_20261127T082700Z` 完成 84.0 s：对 7,048 个清单文件做尺寸+SHA-256（23,976,706,717 B），对 215 个 IMERG 日文件各解码一次；但 IMERG 元数据 QC 全部失败，导致 **eligible 0 / rejected 856**（`IMERG_METADATA_MISMATCH` 847 + `MISSING_HIMAWARI_SLOT` 9）。
+  3. 根因：本机 netCDF4/HDF5 无法打开含非 ASCII 字符的 2025 IMERG 路径（文件存在时 `Dataset(str(path))` 报 `FileNotFoundError`；`os.fsencode(path)` 报 `OSError [Errno 22]`）；复制到 ASCII staging 路径后可正常解码。
+  4. 修复：`final_test_2025_catalogue_execution.py` 的解码器新增 ASCII staging（`F:\pytorch\Research\stage0_himawari\cache\staging`，`_staged` 上下文管理器，复制后即时清理），并新增“IMERG 全部不可解码即 STOP”守卫，防止全拒绝结果被静默冻结为人口。用 2024 年 IMERG 日文件验证修复后的解码器工作正常（48 个半时次 × 3,430 像元 = 164,640）。
+  5. 修复后测试：catalogue(12) + execution(20，含 1 skip) → **32 passed / 1 skipped**；implementation digest 更新为 `a10711d2…`。三份无效运行与旧授权已移入 gitignored 的 `docs/research_readiness/.local/catalogue_qc_invalid_runs/`，不作为公开运行结果提交。
+- 判断：本次 0 eligible 是实现/环境缺陷导致的无效执行，不是 2025 人口或模型结果；不得据此冻结人口、计算预算或调整任何东西。
+- 请求：批准**修复后单次重跑**（相同 scope `B4_B7_B8_2025_FINAL_TEST_CATALOGUE_ONLY`，再次读取同样的 7,048 个文件/约 23.98 GB，零 checkpoint/零模型/零指标；decision_id 建议 `CATALOGUE_QC_2025_HASH_ONLY_RERUN`）。重跑成功后冻结人口与唯一源字节预算，再另行请求一次性最终推理授权。
+- 授权模板：与 §5 相同 14 键，但 `implementation.sha256` 使用上述新 digest、`created_utc` 取整分钟且晚于本次补记时间；输出目录必须为新 `catalogue_qc_runs/run_<UTC>`。

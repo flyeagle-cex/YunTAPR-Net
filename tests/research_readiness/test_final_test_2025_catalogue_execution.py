@@ -50,15 +50,20 @@ def write_json(path, payload):
 
 
 class RecordingDecoder:
-    def __init__(self, counts=IMERG_COUNTS, error=None):
+    def __init__(self, counts=IMERG_COUNTS, error=None, undecodable=False):
         self.counts = tuple(counts)
         self.error = error
+        self.undecodable = undecodable
         self.calls = []
 
     def __call__(self, path, day_start):
         self.calls.append((Path(path).resolve(), day_start.isoformat()))
         if self.error is not None:
             raise self.error
+        if self.undecodable:
+            return {'product': '', 'version': '', 'run_type': '',
+                    'time_grid_provenance_pass': False,
+                    'valid_yunnan_counts': (0,) * execution.IMERG_COUNT}
         return {'product': catalogue.IMERG_PRODUCT, 'version': catalogue.IMERG_VERSION,
                 'run_type': catalogue.IMERG_RUN_TYPE,
                 'time_grid_provenance_pass': True,
@@ -385,6 +390,29 @@ class CatalogueQCExecutionTests(unittest.TestCase):
             run_qc(fixture, decoder=RecordingDecoder(error=OSError('synthetic decode failure')))
         failure = self.read_failure(fixture.output())
         self.assertGreater(failure['payload_decode_opens'], 0)
+
+    def test_undecodable_imerg_day_set_stops(self):
+        """A decoder that cannot read any IMERG day is an infrastructure STOP,
+        never a silently all-rejected catalogue."""
+        fixture = self.temp_fixture()
+        with self.assertRaisesRegex(ValueError, 'no IMERG day file could be decoded'):
+            run_qc(fixture, decoder=RecordingDecoder(undecodable=True))
+        failure = self.read_failure(fixture.output())
+        self.assertGreater(failure['payload_decode_opens'], 0)
+        self.assertFalse((fixture.output() / execution.SUMMARY_FILENAME).exists())
+
+    def test_frozen_imerg_decoder_stages_a_byte_identical_copy(self):
+        fixture = self.temp_fixture()
+        staging = fixture.root / 'staging'
+        decoder = execution.FrozenIMERGDecoder(staging_root=staging)
+        source = fixture.root / 'probe_imerg.nc'
+        source.write_bytes(b'synthetic-netCDF-bytes')
+        with decoder._staged(source) as staged:
+            self.assertTrue(staged.exists())
+            self.assertEqual(staged.read_bytes(), source.read_bytes())
+            self.assertEqual(staged.parent.parent, staging)
+            self.assertTrue(staged.parent.name.startswith(execution.STAGING_PREFIX))
+        self.assertFalse(staged.parent.exists())
 
     @unittest.skipIf(importlib.util.find_spec('netCDF4') is not None,
                      'netCDF4 is installed; the lazy-import STOP cannot be exercised')

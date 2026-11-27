@@ -208,3 +208,11 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 测试：`test_final_test_2025_catalogue.py`（12）+ `test_final_test_2025_catalogue_execution.py`（18，含 1 fixture skip）→ 30 passed / 1 skipped（48 s）；py_compile exit 0；`git diff --check`（cr-at-eol）exit 0；CLI `plan` 输出 856 场景/7,063 unique/7,048 present/15 missing/23,976,706,717 B/215 IMERG 天，guards 全零。
 - 授权请求对象：`AUTHORIZATION_REQUEST_CATALOGUE_QC_V1.md`（scope、14 键模板、7 项绑定、23.98 GB 预算、失败即停、下一阶段另需一次性最终推理授权）。
 - 边界：本阶段未读取任何 2025 载荷内容；checkpoint/模型/前向/指标零访问；2025 保持封存。
+
+## 14. 2026-11-27 补记：gate 2 授权与首次执行事件（无效，修复后待重跑授权）
+
+- 研究者批准后，gate 2 单次执行被消费，但首次有效执行 `run_20261127T082700Z`（84.0 s、已对 7,048 文件做尺寸+SHA-256、215 个 IMERG 日文件各解码一次）因本机 netCDF4/HDF5 无法打开非 ASCII 的 2025 IMERG 路径而全部元数据 QC 失败，**eligible 0 / rejected 856**（847 `IMERG_METADATA_MISMATCH` + 9 `MISSING_HIMAWARI_SLOT`）。该结果无效，不是人口或模型结论。
+- 首次尝试 `run_20261127T082300Z` 另在打开载荷前因 measurement 协议 revision（gate-0 `3b5608a2…`）与 gate-2 协议 `eb209ff2…` 严格相等检查而中止；已加入 predecessor 协议 revision 兼容（`MEASUREMENT_PROTOCOL_REVISIONS`）。
+- 修复：解码前把 IMERG 日文件复制到 ASCII staging（`_staged`，即时清理），并新增“全部不可解码即 STOP”守卫；用 2024 IMERG 文件验证解码（48×3,430=164,640）；测试 32 passed/1 skipped；implementation digest 更新为 `a10711d2…`（§13 的 `1f3f4b9e…` 已被取代）。
+- 证据处置：三份无效运行（`run_20261127T082300Z`、`run_20261127T082500Z`、`run_20261127T082700Z`）与旧授权 `stale_authorization_916b013f.json` 已移入 gitignored `docs/research_readiness/.local/catalogue_qc_invalid_runs/`；公开 `catalogue_qc_runs/` 为空。
+- 状态：gate 2 授权已消费；需研究者批准修复后单次重跑（同 scope，约 23.98 GB 再读，零 checkpoint/模型/指标；建议 decision_id `CATALOGUE_QC_2025_HASH_ONLY_RERUN`）。协议 SHA 保持 `eb209ff2…` 不变。

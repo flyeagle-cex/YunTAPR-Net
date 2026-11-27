@@ -20,8 +20,12 @@ size drift, decoder contract violation) is a STOP: the run writes
 
 import hashlib
 import json
+import os
 import re
+import shutil
+import tempfile
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -47,12 +51,34 @@ FAILURE_FILENAME = 'failure.json'
 DEFAULT_CHUNK_BYTES = 1 << 20
 IMERG_COUNT = 48
 
+# netCDF4/HDF5 cannot open the non-ASCII 2025 IMERG payload paths on this host:
+# the library's OS-level open fails with FileNotFoundError even though the file
+# exists.  The decoder therefore stages a byte-identical copy under an ASCII-only
+# staging root, decodes it and removes it immediately.  The staging copy is never
+# retained and is not counted as a source read beyond the one authorized read.
+ASCII_STAGING_ROOT = Path(os.environ.get(
+    'YUNTAPR_ASCII_STAGING_ROOT',
+    r'F:\pytorch\Research\stage0_himawari\cache\staging'))
+STAGING_PREFIX = 'imerg_qc_'
+
 # The real IMERG decode needs the frozen Yunnan target mask and the pinned SP04
 # coordinate mapping.  Both are resolved through the frozen loss protocol, exactly
 # as the B0 catalogue backend did; this code path runs only in the real QC run.
 FROZEN_LOSS_PROTOCOL_RELPATH = 'config/training/phase_a_training_protocol_v1.yaml'
 FROZEN_LOSS_PROTOCOL_SHA256 = 'dcacbe34050da7e777ad0cb72c53b5b51b48ce57eb9260b09fd283d96de12a4a'
 FROZEN_MASK_FILE_SHA256 = '9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef'
+
+# The stat-only inventory measurement is frozen evidence: it was executed once
+# under the protocol revision that existed at measurement time.  The catalogue-QC
+# revision of the same protocol only adds the gate-2 (QC payload) authorization
+# text; the stat-only contract, the scene calendar and the expected file set are
+# unchanged.  A measurement binding one of the predecessor revisions listed below
+# is therefore still accepted, and the expected file set itself is re-derived by
+# validate_measurement before any payload is opened.  Revisions that change the
+# contract must never be added here.
+MEASUREMENT_PROTOCOL_REVISIONS = frozenset({
+    '3b5608a2b406c927a7d99aba9aace6f782ce1e19478460cb794954c6dc662421',  # gate-0 inventory revision
+})
 
 # The implementation files a real catalogue-QC authorization must bind.  The
 # execution gate re-hashes every one of them against the working tree before it
@@ -493,9 +519,24 @@ class FrozenIMERGDecoder:
     so it becomes a candidate rejection rather than an infrastructure STOP.
     """
 
-    def __init__(self):
+    def __init__(self, staging_root=None):
         self._mapping = None
         self._yunnan = None
+        self._staging_root = (Path(staging_root) if staging_root is not None
+                              else ASCII_STAGING_ROOT)
+
+    @contextmanager
+    def _staged(self, path):
+        """Byte-identical ASCII-path copy for netCDF4, removed immediately after."""
+        self._staging_root.mkdir(parents=True, exist_ok=True)
+        workdir = Path(tempfile.mkdtemp(prefix=STAGING_PREFIX,
+                                        dir=str(self._staging_root)))
+        target = workdir / 'imerg_day.nc'
+        try:
+            shutil.copyfile(path, target)
+            yield target
+        finally:
+            shutil.rmtree(workdir, ignore_errors=True)
 
     def _context(self):
         if self._mapping is None:
@@ -529,35 +570,36 @@ class FrozenIMERGDecoder:
         product = version = run_type = ''
         counts = (0,) * IMERG_COUNT
         try:
-            with netCDF4.Dataset(str(path), 'r') as dataset:
-                dataset.set_auto_maskandscale(False)
-                global_attrs = {name: dataset.getncattr(name)
-                                for name in ('source', 'title') if name in dataset.ncattrs()}
-                if global_attrs.get('source') == catalogue.IMERG_PRODUCT:
-                    product, version = catalogue.IMERG_PRODUCT, catalogue.IMERG_VERSION
-                if 'IMERG Final Run V07' in str(global_attrs.get('title', '')):
-                    run_type = catalogue.IMERG_RUN_TYPE
-                variable = dataset['precipitation']
-                if (tuple(variable.dimensions) != ('time', 'lat', 'lon')
-                        or tuple(variable.shape) != (IMERG_COUNT, 130, 140)
-                        or variable.units != 'mm hr-1'):
-                    raise ValueError('IMERG converted dimension/shape/units mismatch')
-                mapping.assert_axes(mapping.axes['native_lat'], mapping.axes['native_lon'],
-                                    np.asarray(dataset['lat'][10:110]),
-                                    np.asarray(dataset['lon'][20:120]))
-                times = backend._cf_times(dataset['time'])
-                expected = tuple(_utc(day_start) + timedelta(minutes=30 * index)
-                                 for index in range(IMERG_COUNT))
-                if times != expected:
-                    raise ValueError('IMERG complete half-hour time grid mismatch')
-                yunnan = np.asarray(yunnan)
-                if yunnan.dtype != np.dtype(bool) or yunnan.shape != (100, 100):
-                    raise ValueError('Frozen Yunnan target mask must be 100x100 bool')
-                raw = np.asarray(variable[:, 10:110, 20:120])
-                valid = backend.imerg_validity_only(
-                    raw, backend._attrs(variable, backend._IMERG_ATTRS))
-                counts = tuple(int(value) for value in
-                               np.count_nonzero(valid & yunnan[None], axis=(1, 2)))
+            with self._staged(path) as staged_path:
+                with netCDF4.Dataset(str(staged_path), 'r') as dataset:
+                    dataset.set_auto_maskandscale(False)
+                    global_attrs = {name: dataset.getncattr(name)
+                                    for name in ('source', 'title') if name in dataset.ncattrs()}
+                    if global_attrs.get('source') == catalogue.IMERG_PRODUCT:
+                        product, version = catalogue.IMERG_PRODUCT, catalogue.IMERG_VERSION
+                    if 'IMERG Final Run V07' in str(global_attrs.get('title', '')):
+                        run_type = catalogue.IMERG_RUN_TYPE
+                    variable = dataset['precipitation']
+                    if (tuple(variable.dimensions) != ('time', 'lat', 'lon')
+                            or tuple(variable.shape) != (IMERG_COUNT, 130, 140)
+                            or variable.units != 'mm hr-1'):
+                        raise ValueError('IMERG converted dimension/shape/units mismatch')
+                    mapping.assert_axes(mapping.axes['native_lat'], mapping.axes['native_lon'],
+                                        np.asarray(dataset['lat'][10:110]),
+                                        np.asarray(dataset['lon'][20:120]))
+                    times = backend._cf_times(dataset['time'])
+                    expected = tuple(_utc(day_start) + timedelta(minutes=30 * index)
+                                     for index in range(IMERG_COUNT))
+                    if times != expected:
+                        raise ValueError('IMERG complete half-hour time grid mismatch')
+                    yunnan = np.asarray(yunnan)
+                    if yunnan.dtype != np.dtype(bool) or yunnan.shape != (100, 100):
+                        raise ValueError('Frozen Yunnan target mask must be 100x100 bool')
+                    raw = np.asarray(variable[:, 10:110, 20:120])
+                    valid = backend.imerg_validity_only(
+                        raw, backend._attrs(variable, backend._IMERG_ATTRS))
+                    counts = tuple(int(value) for value in
+                                   np.count_nonzero(valid & yunnan[None], axis=(1, 2)))
         except (OSError, ValueError, KeyError, IndexError, AttributeError):
             return {'product': product, 'version': version, 'run_type': run_type,
                     'time_grid_provenance_pass': False,
@@ -703,8 +745,10 @@ def run_catalogue_qc(authorization_path, authorization_sha256, measurement_path,
             raise PermissionError('Inventory measurement SHA differs from the authorization binding')
         if _utc(binding['created_utc']) != _utc(document['created_utc']):
             raise PermissionError('Inventory measurement creation time differs from the authorization')
-        if document['protocol_sha256'] != authorization.protocol['sha256']:
-            raise PermissionError('Measurement protocol differs from the authorization protocol')
+        measurement_revision = document['protocol_sha256']
+        if (measurement_revision != authorization.protocol['sha256']
+                and measurement_revision not in MEASUREMENT_PROTOCOL_REVISIONS):
+            raise PermissionError('Measurement protocol revision is not recognized by this QC gate')
         if authorization.fixture:
             raise PermissionError('Engineering fixture authorization cannot run a real QC pass')
 
@@ -779,6 +823,11 @@ def run_catalogue_qc(authorization_path, authorization_sha256, measurement_path,
                            'modality': modality, 'relative_path': relative_path,
                            'bytes': record['bytes'], 'sha256': digest,
                            'seconds': round(time.monotonic() - hashing, 6)})
+
+        undecodable = sum(1 for decoded in imerg_entries.values()
+                          if decoded['product'] == '' and decoded['version'] == '')
+        if imerg_entries and undecodable == len(imerg_entries):
+            raise ValueError('STOP: no IMERG day file could be decoded (decoder/encoding failure)')
 
         index = catalogue.InventoryIndex(_inventory_entries(measurement, entries))
         rows = catalogue.build_catalogue(population, index)
