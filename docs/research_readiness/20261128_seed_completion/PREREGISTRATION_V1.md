@@ -1,7 +1,7 @@
 # 种子补齐预注册（B2/B5/B6 × seed 2030/2031）V1
 
 - 日期：2026-11-27
-- 状态：`DRAFT_NON_EXECUTABLE_NOT_RESEARCHER_FROZEN`（准备完成后改为 `READY_WAITING_EXACT_RESEARCHER_APPROVAL`）
+- 状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`（提案已冻结、无载荷 dry-run 通过；尚未授权、尚未启动训练）
 - 代码基线：`8f54c4587505628a929d5a204a7d2130ecaaba4f`（准备提交的父提交；实际执行 commit 由批准对象绑定干净固定副本 HEAD）
 - 协议：`config/training/seed_completion_protocol_v1.yaml`
 - 范围：`SEED_COMPLETION_B2_B5_B6_2030_2031`
@@ -99,3 +99,15 @@
 ## 11 批准对象（一次明确批准）
 
 批准文件必须包含：`approved_by_researcher: true`、`decision_id`、`code_commit`、`proposal_sha256`、`tasks`、`budget`、`scientific_choices`、`output_root`，与冻结 proposal 全等。批准前不写任何授权文件、不启动任何训练。
+
+## 12 冻结提案与无载荷 dry-run（2026-11-27）
+
+- 固定执行副本：`D:\研究\极端降水预测\YunTAPR-SeedCompletion-Exec-cae1da4`，HEAD `cae1da4a059ad394253ae66d2546b25bbf5c7698`；工作树干净。
+- 执行器：`F:\pytorch\Research\.venv-cuda\Scripts\python.exe`（Python 3.12.14、torch 2.11.0+cu128）。
+- 规范提案摘要：`proposal_sha256 = b6709cd689f6e367fc50c3cf284e9e9cb87a78e895466c224289519438e6daf1`（由 JSON 内容规范化计算，与文件换行无关）。
+- 公开提案副本：`docs/research_readiness/20261128_seed_completion/SEED_COMPLETION_EXECUTION_PROPOSAL_V1.json`，LF 规范化后 108,893 B、文件 SHA-256 `8cc543a00d9c688b1fcf8b4531d0a2dbc011a68ec7b07b7dc7927324a17306dd`。
+- 私有准备（不提交，位于固定副本 gitignored `.local/seed_completion_20261128_v1/PRIVATE_PREPARATION.json`）：6,805 B、文件 SHA-256 `a693954e434438106d5c8bebd860c16e22cc6839cf2b95fbdb2db1a66da18d24`；绑定 output_root `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`（当前不存在）。
+- 提案内容：6 任务、25,920 更新、856,876 次源读取、2,865,430,597,384 B；672 个代码文件 SHA 绑定；21 个 input pins；每 seed 配对基线（B2→B3、B5/B6→B4 的 Dev E9）与 `paired_initial_identity` / `paired_orders` 引用；startup 存储准入 86,537,695,232 B（≥48 GiB）。
+- 无载荷 dry-run：使用本地内存中的工程 stub 批准对象（`approved_by_researcher: true`、`decision_id: ENGINEERING_DRY_RUN_STUB_NOT_RESEARCHER_AUTHORIZATION`，**不是研究者授权**）调用 `dry_run` → `DRY_RUN_OK`；校验提案摘要、8 键批准结构、预算算术、代码 SHA、21 个 pins、输出根与 48 GiB 准入；未读 Train/Dev、未建模型、未 `torch.load`、未创建输出根。
+- 批准对象（待研究者给出）：恰 8 键，必须逐字段绑定 `code_commit = cae1da4a059ad394253ae66d2546b25bbf5c7698`、`proposal_sha256 = b6709cd689f6e367fc50c3cf284e9e9cb87a78e895466c224289519438e6daf1`、tasks、budget、scientific_choices、output_root。
+- 边界：本包只补训练 seed 用于后续描述性三 seed 对比；不建立机制因果、不改变 2025 终测结论、不产生确认性显著性判决；获批后单次串行执行、失败即停、不重试不重放。
