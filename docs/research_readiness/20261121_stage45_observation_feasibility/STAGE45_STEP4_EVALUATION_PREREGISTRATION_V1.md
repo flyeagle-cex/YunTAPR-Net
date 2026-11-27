@@ -124,3 +124,20 @@
 - 准入核验：`prepare` 在固定副本执行成功（输入 artifact、A completion 数组清单、卫星 manifest、预算合计）；准入干跑 `ENTRY_OK` / `CHECKED_OK True` / `OUTPUT_ROOT_ABSENT True` / `DRYRUN_B_CHECKED_OK`；固定副本 HEAD=ca2ed1a、干净；提案 status `READY_WAITING_EXACT_RESEARCHER_APPROVAL`、authorized=False、final_2025_access=False。
 - 偏差披露：① V4 地形收据无 `final_2025_access` 字段，其校验改为 status 以 `COMPLETE` 开头、`automatic_retry/replay` 为 False、逐任务 epoch-09 检查点 SHA/字节与 4×4,320 更新/1,910,287,815,360 B 合计；② seed2029 的 PASS 仅引用既有 `STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json`（prepare 校验并绑定 SHA），不重读数组、不重算；③ metadata 计量：`checked()` 仅做存在性与字节数检查（stat，不读内容），唯一计量读取在 `load_metadata` 的 ReadGuard，保证 metadata 恰 3 次、总打开恰 907；④ 结果文件命名 `STAGE45_STEP4_MULTISEED_CANDIDATE_REPRODUCTION_RESULTS_V1.json`。
 - 状态：**READY_WAITING_EXACT_RESEARCHER_APPROVAL**、authorized=False、final_2025_access=False；未创建批准文件、未创建输出目录、未执行任何科学读取；公开副本仅供冻结。获批后由独立监督器单次派发并记录 Q2/Q3 终态与账本对账。
+
+## 17 工作包 B 执行终态与 Q2/Q3 判定（2026-11-27）
+
+- 批准与派发：研究者于 2026-11-27 09:43:56 +08:00 明确批准（指令"启动"、引用 m03808；批准 decision `MULTISEED_CANDIDATE_REPRODUCTION_Q2_Q3_EVALUATION`，绑定提案 `cda647c6…`、代码 `ca2ed1a…`、既有 output 根与 scope）。批准文件留存私有命名空间（12,711 B，SHA-256 `1b525d6b…`）。固定副本单次派发，`target_launch` 2026-11-27 09:44:35、target pid 13488。
+- 终态：`target_exit` 2026-11-27T01:45:06.338077+00:00、`return_code` 0、`automatic_retry` false；`completion.json`（4,710 B，SHA-256 `dc6bf6c1f6dadf2646187aa344689da31bac4f16573461fd1fdbfc43540d5e74`）status `COMPLETE_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION`、decision `NOT_REPRODUCED`、q2_decision `NOT_REPRODUCED`、q3_decision `DESCRIPTIVE_ONLY`、`scientific_status=NOT_VERIFIED`、`final_2025_access=false`、elapsed 28.110 s；无 failure 收据。
+- 账本（与预算声明逐项相等）：科学打开 907 = 数组 484 + 卫星 420 + 元数据 3；科学源字节 5,410,034,087 = 3,527,579,048 + 1,875,185,928 + 7,269,111；checkpoint 0、模型前向 0、优化器更新 0、refit/retrain/replay/retry 0。四任务数组均 121 分片 / 881,894,762 B；卫星 78/66/132/144 文件。
+- 结果：四任务均 COMPLETE 但 decision 均 FAIL。公开脱敏收据 `STAGE45_STEP4_MULTISEED_CANDIDATE_REPRODUCTION_RESULTS_V1.json`（45,413 B，SHA-256 `9b1cccb918ff0cfdd6fd2636db5b27e92f8f00516a6a2907a1f14cc58b6c03d8`；公开副本 LF 规范化后 43,980 B，SHA-256 `ae5e70450e730bea7fd06c5c6a413860527d8d2760e23a12725ec38075066478`）。
+- 逐任务：
+  - REAL_s2030：候选 1,119 行/119 场景，S1 72 行/13 场景，S2 选中 1 行（2024-08-11T11:30 y12x44，truth 11.25 mm/h 非强雨）；门 1 `0.511064524030272→0.511064524030272` FAIL、门 2 `tp/fp 0/0→0/1` FAIL、门 3 `fp 0→1` FAIL、门 4/5（149/4354）PASS、门 6（weak 0.08708345141541186）PASS、门 7–9 恒等 PASS；非强雨选中 1。
+  - ZERO_s2030：候选 1,131 行/113 场景，S1 70 行/11 场景，S2 选中 1 行（同场景/像元，truth 11.25 非强雨）；门 1 `0.5088647063017729→同` FAIL、门 2/3 FAIL（fp 1）、门 4/5（148/4493）PASS、门 6 PASS；非强雨选中 1。
+  - REAL_s2031：候选 1,808 行/155 场景，S1 143 行/22 场景，S2 选中 1 行（同场景/像元）；门 1 `0.5031727581453885→同` FAIL、门 2/3 FAIL（fp 1）、门 4/5（181/6019）PASS、门 6 PASS；非强雨选中 1。
+  - ZERO_s2031：候选 1,700 行/148 场景，S1 138 行/24 场景，S2 选中 8 行（5 强 3 非强）；门 1 `0.5011434163139743→0.49966633066705723` PASS、门 2 `tp/fp 0/0→5/3` PASS、门 3 `fp 0→3` FAIL、门 4/5（187/5791）PASS、门 6 PASS；非强雨选中 3，任务 FAIL。
+- Q2 判定：**`NOT_REPRODUCED`**（passing_tasks 空；failing_tasks `[REAL_s2030, REAL_s2031]`）。预注册规则要求三个 REAL seed 全部 PASS 才 `CANDIDATE_REPRODUCED_ACROSS_SEEDS`；本次两个 REAL 任务均因门 1/2/3 与"非强雨选中"失败、无真强雨命中。seed2029 Dev 上的一次九门 PASS（单激活像元、门 1 余量约 1.2e-4）未能跨 seed 复现。
+- Q3 判定：**`DESCRIPTIVE_ONLY`**，`attribution_warning=true`（warning task `ZERO_s2031`：ZERO 对照也出现门 1 改善、5 个真强雨命中与 3 个非强雨误报）。候选机制在本组 Dev 数据上不能归因于地形/动力强迫；Q3 不建立物理归因，不用于模型选择。
+- 解释边界：新 seed 上 S1 候选经 S2 只留下 1/1/1/8 行；2030/2031 的 REAL 臂唯一选中行是同一非强雨像元（truth 11.25），使固定 A 由 0/0 变为 0/1（假阳）；唯一出现真强雨命中（5 TP）的是 ZERO_s2031，但伴随 3 个非强雨误报。即冻结候选（云顶选择器 + blend-to-top）未表现出跨 seed 的稳定判别/命中优势。`scientific_status=NOT_VERIFIED`；本结果不构成 2025 访问、训练或最终科学验收。
+- 独立核验：执行后独立核对 `target_exit`/`target_launch`/`authorization_binding` 身份、预算与 totals 逐项算术、九门与 `nonstrong_rows_selected` 判定一致性、Q2/Q3 规则、选中行结构、逐任务结果文件与 completion 回环、2025 禁止访问等共 125 项，全部通过（`VERIFY_B_OUTPUTS_OK`）；核验本身未新增科学读取。
+- 状态：B 包已执行，终态/账本/公开收据已记录；批准已消费，不重试不重放。步骤 4 的两项预注册判定均已落档：Q1=`TERRAIN_MECHANISM_NOT_REPRODUCED`、Q2=`NOT_REPRODUCED`。后续任何新评价或训练需新的预注册、新预算与一次明确批准；2025 保持封存。

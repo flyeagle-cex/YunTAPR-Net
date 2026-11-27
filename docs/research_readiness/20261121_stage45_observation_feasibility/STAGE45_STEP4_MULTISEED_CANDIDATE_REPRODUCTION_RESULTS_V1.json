@@ -1,0 +1,1433 @@
+{
+  "access_2025": false,
+  "automatic_retry": false,
+  "budget": {
+    "arrays_open_instances": 484,
+    "arrays_reference_bytes": 3527579048,
+    "checkpoint_loads": 0,
+    "development_pixels": 3303090,
+    "development_scenes": 963,
+    "forward_batches": 0,
+    "kind": "BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION",
+    "maximum_output_bytes": 4294967296,
+    "maximum_scientific_file_opens": 3700,
+    "maximum_scientific_source_bytes": 18000000000,
+    "maximum_seconds": 1800,
+    "metadata_open_instances": 3,
+    "metadata_reference_bytes": 7269111,
+    "minimum_free_bytes": 8589934592,
+    "model": "B7",
+    "model_inference_passes": 0,
+    "optimizer_updates": 0,
+    "per_task": {
+      "REAL_s2030": {
+        "arrays_bytes": 881894762,
+        "arrays_opens": 121,
+        "satellite_bytes": 351193068,
+        "satellite_opens": 78,
+        "scientific_bytes": 1233087830,
+        "scientific_opens": 199
+      },
+      "REAL_s2031": {
+        "arrays_bytes": 881894762,
+        "arrays_opens": 121,
+        "satellite_bytes": 590955098,
+        "satellite_opens": 132,
+        "scientific_bytes": 1472849860,
+        "scientific_opens": 253
+      },
+      "ZERO_s2030": {
+        "arrays_bytes": 881894762,
+        "arrays_opens": 121,
+        "satellite_bytes": 288604839,
+        "satellite_opens": 66,
+        "scientific_bytes": 1170499601,
+        "scientific_opens": 187
+      },
+      "ZERO_s2031": {
+        "arrays_bytes": 881894762,
+        "arrays_opens": 121,
+        "satellite_bytes": 644432923,
+        "satellite_opens": 144,
+        "scientific_bytes": 1526327685,
+        "scientific_opens": 265
+      }
+    },
+    "refits": 0,
+    "replays": 0,
+    "retrains": 0,
+    "retries": 0,
+    "satellite_open_instances": 420,
+    "satellite_reference_bytes": 1875185928,
+    "scientific_file_opens": 904,
+    "scientific_source_bytes": 5402764976,
+    "tasks": [
+      "REAL_s2030",
+      "ZERO_s2030",
+      "REAL_s2031",
+      "ZERO_s2031"
+    ],
+    "total_scientific_file_opens": 907,
+    "total_scientific_source_bytes": 5410034087
+  },
+  "checkpoint_loads": 0,
+  "decision": "NOT_REPRODUCED",
+  "elapsed_seconds": 28.110000000000582,
+  "execution_code_commit": "ca2ed1ab20e5ef9b00b05d22e0d1daefa3c3e7ed",
+  "expected_baselines": {
+    "REAL_s2030": {
+      "counts": {
+        "candidate_rows": 1119,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 72,
+        "s1_scenes": 13,
+        "satellite_bytes": 351193068,
+        "satellite_files": 78,
+        "scenes": 963
+      },
+      "metrics": {
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 4354,
+        "q32_support_tp": 149,
+        "strong_physical_pinball_over20": 0.5110645240302718,
+        "weak_log_pinball": 0.08708345141541186
+      }
+    },
+    "REAL_s2031": {
+      "counts": {
+        "candidate_rows": 1808,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 143,
+        "s1_scenes": 22,
+        "satellite_bytes": 590955098,
+        "satellite_files": 132,
+        "scenes": 963
+      },
+      "metrics": {
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 6019,
+        "q32_support_tp": 181,
+        "strong_physical_pinball_over20": 0.5031727581453883,
+        "weak_log_pinball": 0.08926385613549269
+      }
+    },
+    "ZERO_s2030": {
+      "counts": {
+        "candidate_rows": 1131,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 70,
+        "s1_scenes": 11,
+        "satellite_bytes": 288604839,
+        "satellite_files": 66,
+        "scenes": 963
+      },
+      "metrics": {
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 4493,
+        "q32_support_tp": 148,
+        "strong_physical_pinball_over20": 0.5088647063017728,
+        "weak_log_pinball": 0.0871356832605682
+      }
+    },
+    "ZERO_s2031": {
+      "counts": {
+        "candidate_rows": 1700,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 138,
+        "s1_scenes": 24,
+        "satellite_bytes": 644432923,
+        "satellite_files": 144,
+        "scenes": 963
+      },
+      "metrics": {
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 5791,
+        "q32_support_tp": 187,
+        "strong_physical_pinball_over20": 0.5011434163139744,
+        "weak_log_pinball": 0.08922417583852392
+      }
+    }
+  },
+  "final_2025_access": false,
+  "frozen_rules": {
+    "a0_rule": "float32(p * mean(expm1(qlog), axis=1))",
+    "a0_threshold": 9.5373,
+    "action_constant": 20.01,
+    "action_rule": "blend the 31 sub-top quantiles toward the fixed q32 with u = (20.01/p - mean(nodes)) / ((31/32) * (q32 - mean(nodes[:31]))); require denominator > 0, 0 < u < 1, strictly increasing nodes and new A > 20",
+    "area_mean_rule": "mean of the 25 native SP04 centers for each target cell; all 25 centers must be valid, otherwise the cell is undefined",
+    "candidate_rule": "FP64 p * expm1(qlog[:, 31]) > 20.0",
+    "candidate_scenes": "scenes containing at least one S1 row",
+    "control": "ZERO_NUMERIC_RETAIN_REAL_MASKS",
+    "final_2025_access": false,
+    "gates": [
+      "gate1 strong physical pinball/20 strictly decreases",
+      "gate2 strong fixed-A hits new >= 1 and >= baseline",
+      "gate3 nonstrong fixed-A hits new <= baseline",
+      "gate4 q32 support true positives unchanged",
+      "gate5 q32 support false positives unchanged",
+      "gate6 weak (0.1 < truth <= 1) log pinball delta == 0 within 1e-12",
+      "gate7 occurrence Brier BY_CONSTRUCTION_EQUAL",
+      "gate8 occurrence AP BY_CONSTRUCTION_EQUAL",
+      "gate9 occurrence AUROC BY_CONSTRUCTION_EQUAL"
+    ],
+    "max_infeasible_rows": 50,
+    "max_selected_rows": 50,
+    "pass_rule": "PASS iff gate1 strictly decreases, gates 2-6 pass, and zero weak or nonstrong rows are selected",
+    "q2_rule": "all REAL tasks PASS -> CANDIDATE_REPRODUCED_ACROSS_SEEDS; one or more but not all PASS -> PARTIAL; none PASS -> NOT_REPRODUCED",
+    "q3_rule": "ZERO tasks are descriptive only; an attribution warning is recorded when a zero-control selected-row readout improves like REAL",
+    "satellite_bands": [
+      "tbb_08",
+      "tbb_13"
+    ],
+    "satellite_slots": "slot_0_nominal .. slot_5_nominal",
+    "selection_rule": "S1 AND S2",
+    "split_min_rule": "minimum split over the six causal slots for the scene",
+    "split_rule": "SP04 area mean of tbb_08 minus SP04 area mean of tbb_13",
+    "split_threshold": 2.3612
+  },
+  "kind": "BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION",
+  "model_inference_passes": 0,
+  "notes": [
+    "Q2 is the pre-registered REAL-seed reproduction decision.",
+    "Q3 is descriptive for the ZERO control and does not establish physical attribution.",
+    "The action leaves p and q32 fixed by construction.",
+    "No arrays are retained by this package."
+  ],
+  "optimizer_updates": 0,
+  "private_preparation_sha256": "945f1c3f975bb0e18c9a58202057b72d4339a1ac98d178927c00ca6578c00313",
+  "proposal_sha256": "cda647c62402dfa64831f1762c0b1597af0a250d1d9811df242ceb2c8537772b",
+  "q2": {
+    "automatic_retry": false,
+    "decision": "NOT_REPRODUCED",
+    "failing_tasks": [
+      "REAL_s2030",
+      "REAL_s2031"
+    ],
+    "final_2025_access": false,
+    "passing_tasks": [],
+    "per_task": {
+      "REAL_s2030": {
+        "arm": "REAL",
+        "baseline_metrics": {
+          "occurrence_ap": 0.6024744611787913,
+          "occurrence_auroc": 0.8980573651200603,
+          "occurrence_brier": 0.09265593568458365,
+          "point_a_fp": 0,
+          "point_a_tp": 0,
+          "q32_support_fp": 4354,
+          "q32_support_tp": 149,
+          "strong_physical_pinball_over20": 0.511064524030272,
+          "weak_log_pinball": 0.08708345141541186
+        },
+        "candidate_metrics": {
+          "occurrence_ap": 0.6024744611787913,
+          "occurrence_auroc": 0.8980573651200603,
+          "occurrence_brier": 0.09265593568458365,
+          "point_a_fp": 1,
+          "point_a_tp": 0,
+          "q32_support_fp": 4354,
+          "q32_support_tp": 149,
+          "strong_physical_pinball_over20": 0.511064524030272,
+          "weak_log_pinball": 0.08708345141541186
+        },
+        "decision": "FAIL",
+        "failing_gates": [
+          "strong_physical_pinball_over20",
+          "point_a_detection_restored",
+          "point_a_false_positive_removed",
+          "nonstrong_rows_selected"
+        ],
+        "passed": false,
+        "seed": 2030,
+        "selection": {
+          "candidate_rows": 1119,
+          "feasible_rows": 1,
+          "infeasible_rows": 0,
+          "nonstrong_rows_selected": 1,
+          "rule": "S1 AND split_min >= 2.3612",
+          "s1_rows": 72,
+          "selected_rows": 1,
+          "split_threshold": 2.3612,
+          "strong_rows_selected": 0,
+          "weak_rows_selected": 0
+        },
+        "task": "REAL_s2030"
+      },
+      "REAL_s2031": {
+        "arm": "REAL",
+        "baseline_metrics": {
+          "occurrence_ap": 0.6022622687662114,
+          "occurrence_auroc": 0.8983323496221561,
+          "occurrence_brier": 0.09257119044053988,
+          "point_a_fp": 0,
+          "point_a_tp": 0,
+          "q32_support_fp": 6019,
+          "q32_support_tp": 181,
+          "strong_physical_pinball_over20": 0.5031727581453885,
+          "weak_log_pinball": 0.08926385613549268
+        },
+        "candidate_metrics": {
+          "occurrence_ap": 0.6022622687662114,
+          "occurrence_auroc": 0.8983323496221561,
+          "occurrence_brier": 0.09257119044053988,
+          "point_a_fp": 1,
+          "point_a_tp": 0,
+          "q32_support_fp": 6019,
+          "q32_support_tp": 181,
+          "strong_physical_pinball_over20": 0.5031727581453885,
+          "weak_log_pinball": 0.08926385613549268
+        },
+        "decision": "FAIL",
+        "failing_gates": [
+          "strong_physical_pinball_over20",
+          "point_a_detection_restored",
+          "point_a_false_positive_removed",
+          "nonstrong_rows_selected"
+        ],
+        "passed": false,
+        "seed": 2031,
+        "selection": {
+          "candidate_rows": 1808,
+          "feasible_rows": 1,
+          "infeasible_rows": 0,
+          "nonstrong_rows_selected": 1,
+          "rule": "S1 AND split_min >= 2.3612",
+          "s1_rows": 143,
+          "selected_rows": 1,
+          "split_threshold": 2.3612,
+          "strong_rows_selected": 0,
+          "weak_rows_selected": 0
+        },
+        "task": "REAL_s2031"
+      }
+    },
+    "real_tasks": [
+      "REAL_s2030",
+      "REAL_s2031"
+    ],
+    "rule": "all REAL tasks PASS -> CANDIDATE_REPRODUCED_ACROSS_SEEDS; one or more but not all PASS -> PARTIAL; none PASS -> NOT_REPRODUCED",
+    "seed2029_reference": {
+      "bytes": 7082,
+      "decision": "PASS",
+      "name": "STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json",
+      "note": "The already-recorded Stage-45 seed2029 nine-gate acceptance was PASS; this package references it and does not recompute it.",
+      "sha256": "5e184d575f0e4aa052048b1747270f62d6a8bc21b1431aac202c44bdc91af6ad",
+      "source": "docs/research_readiness/20261121_stage45_observation_feasibility/STAGE45_DEV_ACCEPTANCE_RESULTS_V1.json",
+      "task": "B7_s2029"
+    },
+    "status": "COMPLETE"
+  },
+  "q3": {
+    "attribution_warning": true,
+    "attribution_warning_tasks": [
+      "ZERO_s2031"
+    ],
+    "automatic_retry": false,
+    "decision": "DESCRIPTIVE_ONLY",
+    "final_2025_access": false,
+    "per_task": {
+      "ZERO_s2030": {
+        "baseline_metrics": {
+          "occurrence_ap": 0.6036989452742342,
+          "occurrence_auroc": 0.8983437352497283,
+          "occurrence_brier": 0.09253907383203379,
+          "point_a_fp": 0,
+          "point_a_tp": 0,
+          "q32_support_fp": 4493,
+          "q32_support_tp": 148,
+          "strong_physical_pinball_over20": 0.5088647063017729,
+          "weak_log_pinball": 0.08713568326056813
+        },
+        "candidate_metrics": {
+          "occurrence_ap": 0.6036989452742342,
+          "occurrence_auroc": 0.8983437352497283,
+          "occurrence_brier": 0.09253907383203379,
+          "point_a_fp": 1,
+          "point_a_tp": 0,
+          "q32_support_fp": 4493,
+          "q32_support_tp": 148,
+          "strong_physical_pinball_over20": 0.5088647063017729,
+          "weak_log_pinball": 0.08713568326056813
+        },
+        "decision": "FAIL",
+        "description": "Descriptive zero-control readout; not a reproduction decision.",
+        "feasible_rows": 1,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 1,
+        "point_a": {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          }
+        },
+        "q32_support": {
+          "baseline": {
+            "fp": 4493,
+            "tp": 148
+          },
+          "candidate": {
+            "fp": 4493,
+            "tp": 148
+          }
+        },
+        "selected_rows": 1,
+        "strong_physical_pinball_over20_delta": 0.0,
+        "strong_rows_selected": 0,
+        "task": "ZERO_s2030",
+        "weak_log_pinball": {
+          "baseline": 0.08713568326056813,
+          "candidate": 0.08713568326056813
+        },
+        "weak_rows_selected": 0
+      },
+      "ZERO_s2031": {
+        "baseline_metrics": {
+          "occurrence_ap": 0.6023839429923064,
+          "occurrence_auroc": 0.898340212277056,
+          "occurrence_brier": 0.09256436929454848,
+          "point_a_fp": 0,
+          "point_a_tp": 0,
+          "q32_support_fp": 5791,
+          "q32_support_tp": 187,
+          "strong_physical_pinball_over20": 0.5011434163139743,
+          "weak_log_pinball": 0.08922417583852395
+        },
+        "candidate_metrics": {
+          "occurrence_ap": 0.6023839429923064,
+          "occurrence_auroc": 0.898340212277056,
+          "occurrence_brier": 0.09256436929454848,
+          "point_a_fp": 3,
+          "point_a_tp": 5,
+          "q32_support_fp": 5791,
+          "q32_support_tp": 187,
+          "strong_physical_pinball_over20": 0.49966633066705723,
+          "weak_log_pinball": 0.08922417583852395
+        },
+        "decision": "FAIL",
+        "description": "Descriptive zero-control readout; not a reproduction decision.",
+        "feasible_rows": 8,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 3,
+        "point_a": {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 3,
+            "tp": 5
+          }
+        },
+        "q32_support": {
+          "baseline": {
+            "fp": 5791,
+            "tp": 187
+          },
+          "candidate": {
+            "fp": 5791,
+            "tp": 187
+          }
+        },
+        "selected_rows": 8,
+        "strong_physical_pinball_over20_delta": -0.0014770856469170646,
+        "strong_rows_selected": 5,
+        "task": "ZERO_s2031",
+        "weak_log_pinball": {
+          "baseline": 0.08922417583852395,
+          "candidate": 0.08922417583852395
+        },
+        "weak_rows_selected": 0
+      }
+    },
+    "rule": "ZERO tasks are descriptive only; an attribution warning is recorded when a zero-control selected-row readout improves like REAL",
+    "status": "COMPLETE",
+    "warning": "A ZERO control's selected rows improve like REAL; attributed physical reproduction is not established by this package.",
+    "zero_tasks": [
+      "ZERO_s2030",
+      "ZERO_s2031"
+    ]
+  },
+  "replay": false,
+  "scientific_acceptance": "NOT_VERIFIED",
+  "scientific_status": "NOT_VERIFIED",
+  "scope": "FOUR_MODEL_COSINE9_REAL_ZERO_CANDIDATE_REPRODUCTION_V1",
+  "status": "COMPLETE_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION",
+  "task_order": [
+    "REAL_s2030",
+    "ZERO_s2030",
+    "REAL_s2031",
+    "ZERO_s2031"
+  ],
+  "tasks": [
+    {
+      "arm": "REAL",
+      "automatic_retry": false,
+      "baseline_metrics": {
+        "occurrence_ap": 0.6024744611787913,
+        "occurrence_auroc": 0.8980573651200603,
+        "occurrence_brier": 0.09265593568458365,
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 4354,
+        "q32_support_tp": 149,
+        "strong_physical_pinball_over20": 0.511064524030272,
+        "weak_log_pinball": 0.08708345141541186
+      },
+      "candidate_metrics": {
+        "occurrence_ap": 0.6024744611787913,
+        "occurrence_auroc": 0.8980573651200603,
+        "occurrence_brier": 0.09265593568458365,
+        "point_a_fp": 1,
+        "point_a_tp": 0,
+        "q32_support_fp": 4354,
+        "q32_support_tp": 149,
+        "strong_physical_pinball_over20": 0.511064524030272,
+        "weak_log_pinball": 0.08708345141541186
+      },
+      "counts": {
+        "candidate_rows": 1119,
+        "candidate_scenes": 119,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 72,
+        "s1_scenes": 13,
+        "satellite_bytes": 351193068,
+        "satellite_files": 78,
+        "satellite_scenes": 13,
+        "scenes": 963
+      },
+      "decision": "FAIL",
+      "failing_gates": [
+        "strong_physical_pinball_over20",
+        "point_a_detection_restored",
+        "point_a_false_positive_removed",
+        "nonstrong_rows_selected"
+      ],
+      "final_2025_access": false,
+      "gates": [
+        {
+          "baseline": 0.511064524030272,
+          "candidate": 0.511064524030272,
+          "comparator": "lt",
+          "gate": 1,
+          "name": "strong_physical_pinball_over20",
+          "passed": false
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "ge",
+          "gate": 2,
+          "name": "point_a_detection_restored",
+          "passed": false,
+          "requirement": "candidate_tp>=1 and >= baseline"
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "le",
+          "gate": 3,
+          "name": "point_a_false_positive_removed",
+          "passed": false,
+          "requirement": "candidate_fp<=baseline"
+        },
+        {
+          "baseline": 149,
+          "candidate": 149,
+          "comparator": "eq",
+          "gate": 4,
+          "name": "q32_support_true_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 4354,
+          "candidate": 4354,
+          "comparator": "eq",
+          "gate": 5,
+          "name": "q32_support_false_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 0.08708345141541186,
+          "candidate": 0.08708345141541186,
+          "comparator": "eq",
+          "gate": 6,
+          "name": "weak_log_pinball_unchanged",
+          "passed": true,
+          "tolerance": 1e-12
+        },
+        {
+          "baseline": 0.09265593568458365,
+          "candidate": 0.09265593568458365,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 7,
+          "name": "occurrence_brier_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.6024744611787913,
+          "candidate": 0.6024744611787913,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 8,
+          "name": "occurrence_ap_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.8980573651200603,
+          "candidate": 0.8980573651200603,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 9,
+          "name": "occurrence_auroc_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        }
+      ],
+      "infeasible_rows": [],
+      "satellite": {
+        "bands": [
+          "08",
+          "13"
+        ],
+        "bytes": 351193068,
+        "files": 78,
+        "files_sha256": "666312adbc3bb801d937ef7bf6d8abdae39047fbd2af71c68069be7464853a8a",
+        "scenes": 13,
+        "slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "seed": 2030,
+      "selected_rows": [
+        {
+          "a0": 9.690690040588379,
+          "activated": true,
+          "blend_fraction": 0.3318940972214703,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.1760761896571231,
+          "p": 0.78125,
+          "q32": 52.202069446077694,
+          "row": 3,
+          "scene": "2024-08-11T11:30:00+00:00",
+          "split_min": 2.6172027587890625,
+          "strong": false,
+          "truth": 11.25,
+          "weak": false,
+          "x": 44,
+          "y": 12
+        }
+      ],
+      "selected_rows_omitted": 0,
+      "selected_rows_total": 1,
+      "selection": {
+        "candidate_rows": 1119,
+        "feasible_rows": 1,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 1,
+        "rule": "S1 AND split_min >= 2.3612",
+        "s1_rows": 72,
+        "selected_rows": 1,
+        "split_threshold": 2.3612,
+        "strong_rows_selected": 0,
+        "weak_rows_selected": 0
+      },
+      "status": "COMPLETE",
+      "task": "REAL_s2030"
+    },
+    {
+      "arm": "ZERO",
+      "automatic_retry": false,
+      "baseline_metrics": {
+        "occurrence_ap": 0.6036989452742342,
+        "occurrence_auroc": 0.8983437352497283,
+        "occurrence_brier": 0.09253907383203379,
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 4493,
+        "q32_support_tp": 148,
+        "strong_physical_pinball_over20": 0.5088647063017729,
+        "weak_log_pinball": 0.08713568326056813
+      },
+      "candidate_metrics": {
+        "occurrence_ap": 0.6036989452742342,
+        "occurrence_auroc": 0.8983437352497283,
+        "occurrence_brier": 0.09253907383203379,
+        "point_a_fp": 1,
+        "point_a_tp": 0,
+        "q32_support_fp": 4493,
+        "q32_support_tp": 148,
+        "strong_physical_pinball_over20": 0.5088647063017729,
+        "weak_log_pinball": 0.08713568326056813
+      },
+      "counts": {
+        "candidate_rows": 1131,
+        "candidate_scenes": 113,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 70,
+        "s1_scenes": 11,
+        "satellite_bytes": 288604839,
+        "satellite_files": 66,
+        "satellite_scenes": 11,
+        "scenes": 963
+      },
+      "decision": "FAIL",
+      "failing_gates": [
+        "strong_physical_pinball_over20",
+        "point_a_detection_restored",
+        "point_a_false_positive_removed",
+        "nonstrong_rows_selected"
+      ],
+      "final_2025_access": false,
+      "gates": [
+        {
+          "baseline": 0.5088647063017729,
+          "candidate": 0.5088647063017729,
+          "comparator": "lt",
+          "gate": 1,
+          "name": "strong_physical_pinball_over20",
+          "passed": false
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "ge",
+          "gate": 2,
+          "name": "point_a_detection_restored",
+          "passed": false,
+          "requirement": "candidate_tp>=1 and >= baseline"
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "le",
+          "gate": 3,
+          "name": "point_a_false_positive_removed",
+          "passed": false,
+          "requirement": "candidate_fp<=baseline"
+        },
+        {
+          "baseline": 148,
+          "candidate": 148,
+          "comparator": "eq",
+          "gate": 4,
+          "name": "q32_support_true_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 4493,
+          "candidate": 4493,
+          "comparator": "eq",
+          "gate": 5,
+          "name": "q32_support_false_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 0.08713568326056813,
+          "candidate": 0.08713568326056813,
+          "comparator": "eq",
+          "gate": 6,
+          "name": "weak_log_pinball_unchanged",
+          "passed": true,
+          "tolerance": 1e-12
+        },
+        {
+          "baseline": 0.09253907383203379,
+          "candidate": 0.09253907383203379,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 7,
+          "name": "occurrence_brier_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.6036989452742342,
+          "candidate": 0.6036989452742342,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 8,
+          "name": "occurrence_ap_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.8983437352497283,
+          "candidate": 0.8983437352497283,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 9,
+          "name": "occurrence_auroc_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        }
+      ],
+      "infeasible_rows": [],
+      "satellite": {
+        "bands": [
+          "08",
+          "13"
+        ],
+        "bytes": 288604839,
+        "files": 66,
+        "files_sha256": "2c6e6a5573e3faa88bbd329c72c007f7781b0dc63aeccd4947e51242e5e33aa3",
+        "scenes": 11,
+        "slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "seed": 2030,
+      "selected_rows": [
+        {
+          "a0": 10.07481575012207,
+          "activated": true,
+          "blend_fraction": 0.3100225023522045,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.16174299124221553,
+          "p": 0.79296875,
+          "q32": 53.11870165702404,
+          "row": 3,
+          "scene": "2024-08-11T11:30:00+00:00",
+          "split_min": 2.6172027587890625,
+          "strong": false,
+          "truth": 11.25,
+          "weak": false,
+          "x": 44,
+          "y": 12
+        }
+      ],
+      "selected_rows_omitted": 0,
+      "selected_rows_total": 1,
+      "selection": {
+        "candidate_rows": 1131,
+        "feasible_rows": 1,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 1,
+        "rule": "S1 AND split_min >= 2.3612",
+        "s1_rows": 70,
+        "selected_rows": 1,
+        "split_threshold": 2.3612,
+        "strong_rows_selected": 0,
+        "weak_rows_selected": 0
+      },
+      "status": "COMPLETE",
+      "task": "ZERO_s2030"
+    },
+    {
+      "arm": "REAL",
+      "automatic_retry": false,
+      "baseline_metrics": {
+        "occurrence_ap": 0.6022622687662114,
+        "occurrence_auroc": 0.8983323496221561,
+        "occurrence_brier": 0.09257119044053988,
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 6019,
+        "q32_support_tp": 181,
+        "strong_physical_pinball_over20": 0.5031727581453885,
+        "weak_log_pinball": 0.08926385613549268
+      },
+      "candidate_metrics": {
+        "occurrence_ap": 0.6022622687662114,
+        "occurrence_auroc": 0.8983323496221561,
+        "occurrence_brier": 0.09257119044053988,
+        "point_a_fp": 1,
+        "point_a_tp": 0,
+        "q32_support_fp": 6019,
+        "q32_support_tp": 181,
+        "strong_physical_pinball_over20": 0.5031727581453885,
+        "weak_log_pinball": 0.08926385613549268
+      },
+      "counts": {
+        "candidate_rows": 1808,
+        "candidate_scenes": 155,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 143,
+        "s1_scenes": 22,
+        "satellite_bytes": 590955098,
+        "satellite_files": 132,
+        "satellite_scenes": 22,
+        "scenes": 963
+      },
+      "decision": "FAIL",
+      "failing_gates": [
+        "strong_physical_pinball_over20",
+        "point_a_detection_restored",
+        "point_a_false_positive_removed",
+        "nonstrong_rows_selected"
+      ],
+      "final_2025_access": false,
+      "gates": [
+        {
+          "baseline": 0.5031727581453885,
+          "candidate": 0.5031727581453885,
+          "comparator": "lt",
+          "gate": 1,
+          "name": "strong_physical_pinball_over20",
+          "passed": false
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "ge",
+          "gate": 2,
+          "name": "point_a_detection_restored",
+          "passed": false,
+          "requirement": "candidate_tp>=1 and >= baseline"
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 1,
+            "tp": 0
+          },
+          "comparator": "le",
+          "gate": 3,
+          "name": "point_a_false_positive_removed",
+          "passed": false,
+          "requirement": "candidate_fp<=baseline"
+        },
+        {
+          "baseline": 181,
+          "candidate": 181,
+          "comparator": "eq",
+          "gate": 4,
+          "name": "q32_support_true_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 6019,
+          "candidate": 6019,
+          "comparator": "eq",
+          "gate": 5,
+          "name": "q32_support_false_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 0.08926385613549268,
+          "candidate": 0.08926385613549268,
+          "comparator": "eq",
+          "gate": 6,
+          "name": "weak_log_pinball_unchanged",
+          "passed": true,
+          "tolerance": 1e-12
+        },
+        {
+          "baseline": 0.09257119044053988,
+          "candidate": 0.09257119044053988,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 7,
+          "name": "occurrence_brier_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.6022622687662114,
+          "candidate": 0.6022622687662114,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 8,
+          "name": "occurrence_ap_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.8983323496221561,
+          "candidate": 0.8983323496221561,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 9,
+          "name": "occurrence_auroc_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        }
+      ],
+      "infeasible_rows": [],
+      "satellite": {
+        "bands": [
+          "08",
+          "13"
+        ],
+        "bytes": 590955098,
+        "files": 132,
+        "files_sha256": "7cfb3fabbcd31e6d326049bd77868c30a17be7ddfb72463001360a6268f49bcb",
+        "scenes": 22,
+        "slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "seed": 2031,
+      "selected_rows": [
+        {
+          "a0": 11.87299633026123,
+          "activated": true,
+          "blend_fraction": 0.22694113141279887,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.15015898822664475,
+          "p": 0.796875,
+          "q32": 59.894120630667196,
+          "row": 3,
+          "scene": "2024-08-11T11:30:00+00:00",
+          "split_min": 2.6172027587890625,
+          "strong": false,
+          "truth": 11.25,
+          "weak": false,
+          "x": 44,
+          "y": 12
+        }
+      ],
+      "selected_rows_omitted": 0,
+      "selected_rows_total": 1,
+      "selection": {
+        "candidate_rows": 1808,
+        "feasible_rows": 1,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 1,
+        "rule": "S1 AND split_min >= 2.3612",
+        "s1_rows": 143,
+        "selected_rows": 1,
+        "split_threshold": 2.3612,
+        "strong_rows_selected": 0,
+        "weak_rows_selected": 0
+      },
+      "status": "COMPLETE",
+      "task": "REAL_s2031"
+    },
+    {
+      "arm": "ZERO",
+      "automatic_retry": false,
+      "baseline_metrics": {
+        "occurrence_ap": 0.6023839429923064,
+        "occurrence_auroc": 0.898340212277056,
+        "occurrence_brier": 0.09256436929454848,
+        "point_a_fp": 0,
+        "point_a_tp": 0,
+        "q32_support_fp": 5791,
+        "q32_support_tp": 187,
+        "strong_physical_pinball_over20": 0.5011434163139743,
+        "weak_log_pinball": 0.08922417583852395
+      },
+      "candidate_metrics": {
+        "occurrence_ap": 0.6023839429923064,
+        "occurrence_auroc": 0.898340212277056,
+        "occurrence_brier": 0.09256436929454848,
+        "point_a_fp": 3,
+        "point_a_tp": 5,
+        "q32_support_fp": 5791,
+        "q32_support_tp": 187,
+        "strong_physical_pinball_over20": 0.49966633066705723,
+        "weak_log_pinball": 0.08922417583852395
+      },
+      "counts": {
+        "candidate_rows": 1700,
+        "candidate_scenes": 148,
+        "n_rain": 407820,
+        "n_strong": 717,
+        "n_valid": 3303090,
+        "n_weak": 246473,
+        "s1_rows": 138,
+        "s1_scenes": 24,
+        "satellite_bytes": 644432923,
+        "satellite_files": 144,
+        "satellite_scenes": 24,
+        "scenes": 963
+      },
+      "decision": "FAIL",
+      "failing_gates": [
+        "point_a_false_positive_removed",
+        "nonstrong_rows_selected"
+      ],
+      "final_2025_access": false,
+      "gates": [
+        {
+          "baseline": 0.5011434163139743,
+          "candidate": 0.49966633066705723,
+          "comparator": "lt",
+          "gate": 1,
+          "name": "strong_physical_pinball_over20",
+          "passed": true
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 3,
+            "tp": 5
+          },
+          "comparator": "ge",
+          "gate": 2,
+          "name": "point_a_detection_restored",
+          "passed": true,
+          "requirement": "candidate_tp>=1 and >= baseline"
+        },
+        {
+          "baseline": {
+            "fp": 0,
+            "tp": 0
+          },
+          "candidate": {
+            "fp": 3,
+            "tp": 5
+          },
+          "comparator": "le",
+          "gate": 3,
+          "name": "point_a_false_positive_removed",
+          "passed": false,
+          "requirement": "candidate_fp<=baseline"
+        },
+        {
+          "baseline": 187,
+          "candidate": 187,
+          "comparator": "eq",
+          "gate": 4,
+          "name": "q32_support_true_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 5791,
+          "candidate": 5791,
+          "comparator": "eq",
+          "gate": 5,
+          "name": "q32_support_false_positive_unchanged",
+          "passed": true
+        },
+        {
+          "baseline": 0.08922417583852395,
+          "candidate": 0.08922417583852395,
+          "comparator": "eq",
+          "gate": 6,
+          "name": "weak_log_pinball_unchanged",
+          "passed": true,
+          "tolerance": 1e-12
+        },
+        {
+          "baseline": 0.09256436929454848,
+          "candidate": 0.09256436929454848,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 7,
+          "name": "occurrence_brier_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.6023839429923064,
+          "candidate": 0.6023839429923064,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 8,
+          "name": "occurrence_ap_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        },
+        {
+          "baseline": 0.898340212277056,
+          "candidate": 0.898340212277056,
+          "comparator": "eq",
+          "equal": true,
+          "gate": 9,
+          "name": "occurrence_auroc_unchanged",
+          "passed": true,
+          "reason": "The action leaves p and q32 fixed, so Brier, AP and AUROC are unchanged without recomputation.",
+          "status": "BY_CONSTRUCTION_EQUAL"
+        }
+      ],
+      "infeasible_rows": [],
+      "satellite": {
+        "bands": [
+          "08",
+          "13"
+        ],
+        "bytes": 644432923,
+        "files": 144,
+        "files_sha256": "5b0fb8209f662279f0c945dc04ca1f1b223cfbff1899b47acfe3f1042c234a3b",
+        "scenes": 24,
+        "slots": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "seed": 2031,
+      "selected_rows": [
+        {
+          "a0": 9.975873947143555,
+          "activated": true,
+          "blend_fraction": 0.4319542512593164,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": -0.24872175499568572,
+          "p": 0.75,
+          "q32": 44.27397019083374,
+          "row": 1178,
+          "scene": "2024-08-10T11:30:00+00:00",
+          "split_min": 2.60919189453125,
+          "strong": true,
+          "truth": 31.3799991607666,
+          "weak": false,
+          "x": 79,
+          "y": 40
+        },
+        {
+          "a0": 10.329537391662598,
+          "activated": true,
+          "blend_fraction": 0.39244847999058086,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": -0.23583034025908395,
+          "p": 0.75390625,
+          "q32": 46.42006171911516,
+          "row": 1179,
+          "scene": "2024-08-10T11:30:00+00:00",
+          "split_min": 2.47760009765625,
+          "strong": true,
+          "truth": 30.65999984741211,
+          "weak": false,
+          "x": 80,
+          "y": 40
+        },
+        {
+          "a0": 9.824706077575684,
+          "activated": true,
+          "blend_fraction": 0.44791501832282926,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": -0.2349460607257293,
+          "p": 0.76953125,
+          "q32": 42.316736460150096,
+          "row": 1260,
+          "scene": "2024-08-10T11:30:00+00:00",
+          "split_min": 2.4296112060546875,
+          "strong": true,
+          "truth": 27.53999900817871,
+          "weak": false,
+          "x": 78,
+          "y": 41
+        },
+        {
+          "a0": 10.121664047241211,
+          "activated": true,
+          "blend_fraction": 0.4095850430823761,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": -0.24866576930385909,
+          "p": 0.765625,
+          "q32": 44.75296819430822,
+          "row": 1261,
+          "scene": "2024-08-10T11:30:00+00:00",
+          "split_min": 2.581207275390625,
+          "strong": true,
+          "truth": 34.029998779296875,
+          "weak": false,
+          "x": 79,
+          "y": 41
+        },
+        {
+          "a0": 9.660305976867676,
+          "activated": true,
+          "blend_fraction": 0.3676777354912989,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.12692006852808038,
+          "p": 0.78515625,
+          "q32": 48.154905975186374,
+          "row": 2,
+          "scene": "2024-08-11T11:30:00+00:00",
+          "split_min": 3.14520263671875,
+          "strong": false,
+          "truth": 13.630000114440918,
+          "weak": false,
+          "x": 43,
+          "y": 12
+        },
+        {
+          "a0": 12.39465618133545,
+          "activated": true,
+          "blend_fraction": 0.20762735445463665,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.1334552102184945,
+          "p": 0.80078125,
+          "q32": 61.280900549562446,
+          "row": 3,
+          "scene": "2024-08-11T11:30:00+00:00",
+          "split_min": 2.6172027587890625,
+          "strong": false,
+          "truth": 11.25,
+          "weak": false,
+          "x": 44,
+          "y": 12
+        },
+        {
+          "a0": 9.71635913848877,
+          "activated": true,
+          "blend_fraction": 0.4667091558723096,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": 0.036983380866339094,
+          "p": 0.80078125,
+          "q32": 39.67644389503614,
+          "row": 56,
+          "scene": "2024-09-30T17:30:00+00:00",
+          "split_min": 2.9927978515625,
+          "strong": false,
+          "truth": 16.829999923706055,
+          "weak": false,
+          "x": 43,
+          "y": 17
+        },
+        {
+          "a0": 10.027067184448242,
+          "activated": true,
+          "blend_fraction": 0.4405301220946424,
+          "infeasible_reason": null,
+          "new_A": 20.010000228881836,
+          "normalized_pinball_change": -0.0909064835552239,
+          "p": 0.80859375,
+          "q32": 40.42604671455007,
+          "row": 57,
+          "scene": "2024-09-30T17:30:00+00:00",
+          "split_min": 2.5723876953125,
+          "strong": true,
+          "truth": 20.119998931884766,
+          "weak": false,
+          "x": 44,
+          "y": 17
+        }
+      ],
+      "selected_rows_omitted": 0,
+      "selected_rows_total": 8,
+      "selection": {
+        "candidate_rows": 1700,
+        "feasible_rows": 8,
+        "infeasible_rows": 0,
+        "nonstrong_rows_selected": 3,
+        "rule": "S1 AND split_min >= 2.3612",
+        "s1_rows": 138,
+        "selected_rows": 8,
+        "split_threshold": 2.3612,
+        "strong_rows_selected": 5,
+        "weak_rows_selected": 0
+      },
+      "status": "COMPLETE",
+      "task": "ZERO_s2031"
+    }
+  ],
+  "totals": {
+    "arrays_open_instances": 484,
+    "arrays_reference_bytes": 3527579048,
+    "checkpoint_loads": 0,
+    "forward_batches": 0,
+    "metadata_open_instances": 3,
+    "metadata_reference_bytes": 7269111,
+    "model_inference_passes": 0,
+    "optimizer_updates": 0,
+    "replays": 0,
+    "retries": 0,
+    "satellite_open_instances": 420,
+    "satellite_reference_bytes": 1875185928,
+    "scientific_file_opens": 904,
+    "scientific_source_bytes": 5402764976,
+    "total_scientific_file_opens": 907,
+    "total_scientific_source_bytes": 5410034087
+  }
+}
