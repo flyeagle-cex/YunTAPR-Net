@@ -193,3 +193,10 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 协议：`execution_gates` 已在最前新增 gate 0 `INVENTORY_MEASUREMENT_RESEARCHER_AUTHORITY`；新增 `inventory_measurement` 段记录实现文件、预期计数、输出契约与"测量本身不构成内容读取授权"的边界。
 - 授权请求：`AUTHORIZATION_REQUEST_INVENTORY_MEASUREMENT_V1.md`（scope `B4_B7_B8_2025_INVENTORY_MEASUREMENT_ONLY`、AUTHORIZED_BY=RESEARCHER、预计 <300 秒、零载荷字节读取）。
 - 边界：未读取任何 2025 载荷；获批后只执行一次 stat-only 测量，然后以精确字节预算另行请求编目/QC 与冻结授权。
+## 12. 2026-11-27 补记：gate 0 清单测量已执行（stat-only）
+
+- 授权与运行：研究者于 m04884 指示“继续”后，按 strict 8 键授权（decision_id `INVENTORY_MEASUREMENT_2025_STAT_ONLY`、scope `B4_B7_B8_2025_INVENTORY_MEASUREMENT_ONLY`、created_utc 2026-11-27T07:48:00Z、授权文件 SHA-256 `25e65f5f…`、协议 SHA-256 `3b5608a2…`）单次运行；7,063 次 `os.stat`、1.98 s。此前交互式授权询问被系统中断、结果未持久化，本次仅做 stat-only 元数据测量。
+- 观测结果：7,048 个实存唯一文件、15 个缺失（2025-02-28 carry-in 六槽 + 1 个 GFS thermo 初始化 + 8 个孤立卫星槽），源字节 **23,976,706,717 B（约 23.98 GB）**；Himawari 5,122/5,136（23,461,923,781 B）、GFS main 856/856（255,602,095 B）、GFS thermo 855/856（79,537,689 B）、IMERG 215/215（179,643,152 B）。
+- 推论与边界：理论 856 场景需剔除至少 9 个（carry-in + 8 个单槽缺口），至多 847 场景可在 QC 后入人口；真实 eligible 数量待 catalogue/QC 冻结。守卫全零（内容读取/哈希/解码/检查点/模型/指标/十月路径均 0），`FINAL_TEST_2025_EXECUTED=false`。
+- 核验：独立只读核验 56 项全 PASS；结果文档 `INVENTORY_MEASUREMENT_RESULTS_V1.md`、核验 JSON `inventory_measurement_verification_v1.json`（SHA-256 `5546ae2e…`）。
+- 下一步：需研究者对 catalogue/QC 阶段（读取并 SHA-256 哈希 2025 原始文件约 24 GB、逐场景 eligibility 判定、冻结 candidate/population/freeze 三件套；零模型/零指标/零调参）另行明确授权。2025 保持封存。
