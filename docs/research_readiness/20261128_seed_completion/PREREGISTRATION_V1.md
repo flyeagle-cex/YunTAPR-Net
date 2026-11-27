@@ -118,3 +118,13 @@
 - 证据与消费：输出根仅创建 `authorization_binding.json`、`task_1_claim.json`、0 B 控制台日志与 `failure.json`（STOP_NO_AUTOMATIC_REPLAY）；0 训练、0 源读取、0 指标；失败 run 与已消费批准归档于 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261127T230031Z/`。
 - 修复：`execute()` 保留 `proposal_path`/`private_path`/`approval_path` 并使用路径构造 worker 命令；新增回归测试 `test_execute_spawns_worker_with_path_strings_not_documents`（断言参数为短字符串路径）；测试 **15 passed**；提交 `f4d44a76880f844531139beef5d3a8941a83e038` 并推送。
 - 治理：首次批准已因工程缺陷作废（一次尝试消费）；本重新冻结需研究者给出**一次新的明确批准**后才能启动；失败即停、零重放零重试、零 2025 读取。
+
+## 14 第二次启动失败（worker 父进程校验 vs uv venv shim）与启动环境修复（2026-11-27）
+
+- 第二次批准（`decision_id = SEED_COMPLETION_B2B5B6_2030_2031_REAPPROVED_20261128`，批准文件 SHA-256 `D6F59FA01719940735D09EC0BFDC408A0F64A305498543FB4FFA18A21A0A0360`）对应冻结身份：固定副本 `YunTAPR-SeedCompletion-Exec-f4d44a7`（HEAD `f4d44a76880f844531139beef5d3a8941a83e038`）、规范提案 `eb9ac98fa1ce12d12384fca3e29220aca78b625672ca5d4aad852ee93041ffa9`、私有准备 6,805 B / SHA-256 `57ba26165ea2630557c0eec16edc7f18e9d5b70edd6238b7b6e6d130145e318c`。
+- 失败现象：控制器创建输出根、`authorization_binding.json` 与 `task_1_claim.json` 后启动 worker，worker 立即抛 `PermissionError: Worker must be started once by the approved live serial controller`（`seed_completion.py` 的父进程校验）；0 更新、0 源读取、0 指标。
+- 根因：`F:\pytorch\Research\.venv-cuda\Scripts\python.exe` 是 262,144 B 的 uv shim。控制器 `subprocess.Popen([venv_python, ...])` 的实际子进程是 shim，shim 再启动真实解释器 `C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`；worker 的 `os.getppid()` 等于 shim 的 pid，而 `binding.controller_pid` 是控制器真实解释器 pid，二者永远不等。探针链路：controller_pid 41352 → 子进程 27908（shim）→ worker_pid 40400（ppid 27908）。
+- 修复（不改代码、不改提案、不重封）：控制器继续使用 venv python，但 worker 改用真实解释器 `--worker-python C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`，并让控制器/worker 继承 `PYTHONPATH=F:\pytorch\Research\.venv-cuda\Lib\site-packages`、`PYTHONUTF8=1`。实测：base python 直接 `subprocess.Popen` 得 controller 40612、子进程 40188、worker ppid 40612（相等）；base python 在上述 `PYTHONPATH` 下导入 torch 2.11.0+cu128（`torch.cuda.is_available() == True`）、numpy 2.5.3、yaml 6.0.3、netCDF4 1.7.4 全部成功。
+- 证据与消费：第二次失败的输出根残留（`authorization_binding.json` 7,496 B、`B2_s2030_console.log` 1,020 B、`failure.json` 307 B / SHA-256 `0fef0e5ac433e6c2a4af17a473b9ab253e52ff9bf779cd8146e6431d7114ed1a`、`task_1_claim.json` 107 B）、控制器日志与已消费批准归档于 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261127T230756Z/`（含 `ARCHIVE_MANIFEST.json`）；F: 输出根已删除。
+- 治理：第二次批准因工程缺陷作废（一次尝试消费）；冻结身份（commit `f4d44a7`、提案、私有准备、预算、任务表、科学选择）不变；需研究者给出**第三次明确批准**后方可启动。启动命令必须显式使用 `--worker-python`（真实解释器）并继承上述 `PYTHONPATH`；失败即停、零重放零重试、零 2025 读取。
+
