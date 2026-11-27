@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-11-28 12 模型 2025 最终测试**尝试 D STOP，修复与预检完成，等待最后一次重授权**：研究者第二次“批准重跑”后，尝试 D（authority `543fd901…`、created_utc 13:28Z）在打开 9 个 2025 源文件（32,563,149 B）后因真实卫星帧子分钟时间戳与 `planning.utc` 整分钟约束冲突 STOP（`failure.json` 267 B，SHA `2f99712f…`；无指标、无前向）。修复：`_frame_moment()` 解析真实帧起止时间、fixture 改用真实时间窗；adapter 16 passed、全套 2025 测试 70 passed / 1 skipped。另完成两项无 2025 载荷预检：12 个检查点加载与参数计数通过；用 2023 年真实卫星值 + canonical 合成环境/目标走通完整场景构建、DOTE、四族 CUDA BF16 前向与指标累积。失败证据与两份已消费授权归档于 gitignored `.local/final_test_invalid_runs/`（含 `ARCHIVE_MANIFEST.json`）；authority 模板重封 SHA `6946eb7d…`、implementation digest `c6d614b9…`（9 文件）。已发出最后一次重授权请求（同 scope、同预算、单次、失败 STOP）；未获新授权前不读取 2025 载荷。
+
 2026-11-28 12 模型 2025 最终测试**启动尝试 STOP，等待重新授权**：研究者批准后三次启动尝试均在指标前失败——①CLI 关键字与 `execute()` 签名不匹配（TypeError，payload 0 打开）；②`frozen_inputs` 原始 dict 索引误用（KeyError，payload 0 打开）；③`run_20261127T130951Z` 打开 1 个卫星文件（5,282,917 B）后因帧时间窗校验与真实 Himawari 约定不符 STOP（`failure.json`、无指标）。修复：CLI 位置参数、`frozen_statistics_sha()` 解析绑定、`_frame_in_nominal_bin()`（nominal≤obs_start<obs_end≤nominal+10min）；全套 2025 测试 70 passed / 1 skipped；authority 重封模板 SHA `0af1fab7…`、implementation digest `521aa9eb…`（9 文件）。失败证据归档于 gitignored `docs/research_readiness/.local/final_test_invalid_runs/`；2025 数据仅打开一次、零指标、零前向、零训练。已请求一次新的单次执行授权（12 检查点/847 场景/7,623 次读取 24,351,305,156 B）；未获新授权前不再读取 2025 载荷。
 
 

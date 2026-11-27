@@ -88,3 +88,28 @@
   提交推送并汇报主比较（B7_REAL−B7_ZERO_DOTE；Brier + conditional Pinball）
 
 回复“批准重跑（推荐）”即视为一次明确授权；回复停止则不再执行。
+
+## 10. 最后一次重授权请求（尝试 D 之后，2026-11-27）
+
+研究者上一次“批准重跑”对应的尝试 D 在打开 9 个 2025 源文件（32,563,149 B）后因真实卫星帧
+子分钟时间戳与 `planning.utc` 整分钟约束冲突 STOP（无指标、无前向）。该缺陷已修复并通过
+test fixture 更新（adapter 16 passed、全套 2025 测试 70 passed / 1 skipped）。
+
+为降低再次启动的工程风险，另完成两项**无 2025 载荷**预检：12 个检查点全部加载并通过参数
+计数；用 2023 年真实卫星波段值加 canonical 合成环境/目标，走通完整场景构建、DOTE、四族
+CUDA BF16 前向与指标累积（无任何 2025 源打开）。
+
+现请求研究者对修复版**最后一次单次执行**给一次明确授权：
+
+- scope：`B4_B7_B8_2025_FINAL_TEST_ONLY`（payload scope 同前）
+- 冻结绑定：authority 模板 SHA-256
+  `6946eb7db26e7ed6c8a0e7c6d4254ead0a684433e2b29862489b65861adbedef`、implementation digest
+  `c6d614b921e05f3d116c1793381607f90b253d026d116b344fdbedbe995c017e`（9 文件）
+- 模型/人口/预算不变：12 个 E9 检查点、847 eligible 场景、按场景读取 7,623 次 /
+  24,351,305,156 B、唯一文件集 6,990 文件 / 23,820,342,517 B、权重 643,891,462 B
+- 零训练、零调参、零选择、零重试；失败即停并保留 `failure.json`
+- 获批后：签发 `created_utc` 晚于批准时刻的 authority/payload 授权 → 单次运行 → 独立核验 →
+  提交推送并汇报主比较（B7_REAL−B7_ZERO_DOTE；Brier + conditional Pinball）
+
+回复“批准重跑（推荐）”即视为一次明确授权；回复停止则不再执行。
+

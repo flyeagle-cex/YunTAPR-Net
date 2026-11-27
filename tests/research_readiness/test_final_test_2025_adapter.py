@@ -212,8 +212,8 @@ def test_build_scene_inputs_synthetic(monkeypatch):
     for slot in range(6):
         nominal = planning.utc(scene[f'slot_{slot:02d}_nominal'])
         frames.append({'slot': slot, 'nominal': nominal.isoformat(),
-                       'obs_start': (nominal - timedelta(minutes=2)).isoformat(),
-                       'obs_end': (nominal + timedelta(minutes=2)).isoformat(),
+                       'obs_start': (nominal + timedelta(seconds=40)).isoformat(),
+                       'obs_end': (nominal + timedelta(minutes=9, seconds=38)).isoformat(),
                        'date_created': None, 'relative_path': scene[f'slot_{slot:02d}_relative_path'],
                        'bytes': 1, 'sha256': '0' * 64, 'channels': list(CHANNELS),
                        'full_valid': True})
@@ -243,7 +243,22 @@ def test_build_scene_inputs_synthetic(monkeypatch):
         lambda frame: (np.zeros((8, 100, 100), dtype=np.float32),
                        np.ones((8, 100, 100), dtype=bool))))
 
+    captured = {}
+    real_prepare = adapter.readers.prepare_multispectral_2025
+
+    def spy_prepare(values, source_valid, **kwargs):
+        captured['starts'] = kwargs['obs_start_times'][0]
+        captured['ends'] = kwargs['obs_end_times'][0]
+        return real_prepare(values, source_valid, **kwargs)
+
+    monkeypatch.setattr(adapter.readers, 'prepare_multispectral_2025', spy_prepare)
+
     inputs = adapter.build_scene_inputs(payload, frozen, device='cpu')
+    # Real Himawari frames start 40 seconds after the nominal bin and end inside
+    # the same ten-minute bin; the frozen whole-minute clock must not be applied.
+    assert [moment.second for moment in captured['starts']] == [40] * 6
+    assert [moment.second for moment in captured['ends']] == [38] * 6
+    assert all(moment.microsecond == 0 for moment in captured['starts'])
     assert inputs.x.shape == (1, 42, 501, 501)
     assert inputs.x.dtype == torch.float32
     assert inputs.environment.shape == (1, 13, 100, 100)

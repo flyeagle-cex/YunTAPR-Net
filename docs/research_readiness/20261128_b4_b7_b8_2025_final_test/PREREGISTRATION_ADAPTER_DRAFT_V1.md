@@ -265,3 +265,42 @@ authority（SHA-256 `bb596dd5…`）与 payload 授权（SHA-256 `8f9a65a3…`�
 零更新、零反向、零重试。按“失败即停、不自动重试”约定，**重新执行需要研究者一次新的明确授权**
 （同 scope、单次、重新签发 created_utc 晚于批准时刻的 authority 与 payload 授权）。本记录不
 代表任何科学结局。
+
+## 18. 执行尝试 D（重授权后子分钟时钟 STOP、修复与第二轮无载荷预检，2026-11-27）
+
+研究者 2026-11-27 21:27 批准“重跑”后签发 `created_utc=2026-11-27T13:28:00+00:00` 的
+authority（SHA-256 `543FD90116FFAE6E52C92EFF13A5058D578518DD71D7888B02931739E35D30E5`）与
+payload 授权（SHA-256 `43786267F51D8E07137B5048D2E7F590F89B9756DE5C59AACCAB53BFE6D52B1A`），
+真实 loader 校验通过、`--dry-run` 通过。尝试 D 输出目录 `run_20261127T132800Z`；共打开 9 个
+2025 源文件（6 卫星 + 2 GFS + 1 IMERG，32,563,149 B）后，在 `build_scene_inputs` 对真实帧
+`obs_start` 调用 `planning.utc` 时因“Whole-minute 2025 final-test clock required”STOP；
+`failure.json` 267 B（SHA-256 `2f99712f7ab23641ea660bc93951d58f9b0db58ce1802c5cae6d8b7f91ccffde`）、
+ledger 为空、零指标、零前向、零 checkpoint 加载、零训练。
+
+修复：适配器新增 `_frame_moment()`（`datetime.fromisoformat`、要求 tz-aware；nominal 仍整分钟，
+真实帧起止在名义 bin 内偏移），`build_scene_inputs` 的 `obs_start_times/obs_end_times` 改用该
+解析；测试 fixture 时间窗改为真实约定（nominal+40 s 到 nominal+9 min 38 s），adapter 测试
+16 passed，全套 2025 测试 **70 passed / 1 skipped**。
+
+第二轮无载荷预检（不打开任何 2025 源）：
+
+1. `preflight_model_load`：真实 authority + frozen inputs 加载 12 个 E9 检查点，
+   epoch/updates/identity/参数计数（B4 4,355,986；B7/B8/ZERO_DOTE 4,411,058）全部通过。
+2. `preflight_scene_chain`：用一份 2023 年 Himawari 文件（SHA-256 `f8ab655c…`，允许年份）
+   的真实 7 通道值构造 6 帧卫星张量，配以 canonical 合成 13 通道环境帧与冻结 SP04 网格上的
+   合成目标，走完整 `build_scene_inputs` → 多光谱归一化 → MEE 归一化 → PhysicalDOTE /
+   ZeroNumericDOTE → 四族模型 CUDA BF16 autocast 前向 → `FinalTest2025Accumulator`：
+   x=(1,42,501,501)、environment=(1,13,100,100)、dynamic=(1,8,100,100)（valid 36,104、
+   ZERO 控制精确 0）、监督像元 3,430；四族指标与 paired 描述结构均有限且符合契约。
+
+证据归档：尝试 D 的 `failure.json`、空 ledger 与两份已消费授权复制到 gitignored
+`docs/research_readiness/.local/final_test_invalid_runs/`（`ARCHIVE_MANIFEST.json` 记录逐文件
+SHA-256）；公开输出根 `E:\YunTAPR_2025_12model_final_test` 已清空。authority 模板按修复后的
+9 个实现文件重新封签：模板 SHA-256
+`6946eb7db26e7ed6c8a0e7c6d4254ead0a684433e2b29862489b65861adbedef`、implementation digest
+`c6d614b921e05f3d116c1793381607f90b253d026d116b344fdbedbe995c017e`、threads 2。
+
+治理：尝试 D 再次消耗了一次研究者授权，且打开了 9 个 2025 源文件；按“失败即停、不自动重试”
+约定，**修复版执行仍需研究者一次新的明确授权**（同 scope、单次、重签 `created_utc` 晚于批准
+时刻的 authority 与 payload 授权）。本节不构成任何科学结果，2025 数据不得回流调参。
+

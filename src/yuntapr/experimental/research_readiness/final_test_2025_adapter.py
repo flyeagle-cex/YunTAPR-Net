@@ -541,6 +541,23 @@ def _as_tensor(array: Any, dtype: torch.dtype) -> torch.Tensor:
     return torch.as_tensor(np.asarray(array), dtype=dtype)
 
 
+def _frame_moment(value: Any) -> datetime:
+    """Parse one observed-frame timestamp without the frozen whole-minute clock.
+
+    Nominal frame labels sit on whole minutes, but real Himawari frames start a
+    few seconds after their nominal bin and end inside the same ten-minute bin.
+    ``planning.utc`` intentionally rejects sub-minute payload clocks, so frame
+    start/end instants are parsed here and validated downstream by the readers'
+    ten-minute-bin rule and ``prepare_multispectral_2025`` interval ordering.
+    """
+    if not isinstance(value, str):
+        raise ValueError('ISO timestamp string required for observation frames')
+    moment = datetime.fromisoformat(value)
+    if moment.tzinfo is None or moment.utcoffset() is None:
+        raise ValueError('Timezone-aware observation frame required')
+    return moment
+
+
 def build_scene_inputs(payload: Mapping[str, Any], frozen: FrozenInputs, *,
                        device: str | torch.device = 'cpu') -> SceneInputs:
     """Turn one bounded read payload into the exact B4/B7/B8 input tensors."""
@@ -568,8 +585,8 @@ def build_scene_inputs(payload: Mapping[str, Any], frozen: FrozenInputs, *,
         values[None], masks[None], source_channels=CHANNELS, selected_channels=CHANNELS,
         units={channel: 'K' for channel in CHANNELS}, normalization=frozen.spectral,
         nominal_times=[[planning.utc(frame['nominal']) for frame in frames]],
-        obs_start_times=[[planning.utc(frame['obs_start']) for frame in frames]],
-        obs_end_times=[[planning.utc(frame['obs_end']) for frame in frames]],
+        obs_start_times=[[_frame_moment(frame['obs_start']) for frame in frames]],
+        obs_end_times=[[_frame_moment(frame['obs_end']) for frame in frames]],
         analysis_times=[analysis],
         expected_offsets_before_analysis_minutes=planning.SATELLITE_OFFSETS_MINUTES,
         source_grid=native, expected_grid=native, missing_policy='reject')
