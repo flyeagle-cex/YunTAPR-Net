@@ -94,3 +94,19 @@
 - V3 冻结：固定副本 `D:\研究\极端降水预测\YunTAPR-Stage4-Eval-Exec-8d24667`（HEAD `8d24667`、干净）；私有命名空间 `docs/research_readiness/.local/train_stage4_multiseed_dev_eval_v3`；输出根 `F:\pytorch\Research\YunTAPR_stage4_multiseed_dev_eval_20261127_v3`（不存在，父目录存在）；规范提案 SHA-256 `38d2e9d5a832e663d263eca65173882fbf418141e4b4395cc4a54d012164d9d6`、私有准备 SHA-256 `08e047ef547e4d518ec4c6ac60ec571af77abd897c3f59c141bc671a30dc3b44`；公开副本 `STAGE45_STEP4_EVALUATION_EXECUTION_PROPOSAL_V3.json`（100,738 B，LF 无 CRLF，文件 SHA-256 `752AB1C967E12C48E77E22D0815CDACEC3A65A0777FDE84B9121DBB76B6271B7`，与私有原样字节一致）。
 - 准入干跑：`VERTICAL_CHECKED_OK`（HEAD `8d24667`；四任务 REAL_s2030/ZERO_s2030/REAL_s2031/ZERO_s2031；checkpoint 身份 `ee7f81da…`/`c8e0f574…`/`ce2aad58…`/`47022bd5…`；父提案文件 `0648beb6…`/内部 `cd5948b6…`、静态地形 `788572b1…`、运行解释器 `0562f573…`、q1 参考 sha `5a25a2dc…`；spec 环境固定 `PYTHONHASHSEED=2029`（子进程按任务 seed 覆盖）；预算 31,812 payload opens / 106,989,518,072 B / 4 checkpoint loads / 4 forwards / 7,200 s 不变）。
 - 状态：`READY_WAITING_EXACT_RESEARCHER_APPROVAL`、`authorized=False`、`final_2025_access=False`；尚未执行；获批后单次派发并记录四任务终态与两对 REAL−ZERO 描述指标；证据边界保持 `NOT_VERIFIED`。
+
+## V3 执行终态（A 包，2026-11-27）
+
+- 执行身份：规范提案 `38d2e9d5a832e663d263eca65173882fbf418141e4b4395cc4a54d012164d9d6`、执行代码 `8d246672de94d3574f2fd6fece308161676e984d`、固定副本 `YunTAPR-Stage4-Eval-Exec-8d24667`、批准 decision `DESCRIPTIVE_MULTISEED_REAL_ZERO_DEV_EVALUATION`（已消费）。
+- 终态：`target_exit` 2026-11-27T00:51:32.999655+00:00、`return_code` 0、`automatic_retry` false；`completion.json` status `COMPLETE_STAGE4_MULTISEED_DEV_EVALUATION`、`elapsed_seconds` 2,819.406；无 failure 收据。`completion.json` SHA-256 `87fe93d4b443d0aef92b1970b8bed5e99bce9c8ac7ef4d4f5269bd480a34b7d4`。
+- 四任务全部 COMPLETE 且 gate PASS（6 组 identity/counts/frozen_metrics，绝对/相对容差 1e-12）；saved elevation gate 全部 true；总体 963 场景 / 3,303,090 监督像元 / 407,820 有雨 / 717 强雨（每任务相同）。
+- 任务账本：每任务 121 批前向、1 次前向、0 更新；逐像元数组 121 分片 / 881,894,762 B/任务；四任务合计 484 分片 / 3,527,579,048 B。`totals`：科学打开 31,812 + 元数据 918 = 32,730；源字节 107,603,418,554；检查点加载 4；模型前向 4；优化器更新 0。
+- 检查点（epoch-9）：REAL_s2030 `ee7f81da…`/53,906,437 B、ZERO_s2030 `c8e0f574…`/53,906,757 B、REAL_s2031 `ce2aad58…`/53,906,885 B、ZERO_s2031 `47022bd5…`/53,906,885 B。
+- 公开脱敏收据：`STAGE45_STEP4_EVALUATION_RESULTS_V1.json`（33526 B，SHA-256 `2318032d94882dac9df50cf4ce47b8b0e687ad041759f2f86660f4fb3a567ebc`）；含四任务身份/门表/账本、两对 `paired_metrics`（含 primary contrast 与海拔×雨强 cells）、Q1 汇总与证据边界。
+
+## A 包结果与 Q1 判定（2026-11-27）
+
+- 两对新 seed REAL−ZERO 山地强雨配对（primary population：海拔 ≥2000 m 且 FP32 truth >20；n_strong 各 178）primary contrast 均为 `DIRECTIONAL_LOCAL_DEGRADATION`；paired population SHA-256 `056ae0d9…`（与 2029 一致）；paired_metrics 文件 SHA-256：seed2030 `38da3900a3aa6479d6c314d4e597ebad0e85a1da615803417b21194f7489a207`、seed2031 `5b2099448ea30c2a396f4a93a879203b9eda6b546b5165ac80d379a00a87c434`。
+- Q1 判定：**`TERRAIN_MECHANISM_NOT_REPRODUCED`**。log Pinball REAL−ZERO：2029 −0.0018427840817258874、2030 +0.0036674256791323595、2031 +0.0015519734424627673（同号数 1，三 seed 均值 +0.0011255383466230798，均值符号不同）；物理 Pinball/20：2029 −0.0006961972905197065、2030 +0.0010402713413337286、2031 +0.00012613554743084573（同号数 1，均值 +0.0001567365327482893）。按预注册规则（≥2/3 同号且均值同号）不成立，记录为 `NOT_REPRODUCED`，不调整阈值、不二次尝试。
+- 解释边界：2029 的局部改善未能跨 seed 复现；两个新 seed 的 Dev 山区配对方向为局部退化。`scientific_status=NOT_VERIFIED`；本结果只用于 Q1 判定与 B 包设计，不构成 2025 访问、训练或最终科学验收。
+- 下一步：按预注册 Q2/Q3 准备并冻结工作包 B（冻结候选跨 3 个 REAL seed 九门复现 + ZERO 描述性对照；预算上限 ≤18,000,000,000 B / ≤3,700 打开），另行请求一次明确批准。

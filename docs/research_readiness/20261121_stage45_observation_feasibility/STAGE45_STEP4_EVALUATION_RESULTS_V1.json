@@ -1,0 +1,937 @@
+{
+  "status": "COMPLETE_STAGE4_MULTISEED_DEV_EVALUATION",
+  "kind": "BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION",
+  "scope": "FOUR_MODEL_COSINE9_REAL_ZERO_DEV_MOUNTAIN_EVALUATION_V1",
+  "decision": "DESCRIPTIVE_MULTISEED_REAL_ZERO_DEV_EVALUATION",
+  "proposal_sha256": "38d2e9d5a832e663d263eca65173882fbf418141e4b4395cc4a54d012164d9d6",
+  "code_commit": "8d246672de94d3574f2fd6fece308161676e984d",
+  "elapsed_seconds": 2819.4060000000004,
+  "scientific_status": "NOT_VERIFIED",
+  "scientific_acceptance": "NOT_VERIFIED",
+  "final_2025_access": false,
+  "access_2025": false,
+  "automatic_retry": false,
+  "replay": false,
+  "tasks": [
+    {
+      "task": "REAL_s2030",
+      "arm": "REAL",
+      "seed": 2030,
+      "model": "B7",
+      "status": "COMPLETE",
+      "dynamic_control": "REAL_PHYSICAL_DOTE",
+      "checkpoint": {
+        "sha256": "ee7f81da1c6edf08b9417aff188bd3f00531bd768ff6cf0440434ad4bee204fc",
+        "bytes": 53906437,
+        "loads": 1
+      },
+      "dev_report": {
+        "sha256": "1477f7eb74b0da3e341c6e7bc6e43b77a825ab049693a213039c5c5a23726f87",
+        "bytes": 1885112
+      },
+      "tail_report": {
+        "sha256": "a92e8003a33567e92ad9888c8b85eea89cbcc188ced64868d93764d011349047",
+        "bytes": 1521512
+      },
+      "recomputed_report_sha256": "c74886be3f468cbeeea35d8205c5ee24a7cc13b7b219458c6deb87c1857732d2",
+      "point_metrics_sha256": "612260498be18ca591ba3658e8c5fa2ee8019e3e1a1684c6f91739f649662332",
+      "terrain_metrics_sha256": "ad1cef8555cbfa7e1289f36af057ce65c4720ac775cfb9f4a7e8d21430ce37d8",
+      "dev_readout_sha256": "7cd0c2eec7cebb3a7bb9ceae024f54f00190405595dc1926297d5e6e33675c13",
+      "gate": {
+        "passed": true,
+        "groups": {
+          "all": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_00": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_06": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_12": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_18": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "scene_max_ge20": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          }
+        },
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-12
+      },
+      "saved_elevation_gate": true,
+      "population": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "n_strong": 717
+      },
+      "forward_calls": 121,
+      "model_inference_passes": 1,
+      "optimizer_updates": 0,
+      "arrays_batch_count": 121,
+      "arrays_bytes": 881894762
+    },
+    {
+      "task": "ZERO_s2030",
+      "arm": "ZERO",
+      "seed": 2030,
+      "model": "B7",
+      "status": "COMPLETE",
+      "dynamic_control": "ZERO_NUMERIC_RETAIN_REAL_MASKS",
+      "checkpoint": {
+        "sha256": "c8e0f5747b2236174e54511b1f461868cac4d53fe8cffa9e87b189d4403a75c6",
+        "bytes": 53906757,
+        "loads": 1
+      },
+      "dev_report": {
+        "sha256": "95cb4976ffca9f2aede44f034da1683f3cdf7890cdaf5be9d3a5a3cf9802b14e",
+        "bytes": 1885883
+      },
+      "tail_report": {
+        "sha256": "69a580c185134e92f31e594ab36d5318c550ed69b82f27da0926fa474619f509",
+        "bytes": 1521824
+      },
+      "recomputed_report_sha256": "b32c88d83702f678071941b74a778f511bd3c4efd742db34ecf34f51aa7ebf47",
+      "point_metrics_sha256": "2d3a82b5075226760c905d26340e8f4e6520bbc4af8f1562d67a652669993b50",
+      "terrain_metrics_sha256": "4a64aab8461220168972a56a0a5a341c127d3e7f0e016bcfe6fe1cbd4e78b106",
+      "dev_readout_sha256": "364eaf7c7b1cbe4f153e53ccb02304b464af7b75ab18777beaac33deb440f1c6",
+      "gate": {
+        "passed": true,
+        "groups": {
+          "all": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_00": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_06": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_12": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_18": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "scene_max_ge20": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          }
+        },
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-12
+      },
+      "saved_elevation_gate": true,
+      "population": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "n_strong": 717
+      },
+      "forward_calls": 121,
+      "model_inference_passes": 1,
+      "optimizer_updates": 0,
+      "arrays_batch_count": 121,
+      "arrays_bytes": 881894762
+    },
+    {
+      "task": "REAL_s2031",
+      "arm": "REAL",
+      "seed": 2031,
+      "model": "B7",
+      "status": "COMPLETE",
+      "dynamic_control": "REAL_PHYSICAL_DOTE",
+      "checkpoint": {
+        "sha256": "ce2aad589e29a9ac4bf29ed9595f107b263f14b6f30596b92baf0bb760ab126d",
+        "bytes": 53906885,
+        "loads": 1
+      },
+      "dev_report": {
+        "sha256": "b71a1aeec0084206a647afc89d123083b9dfab925af11b21119aa4ecfeca75ee",
+        "bytes": 1884984
+      },
+      "tail_report": {
+        "sha256": "47dcc07b913ae0b36c358a6574ed0a88c0c87c104eb2b30687739ece224dd6ea",
+        "bytes": 1523273
+      },
+      "recomputed_report_sha256": "7509047ee55d469e2c55b5271ea9260fd1b8c1c9ea5378feead213466a31026f",
+      "point_metrics_sha256": "1cd1fa8a661860b69cb9204a9d1591f24be32033566a7eb48de0a27869100a71",
+      "terrain_metrics_sha256": "965a2b617e20341443b1ced49112124be3c2618a1e351eebfb57c76211f6579e",
+      "dev_readout_sha256": "877ee233c167d5d87b567f55d6ab2007bcc1d881f37bef946f855e89d3f2ca92",
+      "gate": {
+        "passed": true,
+        "groups": {
+          "all": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_00": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_06": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_12": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_18": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "scene_max_ge20": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          }
+        },
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-12
+      },
+      "saved_elevation_gate": true,
+      "population": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "n_strong": 717
+      },
+      "forward_calls": 121,
+      "model_inference_passes": 1,
+      "optimizer_updates": 0,
+      "arrays_batch_count": 121,
+      "arrays_bytes": 881894762
+    },
+    {
+      "task": "ZERO_s2031",
+      "arm": "ZERO",
+      "seed": 2031,
+      "model": "B7",
+      "status": "COMPLETE",
+      "dynamic_control": "ZERO_NUMERIC_RETAIN_REAL_MASKS",
+      "checkpoint": {
+        "sha256": "47022bd59ba399c7773d482c7f0ae71017212d50435f90f10d6062b3bfa2faba",
+        "bytes": 53906885,
+        "loads": 1
+      },
+      "dev_report": {
+        "sha256": "1795590c81649085c97b82f332f740142504700f2504b6870a709c543e565555",
+        "bytes": 1885440
+      },
+      "tail_report": {
+        "sha256": "83be8ec1ee2b271af128fd983e9fedf4707a17675deb3f6c7b7592964887913c",
+        "bytes": 1523375
+      },
+      "recomputed_report_sha256": "e8eed9347a91c96b2f10d53ff89a64c81a511eb0b858554ae263a0a9ac9367b6",
+      "point_metrics_sha256": "f564ec1d206d95371735a062f9a7ad258eb8aa96a5be31275ee1fedbac14c28f",
+      "terrain_metrics_sha256": "8b51e1dbde3cf7efddecb1284349791c88c28d1f66eaba9ea5b39e4fcbba784c",
+      "dev_readout_sha256": "51b33e99f0be09294eac77ff9b96e3efaa267165f8ef39e9c3feeecdf1a4356c",
+      "gate": {
+        "passed": true,
+        "groups": {
+          "all": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_00": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_06": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_12": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "analysis_UTC_18": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          },
+          "scene_max_ge20": {
+            "identity": "PASS",
+            "counts": "PASS",
+            "frozen_metrics": "PASS"
+          }
+        },
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-12
+      },
+      "saved_elevation_gate": true,
+      "population": {
+        "scenes": 963,
+        "n_valid": 3303090,
+        "n_rain": 407820,
+        "n_strong": 717
+      },
+      "forward_calls": 121,
+      "model_inference_passes": 1,
+      "optimizer_updates": 0,
+      "arrays_batch_count": 121,
+      "arrays_bytes": 881894762
+    }
+  ],
+  "pairing": {
+    "2030": {
+      "real": "REAL_s2030",
+      "zero": "ZERO_s2030",
+      "real_checkpoint_sha256": "ee7f81da1c6edf08b9417aff188bd3f00531bd768ff6cf0440434ad4bee204fc",
+      "zero_checkpoint_sha256": "c8e0f5747b2236174e54511b1f461868cac4d53fe8cffa9e87b189d4403a75c6",
+      "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+      "primary_contrast_status": "DIRECTIONAL_LOCAL_DEGRADATION"
+    },
+    "2031": {
+      "real": "REAL_s2031",
+      "zero": "ZERO_s2031",
+      "real_checkpoint_sha256": "ce2aad589e29a9ac4bf29ed9595f107b263f14b6f30596b92baf0bb760ab126d",
+      "zero_checkpoint_sha256": "47022bd59ba399c7773d482c7f0ae71017212d50435f90f10d6062b3bfa2faba",
+      "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+      "primary_contrast_status": "DIRECTIONAL_LOCAL_DEGRADATION"
+    }
+  },
+  "paired_metrics": {
+    "2030": {
+      "sha256": "38da3900a3aa6479d6c314d4e597ebad0e85a1da615803417b21194f7489a207",
+      "status": "DESCRIPTIVE_MATCHED_MOUNTAIN_EVALUATION",
+      "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+      "primary_contrast": {
+        "status": "DIRECTIONAL_LOCAL_DEGRADATION",
+        "n_strong": 178,
+        "real_minus_zero": {
+          "log_pinball": 0.0036674256791323595,
+          "physical_pinball_over20": 0.0010402713413337286
+        }
+      },
+      "cells": {
+        "elevation_lt_1000m": [
+          {
+            "n_rain": 14877,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.09568189894910947,
+            "zero_log_pinball": 0.0957932265993586,
+            "real_physical_pinball_over20": 0.009424807780807417,
+            "zero_physical_pinball_over20": 0.009442565417586955
+          },
+          {
+            "n_rain": 10416,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.1424514582627082,
+            "zero_log_pinball": 0.14233656109435003,
+            "real_physical_pinball_over20": 0.021356258821697942,
+            "zero_physical_pinball_over20": 0.021386737605963758
+          },
+          {
+            "n_rain": 1897,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.3083707258355632,
+            "zero_log_pinball": 0.3061408622316468,
+            "real_physical_pinball_over20": 0.0780110894306192,
+            "zero_physical_pinball_over20": 0.07755822686737772
+          },
+          {
+            "n_rain": 517,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.47911503599276667,
+            "zero_log_pinball": 0.4736550532874096,
+            "real_physical_pinball_over20": 0.1900838675105841,
+            "zero_physical_pinball_over20": 0.18827937619492716
+          },
+          {
+            "n_rain": 65,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.7488972396783118,
+            "zero_log_pinball": 0.7446330090053358,
+            "real_physical_pinball_over20": 0.43611567394097256,
+            "zero_physical_pinball_over20": 0.43391673261957986
+          },
+          {
+            "n_rain": 23,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.8899787071485652,
+            "zero_log_pinball": 0.8778794810403958,
+            "real_physical_pinball_over20": 0.7397790779240335,
+            "zero_physical_pinball_over20": 0.7339774968111198
+          },
+          {
+            "n_rain": 1,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": 1.105650595438668,
+            "zero_log_pinball": 1.1156106240809815,
+            "real_physical_pinball_over20": 1.1305006955629515,
+            "zero_physical_pinball_over20": 1.1344116873593189
+          }
+        ],
+        "elevation_1000_to_2000m": [
+          {
+            "n_rain": 139658,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.08886291062305055,
+            "zero_log_pinball": 0.08887791695974016,
+            "real_physical_pinball_over20": 0.008464958882571136,
+            "zero_physical_pinball_over20": 0.008463952212593278
+          },
+          {
+            "n_rain": 83608,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.14621484309636254,
+            "zero_log_pinball": 0.1463088059436845,
+            "real_physical_pinball_over20": 0.021348116851965037,
+            "zero_physical_pinball_over20": 0.021393886318274043
+          },
+          {
+            "n_rain": 13368,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.3306516489545613,
+            "zero_log_pinball": 0.3291548380759032,
+            "real_physical_pinball_over20": 0.08180475020565824,
+            "zero_physical_pinball_over20": 0.08151257039376392
+          },
+          {
+            "n_rain": 3063,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.520409510218326,
+            "zero_log_pinball": 0.5152829324213967,
+            "real_physical_pinball_over20": 0.20211355416878007,
+            "zero_physical_pinball_over20": 0.20055537872620546
+          },
+          {
+            "n_rain": 348,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.7557607604410524,
+            "zero_log_pinball": 0.7485216678238636,
+            "real_physical_pinball_over20": 0.43949586518560696,
+            "zero_physical_pinball_over20": 0.4370767090464938
+          },
+          {
+            "n_rain": 97,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.9225856218591287,
+            "zero_log_pinball": 0.916421468848694,
+            "real_physical_pinball_over20": 0.716226644222416,
+            "zero_physical_pinball_over20": 0.7132508766427719
+          },
+          {
+            "n_rain": 5,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": 1.259233195447226,
+            "zero_log_pinball": 1.266580170109344,
+            "real_physical_pinball_over20": 1.372093374661313,
+            "zero_physical_pinball_over20": 1.3742676424116567
+          }
+        ],
+        "elevation_ge_2000m": [
+          {
+            "n_rain": 91938,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.08298900931335171,
+            "zero_log_pinball": 0.08308822577606603,
+            "real_physical_pinball_over20": 0.007444087776638558,
+            "zero_physical_pinball_over20": 0.007457465328475978
+          },
+          {
+            "n_rain": 41662,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.14708960693729278,
+            "zero_log_pinball": 0.1469227306193624,
+            "real_physical_pinball_over20": 0.020382692289872387,
+            "zero_physical_pinball_over20": 0.02040668479910235
+          },
+          {
+            "n_rain": 4880,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.372534241031589,
+            "zero_log_pinball": 0.3684852882656463,
+            "real_physical_pinball_over20": 0.08933679546322504,
+            "zero_physical_pinball_over20": 0.08848774113198812
+          },
+          {
+            "n_rain": 1219,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.5889281498642833,
+            "zero_log_pinball": 0.5817660048863103,
+            "real_physical_pinball_over20": 0.22051058800931206,
+            "zero_physical_pinball_over20": 0.21849085027644038
+          },
+          {
+            "n_rain": 151,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.8593941697787343,
+            "zero_log_pinball": 0.8554450447489598,
+            "real_physical_pinball_over20": 0.4719217643905021,
+            "zero_physical_pinball_over20": 0.47079656440764384
+          },
+          {
+            "n_rain": 27,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.9712248007752012,
+            "zero_log_pinball": 0.969132804797808,
+            "real_physical_pinball_over20": 0.7185602431588215,
+            "zero_physical_pinball_over20": 0.7179949431089766
+          },
+          {
+            "n_rain": 0,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": null,
+            "zero_log_pinball": null,
+            "real_physical_pinball_over20": null,
+            "zero_physical_pinball_over20": null
+          }
+        ]
+      },
+      "evaluation_contract": {
+        "profile": "MOUNTAIN_TERRAIN_PAIR_V1",
+        "direction": "REAL_MINUS_ZERO",
+        "elevation_edges_m": [
+          1000.0,
+          2000.0
+        ],
+        "rainfall_edges_mm_h": [
+          0.1,
+          1.0,
+          5.0,
+          10.0,
+          20.0,
+          30.0,
+          50.0,
+          null
+        ],
+        "primary_population": "elevation_ge_2000m_AND_float32_R_strictly_gt20",
+        "primary_metrics": [
+          "log_pinball",
+          "physical_pinball_over20"
+        ],
+        "roundoff_tolerance": 1e-10,
+        "purpose": "EXPLORATORY_LOCAL_INCREMENT_AND_GLOBAL_TRADEOFF_DESCRIPTION",
+        "empty_cells": "NOT_ESTIMABLE",
+        "inference": "ONE_FIXED_E9_PASS_PER_ARM_NO_TRAINING",
+        "independent_event_count": "NOT_IDENTIFIED",
+        "scientific_status": "NOT_VERIFIED"
+      }
+    },
+    "2031": {
+      "sha256": "5b2099448ea30c2a396f4a93a879203b9eda6b546b5165ac80d379a00a87c434",
+      "status": "DESCRIPTIVE_MATCHED_MOUNTAIN_EVALUATION",
+      "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+      "primary_contrast": {
+        "status": "DIRECTIONAL_LOCAL_DEGRADATION",
+        "n_strong": 178,
+        "real_minus_zero": {
+          "log_pinball": 0.0015519734424627673,
+          "physical_pinball_over20": 0.00012613554743084573
+        }
+      },
+      "cells": {
+        "elevation_lt_1000m": [
+          {
+            "n_rain": 14877,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.09739588103800047,
+            "zero_log_pinball": 0.09716325090278312,
+            "real_physical_pinball_over20": 0.009708011211560728,
+            "zero_physical_pinball_over20": 0.00967278775668025
+          },
+          {
+            "n_rain": 10416,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.14350473086689067,
+            "zero_log_pinball": 0.14402737332207022,
+            "real_physical_pinball_over20": 0.021696487734630662,
+            "zero_physical_pinball_over20": 0.021789368087188246
+          },
+          {
+            "n_rain": 1897,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.3021044063493691,
+            "zero_log_pinball": 0.30298275311996087,
+            "real_physical_pinball_over20": 0.07661259624302257,
+            "zero_physical_pinball_over20": 0.0768055675273492
+          },
+          {
+            "n_rain": 517,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.46153227681611486,
+            "zero_log_pinball": 0.46008955789187456,
+            "real_physical_pinball_over20": 0.1848038095221252,
+            "zero_physical_pinball_over20": 0.18420602392126934
+          },
+          {
+            "n_rain": 65,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.7278636275074611,
+            "zero_log_pinball": 0.7226273264324231,
+            "real_physical_pinball_over20": 0.43064938037850053,
+            "zero_physical_pinball_over20": 0.4277231943091164
+          },
+          {
+            "n_rain": 23,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.8499082161040974,
+            "zero_log_pinball": 0.8449699115520309,
+            "real_physical_pinball_over20": 0.7241026455213454,
+            "zero_physical_pinball_over20": 0.7210026683223056
+          },
+          {
+            "n_rain": 1,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": 1.0130445263430494,
+            "zero_log_pinball": 1.0004969056269084,
+            "real_physical_pinball_over20": 1.0939767031520677,
+            "zero_physical_pinball_over20": 1.0864145061613826
+          }
+        ],
+        "elevation_1000_to_2000m": [
+          {
+            "n_rain": 139658,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.09108563039509464,
+            "zero_log_pinball": 0.09098674797646045,
+            "real_physical_pinball_over20": 0.008765339700903266,
+            "zero_physical_pinball_over20": 0.008752318411501515
+          },
+          {
+            "n_rain": 83608,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.14575009961335766,
+            "zero_log_pinball": 0.14597096267809306,
+            "real_physical_pinball_over20": 0.021452240525964023,
+            "zero_physical_pinball_over20": 0.021476375104128812
+          },
+          {
+            "n_rain": 13368,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.3220809925204491,
+            "zero_log_pinball": 0.322223975951597,
+            "real_physical_pinball_over20": 0.08013703783875215,
+            "zero_physical_pinball_over20": 0.08014136283492322
+          },
+          {
+            "n_rain": 3063,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.5011233092344399,
+            "zero_log_pinball": 0.5005359326692819,
+            "real_physical_pinball_over20": 0.19680550934256835,
+            "zero_physical_pinball_over20": 0.19647964255508638
+          },
+          {
+            "n_rain": 348,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.7319175829642031,
+            "zero_log_pinball": 0.727248876759873,
+            "real_physical_pinball_over20": 0.43237022767690586,
+            "zero_physical_pinball_over20": 0.4299407139188341
+          },
+          {
+            "n_rain": 97,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.8841036735176764,
+            "zero_log_pinball": 0.8794783886493508,
+            "real_physical_pinball_over20": 0.7014608307115823,
+            "zero_physical_pinball_over20": 0.6981627222118159
+          },
+          {
+            "n_rain": 5,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": 1.2331788618399415,
+            "zero_log_pinball": 1.2362859500150343,
+            "real_physical_pinball_over20": 1.3643429485048253,
+            "zero_physical_pinball_over20": 1.3647159712415409
+          }
+        ],
+        "elevation_ge_2000m": [
+          {
+            "n_rain": 91938,
+            "lower_exclusive": 0.1,
+            "upper_inclusive": 1.0,
+            "real_log_pinball": 0.08518060999111166,
+            "zero_log_pinball": 0.08526208269563497,
+            "real_physical_pinball_over20": 0.007721614028224704,
+            "zero_physical_pinball_over20": 0.0077350012555006805
+          },
+          {
+            "n_rain": 41662,
+            "lower_exclusive": 1.0,
+            "upper_inclusive": 5.0,
+            "real_log_pinball": 0.14574495322148856,
+            "zero_log_pinball": 0.14564219265019673,
+            "real_physical_pinball_over20": 0.02038118752062188,
+            "zero_physical_pinball_over20": 0.020378735358929874
+          },
+          {
+            "n_rain": 4880,
+            "lower_exclusive": 5.0,
+            "upper_inclusive": 10.0,
+            "real_log_pinball": 0.3559567419118767,
+            "zero_log_pinball": 0.35564016703928186,
+            "real_physical_pinball_over20": 0.08610079173606712,
+            "zero_physical_pinball_over20": 0.086047675940283
+          },
+          {
+            "n_rain": 1219,
+            "lower_exclusive": 10.0,
+            "upper_inclusive": 20.0,
+            "real_log_pinball": 0.5626211555725152,
+            "zero_log_pinball": 0.5618393791929036,
+            "real_physical_pinball_over20": 0.2137320710637255,
+            "zero_physical_pinball_over20": 0.21351830590165782
+          },
+          {
+            "n_rain": 151,
+            "lower_exclusive": 20.0,
+            "upper_inclusive": 30.0,
+            "real_log_pinball": 0.8410711413622574,
+            "zero_log_pinball": 0.8392118247397813,
+            "real_physical_pinball_over20": 0.46763353698940535,
+            "zero_physical_pinball_over20": 0.4674207683035474
+          },
+          {
+            "n_rain": 27,
+            "lower_exclusive": 30.0,
+            "upper_inclusive": 50.0,
+            "real_log_pinball": 0.9375766332775137,
+            "zero_log_pinball": 0.9377435050269775,
+            "real_physical_pinball_over20": 0.7071630250735916,
+            "zero_physical_pinball_over20": 0.7075213933744012
+          },
+          {
+            "n_rain": 0,
+            "lower_exclusive": 50.0,
+            "upper_inclusive": null,
+            "real_log_pinball": null,
+            "zero_log_pinball": null,
+            "real_physical_pinball_over20": null,
+            "zero_physical_pinball_over20": null
+          }
+        ]
+      },
+      "evaluation_contract": {
+        "profile": "MOUNTAIN_TERRAIN_PAIR_V1",
+        "direction": "REAL_MINUS_ZERO",
+        "elevation_edges_m": [
+          1000.0,
+          2000.0
+        ],
+        "rainfall_edges_mm_h": [
+          0.1,
+          1.0,
+          5.0,
+          10.0,
+          20.0,
+          30.0,
+          50.0,
+          null
+        ],
+        "primary_population": "elevation_ge_2000m_AND_float32_R_strictly_gt20",
+        "primary_metrics": [
+          "log_pinball",
+          "physical_pinball_over20"
+        ],
+        "roundoff_tolerance": 1e-10,
+        "purpose": "EXPLORATORY_LOCAL_INCREMENT_AND_GLOBAL_TRADEOFF_DESCRIPTION",
+        "empty_cells": "NOT_ESTIMABLE",
+        "inference": "ONE_FIXED_E9_PASS_PER_ARM_NO_TRAINING",
+        "independent_event_count": "NOT_IDENTIFIED",
+        "scientific_status": "NOT_VERIFIED"
+      }
+    }
+  },
+  "q1_summary": {
+    "status": "TERRAIN_MECHANISM_NOT_REPRODUCED",
+    "decision": "TERRAIN_MECHANISM_NOT_REPRODUCED",
+    "seeds": [
+      2029,
+      2030,
+      2031
+    ],
+    "per_metric": {
+      "log_pinball": {
+        "values": [
+          -0.0018427840817258874,
+          0.0036674256791323595,
+          0.0015519734424627673
+        ],
+        "signs": [
+          -1,
+          1,
+          1
+        ],
+        "same_sign_count": 1,
+        "three_seed_mean": 0.0011255383466230798,
+        "mean_same_sign": false,
+        "reference_sign": -1,
+        "decision": "NOT_REPRODUCED",
+        "n_strong": [
+          178,
+          178,
+          178
+        ]
+      },
+      "physical_pinball_over20": {
+        "values": [
+          -0.0006961972905197065,
+          0.0010402713413337286,
+          0.00012613554743084573
+        ],
+        "signs": [
+          -1,
+          1,
+          1
+        ],
+        "same_sign_count": 1,
+        "three_seed_mean": 0.0001567365327482893,
+        "mean_same_sign": false,
+        "reference_sign": -1,
+        "decision": "NOT_REPRODUCED",
+        "n_strong": [
+          178,
+          178,
+          178
+        ]
+      }
+    },
+    "primary_population": "elevation_ge_2000m_AND_float32_R_strictly_gt20",
+    "reference_2029": {
+      "n_strong": 178,
+      "real_minus_zero": {
+        "log_pinball": -0.0018427840817258874,
+        "physical_pinball_over20": -0.0006961972905197065
+      },
+      "paired_population_sha256": "056ae0d9168dd572383543e652b4f49462b868643d19d6dab0babc1ec21a18ba",
+      "file_sha256": "5a25a2dcb93ab907d62569d173f8b0a559b921e9905fdd57786a87337e5fe711"
+    },
+    "overall_rule": "REPRODUCED iff >=2 of 3 seeds share the 2029 sign and the 3-seed mean shares it; PARTIAL otherwise when one condition holds; NOT_REPRODUCED when neither holds",
+    "final_2025_access": false,
+    "scientific_status": "NOT_VERIFIED"
+  },
+  "totals": {
+    "scientific_open_instances": 31812,
+    "scientific_source_bytes": 106989517688,
+    "metadata_open_instances": 918,
+    "metadata_reserved_bytes": 613900866,
+    "total_open_instances": 32730,
+    "total_source_bytes": 107603418554,
+    "checkpoint_loads": 4,
+    "model_inference_passes": 4,
+    "forward_calls": 484,
+    "optimizer_updates": 0,
+    "arrays_batch_count": 484,
+    "arrays_bytes": 3527579048
+  },
+  "budget": {
+    "kind": "BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION",
+    "model": "B7",
+    "tasks": 4,
+    "total_scientific_file_opens": 32730,
+    "total_scientific_source_bytes": 108217319806,
+    "payload_open_instances": 31812,
+    "payload_archive_reference_bytes": 106989518072,
+    "metadata_open_instances": 918,
+    "metadata_archive_reference_bytes": 1227801734,
+    "per_task_payload_open_instances": 7953,
+    "per_task_payload_reference_bytes": 26747379518,
+    "per_task_metadata_open_instances": 459,
+    "per_task_metadata_reference_bytes": 306950433,
+    "development_files": 7950,
+    "development_bytes": 26639253112,
+    "development_opens_per_task": 7950,
+    "static_bytes": 312828,
+    "static_opens_per_task": 1,
+    "checkpoint_opens_per_task": 2,
+    "checkpoint_loads": 4,
+    "model_inference_passes": 4,
+    "forward_batches_per_model": 121,
+    "optimizer_updates": 0,
+    "retrains": 0,
+    "refits": 0,
+    "retries": 0,
+    "replays": 0,
+    "maximum_seconds": 7200,
+    "minimum_free_bytes": 8589934592,
+    "maximum_output_bytes": 4294967296,
+    "development_scenes": 963,
+    "development_batches": 121,
+    "validation_batch": 8,
+    "arrays_batch_count_per_model": 121
+  },
+  "evidence_boundary": [
+    "Four epoch-9 Dev forward passes only; no training, no optimizer step, no retry, no replay, no 2025 access.",
+    "All frozen-identity, count and frozen-metric gates passed at absolute/relative tolerance 1e-12 against the four saved epoch-9 Dev reports and tail elevation reports.",
+    "The two new REAL-ZERO mountain pairs are DIRECTIONAL_LOCAL_DEGRADATION; the 2029 reference pair was DIRECTIONAL_LOCAL_IMPROVEMENT (-0.001842784 log Pinball, -0.000696197 physical Pinball/20).",
+    "Q1 rule (>=2/3 seeds share the 2029 sign and the three-seed mean shares it) failed: only 2029 is negative; 2030/2031 are positive; decision TERRAIN_MECHANISM_NOT_REPRODUCED.",
+    "Q2 (frozen candidate across seed2030/2031) is not evaluated in this package; it remains part of work package B.",
+    "scientific_status remains NOT_VERIFIED; this is a descriptive Dev evaluation, not a final scientific acceptance."
+  ]
+}
