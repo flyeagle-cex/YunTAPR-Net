@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-11-27 B0 2025 一次性最终测试已执行（研究者明确批准）：按冻结协议 v1.1 完成一次只读推理，10,244 个 eligible 场景、35,136,920 个有效像元观测、4,882,555 个 rainy 像元观测。主要指标：global core loss 0.05151132978268864、occurrence loss 0.033797817841140915、quantile loss 0.017713511941547723、Brier 0.09896918546879455、AUROC 0.8972174938962962、Average Precision 0.6059135116913023、conditional mean pinball 0.12747388447425723、平均绝对覆盖误差 0.013060728770592453；crossing/nonfinite/support violation 均为 0。预算：B13 45,639,682,705 B + 214 个 IMERG 日文件 179,318,880 B = 45,819,001,585 B，raw_source_open_events 51,434；墙钟 1,676.59 秒；零训练、零调参、零参数更新、零重试；197 项独立只读核验通过。收据见 [B0_2025_FINAL_TEST_RESULTS_v1_1.json](../final_test_b0/formal_v1_1/B0_2025_FINAL_TEST_RESULTS_v1_1.json)，报告见 [B0_2025_FINAL_TEST_EXECUTION_REPORT_v1.pdf](../final_test_b0/B0_2025_FINAL_TEST_EXECUTION_REPORT_v1.pdf)。该结果仅对应冻结的 B0 FINAL（无独立 Dev 评价，本次为其唯一留出评价），不得回流调参/选择/校准；POD/FAR/CSI 阈值未冻结；非冻结诊断代理字段溢出已在报告披露且不参与任何主张。2025 一次性最终测试授权已消费，无遗留运行授权；创新模型 B1–B8 的 2025 最终测试仍需新协议、2025 多模态适配器与新的明确批准。
+
 2026-10-31结果汇总已交付：[四页单文件PDF](../../output/pdf/YunTAPR-Net_V1.3_极端降水审计结果汇总_20261031.pdf)。汇集已完成极端审计的主要结论、A方案逐seed阈值计数、三seed差值、20–50反例、峰值下界及后续零训练建议，PDF内含审计CSV、原报告和可修改LaTeX源码附件。只做保存结果的阅读整理，没有新增科研计算或2025载荷访问；原始数据和既有结果未覆盖。
 
 2026-10-31极端专项审计完成（存在明确证据缺口）：[报告](../research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.md)及[CSV](../research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv)。B4/B7/B8三个seed的九个E9身份通过；严格>20mm/h的A/B/C点估计全部漏掉同一717个像元时次，独立天气事件数不可识别。B7相对B4的20–50条件Pinball仅2/3改善，B8相对B7仅1/3；不能由总体收益宣称极端技能或物理机制验证。只复用原明细、补Precision与可证明的决策/峰值界，不新增训练或推理。下一步建议新增训练0，先冻结事件/边界定义并申请缺失评价明细，2025保持冻结；没有擅自选择最终模型。
@@ -127,7 +129,7 @@ E0/E1/E2 是损失臂，**不是** B0–B8 模型结构编号。seed2028 只有�
 - **Himawari/IMERG**：旧 B0/B1 的 2023 Train=10,455、2024 Dev=10,501 共同人口有冻结与评估证据。标签为分析时刻结束的半小时窗口，六帧历史槽位于分析前 60/50/40/30/20/10 分钟；这是回顾估计定义。新增七通道共同 QC 及统计已完成，B13 保留冻结统计，六个新波段仅用最终 2023 Train 拟合。
 - **GFS**：本次 B3/B4 使用固定 f006、valid=analysis、2023/2024 三月至十月的共同人口，分别 959/963 场景；只覆盖 00/06/12/18 UTC。13 变量及独立有效掩膜、地下压力层排除已进入 B4。2023 Train 统计 SHA 为 `53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980`，两模型共享人口 SHA 为 `2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8`。历史实际发布时间与完整产品转换来源链仍不足；**retrospective，不代表 operational NRT**。
 - **DEM/SRTM**：既有 237 tiles 审计记录云南覆盖 FULL，并有真实小窗口梯度与候选生产接口。DOTE 所需米制导数聚合、拼接边界、footprint 等生产/科学选项仍未全部冻结。没有本轮新读 DEM。
-- **2025**：既有 catalogue/QC-only 收据记录候选 10,272、eligible 10,244、reject 28，以及历史 2,676,986,256 次像元读取；模型 forward、checkpoint load 和最终指标计算均为零。**不能宣称历史从未读过 2025**。该旧 B13/IMERG catalogue 也不能证明七通道、GFS 等全部 2025 最终测试输入完整；全模态完整性为 `NOT_VERIFIED`。本轮仅核查旧收据，没有进入 2025 数据目录或读取载荷。[数据证据](evidence/data_and_modules.json)
+- **2025**：既有 catalogue/QC-only 收据记录候选 10,272、eligible 10,244、reject 28，以及历史 2,676,986,256 次像元读取；模型 forward、checkpoint load 和最终指标计算均为零。**不能宣称历史从未读过 2025**。该旧 B13/IMERG catalogue 也不能证明七通道、GFS 等全部 2025 最终测试输入完整；全模态完整性为 `NOT_VERIFIED`。本轮仅核查旧收据，没有进入 2025 数据目录或读取载荷。[数据证据](evidence/data_and_modules.json) 2026-11-27 更新：研究者批准后已按冻结协议 v1.1 执行一次 B0 2025 最终测试（B13/IMERG 单模态，10,244 场景；零训练、零参数更新、零重试），结果与边界见上；七通道/GFS 等全模态 2025 评价仍未授权、未执行、适配器未实现。
 
 ## 已核实的重要结果
 

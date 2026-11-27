@@ -1,0 +1,450 @@
+{
+ "task": "B0_2025_FINAL_TEST_EXECUTION",
+ "version": "v1.1",
+ "status": "EXECUTED_ONCE_UNDER_FROZEN_PROTOCOL",
+ "completed_utc": "2026-11-27T05:27:59.726491+00:00",
+ "run_id": "run_20261127T050003.131968Z",
+ "authorization": {
+  "path": "config/evaluation/b0_2025_final_test_authorization_v1.1.json",
+  "bytes": 6362,
+  "sha256": "ada75ca5de75c84c3515bca960a53d76de7796673d90dc1332b2b835765d9855",
+  "AUTHORIZED_BY": "RESEARCHER",
+  "scope": "B0_2025_MAR_SEP_FINAL_TEST_ONLY",
+  "created_utc": "2026-11-27T04:59:35.296718+00:00",
+  "researcher_instruction": "批准执行（推荐）",
+  "researcher_reference": "m04056"
+ },
+ "frozen_identity": {
+  "protocol_sha256": "b1be82d5bc03293c35ddc793faa1187e97fa48c537039181c0eb68a689f15eb8",
+  "catalogue_freeze_record_sha256": "0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f",
+  "candidate_catalogue_sha256": "b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d",
+  "eligible_population_manifest_sha256": "53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e",
+  "candidate_count": 10272,
+  "eligible_count": 10244,
+  "FINAL": {
+   "path_label": "F:/pytorch/Research/outputs/formal_training/b0_phase_b_finalfit/run_20261002T035929_487644Z/epoch_011.pt",
+   "sha256": "05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65",
+   "bytes": 52071595,
+   "epoch": 11,
+   "global_update": 128964,
+   "model_state_sha256": "d6e64fe6f3e38eb421806858fc0f484ebfb2ec0fcc952604813fa448f8e49944"
+  }
+ },
+ "execution": {
+  "entrypoint": "scripts/test_b0_2025_final_v1_1.py run",
+  "command_identity_sha256": "859e6f2cebc5a0b919580d44a596598bdc4dcd66062d34099c98903fa58b2963",
+  "created_utc": "2026-11-27T05:02:30.752125+00:00",
+  "completed_utc": "2026-11-27T05:27:59.726491+00:00",
+  "elapsed_seconds": 1528.974366,
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "torch": "2.11.0+cu128",
+  "python": "3.12.14",
+  "batch_size": 2,
+  "precision": "CUDA BF16 forward; FP32 parameters; FP64 metric accumulation",
+  "model_parameters_updated": false,
+  "optimizer_steps": 0,
+  "backward_calls": 0,
+  "automatic_retry": false
+ },
+ "population": {
+  "window_utc": [
+   "2025-03-01T00:00:00+00:00",
+   "2025-10-01T00:00:00+00:00"
+  ],
+  "cadence_minutes": 30,
+  "eligible_scenes": 10244,
+  "valid_pixel_observations": 35136920,
+  "rainy_pixel_observations": 4882555,
+  "rainy_prevalence": 0.13895796785830972,
+  "pixel_values_lower_bound": 2673694244,
+  "raw_source_open_events": 51434,
+  "source_bytes_read_lower_bound_advisory": 45819001585
+ },
+ "primary_metrics": {
+  "global_core_loss": 0.05151132978268864,
+  "occurrence_loss": 0.033797817841140915,
+  "quantile_loss": 0.017713511941547723,
+  "Brier": 0.09896918546879455,
+  "AUROC": 0.8972174938962962,
+  "Average_Precision": 0.6059135116913023,
+  "AUROC_convention": "TRAPEZOID_GROUPED_ROC_HALF_CREDIT_EXACT_TIES",
+  "AP_convention": "NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP",
+  "conditional_mean_pinball": 0.12747388447425723,
+  "per_tau_pinball": [
+   0.009766103847958708,
+   0.028860650410185536,
+   0.04604269823414376,
+   0.062310695272068894,
+   0.07821075979173109,
+   0.09280099483443383,
+   0.10622708561086568,
+   0.11871162660484867,
+   0.13044375146488618,
+   0.14077225462630902,
+   0.15028735472315768,
+   0.15879124955111723,
+   0.16597219856558806,
+   0.1723553761473956,
+   0.17729662802047924,
+   0.1812707852437868,
+   0.18399106442648955,
+   0.185479508957343,
+   0.18579900362084073,
+   0.1846985029184076,
+   0.18212438763896524,
+   0.17839018798710235,
+   0.1730057128462592,
+   0.1658916836742385,
+   0.1572998700758286,
+   0.14686395570123847,
+   0.13426552973406758,
+   0.11938086550959008,
+   0.10183903167394022,
+   0.08092454509215463,
+   0.055746191355773474,
+   0.023344049015029945
+  ],
+  "32_tau_conditional_coverage": [
+   0.003923560512887208,
+   0.07111727364054271,
+   0.08926760681651308,
+   0.10918852936628466,
+   0.1537025184560133,
+   0.1887278279507348,
+   0.2121360640074715,
+   0.23904717919204188,
+   0.27403664679660544,
+   0.3006638942111251,
+   0.33447406122409273,
+   0.36379805245409425,
+   0.3819576021161052,
+   0.41934909079365207,
+   0.44288881538456815,
+   0.4809633480831245,
+   0.5027941313513109,
+   0.5335407384043805,
+   0.5620647386460572,
+   0.5935128226922175,
+   0.6231690170412827,
+   0.6497014370549845,
+   0.6811937602341397,
+   0.7127417919511403,
+   0.742986612541999,
+   0.7740035698522597,
+   0.8067476966465303,
+   0.8385599342966951,
+   0.8719809607879481,
+   0.9062939383171311,
+   0.9417391099537025,
+   0.9797265980618753
+  ],
+  "coverage_error": [
+   -0.011701439487112792,
+   0.02424227364054271,
+   0.011142606816513079,
+   -0.00018647063371533823,
+   0.013077518456013293,
+   0.01685282795073481,
+   0.009011064007471509,
+   0.004672179192041881,
+   0.008411646796605443,
+   0.0037888942111251045,
+   0.0063490612240927335,
+   0.004423052454094245,
+   -0.008667397883894812,
+   -0.0025259092063479316,
+   -0.010236184615431854,
+   -0.00341165191687548,
+   -0.012830868648689098,
+   -0.013334261595619457,
+   -0.016060261353942784,
+   -0.0158621773077825,
+   -0.01745598295871731,
+   -0.02217356294501549,
+   -0.02193123976586031,
+   -0.02163320804885971,
+   -0.022638387458000953,
+   -0.02287143014774029,
+   -0.021377303353469657,
+   -0.020815065703304936,
+   -0.018644039212051933,
+   -0.01558106168286888,
+   -0.011385890046297531,
+   -0.004648401938124658
+  ],
+  "mean_absolute_coverage_error": 0.013060728770592453,
+  "crossing_count": 0,
+  "nonfinite_count": 0,
+  "support_violation_count": 0,
+  "POD": "THRESHOLD_NOT_FROZEN",
+  "FAR": "THRESHOLD_NOT_FROZEN",
+  "CSI": "THRESHOLD_NOT_FROZEN",
+  "undefined_reasons": {
+   "AUROC": null,
+   "Average_Precision": null,
+   "conditional_metrics": null
+  },
+  "numerical_checks": {
+   "qlog_crossing_count": 0,
+   "qphysical_crossing_count": 0,
+   "nonfinite_qlog": 0,
+   "nonfinite_qphysical": 0,
+   "q1_support_violation": 0,
+   "nonfinite_occurrence": 0,
+   "probability_range_violation": 0,
+   "physical_support_violation": 0
+  }
+ },
+ "diagnostics": {
+  "monthly": [
+   {
+    "month": "2025-03",
+    "scene_count": 1485,
+    "N_valid": 5093550,
+    "N_rain": 127550,
+    "global_core_loss": 0.014427463028183238,
+    "Brier": 0.03016717551621205,
+    "AUROC": 0.9106654417281734,
+    "Average_Precision": 0.2831997081767911,
+    "conditional_mean_pinball": 0.11311745152942687
+   },
+   {
+    "month": "2025-04",
+    "scene_count": 1435,
+    "N_valid": 4922050,
+    "N_rain": 275812,
+    "global_core_loss": 0.02657102860310996,
+    "Brier": 0.06347435712987046,
+    "AUROC": 0.8974073420694006,
+    "Average_Precision": 0.35824059508950373,
+    "conditional_mean_pinball": 0.11242092521904216
+   },
+   {
+    "month": "2025-05",
+    "scene_count": 1487,
+    "N_valid": 5100410,
+    "N_rain": 747534,
+    "global_core_loss": 0.0527195863460981,
+    "Brier": 0.10118424950380478,
+    "AUROC": 0.9055776639184505,
+    "Average_Precision": 0.6206963285315514,
+    "conditional_mean_pinball": 0.1295385735345488
+   },
+   {
+    "month": "2025-06",
+    "scene_count": 1439,
+    "N_valid": 4935770,
+    "N_rain": 893938,
+    "global_core_loss": 0.0640227858660695,
+    "Brier": 0.11998289228715905,
+    "AUROC": 0.8843024467789178,
+    "Average_Precision": 0.6440506914219907,
+    "conditional_mean_pinball": 0.13084340198422154
+   },
+   {
+    "month": "2025-07",
+    "scene_count": 1486,
+    "N_valid": 5096980,
+    "N_rain": 1085898,
+    "global_core_loss": 0.07368426038046709,
+    "Brier": 0.13370152463340676,
+    "AUROC": 0.8687112062364135,
+    "Average_Precision": 0.6518132270360876,
+    "conditional_mean_pinball": 0.12954499355935103
+   },
+   {
+    "month": "2025-08",
+    "scene_count": 1484,
+    "N_valid": 5090120,
+    "N_rain": 953484,
+    "global_core_loss": 0.06806698879768701,
+    "Brier": 0.12653309300551654,
+    "AUROC": 0.8669265999155967,
+    "Average_Precision": 0.61710013545413,
+    "conditional_mean_pinball": 0.13072933867163325
+   },
+   {
+    "month": "2025-09",
+    "scene_count": 1428,
+    "N_valid": 4898040,
+    "N_rain": 798339,
+    "global_core_loss": 0.060993569742635444,
+    "Brier": 0.1179162753365432,
+    "AUROC": 0.8644140377132099,
+    "Average_Precision": 0.5867579096143851,
+    "conditional_mean_pinball": 0.12255661010982927
+   }
+  ],
+  "exceedances": [
+   {
+    "threshold_mm_h": 10,
+    "count": 58035,
+    "fraction_of_population": 0.0016516814791962414,
+    "conditional_pinball_log1p_mm_h": 0.5109831044188645
+   },
+   {
+    "threshold_mm_h": 20,
+    "count": 7898,
+    "fraction_of_population": 0.0002247778120563783,
+    "conditional_pinball_log1p_mm_h": 0.6991804309694565
+   },
+   {
+    "threshold_mm_h": 30,
+    "count": 1770,
+    "fraction_of_population": 5.0374364059228865e-05,
+    "conditional_pinball_log1p_mm_h": 0.8148556205503227
+   },
+   {
+    "threshold_mm_h": 50,
+    "count": 129,
+    "fraction_of_population": 3.671351956859053e-06,
+    "conditional_pinball_log1p_mm_h": 0.968414198061123
+   }
+  ],
+  "rainrate_bins": [
+   {
+    "rate_bin_mm_h": "(0.1,1]",
+    "pixel_count": 2812956,
+    "fraction_of_rainy_population": 0.5761237712632014,
+    "conditional_pinball_log1p_mm_h": 0.08717848821313277
+   },
+   {
+    "rate_bin_mm_h": "(1,5]",
+    "pixel_count": 1774265,
+    "fraction_of_rainy_population": 0.3633886356630903,
+    "conditional_pinball_log1p_mm_h": 0.15211975416689433
+   },
+   {
+    "rate_bin_mm_h": "(5,10]",
+    "pixel_count": 237299,
+    "fraction_of_rainy_population": 0.048601398243337764,
+    "conditional_pinball_log1p_mm_h": 0.32706981667546886
+   },
+   {
+    "rate_bin_mm_h": "(10,20]",
+    "pixel_count": 50137,
+    "fraction_of_rainy_population": 0.010268599124843448,
+    "conditional_pinball_log1p_mm_h": 0.48133668590366435
+   },
+   {
+    "rate_bin_mm_h": "(20,30]",
+    "pixel_count": 6128,
+    "fraction_of_rainy_population": 0.0012550805879298851,
+    "conditional_pinball_log1p_mm_h": 0.665769026668194
+   },
+   {
+    "rate_bin_mm_h": "(30,50]",
+    "pixel_count": 1641,
+    "fraction_of_rainy_population": 0.00033609452428083245,
+    "conditional_pinball_log1p_mm_h": 0.8027842881317411
+   },
+   {
+    "rate_bin_mm_h": "(50,inf)",
+    "pixel_count": 129,
+    "fraction_of_rainy_population": 2.6420593316409134e-05,
+    "conditional_pinball_log1p_mm_h": 0.968414198061123
+   }
+  ],
+  "coverage_at_selected_tau": {
+   "0.01562": 0.003923560512887208,
+   "0.10938": 0.10918852936628466,
+   "0.23438": 0.23904717919204188,
+   "0.48438": 0.4809633480831245,
+   "0.73438": 0.7127417919511403,
+   "0.98438": 0.9797265980618753
+  },
+  "quantile_groups": {
+   "low": {
+    "number_of_tau": 6,
+    "mean_absolute_coverage_error": 0.01286718949743867
+   },
+   "middle": {
+    "number_of_tau": 20,
+    "mean_absolute_coverage_error": 0.012414421086910444
+   },
+   "high": {
+    "number_of_tau": 6,
+    "mean_absolute_coverage_error": 0.015408626989352933
+   }
+  },
+  "cases": {
+   "rule": "MAX_ABSOLUTE_DIAGNOSTIC_PROXY_ERROR/HIGHEST_TRUE_RAIN_RATE/LOWEST_TRUE_RATE_AMONG_RAINY",
+   "count": 30
+  },
+  "DIAGNOSTIC_PROXY_METRIC": {
+   "name": "p_rain_times_mean_32_physical_conditional_quantiles",
+   "MAE": 4.8454286409641105e+62,
+   "RMSE": 2.8309550631741128e+66,
+   "Bias": 4.8454286409641105e+62,
+   "is_exact_expected_precipitation": false
+  },
+  "diagnostic_proxy_note": "DIAGNOSTIC_PROXY_METRIC is a non-frozen diagnostic proxy; it is not an exact expected precipitation and shows numerical overflow in this run. It is not used for any selection, gate or reported performance claim.",
+  "scope": "DESCRIPTIVE_DIAGNOSTICS_ONLY"
+ },
+ "final_status": {
+  "FINAL_TEST_2025_AUTHORIZED": true,
+  "FINAL_TEST_2025_EXECUTED": true,
+  "2025_FINAL_TEST_EXECUTED": true,
+  "2025_FINAL_TEST_METRICS_COMPUTED": true,
+  "2025_MODEL_INFERENCE_SCENES": 10244,
+  "2025_TARGET_OUTCOME_SUMMARIES_EXPOSED": true,
+  "raw_source_open_events": 51434,
+  "completed_sample_pixel_values_lower_bound": 2673694244,
+  "raw_access_semantics": "completed sample values are a lower bound; failed/incomplete reads and source hashing are not counted as zero access",
+  "MODEL_PARAMETERS_UPDATED": false,
+  "OPTIMIZER_STEPS": 0,
+  "BACKWARD_CALLS": 0,
+  "completed_utc": "2026-11-27T05:27:59.726491+00:00"
+ },
+ "verification": {
+  "status": "PASS",
+  "checks": 197,
+  "failed": 0,
+  "artifacts": {
+   "diagnostics.json": {
+    "bytes": 1691153,
+    "sha256": "cec3b7f9ab7e7667e12bfa2e8fa3dc86b07200913c277aa85803fa0b9032852c"
+   },
+   "final_status.json": {
+    "bytes": 625,
+    "sha256": "c4da1c9da5c47c5aa8eb46c8eb85e581ea1b86e3fa73a5cd375103eda40ab621"
+   },
+   "formal_manifest.json": {
+    "bytes": 6716,
+    "sha256": "8a4e6da8710192d976edcd82982587899004027183631a5e1584a4bc6523237f"
+   },
+   "primary_metrics.json": {
+    "bytes": 4829,
+    "sha256": "96b040628f0922db68739c970f21f3508f3d4fa3a4c46a0735679e73768eb97b"
+   },
+   "runtime_ledger.jsonl": {
+    "bytes": 4273361,
+    "sha256": "3be95e188ef12688dcd4a91d0b3ebe254d80d2a9e4ce942107267bc29452f36d"
+   }
+  },
+  "frozen_inputs_unchanged_sha256": {
+   "protocol": "b1be82d5bc03293c35ddc793faa1187e97fa48c537039181c0eb68a689f15eb8",
+   "authorization": "ada75ca5de75c84c3515bca960a53d76de7796673d90dc1332b2b835765d9855",
+   "candidate_catalogue": "b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d",
+   "eligible_population": "53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e",
+   "catalogue_freeze_record": "0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f",
+   "FINAL": "05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65"
+  }
+ },
+ "limitations": [
+  "Single frozen FINAL model; no model/epoch/checkpoint selection.",
+  "IMERG V07 Final is a reference, not ground truth.",
+  "POD/FAR/CSI thresholds were not frozen; not computed.",
+  "Independent weather-event count is not identified.",
+  "Diagnostic proxy overflow (see diagnostics.diagnostic_proxy_note) is disclosed and unused.",
+  "2025 outcomes were unblinded only for this one-shot final test; they must not be used for tuning, selection or calibration.",
+  "This receipt does not claim B1-B8 or DOTE/DTFM physical attribution."
+ ],
+ "2025_access_semantics": {
+  "catalogue_qc_executed_2026_10_03": true,
+  "final_test_executed_once": true,
+  "historical_2025_catalogue_access": "RAW_ACCESS_TELEMETRY_RECORDED",
+  "model_inference_scenes": 10244,
+  "target_outcome_summaries_exposed": true
+ }
+}

@@ -1,0 +1,204 @@
+\documentclass[UTF8,11pt,a4paper,fontset=windows]{ctexart}
+\usepackage[margin=22mm]{geometry}
+\usepackage{amsmath,array,longtable,hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,pdftitle={YunTAPR-Net B0 2025 Final Test Execution Report v1.1}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{3em}
+\renewcommand{\arraystretch}{1.15}
+\title{YunTAPR-Net\\B0 2025 Final Test\\一次性执行报告 v1.1}
+\author{工程执行记录；科研授权依据研究者明确批准}
+\date{2026-11-27 UTC}
+\begin{document}
+\maketitle
+\textbf{结果：研究者授权后按冻结协议执行一次 2025 最终测试，已成功完成；零训练、零调参、零参数更新、零重试。}
+
+本报告记录一次在研究者明确授权下、按已冻结协议 \path{b0_2025_final_test_protocol_v1.1.yaml} 执行的 B0 2025 一次性最终测试。执行于 2026-11-27（UTC 05:00--05:28；本地 13:00--13:28）完成，只读推理一次，未训练、未调参、未选择模型或 epoch，未重试。
+
+结果摘要：评价样本全集 10,244 个场景，有效像元观测 35,136,920，rainy 像元观测 4,882,555。主要指标为 global core loss \textbf{0.05151132978268864}、occurrence loss \textbf{0.033797817841140915}、quantile loss \textbf{0.017713511941547723}、Brier \textbf{0.09896918546879455}、AUROC \textbf{0.8972174938962962}、Average Precision \textbf{0.6059135116913023}、conditional mean pinball \textbf{0.12747388447425723}、平均绝对覆盖误差 \textbf{0.013060728770592453}。crossing / nonfinite / support violation 计数均为 0。
+
+术语约定：\textbf{评价样本全集（population）}指按冻结资格规则确定的全部评价场景；全样本指标按这些场景中的有效像元观测累计原始分子和真实 valid 分母，同一格点在不同时次分别计数。conditional 指标按有效 rainy 像元观测统计，不平均 batch loss。
+
+\section{执行状态与运行身份}
+\begin{verbatim}
+FINAL_TEST_2025_AUTHORIZED=true
+FINAL_TEST_2025_EXECUTED=true
+2025_FINAL_TEST_EXECUTED=true
+2025_FINAL_TEST_METRICS_COMPUTED=true
+2025_MODEL_INFERENCE_SCENES=10244
+2025_TARGET_OUTCOME_SUMMARIES_EXPOSED=true
+MODEL_PARAMETERS_UPDATED=false
+OPTIMIZER_STEPS=0
+BACKWARD_CALLS=0
+automatic_retry=false
+\end{verbatim}
+
+运行 id：\path{run_20261127T050003.131968Z}，目录 \path{docs/final_test_b0/formal_v1_1/run_20261127T050003.131968Z}。
+
+入口 \path{scripts/test_b0_2025_final_v1_1.py run}，模块 \path{src/yuntapr/evaluation/final_test_b0_v1_1.py}；GPU NVIDIA RTX 5060 Laptop GPU，torch 2.11.0+cu128，Python 3.12.14，batch=2，CUDA BF16 forward、FP32 参数、FP64 指标累加。
+
+时间：manifest \path{created_utc=2026-11-27T05:02:30.752125+00:00}（授权、预检与全量源哈希预检完成后），\path{completed_utc=2026-11-27T05:27:59.726491+00:00}；进程墙钟 1,676.59 s（约 28 分钟），manifest 至 completed 1,528.97 s。
+
+输出：\path{formal_manifest.json}、\path{runtime_ledger.jsonl}、\path{primary_metrics.json}、\path{diagnostics.json}、\path{final_status.json}；无 \path{failure.json}。
+
+\section{授权与冻结身份}
+本轮执行依据研究者 2026-11-27 的明确批准（交互选择“批准执行（推荐）”，记录引用 m04056）。授权文件 \path{config/evaluation/b0_2025_final_test_authorization_v1.1.json} 严格 12 键：
+
+\begin{itemize}
+\item \path{AUTHORIZED_BY=RESEARCHER}；\path{scope=B0_2025_MAR_SEP_FINAL_TEST_ONLY}；\path{created_utc=2026-11-27T04:59:35.296718+00:00}（晚于 catalogue freeze 完成时间）。
+\item 授权文件 SHA256：
+\par{\small\ttfamily ada75ca5de75c84c3515bca960a53d76de7796673d90dc1332b2b835765d9855}\par
+\end{itemize}
+
+冻结身份（全部与授权及 freeze record 回环一致）：
+
+\begin{itemize}
+\item 协议 v1.1 SHA256：
+\par{\small\ttfamily b1be82d5bc03293c35ddc793faa1187e97fa48c537039181c0eb68a689f15eb8}\par
+\item 候选目录 10,272 个候选槽（5,444,056 B）。SHA256：
+\par{\small\ttfamily b11006105aebc92370d0c37042f3d0c27ec08aeb3a8b602987c62d131f18b16d}\par
+\item eligible population 10,244 行（3,821,315 B），拒绝 28。SHA256：
+\par{\small\ttfamily 53ce28a5dc70b2e39401870fb7b99847e095ae921c372b9240d240fd4501855e}\par
+\item catalogue freeze record（7,151 B），冻结完成于 \path{2026-10-03T02:19:33.679048+00:00}。SHA256：
+\par{\small\ttfamily 0fe4995888a40d77c4df761c2f1510596dd6e2fc0388c2dabe2a1ca890a94d3f}\par
+\item FINAL：\path{F:/pytorch/Research/outputs/formal_training/b0_phase_b_finalfit/run_20261002T035929_487644Z/epoch_011.pt}；epoch 11，global update 128,964，52,071,595 bytes。读取与应用前后身份均重新核验，未应用 optimizer state 或 RNG state。SHA256：
+\par{\small\ttfamily 05359d2fee2ae61daf654ae5a59b7977cb65247fd46d97a69a690a0133da7f65}\par
+模型逻辑 state SHA256：
+\par{\small\ttfamily d6e64fe6f3e38eb421806858fc0f484ebfb2ec0fcc952604813fa448f8e49944}\par
+\item Phase-B normalization：mean 270.5900486586461 K，std 20.368583874067266 K；不 refit。SHA256：
+\par{\small\ttfamily c7042beac2412594ca9fc264d7df10981755b393158c539cb48c9b56cd314327}\par
+\end{itemize}
+
+\section{评价人口与读取账本}
+\begin{itemize}
+\item 时间窗口：UTC $[2025\text{-}03\text{-}01T00:00:00,\ 2025\text{-}10\text{-}01T00:00:00)$，30 分钟步进；9 月 30 日 23:30 起始窗口允许（其名义卫星时次为 9 月 30 日 23:50），10 月起始窗口与 10 月源文件在 I/O 前拒绝。
+\item eligible 场景 10,244；有效像元观测 35,136,920；rainy 像元观测 4,882,555（prevalence 0.13895796785830972）；完成样本像元值下界 2,673,694,244（$=10{,}244\times261{,}001$）。
+\item 源读取：B13 文件 45,639,682,705 B + 214 个 IMERG 日文件 179,318,880 B，合计 \textbf{45,819,001,585 B}；\path{raw_source_open_events=51,434}；staging 临时字节峰值 6,112,392 B（上限 734,003,200 B）。
+\item 逐样本 ledger 10,244 行（2 行/批），索引 0--10,243 连续、sample\_id 与冻结人口清单逐行一致；每行记录 obs\_start/obs\_end、日期、copy/read 秒数与 cleanup 结果。
+\item 一次性：零重试、零失败记录、零模型参数更新；运行失败时本应写 \path{failure.json} 并 STOP\_REQUIRED，本轮未触发。
+\end{itemize}
+
+\section{主要指标（全样本评价）}
+{\small\begin{longtable}{p{80mm}r}
+\textbf{指标} & \textbf{值}\\\hline
+global core loss & 0.05151132978268864\\
+occurrence loss & 0.033797817841140915\\
+quantile loss & 0.017713511941547723\\
+Brier & 0.09896918546879455\\
+AUROC（exact ties half） & 0.8972174938962962\\
+Average Precision（non-interpolated grouped） & 0.6059135116913023\\
+conditional mean pinball & 0.12747388447425723\\
+平均条件覆盖绝对误差 & 0.013060728770592453\\
+32$\tau$ 覆盖最小/最大 & 0.0039236 / 0.9797266\\
+32$\tau$ 覆盖误差合计 & $-0.214001$\\
+crossing / nonfinite / support violation & 0 / 0 / 0\\
+POD / FAR / CSI & THRESHOLD\_NOT\_FROZEN（null）\\\hline
+\end{longtable}}
+
+恒等式核验：$L_{core}=(S_{occ}+S_{qr})/N_{valid}$、$L_{occ}=S_{occ}/N_{valid}$、$L_{qr}=S_{qr}/N_{valid}$、prevalence$=N_{rain}/N_{valid}$ 全部严格成立（$S_{occ}=1{,}187{,}551.2216587411$，$S_{qr}=622{,}398.252009207$）。
+
+\section{描述性诊断（不用于选择、门或主张）}
+月度（3--9 月，7 行；每行统计量在全月有效像元观测上累计）：
+
+{\footnotesize\begin{longtable}{lrrrrrrrr}
+\textbf{月份} & \textbf{场景} & \textbf{N\_valid} & \textbf{N\_rain} & \textbf{core} & \textbf{Brier} & \textbf{AUROC} & \textbf{AP} & \textbf{pinball}\\\hline
+2025-03 & 1,485 & 5,093,550 & 127,550 & 0.014427 & 0.030167 & 0.910665 & 0.283200 & 0.113117\\
+2025-04 & 1,435 & 4,922,050 & 275,812 & 0.026571 & 0.063474 & 0.897407 & 0.358241 & 0.112421\\
+2025-05 & 1,487 & 5,100,410 & 747,534 & 0.052720 & 0.101184 & 0.905578 & 0.620696 & 0.129539\\
+2025-06 & 1,439 & 4,935,770 & 893,938 & 0.064023 & 0.119983 & 0.884302 & 0.644051 & 0.130843\\
+2025-07 & 1,486 & 5,096,980 & 1,085,898 & 0.073684 & 0.133702 & 0.868711 & 0.651813 & 0.129545\\
+2025-08 & 1,484 & 5,090,120 & 953,484 & 0.068067 & 0.126533 & 0.866927 & 0.617100 & 0.130729\\
+2025-09 & 1,428 & 4,898,040 & 798,339 & 0.060994 & 0.117916 & 0.864414 & 0.586758 & 0.122557\\\hline
+\end{longtable}}
+
+超阈值计数与条件 pinball（阈值 10/20/30/50 mm/h，descriptive only；extremity 定义未冻结）：
+
+\begin{longtable}{rrrr}
+\textbf{阈值} & \textbf{计数} & \textbf{占全人口} & \textbf{条件 pinball}\\\hline
+10 mm/h & 58,035 & 0.001652 & 0.510983\\
+20 mm/h & 7,898 & 0.000225 & 0.699180\\
+30 mm/h & 1,770 & 0.000050 & 0.814856\\
+50 mm/h & 129 & 0.000004 & 0.968414\\\hline
+\end{longtable}
+
+rain-rate 分箱（条件 pinball 随雨强单调上升，与 Dev 行为一致方向）：
+
+\begin{longtable}{lrrr}
+\textbf{分箱 (mm/h)} & \textbf{像元数} & \textbf{rainy 占比} & \textbf{条件 pinball}\\\hline
+(0.1,1] & 2,812,956 & 0.576124 & 0.087178\\
+(1,5] & 1,774,265 & 0.363389 & 0.152120\\
+(5,10] & 237,299 & 0.048601 & 0.327070\\
+(10,20] & 50,137 & 0.010269 & 0.481337\\
+(20,30] & 6,128 & 0.001255 & 0.665769\\
+(30,50] & 1,641 & 0.000336 & 0.802784\\
+(50,$\infty$) & 129 & 0.000026 & 0.968414\\\hline
+\end{longtable}
+
+其它诊断：reliability 10 个固定 0.1 edges（边界右归，末 bin 含 1，count 合计 $=N_{valid}$）；quantile groups low（$\tau<0.2$）/middle/high 的平均绝对覆盖误差 0.012867/0.012414/0.015409；spatial $100\times100$ 网格 valid/rain 计数合计分别对账 $N_{valid}$/$N_{rain}$；probability histogram 100 bins（rainy\_truth/dry\_truth）合计对账；cases 30 条（三类 top-10 规则与 tie 顺序继承）。
+
+\textbf{诊断代理披露}：\path{DIAGNOSTIC_PROXY_METRIC}（$p_{rain}\times32$ 个 physical conditional quantile 平均）在本轮出现数值溢出（MAE/Bias$\approx4.85\times10^{62}$、RMSE$\approx2.83\times10^{66}$ mm/h）。该字段是协议明示的非冻结诊断代理（\path{is_exact_expected_precipitation=false}），不参与任何选择、门或报告主张；仅在此披露，不据此修改指标或重跑。主指标全部在 log1p 空间计算，均为有限值。
+
+\section{与开发集参考的对照}
+开发集背景数字（\path{docs/research_progress/SCIENTIFIC_RESULTS.md}，B0/2026/E0 第九轮 Dev 评价，Phase-A 9 轮模型、2024 Dev 人口）：Brier 0.0968676263395、AUROC 0.886357037272、AP 0.567232691216、conditional pinball 0.124885458292、q32 coverage 0.95744184495。
+
+\textbf{该对照仅作背景，不构成门槛或模型选择依据}：其一，FINAL 是独立的 Phase-B FinalFit（seed2026、11 轮、128,964 更新，无早期验证、无 2025 访问），并非 Phase-A Dev 模型；其二，2025 评价人口与 2024 Dev 人口不同。B0 FINAL 没有独立的 Dev 评价，故本次 2025 一次性最终测试是该模型唯一的留出评价。
+
+\section{独立核验与完整性}
+独立核验脚本（本地只读，不修改 run 产物）逐项执行 \textbf{197 项检查，全部 PASS}：
+
+\begin{itemize}
+\item 授权 12 键内容、\path{created_utc >= freeze_completed_utc}、\path{implementation_hashes()}（50 个实现文件）与 freeze record 全等。
+\item 候选/人口/freeze record 运行前后 SHA 不变；FINAL 文件 SHA / size / mtime 未变；模型逻辑 state SHA 前后一致。
+\item \path{final_status} 全部标志位、指标恒等式与数值范围、32$\tau$ 覆盖单调性均通过；crossing、nonfinite、support violation 三计数为 0。
+\item ledger 10,244 行索引连续、sample\_id 与冻结人口逐行一致、30 分钟网格、rain\_sum$=N_{rain}$、staging 临时字节峰值 $\leq$ 上限。
+\item diagnostics 月度 scene 数合计 10,244、reliability/rainrate/spatial/histogram 计数对账、无 \path{failure.json}。
+\end{itemize}
+
+运行目录文件身份：
+
+{\small\begin{longtable}{lrr}
+\textbf{文件} & \textbf{bytes} & \textbf{SHA256}\\\hline
+formal\_manifest.json & 6,716 & \path{8a4e6da8...6523237f}\\
+primary\_metrics.json & 4,829 & \path{96b04062...3768eb97b}\\
+diagnostics.json & 1,691,153 & \path{cec3b7f9...0b9032852c}\\
+final\_status.json & 625 & \path{c4da1c9d...eda40ab621}\\
+runtime\_ledger.jsonl & 4,273,361 & \path{3be95e18...29452f36d}\\\hline
+\end{longtable}}
+
+2025 访问语义：本次为授权后一次性最终推理；2025 catalogue/QC 于 2026-10-03 在单独授权下完成；历史 2025 catalogue/QC-only 读取记录（2,676,986,256 像元）保留为访问记录，不因本次执行被改写。本次 \path{raw_source_open_events=51,434} 为完成样本读取与哈希的计数记录；失败/未完成读取不以 0 计。
+
+\section{限制与解释边界}
+\begin{enumerate}
+\item 单一冻结 FINAL 模型；无模型/epoch/checkpoint 选择，无温度缩放、等渗、Platt 或阈值调参。
+\item IMERG V07 Final 是参考观测而非真值；POD/FAR/CSI 阈值未冻结，故未计算。
+\item 未识别独立天气事件计数；本报告不作事件级归因。
+\item 诊断代理字段数值溢出已在第 5 节披露且不参与任何主张。
+\item 2025 结果仅用于这一次性最终测试，不得用于调参、选择、校准或后续探索性模型选择。
+\item 本报告只对应 B0 合成模型；不声称 B1--B8、DOTE/DTFM 物理机制或创新链的最终测试结论。
+\item 单次执行、零重试；若未来需要重复评价，必须重新走协议/授权流程并说明理由。
+\end{enumerate}
+
+\section{复现与文件清单}
+\begin{itemize}
+\item 授权：\path{config/evaluation/b0_2025_final_test_authorization_v1.1.json}。
+\item 协议：\path{config/evaluation/b0_2025_final_test_protocol_v1.1.yaml}。
+\item 冻结目录：\path{docs/final_test_b0/catalogue_gate_v1_1/catalogue_only_runs/run_20261003T015507_526850Z/}。
+\item 运行产物：\path{docs/final_test_b0/formal_v1_1/run_20261127T050003.131968Z/}。
+\item 公开收据：\path{docs/final_test_b0/formal_v1_1/B0_2025_FINAL_TEST_RESULTS_v1_1.json}。
+\end{itemize}
+
+复现命令（需授权文件与原数据在位；仅供审计，不自动重跑）：
+
+\begin{verbatim}
+F:\pytorch\Research\.venv-cuda\Scripts\python.exe -B ^
+  scripts\test_b0_2025_final_v1_1.py run ^
+  --authorization config\evaluation\b0_2025_final_test_authorization_v1.1.json ^
+  --authorization-sha256 <sha256> ^
+  --candidate-catalogue <catalogue.csv> ^
+  --eligible-population <population.csv> ^
+  --catalogue-freeze-record <catalogue_freeze_record.json>
+\end{verbatim}
+
+环境：Python 3.12.14、torch 2.11.0+cu128、NVIDIA RTX 5060 Laptop GPU；\path{PYTHONHASHSEED=2026}、\path{CUBLAS_WORKSPACE_CONFIG=:4096:8}、\path{PYTHONUTF8=1}。
+
+\end{document}
