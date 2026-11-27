@@ -1,0 +1,145 @@
+version: seed_completion_v1
+status: DRAFT_NON_EXECUTABLE_NOT_RESEARCHER_FROZEN
+created_utc: 2026-11-27
+kind: SEED_COMPLETION_FORMAL_TRAINING_PACKAGE
+scope: SEED_COMPLETION_B2_B5_B6_2030_2031
+baseline_commit: 8f54c4587505628a929d5a204a7d2130ecaaba4f
+entry: tools/research_readiness/start_seed_completion.py
+module: src/yuntapr/experimental/research_readiness/seed_completion.py
+
+motivation: >
+  2026-11-27 阶段汇报的 2024 Development 表混合了 3-seed 与 1-seed 配置。
+  按常规确认性研究实践，用于确认性主张的每个配置至少需要 3 个独立训练 seed。
+  本包补齐 B2（S2 单时次基线）、B5（S4 高程单通道）、B6（S4 六通道静态地形）
+  在 seed 2030 与 2031 上缺失的种子，使每个阶段配置达到 3 seed 最低线。
+  已存在的 E0 对照行（B7/B8/ZERO 三 seed 检查点）与 COSINE9 行
+  （SCHEDULE9 seed2029 + V4 REAL seed2030/2031）不需要新训练，
+  只做既有无指标复算重排；本包不重复训练这些模型。
+
+tasks:
+  - {model: B2, seed: 2030}
+  - {model: B2, seed: 2031}
+  - {model: B5, seed: 2030}
+  - {model: B6, seed: 2030}
+  - {model: B5, seed: 2031}
+  - {model: B6, seed: 2031}
+
+recipes:
+  B2: >
+    冻结的 2026-10-25 B2 配方（b2_preparation_20261025_v4 / b2_proposal_v4）：
+    七光谱通道、单一时次（t-10）、以冻结 B2 stem rule 从 B3 参考初始化；
+    E0 九轮、4,320 更新；2023 Train / 2024 Dev 固定人口；仅随机 seed 改变。
+  B5: >
+    冻结的 2026-10-27 B5 配方（b5_b6_training_preparation /
+    b5_b6_corrected_start_preparation）：Stage4 B4 主干加 SP04 高程单通道
+    （width 16，加性残差零输出初始化）；E0 九轮、4,320 更新；仅 seed 改变。
+  B6: >
+    冻结的 2026-10-27 B6 配方：Stage4 B4 主干加六静态地形通道
+    （高程、东/北梯度、坡度、坡向 sin/cos，width 16，加性残差零输出初始化）；
+    E0 九轮、4,320 更新；仅 seed 改变。
+
+invariants:
+  - 人口与数据身份：2023 Train / 2024 Dev 固定人口（B2–B6 核心人口 959/963）
+  - 统计 scaler、归一化、读取范围、GFS f006、气象字段顺序全部不变
+  - 优化器、调度、损失、评估代码与既有 seed2029 运行完全一致
+  - seed 只影响初始化 RNG 与 epoch 顺序派生；不得改变数据、预算或模型结构
+  - 固定 E9 端点；无早停、无 Dev 选择、无 checkpoint 选择
+  - 每任务单次执行；零 replay、零额外重试；2025 载荷永不读取
+
+comparisons:
+  primary:
+    - {left: B2, right: B3, seed: 2030}
+    - {left: B2, right: B3, seed: 2031}
+    - {left: B5, right: B4, seed: 2030}
+    - {left: B6, right: B4, seed: 2030}
+    - {left: B5, right: B4, seed: 2031}
+    - {left: B6, right: B4, seed: 2031}
+  secondary:
+    - three-seed equal-weight family means for B2, B3, B4, B5, B6
+    - B6_minus_B5 per seed and three-seed
+  inference: DESCRIPTIVE_ONLY; no significance verdict, no mechanism claim
+
+metrics:
+  - Brier, AUROC, Average Precision, conditional pinball
+  - q32 coverage, q32 signed bias, group-level metrics
+  - same frozen evaluation code as the existing E9 comparisons
+
+budget:
+  per_model:
+    B2: {updates: 4320, source_opens: 142812, source_bytes: 477571641012}
+    B5: {updates: 4320, source_opens: 142813, source_bytes: 477571703840}
+    B6: {updates: 4320, source_opens: 142813, source_bytes: 477571953840}
+  package:
+    models: 6
+    total_updates: 25920
+    total_source_opens: 856876
+    total_source_bytes: 2865430597384
+    max_task_seconds: 21600
+    max_package_seconds: 129600
+    initial_free_bytes: 51539607552
+    minimum_task_free_bytes: 25769803776
+    replay_allowance: 0
+    additional_retry_allowance: 0
+    checkpoint_loads: 0
+    inference_forwards: 0
+  storage:
+    output_root: F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1
+    output_root_policy: ABSOLUTE_PRIVATE_DIRECTORY_OUTSIDE_REPOSITORY
+    approval_binding: EXACT_EIGHT_KEYS_INCLUDING_CODE_COMMIT_OF_THE_CLEAN_EXECUTION_COPY
+
+pins:
+  b2_preparation_v4: D:\研究\极端降水预测\YunTAPR-B2-readiness-20261025\docs\research_readiness\.local\b2_preparation_20261025_v4.json
+  b3_development_09:
+    seed2030: F:\pytorch\Research\YunTAPR_B3_B4_s2030_s2031_20261026_v1\B3_s2030\B3_development_09.json
+    sha256_2030: 2e816d8806e0ff5dd581f6b0737f13ba353be29bbc8e5e08ef2034d852ed9f27
+    seed2031: F:\pytorch\Research\YunTAPR_B3_B4_recovery1_20261026_v1\B3_s2031\B3_development_09.json
+    sha256_2031: e8a07756b513c920bc83b43d83ea3c4d2f2ea37099a64f0a870778cb5b7cf5d9
+  b4_development_09:
+    seed2030: F:\pytorch\Research\YunTAPR_B3_B4_recovery1_20261026_v1\B4_s2030\B4_development_09.json
+    sha256_2030: bc5ee14ea4f353df212e9aeaef53ec49c1e0d899142bea1632f9cd73400b23a0
+    seed2031: F:\pytorch\Research\YunTAPR_B3_B4_recovery1_20261026_v1\B4_s2031\B4_development_09.json
+    sha256_2031: 27f4827b1537c86b647dbdce68e030de60475c43ba5981fc502fe8c80ddf3a5f
+  static_terrain:
+    root: F:\pytorch\Research\YunTAPR_static_terrain_candidate_20261027_v1
+    b5_npz_sha256: 98d91515b8475f15343b931be0e14d8b005762987f6d4caeb69e9c9ce1d134b8
+    b6_npz_sha256: 788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd
+    production_receipt_sha256: 180599379509dd5a49639feb1df9ca22ed97afd34d8e4d021c6eb4a24a0cd32d
+  historical_pair: F:\codex_downloads\C迁移\极端降水预测\YunTAPR-seed2029-recovery-20261024\docs\core_stage4\.local\seed2029_recovery1_20261024_v1
+  b3_b4_three_seed_completion: docs/research_readiness/20261025/evidence/b3_b4_three_seed_completion.json
+
+execution_gates:
+  - PREPARE_FROZEN_PROPOSAL_AND_PRIVATE_PREPARATION
+  - NO_PAYLOAD_DRY_RUN_AND_CODE_HASH_BINDING
+  - SEPARATE_EXACT_RESEARCHER_AUTHORIZATION
+  - ONCE_ONLY_SERIAL_EXECUTION_WITH_FAILURE_STOP
+  - INDEPENDENT_VERIFICATION_AND_DOCS_GITHUB_OBSIDIAN_SYNC
+
+prohibitions:
+  - no change to populations, scalers, static inputs, GFS f006 fields, or evaluation code
+  - no 2025 data access of any kind
+  - no Dev-based selection, early stopping, hyperparameter tuning, or seed selection
+  - no replay, resume, additional retry, or partial restart
+  - no writing outside the pinned output root except the repository evidence files
+  - no modification of the existing b2_runner / static_training execution modules
+
+failure_policy: >
+  Any task or controller failure writes failure.json with
+  status STOP_NO_AUTOMATIC_REPLAY and preserves all partial ledgers and
+  console logs. A retry requires a new, separately approved proposal.
+
+approval:
+  keys:
+    - approved_by_researcher
+    - decision_id
+    - code_commit
+    - proposal_sha256
+    - tasks
+    - budget
+    - scientific_choices
+    - output_root
+  authorized_by: RESEARCHER
+  authorized_value: true
+
+evidence_boundary: >
+  该包只补齐训练种子以支持 later descriptive comparison；不建立机制因果、
+  不改变 2025 终测结论、不产生新的确认性显著性判决。
