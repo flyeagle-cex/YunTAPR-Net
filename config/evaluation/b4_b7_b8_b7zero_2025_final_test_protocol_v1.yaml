@@ -1,0 +1,257 @@
+# B4 / B7 / B8 / B7_ZERO_DOTE twelve-model 2025 final-test protocol (DRAFT)
+#
+# This is an implementation-stage draft, NOT a researcher-frozen protocol and
+# NOT executable.  It binds no 2025 payload, opens no 2025 directory and does
+# not load any checkpoint.  It will be replaced by a researcher-frozen v1 only
+# after the separate payload-phase catalogue and freeze gates have completed.
+version: v1
+status: DRAFT_NON_EXECUTABLE_NOT_RESEARCHER_FROZEN
+created_utc: '2026-11-27T00:00:00+00:00'
+baseline_commit: 27be27ee7df3c3135e145259f73589cc587b6565
+protocol_frozen: false
+final_test_2025_authorized: false
+final_test_2025_executed: false
+payload_access_authorized: false
+scope: B4_B7_B8_B7ZERO_2025_MAR_SEP_FINAL_TEST_ONLY
+population_scope: 2025_MAR_SEP_ALL_MODALITIES_ONCE
+
+# ---------------------------------------------------------------------------
+# Population: the common 2025 modality grid that the catalogue must freeze.
+# ---------------------------------------------------------------------------
+population:
+  year: 2025
+  months: [3, 4, 5, 6, 7, 8, 9]
+  analysis_hours_utc: [0, 6, 12, 18]
+  window_minutes: 30
+  window_convention: LEFT_CLOSED_RIGHT_OPEN
+  window_span_utc:
+    start: '2025-03-01T00:00:00+00:00'
+    end: '2025-10-01T00:00:00+00:00'
+  sample_id: window_start
+  sample_id_format: UTC ISO-8601 with explicit +00:00
+  clock_convention: 'sample_id = window_start = analysis_time - 30min; analysis on 00/06/12/18 UTC'
+  expected_scenes: 856
+  scenes_rule: 'every 2025-03-01T00:00Z..2025-10-01T00:00Z analysis on the four-hour grid, one scene each'
+  satellite:
+    product: HIMAWARI_9_AHI_L1B
+    channels: [B08, B09, B10, B11, B13, B15, B16]
+    nominal_offsets_before_analysis_minutes: [60, 50, 40, 30, 20, 10]
+    slots: 6
+    layout_default: '{YYYYMM}/{DD}/NC_H09_{YYYYMMDD}_{HHMM}_R21_FLDK.06001_06001.nc'
+    layout_note: >-
+      Confirmed by frozen 2023/2024 evidence (H09/R21), e.g.
+      docs/b0_pretraining_closure/runs/run_20260930T095416Z/real_normalized_forward_smoke.json:149
+      records H:\葵花202303_202510\202303\01\NC_H09_20230301_0020_R21_FLDK.06001_06001.nc.
+      The implementation keeps the pattern configurable; an H08/R02 alternative
+      is never an implicit fallback.
+  gfs:
+    initialization_lag_hours: 6
+    lead_hours: 6
+    init_hours_utc: [0, 6, 12, 18]
+    main_and_thermo: REQUIRED_PAIR
+    layout_main_default: '{YYYY}/{YYYYMMDD}/gfs_0p25_{YYYYMMDDHH}_f006.nc'
+    layout_thermo_default: '{YYYY}/{YYYYMMDD}/gfs_thermo_0p25_{YYYYMMDDHH}_f006.nc'
+    layout_basis: >-
+      Confirmed from frozen 2023/2024 raw-layout probes (stage0 discovery
+      evidence: F:\云南极端降水数据\raw\GFS\2023\20230101\gfs_0p25_2023010100_f006.nc
+      and matching GFS_thermo sibling).  No 2025 directory was listed, stat-ed
+      or opened to prepare this draft.
+  imerg:
+    product: GPM_3IMERGHH_07
+    version: V07
+    run_type: Final
+    units: 'mm hr-1'
+    day_file_layout: '{YYYY}/imerg_{YYYYMMDD}.nc'
+    target_window: 'one 30-minute window ending at analysis_time'
+    half_hour_index: 'window_start.hour * 2 + window_start.minute // 30'
+  target_grid: SP04 100x100
+  yunnan_supervision_region_pixels: 3430
+  common_modality_rule: 'all six satellite frames + GFS main + GFS thermo + IMERG day file + frozen SP04 grid and Yunnan mask'
+  october: HARD_REJECT_BEFORE_SOURCE_IO
+  carry_in_exception: '2025-03-01T00:00Z analysis legitimately uses 2025-02-28 satellite frames and the 2025-02-28T18:00Z GFS initialization'
+
+# ---------------------------------------------------------------------------
+# Twelve fixed E9 checkpoints.  Identity only; no private checkpoint path.
+# ---------------------------------------------------------------------------
+models: [B4, B7, B8, B7_ZERO_DOTE]
+seeds: [2029, 2030, 2031]
+checkpoint_catalog:
+  status: IDENTITY_FROM_2026_10_31_AUDIT_AND_2026_10_30_PREREGISTRATION
+  audit_source: docs/research_readiness/20261031_extreme_precipitation_audit/EXTREME_PRECIPITATION_AUDIT.csv
+  zero_dote_source: docs/research_readiness/20261025/evidence/final_test_preregistration_increment_20261030.json
+  checkpoints:
+    - {model: B4, seed: 2029, sha256: 7c74eb80ab7d754e3262781d85ac370b2319c3bf27d37ac362860c104acfb34d, bytes: 52913659, execution_commit: 7fa609e89bdb8b744bb0e7eebc9e7b5c3a703e35}
+    - {model: B4, seed: 2030, sha256: 7fb2c3714586634dfcee763d7eccdf4d746972044d7c0b9ac8827bca35db414c, bytes: 52914619, execution_commit: 943da957a3af846746c21b52d05a148bcb135064}
+    - {model: B4, seed: 2031, sha256: 17cdf28b1b3032bbe1735f1203bd1cbf6993f78fb3d21e85f6b6a0cfef6fafea, bytes: 52914939, execution_commit: 943da957a3af846746c21b52d05a148bcb135064}
+    - {model: B7, seed: 2029, sha256: 019a6dfabf2eef8eeb48bce993eaed64d86b78ea2da3e413e324f22f347f2e35, bytes: 53904005, execution_commit: b1f072e45fdd17b80106a774083995c350b28f04}
+    - {model: B7, seed: 2030, sha256: 820796601fa0d0be5c11125171116c7548483b0e3e5ac45c102e5ca5d6ffc15d, bytes: 53905285, execution_commit: e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c}
+    - {model: B7, seed: 2031, sha256: 4537be7af702efd96d357a64099eb9c55f5cd9d2a4018677908e989c4a730fc7, bytes: 53906245, execution_commit: e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c}
+    - {model: B8, seed: 2029, sha256: 8abcf2082176bdbff54426649fe7a0125779873808e72e00197746f86a7f04f0, bytes: 53905021, execution_commit: ef11531a7cdeb35b767caebdb61e0e81c6123187}
+    - {model: B8, seed: 2030, sha256: f20d81858e8a61e78778da846b970e75914609f3ed05069bbebdcec459ff246e, bytes: 53906237, execution_commit: e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c}
+    - {model: B8, seed: 2031, sha256: bc324e74209076613ae3ed9a2e20bab42e81456afd315728948ef5e2c5112f07, bytes: 53906877, execution_commit: e81c6e1e0306e2a1e31103f1cc632be3c0d84d8c}
+    - {model: B7_ZERO_DOTE, seed: 2029, sha256: 445e4be5f49cba10057d90d16b82827b2c125964fd9bf4811d1e819fb3954a21, bytes: 53903301, execution_commit: 0c91ff0f36d5cce3f4516d38663482650f61b03a, identity_model_in_file: B7}
+    - {model: B7_ZERO_DOTE, seed: 2030, sha256: b03ee41cd190dc7579a1fb993afb1f5598997fca91af3b1c2addc6eed430f0ba, bytes: 53905157, execution_commit: 8a4668377dbd40013245b54550c0963d10c286fb, identity_model_in_file: B7, bytes_status: BOUND_2026_11_27}
+    - {model: B7_ZERO_DOTE, seed: 2031, sha256: f99952905157d8e649e567af671d0ee3ff02f11530a9996b80306ef758acdac0, bytes: 53906117, execution_commit: 8a4668377dbd40013245b54550c0963d10c286fb, identity_model_in_file: B7, bytes_status: BOUND_2026_11_27}
+  catalog_sha256: 7b5bafdf9920b17c78d4949bf8a5d19a0071c06cdae3da3fa95ee57dc14aab46
+  catalog_sha256_definition: 'canonical sha256 over {model:seed -> sha256, bytes, execution_commit}; authoritative value is final_test_2025_catalogue.CHECKPOINT_CATALOG_SHA256'
+  parameter_counts: {B4: 4355986, B7: 4411058, B8: 4411058, B7_ZERO_DOTE: 4411058}
+  checkpoint_load_rule: 'verify SHA-256 and byte size, then strict state_dict; ZERO_DOTE uses the B7 architecture with a zeroed numeric DOTE input'
+
+# ---------------------------------------------------------------------------
+# Frozen non-checkpoint inputs (identity only; private paths live elsewhere).
+# ---------------------------------------------------------------------------
+frozen_inputs:
+  population_sha256: 2f2cc75cfb6c209fd8195d3419207216c5c3f2a4fc8315b40a1d77cc537dedb8
+  train_statistics_sha256: 53ab2f07aabb02e66ad237452447a35e0e2896278eae9d2da179336c06fea980
+  static_pack_sha256: 788572b1e82ba388d6ddcd6b1f8a987af818f44cdde9d5d613db5d35af5281bd
+  yunnan_mask_file_sha256: 9d921def661fc3e58cd1ed783fcf87abbf493da6ae5e5fea79c28043f73495ef
+  yunnan_mask_region_sha256: 70368bec3149e998922d565dab83347ba33f465df481a03ac3f90b85f1286d4b
+  b13_normalization_sha256: 656fe7a929cbd8617b08427e8d1fa7029b26512253efb44faa576796137d4a31
+  sp04_grid_sha256: e1c5d8ab1b58407503db4b56124f4a34a360507280b0e7989e8b9e2f60888473
+  sp04_grid_source: 'config/b0_engineering_v4.yaml::sp04_manifest_sha256 (pinned SP04 coordinate manifest identity)'
+  sp04_grid_status: BOUND_TO_PINNED_SP04_MANIFEST
+  normalization_refit_allowed: false
+
+# ---------------------------------------------------------------------------
+# Metrics: exactly the B0 v1.1 primary definitions.
+# ---------------------------------------------------------------------------
+primary_metrics:
+  - global_core_loss
+  - occurrence_loss
+  - quantile_loss
+  - Brier
+  - AUROC
+  - Average_Precision
+  - conditional_mean_pinball
+  - per_tau_pinball
+  - 32_tau_conditional_coverage
+  - coverage_error
+  - crossing_count
+  - nonfinite_count
+  - support_violation_count
+metric_definitions:
+  rainy: 'float32 R > float32(0.1), evaluated before any float64 conversion'
+  occurrence: 'float64 focal BCE alpha=0.5 gamma=2; S_occ / N_valid'
+  quantile: 'mean of 32 log1p conditional rainy pinball losses; S_qr / N_valid'
+  global_core: '(S_occ + S_qr) / N_valid; never batch-averaged'
+  brier: 'sum((p - rainy)^2) / N_valid'
+  auroc: 'exact equal-score groups, tie half credit'
+  average_precision: 'NON_INTERPOLATED_END_OF_EXACT_EQUAL_SCORE_GROUP'
+  conditional_mean_pinball: 'S_qr / N_rain'
+  tau: '(i - 0.5) / 32, i = 1..32'
+  coverage: 'R <= physical conditional quantile; valid rainy cells only'
+  coverage_error: 'signed (coverage - tau), absolute, and mean absolute over 32 taus'
+  q32_signed_bias: 'coverage[tau=31/32] - 31.5/32'
+  q32_absolute_error: 'abs(q32_signed_bias)'
+  crossing: 'adjacent q_i <= q_(i-1) in log or physical domain'
+  support: 'qlog_1 <= log1p(0.1) or physical q_1 <= 0.1'
+  nonfinite: 'any nonfinite occurrence probability or quantile'
+  stop_rule: 'STOP_NO_REPAIR on support or crossing violation'
+  undefined: 'null with explicit reason'
+  thresholds: 'POD / FAR / CSI THRESHOLD_NOT_FROZEN'
+estimand: 'paired descriptive differences; no hypothesis test, confidence interval or significance claim is frozen'
+comparisons:
+  primary: {label: B7_REAL_MINUS_B7_ZERO_DOTE, left: B7, right: B7_ZERO_DOTE, co_primary: [Brier, conditional_mean_pinball]}
+  secondary:
+    - {label: B8_MINUS_B7_REAL, left: B8, right: B7}
+    - {label: B7_REAL_MINUS_B4, left: B7, right: B4}
+    - {label: B8_MINUS_B4, left: B8, right: B4}
+  aggregation: 'per-seed paired difference, then equal-weight mean over 3 seeds; null seeds counted, not imputed'
+  secondary_metrics: [AUROC, Average_Precision, 32_tau_conditional_coverage, q32_signed_bias, q32_absolute_error, mean_absolute_coverage_error]
+
+# ---------------------------------------------------------------------------
+# Inference contract.
+# ---------------------------------------------------------------------------
+inference:
+  mode: FINAL_ONLY_NO_SELECTION
+  read_only: true
+  model_eval: true
+  torch_inference_mode: true
+  physical_batch: 1
+  scenes_per_batch: 1
+  drop_last: false
+  num_workers: 0
+  precision: 'BF16 cuda autocast; FP32 parameters; float64 quantiles, coverage and metrics'
+  seed: 2026
+  torch_threads: 2
+  normalization: PHASE_B_FINALFIT
+  staging: 'BOUNDED_ENGLISH_OWN_UUID_COPY_SIZE_SHA_REQUIRED'
+  output: 'one new append-only output directory under the authorized output_root'
+  failure_policy: 'write failure.json STOP_REQUIRED, preserve partials, exit non-zero; no retry, no selection'
+prohibitions:
+  - training
+  - backward
+  - optimizer
+  - parameter_update
+  - normalization_refit
+  - calibration
+  - threshold_tuning
+  - checkpoint_selection
+  - architecture_or_loss_change
+  - learning_rate_change
+  - 2025_october
+  - true_2025_inference_in_this_phase
+
+# ---------------------------------------------------------------------------
+# Three-stage authorization; each stage is a separate researcher act.
+# ---------------------------------------------------------------------------
+execution_gates:
+  - stage: CATALOGUE_ONLY_RESEARCHER_AUTHORITY
+    gate: catalogue_authorization_json
+    allowed: 'caller-supplied inventory inspection only; no payload open'
+  - stage: OUTCOME_FREE_CATALOGUE_QC_AND_FREEZE
+    gate: catalogue_freeze_record
+    allowed: 'catalogue/population/freeze artefacts only'
+  - stage: SEPARATE_POST_FREEZE_FINAL_TEST_AUTHORITY
+    gate: final_test_authorization_json
+    allowed: 'checkpoint and frozen-input identity verification; dry-run plan'
+  - stage: FINAL_READ_ONLY_INFERENCE
+    gate: payload_authorization_json_plus_final_test_authorization_json
+    allowed: 'one bounded final pass'
+must_bind:
+  - protocol
+  - implementation
+  - catalogue
+  - population
+  - catalogue_freeze_record
+  - twelve_checkpoint_sha256
+  - frozen_inputs
+authorization_created_utc_rule: MUST_NOT_PRECEDE_REAL_CATALOGUE_FREEZE_COMPLETION
+payload_access_rule: 'the payload authorization is a separate object from the catalogue and final-test authorizations'
+artifact_names:
+  candidate_catalogue: b4_b7_b8_2025_candidate_catalogue_v1.csv
+  population_manifest: b4_b7_b8_2025_population_manifest_v1.json
+  catalogue_freeze_record: b4_b7_b8_2025_catalogue_freeze_record_v1.json
+  metrics_dir: metrics
+  comparisons: comparisons.json
+  run_manifest: run_manifest.json
+  final_status: final_status.json
+  failure: failure.json
+catalogue_schema:
+  columns: 42
+  source: src/yuntapr/experimental/research_readiness/final_test_2025_catalogue.py::COLUMNS
+  unknown_columns: REJECT
+  rows_per_scene: 1
+
+# ---------------------------------------------------------------------------
+# Budget: NOT COMPUTED by this draft.
+# ---------------------------------------------------------------------------
+budget:
+  status: NOT_COMPUTED
+  raw_source_bytes: null
+  read_formula: '12 * sum(exact per-model unique satellite/GFS/IMERG/mask payload bytes over the frozen common population) + required static reads; no training-epoch multiplier'
+  inventory_dependency: 'exact unique bytes are only knowable from the authorized 2025 inventory/QC phase; no 2025 file was listed, stat-ed or opened to prepare this draft'
+  note: 'source-byte, checkpoint-storage, score-storage and wall-clock caps must be frozen by the researcher before execution'
+
+# ---------------------------------------------------------------------------
+# Open questions carried by this draft.
+# ---------------------------------------------------------------------------
+open_questions:
+  - 'RESOLVED 2026-11-27: 2025 satellite product/pattern frozen as HIMAWARI_9_AHI_L1B / NC_H09_R21 under {YYYYMM}/{DD}; H08/R02 is not a fallback'
+  - 'RESOLVED 2026-11-27: GFS {YYYY}/{YYYYMMDD} layout confirmed from frozen 2023/2024 raw evidence; no 2025 directory was listed'
+  - 'RESOLVED 2026-11-27: ZERO_DOTE 2030/2031 checkpoint byte sizes bound (53,905,157 and 53,906,117) by stat+SHA on the archived epoch-09 files'
+  - 'RESOLVED 2026-11-27: SP04 identity bound to the pinned SP04 manifest SHA in config/b0_engineering_v4.yaml'
+  - 'IMERG 2025 completeness manifest identity is delegated to the separate payload-phase inventory'
+  - 'real 2025 population/QC and common-modality counts remain NOT_VERIFIED until the authorized catalogue phase'
+  - 'the 856 theoretical slots are a calendar expectation, not a verified population; October remains HARD_REJECT'
+  - 'budget/raw_source_bytes and wall-clock caps remain NOT_COMPUTED until the authorized inventory phase'
