@@ -473,6 +473,68 @@ def validate_spec(path):
         if (commit!=approval.get('code_commit') or dirty
                 or not isinstance(entry_hash,str) or sha(entry)!=entry_hash):
             raise PermissionError('Clean approved four-model Development checkout required')
+    elif spec['kind']=='BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION':
+        cwd=Path(spec['cwd']).resolve()
+        entry_relative='tools/research_readiness/start_multiseed_candidate_reproduction.py'
+        if (entry!=cwd/entry_relative or len(command)!=10 or command[3]!='execute'
+                or command[4::2]!=['--proposal','--private-preparation','--researcher-approval']
+                or not all(Path(value).is_absolute() for value in command[5::2])
+                or not Path(command[9]).is_file()):
+            raise PermissionError('Separate exact multi-seed candidate reproduction approval required')
+        proposal,private,approval=map(read,command[5::2])
+        expected_environment={'PYTHONHASHSEED':'2029','PYTHONUTF8':'1',
+                              'OMP_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
+                              'CUBLAS_WORKSPACE_CONFIG':':4096:8'}
+        scope='FOUR_MODEL_COSINE9_REAL_ZERO_CANDIDATE_REPRODUCTION_V1'
+        tasks=['REAL_s2030','ZERO_s2030','REAL_s2031','ZERO_s2031']
+        budget=proposal.get('budget',{})
+        if (proposal.get('kind')!='BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION'
+                or proposal.get('authorization_scope')!=scope
+                or approval.get('authorization_scope')!=scope
+                or proposal.get('authorized') is not False
+                or proposal.get('final_2025_access') is not False
+                or proposal.get('execution_code_commit_status')!='BOUND_BY_RESEARCHER_APPROVAL'
+                or approval.get('approved_by_researcher') is not True
+                or not approval.get('decision_id')
+                or approval.get('decision_id')!=proposal.get('decision')
+                or any(approval.get(key)!=proposal.get(key) for key in
+                       ('proposal_sha256','tasks','budget','scientific_choices'))
+                or proposal.get('tasks')!=tasks
+                or any(budget.get(key)!=value for key,value in
+                       dict(total_scientific_file_opens=907,
+                            total_scientific_source_bytes=5410034087,
+                            scientific_file_opens=904,
+                            scientific_source_bytes=5402764976,
+                            arrays_open_instances=484,
+                            arrays_reference_bytes=3527579048,
+                            satellite_open_instances=420,
+                            satellite_reference_bytes=1875185928,
+                            metadata_open_instances=3,
+                            metadata_reference_bytes=7269111,
+                            checkpoint_loads=0,model_inference_passes=0,
+                            optimizer_updates=0,retries=0,replays=0,
+                            maximum_seconds=1800).items())
+                or approval.get('code_commit')!=proposal.get('execution_code_commit')
+                or approval.get('output_root')!=private.get('output_root')
+                or private.get('proposal_sha256')!=proposal.get('proposal_sha256')
+                or Path(private.get('output_root','')).exists()
+                or Path(private.get('service_dir','')).resolve()!=folder
+                or Path(private.get('runtime_python','')).resolve()!=executable.resolve()
+                or sha(executable)!=proposal.get('runtime_binding',{}).get('python_executable_sha256')
+                or spec.get('environment')!=expected_environment):
+            raise PermissionError('Multi-seed candidate reproduction scope, approval, or runtime differs')
+        for key in ('code_root','output_root','arrays_root','service_dir',
+                    'runtime_python','parent_results','parent_completion',
+                    'terrain_results','seed2029_results','satellite_manifest',
+                    'satellite_root'):
+            if not Path(private.get(key,'')).is_absolute():
+                raise PermissionError('Absolute private binding required for '+key)
+        commit=subprocess.check_output(['git','-C',str(cwd),'rev-parse','HEAD'],text=True).strip()
+        dirty=subprocess.check_output(['git','-C',str(cwd),'status','--porcelain'],text=True).strip()
+        entry_hash=proposal.get('code_sha256',{}).get(entry_relative)
+        if (commit!=approval.get('code_commit') or dirty
+                or not isinstance(entry_hash,str) or sha(entry)!=entry_hash):
+            raise PermissionError('Clean approved multi-seed candidate reproduction checkout required')
     elif spec['kind']=='APPROVAL_BOUND_EXECUTION' or (spec['kind']=='BOUNDED_TRAIN_COSINE9_MULTISEED_TERRAIN' and entry.name=='start_cosine9_multiseed.py'):
         if entry.name not in ('start_dynamic_pair.py','start_dynamic_loss_recovery.py','start_upper_quantile_pair.py','start_cosine9.py','start_zero_cosine9.py','start_cosine9_multiseed.py','start_physical_pinball.py','start_dynamic_multiseed.py','start_dynamic_multiseed_recovery.py','start_dote_numeric_control.py','start_dote_numeric_multiseed.py','start_dote_physical_control.py','start_dote_physical_recovery.py') or command[3]!='execute':raise PermissionError('Only the approval-bound controller')
         def argument(flag):
@@ -560,6 +622,7 @@ def supervise(path):
             timeout = {'BOUNDED_CONDITIONAL_INTENSITY_READOUT': 7200,
                        'BOUNDED_A20_POINT_RANK': 7200,
                        'BOUNDED_STAGE4_MULTISEED_DEV_EVALUATION': 7200,
+                       'BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION': 1800,
                        'BOUNDED_STAGE45_DEV_ACCEPTANCE': 900,
                        'BOUNDED_TRAIN_ENDPOINT_SCREEN': 3600,
                        'BOUNDED_TRAIN_CROSSING_AMPLITUDE': 1200,

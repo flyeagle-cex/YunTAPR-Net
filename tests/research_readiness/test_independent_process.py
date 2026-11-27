@@ -298,4 +298,97 @@ class IndependentHostTests(unittest.TestCase):
                 process.wait.assert_called_once_with(timeout=7200)
 
 
+    def test_multiseed_candidate_reproduction_rejects_a_cosine9_multiseed_scope(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp).resolve()
+            service = root / "service"
+            service.mkdir()
+            entry_relative = "tools/research_readiness/start_multiseed_candidate_reproduction.py"
+            entry = root / entry_relative
+            entry.parent.mkdir(parents=True)
+            entry.touch()
+            runtime = root / "test_python.exe"
+            runtime.touch()
+            proposal_path, private_path, grant_path = (root / name for name in
+                                                      ("proposal.json", "private.json", "grant.json"))
+            spec_path = root / "spec.json"
+            scope = "FOUR_MODEL_COSINE9_REAL_ZERO_CANDIDATE_REPRODUCTION_V1"
+            tasks = ["REAL_s2030", "ZERO_s2030", "REAL_s2031", "ZERO_s2031"]
+            budget = dict(total_scientific_file_opens=907,
+                          total_scientific_source_bytes=5410034087,
+                          scientific_file_opens=904,
+                          scientific_source_bytes=5402764976,
+                          arrays_open_instances=484,
+                          arrays_reference_bytes=3527579048,
+                          satellite_open_instances=420,
+                          satellite_reference_bytes=1875185928,
+                          metadata_open_instances=3,
+                          metadata_reference_bytes=7269111,
+                          checkpoint_loads=0, model_inference_passes=0,
+                          optimizer_updates=0, retries=0, replays=0,
+                          maximum_seconds=1800)
+            proposal = dict(
+                kind="BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION",
+                authorization_scope=scope, authorized=False, final_2025_access=False,
+                decision="MULTISEED_CANDIDATE_REPRODUCTION_Q2_Q3_EVALUATION",
+                execution_code_commit_status="BOUND_BY_RESEARCHER_APPROVAL",
+                proposal_sha256="synthetic", execution_code_commit="synthetic",
+                budget=budget, scientific_choices={}, tasks=tasks,
+                runtime_binding=dict(python_executable_sha256=module.sha(runtime)),
+                code_sha256={entry_relative: module.sha(entry)},
+            )
+            private = dict(
+                proposal_sha256="synthetic", output_root=str(root / "output"),
+                service_dir=str(service), runtime_python=str(runtime),
+                code_root=str(root), arrays_root=str(root / "arrays"),
+                parent_results=str(root / "results.json"),
+                parent_completion=str(root / "completion.json"),
+                terrain_results=str(root / "terrain.json"),
+                seed2029_results=str(root / "seed2029.json"),
+                satellite_manifest=str(root / "manifest.json"),
+                satellite_root=str(root / "satellite"),
+            )
+            spec = dict(kind="BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION", cwd=str(root),
+                        service_dir=str(service),
+                        environment=dict(PYTHONHASHSEED="2029", PYTHONUTF8="1",
+                                         OMP_NUM_THREADS="1", MKL_NUM_THREADS="1",
+                                         CUBLAS_WORKSPACE_CONFIG=":4096:8"),
+                        command=[str(runtime), "-B", str(entry), "execute",
+                                 "--proposal", str(proposal_path),
+                                 "--private-preparation", str(private_path),
+                                 "--researcher-approval", str(grant_path)])
+            module.write(spec_path, spec)
+            module.write(proposal_path, proposal)
+            module.write(private_path, private)
+            grant = dict(proposal, approved_by_researcher=True,
+                         decision_id=proposal["decision"],
+                         code_commit="synthetic", output_root=private["output_root"])
+            module.write(grant_path, grant)
+            with patch.object(module, "PRIVATE", root), patch.object(
+                    module.subprocess, "check_output", side_effect=["synthetic", ""]):
+                self.assertEqual(module.validate_spec(spec_path), (spec, service))
+                grant["authorization_scope"] = "FOUR_TASK_COSINE9_REAL_ZERO_SEED2030_2031"
+                grant_path.write_text(json.dumps(grant), encoding="utf-8")
+                with self.assertRaisesRegex(PermissionError, "Multi-seed candidate reproduction"):
+                    module.validate_spec(spec_path)
+
+    def test_multiseed_candidate_reproduction_supervisor_uses_the_bound_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service = Path(tmp)
+            configuration = service / "spec.json"
+            fixture = dict(kind="BOUNDED_STAGE4_MULTISEED_CANDIDATE_REPRODUCTION",
+                           command=["synthetic"], cwd=tmp)
+            module.write(configuration, fixture)
+            module.write(service / "independent_launch_claim.json",
+                         dict(spec_sha256=module.sha(configuration)))
+            with patch.object(module, "validate_spec", return_value=(fixture, service)), patch.object(
+                    module, "host_identity", return_value=dict(in_any_job=False, package_status=15700)
+            ), patch.object(module.subprocess, "Popen") as popen:
+                process = popen.return_value
+                process.pid = 123
+                process.wait.return_value = 0
+                self.assertEqual(module.supervise(configuration), 0)
+                process.wait.assert_called_once_with(timeout=1800)
+
+
 if __name__=='__main__':unittest.main()
