@@ -127,3 +127,11 @@
 - 修复（不改代码、不改提案、不重封）：控制器继续使用 venv python，但 worker 改用真实解释器 `--worker-python C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`，并让控制器/worker 继承 `PYTHONPATH=F:\pytorch\Research\.venv-cuda\Lib\site-packages`、`PYTHONUTF8=1`。实测：base python 直接 `subprocess.Popen` 得 controller 40612、子进程 40188、worker ppid 40612（相等）；base python 在上述 `PYTHONPATH` 下导入 torch 2.11.0+cu128（`torch.cuda.is_available() == True`）、numpy 2.5.3、yaml 6.0.3、netCDF4 1.7.4 全部成功。
 - 证据与消费：第二次失败的输出根残留（`authorization_binding.json` 7,496 B、`B2_s2030_console.log` 1,020 B、`failure.json` 307 B / SHA-256 `0fef0e5ac433e6c2a4af17a473b9ab253e52ff9bf779cd8146e6431d7114ed1a`、`task_1_claim.json` 107 B）、控制器日志与已消费批准归档于 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261127T230756Z/`（含 `ARCHIVE_MANIFEST.json`）；F: 输出根已删除。
 - 治理：第二次批准因工程缺陷作废（一次尝试消费）；冻结身份（commit `f4d44a7`、提案、私有准备、预算、任务表、科学选择）不变；需研究者给出**第三次明确批准**后方可启动。启动命令必须显式使用 `--worker-python`（真实解释器）并继承上述 `PYTHONPATH`；失败即停、零重放零重试、零 2025 读取。
+
+## 15 第三次启动（研究者批准后，运行中，2026-11-27）
+
+- 第三次批准：`decision_id = SEED_COMPLETION_B2B5B6_2030_2031_THIRD_APPROVED_20261128`，批准文件 `RESEARCHER_APPROVAL.json` 6,170 B、SHA-256 `399EC8C5C5901C900A33DC53E4CC3D968271D99C027C907FB1E191F08BBACBBC`，恰 8 键并与冻结提案全等（`code_commit = f4d44a7…`、`proposal_sha256 = eb9ac98f…`、6 任务、预算、scientific_choices、`output_root = F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`）；`dry_run` 通过（`DRY_RUN_OK`，输出根不存在）。
+- 启动（本地 2026-11-27 23:16:20）：控制器 = 固定副本 `YunTAPR-SeedCompletion-Exec-f4d44a7` 下 `F:\pytorch\Research\.venv-cuda\Scripts\python.exe -B tools/research_readiness/start_seed_completion.py execute …`，`--worker-python C:\Users\chenerxiao\AppData\Roaming\uv\python\cpython-3.12.14-windows-x86_64-none\python.exe`；控制器/worker 继承 `PYTHONPATH=F:\pytorch\Research\.venv-cuda\Lib\site-packages`、`PYTHONUTF8=1`。绑定文件记录 controller_pid 40600；进程链 18356（shim）→ 40600（真实控制器）→ 13064（worker，ppid 40600），父进程校验通过。
+- 启动证据：输出根已创建，`authorization_binding.json` 7,501 B、`task_1_claim.json` 108 B；`B2_s2030/initialization.json` 952 B、`train_orders.json` 311,790 B；截至 23:21，`updates.sqlite` 表 `updates` 已 174 行（RETURNED），`B2_Train_reads_01/reads.sqlite` 3,004 jobs / 3,004 file_io，凭据与既有 B2 训练循环一致；无 `failure.json`。
+- 运行上限：每任务 21,600 s、整包 129,600 s（36 h）；零重放、零额外重试；任何任务失败即 STOP_NO_AUTOMATIC_REPLAY 并保留已写入账本。完成后按预注册执行独立核验（ledger 4,320/任务、三 seed 表与比较摘要、检查点身份）。
+
