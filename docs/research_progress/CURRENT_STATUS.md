@@ -1,5 +1,7 @@
 # YunTAPR-Net 当前科研进度
 
+2026-11-28 种子补齐包（B2/B5/B6 × seed 2030/2031）**已冻结、等待研究者一次明确批准**：为把 S2 单时次基线（B2）、S4 高程单通道（B5）、S4 六通道静态地形（B6）从单 seed 补齐到 3 seed 最低确认线，新实现只复制既有 B2/B5/B6 冻结训练循环并参数化 seed（既有模块字节不变）。固定执行副本 `YunTAPR-SeedCompletion-Exec-ee69b65`（HEAD `ee69b65`）；规范提案 `proposal_sha256 = efd99057…`，公开提案 LF 108,893 B / SHA-256 `954deff5…`；无载荷 dry-run `DRY_RUN_OK`（未读 Train/Dev、未建模型、未 torch.load）。6 任务：B2/B5/B6 × 2030、2031，各 E0 九轮 4,320 更新；预算 25,920 更新、856,876 次源读取、2,865,430,597,384 B；每任务 21,600 s、整包 129,600 s；初始 ≥48 GiB、每任务 ≥24 GiB；零 replay/重试；2025 数据永不读取。证据：[执行提案](../research_readiness/20261128_seed_completion/SEED_COMPLETION_EXECUTION_PROPOSAL_V1.json)、[预注册](../research_readiness/20261128_seed_completion/PREREGISTRATION_V1.md)、[协议](../../../config/training/seed_completion_protocol_v1.yaml)。未获批准前不创建输出根、不启动任何训练。
+
 2026-11-28 12 模型 2025 一次性最终测试**已执行完成**（研究者明确授权；run
 `run_20261127T134218Z`，2026-11-27T13:42:21Z 起、elapsed 858.0 s、exit 0）：847 个 eligible
 场景 × 12 个冻结 E9 模型，按场景读取 7,623 次 / 24,351,305,156 B（唯一 6,990 文件 /
