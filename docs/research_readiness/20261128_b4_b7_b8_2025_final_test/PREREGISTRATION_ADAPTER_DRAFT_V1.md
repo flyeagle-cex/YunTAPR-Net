@@ -224,3 +224,12 @@ F:\devtools\miniconda3\python.exe -m pytest tests/research_readiness/test_final_
 - 冻结推理预算：847 场景单次读取唯一 **6,990 文件 / 23,820,342,517 B**（Himawari 5,082/23,309,298,535；GFS main 847/252,937,333；GFS thermo 847/78,787,769；IMERG 214/179,318,880）。
 - 首次无效执行（IMERG 非 ASCII 路径解码失败）已停止并披露；修复后本运行是唯一公开有效运行，无效证据在 gitignored `.local/catalogue_qc_invalid_runs/`。
 - 结果文档：`CATALOGUE_QC_RESULTS_V1.md`。下一步：另行请求 12 模型一次性最终推理授权（`SEPARATE_POST_FREEZE_FINAL_TEST_AUTHORITY` + payload 授权）；2025 仍不得回流调参。
+
+## 16 最终推理实现加固与一次性执行授权请求（2026-11-28）
+
+- 适配器修复（工作树）：freeze 完成时钟 `created_utc`、freeze↔population 绑定、eligible 过滤 847、B13 分位身份 `656fe7a9…`、协议 CUDA BF16 autocast、IMERG 列名 `imerg_sha256`/`imerg_bytes`；新增 5 项合成测试。
+- 实现绑定扩展：authority 的 implementation set 为 **9 个文件**（7 个冻结 QC 实现 + `final_test_2025_adapter.py` + `final_test_2025_readers.py`），digest `675ac33709307ed0cd17998866810391289d299f45289b6a6cdfba30a0a57d57`；协议本身的实参集合仍为原 7 文件（gate 2 历史绑定不变）。
+- 模板：`final_test_authority_template_v1.json`（16 键、SHA `f13d8cbe7734ab91e97f95b90ea090ff4579f6403970ead97ac6c80a485567a1`）、`payload_authorization_template_v1.json`（9 键、SHA `ba5c1ad32a7e1b14d040e8041d379591651cd65e5963591ab31332089d978777`），真实 loader 通过；正式授权文件在研究者批准后按批准时刻重签 `created_utc` 后生成。
+- 测试：`tests/research_readiness/test_final_test_2025_*.py` → 74 passed / 1 skipped；dry-run 通过（`DRY_RUN_AUTHORIZED_NO_PAYLOAD_IO`）。
+- 预算：按场景 7,623 opens / 24,351,305,156 B；唯一文件 6,990 / 23,820,342,517 B；权重 643,891,462 B；10,164 次 no-grad forward；预计 1.5–4 h，输出 <1 GiB。
+- 请求对象：见 `AUTHORIZATION_REQUEST_FINAL_TEST_V1.md`；**本文件不构成授权**，2025 载荷仍未打开。

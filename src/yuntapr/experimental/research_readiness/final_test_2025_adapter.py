@@ -333,6 +333,12 @@ class FrozenInputs:
     definition: DoteDefinition | None
 
 
+def spectral_population_id(channel: str, population_sha256: str) -> str:
+    """B13 keeps the frozen pre-phase-B normalization identity; six channels use Train."""
+    _hex(population_sha256, 'Train statistics population SHA')
+    return FROZEN_B13_NORMALIZATION_SHA if channel == 'B13' else population_sha256
+
+
 def load_frozen_inputs(authority: FinalTest2025Authority, *,
                        require_canonical: bool = True) -> FrozenInputs:
     """Load the frozen 2023-Train scalers, static B6 pack and Yunnan mask."""
@@ -371,7 +377,8 @@ def load_frozen_inputs(authority: FinalTest2025Authority, *,
             unit=entry['unit'], fit_years=tuple(entry['fit_years']),
             fit_role=entry['fit_role'], ddof=entry['ddof'],
             population_id=entry['population_id'])
-        if item.channel != channel or item.population_id != population:
+        if item.channel != channel or item.population_id != spectral_population_id(
+                channel, population):
             raise ValueError('Spectral scaler channel/population binding differs')
         spectral[channel] = item
 
@@ -636,6 +643,14 @@ def infer_scene(model: torch.nn.Module, kind: str, inputs: SceneInputs,
     return output
 
 
+def forward_scene(model: torch.nn.Module, kind: str, inputs: SceneInputs,
+                  frozen: FrozenInputs, device: torch.device) -> Any:
+    """One inference-mode forward under the protocol's CUDA BF16 autocast."""
+    with torch.autocast(device_type=device.type, dtype=torch.bfloat16,
+                        enabled=device.type == 'cuda'):
+        return infer_scene(model, kind, inputs, frozen)
+
+
 # --------------------------------------------------------------------------- #
 # Metrics
 # --------------------------------------------------------------------------- #
@@ -764,7 +779,7 @@ def _expected_from_catalogue(rows: Sequence[Mapping[str, Any]]) -> dict[str, dic
         for modality, path_key, sha_key, bytes_key in (
                 ('gfs', 'gfs_main_relative_path', 'gfs_main_sha256', 'gfs_main_bytes'),
                 ('gfs', 'gfs_thermo_relative_path', 'gfs_thermo_sha256', 'gfs_thermo_bytes'),
-                ('imerg', 'imerg_day_relative_path', 'imerg_day_sha256', 'imerg_day_bytes')):
+                ('imerg', 'imerg_day_relative_path', 'imerg_sha256', 'imerg_bytes')):
             expected[row[path_key]] = {'sha256': row[sha_key], 'bytes': row[bytes_key]}
     return expected
 
@@ -781,6 +796,64 @@ def validate_scene_population(population: Mapping[str, Any], expected_count: int
     if len(set(ids)) != len(ids):
         raise ValueError('Duplicate population sample_id')
     return scenes
+
+
+def freeze_completed_utc(freeze: Mapping[str, Any]) -> datetime:
+    """Parse the freeze record's completion clock (sub-minute precision retained)."""
+    if not isinstance(freeze, Mapping) or 'created_utc' not in freeze:
+        raise ValueError('Freeze record must carry created_utc')
+    return planning.parse_utc(freeze['created_utc'])
+
+
+def validate_freeze_population_binding(freeze: Mapping[str, Any],
+                                       population: Mapping[str, Any],
+                                       population_file_sha256: str) -> str:
+    """Bind the population manifest file and identity to the freeze record."""
+    _hex(population_file_sha256, 'population file SHA')
+    frozen_population = freeze.get('population')
+    if not isinstance(frozen_population, Mapping) or 'sha256' not in frozen_population:
+        raise ValueError('Freeze record must bind the population file SHA')
+    if frozen_population['sha256'] != population_file_sha256:
+        raise PermissionError('Freeze record population SHA differs from the authorized file')
+    if population.get('fixture_only') is not False:
+        raise PermissionError('Only a real frozen population can be executed')
+    identity = population.get('identity')
+    frozen_identity = freeze.get('identity')
+    if not isinstance(identity, Mapping) or not isinstance(frozen_identity, Mapping):
+        raise ValueError('Freeze and population must both bind a population identity')
+    if dict(identity) != dict(frozen_identity):
+        raise ValueError('Population identity differs from the frozen catalogue identity')
+    identity_sha = manifest.identity_sha256(identity)
+    if not isinstance(identity_sha, str) or _HEX.fullmatch(identity_sha) is None:
+        raise ValueError('Frozen population identity SHA must be 64-hex')
+    return identity_sha
+
+
+def select_eligible_scenes(population: Mapping[str, Any],
+                           rows: Sequence[Mapping[str, Any]],
+                           expected_count: Any) -> list[dict[str, Any]]:
+    """Return only catalogue-eligible scenes, preserving frozen population order."""
+    if type(expected_count) is not int or expected_count <= 0:
+        raise ValueError('Frozen eligible count must be a positive integer')
+    scenes = validate_scene_population(population)
+    eligible: set[str] = set()
+    for row in rows:
+        flag = row.get('eligible')
+        if type(flag) is not bool:
+            raise ValueError('Catalogue eligible flag must be a boolean')
+        if flag:
+            eligible.add(row['sample_id'])
+    if len(eligible) != expected_count:
+        raise ValueError('Catalogue eligible count differs from the frozen freeze record')
+    population_ids = {scene['sample_id'] for scene in scenes}
+    if eligible - population_ids:
+        raise ValueError('Eligible catalogue samples are missing from the frozen population')
+    selected = [scene for scene in scenes if scene['sample_id'] in eligible]
+    if len(selected) != expected_count:
+        raise ValueError('Eligible population scene count differs from the frozen freeze record')
+    for scene in selected:
+        planning.validate_scene(scene)
+    return selected
 
 
 def dry_run(authority_path: str | os.PathLike[str], authority_sha256: str | None = None) -> dict[str, Any]:
@@ -829,16 +902,17 @@ def execute(authority_path: str | os.PathLike[str], authority_sha256: str | None
     freeze = json.loads(freeze_path.read_bytes().decode('utf-8'))
     if freeze.get('status') != 'CATALOGUE_FROZEN' or freeze.get('fixture_only') is not False:
         raise PermissionError('Only a real frozen catalogue can be executed')
-    if authority.created_utc < _utc(freeze['freeze_completed_utc']):
+    if authority.created_utc < freeze_completed_utc(freeze):
         raise PermissionError('Final-test authority must not precede the catalogue freeze')
 
     rows = catalogue.read_csv(catalogue_path)
     catalogue.validate_catalogue(rows)
     population = manifest.read_population(population_path)
+    validate_freeze_population_binding(freeze, population, authority.population_sha256_file)
     canonical_population = population.get('population_sha256')
-    if canonical_population != FROZEN_POPULATION_SHA:
-        raise PermissionError('Population is not the frozen 2023/2024 identity')
-    scenes = validate_scene_population(population)
+    if not isinstance(canonical_population, str) or _HEX.fullmatch(canonical_population) is None:
+        raise ValueError('Frozen population must bind a 64-hex canonical population SHA')
+    scenes = select_eligible_scenes(population, rows, freeze.get('eligible_count'))
     pins = _expected_from_catalogue(rows)
     frozen = load_frozen_inputs(authority)
     if authority.document['frozen_inputs']['statistics'][1] != FROZEN_TRAIN_STATISTICS_SHA:
@@ -871,7 +945,7 @@ def execute(authority_path: str | os.PathLike[str], authority_sha256: str | None
                 payload = readers.read_scene_payload(access, scene, expected=pins)
                 inputs = build_scene_inputs(payload, frozen, device=device)
                 for key, model in models.items():
-                    result = infer_scene(model, key[0], inputs, frozen)
+                    result = forward_scene(model, key[0], inputs, frozen, device)
                     accumulators[key].add(result, inputs)
                 ledger.write(json.dumps({
                     'sample_id': inputs.sample_id, 'analysis_time': inputs.analysis_time,
@@ -963,6 +1037,7 @@ __all__ = [
     'COMPARISONS', 'CO_PRIMARY_METRICS', 'FINAL_METRICS', 'FAMILY', 'MODELS', 'SEEDS',
     'FinalTest2025Accumulator', 'FinalTest2025Authority', 'FrozenInputs', 'SceneInputs',
     'authorize_final_test', 'authorize_payload', 'build_model', 'build_scene_inputs',
-    'dry_run', 'execute', 'infer_scene', 'load_final_model', 'load_frozen_inputs',
-    'paired_descriptions', 'sha256_file', 'validate_scene_population', 'VERSION', 'SCOPE',
+    'dry_run', 'execute', 'freeze_completed_utc', 'infer_scene', 'load_final_model',
+    'load_frozen_inputs', 'paired_descriptions', 'select_eligible_scenes', 'sha256_file',
+    'spectral_population_id', 'validate_freeze_population_binding', 'validate_scene_population', 'VERSION', 'SCOPE',
 ]

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 import math
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
 import numpy as np
@@ -266,3 +266,138 @@ def test_scene_population_requires_contiguous_indices():
         adapter.validate_scene_population({'scene_records': []})
     with pytest.raises(ValueError):
         adapter.validate_scene_population({'scene_records': [good[0], good[0]]})
+
+
+def _population_identity():
+    return {'sp04_grid_sha256': '1' * 64, 'supervision_mask_sha256': '2' * 64,
+            'static_sha256': '3' * 64, 'train_scalers_sha256': '4' * 64}
+
+
+def test_freeze_completed_utc_retains_subminute_clock():
+    freeze = {'created_utc': '2026-11-27T08:38:11.452234+00:00'}
+    moment = adapter.freeze_completed_utc(freeze)
+    assert moment == datetime(2026, 11, 27, 8, 38, 11, 452234, tzinfo=timezone.utc)
+    with pytest.raises(ValueError):
+        adapter.freeze_completed_utc({})
+
+
+def test_freeze_population_binding_requires_frozen_identity():
+    identity = _population_identity()
+    file_sha = 'a' * 64
+    freeze = {'population': {'sha256': file_sha}, 'identity': dict(identity)}
+    population = {'fixture_only': False, 'identity': dict(identity),
+                  'population_sha256': 'b' * 64}
+    assert adapter.validate_freeze_population_binding(freeze, population, file_sha) == \
+        manifest.identity_sha256(identity)
+
+    with pytest.raises(PermissionError):
+        adapter.validate_freeze_population_binding(freeze, population, 'c' * 64)
+    with pytest.raises(PermissionError):
+        adapter.validate_freeze_population_binding(
+            freeze, dict(population, fixture_only=True), file_sha)
+    with pytest.raises(ValueError):
+        adapter.validate_freeze_population_binding(
+            freeze, dict(population, identity=dict(identity, sp04_grid_sha256='9' * 64)),
+            file_sha)
+    with pytest.raises(ValueError):
+        adapter.validate_freeze_population_binding({'identity': identity}, population, file_sha)
+
+
+def test_spectral_population_keeps_frozen_b13_identity():
+    population = 'b' * 64
+    assert adapter.spectral_population_id('B13', population) == \
+        adapter.FROZEN_B13_NORMALIZATION_SHA
+    for channel in planning.CHANNELS:
+        if channel != 'B13':
+            assert adapter.spectral_population_id(channel, population) == population
+
+
+def _synthetic_population():
+    layout = planning.PathLayout2025.default()
+    return [scene.as_dict() for scene in planning.enumerate_scenes(layout, months=(3,))]
+
+
+def test_select_eligible_scenes_excludes_ineligible_rows():
+    scenes = _synthetic_population()
+    assert len(scenes) == 124
+    rows = [{'sample_id': scene['sample_id'], 'eligible': position < 100}
+            for position, scene in enumerate(scenes)]
+    selected = adapter.select_eligible_scenes({'scene_records': scenes}, rows, 100)
+    assert [scene['sample_id'] for scene in selected] == \
+        [scene['sample_id'] for scene in scenes[:100]]
+    assert len(selected) == 100
+
+    with pytest.raises(ValueError):
+        adapter.select_eligible_scenes({'scene_records': scenes}, rows, 101)
+    unknown = [dict(row) for row in rows]
+    unknown[0]['sample_id'] = 'not-in-population'
+    with pytest.raises(ValueError):
+        adapter.select_eligible_scenes({'scene_records': scenes}, unknown, 100)
+    bad_flag = [dict(row) for row in rows]
+    bad_flag[0]['eligible'] = 1
+    with pytest.raises(ValueError):
+        adapter.select_eligible_scenes({'scene_records': scenes}, bad_flag, 100)
+
+
+def test_select_eligible_scenes_requires_positive_count():
+    scenes = _synthetic_population()
+    rows = [{'sample_id': scene['sample_id'], 'eligible': False} for scene in scenes]
+    for bad in (0, -1, None, '1'):
+        with pytest.raises(ValueError):
+            adapter.select_eligible_scenes({'scene_records': scenes}, rows, bad)
+
+
+def _catalogue_row_for_pins():
+    row = {}
+    for slot in range(6):
+        row[f'slot_{slot:02d}_relative_path'] = f'2025/03/01/slot_{slot:02d}.nc'
+        row[f'slot_{slot:02d}_sha256'] = _sha(f'slot-{slot}')
+        row[f'slot_{slot:02d}_bytes'] = 100 + slot
+    row.update({
+        'gfs_main_relative_path': '2025/20250301/gfs_main.nc',
+        'gfs_main_sha256': _sha('gfs-main'), 'gfs_main_bytes': 201,
+        'gfs_thermo_relative_path': '2025/20250301/gfs_thermo.nc',
+        'gfs_thermo_sha256': _sha('gfs-thermo'), 'gfs_thermo_bytes': 202,
+        'imerg_day_relative_path': '2025/imerg_20250301.nc',
+        'imerg_sha256': _sha('imerg'), 'imerg_bytes': 203,
+    })
+    return row
+
+
+def test_expected_from_catalogue_uses_real_imerg_column_names():
+    row = _catalogue_row_for_pins()
+    pins = adapter._expected_from_catalogue([row])
+    assert len(pins) == 9
+    assert pins['2025/03/01/slot_03.nc'] == {'sha256': _sha('slot-3'), 'bytes': 103}
+    assert pins['2025/imerg_20250301.nc'] == {'sha256': _sha('imerg'), 'bytes': 203}
+    assert pins['2025/20250301/gfs_thermo.nc'] == {
+        'sha256': _sha('gfs-thermo'), 'bytes': 202}
+
+
+def test_expected_from_catalogue_ignores_legacy_placeholder_columns():
+    row = _catalogue_row_for_pins()
+    row.update(imerg_day_sha256=_sha('legacy'), imerg_day_bytes=999)
+    pins = adapter._expected_from_catalogue([row])
+    assert pins['2025/imerg_20250301.nc'] == {'sha256': _sha('imerg'), 'bytes': 203}
+
+
+def test_forward_scene_uses_bf16_cuda_autocast(monkeypatch):
+    captured = {}
+
+    class FakeAutocast:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+
+        def __enter__(self):
+            return None
+
+        def __exit__(self, *exc):
+            return False
+
+    monkeypatch.setattr(adapter.torch, 'autocast', FakeAutocast)
+    monkeypatch.setattr(adapter, 'infer_scene', lambda *args, **kwargs: 'RESULT')
+    assert adapter.forward_scene(None, 'B7', None, None, torch.device('cpu')) == 'RESULT'
+    assert captured == {'device_type': 'cpu', 'dtype': torch.bfloat16, 'enabled': False}
+    captured.clear()
+    assert adapter.forward_scene(None, 'B7', None, None, torch.device('cuda')) == 'RESULT'
+    assert captured == {'device_type': 'cuda', 'dtype': torch.bfloat16, 'enabled': True}
