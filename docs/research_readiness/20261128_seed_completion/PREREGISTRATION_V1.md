@@ -144,3 +144,16 @@
 - 证据状态：输出根无 `failure.json`、无 `completion.json`、无 `package_completion.json`；包状态记为 `INCOMPLETE_PAUSED_MID_EXECUTION`。本暂停不是工程失败，也不是科学结果，不得据此写任何结论。
 - 暂停记录：私有位置 `D:\研究\极端降水预测\.dsh_seed_completion_pause.json`（不写入已批准的证据目录）；看板 `http://127.0.0.1:8766/` 显示 PAUSED。
 - 恢复治理：不自动恢复。已批准的一次性执行已被中断并消费；继续或重跑属于新的执行，必须由研究者给出新的明确批准（新提案或修订提案、预算按已消费部分重算、失败即停、零静默重试），且不得覆盖现有输出根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`。可选路径：A 从零重跑 `B2_s2030`（旧目录留证、新输出目录）；B 仅执行剩余 5 任务并按已消费 960 更新重算预算；C 保持暂停。
+## 17 选项 B 恢复包（2026-11-28，已消耗 960 更新核算）
+
+- 研究者指令：m07293「恢复，按B来」。按暂停记录 `resume_policy.future_resume_options` 的选项 B 执行新批准包。
+- 暂停事实：上一包（proposal `eb9ac98f…`、code `f4d44a7…`、批准 `399EC8C5…`）于 2026-11-28 00:02:48 被研究者暂停；`B2_s2030` 完成 960/4,320 更新（28,883 reads / 96,959,556,099 B），其余 5 任务未启动；整包无 `failure.json` / `completion.json`，状态 `INCOMPLETE_PAUSED_MID_EXECUTION`。
+- 关键发现：暂停产物只保存了 `B2_LAST_epoch_01.pt`（52,625,195 B），**没有 epoch-02 检查点**；冻结 worker 没有 resume/replay 语义。因此“从第 960 更新续跑”无法在不动代码、不重放的前提下实现。
+- 决策（选项 B 的忠实实现）：新批准包在**新输出根**完整重跑 6 个任务；把上一包的 960 更新 / 28,883 reads / 96,959,556,099 B 记为**已消耗**且不重用；两者合并核算为 26,880 更新 / 885,759 reads / 2,962,390,153,483 B。
+- 冻结身份：固定副本 `YunTAPR-SeedCompletion-Resume6-Exec-a03899f`（HEAD `a03899f…`）；规范提案 SHA-256 `b9d6700f5201ef27f960a45d4ecf11e4e9709a168dff52a24ffb1044563064dc`；公开提案 `SEED_COMPLETION_RESUME6_EXECUTION_PROPOSAL_V1.json`（110946 B，SHA-256 `43dcd63ade2c43b4a2e0177be61f1ebf0c935d5592eaa77d6491b85a40e9e3f1`）；私有准备 6,829 B（SHA-256 `95d20244a39dfa802d90b60d0580e1e23b078231804a4885cfb2edd34a3b5187`）；提案内 `resume_context` digest `a4a0cb21…`；代码提交 `a03899f…` 已推送。
+- 任务与预算：6 任务顺序 B2/2030, B2/2031, B5/2030, B6/2030, B5/2031, B6/2031；25,920 更新 / 856,876 源读取 / 2,865,430,597,384 B；每任务 21,600 s、整包 129,600 s；初始 48 GiB、每任务 24 GiB；零 replay、零额外重试。
+- 输出根：`F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1_resume6`（必须不存在）；**不得覆盖**暂停根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1`；暂停根与暂停记录（SHA-256 `e7c1bc825726e78c521f4e3f5697542b389d4a3e4bef1f259353e9d61591af8a`）保留为证据。
+- 比较与不变量：与全量包相同的 B2→B3、B5/B6→B4 三 seed 配方与 Dev E9 基线；三 seed 表补齐后只作描述性汇总（均值±SD，不宣称显著性）。
+- 批准对象：恰 8 键（approved_by_researcher / decision_id / code_commit / proposal_sha256 / tasks / budget / scientific_choices / output_root），`dry_run` 通过后方可单次启动。
+- 失败策略：任一任务失败即 `STOP_NO_AUTOMATIC_REPLAY`，保留已写入账本，不自动重试；2025 数据不读取、不回流。
+- 边界：本包是训练补齐与描述性 Dev 汇总，不构成 2025 最终测试、独立验证或机制因果结论。
