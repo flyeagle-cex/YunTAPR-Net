@@ -157,3 +157,11 @@
 - 批准对象：恰 8 键（approved_by_researcher / decision_id / code_commit / proposal_sha256 / tasks / budget / scientific_choices / output_root），`dry_run` 通过后方可单次启动。
 - 失败策略：任一任务失败即 `STOP_NO_AUTOMATIC_REPLAY`，保留已写入账本，不自动重试；2025 数据不读取、不回流。
 - 边界：本包是训练补齐与描述性 Dev 汇总，不构成 2025 最终测试、独立验证或机制因果结论。
+## 18 选项 B 恢复包第四次启动（因 H: 卷离线 STOP，2026-11-28）
+
+- 授权对象：`decision_id = SEED_COMPLETION_B2B5B6_RESUME_OPTION_B_APPROVED_20261128`，8 键批准文件 6,355 B / SHA-256 `28a1e63ee84374e839d51d24dd2b3320007534bf02ca41393682a6cc0f884ed8`（`researcher_instruction = "恢复，按B来"`，ref m07293；`dry_run` 通过）。
+- 冻结身份：固定副本 `YunTAPR-SeedCompletion-Resume6-Exec-a03899f`（HEAD `a03899f…`）；规范提案 `b9d6700f5201ef27f960a45d4ecf11e4e9709a168dff52a24ffb1044563064dc`；公开提案 SHA-256 `43dcd63ade2c43b4a2e0177be61f1ebf0c935d5592eaa77d6491b85a40e9e3f1`；输出根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1_resume6`。
+- 启动与失败：2026-11-28 08:42:21 创建输出根，控制器（venv python）与 worker（真实解释器 cpython-3.12.14 + `PYTHONPATH` 指向 venv site-packages）父进程校验通过；worker 在 `B2_s2030` 第一批准 Train 批次读取时抛 `FileNotFoundError: [WinError 3] H:\葵花202303_202510\202310\03\NC_H09_20231003_1700_R21_FLDK.06001_06001.nc`；**0 更新、0 源读取、0 指标**，根/任务两级 `failure.json` 均为 `STOP_NO_AUTOMATIC_REPLAY`。
+- 环境证据：`Get-Volume` / `Get-CimInstance Win32_LogicalDisk` 仅显示 C/D/E/F（内部 NVMe），无 exFAT 卷，H: 不存在；即训练所依赖的外置 Himawari 2TB 卷当前未连接（物理离线），非代码缺陷。
+- 证据归档：本次输出根已删除，授权绑定、两级 failure、claim、console、controller 日志与已消费批准归档至 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261128T084221Z/`（含 `ARCHIVE_MANIFEST.json`）；暂停根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1` 未触碰。
+- 治理：本次一次性批准已被该次尝试消费；不自动重试、不重放。重新启动需 ①研究者重新连接 H: 卷并确认；②研究者给出一次新的明确批准（同提案/预算，新 decision_id 与批准文件）；③再次 `dry_run` 通过后单次启动。
