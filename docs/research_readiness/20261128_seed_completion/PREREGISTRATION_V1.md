@@ -165,3 +165,11 @@
 - 环境证据：`Get-Volume` / `Get-CimInstance Win32_LogicalDisk` 仅显示 C/D/E/F（内部 NVMe），无 exFAT 卷，H: 不存在；即训练所依赖的外置 Himawari 2TB 卷当前未连接（物理离线），非代码缺陷。
 - 证据归档：本次输出根已删除，授权绑定、两级 failure、claim、console、controller 日志与已消费批准归档至 `docs/research_readiness/.local/seed_completion_invalid_runs/run_20261128T084221Z/`（含 `ARCHIVE_MANIFEST.json`）；暂停根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1` 未触碰。
 - 治理：本次一次性批准已被该次尝试消费；不自动重试、不重放。重新启动需 ①研究者重新连接 H: 卷并确认；②研究者给出一次新的明确批准（同提案/预算，新 decision_id 与批准文件）；③再次 `dry_run` 通过后单次启动。
+## 19 选项 B 恢复包第五次启动（H: 卷恢复在线，retry2，2026-11-28）
+
+- 触发：研究者于 2026-11-28 08:48 重新接入外置 Himawari 卷并回复「已接入」（m07555）。
+- 环境复核：`H:\葵花202303_202510` 在线（H: 1,376.5 GB 可用）；抽查 `H:\葵花202303_202510\202310\03\NC_H09_20231003_1700_R21_FLDK.06001_06001.nc`（2,857,879 B）、`202303\01` 首帧与 `202506\15` 帧均存在。
+- 新批准（同冻结提案/预算，新 decision_id）：`SEED_COMPLETION_B2B5B6_RESUME_OPTION_B_RETRY2_APPROVED_20261128`，8 键批准文件 6,362 B / SHA-256 `0c0d0acc7d163da8c6f2b08636191cbdcf4fe2dc3eb4e595ea838fd80a8b7ea6`；`researcher_instruction = "已接入"`，ref m07555；上一份已消费批准轮换为 `CONSUMED_RESEARCHER_APPROVAL_attempt4_28a1e63e.json`。
+- 冻结身份：固定副本 `YunTAPR-SeedCompletion-Resume6-Exec-a03899f`（HEAD `a03899f…`）；规范提案 `b9d6700f5201ef27f960a45d4ecf11e4e9709a168dff52a24ffb1044563064dc`；公开提案 SHA-256 `43dcd63ade2c43b4a2e0177be61f1ebf0c935d5592eaa77d6491b85a40e9e3f1`；`dry_run` 通过（6 任务、25,920 更新、2,865,430,597,384 B、129,600 s 上限、零重放零重试）。
+- 启动：2026-11-28 08:49:09 创建输出根 `F:\pytorch\Research\YunTAPR_seed_completion_20261128_v1_resume6`；控制器 venv python + worker 真实解释器（cpython-3.12.14 + `PYTHONPATH` 指向 venv site-packages）父进程校验通过；`B2_s2030` 初始化完成并开始写入 updates 账本，无 `failure.json`。
+- 运行边界：每任务 21,600 s、整包 129,600 s 上限；零 replay、零额外重试；任一任务失败即 STOP_NO_AUTOMATIC_REPLAY；2025 数据不读取。
