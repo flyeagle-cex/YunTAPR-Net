@@ -45,6 +45,8 @@ def main():
     prepare.add_argument('--inherited', type=Path, required=True)
     prepare.add_argument('--terrain', type=Path, required=True)
     prepare.add_argument('--public-terrain', type=Path, required=True)
+    prepare.add_argument('--tasks', type=str, default='',
+                         help='optional ordered subset, e.g. "B2:2031,B5:2030,B6:2030,B5:2031,B6:2031"; default all six')
     _output_paths(prepare)
     dry = modes.add_parser('dry-run', help='validate everything without model/data/checkpoint reads')
     _paths(dry)
@@ -70,9 +72,18 @@ def main():
                           'budget': module.BUDGET}, indent=2, ensure_ascii=False))
         return
     if args.mode == 'prepare':
+        tasks = []
+        if args.tasks:
+            for item in args.tasks.split(','):
+                item = item.strip()
+                if not item:
+                    continue
+                model, _, seed_text = item.partition(':')
+                tasks.append((model.strip(), int(seed_text)))
         proposal, private = module.prepare(ROOT, output_root=args.output_root,
                                            inherited=args.inherited, terrain=args.terrain,
-                                           public_terrain=args.public_terrain)
+                                           public_terrain=args.public_terrain,
+                                           tasks=(tasks or None))
         from yuntapr.experimental.core_innovation.stage4.engine import write
         write(args.proposal, proposal)
         write(args.private_preparation, private)

@@ -110,6 +110,44 @@ BUDGET=dict(version=VERSION,models=6,epochs=9,updates_per_epoch=480,updates_per_
     initial_free_bytes=48*GIB,minimum_task_free_bytes=24*GIB,scopes=B2_SCOPES,
     comparison_baselines=_comparison_baselines())
 
+def resolve_tasks(tasks):
+    """Return an ordered (model,seed) subset of the six canonical tasks.
+
+    A resume package may execute only the not-yet-consumed tasks; the order and
+    membership must stay a subsequence of the canonical six-task list so that
+    package evidence remains comparable with the paused full package.
+    """
+    items=[]
+    for item in tasks:
+        kind=item.get('model') if isinstance(item,dict) else item[0]
+        seed=item.get('seed') if isinstance(item,dict) else item[1]
+        items.append((kind,seed))
+    if not items:raise ValueError('Seed-completion package requires at least one approved task')
+    positions=[]
+    for task in items:
+        if task not in TASKS:raise ValueError('Unknown seed-completion task: '+repr(task))
+        positions.append(TASKS.index(task))
+    if positions!=sorted(positions) or len(set(positions))!=len(positions):
+        raise ValueError('Task subset must follow canonical order without duplicates')
+    return tuple(items)
+
+def budget_for(tasks):
+    tasks=resolve_tasks(tasks)
+    bytes_per={f'{k}_s{s}':WEATHER_SOURCE_BYTES+STATIC_SOURCE_BYTES.get(k,0) for k,s in tasks}
+    files_per={f'{k}_s{s}':WEATHER_SOURCE_FILES+(1 if k in STATIC_SOURCE_BYTES else 0) for k,s in tasks}
+    seeds=sorted({seed for _,seed in tasks})
+    baselines=_comparison_baselines()
+    return dict(version=VERSION,models=len(tasks),epochs=9,updates_per_epoch=480,updates_per_task=4320,
+        total_updates=4320*len(tasks),weather_source_bytes_per_task=WEATHER_SOURCE_BYTES,
+        weather_source_files_per_task=WEATHER_SOURCE_FILES,
+        static_source_bytes_per_model=dict(STATIC_SOURCE_BYTES),static_source_files_per_model=1,
+        source_bytes_per_task=bytes_per,source_files_per_task=files_per,
+        total_source_bytes=sum(bytes_per.values()),total_source_files=sum(files_per.values()),
+        max_task_seconds=21600,task_wall_seconds={'B2':21600,'B5':21600,'B6':21600},
+        max_package_seconds=21600*len(tasks),replay_allowance=0,additional_retry_allowance=0,
+        initial_free_bytes=48*GIB,minimum_task_free_bytes=24*GIB,scopes=B2_SCOPES,
+        comparison_baselines={str(seed):baselines[str(seed)] for seed in seeds})
+
 def code_hashes(root):
     """Bind executable dependencies (new skeleton included) for drift checks."""
     root=Path(root);result=_inherited_code_hashes(root)
@@ -122,9 +160,10 @@ def code_hashes(root):
         result[name]=sha(root/name)
     return result
 
-def task_for(index):
-    if type(index)!=int or not 0<=index<len(TASKS):raise PermissionError('Only the six approved seed-completion tasks exist')
-    return TASKS[index]
+def task_for(index,tasks=None):
+    tasks=resolve_tasks(TASKS if tasks is None else tasks)
+    if type(index)!=int or not 0<=index<len(tasks):raise PermissionError('Only approved seed-completion tasks exist')
+    return tasks[index]
 
 def worker_environment(seed):
     return dict(os.environ,PYTHONHASHSEED=str(seed),CUBLAS_WORKSPACE_CONFIG=':4096:8',
@@ -142,23 +181,24 @@ def validate_package_closure(totals,budget):
         raise RuntimeError('Seed-completion package exact closure differs')
     return True
 
-def validate_budget(budget):
-    keys={f'{k}_s{s}' for k,s in TASKS}
-    if set(budget['source_bytes_per_task'])!=keys or set(budget['source_files_per_task'])!=keys:raise ValueError('Six-task source map differs')
-    for kind,seed in TASKS:
+def validate_budget(budget,tasks=None):
+    tasks=resolve_tasks(TASKS if tasks is None else tasks)
+    keys={f'{k}_s{s}' for k,s in tasks}
+    if set(budget['source_bytes_per_task'])!=keys or set(budget['source_files_per_task'])!=keys:raise ValueError('Task source map differs')
+    for kind,seed in tasks:
         key=f'{kind}_s{seed}'
         if budget['source_bytes_per_task'][key]!=WEATHER_SOURCE_BYTES+STATIC_SOURCE_BYTES.get(kind,0):raise ValueError('Per-task byte arithmetic differs')
         if budget['source_files_per_task'][key]!=WEATHER_SOURCE_FILES+(1 if kind in STATIC_SOURCE_BYTES else 0):raise ValueError('Per-task file arithmetic differs')
     if sum(budget['source_bytes_per_task'].values())!=budget['total_source_bytes']:raise ValueError('Total byte arithmetic differs')
     if sum(budget['source_files_per_task'].values())!=budget['total_source_files']:raise ValueError('Total file arithmetic differs')
-    if (budget['total_updates']!=25920 or budget['total_source_bytes']!=2865430597384
-            or budget['total_source_files']!=856876 or budget['max_package_seconds']!=129600
-            or budget['replay_allowance']!=0 or budget['additional_retry_allowance']!=0
-            or budget['max_task_seconds']!=21600 or any(v!=21600 for v in budget['task_wall_seconds'].values())
-            or budget['initial_free_bytes']!=48*GIB or budget['minimum_task_free_bytes']!=24*GIB):
-        raise ValueError('Package cap/storage arithmetic differs')
-    if set(budget['comparison_baselines'])!={'2030','2031'}:raise ValueError('Exactly two independent seeds require baselines')
-    for seed in ('2030','2031'):
+    expected=budget_for(tasks)
+    for key in ('models','total_updates','total_source_bytes','total_source_files','max_package_seconds',
+                'replay_allowance','additional_retry_allowance','max_task_seconds'):
+        if budget[key]!=expected[key]:raise ValueError('Package cap/arithmetic differs: '+key)
+    if any(v!=21600 for v in budget['task_wall_seconds'].values()):raise ValueError('Per-task wall arithmetic differs')
+    if budget['initial_free_bytes']!=48*GIB or budget['minimum_task_free_bytes']!=24*GIB:raise ValueError('Storage admission arithmetic differs')
+    if set(budget['comparison_baselines'])!={str(seed) for seed in {s for _,s in tasks}}:raise ValueError('Independent-seed baseline set differs')
+    for seed in {str(s) for _,s in tasks}:
         for kind,model in (('B2','B3'),('B5','B4'),('B6','B4')):
             entry=budget['comparison_baselines'][seed][kind]
             if entry['model']!=model or entry['endpoint']!='FIXED_EPOCH_9_LAST' or len(entry['sha256'])!=64:raise ValueError('Per-seed comparison baseline differs')
@@ -313,11 +353,13 @@ def _scientific_choices(receipt):
         seed_parameterization='MODEL_INIT_AND_EPOCH_ORDER_USE_TASK_SEED; PYTHONHASHSEED=str(seed); STATIC_ADAPTER_RNG=seed+10000',
         comparison_scope='DESCRIPTIVE_ONLY_SAME_SEED_B2_VS_B3_AND_B5_B6_VS_B4')
 
-def prepare(root,*,output_root,inherited=None,terrain=None,public_terrain=None):
+def prepare(root,*,output_root,inherited=None,terrain=None,public_terrain=None,tasks=None,resume_context=None):
     """Build a public proposal and private preparation. Reads metadata only."""
     root=Path(root)
     if inherited is None or terrain is None or public_terrain is None:raise PermissionError('Explicit inherited/terrain/public-terrain paths required')
     inherited,terrain,public_terrain=Path(inherited).resolve(),Path(terrain).resolve(),Path(public_terrain).resolve()
+    tasks=resolve_tasks(TASKS if tasks is None else tasks)
+    budget=budget_for(tasks)
     out,free=validate_output_root(output_root)
     inherited,b5b6_path,wrapper,prepared=_validate_inherited(root,inherited,terrain)
     receipt,public=_validate_terrain(terrain,public_terrain)
@@ -330,13 +372,13 @@ def prepare(root,*,output_root,inherited=None,terrain=None,public_terrain=None):
     proposal=dict(version=VERSION,scope=SCOPE,kind=KIND,entry=ENTRY,
         status='READY_WAITING_EXPLICIT_SEED_COMPLETION_APPROVAL',authorized=False,
         created_utc=datetime.now(timezone.utc).replace(second=0,microsecond=0).strftime('%Y-%m-%dT%H:%M:%SZ'),
-        tasks=[dict(model=kind,seed=seed) for kind,seed in TASKS],data=prepared['data'],
+        tasks=[dict(model=kind,seed=seed) for kind,seed in tasks],data=prepared['data'],
         data_inputs=dict(stage3_run=prepared['private_inputs']['stage3_run'],
                          request=prepared['private_inputs']['request'],
                          mask_read_ledger=prepared['private_inputs']['mask_read_ledger'],
                          b2_preparation_sha256=B2_PREPARATION['sha256'],
                          b2_preparation_digest=prepared['preparation_sha256']),
-        scientific_choices=_scientific_choices(receipt),budget=BUDGET,
+        scientific_choices=_scientific_choices(receipt),budget=budget,
         static_source_sha256=dict(STATIC_SOURCE_SHA256),static_source_bytes=dict(STATIC_SOURCE_BYTES),
         terrain_receipt_sha256=TERRAIN_RECEIPT_SHA256,grid_sha256=receipt['grid_sha256'],
         region_sha256=receipt['region_sha256'],scalers_sha256=digest(receipt['scalers']),
@@ -345,6 +387,7 @@ def prepare(root,*,output_root,inherited=None,terrain=None,public_terrain=None):
                                         paired_orders_sha256=PAIR_REFERENCE[seed][2]) for seed in (2030,2031)},
         input_pins=pins,storage_admission_free_bytes=free,raw_payload_opens_during_preparation=0,
         optimizer_updates=0,checkpoint_loads=0,raw_2025_reads=0,code_sha256=code_hashes(root))
+    if resume_context is not None:proposal['resume_context']=resume_context
     proposal['proposal_sha256']=digest(proposal)
     private=dict(version=VERSION,scope=SCOPE,proposal_sha256=proposal['proposal_sha256'],root=str(root.resolve()),
         output_root=str(out.resolve()),
@@ -371,7 +414,7 @@ def prepare(root,*,output_root,inherited=None,terrain=None,public_terrain=None):
         evidence_pins=dict(precheck=precheck_path.name,certificate=certificate_path.name,
                            closeout=EVIDENCE['b3_b4_three_seed_completion'][0]),
         baseline_paths={str(seed):{kind:BASELINE_DEV[seed][kind][0] for kind in ('B2','B5','B6')} for seed in (2030,2031)},
-        package_closure=dict(updates=BUDGET['total_updates'],bytes=BUDGET['total_source_bytes'],files=BUDGET['total_source_files']))
+        package_closure=dict(updates=budget['total_updates'],bytes=budget['total_source_bytes'],files=budget['total_source_files']))
     return proposal,private
 
 def checked(root,proposal,private,approval,commit):
@@ -379,7 +422,7 @@ def checked(root,proposal,private,approval,commit):
     root=Path(root);proposal,private,approval=map(read,(proposal,private,approval))
     expected=verify_proposal_digest(proposal);validate_approval(approval,proposal,private,commit)
     if private.get('proposal_sha256')!=expected:raise ValueError('Private seed-completion preparation differs')
-    validate_budget(proposal['budget']);check_code_hashes(root,proposal);check_input_pins(proposal)
+    resolve_tasks(proposal.get('tasks',[]));validate_budget(proposal['budget'],proposal['tasks']);check_code_hashes(root,proposal);check_input_pins(proposal)
     if proposal['static_source_sha256']!=STATIC_SOURCE_SHA256:raise ValueError('Pinned static terrain hashes differ')
     if proposal['terrain_receipt_sha256']!=TERRAIN_RECEIPT_SHA256:raise ValueError('Pinned terrain receipt differs')
     if {str(seed):proposal['baseline_E9_Dev_sha256'][str(seed)] for seed in (2030,2031)}!={str(seed):{kind:BASELINE_DEV[seed][kind][1] for kind in ('B2','B5','B6')} for seed in (2030,2031)}:raise ValueError('Per-seed comparison baseline map differs')
@@ -562,7 +605,9 @@ def _worker_static(root,proposal,private,approval,commit,index,kind,seed,started
 def worker(root,proposal,private,approval,commit,index):
     """One once-only task worker launched by the approved live controller."""
     started=time.monotonic();proposal,private,approval=checked(root,proposal,private,approval,commit)
-    kind,seed=task_for(index);package=Path(private['output_root'])
+    tasks=resolve_tasks(proposal.get('tasks',[]))
+    if type(index)!=int or not 0<=index<len(tasks):raise PermissionError('Only approved seed-completion tasks exist')
+    kind,seed=tasks[index];package=Path(private['output_root'])
     binding=read(package/'authorization_binding.json');claim=read(package/f'task_{index+1}_claim.json')
     if (binding.get('controller_pid')!=os.getppid() or binding.get('approval')!=approval
             or claim!=dict(index=index,controller_pid=os.getppid(),code_commit=commit)):raise PermissionError('Worker must be started once by the approved live serial controller')
@@ -596,24 +641,41 @@ def write_package_failure(out,error,updates=0,source_bytes=0,source_files=0):
     return path
 
 def _comparison_summary(out,proposal):
+    """Per-seed descriptive comparisons for the tasks this package actually ran.
+
+    A resumed sub-package may lack some models for a seed (for example a paused
+    B2_s2030 in option-B resume); such a seed is reported with
+    ``missing_models`` instead of fabricated values.
+    """
     baselines=proposal['budget']['comparison_baselines']
-    combined=dict(scope=SCOPE,endpoint='FIXED_EPOCH_9_LAST',seeds=[2030,2031],descriptive_only=True,
+    tasks={f"{item['model']}_s{item['seed']}" for item in proposal['tasks']}
+    seeds=sorted({item['seed'] for item in proposal['tasks']})
+    combined=dict(scope=SCOPE,endpoint='FIXED_EPOCH_9_LAST',seeds=seeds,descriptive_only=True,
                   significance='NOT_CLAIMED',comparisons={})
-    for seed in (2030,2031):
-        seed_text=str(seed)
-        b3=read(baselines[seed_text]['B2']['path']);b2=read(Path(out)/f'B2_s{seed}'/'B2_development_09.json')
-        b4=read(baselines[seed_text]['B5']['path']);b5=read(Path(out)/f'B5_s{seed}'/'B5_development_09.json')
-        b6=read(Path(out)/f'B6_s{seed}'/'B6_development_09.json')
-        b2_difference=difference(b3,b2);paired_difference(b4,b5);paired_difference(b4,b6)
-        values=dict(B3=metric_values(b3),B2=metric_values(b2),B4=metric_values(b4),B5=metric_values(b5),B6=metric_values(b6))
-        keys=tuple(values['B3'])
-        summary=dict(seed=seed,endpoint='FIXED_EPOCH_9_LAST',values=values,
-            differences=dict(B2_minus_B3={k:values['B2'][k]-values['B3'][k] for k in keys},
-                             B5_minus_B4={k:values['B5'][k]-values['B4'][k] for k in keys},
-                             B6_minus_B4={k:values['B6'][k]-values['B4'][k] for k in keys},
-                             B6_minus_B5={k:values['B6'][k]-values['B5'][k] for k in keys}),
-            b2_group_differences=b2_difference,descriptive_only=True,significance='NOT_CLAIMED')
-        write(Path(out)/f'seed{seed}_comparison_summary.json',summary);combined['comparisons'][seed_text]=summary
+    for seed in seeds:
+        available=[kind for kind in ('B2','B5','B6') if f'{kind}_s{seed}' in tasks]
+        missing=[kind for kind in ('B2','B5','B6') if kind not in available]
+        b4=read(baselines[str(seed)]['B5']['path'])
+        values=dict(B4=metric_values(b4))
+        if 'B2' in available:
+            b3=read(baselines[str(seed)]['B2']['path']);b2=read(Path(out)/f'B2_s{seed}'/'B2_development_09.json')
+            values.update(B3=metric_values(b3),B2=metric_values(b2))
+            b2_difference=difference(b3,b2)
+        for kind in ('B5','B6'):
+            if kind in available:
+                values[kind]=metric_values(read(Path(out)/f'{kind}_s{seed}'/f'{kind}_development_09.json'))
+        keys=tuple(values['B4'])
+        differences={}
+        if 'B2' in available:differences['B2_minus_B3']={k:values['B2'][k]-values['B3'][k] for k in keys}
+        if 'B5' in available:differences['B5_minus_B4']={k:values['B5'][k]-values['B4'][k] for k in keys}
+        if 'B6' in available:differences['B6_minus_B4']={k:values['B6'][k]-values['B4'][k] for k in keys}
+        if 'B5' in available and 'B6' in available:differences['B6_minus_B5']={k:values['B6'][k]-values['B5'][k] for k in keys}
+        summary=dict(seed=seed,endpoint='FIXED_EPOCH_9_LAST',available_models=available,
+                     missing_models=missing,values=values,differences=differences,
+                     descriptive_only=True,significance='NOT_CLAIMED')
+        if 'B2' in available:summary['b2_group_differences']=b2_difference
+        write(Path(out)/f'seed{seed}_comparison_summary.json',summary);combined['comparisons'][str(seed)]=summary
+        if missing:combined.setdefault('incomplete_seeds',{})[str(seed)]=missing
     write(Path(out)/'comparison_summary.json',combined);return combined
 
 def execute(root,proposal,private,approval,commit,*,worker_python=None):
@@ -621,6 +683,7 @@ def execute(root,proposal,private,approval,commit,*,worker_python=None):
     root=Path(root);started=time.monotonic()
     proposal_path,private_path,approval_path=Path(proposal),Path(private),Path(approval)
     proposal,private,approval=checked(root,proposal_path,private_path,approval_path,commit)
+    tasks=resolve_tasks(proposal['tasks'])
     out,free=validate_output_root(private['output_root'])
     admission=dict(resources(),initial_output_free_bytes=free)
     out.mkdir(parents=True,exist_ok=False)
@@ -628,7 +691,7 @@ def execute(root,proposal,private,approval,commit,*,worker_python=None):
                                                 proposal_sha256=proposal['proposal_sha256'],code_commit=commit))
     total_updates=total_bytes=total_files=0;active=None
     try:
-        for index,(kind,seed) in enumerate(TASKS):
+        for index,(kind,seed) in enumerate(tasks):
             remaining=proposal['budget']['max_package_seconds']-(time.monotonic()-started)
             if remaining<=0:raise RuntimeError('Seed-completion package 36h limit reached; no replay')
             write(out/f'task_{index+1}_claim.json',dict(index=index,controller_pid=os.getpid(),code_commit=commit))
@@ -648,7 +711,8 @@ def execute(root,proposal,private,approval,commit,*,worker_python=None):
                                       total_logical_source_files=total_files),proposal['budget'])
         _comparison_summary(out,proposal)
         if time.monotonic()-started>proposal['budget']['max_package_seconds']:raise RuntimeError('Seed-completion package closure exceeded 36h')
-        result=dict(status='COMPLETE_SEED_COMPLETION_PACKAGE',scope=SCOPE,models=6,seeds=[2030,2031],
+        result=dict(status='COMPLETE_SEED_COMPLETION_PACKAGE',scope=SCOPE,models=len(tasks),
+                    seeds=sorted({seed for _,seed in tasks}),
                     optimizer_updates=total_updates,total_logical_source_bytes=total_bytes,total_logical_source_files=total_files,
                     replay=0,additional_retries=0,code_commit=commit,proposal_sha256=proposal['proposal_sha256'],
                     comparison_summary_sha256=sha(out/'comparison_summary.json'),
@@ -667,9 +731,9 @@ def dry_run(root,proposal,private,approval,commit):
     expected=verify_proposal_digest(proposal);validate_approval(approval,proposal,private,commit)
     if private.get('proposal_sha256')!=expected:raise ValueError('Private seed-completion preparation differs')
     if (proposal.get('version')!=VERSION or proposal.get('scope')!=SCOPE or proposal.get('kind')!=KIND
-            or proposal.get('authorized') is not False
-            or proposal.get('tasks')!=[dict(model=kind,seed=seed) for kind,seed in TASKS]):raise ValueError('Seed-completion proposal identity differs')
-    validate_budget(proposal['budget']);check_code_hashes(root,proposal);check_input_pins(proposal)
+            or proposal.get('authorized') is not False):raise ValueError('Seed-completion proposal identity differs')
+    tasks=resolve_tasks(proposal.get('tasks',[]))
+    validate_budget(proposal['budget'],tasks);check_code_hashes(root,proposal);check_input_pins(proposal)
     if proposal.get('static_source_sha256')!=STATIC_SOURCE_SHA256:raise ValueError('Pinned static terrain hashes differ')
     if proposal.get('terrain_receipt_sha256')!=TERRAIN_RECEIPT_SHA256:raise ValueError('Pinned terrain receipt differs')
     out,free=validate_output_root(private['output_root'])

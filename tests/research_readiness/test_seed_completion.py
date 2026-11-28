@@ -255,6 +255,70 @@ class SeedCompletionTests(unittest.TestCase):
             module.prepare(REPO_ROOT, output_root=parent / 'out')
         self.assertFalse((parent / 'out').exists())
 
+    def test_resolve_tasks_ordered_subset_and_subset_budget(self):
+        subset = [('B2', 2031), ('B5', 2030), ('B6', 2030), ('B5', 2031), ('B6', 2031)]
+        self.assertEqual(module.resolve_tasks([dict(model=m, seed=s) for m, s in subset]),
+                         tuple(subset))
+        budget = module.budget_for(subset)
+        self.assertTrue(module.validate_budget(budget, subset))
+        self.assertEqual(budget['models'], 5)
+        self.assertEqual(budget['total_updates'], 21600)
+        self.assertEqual(budget['total_source_bytes'], 2387858956372)
+        self.assertEqual(budget['total_source_files'], 714064)
+        self.assertEqual(budget['max_package_seconds'], 108000)
+        self.assertEqual(set(budget['comparison_baselines']), {'2030', '2031'})
+        for bad in ([], [('B5', 2030), ('B2', 2031)], [('B2', 2031), ('B2', 2031)],
+                    [('B9', 2030)], [('B6', 2030), ('B5', 2030)]):
+            with self.assertRaises(ValueError):
+                module.resolve_tasks(bad)
+        broken = copy.deepcopy(budget)
+        broken['source_bytes_per_task'].pop('B6_s2031')
+        with self.assertRaises(ValueError):
+            module.validate_budget(broken, subset)
+        broken = copy.deepcopy(budget)
+        broken['total_updates'] = 25920
+        with self.assertRaises(ValueError):
+            module.validate_budget(broken, subset)
+        broken = copy.deepcopy(budget)
+        broken['max_package_seconds'] = 129600
+        with self.assertRaises(ValueError):
+            module.validate_budget(broken, subset)
+
+    def test_task_for_uses_subset_index_space(self):
+        tasks = [('B5', 2030), ('B6', 2031)]
+        self.assertEqual(module.task_for(0, tasks), ('B5', 2030))
+        self.assertEqual(module.task_for(1, tasks), ('B6', 2031))
+        for bad in (-1, 2, 1.0, '0', None):
+            with self.assertRaises(PermissionError):
+                module.task_for(bad, tasks)
+
+    def test_dry_run_accepts_approved_task_subset(self):
+        subset = [('B2', 2031), ('B5', 2030), ('B6', 2030), ('B5', 2031), ('B6', 2031)]
+        proposal = _proposal()
+        proposal['tasks'] = [dict(model=m, seed=s) for m, s in subset]
+        proposal['budget'] = module.budget_for(subset)
+        proposal['proposal_sha256'] = module.digest(
+            {k: v for k, v in proposal.items() if k != 'proposal_sha256'})
+        parent = Path(tempfile.mkdtemp())
+        output_root = parent / 'fresh-subset-root'
+        private = _private(proposal, output_root)
+        commit = 'a' * 40
+        approval = _approval(proposal, private, commit)
+        usage = type('Usage', (), {'free': 50 * module.GIB, 'total': 100 * module.GIB,
+                                   'used': 50 * module.GIB})()
+        captured = io.StringIO()
+        with patch.object(module, 'code_hashes', return_value={'synthetic': '0' * 64}), \
+                patch.object(module.shutil, 'disk_usage', return_value=usage), \
+                patch.object(Path, 'read_bytes', side_effect=AssertionError('payload read forbidden')), \
+                patch.object(Path, 'read_text', side_effect=AssertionError('payload read forbidden')), \
+                redirect_stdout(captured):
+            summary = module.dry_run(REPO_ROOT, proposal, private, approval, commit)
+        self.assertEqual(summary['status'], 'DRY_RUN_OK')
+        self.assertEqual(summary['model_count'], 5)
+        self.assertEqual(summary['optimizer_updates'], 21600)
+        self.assertEqual(summary['total_source_bytes'], 2387858956372)
+        self.assertFalse(output_root.exists())
+
     def test_static_and_baseline_constants_are_complete(self):
         self.assertEqual(module.STATIC_SOURCE_BYTES, {'B5': 62828, 'B6': 312828})
         for kind in ('B5', 'B6'):
